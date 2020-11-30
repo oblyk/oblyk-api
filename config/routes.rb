@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       get 'bolts', controller: :bolts, action: :index
       get 'anchors', controller: :anchors, action: :index
       get 'approach-types', controller: :approach_types, action: :index
+      get 'alert-types', controller: :alert_types, action: :index
 
       get 'grade', controller: :grades, action: :grade
       get 'grade-types', controller: :grades, action: :types
@@ -33,6 +34,7 @@ Rails.application.routes.draw do
       resources :follows
       resources :parks
       resources :approaches
+      resources :alerts
     end
   end
 end

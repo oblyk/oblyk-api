@@ -32,7 +32,7 @@ Todo migration des tables :
 - [x] crags
 - [ ] ascents (old crosses)
 - [ ] descriptions (??)
-- [ ] alerts (old exceptions)
+- [x] alerts (old exceptions)
 - [x] follows
 - [ ] likes (??)
 - [x] links

@@ -36,6 +36,7 @@ end
 json.comment_count crag.comments.count
 json.link_count crag.links.count
 json.follow_count crag.follows.count
+json.alert_count crag.alerts.count
 
 json.creator do
   json.id crag_sector.user_id

@@ -9,6 +9,7 @@ class Crag < ApplicationRecord
   has_many :comments, as: :commentable
   has_many :links, as: :linkable
   has_many :follows, as: :followable
+  has_many :alerts, as: :alertable
   has_many :parks
   has_many :crag_sectors
   alias_attribute :sectors, :crag_sectors

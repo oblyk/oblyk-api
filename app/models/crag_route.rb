@@ -10,6 +10,7 @@ class CragRoute < ApplicationRecord
   has_many :comments, as: :commentable
   has_many :links, as: :linkable
   has_many :follows, as: :followable
+  has_many :alerts, as: :alertable
 
   validates :name, presence: true
   validates :climbing_type, inclusion: { in: Climb::LIST }

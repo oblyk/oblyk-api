@@ -45,3 +45,7 @@ Accept: application/json
 ###
 GET {{api_url}}/approach-types.json
 Accept: application/json
+
+###
+GET {{api_url}}/alert-types.json
+Accept: application/json

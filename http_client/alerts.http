@@ -1,0 +1,36 @@
+DELETE {{api_url}}/alerts/1.json
+Authorization: Bearer {{auth_token}}
+
+### Update alert 1
+PUT {{api_url}}/alerts/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "alert": {
+    "description": "Attention aux chutes de pierre",
+    "alert_type": "bad"
+  }
+}
+
+### Create alert
+POST {{api_url}}/alerts.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "alert": {
+    "alertable_type": "Crag",
+    "alertable_id": 1,
+    "description": "Ce site est conventionné par la FFME",
+    "alert_type": "info"
+  }
+}
+
+### GET alert
+GET {{api_url}}/alerts/1.json
+Accept: application/json
+
+### GET all alerts for one item
+GET {{api_url}}/alerts.json?alertable_type=Crag&alertable_id=1
+Accept: application/json

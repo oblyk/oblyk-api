@@ -10,6 +10,7 @@ class CragSector < ApplicationRecord
   has_many :comments, as: :commentable
   has_many :links, as: :linkable
   has_many :follows, as: :followable
+  has_many :alerts, as: :alertable
 
   validates :name, presence: true
   validates :rain, inclusion: { in: Rain::LIST }, allow_nil: true
