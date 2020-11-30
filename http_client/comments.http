@@ -1,0 +1,34 @@
+DELETE {{api_url}}/comments/1.json
+Authorization: Bearer {{auth_token}}
+
+### Update comment 1
+PUT {{api_url}}/comments/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "comment": {
+    "body": "Super falaise pour l'hiers, c'est plein sud"
+  }
+}
+
+### Create comment
+POST {{api_url}}/comments.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "comment": {
+    "commentable_type": "Crag",
+    "commentable_id": 1,
+    "body": "Super falaise pour l'hivers"
+  }
+}
+
+### GET comment
+GET {{api_url}}/comments/1.json
+Accept: application/json
+
+### GET all comments for one item
+GET {{api_url}}/comments.json?commentable_type=Crag&commentable_id=1
+Accept: application/json

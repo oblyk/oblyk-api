@@ -1,0 +1,57 @@
+require:
+  - rubocop-performance
+  - rubocop-rails
+
+AllCops:
+  TargetRubyVersion: 2.5
+  TargetRailsVersion: 6
+  DisplayCopNames: true
+  Exclude:
+    - 'bin/**/*'
+    - 'db/schema.rb'
+    - 'db/migrate/*'
+    - 'db/seeds/*'
+    - 'vendor/**/*'
+    - 'node_modules/**/*'
+
+Rails:
+  Enabled: true
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Rails/OutputSafety:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Enabled: false
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
+Rails/InverseOf:
+  Enabled: false

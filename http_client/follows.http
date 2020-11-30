@@ -1,0 +1,34 @@
+DELETE {{api_url}}/follows/1.json
+Authorization: Bearer {{auth_token}}
+
+### Create user follow
+POST {{api_url}}/follows.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "follow": {
+    "followable_type": "User",
+    "followable_id": 1
+  }
+}
+
+### Create follow
+POST {{api_url}}/follows.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "follow": {
+    "followable_type": "Crag",
+    "followable_id": 1
+  }
+}
+
+### GET follow
+GET {{api_url}}/follows/1.json
+Accept: application/json
+
+### GET all follows for one item
+GET {{api_url}}/follows.json?followable_type=Crag&followable_id=1
+Accept: application/json

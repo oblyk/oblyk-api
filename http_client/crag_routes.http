@@ -1,0 +1,77 @@
+DELETE {{api_url}}/crag_routes/1.json
+Authorization: Bearer {{auth_token}}
+
+### Update route 1
+PUT {{api_url}}/crag_routes/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "crag_route": {
+    "height": 22
+  }
+}
+
+### Create mutli pitch
+POST {{api_url}}/crag_routes.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "crag_route": {
+    "name": "La voie des grands",
+    "height": 80,
+    "sections": [{
+      "description": "Première longueur, le pied de voie est cool",
+      "grade": "5b",
+      "bolt_count": 8,
+      "height": 35,
+      "bolt_type": "bolt_hangers",
+      "anchor_type": "bolted_anchor_chains",
+      "incline_type": "vertical"
+    },{
+      "grade": "6b+",
+      "bolt_count": 13,
+      "height": 45,
+      "bolt_type": "staple_u_bolts",
+      "anchor_type": "traditional_anchor",
+      "incline_type": "slight_overhang"
+    }],
+    "climbing_type": "multi_pitch",
+    "incline_type": "vertical",
+    "crag_id": 1
+  }
+}
+
+### Create sport climbing route
+POST {{api_url}}/crag_routes.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "crag_route": {
+    "name": "Manu tu viens?",
+    "height": 20,
+    "open_year": 1985,
+    "opener": "François Crespo",
+    "sections": [{
+      "grade": "7b",
+      "bolt_count": 7,
+      "bolt_type": "bolt_hangers",
+      "anchor_type": "bolted_anchor_chains",
+      "incline_type": "vertical"
+    }],
+    "climbing_type": "sport_climbing",
+    "incline_type": "vertical",
+    "crag_id": 1,
+    "crag_sector_id": 1
+  }
+}
+
+### GET route
+GET {{api_url}}/crag_routes/1.json
+Accept: application/json
+
+### GET all route in crag
+GET {{api_url}}/crag_routes.json&crag_id=1
+Accept: application/json

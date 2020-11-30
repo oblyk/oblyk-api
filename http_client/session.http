@@ -1,0 +1,34 @@
+
+###
+# Sign In
+POST {{api_url}}/sessions/sign_in.json
+Content-Type: application/json
+
+{
+  "password": "{{auth_password}}",
+  "email": "{{auth_email}}"
+}
+
+> {%
+client.global.set("auth_id", response.body.user.id);
+client.global.set("auth_token", response.body.token);
+%}
+
+###
+# Sign Up
+POST {{api_url}}/sessions/sign_up.json
+Content-Type: application/json
+
+{
+  "email": "{{auth_email}}",
+  "password": "{{auth_password}}",
+  "password_confirmation": "{{auth_password}}",
+  "last_name": "{{auth_firstname}}",
+  "first_name": "{{auth_lastname}}",
+  "date_of_birth": "{{auth_date_of_birth}}"
+}
+
+> {%
+client.global.set("auth_id", response.body.user.id);
+client.global.set("auth_token", response.body.token);
+%}

@@ -1,0 +1,35 @@
+DELETE {{api_url}}/parks/1.json
+Authorization: Bearer {{auth_token}}
+
+### Update park 1
+PUT {{api_url}}/parks/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "park": {
+    "description": "Parking principal - ne pas se garrer dans le champs de lavande"
+  }
+}
+
+### Create Crag
+POST {{api_url}}/parks.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "park": {
+    "description": "Parking du champs de lavande",
+    "latitude": 44.46635,
+    "longitude": 5.05527,
+    "crag_id": 1
+  }
+}
+
+### GET park
+GET {{api_url}}/parks/1.json
+Accept: application/json
+
+### GET all parks
+GET {{api_url}}/parks.json?crag_id=1
+Accept: application/json

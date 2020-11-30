@@ -1,0 +1,47 @@
+###
+GET {{api_url}}/climbs.json
+Accept: application/json
+
+###
+GET {{api_url}}/inclines.json
+Accept: application/json
+
+###
+GET {{api_url}}/rains.json
+Accept: application/json
+
+###
+GET {{api_url}}/receptions.json
+Accept: application/json
+
+###
+GET {{api_url}}/suns.json
+Accept: application/json
+
+###
+GET {{api_url}}/rocks.json
+Accept: application/json
+
+###
+GET {{api_url}}/starts.json
+Accept: application/json
+
+###
+GET {{api_url}}/bolts.json
+Accept: application/json
+
+###
+GET {{api_url}}/anchors.json
+Accept: application/json
+
+###
+GET {{api_url}}/grade.json?grade=7b
+Accept: application/json
+
+###
+GET {{api_url}}/grade-types.json
+Accept: application/json
+
+###
+GET {{api_url}}/approach-types.json
+Accept: application/json

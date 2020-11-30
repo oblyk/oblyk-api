@@ -1,0 +1,22 @@
+### GET user 1
+PUT {{api_url}}/users/{{auth_id}}.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "user": {
+    "first_name": "Chris",
+    "last_name": "Sharma",
+    "date_of_birth": "1983-03-04"
+  }
+}
+
+### GET user 1
+GET {{api_url}}/users/{{auth_id}}.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET all users
+GET {{api_url}}/users.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json

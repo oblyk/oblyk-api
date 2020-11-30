@@ -1,0 +1,36 @@
+DELETE {{api_url}}/links/1.json
+Authorization: Bearer {{auth_token}}
+
+### Update link 1
+PUT {{api_url}}/links/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "link": {
+    "name": "FFME - Rocher des aures"
+  }
+}
+
+### Create link
+POST {{api_url}}/links.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "link": {
+    "linkable_type": "Crag",
+    "linkable_id": 1,
+    "name": "Fiche FFME rocher de aures",
+    "url": "https://www.ffme.fr/sne-fiche/238/",
+    "description": "Complément d'information sur la falaise du rocher des aures par la FFME"
+  }
+}
+
+### GET link
+GET {{api_url}}/links/1.json
+Accept: application/json
+
+### GET all links for one item
+GET {{api_url}}/links.json?linkable_type=Crag&linkable_id=1
+Accept: application/json

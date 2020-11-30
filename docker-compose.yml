@@ -1,0 +1,24 @@
+version: "3.7"
+
+services:
+  redis:
+    image: redis:4.0
+    ports:
+      - 16379:6379
+    volumes:
+      - data-redis:/data
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "13306:3306"
+    entrypoint: ['docker-entrypoint.sh', '--default-authentication-plugin=mysql_native_password']
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - data-mysql:/var/lib/mysql
+
+volumes:
+  data-redis:
+    name: oblyk-api-data-redis
+  data-mysql:
+    name: oblyk-api-data-mysql

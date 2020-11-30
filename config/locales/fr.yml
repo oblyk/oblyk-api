@@ -1,0 +1,73 @@
+fr:
+  activerecord:
+    attributes:
+      crag:
+        name: "Nom"
+        rain: "Expostion à la pluie"
+        sun: "Ensoleillement"
+        approach_time: "Temps d'approche"
+        approach_type: "Type de marche"
+        latitude: "latitude"
+        longitude: "longitude"
+        code_country: "Code pays"
+        country: "Pays"
+        city: "Ville"
+        region: "Département"
+        sport_climbing: "Voie"
+        bouldering: "Bloc"
+        multi_pitch: "Grand voie"
+        trad_climbing: "Trad"
+        aid_climbing: "Artif"
+        deep_water: "Psycobloc"
+        via_ferrata: "Via ferrata"
+        north: "Nord"
+        north_east: "Nord-est"
+        east: "Est"
+        south_east: "Sud-est"
+        south: "Sud"
+        south_west: "Sud-ouest"
+        west: "Ouest"
+        north_west: "Nord-Ouest"
+        user_id: "Créateur"
+      crag_route:
+        name: "Nom"
+        height: "Hauteur"
+        open_year: "Année d'ouverture"
+        opener: "Ouvreurs"
+        sections: "Longueurs"
+        climbing_type: "Type d'escalade"
+        incline_type: "Inclinaison"
+        reception_type: "Réception"
+        start_type: "Départ"
+        difficulty_appreciation: ""
+        note: "Note"
+        note_count: "Nombre de note"
+        ascents_count: "Nombre d'ascension"
+        sections_count: "Nombre de longueur"
+        max_grade_value: "Cotation max"
+        min_grade_value: "Cotation min"
+        max_grade_text: "Cotation max"
+        min_grade_text: "Cotation min"
+        max_bolt: "Nombre de degaine"
+        crag_id: "Falaise"
+        crag_sector_id: "Secteur"
+        user_id: "Créateur"
+      user:
+        first_name: "Prénom"
+        last_name: "Nom"
+        email: "Email"
+        password: "Mot de passe"
+        password_digest: "Mot de passe"
+        date_of_birth: "Date de naissance"
+        genre: "Civilité"
+        description: "Description"
+        super_admin: "Super administration"
+    errors:
+      messages:
+        blank: "est obligatoire"
+        taken: 'est déjà pris'
+        too_short: 'est trop court'
+        greater_than: 'doit être positif'
+        invalid: 'est invalide'
+        email: 'est invalide'
+        inclusion: "n'est pas dans la liste des valeurs autorisées"

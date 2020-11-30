@@ -1,0 +1,49 @@
+fr:
+  activerecord:
+    attributes:
+      crag:
+        name: "Name"
+        rain: "Exposure to rain"
+        sun: "Ensoleillement"
+        approach_time: "Approach time"
+        approach_type: "Approach type"
+        latitude: "latitude"
+        longitude: "longitude"
+        code_country: "Code country"
+        country: "Country"
+        city: "City"
+        region: "Region"
+        sport_climbing: "sport climbing"
+        bouldering: "bouldering"
+        multi_pitch: "Multi pitch"
+        trad_climbing: "Trad climbing"
+        aid_climbing: "Aid climbing"
+        deep_water: "Deep water"
+        via_ferrata: "Via ferrata"
+        north: "North"
+        north_east: "North-east"
+        east: "East"
+        south_east: "South-east"
+        south: "South"
+        south_west: "South-west"
+        west: "West"
+        north_west: "North-west"
+        user_id: "Creator"
+      user:
+        first_name: "First name"
+        last_name: "Last name"
+        email: "Email"
+        password: "Password"
+        password_digest: "Password"
+        date_of_birth: "Date of birth"
+        genre: "Genre"
+        description: "Description"
+        super_admin: "Super admin"
+    errors:
+      messages:
+        blank: "is mandatory"
+        taken: 'is already taken'
+        too_short: 'is too short'
+        invalid: 'is invalid'
+        email: 'is invalid'
+        inclusion: 'is not a permitted value'

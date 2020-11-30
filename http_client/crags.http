@@ -1,0 +1,55 @@
+DELETE {{api_url}}/crags/1.json
+Authorization: Bearer {{auth_token}}
+
+### Update crag 1
+PUT {{api_url}}/crags/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "crag": {
+    "rocks": [
+      {
+        "name": "conglomerate"
+      }, {
+        "name": "gneiss"
+      }
+    ]
+  }
+}
+
+### Create Crag
+POST {{api_url}}/crags.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "crag": {
+    "name": "Rocher des aures",
+    "rain": "exposed",
+    "sun": "sunny_all_day",
+    "latitude": 44.469592,
+    "longitude": 5.058089,
+    "code_country": "fr",
+    "country": "France",
+    "city": "La roche saint secret",
+    "region": "Drôme",
+    "south": true,
+    "autumn": true,
+    "winter": true,
+    "spring": true,
+    "rocks": [
+      {
+        "name": "limestone"
+      }
+    ]
+  }
+}
+
+### GET crag
+GET {{api_url}}/crags/1.json
+Accept: application/json
+
+### GET all crags
+GET {{api_url}}/crags.json
+Accept: application/json

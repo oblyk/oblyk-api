@@ -1,0 +1,35 @@
+DELETE {{api_url}}/crag_sectors/1.json
+Authorization: Bearer {{auth_token}}
+
+### Update crag 1
+PUT {{api_url}}/crag_sectors/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "crag_sector": {
+    "description": "Changement de la description de ce secteur"
+  }
+}
+
+### Create sector
+POST {{api_url}}/crag_sectors.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "crag_sector": {
+    "crag_id": 1,
+    "name": "La rose des sables",
+    "description": "Secteur avec les voies les plus dures du rocher des aures",
+    "south": true
+  }
+}
+
+### GET sector
+GET {{api_url}}/crag_sectors/1.json
+Accept: application/json
+
+### GET all sectors in crag
+GET {{api_url}}/crag_sectors.json?crag_id=1
+Accept: application/json
