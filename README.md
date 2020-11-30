@@ -26,40 +26,40 @@ Things you may want to cover:
 Todo migration des tables :
 - [x] approaches
 - [x] comments
-- [] conversations
-- [] user_conversations
-- [] messages
+- [ ] conversations
+- [ ] user_conversations
+- [ ] messages
 - [x] crags
-- [] ascents (old crosses)
-- [] descriptions (??)
-- [] alerts (old exceptions)
+- [ ] ascents (old crosses)
+- [ ] descriptions (??)
+- [ ] alerts (old exceptions)
 - [x] follows
-- [] likes (??)
+- [ ] likes (??)
 - [x] links
-- [] massive_crags
-- [] massives
+- [ ] massive_crags
+- [ ] massives
 - [x] parkings
 - [x] crag_routes
 - [x] crag_sectors
-- [] subscribes
-- [] tags
-- [] tick_lists
-- [] guide_book_crags
-- [] guide_book_pdfs
-- [] guide_book_webs
-- [] guide_books
+- [ ] subscribes
+- [ ] tags
+- [ ] tick_lists
+- [ ] guide_book_crags
+- [ ] guide_book_pdfs
+- [ ] guide_book_webs
+- [ ] guide_books
 - [x] users
-- [] videos
+- [ ] videos
 - [x] words
 
 Gym :
-- [] contest_routes
-- [] contest_users
-- [] contests
-- [] gym_administrators
-- [] gym_grade_lines
-- [] gym_grades
-- [] gym_rooms
-- [] gym_routes
-- [] gym_sectors
-- [] gyms
+- [ ] contest_routes
+- [ ] contest_users
+- [ ] contests
+- [ ] gym_administrators
+- [ ] gym_grade_lines
+- [ ] gym_grades
+- [ ] gym_rooms
+- [ ] gym_routes
+- [ ] gym_sectors
+- [ ] gyms
