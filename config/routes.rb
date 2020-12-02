@@ -35,6 +35,8 @@ Rails.application.routes.draw do
       resources :parks
       resources :approaches
       resources :alerts
+      resources :conversations
+      resources :conversation_messages
     end
   end
 end

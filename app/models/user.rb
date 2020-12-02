@@ -7,6 +7,9 @@ class User < ApplicationRecord
   has_one_attached :avatar
   has_many :follows, as: :followable
   has_many :followers, class_name: 'Follow', foreign_key: :user_id
+  has_many :conversation_messages
+  has_many :conversation_users
+  has_many :conversations, through: :conversation_users
 
   validates :first_name, :email, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }

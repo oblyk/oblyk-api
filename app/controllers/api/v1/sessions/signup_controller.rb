@@ -26,6 +26,7 @@ module Api
           params.permit(
             :email,
             :first_name,
+            :last_name,
             :password,
             :password_confirmation,
             :date_of_birth,

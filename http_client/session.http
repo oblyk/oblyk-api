@@ -15,7 +15,35 @@ client.global.set("auth_token", response.body.token);
 %}
 
 ###
-# Sign Up
+# Sign Up Patrick Edlinger
+POST {{api_url}}/sessions/sign_up.json
+Content-Type: application/json
+
+{
+  "email": "patring@edlinger.fr",
+  "password": "Opera",
+  "password_confirmation": "Opera",
+  "last_name": "Edlinger",
+  "first_name": "Patrick",
+  "date_of_birth": "1960-06-15"
+}
+
+###
+# Sign Up Seb Bouin
+POST {{api_url}}/sessions/sign_up.json
+Content-Type: application/json
+
+{
+  "email": "seb@bouin.fr",
+  "password": "akira",
+  "password_confirmation": "akira",
+  "last_name": "Bouin",
+  "first_name": "Seb",
+  "date_of_birth": "1993-04-17"
+}
+
+###
+# Sign Up Chris Sharma
 POST {{api_url}}/sessions/sign_up.json
 Content-Type: application/json
 

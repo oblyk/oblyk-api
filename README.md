@@ -26,9 +26,9 @@ Things you may want to cover:
 Todo migration des tables :
 - [x] approaches
 - [x] comments
-- [ ] conversations
-- [ ] user_conversations
-- [ ] messages
+- [x] conversations
+- [X] conversation_users
+- [X] messages
 - [x] crags
 - [ ] ascents (old crosses)
 - [x] alerts (old exceptions)

@@ -1,0 +1,58 @@
+### Delete a message
+DELETE {{api_url}}/conversation_messages/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+### Update a message
+PUT {{api_url}}/conversation_messages/2.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "conversation_message": {
+    "body": "Coucou Seb, tu viens grimper à Buoux ? Chris."
+  }
+}
+
+### Create a message
+POST {{api_url}}/conversation_messages.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "conversation_message": {
+    "body": "Je n'ai pas le droit ici",
+    "conversation_id": 4
+  }
+}
+
+### Create conversation
+POST {{api_url}}/conversations.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "conversation": {
+    "conversation_users_attributes": [
+      {
+        "user_id": 2
+      },
+      {
+        "user_id": 3
+      },
+      {
+        "user_id": 1
+      }
+    ]
+  }
+}
+
+### GET conversation
+GET {{api_url}}/conversations/3.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET all conversations for one item
+GET {{api_url}}/conversations.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
