@@ -34,8 +34,8 @@ Todo migration des tables :
 - [x] alerts (old exceptions)
 - [x] follows
 - [x] links
-- [ ] massive_crags
-- [ ] massives
+- [x] area (old massives)
+- [x] area_crag (old massive_crags)
 - [x] parkings
 - [x] crag_routes
 - [x] crag_sectors

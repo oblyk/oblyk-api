@@ -1,0 +1,49 @@
+### Delete area crag
+DELETE {{api_url}}/area_crags/2.json
+Authorization: Bearer {{auth_token}}
+
+### Add crag in area
+POST {{api_url}}/area_crags.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "area_crag": {
+    "crag_id": 1,
+    "area_id": 1
+  }
+}
+
+### Delete area
+DELETE {{api_url}}/areas/1.json
+Authorization: Bearer {{auth_token}}
+
+### Update area 1
+PUT {{api_url}}/areas/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "area": {
+    "name": "Autour de la Lance"
+  }
+}
+
+### Create area
+POST {{api_url}}/areas.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "area": {
+    "name": "Autour de la lance"
+  }
+}
+
+### GET area
+GET {{api_url}}/areas/1.json
+Accept: application/json
+
+### GET all areas
+GET {{api_url}}/areas.json
+Accept: application/json

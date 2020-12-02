@@ -37,6 +37,8 @@ Rails.application.routes.draw do
       resources :alerts
       resources :conversations
       resources :conversation_messages
+      resources :areas
+      resources :area_crags
     end
   end
 end

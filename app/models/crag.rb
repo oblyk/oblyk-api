@@ -13,6 +13,8 @@ class Crag < ApplicationRecord
   has_many :parks
   has_many :crag_sectors
   alias_attribute :sectors, :crag_sectors
+  has_many :area_crags
+  has_many :areas, through: :area_crags
 
   validates :name, :latitude, :longitude, presence: true
   validates :rain, inclusion: { in: Rain::LIST }, allow_nil: true
