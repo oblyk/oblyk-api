@@ -43,6 +43,7 @@ Rails.application.routes.draw do
       resources :subscribes, only: %i[index create]
       delete 'unsubscribes', controller: :subscribes, action: :unsubscribe
       resources :tags, only: %i[index create destroy]
+      resources :tick_lists, only: %i[index create destroy]
     end
   end
 end

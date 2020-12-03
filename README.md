@@ -41,11 +41,11 @@ Todo migration des tables :
 - [x] crag_sectors
 - [x] subscribes
 - [x] tags
-- [ ] tick_lists
+- [x] tick_lists
 - [ ] guide_book_crags
+- [ ] guide_books
 - [ ] guide_book_pdfs
 - [ ] guide_book_webs
-- [ ] guide_books
 - [x] users
 - [ ] videos
 - [x] words

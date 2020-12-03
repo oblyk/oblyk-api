@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :conversation_messages
   has_many :conversation_users
   has_many :conversations, through: :conversation_users
+  has_many :tick_lists
 
   validates :first_name, :email, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_03_175124) do
+ActiveRecord::Schema.define(version: 2020_12_03_183822) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -288,6 +288,15 @@ ActiveRecord::Schema.define(version: 2020_12_03_175124) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["taggable_type", "taggable_id"], name: "index_tags_on_taggable_type_and_taggable_id"
     t.index ["user_id"], name: "index_tags_on_user_id"
+  end
+
+  create_table "tick_lists", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "crag_route_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["crag_route_id"], name: "index_tick_lists_on_crag_route_id"
+    t.index ["user_id"], name: "index_tick_lists_on_user_id"
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
