@@ -47,7 +47,7 @@ Todo migration des tables :
 - [ ] guide_book_pdfs
 - [ ] guide_book_webs
 - [x] users
-- [ ] videos
+- [x] videos
 - [x] words
 
 Gym :

@@ -51,6 +51,7 @@ json.link_count crag.links.count
 json.follow_count crag.follows.count
 json.park_count crag.parks.count
 json.alert_count crag.alerts.count
+json.video_count crag.videos.count
 
 json.creator do
   json.id crag.user_id

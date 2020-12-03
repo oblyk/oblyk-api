@@ -35,6 +35,7 @@ json.comment_count crag_route.comments.count
 json.link_count crag_route.links.count
 json.follow_count crag_route.follows.count
 json.alert_count crag_route.alerts.count
+json.video_count crag_route.videos.count
 
 json.creator do
   json.id crag_route.user_id

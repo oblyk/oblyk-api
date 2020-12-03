@@ -32,6 +32,9 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'jwt'
 gem 'rack-cors'
 
+# Addressable is an alternative implementation to the URI implementation
+gem 'addressable'
+
 group :development, :test do
   # Ruby static code analyzer
   gem 'rubocop-faker'

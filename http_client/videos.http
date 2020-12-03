@@ -1,0 +1,35 @@
+DELETE {{api_url}}/videos/1.json
+Authorization: Bearer {{auth_token}}
+
+### Update video 1
+PUT {{api_url}}/videos/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "video": {
+    "description": "Feu Valery et ses poches"
+  }
+}
+
+### Create video
+POST {{api_url}}/videos.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "video": {
+    "viewable_type": "Crag",
+    "viewable_id": 1,
+    "url": "https://www.dailymotion.com/video/x7xv2y9?playlist=x5nmbq",
+    "description": "Feu Valéry"
+  }
+}
+
+### GET video
+GET {{api_url}}/videos/1.json
+Accept: application/json
+
+### GET all videos for one item
+GET {{api_url}}/videos.json?videoable_type=Crag&videoable_id=1
+Accept: application/json

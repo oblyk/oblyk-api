@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_03_183822) do
+ActiveRecord::Schema.define(version: 2020_12_03_193436) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -328,6 +328,19 @@ ActiveRecord::Schema.define(version: 2020_12_03_183822) do
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
+  end
+
+  create_table "videos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.text "description"
+    t.string "url"
+    t.bigint "user_id"
+    t.string "viewable_type"
+    t.bigint "viewable_id"
+    t.bigint "legacy_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_videos_on_user_id"
+    t.index ["viewable_type", "viewable_id"], name: "index_videos_on_viewable_type_and_viewable_id"
   end
 
   create_table "words", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
