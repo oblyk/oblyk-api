@@ -1,0 +1,24 @@
+DELETE {{api_url}}/unsubscribes.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "subscribe": {
+    "email": "mail@mail.com"
+  }
+}
+
+### Create subscribe
+POST {{api_url}}/subscribes.json
+Content-Type: application/json
+
+{
+  "subscribe": {
+    "email": "mail@mail.com"
+  }
+}
+
+### GET all subscribes
+GET {{api_url}}/subscribes.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json

@@ -39,6 +39,8 @@ Rails.application.routes.draw do
       resources :conversation_messages
       resources :areas
       resources :area_crags
+      resources :subscribes, only: %i[index create]
+      delete 'unsubscribes', controller: :subscribes, action: :unsubscribe
     end
   end
 end
