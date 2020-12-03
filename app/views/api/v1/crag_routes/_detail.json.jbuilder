@@ -25,11 +25,16 @@ json.sector do
   json.id crag_route.crag_sector&.id
   json.name crag_route.crag_sector&.name
 end
-
-json.comment_count crag.comments.count
-json.link_count crag.links.count
-json.follow_count crag.follows.count
-json.alert_count crag.alerts.count
+json.tags do
+  json.array! crag_route.tags do |tag|
+    json.id tag.id
+    json.name tag.name
+  end
+end
+json.comment_count crag_route.comments.count
+json.link_count crag_route.links.count
+json.follow_count crag_route.follows.count
+json.alert_count crag_route.alerts.count
 
 json.creator do
   json.id crag_route.user_id

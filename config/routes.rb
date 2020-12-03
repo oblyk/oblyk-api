@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       get 'anchors', controller: :anchors, action: :index
       get 'approach-types', controller: :approach_types, action: :index
       get 'alert-types', controller: :alert_types, action: :index
+      get 'tags-list', controller: :tags_list, action: :index
 
       get 'grade', controller: :grades, action: :grade
       get 'grade-types', controller: :grades, action: :types
@@ -41,6 +42,7 @@ Rails.application.routes.draw do
       resources :area_crags
       resources :subscribes, only: %i[index create]
       delete 'unsubscribes', controller: :subscribes, action: :unsubscribe
+      resources :tags, only: %i[index create destroy]
     end
   end
 end

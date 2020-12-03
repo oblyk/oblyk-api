@@ -49,3 +49,7 @@ Accept: application/json
 ###
 GET {{api_url}}/alert-types.json
 Accept: application/json
+
+###
+GET {{api_url}}/tags-list.json
+Accept: application/json

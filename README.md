@@ -39,8 +39,8 @@ Todo migration des tables :
 - [x] parkings
 - [x] crag_routes
 - [x] crag_sectors
-- [ ] subscribes
-- [ ] tags
+- [x] subscribes
+- [x] tags
 - [ ] tick_lists
 - [ ] guide_book_crags
 - [ ] guide_book_pdfs
