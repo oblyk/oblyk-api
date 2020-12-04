@@ -42,18 +42,15 @@ Todo migration des tables :
 - [x] subscribes
 - [x] tags
 - [x] tick_lists
-- [ ] guide_book_paper_crags
 - [ ] guide_book_papers
-- [ ] guide_book_pdfs
+- [ ] guide_book_paper_crags
+- [x] guide_book_pdfs
 - [x] guide_book_webs
 - [x] users
 - [x] videos
 - [x] words
 
 Gym :
-- [ ] contest_routes
-- [ ] contest_users
-- [ ] contests
 - [ ] gym_administrators
 - [ ] gym_grade_lines
 - [ ] gym_grades
@@ -61,3 +58,8 @@ Gym :
 - [ ] gym_routes
 - [ ] gym_sectors
 - [ ] gyms
+
+Later :
+- [ ] contest_routes
+- [ ] contest_users
+- [ ] contests

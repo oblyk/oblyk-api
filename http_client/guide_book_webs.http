@@ -9,7 +9,8 @@ Content-Type: application/json
 
 {
   "guide_book_web": {
-    "name": "Plan secteur Rocher des aures"
+    "name": "Plan secteur Rocher des aures",
+    "publication_year": 2013
   }
 }
 
@@ -22,6 +23,7 @@ Content-Type: application/json
   "guide_book_web": {
     "name": "Topo web du rocher des aures",
     "url": "https://oblyk.org/fr/site-escalade/18/rocher-des-aures",
+    "publication_year": 2012,
     "crag_id": 1
   }
 }

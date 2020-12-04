@@ -46,6 +46,7 @@ Rails.application.routes.draw do
       resources :tags, only: %i[index create destroy]
       resources :tick_lists, only: %i[index create destroy]
       resources :guide_book_webs
+      resources :guide_book_pdfs
     end
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-json.extract! guide_book_web, :name, :url
+json.extract! guide_book_web, :name, :url, :publication_year
 json.crag do
   json.extract! guide_book_web.crag, :id, :name
 end

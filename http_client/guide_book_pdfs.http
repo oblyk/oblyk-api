@@ -1,0 +1,58 @@
+### Delete guide_book_pdf
+DELETE {{api_url}}/guide_book_pdfs/1.json
+Authorization: Bearer {{auth_token}}
+
+### Update guide_book_pdf 1
+PUT {{api_url}}/guide_book_pdfs/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "guide_book_pdf": {
+    "name": "Plan des secteurs",
+    "publication_year": 2002
+  }
+}
+
+### Create guide_book_pdf
+POST {{api_url}}/guide_book_pdfs.json
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="guide_book_pdf[pdf_file]"; filename="topo.pdf"
+
+< ./pdfs/topo.pdf
+--WebAppBoundary--
+Content-Disposition: form-data; name="guide_book_pdf[name]"
+Content-Type: text/plain
+
+Topo rocher des aures
+--WebAppBoundary--
+Content-Disposition: form-data; name="guide_book_pdf[description]"
+Content-Type: text/plain
+
+Plan de la marche d'approche et des secteurs
+--WebAppBoundary--
+Content-Disposition: form-data; name="guide_book_pdf[author]"
+Content-Type: text/plain
+
+François Crespo
+--WebAppBoundary--
+Content-Disposition: form-data; name="guide_book_pdf[publication_year]"
+Content-Type: text/plain
+
+2001
+--WebAppBoundary--
+Content-Disposition: form-data; name="guide_book_pdf[crag_id]"
+Content-Type: text/plain
+
+1
+
+### GET guide_book_pdf
+GET {{api_url}}/guide_book_pdfs/1.json
+Accept: application/json
+
+### GET all guide_book_pdfs
+GET {{api_url}}/guide_book_pdfs.json?crag_id=1
+Accept: application/json

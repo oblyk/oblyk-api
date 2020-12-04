@@ -49,6 +49,7 @@ module Api
         params.require(:guide_book_web).permit(
           :name,
           :url,
+          :publication_year,
           :crag_id
         )
       end

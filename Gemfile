@@ -35,6 +35,9 @@ gem 'rack-cors'
 # Addressable is an alternative implementation to the URI implementation
 gem 'addressable'
 
+# Active storage validation
+gem 'activestorage-validator', '~> 0.1.3'
+
 group :development, :test do
   # Ruby static code analyzer
   gem 'rubocop-faker'
