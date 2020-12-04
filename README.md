@@ -42,8 +42,8 @@ Todo migration des tables :
 - [x] subscribes
 - [x] tags
 - [x] tick_lists
-- [ ] guide_book_papers
-- [ ] guide_book_paper_crags
+- [x] guide_book_papers
+- [x] guide_book_paper_crags
 - [x] guide_book_pdfs
 - [x] guide_book_webs
 - [x] users

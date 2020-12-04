@@ -56,6 +56,7 @@ json.video_count crag.videos.count
 json.guide_books do
   json.web_count crag.guide_book_webs.count
   json.pdf_count crag.guide_book_pdfs.count
+  json.paper_count crag.guide_book_papers.count
 end
 
 json.creator do

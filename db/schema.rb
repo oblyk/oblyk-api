@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_04_145207) do
+ActiveRecord::Schema.define(version: 2020_12_04_172726) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -239,6 +239,35 @@ ActiveRecord::Schema.define(version: 2020_12_04_145207) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["followable_type", "followable_id"], name: "index_follows_on_followable_type_and_followable_id"
     t.index ["user_id"], name: "index_follows_on_user_id"
+  end
+
+  create_table "guide_book_paper_crags", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "crag_id"
+    t.bigint "guide_book_paper_id"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["crag_id", "guide_book_paper_id"], name: "index_guide_book_paper_crags_on_crag_id_and_guide_book_paper_id", unique: true
+    t.index ["crag_id"], name: "index_guide_book_paper_crags_on_crag_id"
+    t.index ["guide_book_paper_id"], name: "index_guide_book_paper_crags_on_guide_book_paper_id"
+    t.index ["user_id"], name: "index_guide_book_paper_crags_on_user_id"
+  end
+
+  create_table "guide_book_papers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "author"
+    t.string "editor"
+    t.integer "publication_year"
+    t.integer "price_cents"
+    t.string "ean"
+    t.string "vc_reference"
+    t.integer "number_of_page"
+    t.integer "weight"
+    t.bigint "user_id"
+    t.bigint "legacy_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_guide_book_papers_on_user_id"
   end
 
   create_table "guide_book_pdfs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

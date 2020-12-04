@@ -18,6 +18,8 @@ class Crag < ApplicationRecord
   has_many :areas, through: :area_crags
   has_many :guide_book_webs
   has_many :guide_book_pdfs
+  has_many :guide_book_paper_crags
+  has_many :guide_book_papers, through: :guide_book_paper_crags
 
   validates :name, :latitude, :longitude, presence: true
   validates :rain, inclusion: { in: Rain::LIST }, allow_nil: true

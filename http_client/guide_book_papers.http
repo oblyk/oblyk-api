@@ -1,0 +1,77 @@
+### Delete guide_book_paper cover
+DELETE {{api_url}}/guide_book_papers/1/remove_cover.json
+Authorization: Bearer {{auth_token}}
+
+### Add guide book cover
+POST {{api_url}}/guide_book_papers/1/add_cover.json
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="guide_book_paper[cover]"; filename="topo.pdf"
+
+< ./imgs/guide-book-cover.jpg
+
+### Delete guide_book_paper
+DELETE {{api_url}}/guide_book_papers/1.json
+Authorization: Bearer {{auth_token}}
+
+### Delete guide_book_paper
+DELETE {{api_url}}/guide_book_papers/1/remove_crag.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "guide_book_paper": {
+    "crag_id": 1
+  }
+}
+
+### Add crag in paper guide book
+POST {{api_url}}/guide_book_papers/1/add_crag.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "guide_book_paper": {
+    "crag_id": 1
+  }
+}
+
+
+### Update guide_book_paper 1
+PUT {{api_url}}/guide_book_papers/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "guide_book_paper": {
+    "vc_reference": "VC7788"
+  }
+}
+
+### Create guide_book_paper
+POST {{api_url}}/guide_book_papers.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "guide_book_paper": {
+    "name": "Escalade en Drôme Provençale Nord",
+    "author": " Collectif CD FFME 26",
+    "editor": "Département de la Drôme",
+    "publication_year": 2011,
+    "price_cents": 2800,
+    "ean": "9782915025910",
+    "number_of_page": 340,
+    "weight": 700
+  }
+}
+
+### GET guide_book_paper
+GET {{api_url}}/guide_book_papers/1.json
+Accept: application/json
+
+### GET all guide_book_papers
+GET {{api_url}}/guide_book_papers.json?crag_id=1
+Accept: application/json

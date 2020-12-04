@@ -47,6 +47,12 @@ Rails.application.routes.draw do
       resources :tick_lists, only: %i[index create destroy]
       resources :guide_book_webs
       resources :guide_book_pdfs
+      resources :guide_book_papers do
+        post :add_crag, on: :member
+        delete :remove_crag, on: :member
+        post :add_cover, on: :member
+        delete :remove_cover, on: :member
+      end
     end
   end
 end
