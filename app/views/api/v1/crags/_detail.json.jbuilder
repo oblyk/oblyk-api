@@ -53,6 +53,10 @@ json.park_count crag.parks.count
 json.alert_count crag.alerts.count
 json.video_count crag.videos.count
 
+json.guide_books do
+  json.web_count crag.guide_book_webs.count
+end
+
 json.creator do
   json.id crag.user_id
   json.name crag.user&.full_name

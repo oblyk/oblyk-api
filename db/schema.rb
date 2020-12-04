@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_03_193436) do
+ActiveRecord::Schema.define(version: 2020_12_04_143422) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -239,6 +239,19 @@ ActiveRecord::Schema.define(version: 2020_12_03_193436) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["followable_type", "followable_id"], name: "index_follows_on_followable_type_and_followable_id"
     t.index ["user_id"], name: "index_follows_on_user_id"
+  end
+
+  create_table "guide_book_webs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "url"
+    t.integer "publication_year"
+    t.bigint "user_id"
+    t.bigint "crag_id"
+    t.bigint "legacy_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["crag_id"], name: "index_guide_book_webs_on_crag_id"
+    t.index ["user_id"], name: "index_guide_book_webs_on_user_id"
   end
 
   create_table "links", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
