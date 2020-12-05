@@ -4,6 +4,7 @@ json.extract! @user, :id, :first_name, :last_name, :date_of_birth, :genre, :desc
 
 json.follow_count @user.followers.count
 json.follower_count @user.follows.count
+json.photo_count @user.photos.count
 
 json.localization do
   json.latitude @user.latitude

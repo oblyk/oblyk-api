@@ -39,6 +39,7 @@ Rails.application.routes.draw do
       resources :conversations
       resources :conversation_messages
       resources :videos
+      resources :photos
       resources :areas
       resources :area_crags
       resources :subscribes, only: %i[index create]

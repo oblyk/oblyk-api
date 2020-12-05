@@ -1,0 +1,39 @@
+DELETE {{api_url}}/photos/1.json
+Authorization: Bearer {{auth_token}}
+
+### Update photo 1
+PUT {{api_url}}/photos/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "photo": {
+    "description": "Vue d'ensemble de la falaise"
+  }
+}
+
+### Create photo
+POST {{api_url}}/photos.json
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="photo[picture]"; filename="rocher-des-aures.jpg"
+
+< ./imgs/rocher-des-aures.jpg
+--WebAppBoundary
+Content-Disposition: form-data; name="photo[illustrable_type]"
+
+Crag
+--WebAppBoundary
+Content-Disposition: form-data; name="photo[illustrable_id]"
+
+1
+
+### GET photo
+GET {{api_url}}/photos/1.json
+Accept: application/json
+
+### GET all photos for one item
+GET {{api_url}}/photos.json?illustrable_type=Crag&illustrable_id=1
+Accept: application/json

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_04_172726) do
+ActiveRecord::Schema.define(version: 2020_12_05_170143) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -322,6 +322,26 @@ ActiveRecord::Schema.define(version: 2020_12_04_172726) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["crag_id"], name: "index_parks_on_crag_id"
     t.index ["user_id"], name: "index_parks_on_user_id"
+  end
+
+  create_table "photos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.text "description"
+    t.string "exif_model"
+    t.string "exif_make"
+    t.string "source"
+    t.string "alt"
+    t.boolean "copyright_by"
+    t.boolean "copyright_nc"
+    t.boolean "copyright_nd"
+    t.bigint "user_id"
+    t.string "illustrable_type"
+    t.bigint "illustrable_id"
+    t.bigint "legacy_id"
+    t.datetime "posted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["illustrable_type", "illustrable_id"], name: "index_photos_on_illustrable_type_and_illustrable_id"
+    t.index ["user_id"], name: "index_photos_on_user_id"
   end
 
   create_table "subscribes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

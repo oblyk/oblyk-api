@@ -13,6 +13,7 @@ class CragRoute < ApplicationRecord
   has_many :alerts, as: :alertable
   has_many :videos, as: :viewable
   has_many :tags, as: :taggable
+  has_many :photos, as: :illustrable
 
   validates :name, presence: true
   validates :climbing_type, inclusion: { in: Climb::LIST }
