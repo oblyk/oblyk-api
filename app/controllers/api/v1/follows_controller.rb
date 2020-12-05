@@ -22,7 +22,7 @@ module Api
         if @follow.save
           render 'api/v1/follows/show'
         else
-          render json: { error: @follow.errors }, status: :unauthorized
+          render json: { error: @follow.errors }, status: :unprocessable_entity
         end
       end
 
@@ -30,7 +30,7 @@ module Api
         if @follow.update(follow_params)
           render 'api/v1/follows/show'
         else
-          render json: { error: @follow.errors }, status: :unauthorized
+          render json: { error: @follow.errors }, status: :unprocessable_entity
         end
       end
 
@@ -38,7 +38,7 @@ module Api
         if @follow.delete
           render json: {}, status: :ok
         else
-          render json: { error: @follow.errors }, status: :unauthorized
+          render json: { error: @follow.errors }, status: :unprocessable_entity
         end
       end
 

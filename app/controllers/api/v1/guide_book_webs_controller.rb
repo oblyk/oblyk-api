@@ -19,7 +19,7 @@ module Api
         if @guide_book_web.save
           render 'api/v1/guide_book_webs/show'
         else
-          render json: { error: @guide_book_web.errors }, status: :unauthorized
+          render json: { error: @guide_book_web.errors }, status: :unprocessable_entity
         end
       end
 
@@ -27,7 +27,7 @@ module Api
         if @guide_book_web.update(guide_book_web_params)
           render 'api/v1/guide_book_webs/show'
         else
-          render json: { error: @guide_book_web.errors }, status: :unauthorized
+          render json: { error: @guide_book_web.errors }, status: :unprocessable_entity
         end
       end
 
@@ -35,7 +35,7 @@ module Api
         if @guide_book_web.delete
           render json: {}, status: :ok
         else
-          render json: { error: @guide_book_web.errors }, status: :unauthorized
+          render json: { error: @guide_book_web.errors }, status: :unprocessable_entity
         end
       end
 

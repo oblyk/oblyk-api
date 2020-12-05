@@ -14,7 +14,7 @@ module Api
         if area_crag.save
           render 'api/v1/areas/show'
         else
-          render json: { error: area_crag.errors }, status: :unauthorized
+          render json: { error: area_crag.errors }, status: :unprocessable_entity
         end
       end
 
@@ -23,7 +23,7 @@ module Api
         if @area_crag.delete
           render 'api/v1/areas/show'
         else
-          render json: { error: @area_crag.errors }, status: :unauthorized
+          render json: { error: @area_crag.errors }, status: :unprocessable_entity
         end
       end
 

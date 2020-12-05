@@ -16,7 +16,7 @@ module Api
         if @tick_list.save
           render 'api/v1/tick_lists/show'
         else
-          render json: { error: @tick_list.errors }, status: :unauthorized
+          render json: { error: @tick_list.errors }, status: :unprocessable_entity
         end
       end
 
@@ -24,7 +24,7 @@ module Api
         if @tick_list.delete
           render json: {}, status: :ok
         else
-          render json: { error: @tick_list.errors }, status: :unauthorized
+          render json: { error: @tick_list.errors }, status: :unprocessable_entity
         end
       end
 

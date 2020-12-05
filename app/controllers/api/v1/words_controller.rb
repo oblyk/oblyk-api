@@ -19,7 +19,7 @@ module Api
         if @word.save
           render 'api/v1/words/show'
         else
-          render json: { error: @word.errors }, status: :unauthorized
+          render json: { error: @word.errors }, status: :unprocessable_entity
         end
       end
 
@@ -27,7 +27,7 @@ module Api
         if @word.update(word_params)
           render 'api/v1/words/show'
         else
-          render json: { error: @word.errors }, status: :unauthorized
+          render json: { error: @word.errors }, status: :unprocessable_entity
         end
       end
 
@@ -35,7 +35,7 @@ module Api
         if @word.delete
           render json: {}, status: :ok
         else
-          render json: { error: @word.errors }, status: :unauthorized
+          render json: { error: @word.errors }, status: :unprocessable_entity
         end
       end
 

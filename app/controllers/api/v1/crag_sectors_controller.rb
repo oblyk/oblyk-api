@@ -20,7 +20,7 @@ module Api
         if @crag_sector.save
           render 'api/v1/crag_sectors/show'
         else
-          render json: { error: @crag_sector.errors }, status: :unauthorized
+          render json: { error: @crag_sector.errors }, status: :unprocessable_entity
         end
       end
 
@@ -28,7 +28,7 @@ module Api
         if @crag_sector.update(crag_sector_params)
           render 'api/v1/crag_sectors/show'
         else
-          render json: { error: @crag_sector.errors }, status: :unauthorized
+          render json: { error: @crag_sector.errors }, status: :unprocessable_entity
         end
       end
 
@@ -36,7 +36,7 @@ module Api
         if @crag_sector.delete
           render json: {}, status: :ok
         else
-          render json: { error: @crag_sector.errors }, status: :unauthorized
+          render json: { error: @crag_sector.errors }, status: :unprocessable_entity
         end
       end
 

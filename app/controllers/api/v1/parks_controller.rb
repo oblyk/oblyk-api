@@ -19,7 +19,7 @@ module Api
         if @park.save
           render 'api/v1/parks/show'
         else
-          render json: { error: @park.errors }, status: :unauthorized
+          render json: { error: @park.errors }, status: :unprocessable_entity
         end
       end
 
@@ -27,7 +27,7 @@ module Api
         if @park.update(park_params)
           render 'api/v1/parks/show'
         else
-          render json: { error: @park.errors }, status: :unauthorized
+          render json: { error: @park.errors }, status: :unprocessable_entity
         end
       end
 
@@ -35,7 +35,7 @@ module Api
         if @park.delete
           render json: {}, status: :ok
         else
-          render json: { error: @park.errors }, status: :unauthorized
+          render json: { error: @park.errors }, status: :unprocessable_entity
         end
       end
 

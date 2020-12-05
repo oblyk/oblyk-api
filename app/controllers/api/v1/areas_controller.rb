@@ -19,7 +19,7 @@ module Api
         if @area.save
           render 'api/v1/areas/show'
         else
-          render json: { error: @area.errors }, status: :unauthorized
+          render json: { error: @area.errors }, status: :unprocessable_entity
         end
       end
 
@@ -27,7 +27,7 @@ module Api
         if @area.update(area_params)
           render 'api/v1/areas/show'
         else
-          render json: { error: @area.errors }, status: :unauthorized
+          render json: { error: @area.errors }, status: :unprocessable_entity
         end
       end
 
@@ -35,7 +35,7 @@ module Api
         if @area.delete
           render json: {}, status: :ok
         else
-          render json: { error: @area.errors }, status: :unauthorized
+          render json: { error: @area.errors }, status: :unprocessable_entity
         end
       end
 

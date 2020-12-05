@@ -19,7 +19,7 @@ module Api
         if @approach.save
           render 'api/v1/approaches/show'
         else
-          render json: { error: @approach.errors }, status: :unauthorized
+          render json: { error: @approach.errors }, status: :unprocessable_entity
         end
       end
 
@@ -27,7 +27,7 @@ module Api
         if @approach.update(approach_params)
           render 'api/v1/approaches/show'
         else
-          render json: { error: @approach.errors }, status: :unauthorized
+          render json: { error: @approach.errors }, status: :unprocessable_entity
         end
       end
 
@@ -35,7 +35,7 @@ module Api
         if @approach.delete
           render json: {}, status: :ok
         else
-          render json: { error: @approach.errors }, status: :unauthorized
+          render json: { error: @approach.errors }, status: :unprocessable_entity
         end
       end
 

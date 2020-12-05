@@ -22,7 +22,7 @@ module Api
         if @link.save
           render 'api/v1/links/show'
         else
-          render json: { error: @link.errors }, status: :unauthorized
+          render json: { error: @link.errors }, status: :unprocessable_entity
         end
       end
 
@@ -30,7 +30,7 @@ module Api
         if @link.update(link_params)
           render 'api/v1/links/show'
         else
-          render json: { error: @link.errors }, status: :unauthorized
+          render json: { error: @link.errors }, status: :unprocessable_entity
         end
       end
 
@@ -38,7 +38,7 @@ module Api
         if @link.delete
           render json: {}, status: :ok
         else
-          render json: { error: @link.errors }, status: :unauthorized
+          render json: { error: @link.errors }, status: :unprocessable_entity
         end
       end
 

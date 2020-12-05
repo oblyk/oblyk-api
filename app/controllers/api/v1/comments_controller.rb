@@ -22,7 +22,7 @@ module Api
         if @comment.save
           render 'api/v1/comments/show'
         else
-          render json: { error: @comment.errors }, status: :unauthorized
+          render json: { error: @comment.errors }, status: :unprocessable_entity
         end
       end
 
@@ -30,7 +30,7 @@ module Api
         if @comment.update(comment_params)
           render 'api/v1/comments/show'
         else
-          render json: { error: @comment.errors }, status: :unauthorized
+          render json: { error: @comment.errors }, status: :unprocessable_entity
         end
       end
 
@@ -38,7 +38,7 @@ module Api
         if @comment.delete
           render json: {}, status: :ok
         else
-          render json: { error: @comment.errors }, status: :unauthorized
+          render json: { error: @comment.errors }, status: :unprocessable_entity
         end
       end
 

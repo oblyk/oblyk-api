@@ -19,7 +19,7 @@ module Api
         if @tag.save
           render 'api/v1/tags/show'
         else
-          render json: { error: @tag.errors }, status: :unauthorized
+          render json: { error: @tag.errors }, status: :unprocessable_entity
         end
       end
 
@@ -27,7 +27,7 @@ module Api
         if @tag.delete
           render json: {}, status: :ok
         else
-          render json: { error: @tag.errors }, status: :unauthorized
+          render json: { error: @tag.errors }, status: :unprocessable_entity
         end
       end
 

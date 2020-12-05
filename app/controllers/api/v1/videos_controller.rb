@@ -22,7 +22,7 @@ module Api
         if @video.save
           render 'api/v1/videos/show'
         else
-          render json: { error: @video.errors }, status: :unauthorized
+          render json: { error: @video.errors }, status: :unprocessable_entity
         end
       end
 
@@ -30,7 +30,7 @@ module Api
         if @video.update(video_params)
           render 'api/v1/videos/show'
         else
-          render json: { error: @video.errors }, status: :unauthorized
+          render json: { error: @video.errors }, status: :unprocessable_entity
         end
       end
 
@@ -38,7 +38,7 @@ module Api
         if @video.delete
           render json: {}, status: :ok
         else
-          render json: { error: @video.errors }, status: :unauthorized
+          render json: { error: @video.errors }, status: :unprocessable_entity
         end
       end
 

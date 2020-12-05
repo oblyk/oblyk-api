@@ -15,7 +15,7 @@ module Api
         if @conversation_message.save
           render 'api/v1/conversation_messages/show'
         else
-          render json: { error: @conversation_message.errors }, status: :unauthorized
+          render json: { error: @conversation_message.errors }, status: :unprocessable_entity
         end
       end
 
@@ -23,7 +23,7 @@ module Api
         if @conversation_message.update(conversation_message_params)
           render 'api/v1/conversation_messages/show'
         else
-          render json: { error: @conversation_message.errors }, status: :unauthorized
+          render json: { error: @conversation_message.errors }, status: :unprocessable_entity
         end
       end
 
@@ -31,7 +31,7 @@ module Api
         if @conversation_message.delete
           render json: {}, status: :ok
         else
-          render json: { error: @conversation_message.errors }, status: :unauthorized
+          render json: { error: @conversation_message.errors }, status: :unprocessable_entity
         end
       end
 

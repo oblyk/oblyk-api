@@ -21,7 +21,7 @@ module Api
         if @alert.save
           render 'api/v1/alerts/show'
         else
-          render json: { error: @alert.errors }, status: :unauthorized
+          render json: { error: @alert.errors }, status: :unprocessable_entity
         end
       end
 
@@ -29,7 +29,7 @@ module Api
         if @alert.update(alert_params)
           render 'api/v1/alerts/show'
         else
-          render json: { error: @alert.errors }, status: :unauthorized
+          render json: { error: @alert.errors }, status: :unprocessable_entity
         end
       end
 
@@ -37,7 +37,7 @@ module Api
         if @alert.delete
           render json: {}, status: :ok
         else
-          render json: { error: @alert.errors }, status: :unauthorized
+          render json: { error: @alert.errors }, status: :unprocessable_entity
         end
       end
 

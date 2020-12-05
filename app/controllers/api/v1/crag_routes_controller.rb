@@ -19,7 +19,7 @@ module Api
         if @crag_route.save
           render 'api/v1/crag_routes/show'
         else
-          render json: { error: @crag_route.errors }, status: :unauthorized
+          render json: { error: @crag_route.errors }, status: :unprocessable_entity
         end
       end
 
@@ -27,7 +27,7 @@ module Api
         if @crag_route.update(crag_route_params)
           render 'api/v1/crag_routes/show'
         else
-          render json: { error: @crag_route.errors }, status: :unauthorized
+          render json: { error: @crag_route.errors }, status: :unprocessable_entity
         end
       end
 
@@ -35,7 +35,7 @@ module Api
         if @crag_route.delete
           render json: {}, status: :ok
         else
-          render json: { error: @crag_route.errors }, status: :unauthorized
+          render json: { error: @crag_route.errors }, status: :unprocessable_entity
         end
       end
 

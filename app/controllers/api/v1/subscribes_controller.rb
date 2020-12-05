@@ -14,7 +14,7 @@ module Api
         if @subscribe.save
           render 'api/v1/subscribes/show'
         else
-          render json: { error: @subscribe.errors }, status: :unauthorized
+          render json: { error: @subscribe.errors }, status: :unprocessable_entity
         end
       end
 
@@ -23,7 +23,7 @@ module Api
         if @subscribe.delete
           render json: {}, status: :ok
         else
-          render json: { error: @subscribe.errors }, status: :unauthorized
+          render json: { error: @subscribe.errors }, status: :unprocessable_entity
         end
       end
 

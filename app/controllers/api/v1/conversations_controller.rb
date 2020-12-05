@@ -24,7 +24,7 @@ module Api
         if @conversation.save
           render 'api/v1/conversations/show'
         else
-          render json: { error: @conversation.errors }, status: :unauthorized
+          render json: { error: @conversation.errors }, status: :unprocessable_entity
         end
       end
 
