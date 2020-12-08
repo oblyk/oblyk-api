@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_08_183850) do
+ActiveRecord::Schema.define(version: 2020_12_08_191502) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -303,6 +303,17 @@ ActiveRecord::Schema.define(version: 2020_12_08_183850) do
     t.string "level"
     t.index ["gym_id"], name: "index_gym_administrators_on_gym_id"
     t.index ["user_id"], name: "index_gym_administrators_on_user_id"
+  end
+
+  create_table "gym_grades", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "difficulty_system"
+    t.boolean "has_hold_color"
+    t.bigint "gym_id"
+    t.bigint "legacy_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gym_id"], name: "index_gym_grades_on_gym_id"
   end
 
   create_table "gyms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

@@ -1,0 +1,37 @@
+DELETE {{api_url}}/gyms/1/gym_grades/1.json
+Authorization: Bearer {{auth_token}}
+
+### Update gym grade 1
+PUT {{api_url}}/gyms/1/gym_grades/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym_grade": {
+    "name": "Bloc Mroc"
+  }
+}
+
+### Create gym grade
+POST {{api_url}}/gyms/1/gym_grades.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym_grade": {
+    "name": "bloc",
+    "difficulty_system": "hold_color",
+    "has_hold_color": true
+  }
+}
+
+### GET gym grade
+GET {{api_url}}/gyms/1/gym_grades/1.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET gym grades for gym
+GET {{api_url}}/gyms/1/gym_grades.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+

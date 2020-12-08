@@ -3,9 +3,7 @@
 module Api
   module V1
     class GymAdministratorsController < ApiController
-      before_action :protected_by_session, only: %i[create update destroy index]
-      before_action :set_gym
-      before_action :protected_by_gym_administrator, only: %i[create update destroy index]
+      include Gymable
       before_action :set_gym_administrator, only: %i[update destroy]
 
       def index
@@ -44,21 +42,11 @@ module Api
         @gym_administrator = GymAdministrator.find params[:id]
       end
 
-      def set_gym
-        @gym = Gym.find params[:gym_id]
-      end
-
       def gym_administrator_params
         params.require(:gym_administrator).permit(
           :user_id,
           :level
         )
-      end
-
-      def protected_by_gym_administrator
-        return if @current_user.super_admin
-
-        not_authorized unless @gym.gym_administrators.where(user_id: @current_user.id).exist?
       end
     end
   end

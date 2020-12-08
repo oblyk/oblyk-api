@@ -56,6 +56,7 @@ Rails.application.routes.draw do
       end
       resources :gyms do
         resources :gym_administrators
+        resources :gym_grades
       end
     end
   end
