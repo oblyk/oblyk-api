@@ -54,7 +54,7 @@ Todo migration des tables :
 Gym :
 - [x] gym_administrators
 - [ ] gym_grade_lines
-- [ ] gym_grades
+- [x] gym_grades
 - [ ] gym_rooms
 - [ ] gym_routes
 - [ ] gym_sectors
