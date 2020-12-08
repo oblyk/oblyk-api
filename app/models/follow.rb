@@ -6,7 +6,7 @@ class Follow < ApplicationRecord
 
   before_validation :auto_accepted
 
-  validates :followable_type, inclusion: { in: %w[User Crag CragSector CragRoute].freeze }
+  validates :followable_type, inclusion: { in: %w[User Crag CragSector CragRoute Gym].freeze }
 
   private
 

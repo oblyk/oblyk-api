@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_05_170143) do
+ActiveRecord::Schema.define(version: 2020_12_08_183850) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -295,6 +295,47 @@ ActiveRecord::Schema.define(version: 2020_12_05_170143) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["crag_id"], name: "index_guide_book_webs_on_crag_id"
     t.index ["user_id"], name: "index_guide_book_webs_on_user_id"
+  end
+
+  create_table "gym_administrators", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "gym_id"
+    t.string "level"
+    t.index ["gym_id"], name: "index_gym_administrators_on_gym_id"
+    t.index ["user_id"], name: "index_gym_administrators_on_user_id"
+  end
+
+  create_table "gyms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.string "address"
+    t.string "postal_code"
+    t.string "code_country"
+    t.string "country"
+    t.string "city"
+    t.string "big_city"
+    t.string "region"
+    t.string "email"
+    t.string "phone_number"
+    t.string "web_site"
+    t.boolean "bouldering"
+    t.boolean "sport_climbing"
+    t.boolean "pan"
+    t.boolean "fun_climbing"
+    t.boolean "training_space"
+    t.decimal "latitude", precision: 10, scale: 6
+    t.decimal "longitude", precision: 10, scale: 6
+    t.bigint "user_id"
+    t.string "plan"
+    t.datetime "plan_start_at"
+    t.datetime "plan_en_at"
+    t.datetime "assigned_at"
+    t.bigint "legacy_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_gyms_on_name"
+    t.index ["user_id"], name: "index_gyms_on_user_id"
   end
 
   create_table "links", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

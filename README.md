@@ -52,13 +52,13 @@ Todo migration des tables :
 - [x] words
 
 Gym :
-- [ ] gym_administrators
+- [x] gym_administrators
 - [ ] gym_grade_lines
 - [ ] gym_grades
 - [ ] gym_rooms
 - [ ] gym_routes
 - [ ] gym_sectors
-- [ ] gyms
+- [x] gyms
 
 Later :
 - [ ] contest_routes

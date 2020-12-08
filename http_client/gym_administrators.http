@@ -1,0 +1,36 @@
+DELETE {{api_url}}/gyms/1/gym_administrators/1.json
+Authorization: Bearer {{auth_token}}
+
+### Update gym administrator 1
+PUT {{api_url}}/gyms/1/gym_administrators/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym_administrator": {
+    "level": "update"
+  }
+}
+
+### Create gym administrator
+POST {{api_url}}/gyms/1/gym_administrators.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym_administrator": {
+    "user_id": 1,
+    "level": "test"
+  }
+}
+
+### GET gym administrator
+GET {{api_url}}/gyms/1/gym_administrators/1.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET gym administrators for gym
+GET {{api_url}}/gyms/1/gym_administrators.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+

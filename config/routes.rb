@@ -54,6 +54,9 @@ Rails.application.routes.draw do
         post :add_cover, on: :member
         delete :remove_cover, on: :member
       end
+      resources :gyms do
+        resources :gym_administrators
+      end
     end
   end
 end

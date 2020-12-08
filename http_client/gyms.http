@@ -1,0 +1,46 @@
+DELETE {{api_url}}/gyms/1.json
+Authorization: Bearer {{auth_token}}
+
+### Update gym 1
+PUT {{api_url}}/gyms/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym": {
+    "description": "Les blocs sont serrés"
+  }
+}
+
+### Create Crag
+POST {{api_url}}/gyms.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym": {
+    "name": "Mroc Laennec",
+    "description": "Meilleurs salles de bloc de Lyon",
+    "address": "49 rue Président Krüger, 69008 Lyon)",
+    "postal_code": "69008",
+    "code_country": "FR",
+    "country": "France",
+    "city": "Lyon",
+    "big_city": "Lyon",
+    "email": "contact@mroc3.com",
+    "phone_number": "0486112721",
+    "web_site": "https://www.mroc3.com/",
+    "bouldering": true,
+    "training_space": true,
+    "latitude": 44.469592,
+    "longitude": 5.058089
+  }
+}
+
+### GET gym
+GET {{api_url}}/gyms/1.json
+Accept: application/json
+
+### GET all gyms
+GET {{api_url}}/gyms.json
+Accept: application/json
