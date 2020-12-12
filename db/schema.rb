@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_12_125613) do
+ActiveRecord::Schema.define(version: 2020_12_12_140244) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -78,6 +78,38 @@ ActiveRecord::Schema.define(version: 2020_12_12_125613) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_areas_on_user_id"
+  end
+
+  create_table "ascents", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "type"
+    t.string "ascent_status"
+    t.string "roping_status"
+    t.integer "attempt"
+    t.bigint "user_id"
+    t.bigint "crag_route_id"
+    t.bigint "gym_route_id"
+    t.json "sections"
+    t.integer "height"
+    t.json "hold_colors"
+    t.json "tag_colors"
+    t.string "climbing_type"
+    t.string "grade_appreciation_text"
+    t.integer "grade_appreciation_value"
+    t.integer "note"
+    t.text "comment"
+    t.integer "sections_count"
+    t.integer "max_grade_value"
+    t.integer "min_grade_value"
+    t.text "max_grade_text"
+    t.text "min_grade_text"
+    t.string "legacy_hardness_id"
+    t.bigint "legacy_id"
+    t.date "released_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["crag_route_id"], name: "index_ascents_on_crag_route_id"
+    t.index ["gym_route_id"], name: "index_ascents_on_gym_route_id"
+    t.index ["user_id"], name: "index_ascents_on_user_id"
   end
 
   create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
