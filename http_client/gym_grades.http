@@ -1,17 +1,3 @@
-DELETE {{api_url}}/gyms/1/gym_grades/1.json
-Authorization: Bearer {{auth_token}}
-
-### Update gym grade 1
-PUT {{api_url}}/gyms/1/gym_grades/1.json
-Authorization: Bearer {{auth_token}}
-Content-Type: application/json
-
-{
-  "gym_grade": {
-    "name": "Bloc Mroc"
-  }
-}
-
 ### Create gym grade
 POST {{api_url}}/gyms/1/gym_grades.json
 Authorization: Bearer {{auth_token}}
@@ -24,9 +10,48 @@ Content-Type: application/json
     "has_hold_color": true
   }
 }
+> {%
+client.global.set("gym_grade_id", response.body.id);
+%}
+
+### Update gym grade 1
+PUT {{api_url}}/gyms/1/gym_grades/{{gym_grade_id}}.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym_grade": {
+    "name": "Bloc Mroc"
+  }
+}
+
+### Create gym grade line
+POST {{api_url}}/gyms/1/gym_grades/{{gym_grade_id}}/gym_grade_lines.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym_grade_line": {
+    "name": "Facile",
+    "order": 1,
+    "colors": ["#ab37c8", "#2ca02c"],
+    "grade_text": "7a"
+  }
+}
+
+### Update gym grade line 1
+PUT {{api_url}}/gyms/1/gym_grades/{{gym_grade_id}}/gym_grade_lines/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym_grade_line": {
+    "name": "Dure"
+  }
+}
 
 ### GET gym grade
-GET {{api_url}}/gyms/1/gym_grades/1.json
+GET {{api_url}}/gyms/1/gym_grades/{{gym_grade_id}}.json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
@@ -35,3 +60,10 @@ GET {{api_url}}/gyms/1/gym_grades.json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
+### Delete grade gyms
+DELETE {{api_url}}/gyms/1/gym_grades/{{gym_grade_id}}/gym_grade_lines/1.json
+Authorization: Bearer {{auth_token}}
+
+### Delete grade gyms
+DELETE {{api_url}}/gyms/1/gym_grades/{{gym_grade_id}}.json
+Authorization: Bearer {{auth_token}}

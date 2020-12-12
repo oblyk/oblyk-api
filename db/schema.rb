@@ -305,6 +305,19 @@ ActiveRecord::Schema.define(version: 2020_12_08_191502) do
     t.index ["user_id"], name: "index_gym_administrators_on_user_id"
   end
 
+  create_table "gym_grade_lines", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name"
+    t.json "colors"
+    t.integer "order"
+    t.string "grade_text"
+    t.integer "grade_value"
+    t.bigint "gym_grade_id"
+    t.bigint "legacy_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gym_grade_id"], name: "index_gym_grade_lines_on_gym_grade_id"
+  end
+
   create_table "gym_grades", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.string "difficulty_system"
