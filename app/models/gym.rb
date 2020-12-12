@@ -9,6 +9,7 @@ class Gym < ApplicationRecord
   has_many :follows, as: :followable
   has_many :gym_administrators
   has_many :gym_grades
+  has_many :gym_spaces
 
   validates :name, :latitude, :longitude, :address, :postal_code, :country, :city, :big_city, presence: true
 end

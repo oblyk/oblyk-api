@@ -1,0 +1,41 @@
+### Create sector
+POST {{api_url}}/gyms/1/gym_spaces/1/gym_sectors.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym_sector": {
+    "name": "Salle principal",
+    "description": "Dèvers droite",
+    "group_sector_name": "Les devers",
+    "climbing_type": "bouldering",
+    "height": 5,
+    "gym_grade_id": 1
+  }
+}
+> {%
+client.global.set("gym_sector_id", response.body.id);
+%}
+
+### Update gym_sector 1
+PUT {{api_url}}/gyms/1/gym_spaces/1/gym_sectors/{{gym_sector_id}}.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym_sector": {
+    "description": "Dèvers droite, là où ça penche"
+  }
+}
+
+### GET gym_sector
+GET {{api_url}}/gyms/1/gym_spaces/1/gym_sectors/{{gym_sector_id}}.json
+Accept: application/json
+
+### GET all gym_sectors
+GET {{api_url}}/gyms/1/gym_spaces/1/gym_sectors.json
+Accept: application/json
+
+### Delete gym_sector
+DELETE {{api_url}}/gyms/1/gym_spaces/1/gym_sectors/{{gym_sector_id}}.json
+Authorization: Bearer {{auth_token}}

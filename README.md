@@ -55,9 +55,9 @@ Gym :
 - [x] gym_administrators
 - [x] gym_grade_lines
 - [x] gym_grades
-- [ ] gym_rooms
+- [x] gym_rooms
 - [ ] gym_routes
-- [ ] gym_sectors
+- [x] gym_sectors
 - [x] gyms
 
 Later :

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_08_191502) do
+ActiveRecord::Schema.define(version: 2020_12_12_113851) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -327,6 +327,47 @@ ActiveRecord::Schema.define(version: 2020_12_08_191502) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["gym_id"], name: "index_gym_grades_on_gym_id"
+  end
+
+  create_table "gym_sectors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.string "group_sector_name"
+    t.string "climbing_type"
+    t.integer "height"
+    t.text "polygon"
+    t.bigint "gym_space_id"
+    t.bigint "gym_grade_id"
+    t.bigint "legacy_id"
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gym_grade_id"], name: "index_gym_sectors_on_gym_grade_id"
+    t.index ["gym_space_id"], name: "index_gym_sectors_on_gym_space_id"
+  end
+
+  create_table "gym_spaces", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.integer "order"
+    t.string "climbing_type"
+    t.string "banner_color"
+    t.string "banner_bg_color"
+    t.integer "banner_opacity"
+    t.string "scheme_bg_color"
+    t.integer "scheme_height"
+    t.integer "scheme_width"
+    t.decimal "latitude", precision: 10, scale: 6
+    t.decimal "longitude", precision: 10, scale: 6
+    t.bigint "gym_id"
+    t.bigint "gym_grade_id"
+    t.bigint "legacy_id"
+    t.datetime "deleted_at"
+    t.datetime "published_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gym_grade_id"], name: "index_gym_spaces_on_gym_grade_id"
+    t.index ["gym_id"], name: "index_gym_spaces_on_gym_id"
   end
 
   create_table "gyms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

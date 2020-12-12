@@ -3,6 +3,8 @@
 class GymGrade < ApplicationRecord
   belongs_to :gym
   has_many :gym_grade_lines, dependent: :destroy
+  has_many :gym_spaces
+  has_many :gym_sectors
 
   DIFFICULTY_SYSTEM_LIST = %w[hold_color tag_color grade].freeze
 

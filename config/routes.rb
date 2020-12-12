@@ -59,6 +59,11 @@ Rails.application.routes.draw do
         resources :gym_grades do
           resources :gym_grade_lines
         end
+        resources :gym_spaces do
+          put :publish, on: :member
+          put :unpublish, on: :member
+          resources :gym_sectors
+        end
       end
     end
   end

@@ -1,0 +1,49 @@
+### Create sapce
+POST {{api_url}}/gyms/1/gym_spaces.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym_space": {
+    "name": "Salle principal",
+    "description": "L'escpace avec le plus de bloc trop beau",
+    "climbing_type": "bouldering",
+    "gym_grade_id": 1
+  }
+}
+> {%
+client.global.set("gym_space_id", response.body.id);
+%}
+
+### Update gym_space 1
+PUT {{api_url}}/gyms/1/gym_spaces/{{gym_space_id}}.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym_space": {
+    "description": "L'escpace avec le plus de bloc trop beau, et le plus de profil"
+  }
+}
+
+### Publish gym_space
+PUT {{api_url}}/gyms/1/gym_spaces/{{gym_space_id}}/publish.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+### Unpublish gym_space
+PUT {{api_url}}/gyms/1/gym_spaces/{{gym_space_id}}/unpublish.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+### GET gym_space
+GET {{api_url}}/gyms/1/gym_spaces/{{gym_space_id}}.json
+Accept: application/json
+
+### GET all gym_spaces
+GET {{api_url}}/gyms/1/gym_spaces.json
+Accept: application/json
+
+### Delete space
+DELETE {{api_url}}/gyms/1/gym_spaces/{{gym_space_id}}.json
+Authorization: Bearer {{auth_token}}
