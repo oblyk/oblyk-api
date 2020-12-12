@@ -56,7 +56,7 @@ Gym :
 - [x] gym_grade_lines
 - [x] gym_grades
 - [x] gym_rooms
-- [ ] gym_routes
+- [x] gym_routes
 - [x] gym_sectors
 - [x] gyms
 

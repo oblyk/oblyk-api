@@ -58,6 +58,6 @@ class Tag < ApplicationRecord
   ].freeze
 
   validates :name, presence: true
-  validates :taggable_type, inclusion: { in: %w[CragRoute].freeze }
+  validates :taggable_type, inclusion: { in: %w[CragRoute GymRoute].freeze }
   validates :name, inclusion: { in: TAGS_LIST }
 end

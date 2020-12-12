@@ -4,7 +4,7 @@ module Api
   module V1
     class ClimbsController < ApiController
       def index
-        render json: Climb::LIST
+        render json: Climb::CRAG_LIST
       end
     end
   end

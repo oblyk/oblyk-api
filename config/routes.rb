@@ -62,8 +62,12 @@ Rails.application.routes.draw do
         resources :gym_spaces do
           put :publish, on: :member
           put :unpublish, on: :member
-          resources :gym_sectors
+          resources :gym_sectors do
+            resources :gym_routes
+          end
+          resources :gym_routes
         end
+        resources :gym_routes
       end
     end
   end

@@ -1,0 +1,51 @@
+### Create sport climbing route
+POST {{api_url}}/gyms/1/gym_spaces/1/gym_sectors/1/gym_routes.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym_route": {
+    "name": "1er bloc",
+    "height": 4,
+    "openers": "Alex",
+    "opened_at": "2020-12-12",
+    "sections": [{
+      "grade": "7b"
+    }],
+    "climbing_type": "bouldering"
+  }
+}
+> {%
+client.global.set("gym_route_id", response.body.id);
+%}
+
+### Update route 1
+PUT {{api_url}}/gyms/1/gym_routes/{{gym_route_id}}.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym_route": {
+    "height": 5
+  }
+}
+
+### GET route
+GET {{api_url}}/gyms/1/gym_spaces/1/gym_routes/{{gym_route_id}}.json
+Accept: application/json
+
+### GET all route in gym sector
+GET {{api_url}}/gyms/1/gym_spaces/1/gym_sectors/1/gym_routes.json
+Accept: application/json
+
+### GET all route in gym space
+GET {{api_url}}/gyms/1/gym_spaces/1/gym_routes.json
+Accept: application/json
+
+### GET all route in gym
+GET {{api_url}}/gyms/1/gym_routes.json
+Accept: application/json
+
+### Delete gym route
+DELETE {{api_url}}/gyms/1/gym_routes/1.json
+Authorization: Bearer {{auth_token}}

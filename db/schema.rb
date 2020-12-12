@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_12_113851) do
+ActiveRecord::Schema.define(version: 2020_12_12_125613) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -327,6 +327,37 @@ ActiveRecord::Schema.define(version: 2020_12_12_113851) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["gym_id"], name: "index_gym_grades_on_gym_id"
+  end
+
+  create_table "gym_routes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name"
+    t.integer "height"
+    t.string "climbing_type"
+    t.boolean "favorite"
+    t.string "openers"
+    t.text "polyline"
+    t.json "hold_colors"
+    t.json "tag_colors"
+    t.json "sections"
+    t.bigint "gym_sector_id"
+    t.bigint "gym_grade_line_id"
+    t.integer "grade_value_appreciation"
+    t.integer "note"
+    t.integer "note_count"
+    t.integer "ascents_count"
+    t.integer "sections_count"
+    t.integer "max_grade_value"
+    t.integer "min_grade_value"
+    t.text "max_grade_text"
+    t.text "min_grade_text"
+    t.bigint "legacy_id"
+    t.datetime "archived_at"
+    t.date "opened_at"
+    t.datetime "dismounted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gym_grade_line_id"], name: "index_gym_routes_on_gym_grade_line_id"
+    t.index ["gym_sector_id"], name: "index_gym_routes_on_gym_sector_id"
   end
 
   create_table "gym_sectors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

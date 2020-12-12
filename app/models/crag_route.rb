@@ -16,7 +16,7 @@ class CragRoute < ApplicationRecord
   has_many :photos, as: :illustrable
 
   validates :name, presence: true
-  validates :climbing_type, inclusion: { in: Climb::LIST }
+  validates :climbing_type, inclusion: { in: Climb::CRAG_LIST }
   validates :incline_type, inclusion: { in: Incline::LIST }, allow_nil: true
   validates :reception_type, inclusion: { in: Reception::LIST }, allow_nil: true
   validates :start_type, inclusion: { in: Start::LIST }, allow_nil: true
@@ -99,7 +99,7 @@ class CragRoute < ApplicationRecord
       errors.add(:start_type, I18n.t('activerecord.errors.messages.inclusion')) if section['start_type'].present? && Bolt::LIST.exclude?(section['start_type'])
       errors.add(:anchor_type, I18n.t('activerecord.errors.messages.inclusion')) if section['anchor_type'].present? && Anchor::LIST.exclude?(section['anchor_type'])
       errors.add(:incline_type, I18n.t('activerecord.errors.messages.inclusion')) if section['incline_type'].present? && Incline::LIST.exclude?(section['incline_type'])
-      errors.add(:climbing_type, I18n.t('activerecord.errors.messages.inclusion')) if Climb::LIST.exclude?(section['climbing_type'])
+      errors.add(:climbing_type, I18n.t('activerecord.errors.messages.inclusion')) if Climb::CRAG_LIST.exclude?(section['climbing_type'])
       errors.add(:reception_type, I18n.t('activerecord.errors.messages.inclusion')) if section['reception_type'].present? && Reception::LIST.exclude?(section['reception_type'])
 
       # Valid numerics
