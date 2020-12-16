@@ -6,6 +6,7 @@ class CragRoute < ApplicationRecord
   has_one_attached :picture
   belongs_to :crag_sector, optional: true
   belongs_to :user, optional: true
+  belongs_to :photo, optional: true
   belongs_to :crag
   has_many :comments, as: :commentable
   has_many :links, as: :linkable

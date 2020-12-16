@@ -66,7 +66,8 @@ module Api
           :south_west,
           :west,
           :north_west,
-          :crag_id
+          :crag_id,
+          :photo_id
         )
       end
     end

@@ -46,6 +46,18 @@ Content-Type: application/json
   }
 }
 
+### Define crag photo
+PUT {{api_url}}/crags/1.json
+Accept: application/json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "crag": {
+    "photo_id": 1
+  }
+}
+
 ### GET crag
 GET {{api_url}}/crags/1.json
 Accept: application/json

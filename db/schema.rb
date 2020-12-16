@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_12_140244) do
+ActiveRecord::Schema.define(version: 2020_12_15_193954) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -180,9 +180,11 @@ ActiveRecord::Schema.define(version: 2020_12_12_140244) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"
+    t.bigint "photo_id"
     t.index ["crag_id"], name: "index_crag_routes_on_crag_id"
     t.index ["crag_sector_id"], name: "index_crag_routes_on_crag_sector_id"
     t.index ["name"], name: "index_crag_routes_on_name"
+    t.index ["photo_id"], name: "index_crag_routes_on_photo_id"
     t.index ["user_id"], name: "index_crag_routes_on_user_id"
   end
 
@@ -212,8 +214,10 @@ ActiveRecord::Schema.define(version: 2020_12_12_140244) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"
+    t.bigint "photo_id"
     t.index ["crag_id"], name: "index_crag_sectors_on_crag_id"
     t.index ["name"], name: "index_crag_sectors_on_name"
+    t.index ["photo_id"], name: "index_crag_sectors_on_photo_id"
     t.index ["user_id"], name: "index_crag_sectors_on_user_id"
   end
 
@@ -257,7 +261,9 @@ ActiveRecord::Schema.define(version: 2020_12_12_140244) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"
+    t.bigint "photo_id"
     t.index ["name"], name: "index_crags_on_name"
+    t.index ["photo_id"], name: "index_crags_on_photo_id"
     t.index ["user_id"], name: "index_crags_on_user_id"
   end
 

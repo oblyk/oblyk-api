@@ -5,8 +5,13 @@ json.extract! crag,
               :name,
               :rain,
               :sun
-
+json.slug_name crag.name.parameterize
 json.rocks crag.rocks
+
+json.photo do
+  json.id crag.photo&.id
+  json.url url_for(crag.photo.picture) if crag.photo
+end
 
 json.climbing_type do
   json.extract! crag,
@@ -71,7 +76,7 @@ json.sectors do
   end
 end
 json.routes_figures do
-  json.count crag.crag_routes_count
+  json.route_count crag.crag_routes.count
   json.grade do
     json.min_value crag.min_grade_value
     json.max_value crag.max_grade_value

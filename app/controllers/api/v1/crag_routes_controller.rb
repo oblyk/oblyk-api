@@ -57,6 +57,7 @@ module Api
           :start_type,
           :crag_id,
           :crag_sector_id,
+          :photo_id,
           sections: %i[climbing_type description grade height bolt_count bolt_type anchor_type incline_type]
         )
       end

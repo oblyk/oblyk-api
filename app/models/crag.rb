@@ -4,8 +4,8 @@ class Crag < ApplicationRecord
   include Geolocable
   include SoftDeletable
 
-  has_one_attached :picture
   belongs_to :user, optional: true
+  belongs_to :photo, optional: true
   has_many :comments, as: :commentable
   has_many :links, as: :linkable
   has_many :follows, as: :followable
@@ -14,6 +14,7 @@ class Crag < ApplicationRecord
   has_many :parks
   has_many :crag_sectors
   alias_attribute :sectors, :crag_sectors
+  has_many :crag_routes
   has_many :area_crags
   has_many :areas, through: :area_crags
   has_many :guide_book_webs

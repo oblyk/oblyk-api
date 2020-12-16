@@ -6,12 +6,14 @@ class CragSector < ApplicationRecord
 
   has_one_attached :picture
   belongs_to :user, optional: true
+  belongs_to :photo, optional: true
   belongs_to :crag
   has_many :comments, as: :commentable
   has_many :links, as: :linkable
   has_many :follows, as: :followable
   has_many :alerts, as: :alertable
   has_many :photos, as: :illustrable
+  has_many :crag_routes
 
   validates :name, presence: true
   validates :rain, inclusion: { in: Rain::LIST }, allow_nil: true

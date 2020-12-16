@@ -68,6 +68,7 @@ module Api
           :autumn,
           :winter,
           :spring,
+          :photo_id,
           rocks: %i[name]
         )
       end
