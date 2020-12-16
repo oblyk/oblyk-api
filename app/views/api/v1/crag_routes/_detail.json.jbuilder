@@ -1,21 +1,7 @@
 # frozen_string_literal: true
 
-json.extract! crag_route,
-              :id,
-              :name,
-              :height,
-              :open_year,
-              :opener,
-              :climbing_type,
-              :sections_count,
-              :max_bolt
-json.grade_gap do
-  json.extract! crag_route,
-                :max_grade_value,
-                :min_grade_value,
-                :max_grade_text,
-                :min_grade_text
-end
+json.partial! 'api/v1/crag_routes/short_detail', crag_route: crag_route
+
 json.sections crag_route.sections
 json.crag do
   json.id crag_route.crag.id

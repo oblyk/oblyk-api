@@ -1,0 +1,3 @@
+### GET all tags for one item
+GET {{api_url}}/search.json?query=Rocher des aures
+Accept: application/json

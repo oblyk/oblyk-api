@@ -3,6 +3,7 @@
 class CragSector < ApplicationRecord
   include Geolocable
   include SoftDeletable
+  include Searchable
 
   has_one_attached :picture
   belongs_to :user, optional: true
@@ -18,4 +19,13 @@ class CragSector < ApplicationRecord
   validates :name, presence: true
   validates :rain, inclusion: { in: Rain::LIST }, allow_nil: true
   validates :sun, inclusion: { in: Sun::LIST }, allow_nil: true
+
+  def search_json
+    JSON.parse(
+      ApplicationController.render(
+        template: 'api/v1/crag_sectors/search.json',
+        assigns: { crag_sector: self }
+      )
+    )
+  end
 end

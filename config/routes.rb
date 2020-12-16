@@ -24,6 +24,7 @@ Rails.application.routes.draw do
 
       get 'grade', controller: :grades, action: :grade
       get 'grade-types', controller: :grades, action: :types
+      get 'search', controller: :searches, action: :index
 
       resources :users
       resources :crags

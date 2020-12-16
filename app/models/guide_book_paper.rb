@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class GuideBookPaper < ApplicationRecord
+  include Searchable
+
   has_one_attached :cover
   belongs_to :user, optional: true
   has_many :guide_book_paper_crags
@@ -8,4 +10,13 @@ class GuideBookPaper < ApplicationRecord
 
   validates :name, presence: true
   validates :cover, blob: { content_type: :image }, allow_nil: true
+
+  def search_json
+    JSON.parse(
+      ApplicationController.render(
+        template: 'api/v1/guide_book_papers/search.json',
+        assigns: { guide_book_paper: self }
+      )
+    )
+  end
 end

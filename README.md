@@ -23,6 +23,29 @@ Things you may want to cover:
 
 * ...
 
+### Elastic Search
+```ruby
+Crag.__elasticsearch__.create_index! force: true
+Crag.import
+Crag.__elasticsearch__.refresh_index!
+
+CragSector.__elasticsearch__.create_index! force: true
+CragSector.import
+CragSector.__elasticsearch__.refresh_index!
+
+CragRoute.__elasticsearch__.create_index! force: true
+CragRoute.import
+CragRoute.__elasticsearch__.refresh_index!
+
+GuideBookPaper.__elasticsearch__.create_index! force: true
+GuideBookPaper.import
+GuideBookPaper.__elasticsearch__.refresh_index!
+
+Gym.__elasticsearch__.create_index! force: true
+Gym.import
+Gym.__elasticsearch__.refresh_index!
+```
+
 Todo migration des tables :
 - [x] approaches
 - [x] comments

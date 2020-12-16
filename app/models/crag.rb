@@ -3,6 +3,7 @@
 class Crag < ApplicationRecord
   include Geolocable
   include SoftDeletable
+  include Searchable
 
   belongs_to :user, optional: true
   belongs_to :photo, optional: true
@@ -27,6 +28,15 @@ class Crag < ApplicationRecord
   validates :rain, inclusion: { in: Rain::LIST }, allow_nil: true
   validates :sun, inclusion: { in: Sun::LIST }, allow_nil: true
   validate :validate_rocks
+
+  def search_json
+    JSON.parse(
+      ApplicationController.render(
+        template: 'api/v1/crags/search.json',
+        assigns: { crag: self }
+      )
+    )
+  end
 
   private
 

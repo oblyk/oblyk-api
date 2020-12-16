@@ -2,6 +2,7 @@
 
 class CragRoute < ApplicationRecord
   include SoftDeletable
+  include Searchable
 
   has_one_attached :picture
   belongs_to :crag_sector, optional: true
@@ -31,6 +32,15 @@ class CragRoute < ApplicationRecord
   before_save :historize_grade_gap
   before_save :historize_sections_count
   before_save :historize_max_bolt
+
+  def search_json
+    JSON.parse(
+      ApplicationController.render(
+        template: 'api/v1/crag_routes/search.json',
+        assigns: { crag_route: self }
+      )
+    )
+  end
 
   private
 
