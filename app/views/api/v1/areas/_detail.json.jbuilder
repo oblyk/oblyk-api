@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-json.extract! area, :name
+json.extract! area, :name, :slug_name
 json.area_crags do
   json.array! area.area_crags do |area_crag|
     json.id area_crag.id

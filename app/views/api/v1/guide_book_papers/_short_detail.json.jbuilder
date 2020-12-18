@@ -2,6 +2,7 @@
 
 json.extract! guide_book_paper,
               :name,
+              :slug_name,
               :author,
               :editor,
               :publication_year,

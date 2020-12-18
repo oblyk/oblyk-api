@@ -4,6 +4,7 @@ class CragSector < ApplicationRecord
   include Geolocable
   include SoftDeletable
   include Searchable
+  include Slugable
 
   has_one_attached :picture
   belongs_to :user, optional: true

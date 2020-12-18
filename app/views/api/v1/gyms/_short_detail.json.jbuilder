@@ -3,6 +3,7 @@
 json.extract! gym,
               :id,
               :name,
+              :slug_name,
               :description,
               :email,
               :phone_number,

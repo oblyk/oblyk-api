@@ -3,6 +3,7 @@
 json.extract! crag_route,
               :id,
               :name,
+              :slug_name,
               :height,
               :open_year,
               :opener,

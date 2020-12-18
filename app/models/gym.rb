@@ -4,6 +4,7 @@ class Gym < ApplicationRecord
   include Geolocable
   include SoftDeletable
   include Searchable
+  include Slugable
 
   has_one_attached :logo
   belongs_to :user, optional: true

@@ -3,6 +3,7 @@
 json.extract! gym_space,
               :id,
               :name,
+              :slug_name,
               :description,
               :order,
               :climbing_type,

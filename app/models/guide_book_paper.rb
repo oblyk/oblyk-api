@@ -2,6 +2,7 @@
 
 class GuideBookPaper < ApplicationRecord
   include Searchable
+  include Slugable
 
   has_one_attached :cover
   belongs_to :user, optional: true

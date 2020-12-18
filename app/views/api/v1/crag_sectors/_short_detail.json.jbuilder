@@ -4,6 +4,7 @@ json.extract! crag_sector,
               :id,
               :crag_id,
               :name,
+              :slug_name,
               :description,
               :rain,
               :sun

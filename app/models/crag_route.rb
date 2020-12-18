@@ -3,6 +3,7 @@
 class CragRoute < ApplicationRecord
   include SoftDeletable
   include Searchable
+  include Slugable
 
   has_one_attached :picture
   belongs_to :crag_sector, optional: true

@@ -4,6 +4,7 @@ class GymSpace < ApplicationRecord
   include Geolocable
   include SoftDeletable
   include Publishable
+  include Slugable
 
   attribute :banner_color, :string, default: '#ffffff'
   attribute :banner_bg_color, :string, default: '#f44336'

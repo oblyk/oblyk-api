@@ -3,9 +3,9 @@
 json.extract! crag,
               :id,
               :name,
+              :slug_name,
               :rain,
               :sun
-json.slug_name crag.name.parameterize
 json.rocks crag.rocks
 
 json.photo do

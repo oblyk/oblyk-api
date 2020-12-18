@@ -4,6 +4,7 @@ class Crag < ApplicationRecord
   include Geolocable
   include SoftDeletable
   include Searchable
+  include Slugable
 
   belongs_to :user, optional: true
   belongs_to :photo, optional: true

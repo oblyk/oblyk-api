@@ -3,6 +3,7 @@
 json.extract! word,
               :id,
               :name,
+              :slug_name,
               :definition
 json.creator do
   json.id word.user_id
