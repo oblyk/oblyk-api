@@ -8,6 +8,8 @@ json.extract! gym,
               :email,
               :phone_number,
               :web_site
+json.banner gym.banner.attached? ? url_for(gym.banner) : nil
+json.logo gym.logo.attached? ? url_for(gym.logo) : nil
 
 json.climbing_type do
   json.extract! gym,

@@ -4,8 +4,8 @@ module Api
   module V1
     class GymsController < ApiController
       before_action :protected_by_super_admin, only: %i[destroy]
-      before_action :protected_by_session, only: %i[create update]
-      before_action :set_gym, only: %i[show update destroy]
+      before_action :protected_by_session, only: %i[create update add_banner add_logo]
+      before_action :set_gym, only: %i[show update destroy add_banner add_logo]
 
       def index
         @gyms = Gym.all
@@ -25,6 +25,22 @@ module Api
 
       def update
         if @gym.update(gym_params)
+          render 'api/v1/gyms/show'
+        else
+          render json: { error: @gym.errors }, status: :unprocessable_entity
+        end
+      end
+
+      def add_banner
+        if @gym.update(banner_params)
+          render 'api/v1/gyms/show'
+        else
+          render json: { error: @gym.errors }, status: :unprocessable_entity
+        end
+      end
+
+      def add_logo
+        if @gym.update(logo_params)
           render 'api/v1/gyms/show'
         else
           render json: { error: @gym.errors }, status: :unprocessable_entity
@@ -66,6 +82,18 @@ module Api
           :training_space,
           :latitude,
           :longitude
+        )
+      end
+
+      def banner_params
+        params.require(:gym).permit(
+          :banner
+        )
+      end
+
+      def logo_params
+        params.require(:gym).permit(
+          :logo
         )
       end
     end

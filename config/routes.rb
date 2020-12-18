@@ -56,6 +56,8 @@ Rails.application.routes.draw do
         delete :remove_cover, on: :member
       end
       resources :gyms do
+        post :add_banner, on: :member
+        post :add_logo, on: :member
         resources :gym_administrators
         resources :gym_grades do
           resources :gym_grade_lines

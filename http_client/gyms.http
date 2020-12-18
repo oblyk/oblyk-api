@@ -1,6 +1,27 @@
 DELETE {{api_url}}/gyms/1.json
 Authorization: Bearer {{auth_token}}
 
+### Add gym banner
+POST {{api_url}}/gyms/1/add_banner.json
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="gym[banner]"; filename="bandeau-laennec.jpg"
+
+< ./imgs/bandeau-laennec.jpg
+
+### Add gym logo
+POST {{api_url}}/gyms/1/add_logo.json
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="gym[logo]"; filename="logo-laennec.png"
+
+< ./imgs/logo-laennec.png
+
+
 ### Update gym 1
 PUT {{api_url}}/gyms/1.json
 Authorization: Bearer {{auth_token}}
@@ -32,8 +53,8 @@ Content-Type: application/json
     "web_site": "https://www.mroc3.com/",
     "bouldering": true,
     "training_space": true,
-    "latitude": 44.469592,
-    "longitude": 5.058089
+    "latitude": 45.737185,
+    "longitude": 4.879842
   }
 }
 
