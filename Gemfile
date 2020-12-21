@@ -42,6 +42,9 @@ gem 'addressable'
 # Active storage validation
 gem 'activestorage-validator', '~> 0.1.3'
 
+# Analyze image
+gem 'mini_magick'
+
 group :development, :test do
   # Ruby static code analyzer
   gem 'rubocop-faker'

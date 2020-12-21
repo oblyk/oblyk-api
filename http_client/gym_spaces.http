@@ -16,7 +16,7 @@ client.global.set("gym_space_id", response.body.id);
 %}
 
 ### Update gym_space 1
-PUT {{api_url}}/gyms/1/gym_spaces/{{gym_space_id}}.json
+PUT {{api_url}}/gyms/1/gym_spaces/1.json
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -36,8 +36,28 @@ PUT {{api_url}}/gyms/1/gym_spaces/{{gym_space_id}}/unpublish.json
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
+### Add gym_sapce banner
+POST {{api_url}}/gyms/1/gym_spaces/1/add_banner.json
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="gym_space[banner]"; filename="bandeau-laennec.jpg"
+
+< ./imgs/bandeau-laennec.jpg
+
+### Add gym_sapce banner
+POST {{api_url}}/gyms/1/gym_spaces/1/add_plan.json
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="gym_space[plan]"; filename="laennec-plan.png"
+
+< ./imgs/laennec-plan.png
+
 ### GET gym_space
-GET {{api_url}}/gyms/1/gym_spaces/{{gym_space_id}}.json
+GET {{api_url}}/gyms/1/gym_spaces/1.json
 Accept: application/json
 
 ### GET all gym_spaces

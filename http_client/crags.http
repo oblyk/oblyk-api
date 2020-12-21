@@ -11,7 +11,8 @@ Content-Type: application/json
     "rocks": [
       {
         "name": "conglomerate"
-      }, {
+      },
+      {
         "name": "gneiss"
       }
     ]

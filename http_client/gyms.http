@@ -21,7 +21,6 @@ Content-Disposition: form-data; name="gym[logo]"; filename="logo-laennec.png"
 
 < ./imgs/logo-laennec.png
 
-
 ### Update gym 1
 PUT {{api_url}}/gyms/1.json
 Authorization: Bearer {{auth_token}}

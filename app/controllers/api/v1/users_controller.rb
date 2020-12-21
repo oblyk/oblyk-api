@@ -3,6 +3,7 @@
 module Api
   module V1
     class UsersController < ApiController
+      before_action :protected_by_session, except: %i[index]
       before_action :set_user, only: %i[show update]
 
       def index
@@ -22,7 +23,7 @@ module Api
       private
 
       def set_user
-        @user = User.find params[:id]
+        @user = @current_user
       end
 
       def user_params

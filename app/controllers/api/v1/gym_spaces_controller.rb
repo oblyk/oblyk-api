@@ -56,6 +56,22 @@ module Api
         end
       end
 
+      def add_banner
+        if @gym_space.update(banner_params)
+          render 'api/v1/gym_spaces/show'
+        else
+          render json: { error: @gym_space.errors }, status: :unprocessable_entity
+        end
+      end
+
+      def add_plan
+        if @gym_space.update(plan_params)
+          render 'api/v1/gym_spaces/show'
+        else
+          render json: { error: @gym_space.errors }, status: :unprocessable_entity
+        end
+      end
+
       private
 
       def set_gym_space
@@ -77,6 +93,18 @@ module Api
           :latitude,
           :longitude,
           :gym_grade_id
+        )
+      end
+
+      def banner_params
+        params.require(:gym_space).permit(
+          :banner
+        )
+      end
+
+      def plan_params
+        params.require(:gym_space).permit(
+          :plan
         )
       end
     end

@@ -26,7 +26,10 @@ Rails.application.routes.draw do
       get 'grade-types', controller: :grades, action: :types
       get 'search', controller: :searches, action: :index
 
-      resources :users
+      resources :users, only: %i[index]
+      get 'users/current', controller: :users, action: :show
+      put 'users/current', controller: :users, action: :update
+
       resources :crags
       resources :crag_sectors
       resources :crag_routes
@@ -65,6 +68,8 @@ Rails.application.routes.draw do
         resources :gym_spaces do
           put :publish, on: :member
           put :unpublish, on: :member
+          post :add_banner, on: :member
+          post :add_plan, on: :member
           resources :gym_sectors do
             resources :gym_routes
           end

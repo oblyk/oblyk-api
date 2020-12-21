@@ -1,5 +1,5 @@
-### GET user 1
-PUT {{api_url}}/users/{{auth_id}}.json
+### Update current user
+PUT {{api_url}}/users/current.json
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -11,8 +11,8 @@ Content-Type: application/json
   }
 }
 
-### GET user 1
-GET {{api_url}}/users/{{auth_id}}.json
+### GET current user
+GET {{api_url}}/users/current.json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
