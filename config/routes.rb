@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       namespace :sessions do
-        post 'refresh', controller: :refresh, action: :create
+        post 'tokens', controller: :token, action: :refresh
         post 'sign_in', controller: :signin, action: :create
         post 'sign_up', controller: :signup, action: :create
         delete 'sign_in', controller: :signin, action: :destroy

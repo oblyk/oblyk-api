@@ -6,13 +6,26 @@ Content-Type: application/json
 
 {
   "password": "{{auth_password}}",
-  "email": "{{auth_email}}"
+  "email": "{{auth_email}}",
+  "remember_me": true
 }
 
 > {%
 client.global.set("auth_id", response.body.user.id);
 client.global.set("auth_token", response.body.token);
+client.global.set("refresh_token", response.body.refresh_token);
 %}
+
+
+###
+# Refresh jwt token
+POST {{api_url}}/sessions/tokens.json
+Content-Type: application/json
+
+{
+  "id": "{{auth_id}}",
+  "refresh_token": "{{refresh_token}}"
+}
 
 ###
 # Sign Up Patrick Edlinger
@@ -25,7 +38,8 @@ Content-Type: application/json
   "password_confirmation": "Opera",
   "last_name": "Edlinger",
   "first_name": "Patrick",
-  "date_of_birth": "1960-06-15"
+  "date_of_birth": "1960-06-15",
+  "remember_me": false
 }
 
 ###
@@ -39,7 +53,8 @@ Content-Type: application/json
   "password_confirmation": "akira",
   "last_name": "Bouin",
   "first_name": "Seb",
-  "date_of_birth": "1993-04-17"
+  "date_of_birth": "1993-04-17",
+  "remember_me": false
 }
 
 ###
@@ -53,7 +68,8 @@ Content-Type: application/json
   "password_confirmation": "{{auth_password}}",
   "last_name": "{{auth_firstname}}",
   "first_name": "{{auth_lastname}}",
-  "date_of_birth": "{{auth_date_of_birth}}"
+  "date_of_birth": "{{auth_date_of_birth}}",
+  "remember_me": true
 }
 
 > {%

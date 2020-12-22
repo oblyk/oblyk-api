@@ -11,17 +11,10 @@ module Api
       end
 
       def verify_json_web_token
-        JwtToken::Token.decode(authorization_token)
+        data = JwtToken::Token.decode(authorization_token)['data']
+        @current_user ||= User.find data['id']
       rescue StandardError
-        render json: { auth: false }, status: :unauthorized
-      end
-
-      def session_data
-        JwtToken::Token.decode(authorization_token)['data']
-      end
-
-      def current_user
-        @current_user ||= User.find session_data['id']
+        not_authorized
       end
 
       def not_authorized
@@ -30,12 +23,10 @@ module Api
 
       def protected_by_session
         verify_json_web_token
-        current_user
       end
 
       def protected_by_super_admin
-        verify_json_web_token
-        current_user
+        protected_by_session
         not_authorized unless @current_user.super_admin
       end
     end

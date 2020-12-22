@@ -45,6 +45,9 @@ gem 'activestorage-validator', '~> 0.1.3'
 # Analyze image
 gem 'mini_magick'
 
+# Analyze user agent
+gem 'useragent'
+
 group :development, :test do
   # Ruby static code analyzer
   gem 'rubocop-faker'

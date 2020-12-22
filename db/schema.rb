@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_18_120027) do
+ActiveRecord::Schema.define(version: 2020_12_21_102622) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -524,6 +524,17 @@ ActiveRecord::Schema.define(version: 2020_12_18_120027) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["illustrable_type", "illustrable_id"], name: "index_photos_on_illustrable_type_and_illustrable_id"
     t.index ["user_id"], name: "index_photos_on_user_id"
+  end
+
+  create_table "refresh_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "token"
+    t.string "user_agent"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["token"], name: "index_refresh_tokens_on_token"
+    t.index ["user_agent"], name: "index_refresh_tokens_on_user_agent"
+    t.index ["user_id"], name: "index_refresh_tokens_on_user_id"
   end
 
   create_table "subscribes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
