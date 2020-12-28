@@ -48,7 +48,9 @@ module Api
         params.require(:gym_grade).permit(
           :name,
           :difficulty_system,
-          :has_hold_color
+          :has_hold_color,
+          :use_grade_system,
+          :use_point_system
         )
       end
     end

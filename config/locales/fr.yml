@@ -71,3 +71,4 @@ fr:
         invalid: 'est invalide'
         email: 'est invalide'
         inclusion: "n'est pas dans la liste des valeurs autorisées"
+        grade_system: "Vous devez choisir au moins un système"

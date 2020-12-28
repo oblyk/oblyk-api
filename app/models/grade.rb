@@ -97,6 +97,8 @@ class Grade
   end
 
   def self.to_value(grade)
+    return nil unless grade
+
     val = MIN_GRADE
     grade = grade.split('/').first
     grade = grade.delete '?'

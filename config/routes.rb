@@ -75,7 +75,10 @@ Rails.application.routes.draw do
           end
           resources :gym_routes
         end
-        resources :gym_routes
+        resources :gym_routes do
+          post :add_picture, on: :member
+          post :add_thumbnail, on: :member
+        end
       end
     end
   end

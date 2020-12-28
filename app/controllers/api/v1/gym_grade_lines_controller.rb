@@ -5,13 +5,15 @@ module Api
     class GymGradeLinesController < ApiController
       include Gymable
       before_action :set_gym_grade
-      before_action :set_gym_grade_line, only: %i[update destroy]
+      before_action :set_gym_grade_line, only: %i[show update destroy]
+
+      def show; end
 
       def create
         @gym_grade_line = GymGradeLine.new(gym_grade_line_params)
         @gym_grade_line.gym_grade = @gym_grade
         if @gym_grade_line.save
-          render 'api/v1/gym_grades/show'
+          render 'api/v1/gym_grade_lines/show'
         else
           render json: { error: @gym_grade_line.errors }, status: :unprocessable_entity
         end
@@ -19,7 +21,7 @@ module Api
 
       def update
         if @gym_grade_line.update(gym_grade_line_params)
-          render 'api/v1/gym_grades/show'
+          render 'api/v1/gym_grade_lines/show'
         else
           render json: { error: @gym_grade_line.errors }, status: :unprocessable_entity
         end
@@ -48,6 +50,7 @@ module Api
           :name,
           :order,
           :grade_text,
+          :points,
           colors: []
         )
       end

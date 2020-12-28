@@ -18,11 +18,22 @@ json.extract! gym_route,
               :ascents_count,
               :sections_count,
               :gym_sector_id,
-              :gym_grade_line_id
+              :gym_grade_line_id,
+              :points
+json.thumbnail gym_route.thumbnail.attached? ? url_for(gym_route.thumbnail) : nil
+json.gym_sector_name gym_route.gym_sector.name
 json.grade_gap do
   json.extract! gym_route,
                 :max_grade_value,
                 :min_grade_value,
                 :max_grade_text,
                 :min_grade_text
+end
+json.gym_space do
+  json.id gym_route.gym_space.id
+  json.slug_name gym_route.gym_space.slug_name
+end
+json.gym do
+  json.id gym_route.gym.id
+  json.slug_name gym_route.gym.slug_name
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_21_102622) do
+ActiveRecord::Schema.define(version: 2020_12_26_171257) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(version: 2020_12_21_102622) do
     t.date "released_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "points"
     t.index ["crag_route_id"], name: "index_ascents_on_crag_route_id"
     t.index ["gym_route_id"], name: "index_ascents_on_gym_route_id"
     t.index ["user_id"], name: "index_ascents_on_user_id"
@@ -358,6 +359,7 @@ ActiveRecord::Schema.define(version: 2020_12_21_102622) do
     t.bigint "legacy_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "points"
     t.index ["gym_grade_id"], name: "index_gym_grade_lines_on_gym_grade_id"
   end
 
@@ -369,6 +371,8 @@ ActiveRecord::Schema.define(version: 2020_12_21_102622) do
     t.bigint "legacy_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "use_grade_system", default: false
+    t.boolean "use_point_system", default: false
     t.index ["gym_id"], name: "index_gym_grades_on_gym_id"
   end
 
@@ -399,6 +403,7 @@ ActiveRecord::Schema.define(version: 2020_12_21_102622) do
     t.datetime "dismounted_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "points"
     t.index ["gym_grade_line_id"], name: "index_gym_routes_on_gym_grade_line_id"
     t.index ["gym_sector_id"], name: "index_gym_routes_on_gym_sector_id"
   end
@@ -416,6 +421,7 @@ ActiveRecord::Schema.define(version: 2020_12_21_102622) do
     t.datetime "deleted_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "can_be_more_than_one_pitch", default: false
     t.index ["gym_grade_id"], name: "index_gym_sectors_on_gym_grade_id"
     t.index ["gym_space_id"], name: "index_gym_sectors_on_gym_space_id"
   end

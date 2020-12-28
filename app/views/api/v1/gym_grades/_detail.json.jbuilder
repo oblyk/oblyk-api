@@ -4,16 +4,18 @@ json.extract! gym_grade,
               :id,
               :name,
               :difficulty_system,
-              :has_hold_color
+              :has_hold_color,
+              :use_grade_system,
+              :use_point_system
 json.next_grade_lines_order gym_grade.next_grade_lines_order
+
+json.gym do
+  json.id gym_grade.gym.id
+  json.slug_name gym_grade.gym.slug_name
+end
 
 json.grade_lines do
   json.array! gym_grade.gym_grade_lines do |gym_grade_line|
-    json.id gym_grade_line.id
-    json.order gym_grade_line.order
-    json.name gym_grade_line.name
-    json.colors gym_grade_line.colors
-    json.grade_text gym_grade_line.grade_text
-    json.grade_value gym_grade_line.grade_value
+    json.partial! 'api/v1/gym_grade_lines/detail', gym_grade_line: gym_grade_line
   end
 end

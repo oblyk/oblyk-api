@@ -60,7 +60,8 @@ module Api
           :height,
           :banner_bg_color,
           :polygon,
-          :gym_grade_id
+          :gym_grade_id,
+          :can_be_more_than_one_pitch
         )
       end
     end

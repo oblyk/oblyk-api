@@ -6,7 +6,7 @@ module Api
       include Gymable
       skip_before_action :protected_by_session, only: %i[show index]
       skip_before_action :protected_by_gym_administrator, only: %i[show index]
-      before_action :set_gym_space, except: %i[index]
+      before_action :set_gym_space, except: %i[index create]
 
       def index
         @gym_spaces = @gym.gym_spaces
@@ -66,6 +66,7 @@ module Api
 
       def add_plan
         if @gym_space.update(plan_params)
+          @gym_space.set_plan_dimension!
           render 'api/v1/gym_spaces/show'
         else
           render json: { error: @gym_space.errors }, status: :unprocessable_entity

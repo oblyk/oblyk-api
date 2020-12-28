@@ -30,6 +30,16 @@ Content-Type: application/json
   }
 }
 
+### Add gym route picture
+POST {{api_url}}/gyms/1/gym_routes/1/add_picture.json
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="gym_route[picture]"; filename="logo-laennec.png"
+
+< ./imgs/bloc-bleu.jpeg
+
 ### GET route
 GET {{api_url}}/gyms/1/gym_spaces/1/gym_routes/{{gym_route_id}}.json
 Accept: application/json

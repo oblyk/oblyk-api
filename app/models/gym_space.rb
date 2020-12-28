@@ -18,8 +18,6 @@ class GymSpace < ApplicationRecord
   has_many :gym_sectors
   has_many :gym_routes, through: :gym_sectors
 
-  before_validation :set_plan_dimension
-
   default_scope { order(:order) }
 
   validates :name, presence: true
@@ -28,14 +26,13 @@ class GymSpace < ApplicationRecord
   validates :banner, blob: { content_type: :image }, allow_nil: true
   validates :plan, blob: { content_type: :image }, allow_nil: true
 
-  private
-
-  def set_plan_dimension
+  def set_plan_dimension!
     return unless plan.attached?
 
     meta = ActiveStorage::Analyzer::ImageAnalyzer.new(plan.blob).metadata
 
     self.scheme_height = meta[:height]
     self.scheme_width = meta[:width]
+    save
   end
 end

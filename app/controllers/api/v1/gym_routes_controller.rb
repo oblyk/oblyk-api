@@ -6,9 +6,9 @@ module Api
       include Gymable
       skip_before_action :protected_by_session, only: %i[show index]
       skip_before_action :protected_by_gym_administrator, only: %i[show index]
-      before_action :set_gym_space
-      before_action :set_gym_sector, except: %i[index show]
-      before_action :set_gym_route, only: %i[show update destroy]
+      before_action :set_gym_space, except: %i[add_picture add_thumbnail]
+      before_action :set_gym_sector, except: %i[index show add_picture add_thumbnail]
+      before_action :set_gym_route, only: %i[show update destroy add_picture add_thumbnail]
 
       def index
         @gym_routes = if @gym_sector.present?
@@ -40,6 +40,22 @@ module Api
         end
       end
 
+      def add_picture
+        if @gym_route.update(picture_params)
+          render 'api/v1/gym_routes/show'
+        else
+          render json: { error: @gym_route.errors }, status: :unprocessable_entity
+        end
+      end
+
+      def add_thumbnail
+        if @gym_route.update(thumbnail_params)
+          render 'api/v1/gym_routes/show'
+        else
+          render json: { error: @gym_route.errors }, status: :unprocessable_entity
+        end
+      end
+
       def destroy
         if @gym_route.delete
           render json: {}, status: :ok
@@ -51,11 +67,11 @@ module Api
       private
 
       def set_gym_space
-        @gym_space = GymSpace.find_by params[:gym_space_id]
+        @gym_space = GymSpace.find params[:gym_space_id]
       end
 
       def set_gym_sector
-        @gym_sector = GymSector.find_by params[:gym_sector_id]
+        @gym_sector = GymSector.find params[:gym_sector_id]
       end
 
       def set_gym_route
@@ -70,9 +86,23 @@ module Api
           :openers,
           :polyline,
           :gym_grade_line_id,
+          :points,
+          :opened_at,
           sections: %i[climbing_type description grade height],
           hold_colors: %i[],
           tag_colors: %i[]
+        )
+      end
+
+      def picture_params
+        params.require(:gym_route).permit(
+          :picture
+        )
+      end
+
+      def thumbnail_params
+        params.require(:gym_route).permit(
+          :thumbnail
         )
       end
     end

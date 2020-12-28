@@ -10,4 +10,6 @@ class GymSector < ApplicationRecord
 
   validates :name, :height, presence: true
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }
+
+  default_scope { order(:group_sector_name, :name) }
 end
