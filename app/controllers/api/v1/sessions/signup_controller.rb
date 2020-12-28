@@ -25,7 +25,8 @@ module Api
               user: user_data,
               token: token,
               expired_at: exp,
-              refresh_token: refresh_token
+              refresh_token: refresh_token,
+              administered_gyms: user.gyms.map(&:id)
             }, status: :created
           else
             render json: { error: user.errors.full_messages.join(' ') }, status: :unprocessable_entity

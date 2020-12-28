@@ -27,7 +27,8 @@ module Api
               user: user_data,
               token: token,
               expired_at: exp,
-              refresh_token: refresh_token&.token
+              refresh_token: refresh_token&.token,
+              administered_gyms: user.gyms.map(&:id)
             }, status: :created
           else
             not_found
