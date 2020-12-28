@@ -62,6 +62,7 @@ Rails.application.routes.draw do
         post :add_banner, on: :member
         post :add_logo, on: :member
         resources :gym_administrators
+        resources :gym_administration_requests, only: %i[create]
         resources :gym_grades do
           resources :gym_grade_lines
         end

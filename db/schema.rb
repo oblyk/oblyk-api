@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_26_171257) do
+ActiveRecord::Schema.define(version: 2020_12_28_171011) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -339,6 +339,19 @@ ActiveRecord::Schema.define(version: 2020_12_26_171257) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["crag_id"], name: "index_guide_book_webs_on_crag_id"
     t.index ["user_id"], name: "index_guide_book_webs_on_user_id"
+  end
+
+  create_table "gym_administration_requests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "gym_id"
+    t.bigint "user_id"
+    t.text "justification"
+    t.string "email"
+    t.string "first_name"
+    t.string "last_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gym_id"], name: "index_gym_administration_requests_on_gym_id"
+    t.index ["user_id"], name: "index_gym_administration_requests_on_user_id"
   end
 
   create_table "gym_administrators", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

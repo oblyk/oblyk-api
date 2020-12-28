@@ -6,6 +6,7 @@ module Api
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update add_banner add_logo]
       before_action :set_gym, only: %i[show update destroy add_banner add_logo]
+      before_action :protected_by_administrator, only: %i[update add_banner add_logo]
 
       def index
         @gyms = Gym.all
@@ -59,6 +60,14 @@ module Api
 
       def set_gym
         @gym = Gym.find params[:id]
+      end
+
+      def protected_by_administrator
+        return if @current_user.super_admin
+
+        return unless @gym.administered?
+
+        not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).count.zero?
       end
 
       def gym_params

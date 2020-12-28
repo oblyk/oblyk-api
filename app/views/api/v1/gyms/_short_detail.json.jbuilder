@@ -22,5 +22,6 @@ json.extract! gym,
               :pan,
               :fun_climbing,
               :training_space
+json.administered gym.administered?
 json.banner gym.banner.attached? ? url_for(gym.banner) : nil
 json.logo gym.logo.attached? ? url_for(gym.logo) : nil

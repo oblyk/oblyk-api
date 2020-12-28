@@ -27,4 +27,13 @@ class Gym < ApplicationRecord
   end
 
   validates :name, :latitude, :longitude, :address, :postal_code, :country, :city, :big_city, presence: true
+
+  def administered?
+    assigned_at.present?
+  end
+
+  def administered!
+    self.assigned_at ||= Time.current
+    save
+  end
 end
