@@ -6,6 +6,7 @@ json.extract! @user,
               :last_name,
               :date_of_birth,
               :genre,
+              :email,
               :description,
               :latitude,
               :longitude
