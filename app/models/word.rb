@@ -7,4 +7,6 @@ class Word < ApplicationRecord
   belongs_to :user, optional: true
 
   validates :name, :definition, presence: true
+
+  default_scope { order(:name) }
 end
