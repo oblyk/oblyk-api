@@ -20,6 +20,9 @@ json.extract! gym_route,
               :gym_sector_id,
               :gym_grade_line_id,
               :points
+json.points_to_s gym_route.points_to_s
+json.grade_to_s gym_route.grade_to_s
+json.identification_to_s gym_route.identification_to_s
 json.thumbnail gym_route.thumbnail.attached? ? url_for(gym_route.thumbnail) : nil
 json.gym_sector_name gym_route.gym_sector.name
 json.grade_gap do

@@ -4,6 +4,8 @@ class GymRoute < ApplicationRecord
   has_one_attached :picture
   has_one_attached :thumbnail
   belongs_to :gym_sector, optional: true
+  belongs_to :gym_grade_line
+  has_one :gym_grade, through: :gym_grade_line
   has_one :gym_space, through: :gym_sector
   has_one :gym, through: :gym_sector
   has_many :videos, as: :viewable
@@ -19,6 +21,35 @@ class GymRoute < ApplicationRecord
   before_validation :format_route_section
   before_save :historize_grade_gap
   before_save :historize_sections_count
+
+  def points_to_s
+    return '' unless gym_grade.use_point_system || gym_grade.use_point_division_system
+
+    ascents_count = self.ascents_count&.positive? ? self.ascents_count : 1
+    points = self.points if gym_grade.use_point_system
+    points = 1000 / ascents_count if gym_grade.use_point_division_system
+    "#{points}pts"
+  end
+
+  def grade_to_s
+    return '' unless gym_grade.use_grade_system
+
+    if sections_count > 1
+      "#{min_grade_text} > #{max_grade_text}"
+    else
+      min_grade_text
+    end
+  end
+
+  def identification_to_s
+    identifications = {
+      hold_color: :tag,
+      pan: :tag,
+      tag_color: :tag_and_hold,
+      grade: :hold
+    }
+    identifications[gym_grade.difficulty_system.to_sym]
+  end
 
   private
 
