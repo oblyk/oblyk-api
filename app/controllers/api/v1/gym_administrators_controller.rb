@@ -11,7 +11,9 @@ module Api
       end
 
       def create
-        @gym_administrator = GymAdministrator.new(gym_administrator_params)
+        user = User.find_by email: gym_administrator_params[:email]
+        @gym_administrator = GymAdministrator.new level: gym_administrator_params[:level]
+        @gym_administrator.user = user
         @gym_administrator.gym = @gym
         if @gym_administrator.save
           render 'api/v1/gym_administrators/show'
@@ -44,7 +46,7 @@ module Api
 
       def gym_administrator_params
         params.require(:gym_administrator).permit(
-          :user_id,
+          :email,
           :level
         )
       end

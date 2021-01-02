@@ -20,6 +20,7 @@ class GymGrade < ApplicationRecord
   private
 
   def validate_grading_system
-    errors.add(:base, I18n.t('activerecord.errors.messages.grade_system')) if !use_grade_system && !use_point_system
+    errors.add(:base, I18n.t('activerecord.errors.messages.grade_system')) if !use_grade_system && !use_point_system && !use_point_division_system
+    errors.add(:base, I18n.t('activerecord.errors.messages.one_point_system')) if use_point_system && use_point_division_system
   end
 end

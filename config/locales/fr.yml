@@ -64,6 +64,7 @@ fr:
         super_admin: "Super administration"
     errors:
       messages:
+        required: "est requis"
         blank: "est obligatoire"
         taken: 'est déjà pris'
         too_short: 'est trop court'
@@ -72,3 +73,4 @@ fr:
         email: 'est invalide'
         inclusion: "n'est pas dans la liste des valeurs autorisées"
         grade_system: "Vous devez choisir au moins un système"
+        one_point_system: "Vous ne pouvez pas avoir les deux systèmes de point"

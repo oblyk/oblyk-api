@@ -6,7 +6,8 @@ json.extract! gym_grade,
               :difficulty_system,
               :has_hold_color,
               :use_grade_system,
-              :use_point_system
+              :use_point_system,
+              :use_point_division_system
 json.next_grade_lines_order gym_grade.next_grade_lines_order
 
 json.gym do

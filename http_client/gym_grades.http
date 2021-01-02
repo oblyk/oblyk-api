@@ -20,7 +20,8 @@ Content-Type: application/json
 
 {
   "gym_grade": {
-    "use_point_system": true
+    "use_point_system": true,
+    "use_point_division_system": false
   }
 }
 

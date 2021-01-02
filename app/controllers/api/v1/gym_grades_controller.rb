@@ -50,7 +50,8 @@ module Api
           :difficulty_system,
           :has_hold_color,
           :use_grade_system,
-          :use_point_system
+          :use_point_system,
+          :use_point_division_system
         )
       end
     end

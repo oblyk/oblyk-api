@@ -10,6 +10,6 @@ module Slugable
   private
 
   def init_slug_name
-    self.slug_name ||= name.parameterize.presence || self.class.name.downcase
+    self.slug_name ||= name&.parameterize.presence || self.class.name.downcase
   end
 end

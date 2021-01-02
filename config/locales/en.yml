@@ -1,4 +1,4 @@
-fr:
+en:
   activerecord:
     attributes:
       crag:
@@ -29,6 +29,29 @@ fr:
         west: "West"
         north_west: "North-west"
         user_id: "Creator"
+      crag_route:
+        name: "Name"
+        height: "Height"
+        open_year: "Open year"
+        opener: "Openers"
+        sections: "Sections"
+        climbing_type: "Climbing type"
+        incline_type: "Incline type"
+        reception_type: "Reception type"
+        start_type: "Start type"
+        difficulty_appreciation: "Difficulty appreciation"
+        note: "Note"
+        note_count: "Note count"
+        ascents_count: "Ascents count"
+        sections_count: "Sections count"
+        max_grade_value: "Max grade value"
+        min_grade_value: "Min grade value"
+        max_grade_text: "Max grade text"
+        min_grade_text: "Min grade text"
+        max_bolt: "Max bolt"
+        crag_id: "Crag id"
+        crag_sector_id: "Crag sector id"
+        user_id: "User id"
       user:
         first_name: "First name"
         last_name: "Last name"
@@ -41,9 +64,13 @@ fr:
         super_admin: "Super admin"
     errors:
       messages:
+        required: "is required"
         blank: "is mandatory"
         taken: 'is already taken'
         too_short: 'is too short'
+        greater_than: 'must be positive'
         invalid: 'is invalid'
         email: 'is invalid'
         inclusion: 'is not a permitted value'
+        grade_system: "You must choose at least one system"
+        one_point_system: "You cannot have both point systems."
