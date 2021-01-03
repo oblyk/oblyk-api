@@ -65,7 +65,8 @@ class GymRoute < ApplicationRecord
         grade: section['grade'],
         grade_value: Grade.to_value(section['grade']),
         height: single_pitch ? height : section_height,
-        points: single_pitch ? points : section['points']
+        points: single_pitch ? points : section['points'],
+        tags: section['tags']
       }
     end
     self.sections = new_sections
