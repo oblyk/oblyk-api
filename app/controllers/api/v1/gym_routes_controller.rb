@@ -11,20 +11,19 @@ module Api
       before_action :set_gym_route, only: %i[show update destroy add_picture add_thumbnail dismount mount]
 
       def index
-        @gym_routes = if @gym_sector.present?
-                        @gym_sector.gym_routes
-                      elsif @gym_space.present?
-                        @gym_space.gym_routes
-                      else
-                        @gym.gym_routes
-                      end
-
+        routes = if @gym_sector.present?
+                   GymRoute.where(gym_sector: @gym_sector)
+                 elsif @gym_space.present?
+                   GymRoute.joins(:gym_sector).where(gym_sectors: { gym_space: @gym_space })
+                 else
+                   GymRoute.where(gym: @gym)
+                 end
         dismounted = params.fetch(:dismounted, false)
-        if dismounted
-          @gym_routes.dismounted
-        else
-          @gym_routes.mounted
-        end
+        @gym_routes = if dismounted
+                        routes.dismounted
+                      else
+                        routes.mounted
+                      end
       end
 
       def show; end
