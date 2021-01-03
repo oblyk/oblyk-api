@@ -79,6 +79,8 @@ Rails.application.routes.draw do
         resources :gym_routes do
           post :add_picture, on: :member
           post :add_thumbnail, on: :member
+          put :dismount, on: :member
+          put :mount, on: :member
         end
       end
     end

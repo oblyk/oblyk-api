@@ -19,6 +19,7 @@ json.extract! gym_route,
               :gym_sector_id,
               :gym_grade_line_id,
               :points
+json.dismounted gym_route.dismounted?
 json.points_to_s gym_route.points_to_s
 json.grade_to_s gym_route.grade_to_s
 json.identification_to_s gym_route.identification_to_s

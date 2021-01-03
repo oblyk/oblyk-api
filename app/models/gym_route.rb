@@ -22,6 +22,9 @@ class GymRoute < ApplicationRecord
   before_save :historize_grade_gap
   before_save :historize_sections_count
 
+  scope :dismounted, -> { where.not(dismounted_at: nil) }
+  scope :mounted, -> { where(dismounted_at: nil) }
+
   def points_to_s
     return '' unless gym_grade.use_point_system || gym_grade.use_point_division_system
 
@@ -49,6 +52,24 @@ class GymRoute < ApplicationRecord
       grade: :hold
     }
     identifications[gym_grade.difficulty_system.to_sym]
+  end
+
+  def mounted?
+    dismounted_at.blank?
+  end
+
+  def dismounted?
+    dismounted_at.present?
+  end
+
+  def dismount!
+    self.dismounted_at = Time.zone.now
+    save
+  end
+
+  def mount!
+    self.dismounted_at = nil
+    save
   end
 
   private

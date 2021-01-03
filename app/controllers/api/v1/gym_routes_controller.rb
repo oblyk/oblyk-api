@@ -6,9 +6,9 @@ module Api
       include Gymable
       skip_before_action :protected_by_session, only: %i[show index]
       skip_before_action :protected_by_gym_administrator, only: %i[show index]
-      before_action :set_gym_space, except: %i[add_picture add_thumbnail]
-      before_action :set_gym_sector, except: %i[index show add_picture add_thumbnail]
-      before_action :set_gym_route, only: %i[show update destroy add_picture add_thumbnail]
+      before_action :set_gym_space, except: %i[add_picture add_thumbnail dismount mount]
+      before_action :set_gym_sector, except: %i[index show add_picture add_thumbnail dismount mount]
+      before_action :set_gym_route, only: %i[show update destroy add_picture add_thumbnail dismount mount]
 
       def index
         @gym_routes = if @gym_sector.present?
@@ -18,6 +18,13 @@ module Api
                       else
                         @gym.gym_routes
                       end
+
+        dismounted = params.fetch(:dismounted, false)
+        if dismounted
+          @gym_routes.dismounted
+        else
+          @gym_routes.mounted
+        end
       end
 
       def show; end
@@ -58,6 +65,22 @@ module Api
 
       def destroy
         if @gym_route.delete
+          render json: {}, status: :ok
+        else
+          render json: { error: @gym_route.errors }, status: :unprocessable_entity
+        end
+      end
+
+      def dismount
+        if @gym_route.dismount!
+          render json: {}, status: :ok
+        else
+          render json: { error: @gym_route.errors }, status: :unprocessable_entity
+        end
+      end
+
+      def mount
+        if @gym_route.mount!
           render json: {}, status: :ok
         else
           render json: { error: @gym_route.errors }, status: :unprocessable_entity
