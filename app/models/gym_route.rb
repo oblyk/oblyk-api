@@ -38,7 +38,11 @@ class GymRoute < ApplicationRecord
     return '' unless gym_grade.use_grade_system
 
     if sections_count > 1
-      "#{min_grade_text} > #{max_grade_text}"
+      sections_array = []
+      sections.each do |section|
+        sections_array << section['grade']
+      end
+      sections_array.join(', ')
     else
       min_grade_text
     end
@@ -46,7 +50,7 @@ class GymRoute < ApplicationRecord
 
   def identification_to_s
     identifications = {
-      hold_color: :tag,
+      hold_color: :hold,
       pan: :tag,
       tag_color: :tag_and_hold,
       grade: :hold
