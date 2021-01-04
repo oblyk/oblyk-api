@@ -48,6 +48,9 @@ gem 'mini_magick'
 # Analyze user agent
 gem 'useragent'
 
+# Pagination
+gem 'kaminari'
+
 group :development, :test do
   # Ruby static code analyzer
   gem 'rubocop-faker'

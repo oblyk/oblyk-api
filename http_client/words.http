@@ -31,3 +31,7 @@ Accept: application/json
 ### GET all words
 GET {{api_url}}/words.json
 Accept: application/json
+
+### search
+GET {{api_url}}/words/search.json?query=yaniro
+Accept: application/json

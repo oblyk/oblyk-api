@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Search
   class OblykSearch
     MODELS_TO_SEARCH = [Crag, CragRoute, CragSector, GuideBookPaper, Gym].freeze
@@ -63,7 +64,7 @@ module Search
           "filter": {
             "term": { "_type": 'crag' }
           },
-          "weight": 5000
+          "weight": 1
         }
       ]
     end

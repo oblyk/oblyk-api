@@ -8,7 +8,13 @@ module Api
       before_action :set_word, only: %i[show update destroy]
 
       def index
-        @words = Word.all
+        @words = Word.page(params.fetch(:page, 1))
+      end
+
+      def search
+        query = params[:query]
+        @words = Word.search(query).records
+        render 'api/v1/words/index'
       end
 
       def show; end

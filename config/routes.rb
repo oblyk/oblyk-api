@@ -33,7 +33,9 @@ Rails.application.routes.draw do
       resources :crags
       resources :crag_sectors
       resources :crag_routes
-      resources :words
+      resources :words do
+        get :search, on: :collection
+      end
       resources :comments
       resources :links
       resources :follows
