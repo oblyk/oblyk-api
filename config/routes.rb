@@ -29,6 +29,8 @@ Rails.application.routes.draw do
       resources :users, only: %i[index]
       get 'users/current', controller: :users, action: :show
       put 'users/current', controller: :users, action: :update
+      post 'users/current/avatar', controller: :users, action: :add_avatar
+      post 'users/current/banner', controller: :users, action: :add_banner
 
       resources :crags
       resources :crag_sectors

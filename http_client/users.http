@@ -11,6 +11,27 @@ Content-Type: application/json
   }
 }
 
+
+### Add user banner
+POST {{api_url}}/users/1/add_banner.json
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="user[banner]"; filename="bandeau-laennec.jpg"
+
+< ./imgs/bandeau-laennec.jpg
+
+### Add user avatar
+POST {{api_url}}/users/1/add_avatar.json
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="user[avatar]"; filename="logo-laennec.png"
+
+< ./imgs/logo-laennec.png
+
 ### GET current user
 GET {{api_url}}/users/current.json
 Authorization: Bearer {{auth_token}}

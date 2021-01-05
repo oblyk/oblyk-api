@@ -2,6 +2,7 @@
 
 class User < ApplicationRecord
   include Geolocable
+  include Slugable
 
   has_secure_password
   has_one_attached :avatar

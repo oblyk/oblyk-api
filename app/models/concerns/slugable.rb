@@ -10,6 +10,7 @@ module Slugable
   private
 
   def init_slug_name
-    self.slug_name ||= name&.parameterize.presence || self.class.name.downcase
+    self.slug_name ||= name&.parameterize.presence || self.class.name.downcase if has_attribute?(:name)
+    self.slug_name ||= first_name&.parameterize.presence || self.class.name.downcase if has_attribute?(:first_name)
   end
 end
