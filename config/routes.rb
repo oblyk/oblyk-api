@@ -76,6 +76,7 @@ Rails.application.routes.draw do
           post :add_banner, on: :member
           post :add_plan, on: :member
           resources :gym_sectors do
+            delete :dismount_routes, on: :member
             resources :gym_routes
           end
           resources :gym_routes

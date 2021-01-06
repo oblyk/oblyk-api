@@ -36,6 +36,11 @@ Accept: application/json
 GET {{api_url}}/gyms/1/gym_spaces/1/gym_sectors.json
 Accept: application/json
 
+### Dismounte routes in gym_sector
+DELETE {{api_url}}/gyms/1/gym_spaces/1/gym_sectors/6/dismount_routes.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
 ### Delete gym_sector
 DELETE {{api_url}}/gyms/1/gym_spaces/1/gym_sectors/{{gym_sector_id}}.json
 Authorization: Bearer {{auth_token}}

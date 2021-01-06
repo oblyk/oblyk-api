@@ -7,7 +7,7 @@ module Api
       skip_before_action :protected_by_session, only: %i[show index]
       skip_before_action :protected_by_gym_administrator, only: %i[show index]
       before_action :set_gym_space
-      before_action :set_gym_sector, only: %i[show update destroy]
+      before_action :set_gym_sector, only: %i[show update destroy dismount_routes]
 
       def index
         @gym_sectors = @gym_space.gym_sectors
@@ -39,6 +39,12 @@ module Api
         else
           render json: { error: @gym_sector.errors }, status: :unprocessable_entity
         end
+      end
+
+      def dismount_routes
+        routes = GymRoute.mounted.where(gym_sector: @gym_sector)
+        routes.each(&:dismount!)
+        render 'api/v1/gym_sectors/show'
       end
 
       private
