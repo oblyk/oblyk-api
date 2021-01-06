@@ -59,7 +59,7 @@ GET {{api_url}}/gyms/1/gym_spaces/1/gym_sectors/1/gym_routes.json
 Accept: application/json
 
 ### GET all route in gym space
-GET {{api_url}}/gyms/1/gym_spaces/1/gym_routes.json
+GET {{api_url}}/gyms/1/gym_spaces/1/gym_routes.json?group_by=grade
 Accept: application/json
 
 ### GET all route in gym

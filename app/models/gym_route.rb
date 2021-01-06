@@ -11,6 +11,7 @@ class GymRoute < ApplicationRecord
   has_many :videos, as: :viewable
   has_many :tags, as: :taggable
 
+  validates :opened_at, presence: true
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }
   validates :height, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
   validate :validate_sections

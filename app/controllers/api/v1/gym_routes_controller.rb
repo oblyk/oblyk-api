@@ -11,19 +11,40 @@ module Api
       before_action :set_gym_route, only: %i[show update destroy add_picture add_thumbnail dismount mount]
 
       def index
-        routes = if @gym_sector.present?
-                   GymRoute.where(gym_sector: @gym_sector)
-                 elsif @gym_space.present?
-                   GymRoute.joins(:gym_sector).where(gym_sectors: { gym_space: @gym_space })
-                 else
-                   GymRoute.where(gym: @gym)
-                 end
+        @group_by = params.fetch(:group_by, nil)
+        order_by = params.fetch(:order_by, nil)
         dismounted = params.fetch(:dismounted, false)
-        @gym_routes = if dismounted
-                        routes.dismounted
-                      else
-                        routes.mounted
-                      end
+
+        if @group_by == 'sector'
+          @sectors = if @gym_sector.present?
+                       @gym_sector
+                     elsif @gym_space.present?
+                       GymSector.where(gym_space: @gym_space)
+                     else
+                       GymSector.joins(:gym_space).where(gym_spaces: { gym_id: @gym.id })
+                     end
+          @gym_routes = group_by_sector(@sectors, dismounted)
+        else
+          routes = if @gym_sector.present?
+                     GymRoute.where(gym_sector: @gym_sector)
+                   elsif @gym_space.present?
+                     GymRoute.joins(:gym_sector).where(gym_sectors: { gym_space: @gym_space })
+                   else
+                     GymRoute.where(gym: @gym)
+                   end
+
+          # Mount or dismount
+          @gym_routes = dismounted ? routes.dismounted : routes.mounted
+
+          # Order
+          @gym_routes = @gym_routes.order(opened_at: :desc) if order_by == 'opened_at'
+          @gym_routes = @gym_routes.includes(gym_grade_line: :gym_grade).order('gym_grades.name ASC, gym_grade_lines.order DESC') if order_by == 'grade'
+          @gym_routes = @gym_routes.includes(:sector).order('sectors.name ASC') if order_by == 'sector'
+
+          # group by
+          @gym_routes = group_by_opened_at(@gym_routes) if @group_by == 'opened_at'
+          @gym_routes = group_by_grade(@gym_routes) if @group_by == 'grade'
+        end
       end
 
       def show; end
@@ -87,6 +108,38 @@ module Api
       end
 
       private
+
+      def group_by_sector(sectors, dismount)
+        groups = []
+        sectors.each do |sector|
+          routes = dismount ? sector.gym_routes.dismounted : sector.gym_routes.mounted
+          groups << {
+            sector: sector,
+            routes: routes
+          }
+        end
+        groups
+      end
+
+      def group_by_opened_at(routes)
+        dates = {}
+        routes.each do |route|
+          date = route.opened_at.strftime '%Y-%m-%d'
+          dates[date] = dates[date] || { opened_at: date, routes: [] }
+          dates[date][:routes] << route
+        end
+        dates
+      end
+
+      def group_by_grade(routes)
+        grades = {}
+        routes.each do |route|
+          grade = "#{route.gym_grade.id}-#{route.gym_grade_line.order}"
+          grades[grade] = grades[grade] || { grade: grade, routes: [] }
+          grades[grade][:routes] << route
+        end
+        grades
+      end
 
       def set_gym_space
         @gym_space = GymSpace.find params[:gym_space_id]
