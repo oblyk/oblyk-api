@@ -7,7 +7,7 @@ module Api
         def create
           user = User.new(user_params)
           if user.save
-            user_data = user.as_json(only: %i[id first_name last_name email])
+            user_data = user.as_json(only: %i[id first_name last_name slug_name email])
             exp = Time.now.to_i + 24 * 3600
             token = JwtToken::Token.generate(user_data, exp)
             refresh_token = nil
