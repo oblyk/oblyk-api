@@ -10,7 +10,8 @@ json.extract! @user,
               :email,
               :description,
               :latitude,
-              :longitude
+              :longitude,
+              :localization
 json.full_name @user.full_name
 json.banner @user.banner.attached? ? url_for(@user.banner) : nil
 json.avatar @user.avatar.attached? ? url_for(@user.avatar) : nil

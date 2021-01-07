@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_05_172913) do
+ActiveRecord::Schema.define(version: 2021_01_07_151918) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -595,8 +595,8 @@ ActiveRecord::Schema.define(version: 2021_01_05_172913) do
     t.date "date_of_birth"
     t.string "genre"
     t.text "description"
-    t.boolean "public", default: false
-    t.boolean "partner_search", default: false
+    t.boolean "public"
+    t.boolean "partner_search"
     t.datetime "newsletter_accepted_at"
     t.decimal "latitude", precision: 10, scale: 6
     t.decimal "longitude", precision: 10, scale: 6
@@ -616,6 +616,7 @@ ActiveRecord::Schema.define(version: 2021_01_05_172913) do
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "deleted_at"
     t.string "slug_name"
+    t.string "localization"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

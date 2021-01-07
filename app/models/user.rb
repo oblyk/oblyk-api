@@ -20,6 +20,7 @@ class User < ApplicationRecord
   validates :first_name, :email, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :email, uniqueness: true, on: :create
+  validates :genre, inclusion: { in: %w[male female] }, allow_blank: true
 
   validates :avatar, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true

@@ -48,7 +48,21 @@ module Api
           :last_name,
           :date_of_birth,
           :genre,
-          :description
+          :description,
+          :latitude,
+          :longitude,
+          :localization,
+          :partner_search,
+          :bouldering,
+          :sport_climbing,
+          :multi_pitch,
+          :trad_climbing,
+          :aid_climbing,
+          :deep_water,
+          :via_ferrata,
+          :pan,
+          :grade_max,
+          :grade_min
         )
       end
 
