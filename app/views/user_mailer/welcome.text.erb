@@ -1,0 +1,17 @@
+<%= t('mailer.welcome.title', name: @user.first_name) %>
+
+<%= t('mailer.welcome.happy_to_see_you') %>
+
+<%= t('mailer.welcome.take_a_tour') %>
+
+<%= t('mailer.welcome.for_crag', url: "#{@app_url}/maps/crags").html_safe.gsub(/(<a href=')/, '').gsub(/('>)/, ' ').gsub(/(<\/a>)/, '').gsub(/(<br>)/, '') %>
+
+<%= t('mailer.welcome.for_partner', explain_url: "#{@app_url}/partner-search/how-it-works", map_url: "#{@app_url}/maps/climbers").html_safe.gsub(/(<a href=')/, '').gsub(/('>)/, ' ').gsub(/(<\/a>)/, '').gsub(/(<br>)/, '') %>
+
+<%= t('mailer.welcome.for_ascents_log', cuvier_url: "#{@app_url}/crags/1/crags/infos", buoux_url: "#{@app_url}/crags/1/crags/infos", cimai_url: "#{@app_url}/crags/1/crags/infos", chart_url: "#{@app_url}/me/#{@user.slug_name}/ascents/analyze").html_safe.gsub(/(<a href=')/, '').gsub(/('>)/, ' ').gsub(/(<\/a>)/, '').gsub(/(<br>)/, '') %>
+
+<%= t('mailer.welcome.discover_the_rest') %>
+
+<%= t('mailer.welcome.help', help_url: "#{@app_url}/helps").html_safe.gsub(/(<a href=')/, '').gsub(/('>)/, ' ').gsub(/(<\/a>)/, '').gsub(/(<br>)/, '') %>
+
+<%= t('mailer.welcome.see_you_later') %>

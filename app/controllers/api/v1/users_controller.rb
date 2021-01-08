@@ -62,7 +62,8 @@ module Api
           :via_ferrata,
           :pan,
           :grade_max,
-          :grade_min
+          :grade_min,
+          :language
         )
       end
 

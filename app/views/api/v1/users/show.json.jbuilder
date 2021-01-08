@@ -22,7 +22,8 @@ json.extract! @user,
               :via_ferrata,
               :pan,
               :grade_max,
-              :grade_min
+              :grade_min,
+              :language
 json.full_name @user.full_name
 json.banner @user.banner.attached? ? url_for(@user.banner) : nil
 json.avatar @user.avatar.attached? ? url_for(@user.avatar) : nil

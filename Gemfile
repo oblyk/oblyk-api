@@ -51,6 +51,9 @@ gem 'useragent'
 # Pagination
 gem 'kaminari'
 
+# Sidekiq
+gem 'sidekiq'
+
 group :development, :test do
   # Ruby static code analyzer
   gem 'rubocop-faker'
@@ -68,6 +71,9 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+
+  # Open mail in browser rather than send real email
+  gem 'letter_opener'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
