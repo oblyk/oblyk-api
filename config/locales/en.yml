@@ -1,6 +1,7 @@
 en:
   mailer:
     signature: "Oblyk team"
+    hello: "Hello %{name}"
     welcome:
       subject: "Oblyk | Welcome %{name}"
       title: "Welcome %{name} !"
@@ -14,6 +15,11 @@ en:
       discover_the_rest: "We'll let you discover the rest !"
       help: "If you are looking for help, you will find it <a href='%{help_url}'>here<a/>, you can also contact us at this address : <a href='mailto:ekip@oblyk.org'>ekip@oblyk.org</a>"
       see_you_later: "See you soon and happy climbing!"
+    reset_password:
+      subject: "Oblyk | Forgotten password"
+      new_password_request: "You have requested a new password."
+      follow_link: "Please follow this link and enter your new password:"
+      link_expiry: "(This link has a limited lifespan, if it no longer works, make a new password request.)"
   activerecord:
     attributes:
       crag:

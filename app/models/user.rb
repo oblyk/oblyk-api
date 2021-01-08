@@ -29,4 +29,13 @@ class User < ApplicationRecord
   def full_name
     "#{first_name} #{last_name}".strip
   end
+
+  def send_reset_password_instructions
+    token = SecureRandom.base36
+    self.reset_password_token = token
+    self.reset_password_token_expired_at = Time.zone.now + 30.minutes
+    save!
+
+    UserMailer.with(user: self, token: token).reset_password.deliver_now
+  end
 end

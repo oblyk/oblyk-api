@@ -3,10 +3,30 @@
 module Api
   module V1
     module Sessions
-      class SignupController < ApiController
+      class PasswordController < ApiController
         def create
-          user = User.new(user_params)
+          user = User.find_by email: params[:email]
+          not_found && return if user.blank?
+
+          user.send_reset_password_instructions
+          render json: {}, status: :ok
+        end
+
+        def update
+          user = User.find_by reset_password_token: params[:token]
+          not_found && return if user.blank?
+
+          token_is_expired && return if user.reset_password_token_expired_at < Time.zone.now
+
+          user.password = params[:password]
+          user.password_confirmation = params[:password_confirmation]
+
           if user.save
+
+            user.reset_password_token = nil
+            user.reset_password_token_expired_at = nil
+            user.save
+
             user_data = user.as_json(only: %i[id first_name last_name slug_name email])
             exp = Time.now.to_i + 24 * 3600
             token = JwtToken::Token.generate(user_data, exp)
@@ -19,8 +39,6 @@ module Api
               refresh_token.unused_token
               refresh_token.save
             end
-
-            UserMailer.with(user: user).welcome.deliver_later
 
             render json: {
               auth: true,
@@ -37,20 +55,14 @@ module Api
 
         private
 
-        def user_params
-          params.permit(
-            :email,
-            :first_name,
-            :last_name,
-            :password,
-            :password_confirmation,
-            :date_of_birth,
-            :genre,
-            :description
-          )
+        def not_found
+          render json: { error: 'Cannot find email associated with account' }, status: :not_found
+        end
+
+        def token_is_expired
+          render json: { error: 'Reset password token is expired' }, status: :unprocessable_entity
         end
       end
     end
   end
 end
-

@@ -9,6 +9,8 @@ Rails.application.routes.draw do
         post 'tokens', controller: :token, action: :refresh
         post 'sign_in', controller: :signin, action: :create
         post 'sign_up', controller: :signup, action: :create
+        post 'reset_password', controller: :password, action: :create
+        put 'new_password', controller: :password, action: :update
         delete 'sign_in', controller: :signin, action: :destroy
       end
       get 'rocks', controller: :rocks, action: :index

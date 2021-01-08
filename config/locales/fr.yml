@@ -1,6 +1,7 @@
 fr:
   mailer:
     signature: "L'ékip Oblyk"
+    hello: "Bonjour %{name}"
     welcome:
       subject: "Oblyk | Bienvenue %{name}"
       title: "Bienvenue %{name} !"
@@ -14,6 +15,11 @@ fr:
       discover_the_rest: "On te laisse découvrir le reste !"
       help: "Si tu cherche de l'aide, tu en trouvera <a href='%{help_url}'>ici</a>, tu peux aussi nous contacter à cette adresse : <a href='mailto:ekip@oblyk.org'>ekip@oblyk.org</a>"
       see_you_later: "À bientôt et bonne grimpe !"
+    reset_password:
+      subject: "Oblyk | Mot de passe oublié"
+      new_password_request: "Vous avez demandé un nouveau mot de passe."
+      follow_link: "Merci de suivre ce lien et de renseigner votre nouveau mot de passe :"
+      link_expiry: "(Ce lien à une durée de vie limitée, s'il ne fonction plus, faite une nouvelle demande de mot de passe.)"
   activerecord:
     attributes:
       crag:
