@@ -8,6 +8,10 @@ class Follow < ApplicationRecord
 
   validates :followable_type, inclusion: { in: %w[User Crag CragSector CragRoute Gym].freeze }
 
+  def accepted?
+    accepted_at.present?
+  end
+
   private
 
   def auto_accepted

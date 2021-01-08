@@ -8,7 +8,7 @@ class User < ApplicationRecord
   has_one_attached :avatar
   has_one_attached :banner
   has_many :follows, as: :followable
-  has_many :followers, class_name: 'Follow', foreign_key: :user_id
+  has_many :subscribes, class_name: 'Follow', foreign_key: :user_id
   has_many :conversation_messages
   has_many :conversation_users
   has_many :conversations, through: :conversation_users
@@ -37,5 +37,13 @@ class User < ApplicationRecord
     save!
 
     UserMailer.with(user: self, token: token).reset_password.deliver_now
+  end
+
+  def subscribes_to_a
+    json_follows = []
+    subscribes.each do |follow|
+      json_follows << { followable_type: follow.followable_type, followable_id: follow.followable_id, accepted: follow.accepted? }
+    end
+    json_follows
   end
 end
