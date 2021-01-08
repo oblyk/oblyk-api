@@ -20,6 +20,8 @@ module Api
               refresh_token.save
             end
 
+            UserMailer.with(user: user).welcome.deliver_later
+
             render json: {
               auth: true,
               user: user_data,
