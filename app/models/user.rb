@@ -42,7 +42,7 @@ class User < ApplicationRecord
   def subscribes_to_a
     json_follows = []
     subscribes.each do |follow|
-      json_follows << { followable_type: follow.followable_type, followable_id: follow.followable_id, accepted: follow.accepted? }
+      json_follows << { id: follow.id, followable_type: follow.followable_type, followable_id: follow.followable_id, accepted: follow.accepted? }
     end
     json_follows
   end

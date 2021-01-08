@@ -44,7 +44,8 @@ Rails.application.routes.draw do
       end
       resources :comments
       resources :links
-      resources :follows
+      resources :follows, only: %i[index create]
+      delete 'follows', controller: :follows, action: :destroy
       resources :parks
       resources :approaches
       resources :alerts
