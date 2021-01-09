@@ -4,10 +4,14 @@ module Api
   module V1
     class UsersController < ApiController
       before_action :protected_by_session, except: %i[index]
-      before_action :set_user, only: %i[show update add_avatar add_banner]
+      before_action :set_user, only: %i[show update add_avatar add_banner subscribes]
 
       def index
         @users = User.all
+      end
+
+      def subscribes
+        @subscribes = @user.subscribes.order(views: :desc)
       end
 
       def show; end

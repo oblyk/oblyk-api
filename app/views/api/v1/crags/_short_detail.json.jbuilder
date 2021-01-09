@@ -5,50 +5,37 @@ json.extract! crag,
               :name,
               :slug_name,
               :rain,
-              :sun
+              :sun,
+              :sport_climbing,
+              :bouldering,
+              :multi_pitch,
+              :trad_climbing,
+              :aid_climbing,
+              :deep_water,
+              :via_ferrata,
+              :north,
+              :north_east,
+              :east,
+              :south_east,
+              :south,
+              :south_west,
+              :west,
+              :north_west,
+              :summer,
+              :autumn,
+              :winter,
+              :spring,
+              :latitude,
+              :longitude,
+              :code_country,
+              :country,
+              :city,
+              :region
 json.rocks crag.rocks
 
 json.photo do
   json.id crag.photo&.id
   json.url url_for(crag.photo.picture) if crag.photo
-end
-
-json.climbing_type do
-  json.extract! crag,
-                :sport_climbing,
-                :bouldering,
-                :multi_pitch,
-                :trad_climbing,
-                :aid_climbing,
-                :deep_water,
-                :via_ferrata
-end
-json.orientation do
-  json.extract! crag,
-                :north,
-                :north_east,
-                :east,
-                :south_east,
-                :south,
-                :south_west,
-                :west,
-                :north_west
-end
-json.seasons do
-  json.extract! crag,
-                :summer,
-                :autumn,
-                :winter,
-                :spring
-end
-json.localization do
-  json.extract! crag,
-                :latitude,
-                :longitude,
-                :code_country,
-                :country,
-                :city,
-                :region
 end
 
 json.routes_figures do

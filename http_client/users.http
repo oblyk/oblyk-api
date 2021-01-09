@@ -37,6 +37,12 @@ GET {{api_url}}/users/current.json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
+### GET user subscribes
+GET {{api_url}}/users/current/subscribes.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+
 ### GET all users
 GET {{api_url}}/users.json
 Authorization: Bearer {{auth_token}}
