@@ -45,7 +45,7 @@ class Crag < ApplicationRecord
     return if rocks&.count&.zero?
 
     rocks.each do |rock|
-      errors.add(:rocks, I18n.t('activerecord.errors.messages.inclusion')) if Rock::LIST.exclude? rock['name']
+      errors.add(:rocks, I18n.t('activerecord.errors.messages.inclusion')) if Rock::LIST.exclude? rock
     end
   end
 end

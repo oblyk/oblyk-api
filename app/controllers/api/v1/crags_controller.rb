@@ -56,6 +56,13 @@ module Api
           :country,
           :city,
           :region,
+          :sport_climbing,
+          :bouldering,
+          :multi_pitch,
+          :trad_climbing,
+          :aid_climbing,
+          :deep_water,
+          :via_ferrata,
           :north,
           :north_east,
           :east,
@@ -69,7 +76,7 @@ module Api
           :winter,
           :spring,
           :photo_id,
-          rocks: %i[name]
+          rocks: %i[]
         )
       end
     end
