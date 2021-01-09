@@ -3,9 +3,9 @@
 module Api
   module V1
     class FollowsController < ApiController
-      before_action :protected_by_session, only: %i[index create destroy]
-      before_action :set_follow, only: %i[destroy]
-      before_action :protected_by_owner, only: %i[destroy]
+      before_action :protected_by_session
+      before_action :set_follow, only: %i[destroy increment]
+      before_action :protected_by_owner, only: %i[destroy increment]
 
       def index
         @follows = Follow.where(
@@ -30,6 +30,11 @@ module Api
         else
           render json: { error: @follow.errors }, status: :unprocessable_entity
         end
+      end
+
+      def increment
+        @follow.increment!
+        render json: {}, status: :ok
       end
 
       private

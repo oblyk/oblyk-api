@@ -25,6 +25,16 @@ Content-Type: application/json
   }
 }
 
+### Increment follow views
+PUT {{api_url}}/follows/increment.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "followable_type": "Crag",
+  "followable_id": 1
+}
+
 ### GET all follows for one item
 GET {{api_url}}/follows.json?followable_type=Crag&followable_id=1
 Accept: application/json

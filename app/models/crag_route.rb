@@ -12,7 +12,6 @@ class CragRoute < ApplicationRecord
   belongs_to :crag
   has_many :comments, as: :commentable
   has_many :links, as: :linkable
-  has_many :follows, as: :followable
   has_many :alerts, as: :alertable
   has_many :videos, as: :viewable
   has_many :tags, as: :taggable

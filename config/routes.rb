@@ -44,7 +44,9 @@ Rails.application.routes.draw do
       end
       resources :comments
       resources :links
-      resources :follows, only: %i[index create]
+      resources :follows, only: %i[index create] do
+        put :increment, on: :collection
+      end
       delete 'follows', controller: :follows, action: :destroy
       resources :parks
       resources :approaches

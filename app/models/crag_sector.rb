@@ -12,7 +12,6 @@ class CragSector < ApplicationRecord
   belongs_to :crag
   has_many :comments, as: :commentable
   has_many :links, as: :linkable
-  has_many :follows, as: :followable
   has_many :alerts, as: :alertable
   has_many :photos, as: :illustrable
   has_many :crag_routes
