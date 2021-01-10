@@ -38,6 +38,7 @@ Rails.application.routes.draw do
       post 'users/current/banner', controller: :users, action: :add_banner
 
       resources :crags do
+        get :guides, on: :member
         resources :crag_routes
       end
       resources :crag_sectors

@@ -59,6 +59,11 @@ Content-Type: application/json
   }
 }
 
+
+### GET guides in crag
+GET {{api_url}}/crags/1/guides.json
+Accept: application/json
+
 ### GET crag
 GET {{api_url}}/crags/1.json
 Accept: application/json

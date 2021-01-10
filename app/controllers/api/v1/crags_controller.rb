@@ -5,13 +5,57 @@ module Api
     class CragsController < ApiController
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update]
-      before_action :set_crag, only: %i[show update destroy]
+      before_action :set_crag, only: %i[show update destroy guides]
 
       def index
         @crags = Crag.includes(:user, :crag_sectors).all
       end
 
       def show; end
+
+      def guides
+        papers = @crag.guide_book_papers
+        pdfs = @crag.guide_book_pdfs
+        webs = @crag.guide_book_webs
+        guides = []
+
+        papers.each do |paper|
+          guides << {
+            guide_type: 'GuideBookPaper',
+            guide: JSON.parse(
+              render_to_string(
+                template: 'api/v1/guide_book_papers/search',
+                assigns: { guide_book_paper: paper }
+              )
+            )
+          }
+        end
+
+        pdfs.each do |pdf|
+          guides << {
+            guide_type: 'GuideBookPdf',
+            guide: JSON.parse(
+              render_to_string(
+                template: 'api/v1/guide_book_pdfs/show',
+                assigns: { guide_book_pdf: pdf }
+              )
+            )
+          }
+        end
+
+        webs.each do |web|
+          guides << {
+            guide_type: 'GuideBookWeb',
+            guide: JSON.parse(
+              render_to_string(
+                template: 'api/v1/guide_book_webs/show',
+                assigns: { guide_book_web: web }
+              )
+            )
+          }
+        end
+        render json: guides, status: :ok
+      end
 
       def create
         @crag = Crag.new(crag_params)
