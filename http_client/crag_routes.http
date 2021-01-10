@@ -73,5 +73,9 @@ GET {{api_url}}/crag_routes/1.json
 Accept: application/json
 
 ### GET all route in crag
+GET {{api_url}}/crags/1/crag_routes.json
+Accept: application/json
+
+### GET all route in crag
 GET {{api_url}}/crag_routes.json&crag_id=1
 Accept: application/json

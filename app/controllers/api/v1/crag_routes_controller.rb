@@ -6,9 +6,15 @@ module Api
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update]
       before_action :set_crag_route, only: %i[show update destroy]
+      before_action :set_crag, only: %i[index]
 
       def index
-        @crag_routes = CragRoute.where(crag_id: params[:crag_id])
+        crag_routes = if @crag
+                        @crag.crag_routes
+                      else
+                        CragRoute.where(crag_id: params[:crag_id])
+                      end
+        @crag_routes = crag_routes.page(params.fetch(:page, 1))
       end
 
       def show; end
@@ -40,6 +46,10 @@ module Api
       end
 
       private
+
+      def set_crag
+        @crag = Crag.find params[:crag_id]
+      end
 
       def set_crag_route
         @crag_route = CragRoute.find params[:id]

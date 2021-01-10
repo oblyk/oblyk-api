@@ -42,6 +42,14 @@ class CragRoute < ApplicationRecord
     )
   end
 
+  def grade_to_s
+    if sections_count > 1
+      "#{min_grade_text} #{max_grade_text}"
+    else
+      min_grade_text
+    end
+  end
+
   private
 
   def format_route_section

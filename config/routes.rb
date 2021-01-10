@@ -37,7 +37,9 @@ Rails.application.routes.draw do
       post 'users/current/avatar', controller: :users, action: :add_avatar
       post 'users/current/banner', controller: :users, action: :add_banner
 
-      resources :crags
+      resources :crags do
+        resources :crag_routes
+      end
       resources :crag_sectors
       resources :crag_routes
       resources :words do
