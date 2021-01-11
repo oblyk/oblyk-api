@@ -11,6 +11,7 @@ json.extract! photo,
               :copyright_nc,
               :copyright_nd
 json.picture url_for(photo.picture)
+json.thumbnail photo.thumbnail_url
 json.illustrable do
   json.type photo.illustrable_type
   json.id photo.illustrable.id

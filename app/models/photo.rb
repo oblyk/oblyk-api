@@ -11,6 +11,10 @@ class Photo < ApplicationRecord
   validates :illustrable_type, inclusion: { in: %w[Crag CragSector CragRoute].freeze }
   validates :picture, blob: { content_type: :image }
 
+  def thumbnail_url
+    Rails.application.routes.url_helpers.rails_representation_url(picture.variant(resize: '300x300').processed, only_path: true)
+  end
+
   private
 
   def init_posted_at

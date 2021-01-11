@@ -39,6 +39,7 @@ Rails.application.routes.draw do
 
       resources :crags do
         get :guides, on: :member
+        get :photos, on: :member
         resources :crag_routes
       end
       resources :crag_sectors

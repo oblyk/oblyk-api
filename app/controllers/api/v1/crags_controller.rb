@@ -5,7 +5,7 @@ module Api
     class CragsController < ApiController
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update]
-      before_action :set_crag, only: %i[show update destroy guides]
+      before_action :set_crag, only: %i[show update destroy guides photos]
 
       def index
         @crags = Crag.includes(:user, :crag_sectors).all
@@ -55,6 +55,14 @@ module Api
           }
         end
         render json: guides, status: :ok
+      end
+
+      def photos
+        @photos = @crag.photos
+        @crag.crag_sectors.each { |crag_sector| @photos += crag_sector.photos }
+        @crag.crag_routes.each { |crag_route| @photos += crag_route.photos }
+
+        render 'api/v1/photos/index'
       end
 
       def create
