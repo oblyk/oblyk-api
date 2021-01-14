@@ -11,6 +11,49 @@ module Api
         @crags = Crag.includes(:user, :crag_sectors).all
       end
 
+      def geo_json
+        features = []
+
+        Crag.all.each do |crag|
+          features << {
+            type: 'Feature',
+            properties: {
+              id: crag.id,
+              name: crag.name,
+              slug_name: crag.slug_name,
+              climbing_key: crag.climbing_key,
+              icon: "crag-marker-#{crag.climbing_key}",
+              localization: "#{crag.city}, #{crag.region}",
+              sport_climbing: crag.sport_climbing,
+              bouldering: crag.bouldering,
+              multi_pitch: crag.multi_pitch,
+              trad_climbing: crag.trad_climbing,
+              aid_climbing: crag.aid_climbing,
+              deep_water: crag.deep_water,
+              via_ferrata: crag.via_ferrata,
+              map_thumbnail_url: crag.photo.present? ? crag.photo.thumbnail_url : nil,
+              route_count: crag.crag_routes_count,
+              grade_min_value: crag.min_grade_value,
+              grade_max_value: crag.max_grade_value,
+              grade_max_text: crag.max_grade_text,
+              grade_min_text: crag.min_grade_text
+            },
+            geometry: { type: 'Point', "coordinates": [Float(crag.longitude), Float(crag.latitude), 0.0] }
+          }
+        end
+
+        render json: {
+          type: 'FeatureCollection',
+          crs: {
+            type: 'name',
+            properties: {
+              name: 'urn'
+            }
+          },
+          features: features
+        }, status: :ok
+      end
+
       def show; end
 
       def guides

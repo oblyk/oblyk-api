@@ -74,3 +74,7 @@ Accept: application/json
 ### GET all crags
 GET {{api_url}}/crags.json
 Accept: application/json
+
+### GET all crags geo_json
+GET {{api_url}}/crags/geo_json.json
+Accept: application/json

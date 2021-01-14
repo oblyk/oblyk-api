@@ -12,6 +12,42 @@ module Api
         @gyms = Gym.all
       end
 
+      def geo_json
+        features = []
+
+        Gym.all.each do |gym|
+          features << {
+            type: 'Feature',
+            properties: {
+              id: gym.id,
+              name: gym.name,
+              slug_name: gym.slug_name,
+              climbing_key: gym.climbing_key,
+              icon: "gym-marker-#{gym.climbing_key}",
+              localization: "#{gym.city}, #{gym.region}",
+              bouldering: gym.bouldering,
+              sport_climbing: gym.sport_climbing,
+              pan: gym.pan,
+              fun_climbing: gym.fun_climbing,
+              training_space: gym.training_space,
+              map_thumbnail_url: gym.banner.present? ? gym.thumbnail_banner_url : nil
+            },
+            geometry: { type: 'Point', "coordinates": [Float(gym.longitude), Float(gym.latitude), 0.0] }
+          }
+        end
+
+        render json: {
+          type: 'FeatureCollection',
+          crs: {
+            type: 'name',
+            properties: {
+              name: 'urn'
+            }
+          },
+          features: features
+        }, status: :ok
+      end
+
       def show; end
 
       def create

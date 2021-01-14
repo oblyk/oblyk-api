@@ -36,4 +36,16 @@ class Gym < ApplicationRecord
     self.assigned_at ||= Time.current
     save
   end
+
+  def climbing_key
+    key = ''
+    key += bouldering || pan ? '1' : '0'
+    key += sport_climbing ? '1' : '0'
+    key += fun_climbing ? '1' : '0'
+    key
+  end
+
+  def thumbnail_banner_url
+    Rails.application.routes.url_helpers.rails_representation_url(banner.variant(resize: '300x300').processed, only_path: true)
+  end
 end

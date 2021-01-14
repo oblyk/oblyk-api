@@ -40,6 +40,7 @@ Rails.application.routes.draw do
       resources :crags do
         get :guides, on: :member
         get :photos, on: :member
+        get :geo_json, on: :collection
         resources :crag_routes
       end
       resources :crag_sectors
@@ -75,6 +76,7 @@ Rails.application.routes.draw do
         delete :remove_cover, on: :member
       end
       resources :gyms do
+        get :geo_json, on: :collection
         post :add_banner, on: :member
         post :add_logo, on: :member
         resources :gym_administrators

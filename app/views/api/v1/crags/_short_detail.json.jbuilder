@@ -36,6 +36,7 @@ json.rocks crag.rocks
 json.photo do
   json.id crag.photo&.id
   json.url url_for(crag.photo.picture) if crag.photo
+  json.thumbnail_url crag.photo.thumbnail_url if crag.photo
 end
 
 json.routes_figures do

@@ -39,6 +39,16 @@ class Crag < ApplicationRecord
     )
   end
 
+  def climbing_key
+    key = ''
+    key += sport_climbing ? '1' : '0'
+    key += multi_pitch || trad_climbing || aid_climbing ? '1' : '0'
+    key += bouldering ? '1' : '0'
+    key += deep_water ? '1' : '0'
+    key += via_ferrata ? '1' : '0'
+    key
+  end
+
   private
 
   def validate_rocks
