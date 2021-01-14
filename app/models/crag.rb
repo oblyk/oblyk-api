@@ -49,6 +49,13 @@ class Crag < ApplicationRecord
     key
   end
 
+  def all_photos
+    photos = self.photos
+    crag_sectors.each { |crag_sector| photos += crag_sector.photos }
+    crag_routes.each { |crag_route| photos += crag_route.photos }
+    photos
+  end
+
   private
 
   def validate_rocks

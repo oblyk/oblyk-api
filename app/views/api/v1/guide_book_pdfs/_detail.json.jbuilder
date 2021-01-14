@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-json.extract! guide_book_pdf, :name, :description, :author, :publication_year
+json.extract! guide_book_pdf, :id, :name, :description, :author, :publication_year
 json.pdf_file url_for(guide_book_pdf.pdf_file)
 json.crag do
   json.extract! guide_book_pdf.crag, :id, :name

@@ -5,5 +5,5 @@ class Link < ApplicationRecord
   belongs_to :linkable, polymorphic: true
 
   validates :name, :url, presence: true
-  validates :linkable_type, inclusion: { in: %w[Crag CragSector CragRoute].freeze }
+  validates :linkable_type, inclusion: { in: %w[Crag CragSector CragRoute GuideBookPaper].freeze }
 end

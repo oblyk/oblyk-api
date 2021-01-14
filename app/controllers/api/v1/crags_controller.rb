@@ -101,10 +101,7 @@ module Api
       end
 
       def photos
-        @photos = @crag.photos
-        @crag.crag_sectors.each { |crag_sector| @photos += crag_sector.photos }
-        @crag.crag_routes.each { |crag_route| @photos += crag_route.photos }
-
+        @photos = @crag.all_photos
         render 'api/v1/photos/index'
       end
 

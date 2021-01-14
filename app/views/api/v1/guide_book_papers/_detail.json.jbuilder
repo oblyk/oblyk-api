@@ -2,6 +2,9 @@
 
 json.partial! 'api/v1/guide_book_papers/short_detail', guide_book_paper: guide_book_paper
 
+json.photos_count guide_book_paper.all_photos.count
+json.crags_count guide_book_paper.crags.count
+json.links_count guide_book_paper.links.count
 json.crags do
   json.array! guide_book_paper.crags do |crag|
     json.extract! crag, :id, :name

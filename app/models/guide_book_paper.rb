@@ -8,6 +8,7 @@ class GuideBookPaper < ApplicationRecord
   belongs_to :user, optional: true
   has_many :guide_book_paper_crags
   has_many :crags, through: :guide_book_paper_crags
+  has_many :links, as: :linkable
 
   validates :name, presence: true
   validates :cover, blob: { content_type: :image }, allow_nil: true
@@ -19,5 +20,15 @@ class GuideBookPaper < ApplicationRecord
         assigns: { guide_book_paper: self }
       )
     )
+  end
+
+  def thumbnail_url
+    Rails.application.routes.url_helpers.rails_representation_url(cover.variant(resize: '300x300').processed, only_path: true)
+  end
+
+  def all_photos
+    photos = []
+    crags.each { |crag| photos += crag.all_photos }
+    photos
   end
 end
