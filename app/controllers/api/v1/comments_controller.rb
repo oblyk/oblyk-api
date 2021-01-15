@@ -3,9 +3,9 @@
 module Api
   module V1
     class CommentsController < ApiController
-      before_action :protected_by_super_admin, only: %i[destroy]
-      before_action :protected_by_session, only: %i[create update]
+      before_action :protected_by_session, only: %i[create update destroy]
       before_action :set_comment, only: %i[show update destroy]
+      before_action :protected_by_owner, only: %i[update destroy]
 
       def index
         @comments = Comment.where(
@@ -54,6 +54,10 @@ module Api
           :commentable_id,
           :body
         )
+      end
+
+      def protected_by_owner
+        not_authorized if @current_user.id != @comment.user_id
       end
     end
   end

@@ -5,5 +5,5 @@ class Comment < ApplicationRecord
   belongs_to :commentable, polymorphic: true
 
   validates :body, presence: true
-  validates :commentable_type, inclusion: { in: %w[Crag CragSector CragRoute].freeze }
+  validates :commentable_type, inclusion: { in: %w[Crag CragSector CragRoute GuideBookPaper].freeze }
 end
