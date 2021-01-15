@@ -78,6 +78,7 @@ Rails.application.routes.draw do
         delete :remove_crag, on: :member
         post :add_cover, on: :member
         delete :remove_cover, on: :member
+        resources :place_of_sales
       end
       resources :gyms do
         get :geo_json, on: :collection

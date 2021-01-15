@@ -1,0 +1,50 @@
+DELETE {{api_url}}/guide_book_papers/1/place_of_sales/1.json
+Authorization: Bearer {{auth_token}}
+
+### Update place_of_sale 1
+PUT {{api_url}}/guide_book_papers/1/place_of_sales/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "place_of_sale": {
+    "name": "name",
+    "url": "url",
+    "description": "description",
+    "latitude": "latitude",
+    "longitude": "longitude",
+    "code_country": "code_country",
+    "country": "country",
+    "postal_code": "postal_code",
+    "city": "city",
+    "region": "region",
+    "address": "address",
+    "guide_book_paper_id": 1
+  }
+}
+
+### Create place_of_sales
+POST {{api_url}}/guide_book_papers/1/place_of_sales.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "place_of_sale": {
+    "name": "Le vieux campeur",
+    "url": "https://www.auvieuxcampeur.fr/",
+    "description": "Meilleurs endoir ou le trouver",
+    "latitude": 45.758737,
+    "longitude": 4.842518,
+    "code_country": "fr",
+    "country": "France",
+    "postal_code": "69007",
+    "city": "Lyon",
+    "region": "Auvergne Rhône Alpe",
+    "address": "15 cours de la liberté",
+    "guide_book_paper_id": 1
+  }
+}
+
+### GET place_of_sale
+GET {{api_url}}/guide_book_papers/1/place_of_sales/1.json
+Accept: application/json

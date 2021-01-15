@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_15_123108) do
+ActiveRecord::Schema.define(version: 2021_01_15_151900) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -544,6 +544,26 @@ ActiveRecord::Schema.define(version: 2021_01_15_123108) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["illustrable_type", "illustrable_id"], name: "index_photos_on_illustrable_type_and_illustrable_id"
     t.index ["user_id"], name: "index_photos_on_user_id"
+  end
+
+  create_table "place_of_sales", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "url"
+    t.text "description"
+    t.decimal "latitude", precision: 10, scale: 6
+    t.decimal "longitude", precision: 10, scale: 6
+    t.string "code_country"
+    t.string "country"
+    t.string "postal_code"
+    t.string "city"
+    t.string "region"
+    t.string "address"
+    t.bigint "guide_book_paper_id"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["guide_book_paper_id"], name: "index_place_of_sales_on_guide_book_paper_id"
+    t.index ["user_id"], name: "index_place_of_sales_on_user_id"
   end
 
   create_table "refresh_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

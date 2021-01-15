@@ -18,6 +18,7 @@ class Report < ApplicationRecord
     Gym
     Photo
     Park
+    PlacesOfSales
     Video
     Word
     User
