@@ -15,6 +15,7 @@ class CragSector < ApplicationRecord
   has_many :alerts, as: :alertable
   has_many :photos, as: :illustrable
   has_many :crag_routes
+  has_many :reports, as: :reportable
 
   validates :name, presence: true
   validates :rain, inclusion: { in: Rain::LIST }, allow_nil: true

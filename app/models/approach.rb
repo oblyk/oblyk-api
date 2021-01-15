@@ -3,6 +3,7 @@
 class Approach < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :crag
+  has_many :reports, as: :reportable
 
   STYLES_LIST = %w[steep_descent soft_descent flat soft_ascent steep_ascent various].freeze
 

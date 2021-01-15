@@ -6,6 +6,7 @@ class Word < ApplicationRecord
 
   has_one_attached :picture
   belongs_to :user, optional: true
+  has_many :reports, as: :reportable
 
   validates :name, :definition, presence: true
 

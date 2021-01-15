@@ -105,6 +105,7 @@ Rails.application.routes.draw do
           put :mount, on: :member
         end
       end
+      resources :reports, only: %i[create]
     end
   end
   mount Sidekiq::Web => '/sidekiq'

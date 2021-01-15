@@ -1,0 +1,13 @@
+### Create link
+POST {{api_url}}/reports.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "report": {
+    "reportable_type": "Comment",
+    "reportable_id": 1,
+    "report_from_url": "https://www.ffme.fr/sne-fiche/238/",
+    "body": "il y a un problème sur cette fiche"
+  }
+}

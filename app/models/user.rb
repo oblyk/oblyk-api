@@ -16,6 +16,7 @@ class User < ApplicationRecord
   has_many :photos
   has_many :gym_administrators
   has_many :gyms, through: :gym_administrators
+  has_many :reports, as: :reportable
 
   validates :first_name, :email, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }

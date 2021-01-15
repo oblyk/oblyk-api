@@ -5,6 +5,7 @@ class Photo < ApplicationRecord
 
   belongs_to :user, optional: true
   belongs_to :illustrable, polymorphic: true
+  has_many :reports, as: :reportable
 
   before_validation :init_posted_at
 

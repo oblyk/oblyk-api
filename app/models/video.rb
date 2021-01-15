@@ -3,6 +3,7 @@
 class Video < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :viewable, polymorphic: true
+  has_many :reports, as: :reportable
 
   URL_REGEXP = %r{(epictv\.com|/youtu\.be|youtube\.com|vimeo\.com|dai\.ly|dailymotion\.com)}.freeze
 
