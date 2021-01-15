@@ -40,6 +40,7 @@ Rails.application.routes.draw do
       resources :crags do
         get :guides, on: :member
         get :photos, on: :member
+        get :videos, on: :member
         get :geo_json, on: :collection
         resources :crag_routes
       end

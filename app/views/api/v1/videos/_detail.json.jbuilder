@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
-json.extract! video, :id, :url, :description
+json.extract! video,
+              :id,
+              :url,
+              :description,
+              :viewable_type,
+              :viewable_id
 json.iframe video.iframe
 json.creator do
   json.id video.user_id

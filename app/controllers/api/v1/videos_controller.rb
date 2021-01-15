@@ -3,9 +3,9 @@
 module Api
   module V1
     class VideosController < ApiController
-      before_action :protected_by_super_admin, only: %i[destroy]
-      before_action :protected_by_session, only: %i[create update]
+      before_action :protected_by_session, only: %i[create update destroy]
       before_action :set_video, only: %i[show update destroy]
+      before_action :protected_by_owner, only: %i[update destroy]
 
       def index
         @videos = Video.where(
@@ -56,6 +56,10 @@ module Api
           :url,
           :description
         )
+      end
+
+      def protected_by_owner
+        not_authorized if @current_user.id != @video.user_id
       end
     end
   end

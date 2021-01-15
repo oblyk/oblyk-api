@@ -57,6 +57,12 @@ class Crag < ApplicationRecord
     photos
   end
 
+  def all_videos
+    videos = self.videos
+    crag_routes.each { |crag_route| videos += crag_route.videos }
+    videos
+  end
+
   private
 
   def validate_rocks

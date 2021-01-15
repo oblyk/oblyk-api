@@ -18,7 +18,7 @@ class Video < ApplicationRecord
   def iframe
     return unless url_for_iframe
 
-    "<iframe src='#{url_for_iframe}' width='100%' height='150px' frameborder='0' />"
+    "<iframe src='#{url_for_iframe}' width='100%' height='250px' frameborder='0' />"
   end
 
   private
