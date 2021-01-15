@@ -72,6 +72,10 @@ Content-Type: application/json
 GET {{api_url}}/guide_book_papers/1.json
 Accept: application/json
 
+### GET all links guide_book_papers
+GET {{api_url}}/guide_book_papers/1/links.json
+Accept: application/json
+
 ### GET all crags photos guide_book_papers
 GET {{api_url}}/guide_book_papers/1/photos.json
 Accept: application/json

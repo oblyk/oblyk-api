@@ -72,6 +72,7 @@ Rails.application.routes.draw do
       resources :guide_book_papers do
         get :crags, on: :member
         get :photos, on: :member
+        get :links, on: :member
         post :add_crag, on: :member
         delete :remove_crag, on: :member
         post :add_cover, on: :member

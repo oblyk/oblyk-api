@@ -5,7 +5,7 @@ module Api
     class GuideBookPapersController < ApiController
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update add_crag remove_crag add_cover remove_cover]
-      before_action :set_guide_book_paper, only: %i[crags photos show update destroy add_crag remove_crag add_cover remove_cover]
+      before_action :set_guide_book_paper, only: %i[crags photos links show update destroy add_crag remove_crag add_cover remove_cover]
 
       def index
         crag_id = params.fetch :crag_id, nil
@@ -25,6 +25,11 @@ module Api
       def photos
         @photos = @guide_book_paper.all_photos
         render 'api/v1/photos/index'
+      end
+
+      def links
+        @links = @guide_book_paper.links
+        render 'api/v1/links/index'
       end
 
       def show; end
