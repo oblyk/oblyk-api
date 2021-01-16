@@ -4,14 +4,19 @@ module Api
   module V1
     class UsersController < ApiController
       before_action :protected_by_session, except: %i[index]
-      before_action :set_user, only: %i[show update add_avatar add_banner subscribes]
+      before_action :set_user, only: %i[show update add_avatar add_banner subscribes library]
 
       def index
         @users = User.all
       end
 
       def subscribes
-        @subscribes = @user.subscribes.order(views: :desc)
+        @subscribes = @user.subscribes.where.not(followable_type: %w[GuideBookPaper User]).order(views: :desc)
+      end
+
+      def library
+        @subscribes = @user.subscribes.where(followable_type: %w[GuideBookPaper]).order(views: :desc)
+        render 'api/v1/users/subscribes'
       end
 
       def show; end

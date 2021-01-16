@@ -9,6 +9,7 @@ class GuideBookPaper < ApplicationRecord
   has_many :guide_book_paper_crags
   has_many :crags, through: :guide_book_paper_crags
   has_many :links, as: :linkable
+  has_many :follows, as: :followable
   has_many :reports, as: :reportable
   has_many :place_of_sales
 
