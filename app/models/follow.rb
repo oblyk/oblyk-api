@@ -6,7 +6,16 @@ class Follow < ApplicationRecord
 
   before_validation :auto_accepted
 
-  validates :followable_type, inclusion: { in: %w[User Crag CragSector CragRoute Gym].freeze }
+  FOLLOWABLE_LIST = %w[
+    User
+    Crag
+    CragSector
+    CragRoute
+    GuideBookPaper
+    Gym
+  ].freeze
+
+  validates :followable_type, inclusion: { in: FOLLOWABLE_LIST }
 
   def accepted?
     accepted_at.present?
