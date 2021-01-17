@@ -5,7 +5,7 @@ module Api
     class CragsController < ApiController
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update]
-      before_action :set_crag, only: %i[show update destroy guides photos videos]
+      before_action :set_crag, only: %i[show update guide_books_around destroy guides photos videos]
 
       def index
         @crags = Crag.includes(:user, :crag_sectors).all
@@ -15,6 +15,27 @@ module Api
         query = params[:query]
         @crags = Crag.search(query).records
         render 'api/v1/crags/index'
+      end
+
+      def geo_search
+        @crags = Crag.geo_search(
+          params[:latitude],
+          params[:longitude],
+          params[:distance]
+        ).records
+        render 'api/v1/crags/index'
+      end
+
+      def guide_books_around
+        guides_already_have = @crag.guide_book_papers.pluck(:id)
+        guide_ids = []
+        crags_around = Crag.geo_search(@crag.latitude, @crag.longitude, '50km').records
+        crags_around.each do |crag|
+          guide_ids.concat(crag.guide_book_papers.pluck(:id)) if crag.guide_book_papers.count.positive?
+        end
+        other_guides = guide_ids - guides_already_have
+        @guide_book_papers = GuideBookPaper.where(id: other_guides)
+        render 'api/v1/guide_book_papers/index'
       end
 
       def geo_json

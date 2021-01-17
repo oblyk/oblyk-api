@@ -31,6 +31,10 @@ class Crag < ApplicationRecord
   validates :sun, inclusion: { in: Sun::LIST }, allow_nil: true
   validate :validate_rocks
 
+  mapping do
+    indexes :location, type: 'geo_point'
+  end
+
   def search_json
     JSON.parse(
       ApplicationController.render(
@@ -50,6 +54,45 @@ class Crag < ApplicationRecord
             fuzziness: :auto
           }
         }
+      }
+    )
+  end
+
+  def location
+    [latitude, longitude]
+  end
+
+  def self.geo_search(latitude, longitude, distance)
+    __elasticsearch__.search(
+      {
+        query: {
+          bool: {
+            must: {
+              match_all: {}
+            },
+            filter: {
+              geo_distance: {
+                distance: distance,
+                location: {
+                  lat: latitude.to_f,
+                  lon: longitude.to_f
+                }
+              }
+            }
+          }
+        },
+        sort: [
+          {
+            _geo_distance: {
+              location: {
+                lat: latitude.to_f,
+                lon: longitude.to_f
+              },
+              order: 'asc',
+              unit: 'km'
+            }
+          }
+        ]
       }
     )
   end
@@ -104,6 +147,15 @@ class Crag < ApplicationRecord
     videos = self.videos
     crag_routes.each { |crag_route| videos += crag_route.videos }
     videos
+  end
+
+  def as_indexed_json(_options = {})
+    as_json.merge(
+      location: {
+        lat: latitude.to_f,
+        lon: longitude.to_f
+      }
+    )
   end
 
   private

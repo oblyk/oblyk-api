@@ -43,7 +43,9 @@ Rails.application.routes.draw do
         get :guides, on: :member
         get :photos, on: :member
         get :videos, on: :member
+        get :guide_books_around, on: :member
         get :geo_json, on: :collection
+        get :geo_search, on: :collection
         resources :crag_routes
       end
       resources :crag_sectors
