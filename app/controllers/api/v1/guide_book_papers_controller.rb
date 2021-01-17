@@ -74,7 +74,7 @@ module Api
       end
 
       def remove_crag
-        guide_book_paper_crag = GuideBookPaperCrag.find crag_params[:crag_id]
+        guide_book_paper_crag = GuideBookPaperCrag.find_by crag_id: crag_params[:crag_id]
 
         if guide_book_paper_crag.delete
           render 'api/v1/guide_book_papers/show'

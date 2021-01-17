@@ -40,6 +40,20 @@ class Crag < ApplicationRecord
     )
   end
 
+  def self.search(query)
+    __elasticsearch__.search(
+      {
+        query: {
+          multi_match: {
+            query: query,
+            fields: %w[name city],
+            fuzziness: :auto
+          }
+        }
+      }
+    )
+  end
+
   def climbing_key
     key = ''
     key += sport_climbing ? '1' : '0'

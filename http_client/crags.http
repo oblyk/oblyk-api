@@ -83,3 +83,7 @@ Accept: application/json
 ### GET all crags geo_json
 GET {{api_url}}/crags/geo_json.json
 Accept: application/json
+
+### search gras
+GET {{api_url}}/crags/search.json?query=rocher des aures
+Accept: application/json

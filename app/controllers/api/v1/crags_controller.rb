@@ -11,6 +11,12 @@ module Api
         @crags = Crag.includes(:user, :crag_sectors).all
       end
 
+      def search
+        query = params[:query]
+        @crags = Crag.search(query).records
+        render 'api/v1/crags/index'
+      end
+
       def geo_json
         features = []
 

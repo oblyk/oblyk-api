@@ -39,6 +39,7 @@ Rails.application.routes.draw do
       post 'users/current/banner', controller: :users, action: :add_banner
 
       resources :crags do
+        get :search, on: :collection
         get :guides, on: :member
         get :photos, on: :member
         get :videos, on: :member
