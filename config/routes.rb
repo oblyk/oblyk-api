@@ -74,6 +74,7 @@ Rails.application.routes.draw do
       resources :guide_book_pdfs
       resources :guide_book_papers do
         get :crags, on: :member
+        get :geo_json, on: :member
         get :photos, on: :member
         get :links, on: :member
         post :add_crag, on: :member

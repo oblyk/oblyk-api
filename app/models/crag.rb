@@ -54,6 +54,35 @@ class Crag < ApplicationRecord
     )
   end
 
+  def to_geo_json
+    {
+      type: 'Feature',
+      properties: {
+        type: 'Crag',
+        id: id,
+        name: name,
+        slug_name: slug_name,
+        climbing_key: climbing_key,
+        icon: "crag-marker-#{climbing_key}",
+        localization: "#{city}, #{region}",
+        sport_climbing: sport_climbing,
+        bouldering: bouldering,
+        multi_pitch: multi_pitch,
+        trad_climbing: trad_climbing,
+        aid_climbing: aid_climbing,
+        deep_water: deep_water,
+        via_ferrata: via_ferrata,
+        map_thumbnail_url: photo.present? ? photo.thumbnail_url : nil,
+        route_count: crag_routes_count,
+        grade_min_value: min_grade_value,
+        grade_max_value: max_grade_value,
+        grade_max_text: max_grade_text,
+        grade_min_text: min_grade_text
+      },
+      geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
+    }
+  end
+
   def climbing_key
     key = ''
     key += sport_climbing ? '1' : '0'

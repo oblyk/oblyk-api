@@ -17,6 +17,7 @@ class Gym < ApplicationRecord
 
   validates :logo, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true
+  validates :name, :latitude, :longitude, :address, :postal_code, :country, :city, :big_city, presence: true
 
   def search_json
     JSON.parse(
@@ -27,7 +28,27 @@ class Gym < ApplicationRecord
     )
   end
 
-  validates :name, :latitude, :longitude, :address, :postal_code, :country, :city, :big_city, presence: true
+  def to_geo_json
+    {
+      type: 'Feature',
+      properties: {
+        type: 'Gym',
+        id: id,
+        name: name,
+        slug_name: slug_name,
+        climbing_key: climbing_key,
+        icon: "gym-marker-#{climbing_key}",
+        localization: "#{city}, #{region}",
+        bouldering: bouldering,
+        sport_climbing: sport_climbing,
+        pan: pan,
+        fun_climbing: fun_climbing,
+        training_space: training_space,
+        map_thumbnail_url: banner.present? ? thumbnail_banner_url : nil
+      },
+      geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
+    }
+  end
 
   def administered?
     assigned_at.present?
