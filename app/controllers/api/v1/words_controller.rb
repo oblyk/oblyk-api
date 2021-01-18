@@ -21,7 +21,6 @@ module Api
 
       def versions
         @versions = @word.versions
-        @actual_version = @word
         render 'api/v1/versions/index'
       end
 

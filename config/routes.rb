@@ -80,6 +80,7 @@ Rails.application.routes.draw do
         get :geo_json, on: :member
         get :photos, on: :member
         get :links, on: :member
+        get :versions, on: :member
         get :search, on: :collection
         post :add_crag, on: :member
         post :add_cover, on: :member
