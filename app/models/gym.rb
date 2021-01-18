@@ -6,6 +6,28 @@ class Gym < ApplicationRecord
   include Searchable
   include Slugable
 
+  has_paper_trail only: %i[
+    name
+    description
+    address
+    postal_code
+    code_country
+    country
+    city
+    big_city
+    region
+    email
+    phone_number
+    web_site
+    bouldering
+    sport_climbing
+    pan
+    fun_climbing
+    training_space
+    latitude
+    longitude
+  ]
+
   has_one_attached :logo
   has_one_attached :banner
   belongs_to :user, optional: true

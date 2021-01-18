@@ -92,7 +92,7 @@ Accept: application/json
 GET {{api_url}}/guide_book_papers/1/crags.json
 Accept: application/json
 
-### GET all crags guide_book_papers
+### GET all guide_book_paper versions
 GET {{api_url}}/guide_book_papers/1/versions.json
 Accept: application/json
 

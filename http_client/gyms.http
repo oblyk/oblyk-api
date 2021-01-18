@@ -57,6 +57,10 @@ Content-Type: application/json
   }
 }
 
+### GET all gym versions
+GET {{api_url}}/gyms/1/versions.json
+Accept: application/json
+
 ### GET gym
 GET {{api_url}}/gyms/1.json
 Accept: application/json

@@ -5,7 +5,7 @@ module Api
     class GymsController < ApiController
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update add_banner add_logo]
-      before_action :set_gym, only: %i[show update destroy add_banner add_logo]
+      before_action :set_gym, only: %i[show versions update destroy add_banner add_logo]
       before_action :protected_by_administrator, only: %i[update add_banner add_logo]
 
       def index
@@ -32,6 +32,11 @@ module Api
       end
 
       def show; end
+
+      def versions
+        @versions = @gym.versions
+        render 'api/v1/versions/index'
+      end
 
       def create
         @gym = Gym.new(gym_params)

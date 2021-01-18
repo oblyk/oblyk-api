@@ -89,6 +89,7 @@ Rails.application.routes.draw do
         resources :place_of_sales
       end
       resources :gyms do
+        get :versions, on: :member
         get :geo_json, on: :collection
         post :add_banner, on: :member
         post :add_logo, on: :member
