@@ -140,6 +140,9 @@ GEM
     nio4r (2.5.4)
     nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
+    paper_trail (11.1.0)
+      activerecord (>= 5.2)
+      request_store (~> 1.1)
     parallel (1.20.1)
     parser (2.7.2.0)
       ast (~> 2.4.1)
@@ -210,6 +213,8 @@ GEM
     redis-store (1.9.0)
       redis (>= 4, < 5)
     regexp_parser (2.0.1)
+    request_store (1.5.0)
+      rack (>= 1.4)
     rexml (3.2.4)
     rubocop (1.6.1)
       parallel (~> 1.10)
@@ -282,6 +287,7 @@ DEPENDENCIES
   listen (~> 3.2)
   mini_magick
   mysql2 (>= 0.4.4, < 0.6.0)
+  paper_trail (~> 11.1)
   pry-doc
   pry-rails
   puma (~> 4.1)

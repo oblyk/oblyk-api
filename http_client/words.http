@@ -8,7 +8,7 @@ Content-Type: application/json
 
 {
   "word": {
-    "definition": "Très grosse prise"
+    "name": "A la rue (être)"
   }
 }
 
@@ -26,6 +26,10 @@ Content-Type: application/json
 
 ### GET word
 GET {{api_url}}/words/1.json
+Accept: application/json
+
+### GET word
+GET {{api_url}}/words/13/versions.json
 Accept: application/json
 
 ### GET all words

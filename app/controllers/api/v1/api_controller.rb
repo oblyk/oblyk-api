@@ -3,6 +3,9 @@
 module Api
   module V1
     class ApiController < ApplicationController
+      def user_for_paper_trail
+        @current_user ? @current_user.id : 'Public user'
+      end
 
       private
 
@@ -23,6 +26,7 @@ module Api
 
       def protected_by_session
         verify_json_web_token
+        set_paper_trail_whodunnit
       end
 
       def protected_by_super_admin

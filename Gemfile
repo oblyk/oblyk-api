@@ -54,6 +54,9 @@ gem 'kaminari'
 # Sidekiq
 gem 'sidekiq'
 
+# Track changes
+gem 'paper_trail', '~> 11.1'
+
 group :development, :test do
   # Ruby static code analyzer
   gem 'rubocop-faker'

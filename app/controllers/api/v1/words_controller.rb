@@ -5,7 +5,7 @@ module Api
     class WordsController < ApiController
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update]
-      before_action :set_word, only: %i[show update destroy]
+      before_action :set_word, only: %i[show versions update destroy]
 
       def index
         @words = Word.page(params.fetch(:page, 1))
@@ -18,6 +18,12 @@ module Api
       end
 
       def show; end
+
+      def versions
+        @versions = @word.versions
+        @actual_version = @word
+        render 'api/v1/versions/index'
+      end
 
       def create
         @word = Word.new(word_params)

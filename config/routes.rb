@@ -52,6 +52,7 @@ Rails.application.routes.draw do
       resources :crag_routes
       resources :words do
         get :search, on: :collection
+        get :versions, on: :member
       end
       resources :comments
       resources :links

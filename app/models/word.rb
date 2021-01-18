@@ -4,6 +4,8 @@ class Word < ApplicationRecord
   include Slugable
   include Searchable
 
+  has_paper_trail only: %i[name definition]
+
   has_one_attached :picture
   belongs_to :user, optional: true
   has_many :reports, as: :reportable

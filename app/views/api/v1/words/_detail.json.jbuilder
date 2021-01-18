@@ -5,6 +5,7 @@ json.extract! word,
               :name,
               :slug_name,
               :definition
+json.versions_count word.versions.length
 json.creator do
   json.id word.user_id
   json.name word.user&.full_name
