@@ -93,5 +93,9 @@ GET {{api_url}}/guide_book_papers/1/crags.json
 Accept: application/json
 
 ### GET all guide_book_papers
+GET {{api_url}}/guide_book_papers/search.json?query=drome
+Accept: application/json
+
+### GET all guide_book_papers
 GET {{api_url}}/guide_book_papers.json?crag_id=1
 Accept: application/json

@@ -25,6 +25,20 @@ class GuideBookPaper < ApplicationRecord
     )
   end
 
+  def self.search(query)
+    __elasticsearch__.search(
+      {
+        query: {
+          multi_match: {
+            query: query,
+            fields: %w[name],
+            fuzziness: :auto
+          }
+        }
+      }
+    )
+  end
+
   def thumbnail_url
     Rails.application.routes.url_helpers.rails_representation_url(cover.variant(resize: '300x300').processed, only_path: true)
   end

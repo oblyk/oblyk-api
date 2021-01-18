@@ -92,7 +92,9 @@ class Crag < ApplicationRecord
               unit: 'km'
             }
           }
-        ]
+        ],
+        from: 0,
+        size: 500
       }
     )
   end

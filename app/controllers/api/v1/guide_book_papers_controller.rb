@@ -22,6 +22,12 @@ module Api
         render 'api/v1/crags/index'
       end
 
+      def search
+        query = params[:query]
+        @guide_book_papers = GuideBookPaper.search(query).records
+        render 'api/v1/guide_book_papers/index'
+      end
+
       def geo_json
         features = []
 
