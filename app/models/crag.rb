@@ -6,6 +6,38 @@ class Crag < ApplicationRecord
   include Searchable
   include Slugable
 
+  has_paper_trail only: %i[
+    name
+    rocks
+    rain
+    sun
+    latitude
+    longitude
+    code_country
+    country
+    city
+    region
+    sport_climbing
+    bouldering
+    multi_pitch
+    trad_climbing
+    aid_climbing
+    deep_water
+    via_ferrata
+    summer
+    autumn
+    winter
+    spring
+    north
+    north_east
+    east
+    south_east
+    south
+    south_west
+    west
+    north_west
+  ]
+
   belongs_to :user, optional: true
   belongs_to :photo, optional: true
   has_many :comments, as: :commentable

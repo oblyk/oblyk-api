@@ -5,7 +5,7 @@ module Api
     class CragsController < ApiController
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update]
-      before_action :set_crag, only: %i[show update guide_books_around destroy guides photos videos]
+      before_action :set_crag, only: %i[show versions update guide_books_around destroy guides photos videos]
 
       def index
         @crags = Crag.includes(:user, :crag_sectors).all
@@ -15,6 +15,11 @@ module Api
         query = params[:query]
         @crags = Crag.search(query).records
         render 'api/v1/crags/index'
+      end
+
+      def versions
+        @versions = @crag.versions
+        render 'api/v1/versions/index'
       end
 
       def geo_search
