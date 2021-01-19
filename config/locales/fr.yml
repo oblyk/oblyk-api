@@ -95,3 +95,4 @@ fr:
         inclusion: "n'est pas dans la liste des valeurs autorisées"
         grade_system: "Vous devez choisir au moins un système"
         one_point_system: "Vous ne pouvez pas avoir les deux systèmes de point"
+        content_type: "n'est pas au bon format"

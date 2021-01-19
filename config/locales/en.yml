@@ -95,3 +95,4 @@ en:
         inclusion: 'is not a permitted value'
         grade_system: "You must choose at least one system"
         one_point_system: "You cannot have both point systems."
+        content_type: "is not in the right format"
