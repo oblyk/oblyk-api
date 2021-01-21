@@ -45,6 +45,7 @@ Rails.application.routes.draw do
         get :videos, on: :member
         get :versions, on: :member
         get :guide_books_around, on: :member
+        get :geo_json_around, on: :member
         get :geo_json, on: :collection
         get :geo_search, on: :collection
         resources :crag_routes

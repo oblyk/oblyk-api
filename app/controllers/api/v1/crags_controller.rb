@@ -5,7 +5,7 @@ module Api
     class CragsController < ApiController
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update]
-      before_action :set_crag, only: %i[show versions update guide_books_around destroy guides photos videos]
+      before_action :set_crag, only: %i[show versions update guide_books_around geo_json_around destroy guides photos videos]
 
       def index
         @crags = Crag.includes(:user, :crag_sectors).all
@@ -47,6 +47,26 @@ module Api
         features = []
 
         Crag.all.each do |crag|
+          features << crag.to_geo_json
+        end
+
+        render json: {
+          type: 'FeatureCollection',
+          crs: {
+            type: 'name',
+            properties: {
+              name: 'urn'
+            }
+          },
+          features: features
+        }, status: :ok
+      end
+
+      def geo_json_around
+        features = []
+        crags_around = Crag.geo_search(@crag.latitude, @crag.longitude, '50km').records
+
+        crags_around.each do |crag|
           features << crag.to_geo_json
         end
 

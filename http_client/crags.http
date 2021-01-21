@@ -89,6 +89,10 @@ GET {{api_url}}/crags/1/versions.json
 Accept: application/json
 
 ### Guide book arrounds
+GET {{api_url}}/crags/1/geo_json_around.json
+Accept: application/json
+
+### Guide book arrounds
 GET {{api_url}}/crags/2363/guide_books_around.json
 Accept: application/json
 
