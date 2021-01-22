@@ -49,9 +49,15 @@ Rails.application.routes.draw do
         get :geo_json, on: :collection
         get :geo_search, on: :collection
         resources :crag_routes
+        resources :crag_sectors
       end
-      resources :crag_sectors
-      resources :crag_routes
+      resources :crag_sectors do
+        get :versions, on: :member
+        get :photos, on: :member
+        get :videos, on: :member
+        resources :crag_routes
+      end
+
       resources :words do
         get :search, on: :collection
         get :versions, on: :member

@@ -21,9 +21,15 @@ json.grade_gap do
                 :max_grade_text,
                 :min_grade_text
 end
+json.sector do
+  json.id crag_route.crag_sector&.id
+  json.name crag_route.crag_sector&.name
+  json.slug_name crag_route.crag_sector&.slug_name
+end
 json.crag do
   json.id crag_route.crag.id
   json.name crag_route.crag.name
+  json.slug_name crag_route.crag.slug_name
   json.country crag_route.crag.country
   json.region crag_route.crag.region
   json.city crag_route.crag.city

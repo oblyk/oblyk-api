@@ -6,6 +6,23 @@ class CragSector < ApplicationRecord
   include Searchable
   include Slugable
 
+  has_paper_trail only: %i[
+    name
+    description
+    rain
+    sun
+    latitude
+    longitude
+    north
+    north_east
+    east
+    south_east
+    south
+    south_west
+    west
+    north_west
+  ]
+
   has_one_attached :picture
   belongs_to :user, optional: true
   belongs_to :photo, optional: true
@@ -28,5 +45,17 @@ class CragSector < ApplicationRecord
         assigns: { crag_sector: self }
       )
     )
+  end
+
+  def all_photos
+    photos = self.photos
+    crag_routes.each { |crag_route| photos += crag_route.photos }
+    photos
+  end
+
+  def all_videos
+    videos = []
+    crag_routes.each { |crag_route| videos += crag_route.videos }
+    videos
   end
 end

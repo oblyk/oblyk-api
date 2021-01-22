@@ -7,29 +7,27 @@ json.extract! crag_sector,
               :slug_name,
               :description,
               :rain,
-              :sun
-json.orientation do
-  json.extract! crag_sector,
-                :north,
-                :north_east,
-                :east,
-                :south_east,
-                :south,
-                :south_west,
-                :west,
-                :north_west
+              :sun,
+              :latitude,
+              :longitude,
+              :north,
+              :north_east,
+              :east,
+              :south_east,
+              :south,
+              :south_west,
+              :west,
+              :north_west
+json.crag do
+  json.id crag_sector.crag.id
+  json.name crag_sector.crag.name
+  json.slug_name crag_sector.crag.slug_name
+  json.city crag_sector.crag.city
+  json.country crag_sector.crag.country
+  json.region crag_sector.crag.region
 end
-json.localization do
-  json.extract! crag_sector,
-                :latitude,
-                :longitude
-end
-json.routes_figures do
-  json.count crag_sector.crag_routes_count
-  json.grade do
-    json.min_value crag_sector.min_grade_value
-    json.max_value crag_sector.max_grade_value
-    json.max_text crag_sector.max_grade_text
-    json.min_text crag_sector.min_grade_text
-  end
+json.photo do
+  json.id crag_sector.photo&.id
+  json.url url_for(crag_sector.photo.picture) if crag_sector.photo
+  json.thumbnail_url crag_sector.photo.thumbnail_url if crag_sector.photo
 end

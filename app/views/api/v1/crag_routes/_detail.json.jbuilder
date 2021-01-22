@@ -3,10 +3,7 @@
 json.partial! 'api/v1/crag_routes/short_detail', crag_route: crag_route
 
 json.sections crag_route.sections
-json.sector do
-  json.id crag_route.crag_sector&.id
-  json.name crag_route.crag_sector&.name
-end
+
 json.tags do
   json.array! crag_route.tags do |tag|
     json.id tag.id

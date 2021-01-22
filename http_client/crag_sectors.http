@@ -26,6 +26,14 @@ Content-Type: application/json
   }
 }
 
+### GET crag routes sector
+GET {{api_url}}/crag_sectors/1/crag_routes.json
+Accept: application/json
+
+### GET sector versions
+GET {{api_url}}/crag_sectors/1/versions.json
+Accept: application/json
+
 ### GET sector
 GET {{api_url}}/crag_sectors/1.json
 Accept: application/json
