@@ -6,15 +6,17 @@ module Api
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update]
       before_action :set_park, only: %i[show update destroy]
+      before_action :set_crag, only: %i[index show create update destroy]
 
       def index
-        @parks = Park.where(crag_id: params[:crag_id])
+        @parks = @crag.parks
       end
 
       def show; end
 
       def create
         @park = Park.new(park_params)
+        @park.crag = @crag
         @park.user = @current_user
         if @park.save
           render 'api/v1/parks/show'
@@ -45,12 +47,15 @@ module Api
         @park = Park.find params[:id]
       end
 
+      def set_crag
+        @crag = Crag.find params[:crag_id]
+      end
+
       def park_params
         params.require(:park).permit(
           :description,
           :latitude,
-          :longitude,
-          :crag_id
+          :longitude
         )
       end
     end
