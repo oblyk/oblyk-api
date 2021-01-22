@@ -47,6 +47,27 @@ class CragSector < ApplicationRecord
     )
   end
 
+  def to_geo_json
+    {
+      type: 'Feature',
+      properties: {
+        type: 'CragSector',
+        id: id,
+        name: name,
+        description: description,
+        slug_name: slug_name,
+        icon: 'sector-marker',
+        map_thumbnail_url: photo.present? ? photo.thumbnail_url : nil,
+        crag: {
+          id: crag.id,
+          name: crag.name,
+          slug_name: crag.slug_name
+        }
+      },
+      geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
+    }
+  end
+
   def all_photos
     photos = self.photos
     crag_routes.each { |crag_route| photos += crag_route.photos }

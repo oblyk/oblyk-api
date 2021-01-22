@@ -8,4 +8,22 @@ class Park < ApplicationRecord
   has_many :reports, as: :reportable
 
   validates :latitude, :longitude, presence: true
+
+  def to_geo_json
+    {
+      type: 'Feature',
+      properties: {
+        type: 'Park',
+        id: id,
+        description: description,
+        icon: 'park-marker',
+        crag: {
+          id: crag.id,
+          name: crag.name,
+          slug_name: crag.slug_name
+        }
+      },
+      geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
+    }
+  end
 end

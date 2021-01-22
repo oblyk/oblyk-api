@@ -70,6 +70,16 @@ module Api
           features << crag.to_geo_json
         end
 
+        @crag.crag_sectors.each do |sector|
+          next unless sector.latitude
+
+          features << sector.to_geo_json
+        end
+
+        @crag.parks.each do |park|
+          features << park.to_geo_json
+        end
+
         render json: {
           type: 'FeatureCollection',
           crs: {
