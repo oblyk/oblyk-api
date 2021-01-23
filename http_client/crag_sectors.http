@@ -34,6 +34,10 @@ Accept: application/json
 GET {{api_url}}/crag_sectors/1/versions.json
 Accept: application/json
 
+### GET approach
+GET {{api_url}}/crags/1/crag_sectors/1/geo_json_around.json
+Accept: application/json
+
 ### GET sector
 GET {{api_url}}/crag_sectors/1.json
 Accept: application/json

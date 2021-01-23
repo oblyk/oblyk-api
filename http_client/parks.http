@@ -26,6 +26,11 @@ Content-Type: application/json
   }
 }
 
+###
+GET {{api_url}}/crags/1/parks/geo_json_around.json
+Accept: application/json
+
+
 ### GET park
 GET {{api_url}}/parks/1.json
 Accept: application/json

@@ -6,10 +6,45 @@ module Api
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update]
       before_action :set_park, only: %i[show update destroy]
-      before_action :set_crag, only: %i[index show create update destroy]
+      before_action :set_crag, only: %i[index geo_json_around show create update destroy]
 
       def index
         @parks = @crag.parks
+      end
+
+      def geo_json_around
+        features = []
+
+        features << @crag.to_geo_json
+
+        @crag.crag_sectors.each do |sector|
+          next unless sector.latitude
+
+          features << sector.to_geo_json
+        end
+
+        # Crag parks
+        @crag.parks.each do |park|
+          next if park.id.to_s == params.fetch('exclude_id', nil)
+
+          features << park.to_geo_json
+        end
+
+        # Crag approaches
+        @crag.approaches.each do |approach|
+          features << approach.to_geo_json
+        end
+
+        render json: {
+          type: 'FeatureCollection',
+          crs: {
+            type: 'name',
+            properties: {
+              name: 'urn'
+            }
+          },
+          features: features
+        }, status: :ok
       end
 
       def show; end

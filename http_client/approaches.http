@@ -27,6 +27,10 @@ Content-Type: application/json
 }
 
 ### GET approach
+GET {{api_url}}/crags/1/approaches/1/geo_json_around.json
+Accept: application/json
+
+### GET approach
 GET {{api_url}}/approaches/1.json
 Accept: application/json
 

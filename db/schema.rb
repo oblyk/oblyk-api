@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_18_190402) do
+ActiveRecord::Schema.define(version: 2021_01_23_111704) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 2021_01_18_190402) do
   end
 
   create_table "approaches", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
-    t.text "polyline"
+    t.json "polyline"
     t.text "description"
     t.integer "length"
     t.string "approach_type"
@@ -665,8 +665,6 @@ ActiveRecord::Schema.define(version: 2021_01_18_190402) do
     t.text "object", size: :long
     t.datetime "created_at"
     t.text "object_changes", size: :long
-    t.string "user_name"
-    t.string "user_slug_name"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 

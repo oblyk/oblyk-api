@@ -57,6 +57,7 @@ class Crag < ApplicationRecord
   has_many :guide_book_papers, through: :guide_book_paper_crags
   has_many :photos, as: :illustrable
   has_many :reports, as: :reportable
+  has_many :approaches
 
   validates :name, :latitude, :longitude, presence: true
   validates :rain, inclusion: { in: Rain::LIST }, allow_nil: true

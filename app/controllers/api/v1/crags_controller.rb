@@ -66,18 +66,26 @@ module Api
         features = []
         crags_around = Crag.geo_search(@crag.latitude, @crag.longitude, '50km').records
 
+        # Crags around this crag
         crags_around.each do |crag|
           features << crag.to_geo_json
         end
 
+        # Crag sectors
         @crag.crag_sectors.each do |sector|
           next unless sector.latitude
 
           features << sector.to_geo_json
         end
 
+        # Crag parks
         @crag.parks.each do |park|
           features << park.to_geo_json
+        end
+
+        # Crag approaches
+        @crag.approaches.each do |approach|
+          features << approach.to_geo_json
         end
 
         render json: {
