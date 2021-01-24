@@ -51,6 +51,33 @@ class CragRoute < ApplicationRecord
     end
   end
 
+  def self.search(query, crag_id = nil, crag_sector_id = nil)
+    filter = []
+    filter << { term: { crag_id: crag_id } } if crag_id
+    filter << { term: { crag_sector_id: crag_sector_id } } if crag_sector_id
+
+    __elasticsearch__.search(
+      {
+        query: {
+          bool: {
+            filter: filter,
+            should: [
+              {
+                match: {
+                  name: {
+                    query: query,
+                    fuzziness: :auto
+                  }
+                }
+              }
+            ],
+            minimum_should_match: 1
+          }
+        }
+      }
+    )
+  end
+
   private
 
   def format_route_section
@@ -100,7 +127,7 @@ class CragRoute < ApplicationRecord
   end
 
   def historize_sections_count
-    self.sections_count =  sections.count
+    self.sections_count = sections.count
   end
 
   def historize_max_bolt

@@ -6,18 +6,42 @@ module Api
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update]
       before_action :set_crag_route, only: %i[show update destroy]
-      before_action :set_crag_sector, only: %i[index]
-      before_action :set_crag, only: %i[index]
+      before_action :set_crag_sector, only: %i[index search]
+      before_action :set_crag, only: %i[index search]
 
       def index
+        order_by = params.fetch(:order_by, 'difficulty_desc')
+        order = case order_by
+                when 'difficulty_desc'
+                  'max_grade_value DESC'
+                when 'difficulty_asc'
+                  'max_grade_value ASC'
+                when 'note'
+                  'note'
+                else
+                  'name'
+                end
+
         crag_routes = if @crag
-                        @crag.crag_routes
+                        @crag.crag_routes.order(order)
                       elsif @crag_sector
-                        @crag_sector.crag_routes
+                        @crag_sector.crag_routes.order(order)
                       else
-                        CragRoute.where(crag_id: params[:crag_id])
+                        CragRoute.where(crag_id: params[:crag_id]).order(order)
                       end
         @crag_routes = crag_routes.page(params.fetch(:page, 1))
+      end
+
+      def search
+        query = params[:query]
+        @crag_routes = if @crag_sector
+                         CragRoute.search(query, nil, @crag_sector.id).records
+                       elsif @crag
+                         CragRoute.search(query, @crag.id, nil).records
+                       else
+                         CragRoute.search(query).records
+                       end
+        render 'api/v1/crag_routes/index'
       end
 
       def show; end

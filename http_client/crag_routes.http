@@ -72,6 +72,14 @@ Content-Type: application/json
 GET {{api_url}}/crag_routes/1.json
 Accept: application/json
 
+### GET search route in crag
+GET {{api_url}}/crags/1/crag_routes/search.json?query=manu
+Accept: application/json
+
+### GET search route in sector
+GET {{api_url}}/crag_sectors/1/crag_routes/search.json?query=grand
+Accept: application/json
+
 ### GET all route in crag
 GET {{api_url}}/crags/1/crag_routes.json
 Accept: application/json
