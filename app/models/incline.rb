@@ -5,6 +5,7 @@ class Incline
     slab
     vertical
     slight_overhang
-    overhang roof
+    overhang
+    roof
   ].freeze
 end

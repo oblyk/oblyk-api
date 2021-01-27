@@ -23,7 +23,6 @@ class CragSector < ApplicationRecord
     north_west
   ]
 
-  has_one_attached :picture
   belongs_to :user, optional: true
   belongs_to :photo, optional: true
   belongs_to :crag

@@ -5,7 +5,7 @@ module Api
     class CragRoutesController < ApiController
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update]
-      before_action :set_crag_route, only: %i[show update destroy]
+      before_action :set_crag_route, only: %i[show photos videos versions update destroy]
       before_action :set_crag_sector, only: %i[index search]
       before_action :set_crag, only: %i[index search]
 
@@ -42,6 +42,21 @@ module Api
                          CragRoute.search(query).records
                        end
         render 'api/v1/crag_routes/index'
+      end
+
+      def versions
+        @versions = @crag_route.versions
+        render 'api/v1/versions/index'
+      end
+
+      def photos
+        @photos = @crag_route.photos
+        render 'api/v1/photos/index'
+      end
+
+      def videos
+        @videos = @crag_route.videos
+        render 'api/v1/videos/index'
       end
 
       def show; end
@@ -99,7 +114,7 @@ module Api
           :crag_id,
           :crag_sector_id,
           :photo_id,
-          sections: %i[climbing_type description grade height bolt_count bolt_type anchor_type incline_type]
+          sections: %i[climbing_type description grade height bolt_count bolt_type anchor_type incline_type tags]
         )
       end
     end

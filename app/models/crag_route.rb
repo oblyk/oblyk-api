@@ -5,7 +5,19 @@ class CragRoute < ApplicationRecord
   include Searchable
   include Slugable
 
-  has_one_attached :picture
+  has_paper_trail only: %i[
+    name
+    height
+    open_year
+    opener
+    sections
+    climbing_type
+    incline_type
+    reception_type
+    start_type
+    difficulty_appreciation
+  ]
+
   belongs_to :crag_sector, optional: true
   belongs_to :user, optional: true
   belongs_to :photo, optional: true
@@ -45,7 +57,7 @@ class CragRoute < ApplicationRecord
 
   def grade_to_s
     if sections_count > 1
-      "#{min_grade_text} #{max_grade_text}"
+      "#{sections_count}L."
     else
       min_grade_text
     end
@@ -100,7 +112,8 @@ class CragRoute < ApplicationRecord
         anchor_type: anchorable ? section['anchor_type'] : nil,
         incline_type: section['incline_type'],
         start_type: startable ? start_type : nil,
-        reception_type: receptionable ? reception_type : nil
+        reception_type: receptionable ? reception_type : nil,
+        tags: section['tags']
       }
     end
     self.sections = new_sections

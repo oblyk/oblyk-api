@@ -69,7 +69,11 @@ Rails.application.routes.draw do
           get :search, on: :collection
         end
       end
-
+      resources :crag_routes do
+        get :versions, on: :member
+        get :photos, on: :member
+        get :videos, on: :member
+      end
       resources :words do
         get :search, on: :collection
         get :versions, on: :member

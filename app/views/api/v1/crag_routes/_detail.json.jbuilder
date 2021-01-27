@@ -2,6 +2,7 @@
 
 json.partial! 'api/v1/crag_routes/short_detail', crag_route: crag_route
 
+json.versions_count crag_route.versions.count
 json.sections crag_route.sections
 
 json.tags do
