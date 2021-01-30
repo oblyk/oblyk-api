@@ -35,7 +35,7 @@ module Api
       end
 
       def destroy
-        if @comment.delete
+        if @comment.destroy
           render json: {}, status: :ok
         else
           render json: { error: @comment.errors }, status: :unprocessable_entity

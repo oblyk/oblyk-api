@@ -12,7 +12,10 @@ json.extract! crag_route,
               :max_bolt,
               :note,
               :note_count,
-              :ascents_count
+              :ascents_count,
+              :photos_count,
+              :videos_count,
+              :comments_count
 json.grade_to_s crag_route.grade_to_s
 json.grade_gap do
   json.extract! crag_route,

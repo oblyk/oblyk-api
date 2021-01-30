@@ -5,6 +5,7 @@ class Crag < ApplicationRecord
   include SoftDeletable
   include Searchable
   include Slugable
+  include GapGradable
 
   has_paper_trail only: %i[
     name
@@ -191,6 +192,20 @@ class Crag < ApplicationRecord
         lon: longitude.to_f
       }
     )
+  end
+
+  def update_climbing_type!
+    climbing_types = crag_routes.select(:climbing_type).distinct&.pluck(:climbing_type)
+
+    self.sport_climbing = climbing_types.include?('sport_climbing')
+    self.bouldering = climbing_types.include?('bouldering')
+    self.multi_pitch = climbing_types.include?('multi_pitch')
+    self.trad_climbing = climbing_types.include?('trad_climbing')
+    self.aid_climbing = climbing_types.include?('aid_climbing')
+    self.deep_water = climbing_types.include?('deep_water')
+    self.via_ferrata = climbing_types.include?('via_ferrata')
+
+    save
   end
 
   private

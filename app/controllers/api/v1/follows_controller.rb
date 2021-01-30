@@ -25,7 +25,7 @@ module Api
       end
 
       def destroy
-        if @follow.delete
+        if @follow.destroy
           render json: @current_user.subscribes_to_a, status: :ok
         else
           render json: { error: @follow.errors }, status: :unprocessable_entity

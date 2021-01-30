@@ -18,10 +18,10 @@ class CragRoute < ApplicationRecord
     difficulty_appreciation
   ]
 
-  belongs_to :crag_sector, optional: true
+  belongs_to :crag_sector, optional: true, counter_cache: :crag_routes_count
   belongs_to :user, optional: true
   belongs_to :photo, optional: true
-  belongs_to :crag
+  belongs_to :crag, counter_cache: :crag_routes_count
   has_many :comments, as: :commentable
   has_many :links, as: :linkable
   has_many :alerts, as: :alertable
@@ -45,6 +45,7 @@ class CragRoute < ApplicationRecord
   before_save :historize_grade_gap
   before_save :historize_sections_count
   before_save :historize_max_bolt
+  after_save :update_gap_grade
 
   def search_json
     JSON.parse(
@@ -78,7 +79,7 @@ class CragRoute < ApplicationRecord
                 match: {
                   name: {
                     query: query,
-                    fuzziness: :auto
+                    fuzziness: 'auto'
                   }
                 }
               }
@@ -99,20 +100,22 @@ class CragRoute < ApplicationRecord
     anchorable = Climb.anchorable?(climbing_type)
     receptionable = Climb.receptionable?(climbing_type)
     startable = Climb.startable?(climbing_type)
-
     sections.each do |section|
+      section_height = section['height'].blank? ? nil : section['height'].to_i
+      section_bolt_count = section['bolt_count'].blank? ? nil : section['bolt_count'].to_i
+
       new_sections << {
         climbing_type: single_pitch ? climbing_type : section['climbing_type'] || climbing_type,
         description: !single_pitch ? section['description'] : nil,
         grade: section['grade'],
         grade_value: Grade.to_value(section['grade']),
-        height: single_pitch ? height : section['height'],
-        bolt_count: boltable ? section['bolt_count'] : nil,
+        height: single_pitch ? height : section_height,
+        bolt_count: boltable ? section_bolt_count : nil,
         bolt_type: boltable ? section['bolt_type'] : nil,
         anchor_type: anchorable ? section['anchor_type'] : nil,
         incline_type: section['incline_type'],
-        start_type: startable ? start_type : nil,
-        reception_type: receptionable ? reception_type : nil,
+        start_type: startable ? section['start_type'] : nil,
+        reception_type: receptionable ? section['reception_type'] : nil,
         tags: section['tags']
       }
     end
@@ -151,15 +154,31 @@ class CragRoute < ApplicationRecord
     self.max_bolt = max_bolt
   end
 
+  def update_gap_grade
+    crag.update_gap!
+    crag.update_climbing_type!
+    crag_sector&.update_gap!
+  end
+
   def validate_sections
     sections.each do |section|
       # valid types
-      errors.add(:grade, I18n.t('activerecord.errors.messages.inclusion')) unless Grade.valid? section['grade']
+      if section['grade']
+        errors.add(:grade, I18n.t('activerecord.errors.messages.inclusion')) unless Grade.valid? section['grade']
+      else
+        errors.add(:grade, I18n.t('activerecord.errors.messages.required'))
+      end
+
+      if section['climbing_type']
+        errors.add(:climbing_type, I18n.t('activerecord.errors.messages.inclusion')) if Climb::CRAG_LIST.exclude?(section['climbing_type'])
+      else
+        errors.add(:climbing_type, I18n.t('activerecord.errors.messages.required'))
+      end
+
       errors.add(:bolt_type, I18n.t('activerecord.errors.messages.inclusion')) if section['bolt_type'].present? && Bolt::LIST.exclude?(section['bolt_type'])
-      errors.add(:start_type, I18n.t('activerecord.errors.messages.inclusion')) if section['start_type'].present? && Bolt::LIST.exclude?(section['start_type'])
+      errors.add(:start_type, I18n.t('activerecord.errors.messages.inclusion')) if section['start_type'].present? && Start::LIST.exclude?(section['start_type'])
       errors.add(:anchor_type, I18n.t('activerecord.errors.messages.inclusion')) if section['anchor_type'].present? && Anchor::LIST.exclude?(section['anchor_type'])
       errors.add(:incline_type, I18n.t('activerecord.errors.messages.inclusion')) if section['incline_type'].present? && Incline::LIST.exclude?(section['incline_type'])
-      errors.add(:climbing_type, I18n.t('activerecord.errors.messages.inclusion')) if Climb::CRAG_LIST.exclude?(section['climbing_type'])
       errors.add(:reception_type, I18n.t('activerecord.errors.messages.inclusion')) if section['reception_type'].present? && Reception::LIST.exclude?(section['reception_type'])
 
       # Valid numerics

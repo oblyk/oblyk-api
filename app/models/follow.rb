@@ -9,8 +9,6 @@ class Follow < ApplicationRecord
   FOLLOWABLE_LIST = %w[
     User
     Crag
-    CragSector
-    CragRoute
     GuideBookPaper
     Gym
   ].freeze

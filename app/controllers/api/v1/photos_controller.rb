@@ -35,7 +35,7 @@ module Api
       end
 
       def destroy
-        if @photo.delete
+        if @photo.destroy
           render json: {}, status: :ok
         else
           render json: { error: @photo.errors }, status: :unprocessable_entity

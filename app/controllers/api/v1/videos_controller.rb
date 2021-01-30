@@ -35,7 +35,7 @@ module Api
       end
 
       def destroy
-        if @video.delete
+        if @video.destroy
           render json: {}, status: :ok
         else
           render json: { error: @video.errors }, status: :unprocessable_entity

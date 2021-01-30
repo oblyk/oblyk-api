@@ -93,6 +93,8 @@ class Grade
   ].freeze
 
   def self.valid?(grade)
+    return false unless grade
+    
     grade.match?(GRADE_VALIDATION)
   end
 

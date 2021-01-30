@@ -5,6 +5,7 @@ class CragSector < ApplicationRecord
   include SoftDeletable
   include Searchable
   include Slugable
+  include GapGradable
 
   has_paper_trail only: %i[
     name

@@ -80,7 +80,7 @@ module Api
       end
 
       def destroy
-        if @crag_route.delete
+        if @crag_route.destroy
           render json: {}, status: :ok
         else
           render json: { error: @crag_route.errors }, status: :unprocessable_entity
@@ -114,7 +114,19 @@ module Api
           :crag_id,
           :crag_sector_id,
           :photo_id,
-          sections: %i[climbing_type description grade height bolt_count bolt_type anchor_type incline_type tags]
+          sections: [
+            :climbing_type,
+            :description,
+            :grade,
+            :height,
+            :bolt_count,
+            :bolt_type,
+            :anchor_type,
+            :incline_type,
+            :start_type,
+            :reception_type,
+            { tags: [] }
+          ]
         )
       end
     end

@@ -11,11 +11,8 @@ json.tags do
     json.name tag.name
   end
 end
-json.comment_count crag_route.comments.count
 json.link_count crag_route.links.count
 json.alert_count crag_route.alerts.count
-json.video_count crag_route.videos.count
-json.photo_count crag_route.photos.count
 
 json.creator do
   json.id crag_route.user_id
