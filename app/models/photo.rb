@@ -8,6 +8,7 @@ class Photo < ApplicationRecord
   has_many :reports, as: :reportable
 
   before_validation :init_posted_at
+  before_validation :set_photo_dimension
 
   validates :illustrable_type, inclusion: { in: %w[Crag CragSector CragRoute].freeze }
   validates :picture, blob: { content_type: :image }
@@ -20,5 +21,14 @@ class Photo < ApplicationRecord
 
   def init_posted_at
     self.posted_at ||= DateTime.current
+  end
+
+  def set_photo_dimension
+    return unless picture.attached?
+
+    meta = ActiveStorage::Analyzer::ImageAnalyzer.new(picture.blob).metadata
+
+    self.photo_height = meta[:height]
+    self.photo_width = meta[:width]
   end
 end

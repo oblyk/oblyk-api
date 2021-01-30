@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_29_171258) do
+ActiveRecord::Schema.define(version: 2021_01_30_202509) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -556,6 +556,8 @@ ActiveRecord::Schema.define(version: 2021_01_29_171258) do
     t.datetime "posted_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "photo_height"
+    t.integer "photo_width"
     t.index ["illustrable_type", "illustrable_id"], name: "index_photos_on_illustrable_type_and_illustrable_id"
     t.index ["user_id"], name: "index_photos_on_user_id"
   end
