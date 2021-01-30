@@ -31,6 +31,7 @@ json.crag_sector do
   json.photo do
     json.id crag_route.crag_sector&.photo&.id
     json.url url_for(crag_route.crag_sector.photo.picture) if crag_route.crag_sector&.photo
+    json.thumbnail_url crag_route.crag_sector.photo.thumbnail_url if crag_route.crag_sector&.photo
   end
 end
 json.crag do
@@ -43,6 +44,7 @@ json.crag do
   json.photo do
     json.id crag_route.crag&.photo&.id
     json.url url_for(crag_route.crag.photo.picture) if crag_route.crag&.photo
+    json.thumbnail_url crag_route.crag.photo.thumbnail_url if crag_route.crag&.photo
   end
 end
 
