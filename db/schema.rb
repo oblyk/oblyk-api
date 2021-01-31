@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_30_202509) do
+ActiveRecord::Schema.define(version: 2021_01_31_110516) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -188,6 +188,7 @@ ActiveRecord::Schema.define(version: 2021_01_30_202509) do
     t.integer "comments_count"
     t.integer "videos_count"
     t.integer "photos_count"
+    t.json "location"
     t.index ["crag_id"], name: "index_crag_routes_on_crag_id"
     t.index ["crag_sector_id"], name: "index_crag_routes_on_crag_sector_id"
     t.index ["name"], name: "index_crag_routes_on_name"
@@ -225,6 +226,7 @@ ActiveRecord::Schema.define(version: 2021_01_30_202509) do
     t.string "slug_name"
     t.integer "comments_count"
     t.integer "photos_count"
+    t.json "location"
     t.index ["crag_id"], name: "index_crag_sectors_on_crag_id"
     t.index ["name"], name: "index_crag_sectors_on_name"
     t.index ["photo_id"], name: "index_crag_sectors_on_photo_id"

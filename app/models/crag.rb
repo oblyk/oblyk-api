@@ -65,6 +65,8 @@ class Crag < ApplicationRecord
   validates :sun, inclusion: { in: Sun::LIST }, allow_nil: true
   validate :validate_rocks
 
+  after_update :update_routes_location
+
   mapping do
     indexes :location, type: 'geo_point'
   end
@@ -90,6 +92,10 @@ class Crag < ApplicationRecord
         }
       }
     )
+  end
+
+  def rich_name
+    "#{name} (#{city})"
   end
 
   def location
@@ -216,5 +222,11 @@ class Crag < ApplicationRecord
     rocks.each do |rock|
       errors.add(:rocks, I18n.t('activerecord.errors.messages.inclusion')) if Rock::LIST.exclude? rock
     end
+  end
+
+  def update_routes_location
+    return unless saved_change_to_latitude? || saved_change_to_longitude?
+
+    crag_routes.each(&:set_location!)
   end
 end

@@ -17,8 +17,16 @@ json.thumbnail photo.thumbnail_url
 json.illustrable do
   json.type photo.illustrable_type
   json.id photo.illustrable.id
-  json.name photo.illustrable.name
+  json.name photo.illustrable.rich_name
   json.slug_name photo.illustrable.slug_name
+  json.location photo.illustrable.location
+  if %w[CragSector CragRoute].include? photo.illustrable_type
+    json.crag do
+      json.id photo.illustrable.crag.id
+      json.name photo.illustrable.crag.name
+      json.slug_name photo.illustrable.crag.slug_name
+    end
+  end
 end
 json.creator do
   json.id photo.user_id

@@ -34,9 +34,17 @@ class CragSector < ApplicationRecord
   has_many :crag_routes
   has_many :reports, as: :reportable
 
+  before_validation :historize_location
+
+  after_update :update_routes_location
+
   validates :name, presence: true
   validates :rain, inclusion: { in: Rain::LIST }, allow_nil: true
   validates :sun, inclusion: { in: Sun::LIST }, allow_nil: true
+
+  def rich_name
+    name
+  end
 
   def search_json
     JSON.parse(
@@ -78,5 +86,26 @@ class CragSector < ApplicationRecord
     videos = []
     crag_routes.each { |crag_route| videos += crag_route.videos }
     videos
+  end
+
+  def set_location!
+    historize_location
+    save
+  end
+
+  private
+
+  def historize_location
+    self.location = if latitude
+                      [latitude, longitude]
+                    else
+                      [crag.latitude, crag.longitude]
+                    end
+  end
+
+  def update_routes_location
+    return unless saved_change_to_latitude? || saved_change_to_longitude?
+
+    crag_routes.each(&:set_location!)
   end
 end

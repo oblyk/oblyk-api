@@ -42,10 +42,15 @@ class CragRoute < ApplicationRecord
   validate :validate_sections
 
   before_validation :format_route_section
+  before_validation :historize_location
   before_save :historize_grade_gap
   before_save :historize_sections_count
   before_save :historize_max_bolt
   after_save :update_gap_grade
+
+  def rich_name
+    "#{grade_to_s} - #{name}"
+  end
 
   def search_json
     JSON.parse(
@@ -91,7 +96,20 @@ class CragRoute < ApplicationRecord
     )
   end
 
+  def set_location!
+    historize_location
+    save
+  end
+
   private
+
+  def historize_location
+    self.location = if crag_sector&.latitude
+                      [crag_sector.latitude, crag_sector.longitude]
+                    else
+                      [crag.latitude, crag.longitude]
+                    end
+  end
 
   def format_route_section
     new_sections = []
