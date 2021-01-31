@@ -8,10 +8,7 @@ module Api
       before_action :set_photo, only: %i[show update destroy]
 
       def index
-        @photos = Photo.where(
-          illustrable_type: params[:illustrable_type],
-          illustrable_id: params[:illustrable_id]
-        )
+        @photos = Photo.where(id: params[:photo_ids])
       end
 
       def show; end

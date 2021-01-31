@@ -35,5 +35,5 @@ GET {{api_url}}/photos/1.json
 Accept: application/json
 
 ### GET all photos for one item
-GET {{api_url}}/photos.json?illustrable_type=Crag&illustrable_id=1
+GET {{api_url}}/photos.json?photo_ids[]=1&photo_ids[]=2
 Accept: application/json
