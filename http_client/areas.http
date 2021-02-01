@@ -3,14 +3,13 @@ DELETE {{api_url}}/area_crags/2.json
 Authorization: Bearer {{auth_token}}
 
 ### Add crag in area
-POST {{api_url}}/area_crags.json
+POST {{api_url}}/areas/1/add_crag.json
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
 {
-  "area_crag": {
-    "crag_id": 1,
-    "area_id": 1
+  "area": {
+    "crag_id": 1
   }
 }
 
@@ -39,6 +38,10 @@ Content-Type: application/json
     "name": "Autour de la lance"
   }
 }
+
+### GET area
+GET {{api_url}}/areas/1/crags.json
+Accept: application/json
 
 ### GET area
 GET {{api_url}}/areas/1.json

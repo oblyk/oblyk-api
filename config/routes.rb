@@ -45,6 +45,7 @@ Rails.application.routes.draw do
         get :videos, on: :member
         get :versions, on: :member
         get :guide_books_around, on: :member
+        get :areas_around, on: :member
         get :geo_json_around, on: :member
         get :geo_json, on: :collection
         get :geo_search, on: :collection
@@ -91,7 +92,14 @@ Rails.application.routes.draw do
       resources :conversation_messages
       resources :videos
       resources :photos
-      resources :areas
+      resources :areas do
+        get :crags, on: :member
+        get :photos, on: :member
+        get :search, on: :collection
+        post :add_crag, on: :member
+        get :geo_json, on: :member
+        delete :remove_crag, on: :member
+      end
       resources :area_crags
       resources :subscribes, only: %i[index create]
       delete 'unsubscribes', controller: :subscribes, action: :unsubscribe

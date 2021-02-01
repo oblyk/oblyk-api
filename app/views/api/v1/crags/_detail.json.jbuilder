@@ -29,6 +29,14 @@ json.sectors do
   end
 end
 
+json.areas do
+  json.array! crag.areas do |area|
+    json.id area.id
+    json.name area.name
+    json.slug_name area.slug_name
+  end
+end
+
 json.history do
   json.extract! crag, :created_at, :updated_at
 end

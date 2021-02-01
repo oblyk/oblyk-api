@@ -6,5 +6,5 @@ class Link < ApplicationRecord
   has_many :reports, as: :reportable
 
   validates :name, :url, presence: true
-  validates :linkable_type, inclusion: { in: %w[Crag CragSector CragRoute GuideBookPaper].freeze }
+  validates :linkable_type, inclusion: { in: %w[Crag CragSector CragRoute GuideBookPaper Area].freeze }
 end
