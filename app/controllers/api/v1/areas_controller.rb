@@ -129,7 +129,8 @@ module Api
 
       def area_params
         params.require(:area).permit(
-          :name
+          :name,
+          :photo_id
         )
       end
     end
