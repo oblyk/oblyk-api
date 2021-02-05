@@ -17,6 +17,8 @@ class User < ApplicationRecord
   has_many :gym_administrators
   has_many :gyms, through: :gym_administrators
   has_many :reports, as: :reportable
+  has_many :ascent_crag_routes
+  has_many :ascent_gym_routes
 
   validates :first_name, :email, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
@@ -51,5 +53,17 @@ class User < ApplicationRecord
       }
     end
     json_follows
+  end
+
+  def ascent_crag_routes_to_a
+    json_ascents = []
+    ascent_crag_routes.each do |ascent|
+      json_ascents << {
+        crag_route_id: ascent.crag_route_id,
+        ascent_status: ascent.ascent_status,
+        released_at: ascent.released_at
+      }
+    end
+    json_ascents
   end
 end

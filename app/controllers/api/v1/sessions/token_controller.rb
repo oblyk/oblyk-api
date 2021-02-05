@@ -18,13 +18,9 @@ module Api
             refresh_token.save
 
             render json: {
-              auth: true,
-              user: user_data,
               token: token,
               expired_at: exp,
-              refresh_token: refresh_token.token,
-              administered_gyms: user.gyms.map(&:id),
-              subscribes: user.subscribes_to_a
+              refresh_token: refresh_token.token
             }, status: :created
           else
             render json: {}, status: :unauthorized

@@ -29,7 +29,8 @@ module Api
               expired_at: exp,
               refresh_token: refresh_token&.token,
               administered_gyms: user.gyms.map(&:id),
-              subscribes: user.subscribes_to_a
+              subscribes: user.subscribes_to_a,
+              ascent_crag_routes: user.ascent_crag_routes_to_a
             }, status: :created
           else
             not_found

@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       resources :users, only: %i[index]
       get 'users/current', controller: :users, action: :show
       get 'users/current/subscribes', controller: :users, action: :subscribes
+      get 'users/current/ascent_crag_routes', controller: :users, action: :ascents_crag_routes
       get 'users/current/library', controller: :users, action: :library
       put 'users/current', controller: :users, action: :update
       post 'users/current/avatar', controller: :users, action: :add_avatar
@@ -75,6 +76,7 @@ Rails.application.routes.draw do
         get :photos, on: :member
         get :videos, on: :member
       end
+      resources :ascent_crag_routes
       resources :words do
         get :search, on: :collection
         get :versions, on: :member
