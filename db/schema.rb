@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_03_214935) do
+ActiveRecord::Schema.define(version: 2021_02_07_213709) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -170,7 +170,7 @@ ActiveRecord::Schema.define(version: 2021_02_03_214935) do
     t.string "reception_type"
     t.string "start_type"
     t.integer "difficulty_appreciation"
-    t.integer "note"
+    t.float "note"
     t.integer "note_count"
     t.integer "ascents_count"
     t.integer "sections_count"
@@ -192,6 +192,7 @@ ActiveRecord::Schema.define(version: 2021_02_03_214935) do
     t.integer "videos_count"
     t.integer "photos_count"
     t.json "location"
+    t.json "votes"
     t.index ["crag_id"], name: "index_crag_routes_on_crag_id"
     t.index ["crag_sector_id"], name: "index_crag_routes_on_crag_sector_id"
     t.index ["name"], name: "index_crag_routes_on_name"

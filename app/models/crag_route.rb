@@ -15,7 +15,6 @@ class CragRoute < ApplicationRecord
     incline_type
     reception_type
     start_type
-    difficulty_appreciation
   ]
 
   belongs_to :crag_sector, optional: true, counter_cache: :crag_routes_count
@@ -29,6 +28,7 @@ class CragRoute < ApplicationRecord
   has_many :tags, as: :taggable
   has_many :photos, as: :illustrable
   has_many :reports, as: :reportable
+  has_many :ascent_crag_routes
 
   validates :name, presence: true
   validates :climbing_type, inclusion: { in: Climb::CRAG_LIST }
@@ -99,6 +99,58 @@ class CragRoute < ApplicationRecord
   def set_location!
     historize_location
     save
+  end
+
+  def update_form_ascents!
+    ascent_count = nil
+    note_count = nil
+    sum_note = nil
+    grade_appreciation_count = nil
+    grade_appreciation_value = nil
+    grade_appreciation_votes = nil
+    note_votes = nil
+
+    ascent_crag_routes.each do |ascent|
+      if ascent.note.present?
+        note_count ||= 0
+        sum_note ||= 0
+        note_votes ||= {}
+        note_votes[ascent.note] ||= { count: 0 }
+        note_count += 1
+        note_votes[ascent.note][:count] += 1
+        sum_note += ascent.note
+      end
+
+      if ascent.grade_appreciation_value.present?
+        grade_appreciation_count ||= 0
+        grade_appreciation_value ||= 0
+        grade_appreciation_votes ||= {}
+        grade_appreciation_votes[ascent.grade_appreciation_value] ||= { count: 0 }
+
+        grade_appreciation_count += 1
+        grade_appreciation_value += ascent.grade_appreciation_value
+        grade_appreciation_votes[ascent.grade_appreciation_value][:count] += 1
+      end
+
+      if ascent.ascent_status != 'project'
+        ascent_count ||= 0
+        ascent_count += 1
+      end
+    end
+
+    self.note = note_count ? sum_note / note_count : nil
+    self.note_count = note_count
+    self.ascents_count = ascent_count
+    self.difficulty_appreciation = grade_appreciation_count ? grade_appreciation_value / grade_appreciation_count : nil
+    self.votes = {
+      difficulty_appreciations: grade_appreciation_votes,
+      notes: note_votes
+    }
+    save
+  end
+
+  def public_ascents
+    ascent_crag_routes.where.not(private_comment: true)
   end
 
   private

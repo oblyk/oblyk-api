@@ -7,18 +7,26 @@ class AscentCragRoute < Ascent
   validates :ascent_status, inclusion: { in: AscentStatus::LIST }
   validates :roping_status, inclusion: { in: RopingStatus::LIST }
   validates :climbing_type, inclusion: { in: Climb::CRAG_LIST }
-  validates :note, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 6}, allow_blank: true
+  validates :note, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 6 }, allow_blank: true
+  validate :validate_grade_appreciation
 
   attr_accessor :selected_sections
 
   before_validation :historize_ascents
   before_validation :historize_grade_gap
 
+  after_save :update_crag_route
+  after_destroy :update_crag_route
+
   def sections_done
     sections.pluck(:index)
   end
 
   private
+
+  def update_crag_route
+    crag_route.update_form_ascents!
+  end
 
   def historize_ascents
     self.height = crag_route.height
@@ -61,5 +69,11 @@ class AscentCragRoute < Ascent
     self.max_grade_value = max_grade_value
     self.min_grade_value = min_grade_value
     self.sections_count = sections.count
+  end
+
+  def validate_grade_appreciation
+    return true if grade_appreciation_text.blank?
+
+    errors.add(:grade_appreciation_text, I18n.t('activerecord.errors.messages.inclusion')) unless Grade.valid? grade_appreciation_text
   end
 end
