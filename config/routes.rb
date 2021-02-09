@@ -30,6 +30,8 @@ Rails.application.routes.draw do
       get 'grade-types', controller: :grades, action: :types
       get 'search', controller: :searches, action: :index
 
+      get 'figures', controller: :commons, action: :figures
+
       resources :users, only: %i[index]
       get 'users/current', controller: :users, action: :show
       get 'users/current/subscribes', controller: :users, action: :subscribes

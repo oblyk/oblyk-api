@@ -1,0 +1,3 @@
+### Figures
+GET {{api_url}}/figures.json
+Accept: application/json
