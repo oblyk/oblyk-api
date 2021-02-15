@@ -13,7 +13,7 @@ Content-Type: application/json
 
 
 ### Add user banner
-POST {{api_url}}/users/1/add_banner.json
+POST {{api_url}}/users/current/add_banner.json
 Authorization: Bearer {{auth_token}}
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
@@ -23,7 +23,7 @@ Content-Disposition: form-data; name="user[banner]"; filename="bandeau-laennec.j
 < ./imgs/bandeau-laennec.jpg
 
 ### Add user avatar
-POST {{api_url}}/users/1/add_avatar.json
+POST {{api_url}}/users/current/add_avatar.json
 Authorization: Bearer {{auth_token}}
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 

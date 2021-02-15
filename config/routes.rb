@@ -33,14 +33,15 @@ Rails.application.routes.draw do
       get 'figures', controller: :commons, action: :figures
 
       resources :users, only: %i[index]
-      get 'users/current', controller: :users, action: :show
-      get 'users/current/subscribes', controller: :users, action: :subscribes
-      get 'users/current/ascent_crag_routes', controller: :users, action: :ascents_crag_routes
-      get 'users/current/library', controller: :users, action: :library
-      get 'users/current/tick_lists', controller: :users, action: :tick_lists
-      put 'users/current', controller: :users, action: :update
-      post 'users/current/avatar', controller: :users, action: :add_avatar
-      post 'users/current/banner', controller: :users, action: :add_banner
+
+      get 'users/current', controller: :current_users, action: :show
+      put 'users/current', controller: :current_users, action: :update
+      get 'users/current/subscribes', controller: :current_users, action: :subscribes
+      get 'users/current/ascent_crag_routes', controller: :current_users, action: :ascents_crag_routes
+      get 'users/current/library', controller: :current_users, action: :library
+      get 'users/current/tick_lists', controller: :current_users, action: :tick_lists
+      post 'users/current/avatar', controller: :current_users, action: :add_avatar
+      post 'users/current/banner', controller: :current_users, action: :add_banner
 
       resources :crags do
         get :search, on: :collection
