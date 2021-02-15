@@ -8,7 +8,6 @@ class AscentCragRoute < Ascent
   validates :roping_status, inclusion: { in: RopingStatus::LIST }
   validates :climbing_type, inclusion: { in: Climb::CRAG_LIST }
   validates :note, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 6 }, allow_blank: true
-  validate :validate_grade_appreciation
 
   attr_accessor :selected_sections
 
@@ -46,9 +45,6 @@ class AscentCragRoute < Ascent
       }
     end
     self.sections = sections
-
-    # Grade appreciation
-    self.grade_appreciation_value = Grade.to_value(grade_appreciation_text) if grade_appreciation_text.present?
   end
 
   def historize_grade_gap
@@ -75,11 +71,5 @@ class AscentCragRoute < Ascent
   def delete_tick_in_list
     tick = TickList.find_by crag_route: crag_route, user: user
     tick&.destroy
-  end
-
-  def validate_grade_appreciation
-    return true if grade_appreciation_text.blank?
-
-    errors.add(:grade_appreciation_text, I18n.t('activerecord.errors.messages.inclusion')) unless Grade.valid? grade_appreciation_text
   end
 end

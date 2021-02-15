@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_07_213709) do
+ActiveRecord::Schema.define(version: 2021_02_15_144656) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -97,8 +97,6 @@ ActiveRecord::Schema.define(version: 2021_02_07_213709) do
     t.json "hold_colors"
     t.json "tag_colors"
     t.string "climbing_type"
-    t.string "grade_appreciation_text"
-    t.integer "grade_appreciation_value"
     t.integer "note"
     t.text "comment"
     t.integer "sections_count"
@@ -106,13 +104,13 @@ ActiveRecord::Schema.define(version: 2021_02_07_213709) do
     t.integer "min_grade_value"
     t.text "max_grade_text"
     t.text "min_grade_text"
-    t.string "legacy_hardness_id"
     t.bigint "legacy_id"
     t.date "released_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "points"
     t.boolean "private_comment"
+    t.string "hardness_status"
     t.index ["crag_route_id"], name: "index_ascents_on_crag_route_id"
     t.index ["gym_route_id"], name: "index_ascents_on_gym_route_id"
     t.index ["user_id"], name: "index_ascents_on_user_id"
@@ -169,7 +167,7 @@ ActiveRecord::Schema.define(version: 2021_02_07_213709) do
     t.string "incline_type"
     t.string "reception_type"
     t.string "start_type"
-    t.integer "difficulty_appreciation"
+    t.float "difficulty_appreciation"
     t.float "note"
     t.integer "note_count"
     t.integer "ascents_count"

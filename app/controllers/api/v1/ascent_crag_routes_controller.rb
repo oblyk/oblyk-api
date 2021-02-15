@@ -52,7 +52,7 @@ module Api
           :roping_status,
           :attempt,
           :crag_route_id,
-          :grade_appreciation_text,
+          :hardness_status,
           :note,
           :comment,
           :private_comment,
