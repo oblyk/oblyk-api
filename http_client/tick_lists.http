@@ -1,5 +1,10 @@
-DELETE {{api_url}}/tick_lists/1.json
+DELETE {{api_url}}/tick_lists.json
 Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "crag_route_id": 6
+}
 
 ### Create tick_list
 POST {{api_url}}/tick_lists.json
@@ -7,9 +12,7 @@ Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
 {
-  "tick_list": {
-    "crag_route_id": 1
-  }
+  "crag_route_id": 6
 }
 
 ### GET all tick_lists

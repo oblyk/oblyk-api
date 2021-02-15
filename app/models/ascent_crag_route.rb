@@ -16,6 +16,7 @@ class AscentCragRoute < Ascent
   before_validation :historize_grade_gap
 
   after_save :update_crag_route
+  after_create :delete_tick_in_list
   after_destroy :update_crag_route
 
   def sections_done
@@ -69,6 +70,11 @@ class AscentCragRoute < Ascent
     self.max_grade_value = max_grade_value
     self.min_grade_value = min_grade_value
     self.sections_count = sections.count
+  end
+
+  def delete_tick_in_list
+    tick = TickList.find_by crag_route: crag_route, user: user
+    tick&.destroy
   end
 
   def validate_grade_appreciation

@@ -47,6 +47,11 @@ GET {{api_url}}/users/current/library.json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
+### GET user tick list
+GET {{api_url}}/users/current/tick_lists.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
 ### GET all users
 GET {{api_url}}/users.json
 Authorization: Bearer {{auth_token}}

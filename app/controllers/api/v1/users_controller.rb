@@ -4,7 +4,7 @@ module Api
   module V1
     class UsersController < ApiController
       before_action :protected_by_session, except: %i[index]
-      before_action :set_user, only: %i[show update add_avatar add_banner subscribes ascents_crag_routes library]
+      before_action :set_user, except: %i[index]
 
       def index
         @users = User.all
@@ -21,6 +21,11 @@ module Api
       def library
         @subscribes = @user.subscribes.where(followable_type: %w[GuideBookPaper]).order(views: :desc)
         render 'api/v1/users/subscribes'
+      end
+
+      def tick_lists
+        @crag_routes = @user.ticked_crag_routes.joins(:crag).order('crags.name')
+        render 'api/v1/crag_routes/index'
       end
 
       def show; end

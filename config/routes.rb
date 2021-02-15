@@ -37,6 +37,7 @@ Rails.application.routes.draw do
       get 'users/current/subscribes', controller: :users, action: :subscribes
       get 'users/current/ascent_crag_routes', controller: :users, action: :ascents_crag_routes
       get 'users/current/library', controller: :users, action: :library
+      get 'users/current/tick_lists', controller: :users, action: :tick_lists
       put 'users/current', controller: :users, action: :update
       post 'users/current/avatar', controller: :users, action: :add_avatar
       post 'users/current/banner', controller: :users, action: :add_banner
@@ -108,7 +109,9 @@ Rails.application.routes.draw do
       resources :subscribes, only: %i[index create]
       delete 'unsubscribes', controller: :subscribes, action: :unsubscribe
       resources :tags, only: %i[index create destroy]
-      resources :tick_lists, only: %i[index create destroy]
+      resources :tick_lists, only: %i[index create] do
+        delete :destroy, on: :collection
+      end
       resources :guide_book_webs
       resources :guide_book_pdfs
       resources :guide_book_papers do

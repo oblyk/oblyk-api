@@ -30,7 +30,8 @@ module Api
               refresh_token: refresh_token,
               administered_gyms: user.gyms.map(&:id),
               subscribes: user.subscribes_to_a,
-              ascent_crag_routes: user.ascent_crag_routes_to_a
+              ascent_crag_routes: user.ascent_crag_routes_to_a,
+              tick_list: user.tick_list_to_a
             }, status: :created
           else
             render json: { error: user.errors }, status: :unprocessable_entity

@@ -13,6 +13,7 @@ class User < ApplicationRecord
   has_many :conversation_users
   has_many :conversations, through: :conversation_users
   has_many :tick_lists
+  has_many :ticked_crag_routes, through: :tick_lists, source: :crag_route
   has_many :photos
   has_many :gym_administrators
   has_many :gyms, through: :gym_administrators
@@ -65,5 +66,9 @@ class User < ApplicationRecord
       }
     end
     json_ascents
+  end
+
+  def tick_list_to_a
+    tick_lists.pluck(:crag_route_id)
   end
 end

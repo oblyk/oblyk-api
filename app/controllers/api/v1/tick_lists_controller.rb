@@ -11,18 +11,18 @@ module Api
       end
 
       def create
-        @tick_list = TickList.new(tick_list_params)
+        @tick_list = TickList.new(crag_route_id: tick_list_params)
         @tick_list.user = @current_user
         if @tick_list.save
-          render 'api/v1/tick_lists/show'
+          render json: @current_user.tick_list_to_a, status: :ok
         else
           render json: { error: @tick_list.errors }, status: :unprocessable_entity
         end
       end
 
       def destroy
-        if @tick_list.delete
-          render json: {}, status: :ok
+        if @tick_list.destroy
+          render json: @current_user.tick_list_to_a, status: :ok
         else
           render json: { error: @tick_list.errors }, status: :unprocessable_entity
         end
@@ -31,13 +31,11 @@ module Api
       private
 
       def set_tick_list
-        @tick_list = TickList.find params[:id]
+        @tick_list = TickList.find_by crag_route_id: params[:crag_route_id]
       end
 
       def tick_list_params
-        params.require(:tick_list).permit(
-          :crag_route_id
-        )
+        params.require(:crag_route_id)
       end
     end
   end
