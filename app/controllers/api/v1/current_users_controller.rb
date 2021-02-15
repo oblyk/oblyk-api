@@ -50,6 +50,14 @@ module Api
         end
       end
 
+      def out_log_figures
+        render json: LogBook::Outdoor::Figure.new(@user).figures, status: :ok
+      end
+
+      def out_log_climb_type_charts
+        render json: LogBook::Outdoor::Chart.new(@user).climb_type, status: :ok
+      end
+
       private
 
       def set_user

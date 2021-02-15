@@ -43,6 +43,9 @@ Rails.application.routes.draw do
       post 'users/current/avatar', controller: :current_users, action: :add_avatar
       post 'users/current/banner', controller: :current_users, action: :add_banner
 
+      get 'users/current/log_book/outdoor/figures', controller: :current_users, action: :out_log_figures
+      get 'users/current/log_book/outdoor/chartjs/climb_type', controller: :current_users, action: :out_log_climb_type_charts
+
       resources :crags do
         get :search, on: :collection
         get :guides, on: :member

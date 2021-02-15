@@ -19,6 +19,8 @@ class User < ApplicationRecord
   has_many :gyms, through: :gym_administrators
   has_many :reports, as: :reportable
   has_many :ascent_crag_routes
+  has_many :ascended_crag_routes, through: :ascent_crag_routes, source: :crag_route
+  has_many :ascended_crags, through: :ascended_crag_routes, source: :crag
   has_many :ascent_gym_routes
 
   validates :first_name, :email, presence: true

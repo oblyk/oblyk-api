@@ -52,6 +52,16 @@ GET {{api_url}}/users/current/tick_lists.json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
+### GET outdoor log book figures
+GET {{api_url}}/users/current/log_book/outdoor/figures.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET outdoor log book climb type charts
+GET {{api_url}}/users/current/log_book/outdoor/chartjs/climb_type.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
 ### GET all users
 GET {{api_url}}/users.json
 Authorization: Bearer {{auth_token}}
