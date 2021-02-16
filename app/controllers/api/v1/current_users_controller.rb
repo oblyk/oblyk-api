@@ -58,6 +58,10 @@ module Api
         render json: LogBook::Outdoor::Chart.new(@user).climb_type, status: :ok
       end
 
+      def out_log_grade_charts
+        render json: LogBook::Outdoor::Chart.new(@user).grade, status: :ok
+      end
+
       private
 
       def set_user

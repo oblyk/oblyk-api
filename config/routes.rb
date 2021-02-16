@@ -45,6 +45,7 @@ Rails.application.routes.draw do
 
       get 'users/current/log_book/outdoor/figures', controller: :current_users, action: :out_log_figures
       get 'users/current/log_book/outdoor/chartjs/climb_type', controller: :current_users, action: :out_log_climb_type_charts
+      get 'users/current/log_book/outdoor/chartjs/grade', controller: :current_users, action: :out_log_grade_charts
 
       resources :crags do
         get :search, on: :collection

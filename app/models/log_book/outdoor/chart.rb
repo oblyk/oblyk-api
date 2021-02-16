@@ -55,6 +55,35 @@ module LogBook
           labels: %w[sport_climbing bouldering multi_pitch trad_climbing aid_climbing deep_water via_ferrata]
         }
       end
+
+      def grade
+        grades = {}
+        54.times do |grade_value|
+          next unless grade_value.even?
+
+          grades[grade_value + 1] = { count: 0 }
+        end
+
+        @user.ascent_crag_routes.made.each do |ascent|
+          next if ascent.min_grade_value.blank?
+
+          grade_value = ascent.min_grade_value
+          grade_value -= 1 if grade_value.even?
+
+          grades[grade_value][:count] += 1
+        end
+
+        {
+          datasets: [
+            {
+              data: grades.map { |grade| grade[1][:count] },
+              backgroundColor: grades.map { |grade| Grade.value_color(grade[0] - 1) },
+              label: 'number'
+            }
+          ],
+          labels: grades.map { |grade| grade[0] }
+        }
+      end
     end
   end
 end
