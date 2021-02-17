@@ -38,6 +38,7 @@ Rails.application.routes.draw do
       put 'users/current', controller: :current_users, action: :update
       get 'users/current/subscribes', controller: :current_users, action: :subscribes
       get 'users/current/ascent_crag_routes', controller: :current_users, action: :ascents_crag_routes
+      get 'users/current/ascended_crag_routes', controller: :current_users, action: :ascended_crag_routes
       get 'users/current/library', controller: :current_users, action: :library
       get 'users/current/tick_lists', controller: :current_users, action: :tick_lists
       post 'users/current/avatar', controller: :current_users, action: :add_avatar

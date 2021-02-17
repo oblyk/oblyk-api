@@ -16,6 +16,19 @@ module Api
         render json: @user.ascent_crag_routes_to_a, status: :ok
       end
 
+      def ascended_crag_routes
+        crag_route_ids = @user.ascent_crag_routes.made.pluck(:crag_route_id)
+        @crag_routes = case params[:order]
+                       when 'crags'
+                         CragRoute.where(id: crag_route_ids).joins(:crag).order('crags.name')
+                       when 'released_at'
+                         CragRoute.where(id: crag_route_ids).order(released_at: :desc)
+                       else
+                         CragRoute.where(id: crag_route_ids).order(max_grade_value: :desc)
+                       end
+        render 'api/v1/crag_routes/index'
+      end
+
       def library
         @subscribes = @user.subscribes.where(followable_type: %w[GuideBookPaper]).order(views: :desc)
         render :subscribes
