@@ -34,6 +34,13 @@ module Api
         render :subscribes
       end
 
+      def project_crag_routes
+        project_crag_route_ids = @user.ascent_crag_routes.project.pluck(:crag_route_id)
+        crag_route_ids = @user.ascent_crag_routes.made.pluck(:crag_route_id)
+        @crag_routes = CragRoute.where(id: project_crag_route_ids).where.not(id: crag_route_ids).joins(:crag).order('crags.name')
+        render 'api/v1/crag_routes/index'
+      end
+
       def tick_lists
         @crag_routes = @user.ticked_crag_routes.joins(:crag).order('crags.name')
         render 'api/v1/crag_routes/index'

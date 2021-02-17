@@ -19,6 +19,7 @@ class AscentCragRoute < Ascent
   after_destroy :update_crag_route
 
   scope :made, -> { where.not(ascent_status: :project) }
+  scope :project, -> { where(ascent_status: :project) }
 
   def sections_done
     sections.pluck(:index)
