@@ -20,6 +20,16 @@ class Climb
     VIA_FERRATA
   ].freeze
 
+  COLOR = {
+    SPORT_CLIMBING => '#3a71c7',
+    BOULDERING => '#ffcb00',
+    MULTI_PITCH => '#ff5656',
+    TRAD_CLIMBING => '#e92b2b',
+    AID_CLIMBING => '#d40000',
+    DEEP_WATER => '#86ccdd',
+    VIA_FERRATA => '#3cc770'
+  }.freeze
+
   GYM_LIST = [SPORT_CLIMBING, BOULDERING, MULTI_PITCH, PAN].freeze
 
   def self.single_pitch?(climbing_type)

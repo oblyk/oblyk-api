@@ -67,6 +67,21 @@ GET {{api_url}}/users/current/log_book/outdoor/chartjs/grade.json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
+### GET outdoor log book years charts
+GET {{api_url}}/users/current/log_book/outdoor/chartjs/years.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET outdoor log book months charts
+GET {{api_url}}/users/current/log_book/outdoor/chartjs/months.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET outdoor log book evolution charts
+GET {{api_url}}/users/current/log_book/outdoor/chartjs/evolution.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
 ### GET ascended crag routes
 GET {{api_url}}/users/current/ascended_crag_routes.json
 Authorization: Bearer {{auth_token}}

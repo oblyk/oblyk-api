@@ -82,6 +82,18 @@ module Api
         render json: LogBook::Outdoor::Chart.new(@user).grade, status: :ok
       end
 
+      def out_log_years_charts
+        render json: LogBook::Outdoor::Chart.new(@user).years, status: :ok
+      end
+
+      def out_log_months_charts
+        render json: LogBook::Outdoor::Chart.new(@user).months, status: :ok
+      end
+
+      def out_log_evolution_charts
+        render json: LogBook::Outdoor::Chart.new(@user).evolution_by_year, status: :ok
+      end
+
       private
 
       def set_user
