@@ -94,6 +94,25 @@ module Api
         render json: LogBook::Outdoor::Chart.new(@user).evolution_by_year, status: :ok
       end
 
+      def ascended_crags_geo_json
+        features = []
+
+        @user.ascended_crags.distinct.each do |crag|
+          features << crag.to_geo_json
+        end
+
+        render json: {
+          type: 'FeatureCollection',
+          crs: {
+            type: 'name',
+            properties: {
+              name: 'urn'
+            }
+          },
+          features: features
+        }, status: :ok
+      end
+
       private
 
       def set_user

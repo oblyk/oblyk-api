@@ -39,6 +39,7 @@ Rails.application.routes.draw do
       get 'users/current/subscribes', controller: :current_users, action: :subscribes
       get 'users/current/ascent_crag_routes', controller: :current_users, action: :ascents_crag_routes
       get 'users/current/ascended_crag_routes', controller: :current_users, action: :ascended_crag_routes
+      get 'users/current/ascended_crags_geo_json', controller: :current_users, action: :ascended_crags_geo_json
       get 'users/current/library', controller: :current_users, action: :library
       get 'users/current/tick_lists', controller: :current_users, action: :tick_lists
       get 'users/current/projects', controller: :current_users, action: :project_crag_routes
