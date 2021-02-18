@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_18_154435) do
+ActiveRecord::Schema.define(version: 2021_02_18_210929) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -647,7 +647,6 @@ ActiveRecord::Schema.define(version: 2021_02_18_154435) do
     t.date "date_of_birth"
     t.string "genre"
     t.text "description"
-    t.boolean "public"
     t.boolean "partner_search"
     t.datetime "newsletter_accepted_at"
     t.decimal "latitude", precision: 10, scale: 6
@@ -674,6 +673,9 @@ ActiveRecord::Schema.define(version: 2021_02_18_154435) do
     t.datetime "reset_password_token_expired_at"
     t.integer "follows_count"
     t.string "uuid"
+    t.boolean "public_profile"
+    t.boolean "public_outdoor_ascents"
+    t.boolean "public_indoor_ascents"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["uuid"], name: "index_users_on_uuid", unique: true
   end

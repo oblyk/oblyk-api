@@ -19,7 +19,10 @@ json.extract! @user,
               :via_ferrata,
               :pan,
               :grade_max,
-              :grade_min
+              :grade_min,
+              :public_profile,
+              :public_outdoor_ascents,
+              :public_indoor_ascents
 json.full_name @user.full_name
 json.banner @user.banner.attached? ? url_for(@user.banner) : nil
 json.avatar @user.avatar.attached? ? url_for(@user.avatar) : nil

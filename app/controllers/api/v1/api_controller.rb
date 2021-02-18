@@ -20,6 +20,14 @@ module Api
         not_authorized
       end
 
+      def login?
+        data = JwtToken::Token.decode(authorization_token)['data']
+        User.find data['id']
+        true
+      rescue StandardError
+        false
+      end
+
       def not_authorized
         render json: { error: 'Not Authorized' }, status: :unauthorized
       end

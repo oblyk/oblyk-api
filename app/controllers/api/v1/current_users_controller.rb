@@ -50,7 +50,7 @@ module Api
         if @user.update(user_params)
           render :show
         else
-          render json: @user.errors, status: :internal_server_error
+          render json: @user.errors, status: :unprocessable_entity
         end
       end
 
@@ -116,7 +116,10 @@ module Api
           :pan,
           :grade_max,
           :grade_min,
-          :language
+          :language,
+          :public_profile,
+          :public_outdoor_ascents,
+          :public_indoor_ascents
         )
       end
 

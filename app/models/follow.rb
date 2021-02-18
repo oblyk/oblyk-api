@@ -27,10 +27,10 @@ class Follow < ApplicationRecord
   private
 
   def auto_accepted
-    self.accepted_at = Time.current if %w[Crag Gym].include? followable_type
+    self.accepted_at = Time.current if %w[Crag Gym GuideBookPaper].include? followable_type
     return unless followable_type == 'User'
 
     target_user = User.find followable_id
-    self.accepted_at = Time.current if target_user.public?
+    self.accepted_at = Time.current if target_user.public_profile?
   end
 end
