@@ -34,7 +34,7 @@ module Api
         render :subscribes
       end
 
-      def project_crag_routes
+      def projects
         project_crag_route_ids = @user.ascent_crag_routes.project.pluck(:crag_route_id)
         crag_route_ids = @user.ascent_crag_routes.made.pluck(:crag_route_id)
         @crag_routes = CragRoute.where(id: project_crag_route_ids).where.not(id: crag_route_ids).joins(:crag).order('crags.name')
@@ -54,7 +54,7 @@ module Api
         end
       end
 
-      def add_banner
+      def banner
         if @user.update(banner_params)
           render :show
         else
@@ -62,36 +62,12 @@ module Api
         end
       end
 
-      def add_avatar
+      def avatar
         if @user.update(avatar_params)
           render :show
         else
           render json: { error: @user.errors }, status: :unprocessable_entity
         end
-      end
-
-      def out_log_figures
-        render json: LogBook::Outdoor::Figure.new(@user).figures, status: :ok
-      end
-
-      def out_log_climb_type_charts
-        render json: LogBook::Outdoor::Chart.new(@user).climb_type, status: :ok
-      end
-
-      def out_log_grade_charts
-        render json: LogBook::Outdoor::Chart.new(@user).grade, status: :ok
-      end
-
-      def out_log_years_charts
-        render json: LogBook::Outdoor::Chart.new(@user).years, status: :ok
-      end
-
-      def out_log_months_charts
-        render json: LogBook::Outdoor::Chart.new(@user).months, status: :ok
-      end
-
-      def out_log_evolution_charts
-        render json: LogBook::Outdoor::Chart.new(@user).evolution_by_year, status: :ok
       end
 
       def ascended_crags_geo_json

@@ -32,26 +32,35 @@ Rails.application.routes.draw do
 
       get 'figures', controller: :commons, action: :figures
 
-      resources :users, only: %i[index]
+      resources :users, only: %i[show]
 
-      get 'users/current', controller: :current_users, action: :show
-      put 'users/current', controller: :current_users, action: :update
-      get 'users/current/subscribes', controller: :current_users, action: :subscribes
-      get 'users/current/ascent_crag_routes', controller: :current_users, action: :ascents_crag_routes
-      get 'users/current/ascended_crag_routes', controller: :current_users, action: :ascended_crag_routes
-      get 'users/current/ascended_crags_geo_json', controller: :current_users, action: :ascended_crags_geo_json
-      get 'users/current/library', controller: :current_users, action: :library
-      get 'users/current/tick_lists', controller: :current_users, action: :tick_lists
-      get 'users/current/projects', controller: :current_users, action: :project_crag_routes
-      post 'users/current/avatar', controller: :current_users, action: :add_avatar
-      post 'users/current/banner', controller: :current_users, action: :add_banner
-
-      get 'users/current/log_book/outdoor/figures', controller: :current_users, action: :out_log_figures
-      get 'users/current/log_book/outdoor/chartjs/climb_type', controller: :current_users, action: :out_log_climb_type_charts
-      get 'users/current/log_book/outdoor/chartjs/grade', controller: :current_users, action: :out_log_grade_charts
-      get 'users/current/log_book/outdoor/chartjs/years', controller: :current_users, action: :out_log_years_charts
-      get 'users/current/log_book/outdoor/chartjs/months', controller: :current_users, action: :out_log_months_charts
-      get 'users/current/log_book/outdoor/chartjs/evolution', controller: :current_users, action: :out_log_evolution_charts
+      resources :current_users, only: %i[] do
+        collection do
+          get '', action: :show
+          put '', action: :update
+          get :library
+          get :subscribes
+          get :ascent_crag_routes
+          get :ascended_crag_routes
+          get :ascended_crags_geo_json
+          get :tick_lists
+          get :projects
+          post :avatar
+          post :banner
+          namespace :log_books do
+            resources :outdoors, only: %i[] do
+              collection do
+                get :figures
+                get :climb_types_chart
+                get :grades_chart
+                get :years_chart
+                get :months_chart
+                get :evolutions_chart
+              end
+            end
+          end
+        end
+      end
 
       resources :crags do
         get :search, on: :collection

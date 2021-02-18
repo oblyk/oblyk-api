@@ -1,0 +1,97 @@
+### Update current user
+PUT {{api_url}}/current_users.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "user": {
+    "first_name": "Chris",
+    "last_name": "Sharma",
+    "date_of_birth": "1983-03-04"
+  }
+}
+
+### Add user banner
+POST {{api_url}}/current_users/banner.json
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="user[banner]"; filename="bandeau-laennec.jpg"
+
+< ./imgs/bandeau-laennec.jpg
+
+### Add user avatar
+POST {{api_url}}/current_users/avatar.json
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="user[avatar]"; filename="logo-laennec.png"
+
+< ./imgs/logo-laennec.png
+
+### GET current user
+GET {{api_url}}/current_users.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET user subscribes
+GET {{api_url}}/current_users/subscribes.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET user library
+GET {{api_url}}/current_users/library.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET user tick list
+GET {{api_url}}/current_users/tick_lists.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET user tick list
+GET {{api_url}}/current_users/projects.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET outdoor log book figures
+GET {{api_url}}/current_users/log_books/outdoors/figures.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET outdoor log book climb type charts
+GET {{api_url}}/current_users/log_books/outdoors/climb_types_chart.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET outdoor log book grade charts
+GET {{api_url}}/current_users/log_books/outdoors/grades_chart.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET outdoor log book years charts
+GET {{api_url}}/current_users/log_books/outdoors/years_chart.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET outdoor log book months charts
+GET {{api_url}}/current_users/log_books/outdoors/months_chart.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET outdoor log book evolution charts
+GET {{api_url}}/current_users/log_books/outdoors/evolutions_chart.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET ascended crag routes
+GET {{api_url}}/current_users/ascended_crag_routes.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET ascended crag routes
+GET {{api_url}}/current_users/ascended_crags_geo_json.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json

@@ -23,9 +23,12 @@ class User < ApplicationRecord
   has_many :ascended_crags, through: :ascended_crag_routes, source: :crag
   has_many :ascent_gym_routes
 
-  validates :first_name, :email, presence: true
+  before_validation :set_uuid
+
+  validates :first_name, :email, :uuid, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :email, uniqueness: true, on: :create
+  validates :uuid, uniqueness: true, on: :create
   validates :genre, inclusion: { in: %w[male female] }, allow_blank: true
   validates :language, inclusion: { in: %w[fr en] }
 
@@ -72,5 +75,11 @@ class User < ApplicationRecord
 
   def tick_list_to_a
     tick_lists.pluck(:crag_route_id)
+  end
+
+  private
+
+  def set_uuid
+    self.uuid ||= SecureRandom.uuid
   end
 end

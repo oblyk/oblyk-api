@@ -1,16 +1,13 @@
 # frozen_string_literal: true
 
 json.extract! @user,
-              :id,
+              :uuid,
               :first_name,
               :last_name,
               :slug_name,
               :date_of_birth,
               :genre,
-              :email,
               :description,
-              :latitude,
-              :longitude,
               :localization,
               :partner_search,
               :bouldering,
@@ -22,8 +19,7 @@ json.extract! @user,
               :via_ferrata,
               :pan,
               :grade_max,
-              :grade_min,
-              :language
+              :grade_min
 json.full_name @user.full_name
 json.banner @user.banner.attached? ? url_for(@user.banner) : nil
 json.avatar @user.avatar.attached? ? url_for(@user.avatar) : nil
