@@ -9,7 +9,7 @@ module Api
           not_found && return if user.blank?
 
           if user.authenticate(params[:password])
-            user_data = user.as_json(only: %i[id first_name last_name slug_name email])
+            user_data = user.as_json(only: %i[id first_name last_name slug_name email uuid])
             exp = Time.now.to_i + 24 * 3600
             token = JwtToken::Token.generate(user_data, exp)
             refresh_token = nil

@@ -3,9 +3,9 @@
 json.id comment.id
 json.body comment.body
 json.creator do
-  json.id comment.user_id
-  json.slug_name comment.user&.slug_name
+  json.uuid comment.user&.uuid
   json.name comment.user&.full_name
+  json.slug_name comment.user&.slug_name
 end
 json.history do
   json.extract! comment, :created_at, :updated_at

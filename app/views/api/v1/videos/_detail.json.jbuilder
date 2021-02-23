@@ -8,8 +8,9 @@ json.extract! video,
               :viewable_id
 json.iframe video.iframe
 json.creator do
-  json.id video.user_id
+  json.uuid video.user&.uuid
   json.name video.user&.full_name
+  json.slug_name video.user&.slug_name
 end
 json.history do
   json.extract! video, :created_at, :updated_at

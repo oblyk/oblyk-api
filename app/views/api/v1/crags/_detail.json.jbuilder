@@ -18,8 +18,9 @@ json.guide_books do
 end
 
 json.creator do
-  json.id crag.user_id
+  json.uuid crag.user&.uuid
   json.name crag.user&.full_name
+  json.slug_name crag.user&.slug_name
 end
 
 json.sectors do

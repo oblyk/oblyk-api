@@ -7,8 +7,9 @@ json.extract! word,
               :definition
 json.versions_count word.versions.length
 json.creator do
-  json.id word.user_id
+  json.uuid word.user&.uuid
   json.name word.user&.full_name
+  json.slug_name word.user&.slug_name
 end
 json.history do
   json.extract! word, :created_at, :updated_at

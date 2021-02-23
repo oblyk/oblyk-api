@@ -3,8 +3,9 @@
 json.id conversation.id
 json.conversation_users do
   json.array! conversation.users do |user|
-    json.id user.id
+    json.uuid user.uuid
     json.name user.full_name
+    json.slug_name user.slug_name
   end
 end
 json.conversation_message_count conversation.conversation_messages.count

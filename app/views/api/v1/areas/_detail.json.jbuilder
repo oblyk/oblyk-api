@@ -21,8 +21,9 @@ json.area_crags do
   end
 end
 json.creator do
-  json.id area.user_id
+  json.uuid area.user&.uuid
   json.name area.user&.full_name
+  json.slug_name area.user&.slug_name
 end
 json.history do
   json.extract! area, :created_at, :updated_at

@@ -2,6 +2,7 @@
 
 json.extract! @user,
               :id,
+              :uuid,
               :first_name,
               :last_name,
               :slug_name,

@@ -13,8 +13,9 @@ json.crags do
   end
 end
 json.creator do
-  json.id guide_book_paper.user_id
+  json.uuid guide_book_paper.user&.uuid
   json.name guide_book_paper.user&.full_name
+  json.slug_name guide_book_paper.user&.slug_name
 end
 json.history do
   json.extract! guide_book_paper, :created_at, :updated_at

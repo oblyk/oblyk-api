@@ -11,6 +11,7 @@ json.gym do
 end
 json.user do
   json.name gym_administrator.user.full_name
-  json.id gym_administrator.user.id
+  json.slug_name gym_administrator.user&.slug_name
+  json.uuid gym_administrator.user.uuid
   json.email gym_administrator.user.email
 end

@@ -13,8 +13,9 @@ json.gym_spaces do
 end
 
 json.creator do
-  json.id gym.user_id
+  json.uuid gym.user&.uuid
   json.name gym.user&.full_name
+  json.slug_name gym.user&.slug_name
 end
 json.history do
   json.extract! gym, :created_at, :updated_at

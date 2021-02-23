@@ -9,7 +9,7 @@ json.versions do
     user = User.find_by id: version.whodunnit
     if user
       json.user do
-        json.id user.id
+        json.uuid user.uuid
         json.name user.full_name
         json.slug_name user.slug_name
       end

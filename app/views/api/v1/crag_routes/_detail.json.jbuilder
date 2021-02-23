@@ -27,9 +27,9 @@ json.link_count crag_route.links.count
 json.alert_count crag_route.alerts.count
 
 json.creator do
-  json.id crag_route.user_id
-  json.slug_name crag_route.user&.slug_name
+  json.uuid crag_route.user&.uuid
   json.name crag_route.user&.full_name
+  json.slug_name crag_route.user&.slug_name
 end
 json.history do
   json.extract! crag_route, :created_at, :updated_at

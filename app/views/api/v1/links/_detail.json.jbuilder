@@ -2,8 +2,9 @@
 
 json.extract! link, :id, :name, :url, :description
 json.creator do
-  json.id link.user_id
+  json.uuid link.user&.uuid
   json.name link.user&.full_name
+  json.slug_name link.user&.slug_name
 end
 json.history do
   json.extract! link, :created_at, :updated_at

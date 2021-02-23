@@ -29,9 +29,9 @@ json.illustrable do
   end
 end
 json.creator do
-  json.id photo.user_id
-  json.slug_name photo.user&.slug_name
+  json.uuid photo.user&.uuid
   json.name photo.user&.full_name
+  json.slug_name photo.user&.slug_name
 end
 json.history do
   json.extract! photo, :created_at, :updated_at

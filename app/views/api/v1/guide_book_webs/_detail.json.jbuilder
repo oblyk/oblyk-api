@@ -5,8 +5,9 @@ json.crag do
   json.extract! guide_book_web.crag, :id, :name
 end
 json.creator do
-  json.id guide_book_web.user_id
+  json.uuid guide_book_web.user&.uuid
   json.name guide_book_web.user&.full_name
+  json.slug_name guide_book_web.user&.slug_name
 end
 json.history do
   json.extract! guide_book_web, :created_at, :updated_at
