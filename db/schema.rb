@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_18_210929) do
+ActiveRecord::Schema.define(version: 2021_02_23_211923) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -659,8 +659,8 @@ ActiveRecord::Schema.define(version: 2021_02_18_210929) do
     t.boolean "deep_water", default: false
     t.boolean "via_ferrata", default: false
     t.boolean "pan", default: false
-    t.string "grade_max"
-    t.string "grade_min"
+    t.integer "grade_max"
+    t.integer "grade_min"
     t.boolean "super_admin", default: false
     t.bigint "legacy_id"
     t.datetime "created_at", precision: 6, null: false
@@ -676,6 +676,9 @@ ActiveRecord::Schema.define(version: 2021_02_18_210929) do
     t.boolean "public_profile"
     t.boolean "public_outdoor_ascents"
     t.boolean "public_indoor_ascents"
+    t.decimal "partner_latitude", precision: 10, scale: 6
+    t.decimal "partner_longitude", precision: 10, scale: 6
+    t.datetime "last_activity_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["uuid"], name: "index_users_on_uuid", unique: true
   end

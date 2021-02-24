@@ -24,6 +24,7 @@ class User < ApplicationRecord
   has_many :ascent_gym_routes
 
   before_validation :set_uuid
+  before_validation :last_activity_at
 
   validates :first_name, :email, :uuid, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
@@ -31,6 +32,9 @@ class User < ApplicationRecord
   validates :uuid, uniqueness: true, on: :create
   validates :genre, inclusion: { in: %w[male female] }, allow_blank: true
   validates :language, inclusion: { in: %w[fr en] }
+
+  validates :partner_latitude, numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }, allow_blank: true
+  validates :partner_longitude, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }, allow_blank: true
 
   validates :avatar, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true
@@ -77,9 +81,17 @@ class User < ApplicationRecord
     tick_lists.pluck(:crag_route_id)
   end
 
+  def activity!
+    update_attribute(:last_activity_at, DateTime.current)
+  end
+
   private
 
   def set_uuid
     self.uuid ||= SecureRandom.uuid
+  end
+
+  def init_last_activity_at
+    self.last_activity_at ||= DateTime.current
   end
 end

@@ -17,6 +17,8 @@ module Api
             refresh_token.unused_token
             refresh_token.save
 
+            user.activity!
+
             render json: {
               token: token,
               expired_at: exp,

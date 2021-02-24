@@ -22,6 +22,8 @@ module Api
               refresh_token.save
             end
 
+            user.activity!
+
             render json: {
               auth: true,
               user: user_data,
