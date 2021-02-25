@@ -119,7 +119,9 @@ module Api
           :language,
           :public_profile,
           :public_outdoor_ascents,
-          :public_indoor_ascents
+          :public_indoor_ascents,
+          :partner_latitude,
+          :partner_longitude
         )
       end
 
