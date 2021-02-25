@@ -85,6 +85,48 @@ class User < ApplicationRecord
     update_attribute(:last_activity_at, DateTime.current)
   end
 
+  def to_partner_geo_json
+    {
+      type: 'Feature',
+      properties: {
+        type: 'PartnerUser',
+        uuid: uuid,
+        full_name: full_name,
+        slug_name: slug_name,
+        description: description,
+        date_of_birth: date_of_birth,
+        genre: genre,
+        icon: 'partner-user',
+        sport_climbing: sport_climbing,
+        bouldering: bouldering,
+        multi_pitch: multi_pitch,
+        trad_climbing: trad_climbing,
+        aid_climbing: aid_climbing,
+        deep_water: deep_water,
+        via_ferrata: via_ferrata,
+        pan: pan,
+        avatar_thumbnail_url: avatar_thumbnail_url,
+        banner_thumbnail_url: banner_thumbnail_url,
+        grade_min: grade_min,
+        grade_max: grade_max,
+        last_activity_at: last_activity_at
+      },
+      geometry: { type: 'Point', "coordinates": [Float(partner_longitude), Float(partner_latitude), 0.0] }
+    }
+  end
+
+  def avatar_thumbnail_url
+    return unless avatar.attached?
+
+    Rails.application.routes.url_helpers.rails_representation_url(avatar.variant(resize: '300x300').processed, only_path: true)
+  end
+
+  def banner_thumbnail_url
+    return unless banner.attached?
+
+    Rails.application.routes.url_helpers.rails_representation_url(banner.variant(resize: '300x300').processed, only_path: true)
+  end
+
   private
 
   def set_uuid

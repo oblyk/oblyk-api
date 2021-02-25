@@ -32,7 +32,10 @@ Rails.application.routes.draw do
 
       get 'figures', controller: :commons, action: :figures
 
-      resources :users, only: %i[show]
+      resources :users, only: %i[show] do
+        get :contribution, on: :member
+        get :partner_user_geo_json, on: :member
+      end
 
       resources :current_users, only: %i[] do
         collection do
