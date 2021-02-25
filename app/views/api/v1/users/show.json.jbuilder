@@ -10,6 +10,8 @@ json.extract! @user,
               :description,
               :localization,
               :partner_search,
+              :partner_latitude,
+              :partner_longitude,
               :bouldering,
               :sport_climbing,
               :multi_pitch,
@@ -22,7 +24,10 @@ json.extract! @user,
               :grade_min,
               :public_profile,
               :public_outdoor_ascents,
-              :public_indoor_ascents
+              :public_indoor_ascents,
+              :last_activity_at
+json.followers_count @user.follows_count || 0
+json.subscribes_count @user.subscribes.count
 json.full_name @user.full_name
 json.banner @user.banner.attached? ? url_for(@user.banner) : nil
 json.avatar @user.avatar.attached? ? url_for(@user.avatar) : nil
