@@ -34,8 +34,14 @@ Rails.application.routes.draw do
       get 'partners/geo_json', controller: :partners, actions: :geo_json
 
       resources :users, only: %i[show] do
+        get :photos, on: :member
+        get :videos, on: :member
         get :contribution, on: :member
         get :partner_user_geo_json, on: :member
+        get :outdoor_figures, on: :member
+        get :outdoor_climb_types_chart, on: :member
+        get :ascended_crag_routes, on: :member
+        get :outdoor_grades_chart, on: :member
       end
 
       resources :current_users, only: %i[] do

@@ -22,7 +22,7 @@ module Api
 
       def login?
         data = JwtToken::Token.decode(authorization_token)['data']
-        User.find data['id']
+        @current_user ||= User.find data['id']
         true
       rescue StandardError
         false

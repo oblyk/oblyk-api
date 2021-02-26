@@ -15,6 +15,7 @@ class User < ApplicationRecord
   has_many :tick_lists
   has_many :ticked_crag_routes, through: :tick_lists, source: :crag_route
   has_many :photos
+  has_many :videos
   has_many :gym_administrators
   has_many :gyms, through: :gym_administrators
   has_many :reports, as: :reportable
