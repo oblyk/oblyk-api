@@ -39,6 +39,8 @@ class User < ApplicationRecord
   validates :avatar, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true
 
+  scope :partner_geolocable, -> { where(partner_search: true).where.not(partner_latitude: nil).where.not(partner_longitude: nil) }
+
   def full_name
     "#{first_name} #{last_name}".strip
   end

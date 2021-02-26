@@ -1,0 +1,3 @@
+###
+GET {{api_url}}/partners/geo_json.json
+Accept: application/json
