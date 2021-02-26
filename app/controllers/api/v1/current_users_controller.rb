@@ -8,8 +8,23 @@ module Api
 
       def show; end
 
-      def subscribes
+      def favorites
         @subscribes = @user.subscribes.where.not(followable_type: %w[GuideBookPaper User]).order(views: :desc)
+        render 'api/v1/current_users/subscribes'
+      end
+
+      def subscribes
+        @subscribes = @user.subscribes.where(followable_type: 'User').order(updated_at: :desc)
+        render 'api/v1/current_users/subscribes'
+      end
+
+      def followers
+        @users = []
+        followers = @user.follows.order(created_at: :desc)
+        followers.each do |follower|
+          @users << follower.user
+        end
+        render 'api/v1/users/index'
       end
 
       def ascents_crag_routes

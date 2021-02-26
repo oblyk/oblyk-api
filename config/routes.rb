@@ -52,6 +52,8 @@ Rails.application.routes.draw do
           put '', action: :update
           get :library
           get :subscribes
+          get :followers
+          get :favorites
           get :ascent_crag_routes
           get :ascended_crag_routes
           get :ascended_crags_geo_json
