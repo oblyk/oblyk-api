@@ -36,6 +36,8 @@ Rails.application.routes.draw do
       resources :users, only: %i[show] do
         get :photos, on: :member
         get :videos, on: :member
+        get :subscribes, on: :member
+        get :followers, on: :member
         get :contribution, on: :member
         get :partner_user_geo_json, on: :member
         get :outdoor_figures, on: :member

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 json.array! @subscribes do |subscribe|
-  next if subscribe.followable_type == 'User'
-
   json.followable_type subscribe.followable_type
   json.followable_id subscribe.followable_id
   json.followable_object do

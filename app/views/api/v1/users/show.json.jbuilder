@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 json.extract! @user,
+              :id,
               :uuid,
               :first_name,
               :last_name,
@@ -26,7 +27,7 @@ json.extract! @user,
               :public_outdoor_ascents,
               :public_indoor_ascents,
               :last_activity_at
-json.followers_count @user.follows_count || 0
+json.followers_count @user.follows.count || 0
 json.subscribes_count @user.subscribes.count
 json.videos_count @user.videos.count
 json.photos_count @user.photos.count

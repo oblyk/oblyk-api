@@ -9,6 +9,20 @@ module Api
 
       def show; end
 
+      def subscribes
+        @subscribes = @user.subscribes.order(views: :desc)
+        render 'api/v1/current_users/subscribes'
+      end
+
+      def followers
+        @users = []
+        followers = @user.follows.order(created_at: :desc)
+        followers.each do |follower|
+          @users << follower.user
+        end
+        render 'api/v1/users/index'
+      end
+
       def photos
         @photos = @user.photos
         render 'api/v1/photos/index'
