@@ -15,14 +15,13 @@ Content-Type: application/json
 }
 
 ### Create a message
-POST {{api_url}}/conversation_messages.json
+POST {{api_url}}/conversations/1/conversation_messages.json
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
 {
   "conversation_message": {
-    "body": "Je n'ai pas le droit ici",
-    "conversation_id": 4
+    "body": "Je n'ai pas le droit ici"
   }
 }
 

@@ -127,8 +127,10 @@ Rails.application.routes.draw do
       resources :parks
       resources :approaches
       resources :alerts
-      resources :conversations
-      resources :conversation_messages
+      resources :conversations, only: %i[index show create] do
+        post :read, on: :member
+        resources :conversation_messages
+      end
       resources :videos
       resources :photos
       resources :areas do

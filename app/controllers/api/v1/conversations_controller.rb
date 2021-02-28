@@ -3,12 +3,13 @@
 module Api
   module V1
     class ConversationsController < ApiController
-      before_action :protected_by_session, only: %i[index show create]
-      before_action :set_conversation, only: %i[show]
+      before_action :protected_by_session
+      before_action :set_conversation, only: %i[show read]
 
       def index
         @conversations = Conversation.joins(:conversation_users)
                                      .where(conversation_users: { user_id: @current_user.id })
+                                     .order(last_message_at: :desc)
       end
 
       def show
@@ -26,6 +27,12 @@ module Api
         else
           render json: { error: @conversation.errors }, status: :unprocessable_entity
         end
+      end
+
+      def read
+        conversation_user = ConversationUser.find_by user: @current_user, conversation: @conversation
+        conversation_user.read!
+        render json: { last_read_at: conversation_user.last_read_at }, status: :ok
       end
 
       private

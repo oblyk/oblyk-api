@@ -3,14 +3,22 @@
 module Api
   module V1
     class ConversationMessagesController < ApiController
-      before_action :protected_by_session, only: %i[create update destroy]
-      before_action :set_conversation_message, only: %i[update destroy]
-      before_action :set_conversation, only: %i[create]
-      before_action :protected_by_conversation_owner, only: %i[create]
-      before_action :protected_by_message_owner, only: %i[update destroy]
+      before_action :protected_by_session
+      before_action :set_conversation_message, except: %i[index create]
+      before_action :set_conversation
+      before_action :protected_by_conversation_owner
+      before_action :protected_by_message_owner, except: %i[index create]
+
+      def index
+        messages = @conversation.conversation_messages.order(posted_at: :desc).limit(20)
+        @conversation_messages = messages.reverse
+      end
+
+      def show; end
 
       def create
         @conversation_message = ConversationMessage.new(conversation_message_params)
+        @conversation_message.conversation = @conversation
         @conversation_message.user = @current_user
         if @conversation_message.save
           render 'api/v1/conversation_messages/show'
@@ -28,7 +36,7 @@ module Api
       end
 
       def destroy
-        if @conversation_message.delete
+        if @conversation_message.destroy
           render json: {}, status: :ok
         else
           render json: { error: @conversation_message.errors }, status: :unprocessable_entity
@@ -46,7 +54,7 @@ module Api
       end
 
       def set_conversation
-        @conversation = Conversation.find conversation_message_params[:conversation_id]
+        @conversation = Conversation.find params[:conversation_id]
       end
 
       def set_conversation_message
@@ -55,8 +63,7 @@ module Api
 
       def conversation_message_params
         params.require(:conversation_message).permit(
-          :body,
-          :conversation_id
+          :body
         )
       end
     end

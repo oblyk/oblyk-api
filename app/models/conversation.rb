@@ -17,4 +17,9 @@ class Conversation < ApplicationRecord
     Conversation.find same_conversations.first.conversation_id
   end
 
+  def update_last_message_at!
+    last_message_date = conversation_messages.maximum(:posted_at)
+    update_attribute(:last_message_at, last_message_date)
+  end
+
 end
