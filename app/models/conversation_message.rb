@@ -14,6 +14,15 @@ class ConversationMessage < ApplicationRecord
     ConversationUser.find_by conversation: conversation, user: user
   end
 
+  def show_to_json
+    JSON.parse(
+      ApplicationController.render(
+        template: 'api/v1/conversation_messages/show.json',
+        assigns: { conversation_message: self }
+      )
+    )
+  end
+
   private
 
   def init_posted_at

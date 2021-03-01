@@ -21,6 +21,9 @@ module Api
         @conversation_message.conversation = @conversation
         @conversation_message.user = @current_user
         if @conversation_message.save
+          data = @conversation_message.show_to_json
+          data[:message_status] = 'new_message'
+          ActionCable.server.broadcast "conversations_#{@conversation_message.conversation_id}", data
           render 'api/v1/conversation_messages/show'
         else
           render json: { error: @conversation_message.errors }, status: :unprocessable_entity
@@ -29,6 +32,9 @@ module Api
 
       def update
         if @conversation_message.update(conversation_message_params)
+          data = @conversation_message.show_to_json
+          data[:message_status] = 'edit_message'
+          ActionCable.server.broadcast "conversations_#{@conversation_message.conversation_id}", data
           render 'api/v1/conversation_messages/show'
         else
           render json: { error: @conversation_message.errors }, status: :unprocessable_entity

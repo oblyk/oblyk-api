@@ -4,6 +4,8 @@ class User < ApplicationRecord
   include Geolocable
   include Slugable
 
+  mattr_accessor :current, instance_accessor: false
+
   has_secure_password
   has_one_attached :avatar
   has_one_attached :banner
