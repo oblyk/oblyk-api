@@ -3,11 +3,18 @@
 module Api
   module V1
     class UsersController < ApiController
-      before_action :set_user
-      before_action :protected_private_profile
+      before_action :protected_by_session, only: %i[search]
+      before_action :set_user, except: %i[search]
+      before_action :protected_private_profile, except: %i[search]
       before_action :protected_outdoor_log_book, only: %i[outdoor_figures outdoor_climb_types_chart ascended_crag_routes outdoor_grades_chart]
 
       def show; end
+
+      def search
+        query = params[:query]
+        @users = User.search(query).records
+        render 'api/v1/users/index'
+      end
 
       def subscribes
         @subscribes = @user.subscribes.order(views: :desc)

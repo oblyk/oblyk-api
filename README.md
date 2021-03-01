@@ -53,6 +53,10 @@ Gym.__elasticsearch__.refresh_index!
 Word.__elasticsearch__.create_index! force: true
 Word.import
 Word.__elasticsearch__.refresh_index!
+
+User.__elasticsearch__.create_index! force: true
+User.import
+User.__elasticsearch__.refresh_index!
 ```
 
 Todo migration des tables :

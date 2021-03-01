@@ -36,6 +36,7 @@ Rails.application.routes.draw do
       get 'partners/geo_json', controller: :partners, actions: :geo_json
 
       resources :users, only: %i[show] do
+        get :search, on: :collection
         get :photos, on: :member
         get :videos, on: :member
         get :subscribes, on: :member

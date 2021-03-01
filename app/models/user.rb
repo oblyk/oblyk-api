@@ -3,6 +3,7 @@
 class User < ApplicationRecord
   include Geolocable
   include Slugable
+  include Searchable
 
   mattr_accessor :current, instance_accessor: false
 
@@ -46,6 +47,20 @@ class User < ApplicationRecord
 
   def full_name
     "#{first_name} #{last_name}".strip
+  end
+
+  def self.search(query)
+    __elasticsearch__.search(
+      {
+        query: {
+          multi_match: {
+            query: query,
+            fields: %w[first_name last_name],
+            fuzziness: :auto
+          }
+        }
+      }
+    )
   end
 
   def send_reset_password_instructions
