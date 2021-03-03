@@ -12,7 +12,7 @@ module Api
 
           if refresh_token.present?
             user_data = user.as_json(only: %i[id first_name last_name slug_name email uuid])
-            exp = Time.now.to_i + 24 * 3600
+            exp = Time.now.to_i + Rails.application.config.jwt_session_lifetime
             token = JwtToken::Token.generate(user_data, exp)
             refresh_token.unused_token
             refresh_token.save

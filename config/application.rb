@@ -46,5 +46,8 @@ module OblykApi
     config.i18n.available_locales = %i[fr en]
     config.i18n.default_locale = :fr
     config.active_record.default_timezone = :utc
+
+    # JWT second before session expiration (24 * 3600 = 1 day)
+    config.jwt_session_lifetime = 24 * 3600
   end
 end
