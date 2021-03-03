@@ -10,8 +10,8 @@ module Api
       before_action :protected_by_message_owner, except: %i[index create]
 
       def index
-        messages = @conversation.conversation_messages.order(posted_at: :desc).limit(20)
-        @conversation_messages = messages.reverse
+        messages = @conversation.conversation_messages.includes(:user).order(posted_at: :desc).page(params.fetch(:page, 1))
+        @conversation_messages = messages.reverse || []
       end
 
       def show; end
