@@ -132,7 +132,9 @@ Rails.application.routes.draw do
       resources :alerts
       resources :conversations, only: %i[index show create] do
         post :read, on: :member
-        resources :conversation_messages
+        resources :conversation_messages do
+          get :last_messages, on: :collection
+        end
       end
       resources :videos
       resources :photos

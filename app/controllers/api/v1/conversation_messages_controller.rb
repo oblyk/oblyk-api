@@ -4,14 +4,21 @@ module Api
   module V1
     class ConversationMessagesController < ApiController
       before_action :protected_by_session
-      before_action :set_conversation_message, except: %i[index create]
+      before_action :set_conversation_message, except: %i[index last_messages create]
       before_action :set_conversation
       before_action :protected_by_conversation_owner
-      before_action :protected_by_message_owner, except: %i[index create]
+      before_action :protected_by_message_owner, except: %i[index last_messages create]
 
       def index
         messages = @conversation.conversation_messages.includes(:user).order(posted_at: :desc).page(params.fetch(:page, 1))
         @conversation_messages = messages.reverse || []
+      end
+
+      def last_messages
+        date = DateTime.parse params[:posted_after_at]
+        messages = @conversation.conversation_messages.where('posted_at >= ?', date).includes(:user).order(posted_at: :desc)
+        @conversation_messages = messages.reverse || []
+        render 'api/v1/conversation_messages/index'
       end
 
       def show; end
@@ -23,7 +30,6 @@ module Api
         if @conversation_message.save
           data = @conversation_message.show_to_json
           data[:message_status] = 'new_message'
-          ActionCable.server.broadcast "conversations_#{@conversation_message.conversation_id}", data
           render 'api/v1/conversation_messages/show'
         else
           render json: { error: @conversation_message.errors }, status: :unprocessable_entity
@@ -34,7 +40,6 @@ module Api
         if @conversation_message.update(conversation_message_params)
           data = @conversation_message.show_to_json
           data[:message_status] = 'edit_message'
-          ActionCable.server.broadcast "conversations_#{@conversation_message.conversation_id}", data
           render 'api/v1/conversation_messages/show'
         else
           render json: { error: @conversation_message.errors }, status: :unprocessable_entity

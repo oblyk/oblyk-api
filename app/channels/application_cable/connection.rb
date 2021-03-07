@@ -12,8 +12,7 @@ module ApplicationCable
     private
 
     def find_verified_user(token)
-      data = JwtToken::Token.decode(token)['data']
-      User.find(data['id']) || reject_unauthorized_connection
+      RefreshToken.find_by(token: token)&.user || reject_unauthorized_connection
     end
 
   end
