@@ -27,7 +27,7 @@ module Api
             user.reset_password_token_expired_at = nil
             user.save
 
-            user_data = user.as_json(only: %i[id first_name last_name slug_name email uuid])
+            user_data = user.as_json(only: %i[id first_name last_name slug_name email uuid super_admin])
             exp = Time.now.to_i + Rails.application.config.jwt_session_lifetime
             token = JwtToken::Token.generate(user_data, exp)
             refresh_token = nil
