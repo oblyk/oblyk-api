@@ -34,7 +34,7 @@ module Api
       end
 
       def destroy
-        if @alert.delete
+        if @alert.destroy
           render json: {}, status: :ok
         else
           render json: { error: @alert.errors }, status: :unprocessable_entity
