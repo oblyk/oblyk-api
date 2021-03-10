@@ -29,6 +29,7 @@ class User < ApplicationRecord
 
   before_validation :set_uuid
   before_validation :last_activity_at
+  before_validation :init_partner_search_activated_at
 
   validates :first_name, :email, :uuid, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
@@ -155,5 +156,11 @@ class User < ApplicationRecord
 
   def init_last_activity_at
     self.last_activity_at ||= DateTime.current
+  end
+
+  def init_partner_search_activated_at
+    return unless partner_search_changed?
+
+    self.partner_search_activated_at = partner_search == true ? DateTime.current : nil
   end
 end

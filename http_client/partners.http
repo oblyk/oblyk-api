@@ -1,3 +1,7 @@
 ###
 GET {{api_url}}/partners/geo_json.json
 Accept: application/json
+
+###
+GET {{api_url}}/partners/figures.json
+Accept: application/json

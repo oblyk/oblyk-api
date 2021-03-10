@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       get 'search', controller: :searches, action: :index
 
       get 'figures', controller: :commons, action: :figures
+      get 'partners/figures', controller: :partners, action: :figures
       get 'partners/geo_json', controller: :partners, actions: :geo_json
 
       resources :users, only: %i[show] do
