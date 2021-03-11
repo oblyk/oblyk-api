@@ -28,6 +28,10 @@ class Gym < ApplicationRecord
     longitude
   ]
 
+  mapping do
+    indexes :location, type: 'geo_point'
+  end
+
   has_one_attached :logo
   has_one_attached :banner
   belongs_to :user, optional: true

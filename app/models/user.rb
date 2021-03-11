@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  include Searchable
   include Geolocable
   include Slugable
-  include Searchable
 
   mattr_accessor :current, instance_accessor: false
 
@@ -45,6 +45,11 @@ class User < ApplicationRecord
   validates :banner, blob: { content_type: :image }, allow_nil: true
 
   scope :partner_geolocable, -> { where(partner_search: true).where.not(partner_latitude: nil).where.not(partner_longitude: nil) }
+
+  mapping do
+    indexes :partner_location, type: 'geo_point'
+    indexes :location, type: 'geo_point'
+  end
 
   def full_name
     "#{first_name} #{last_name}".strip

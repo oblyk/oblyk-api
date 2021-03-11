@@ -96,6 +96,10 @@ Accept: application/json
 GET {{api_url}}/crags/2363/guide_books_around.json
 Accept: application/json
 
+### Guide book arrounds
+GET {{api_url}}/crags/crags_around.json?latitude=44.469592&longitude=5.058089&distance=20km
+Accept: application/json
+
 ### search crags geo_json
 GET {{api_url}}/crags/geo_search.json?latitude=44.469592&longitude=5.058089&distance=20km
 Accept: application/json

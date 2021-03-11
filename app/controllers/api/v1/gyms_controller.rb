@@ -33,6 +33,12 @@ module Api
 
       def show; end
 
+      def gyms_around
+        distance = params.fetch(:distance, '20km')
+        @gyms = Gym.geo_search(params[:latitude], params[:longitude], distance).records
+        render 'api/v1/gyms/index'
+      end
+
       def versions
         @versions = @gym.versions
         render 'api/v1/versions/index'

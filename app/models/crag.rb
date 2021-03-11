@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Crag < ApplicationRecord
+  include Searchable
   include Geolocable
   include SoftDeletable
-  include Searchable
   include Slugable
   include GapGradable
 
@@ -39,6 +39,10 @@ class Crag < ApplicationRecord
     north_west
   ]
 
+  mapping do
+    indexes :location, type: 'geo_point'
+  end
+
   belongs_to :user, optional: true
   belongs_to :photo, optional: true
   has_many :comments, as: :commentable
@@ -67,10 +71,6 @@ class Crag < ApplicationRecord
 
   after_update :update_routes_location
 
-  mapping do
-    indexes :location, type: 'geo_point'
-  end
-
   def search_json
     JSON.parse(
       ApplicationController.render(
@@ -96,47 +96,6 @@ class Crag < ApplicationRecord
 
   def rich_name
     "#{name} (#{city})"
-  end
-
-  def location
-    [latitude, longitude]
-  end
-
-  def self.geo_search(latitude, longitude, distance)
-    __elasticsearch__.search(
-      {
-        query: {
-          bool: {
-            must: {
-              match_all: {}
-            },
-            filter: {
-              geo_distance: {
-                distance: distance,
-                location: {
-                  lat: latitude.to_f,
-                  lon: longitude.to_f
-                }
-              }
-            }
-          }
-        },
-        sort: [
-          {
-            _geo_distance: {
-              location: {
-                lat: latitude.to_f,
-                lon: longitude.to_f
-              },
-              order: 'asc',
-              unit: 'km'
-            }
-          }
-        ],
-        from: 0,
-        size: 500
-      }
-    )
   end
 
   def to_geo_json
@@ -189,15 +148,6 @@ class Crag < ApplicationRecord
     videos = self.videos
     crag_routes.each { |crag_route| videos += crag_route.videos }
     videos
-  end
-
-  def as_indexed_json(_options = {})
-    as_json.merge(
-      location: {
-        lat: latitude.to_f,
-        lon: longitude.to_f
-      }
-    )
   end
 
   def update_climbing_type!

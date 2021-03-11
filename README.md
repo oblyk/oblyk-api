@@ -45,7 +45,6 @@ Area.__elasticsearch__.create_index! force: true
 Area.import
 Area.__elasticsearch__.refresh_index!
 
-
 Gym.__elasticsearch__.create_index! force: true
 Gym.import
 Gym.__elasticsearch__.refresh_index!

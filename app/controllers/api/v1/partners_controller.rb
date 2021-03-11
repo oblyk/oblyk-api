@@ -3,6 +3,8 @@
 module Api
   module V1
     class PartnersController < ApiController
+      before_action :protected_by_session, only: %i[partners_around]
+
       def geo_json
         features = []
 
@@ -28,6 +30,12 @@ module Api
           count_global: climbers.count,
           count_last_week: climbers.where('partner_search_activated_at > ?', DateTime.current - 1.week).count
         }
+      end
+
+      def partners_around
+        distance = params.fetch(:distance, '20km')
+        @users = User.partner_geo_search(params[:latitude], params[:longitude], distance).records
+        render 'api/v1/users/index'
       end
     end
   end

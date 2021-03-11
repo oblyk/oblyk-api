@@ -61,6 +61,10 @@ Content-Type: application/json
 GET {{api_url}}/gyms/1/versions.json
 Accept: application/json
 
+### Gym arrounds
+GET {{api_url}}/gyms/gyms_around.json?latitude=44.469592&longitude=5.058089&distance=20km
+Accept: application/json
+
 ### GET gym
 GET {{api_url}}/gyms/1.json
 Accept: application/json

@@ -35,6 +35,7 @@ Rails.application.routes.draw do
       get 'figures', controller: :commons, action: :figures
       get 'partners/figures', controller: :partners, action: :figures
       get 'partners/geo_json', controller: :partners, actions: :geo_json
+      get 'partners/partners_around', controller: :partners, actions: :partners_around
 
       resources :users, only: %i[show] do
         get :search, on: :collection
@@ -91,6 +92,7 @@ Rails.application.routes.draw do
         get :geo_json_around, on: :member
         get :geo_json, on: :collection
         get :geo_search, on: :collection
+        get :crags_around, on: :collection
         resources :crag_routes do
           get :search, on: :collection
         end
@@ -172,6 +174,7 @@ Rails.application.routes.draw do
       resources :gyms do
         get :versions, on: :member
         get :geo_json, on: :collection
+        get :gyms_around, on: :collection
         post :add_banner, on: :member
         post :add_logo, on: :member
         resources :gym_administrators

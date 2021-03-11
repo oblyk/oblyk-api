@@ -178,6 +178,12 @@ module Api
         end
       end
 
+      def crags_around
+        distance = params.fetch(:distance, '20km')
+        @crags = Crag.geo_search(params[:latitude], params[:longitude], distance).records
+        render 'api/v1/crags/index'
+      end
+
       def update
         if @crag.update(crag_params)
           render 'api/v1/crags/show'
