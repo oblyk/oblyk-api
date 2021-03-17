@@ -6,6 +6,7 @@ class Crag < ApplicationRecord
   include SoftDeletable
   include Slugable
   include GapGradable
+  include ActivityFeedable
 
   has_paper_trail only: %i[
     name
@@ -50,6 +51,7 @@ class Crag < ApplicationRecord
   has_many :follows, as: :followable
   has_many :alerts, as: :alertable
   has_many :videos, as: :viewable
+  has_many :feeds, as: :feedable
   has_many :parks
   has_many :crag_sectors
   alias_attribute :sectors, :crag_sectors
@@ -71,10 +73,10 @@ class Crag < ApplicationRecord
 
   after_update :update_routes_location
 
-  def search_json
+  def summary_to_json
     JSON.parse(
       ApplicationController.render(
-        template: 'api/v1/crags/search.json',
+        template: 'api/v1/crags/summary.json',
         assigns: { crag: self }
       )
     )
@@ -162,6 +164,14 @@ class Crag < ApplicationRecord
     self.via_ferrata = climbing_types.include?('via_ferrata')
 
     save
+  end
+
+  def feed_parent_id
+    id
+  end
+
+  def feed_parent_type
+    self.class.name
   end
 
   private

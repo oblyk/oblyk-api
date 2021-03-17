@@ -95,6 +95,23 @@ Gym :
 - [x] gym_sectors
 - [x] gyms
 
+Feed :
+- Oblyk
+  - Article
+- community
+  - [ ] crags added
+  - [ ] crag_routes added
+  - [ ] gyms added
+  - [ ] photos added
+  - [ ] videos created
+  - [ ] guide book added
+- around
+  - [ ] alerts posted
+  - [ ] crags, routes, gyms, etc. if not community
+- follower
+  - [ ] follow added
+  - [ ] subscribers ascents added
+
 Later :
 - [ ] contest_routes
 - [ ] contest_users

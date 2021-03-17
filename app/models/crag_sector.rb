@@ -34,6 +34,9 @@ class CragSector < ApplicationRecord
   has_many :crag_routes
   has_many :reports, as: :reportable
 
+  delegate :feed_parent_id, to: :crag
+  delegate :feed_parent_type, to: :crag
+
   before_validation :historize_location
 
   after_update :update_routes_location
@@ -46,10 +49,10 @@ class CragSector < ApplicationRecord
     name
   end
 
-  def search_json
+  def summary_to_json
     JSON.parse(
       ApplicationController.render(
-        template: 'api/v1/crag_sectors/search.json',
+        template: 'api/v1/crag_sectors/summary.json',
         assigns: { crag_sector: self }
       )
     )

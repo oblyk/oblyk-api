@@ -4,6 +4,7 @@ class CragRoute < ApplicationRecord
   include SoftDeletable
   include Searchable
   include Slugable
+  include ActivityFeedable
 
   has_paper_trail only: %i[
     name
@@ -30,6 +31,9 @@ class CragRoute < ApplicationRecord
   has_many :reports, as: :reportable
   has_many :ascent_crag_routes
 
+  delegate :feed_parent_id, to: :crag
+  delegate :feed_parent_type, to: :crag
+
   validates :name, presence: true
   validates :climbing_type, inclusion: { in: Climb::CRAG_LIST }
   validates :incline_type, inclusion: { in: Incline::LIST }, allow_nil: true
@@ -52,10 +56,10 @@ class CragRoute < ApplicationRecord
     "#{grade_to_s} - #{name}"
   end
 
-  def search_json
+  def summary_to_json
     JSON.parse(
       ApplicationController.render(
-        template: 'api/v1/crag_routes/search.json',
+        template: 'api/v1/crag_routes/summary.json',
         assigns: { crag_route: self }
       )
     )
@@ -153,14 +157,18 @@ class CragRoute < ApplicationRecord
     ascent_crag_routes.where.not(private_comment: true)
   end
 
+  def latitude
+    crag_sector.latitude || crag.latitude
+  end
+
+  def longitude
+    crag_sector.longitude || crag.longitude
+  end
+
   private
 
   def historize_location
-    self.location = if crag_sector&.latitude
-                      [crag_sector.latitude, crag_sector.longitude]
-                    else
-                      [crag.latitude, crag.longitude]
-                    end
+    self.location = [latitude, longitude]
   end
 
   def format_route_section

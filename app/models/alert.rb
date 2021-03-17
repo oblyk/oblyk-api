@@ -1,8 +1,13 @@
 # frozen_string_literal: true
 
 class Alert < ApplicationRecord
+  include ActivityFeedable
+
   belongs_to :user, optional: true
   belongs_to :alertable, polymorphic: true
+
+  delegate :feed_parent_id, to: :alertable
+  delegate :feed_parent_type, to: :alertable
 
   ALERT_TYPES_LIST = %w[good warning info bad].freeze
 

@@ -3,6 +3,7 @@
 class Word < ApplicationRecord
   include Slugable
   include Searchable
+  include ActivityFeedable
 
   has_paper_trail only: %i[name definition]
 
@@ -14,10 +15,10 @@ class Word < ApplicationRecord
 
   default_scope { order(:name) }
 
-  def search_json
+  def summary_to_json
     JSON.parse(
       ApplicationController.render(
-        template: 'api/v1/words/search.json',
+        template: 'api/v1/words/summary.json',
         assigns: { word: self }
       )
     )
@@ -35,5 +36,13 @@ class Word < ApplicationRecord
         }
       }
     )
+  end
+
+  def feed_parent_id
+    id
+  end
+
+  def feed_parent_type
+    self.class.name
   end
 end

@@ -1,9 +1,14 @@
 # frozen_string_literal: true
 
 class Video < ApplicationRecord
+  include ActivityFeedable
+
   belongs_to :user, optional: true
   belongs_to :viewable, polymorphic: true
   has_many :reports, as: :reportable
+
+  delegate :feed_parent_id, to: :viewable
+  delegate :feed_parent_type, to: :viewable
 
   URL_REGEXP = %r{(epictv\.com|/youtu\.be|youtube\.com|vimeo\.com|dai\.ly|dailymotion\.com)}.freeze
 

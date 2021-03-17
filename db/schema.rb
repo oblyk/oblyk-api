@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_10_131508) do
+ActiveRecord::Schema.define(version: 2021_03_15_155902) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -285,6 +285,23 @@ ActiveRecord::Schema.define(version: 2021_03_10_131508) do
     t.index ["name"], name: "index_crags_on_name"
     t.index ["photo_id"], name: "index_crags_on_photo_id"
     t.index ["user_id"], name: "index_crags_on_user_id"
+  end
+
+  create_table "feeds", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "feedable_type"
+    t.bigint "feedable_id"
+    t.json "feed_object"
+    t.string "parent_type"
+    t.bigint "parent_id"
+    t.decimal "latitude", precision: 10, scale: 6
+    t.decimal "longitude", precision: 10, scale: 6
+    t.datetime "posted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["feedable_type", "feedable_id"], name: "index_feeds_on_feedable_type_and_feedable_id"
+    t.index ["parent_id"], name: "index_feeds_on_parent_id"
+    t.index ["parent_type"], name: "index_feeds_on_parent_type"
+    t.index ["posted_at"], name: "index_feeds_on_posted_at"
   end
 
   create_table "follows", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

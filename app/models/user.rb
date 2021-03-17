@@ -153,6 +153,14 @@ class User < ApplicationRecord
     Rails.application.routes.url_helpers.rails_representation_url(banner.variant(resize: '300x300').processed, only_path: true)
   end
 
+  def feed_parent_id
+    id
+  end
+
+  def feed_parent_type
+    'User'
+  end
+
   private
 
   def set_uuid

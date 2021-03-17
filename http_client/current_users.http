@@ -91,6 +91,11 @@ GET {{api_url}}/current_users/ascended_crag_routes.json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
+### GET feed
+GET {{api_url}}/current_users/feed.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
 ### GET ascended crag routes
 GET {{api_url}}/current_users/ascended_crags_geo_json.json
 Authorization: Bearer {{auth_token}}

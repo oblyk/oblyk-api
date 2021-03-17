@@ -5,6 +5,7 @@ class Gym < ApplicationRecord
   include SoftDeletable
   include Searchable
   include Slugable
+  include ActivityFeedable
 
   has_paper_trail only: %i[
     name
@@ -36,6 +37,7 @@ class Gym < ApplicationRecord
   has_one_attached :banner
   belongs_to :user, optional: true
   has_many :follows, as: :followable
+  has_many :feeds, as: :feedable
   has_many :gym_administrators
   has_many :gym_grades
   has_many :gym_spaces
@@ -45,10 +47,10 @@ class Gym < ApplicationRecord
   validates :banner, blob: { content_type: :image }, allow_nil: true
   validates :name, :latitude, :longitude, :address, :postal_code, :country, :city, :big_city, presence: true
 
-  def search_json
+  def summary_to_json
     JSON.parse(
       ApplicationController.render(
-        template: 'api/v1/gyms/search.json',
+        template: 'api/v1/gyms/summary.json',
         assigns: { gym: self }
       )
     )
@@ -95,5 +97,13 @@ class Gym < ApplicationRecord
 
   def thumbnail_banner_url
     Rails.application.routes.url_helpers.rails_representation_url(banner.variant(resize: '300x300').processed, only_path: true)
+  end
+
+  def feed_parent_id
+    id
+  end
+
+  def feed_parent_type
+    self.class.name
   end
 end

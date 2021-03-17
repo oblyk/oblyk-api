@@ -3,7 +3,7 @@
 module Search
   class OblykResultBuilder < ResultBuilderBase
     def json_record
-      record.search_json
+      record.summary_to_json
     end
   end
 end

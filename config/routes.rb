@@ -55,6 +55,7 @@ Rails.application.routes.draw do
         collection do
           get '', action: :show
           put '', action: :update
+          get :feed
           get :library
           get :subscribes
           get :followers
