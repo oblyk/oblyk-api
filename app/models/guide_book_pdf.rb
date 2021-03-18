@@ -13,4 +13,13 @@ class GuideBookPdf < ApplicationRecord
 
   validates :name, :pdf_file, presence: true
   validates :pdf_file, blob: { content_type: ['application/pdf'] }
+
+  def summary_to_json
+    JSON.parse(
+      ApplicationController.render(
+        template: 'api/v1/guide_book_pdfs/summary.json',
+        assigns: { guide_book_pdf: self }
+      )
+    )
+  end
 end

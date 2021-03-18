@@ -97,14 +97,17 @@ Gym :
 
 Feed :
 - Oblyk
-  - Article
+  - [ ] Article
 - community
-  - [ ] crags added
+  - [x] crags added
   - [ ] crag_routes added
-  - [ ] gyms added
+  - [x] gyms added
   - [ ] photos added
   - [ ] videos created
-  - [ ] guide book added
+  - [x] guide book paper added
+  - [x] guide book pdf added
+  - [x] guide book web added
+  - [x] word
 - around
   - [ ] alerts posted
   - [ ] crags, routes, gyms, etc. if not community

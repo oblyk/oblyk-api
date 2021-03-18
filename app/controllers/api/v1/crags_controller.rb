@@ -125,7 +125,7 @@ module Api
             guide_type: 'GuideBookPaper',
             guide: JSON.parse(
               render_to_string(
-                template: 'api/v1/guide_book_papers/search',
+                template: 'api/v1/guide_book_papers/summary',
                 assigns: { guide_book_paper: paper }
               )
             )

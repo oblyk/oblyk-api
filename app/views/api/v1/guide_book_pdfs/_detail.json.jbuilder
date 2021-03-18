@@ -3,7 +3,7 @@
 json.extract! guide_book_pdf, :id, :name, :description, :author, :publication_year
 json.pdf_file url_for(guide_book_pdf.pdf_file)
 json.crag do
-  json.extract! guide_book_pdf.crag, :id, :name
+  json.extract! guide_book_pdf.crag, :id, :name, :slug_name
 end
 json.creator do
   json.uuid guide_book_pdf.user&.uuid

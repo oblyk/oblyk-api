@@ -11,4 +11,13 @@ class GuideBookWeb < ApplicationRecord
   delegate :feed_parent_type, to: :crag
 
   validates :name, :url, presence: true
+
+  def summary_to_json
+    JSON.parse(
+      ApplicationController.render(
+        template: 'api/v1/guide_book_webs/summary.json',
+        assigns: { guide_book_web: self }
+      )
+    )
+  end
 end
