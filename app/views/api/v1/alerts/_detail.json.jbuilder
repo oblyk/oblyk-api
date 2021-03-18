@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-json.extract! alert, :id, :description, :alert_type, :alerted_at
+json.extract! alert, :id, :description, :alert_type, :alerted_at, :alertable_type, :alertable_id
 json.creator do
   json.uuid alert.user&.uuid
   json.name alert.user&.full_name

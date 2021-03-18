@@ -100,6 +100,7 @@ Feed :
   - [ ] Article
 - community
   - [x] crags added
+  - [x] alerts added
   - [ ] crag_routes added
   - [x] gyms added
   - [ ] photos added

@@ -19,6 +19,15 @@ class Alert < ApplicationRecord
 
   default_scope { order(alerted_at: :desc) }
 
+  def summary_to_json
+    JSON.parse(
+      ApplicationController.render(
+        template: 'api/v1/alerts/summary.json',
+        assigns: { alert: self }
+      )
+    )
+  end
+  
   private
 
   def init_alerted_at
