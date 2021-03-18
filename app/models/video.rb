@@ -26,8 +26,6 @@ class Video < ApplicationRecord
     "<iframe src='#{url_for_iframe}' width='100%' height='250px' frameborder='0' />"
   end
 
-  private
-
   def url_for_iframe
     iframe_url = nil
 
@@ -49,5 +47,14 @@ class Video < ApplicationRecord
 
     end
     iframe_url
+  end
+
+  def summary_to_json
+    JSON.parse(
+      ApplicationController.render(
+        template: 'api/v1/videos/summary.json',
+        assigns: { video: self }
+      )
+    )
   end
 end

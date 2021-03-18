@@ -103,7 +103,7 @@ Feed :
   - [ ] crag_routes added
   - [x] gyms added
   - [ ] photos added
-  - [ ] videos created
+  - [x] videos created
   - [x] guide book paper added
   - [x] guide book pdf added
   - [x] guide book web added

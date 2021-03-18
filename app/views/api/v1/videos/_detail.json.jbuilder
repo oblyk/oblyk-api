@@ -7,6 +7,7 @@ json.extract! video,
               :viewable_type,
               :viewable_id
 json.iframe video.iframe
+json.url_for_iframe video.url_for_iframe
 json.creator do
   json.uuid video.user&.uuid
   json.name video.user&.full_name
