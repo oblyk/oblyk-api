@@ -7,8 +7,12 @@ class GuideBookWeb < ApplicationRecord
   belongs_to :crag
   has_many :reports, as: :reportable
 
+  delegate :latitude, to: :crag
+  delegate :longitude, to: :crag
+
   delegate :feed_parent_id, to: :crag
   delegate :feed_parent_type, to: :crag
+  delegate :feed_parent_object, to: :crag
 
   validates :name, :url, presence: true
 

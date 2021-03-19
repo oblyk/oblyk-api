@@ -6,6 +6,7 @@ class Crag < ApplicationRecord
   include SoftDeletable
   include Slugable
   include GapGradable
+  include ParentFeedable
   include ActivityFeedable
 
   has_paper_trail only: %i[
@@ -164,14 +165,6 @@ class Crag < ApplicationRecord
     self.via_ferrata = climbing_types.include?('via_ferrata')
 
     save
-  end
-
-  def feed_parent_id
-    id
-  end
-
-  def feed_parent_type
-    self.class.name
   end
 
   private

@@ -33,6 +33,7 @@ class CragRoute < ApplicationRecord
 
   delegate :feed_parent_id, to: :crag
   delegate :feed_parent_type, to: :crag
+  delegate :feed_parent_object, to: :crag
 
   validates :name, presence: true
   validates :climbing_type, inclusion: { in: Climb::CRAG_LIST }
@@ -158,11 +159,11 @@ class CragRoute < ApplicationRecord
   end
 
   def latitude
-    crag_sector.latitude || crag.latitude
+    crag_sector&.latitude || crag.latitude
   end
 
   def longitude
-    crag_sector.longitude || crag.longitude
+    crag_sector&.longitude || crag.longitude
   end
 
   private

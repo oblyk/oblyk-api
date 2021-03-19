@@ -13,6 +13,7 @@ class GymRoute < ApplicationRecord
 
   delegate :feed_parent_id, to: :gym
   delegate :feed_parent_type, to: :gym
+  delegate :feed_parent_object, to: :gym
 
   validates :opened_at, presence: true
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }

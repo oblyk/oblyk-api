@@ -3,6 +3,7 @@
 class GuideBookPaper < ApplicationRecord
   include Searchable
   include Slugable
+  include ParentFeedable
   include ActivityFeedable
 
   has_paper_trail only: %i[name author editor publication_year price_cents ean number_of_page weight]
@@ -50,13 +51,5 @@ class GuideBookPaper < ApplicationRecord
     photos = []
     crags.each { |crag| photos += crag.all_photos }
     photos
-  end
-
-  def feed_parent_id
-    id
-  end
-
-  def feed_parent_type
-    self.class.name
   end
 end

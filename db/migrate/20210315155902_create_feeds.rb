@@ -5,6 +5,7 @@ class CreateFeeds < ActiveRecord::Migration[6.0]
       t.json :feed_object
       t.string :parent_type
       t.bigint :parent_id
+      t.json :parent_object
 
       # localisation
       t.decimal :latitude, precision: 10, scale: 6, nil: true
@@ -17,5 +18,7 @@ class CreateFeeds < ActiveRecord::Migration[6.0]
     add_index :feeds, :posted_at
     add_index :feeds, :parent_type
     add_index :feeds, :parent_id
+    add_index :feeds, :latitude
+    add_index :feeds, :longitude
   end
 end

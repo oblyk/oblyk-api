@@ -293,12 +293,15 @@ ActiveRecord::Schema.define(version: 2021_03_15_155902) do
     t.json "feed_object"
     t.string "parent_type"
     t.bigint "parent_id"
+    t.json "parent_object"
     t.decimal "latitude", precision: 10, scale: 6
     t.decimal "longitude", precision: 10, scale: 6
     t.datetime "posted_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["feedable_type", "feedable_id"], name: "index_feeds_on_feedable_type_and_feedable_id"
+    t.index ["latitude"], name: "index_feeds_on_latitude"
+    t.index ["longitude"], name: "index_feeds_on_longitude"
     t.index ["parent_id"], name: "index_feeds_on_parent_id"
     t.index ["parent_type"], name: "index_feeds_on_parent_type"
     t.index ["posted_at"], name: "index_feeds_on_posted_at"

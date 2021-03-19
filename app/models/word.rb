@@ -3,6 +3,7 @@
 class Word < ApplicationRecord
   include Slugable
   include Searchable
+  include ParentFeedable
   include ActivityFeedable
 
   has_paper_trail only: %i[name definition]
@@ -36,13 +37,5 @@ class Word < ApplicationRecord
         }
       }
     )
-  end
-
-  def feed_parent_id
-    id
-  end
-
-  def feed_parent_type
-    self.class.name
   end
 end

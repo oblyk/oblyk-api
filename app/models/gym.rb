@@ -5,6 +5,7 @@ class Gym < ApplicationRecord
   include SoftDeletable
   include Searchable
   include Slugable
+  include ParentFeedable
   include ActivityFeedable
 
   has_paper_trail only: %i[
@@ -97,13 +98,5 @@ class Gym < ApplicationRecord
 
   def thumbnail_banner_url
     Rails.application.routes.url_helpers.rails_representation_url(banner.variant(resize: '300x300').processed, only_path: true)
-  end
-
-  def feed_parent_id
-    id
-  end
-
-  def feed_parent_type
-    self.class.name
   end
 end

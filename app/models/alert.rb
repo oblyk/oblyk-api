@@ -6,8 +6,12 @@ class Alert < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :alertable, polymorphic: true
 
+  delegate :latitude, to: :alertable
+  delegate :longitude, to: :alertable
+
   delegate :feed_parent_id, to: :alertable
   delegate :feed_parent_type, to: :alertable
+  delegate :feed_parent_object, to: :alertable
 
   ALERT_TYPES_LIST = %w[good warning info bad].freeze
 
@@ -27,7 +31,7 @@ class Alert < ApplicationRecord
       )
     )
   end
-  
+
   private
 
   def init_alerted_at

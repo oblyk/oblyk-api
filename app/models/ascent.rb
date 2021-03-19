@@ -7,6 +7,7 @@ class Ascent < ApplicationRecord
 
   delegate :feed_parent_id, to: :user
   delegate :feed_parent_type, to: :user
+  delegate :feed_parent_object, to: :user
 
   validates :released_at, presence: true
   validates :hardness_status, inclusion: { in: Hardness::LIST }, allow_blank: true

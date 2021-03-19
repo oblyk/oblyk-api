@@ -26,6 +26,7 @@ module ActivityFeedable
     feed.posted_at ||= created_at
     feed.parent_id = feed_parent_id
     feed.parent_type = feed_parent_type
+    feed.parent_object = feed_parent_object
     feed
   end
 

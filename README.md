@@ -58,6 +58,19 @@ User.import
 User.__elasticsearch__.refresh_index!
 ```
 
+Recreate feeds :
+```ruby
+Crag.all.find_each(&:save_feed!)
+Alert.all.find_each(&:save_feed!)
+Gym.all.find_each(&:save_feed!)
+GuideBookPaper.all.find_each(&:save_feed!)
+GuideBookPdf.all.find_each(&:save_feed!)
+GuideBookWeb.all.find_each(&:save_feed!)
+Word.all.find_each(&:save_feed!)
+Video.all.find_each(&:save_feed!)
+Photo.all.find_each(&:save_feed!)
+```
+
 Todo migration des tables :
 - [x] approaches
 - [x] comments
@@ -95,6 +108,11 @@ Gym :
 - [x] gym_sectors
 - [x] gyms
 
+Gym later :
+- [ ] contest_routes
+- [ ] contest_users
+- [ ] contests
+
 Feed :
 - Oblyk
   - [ ] Article
@@ -103,7 +121,7 @@ Feed :
   - [x] alerts added
   - [ ] crag_routes added
   - [x] gyms added
-  - [ ] photos added
+  - [x] photos added
   - [x] videos created
   - [x] guide book paper added
   - [x] guide book pdf added
@@ -113,10 +131,9 @@ Feed :
   - [ ] alerts posted
   - [ ] crags, routes, gyms, etc. if not community
 - follower
-  - [ ] follow added
   - [ ] subscribers ascents added
-
-Later :
-- [ ] contest_routes
-- [ ] contest_users
-- [ ] contests
+  
+Notification :
+- [ ] New conversation
+- [ ] New message
+- [ ] New follower

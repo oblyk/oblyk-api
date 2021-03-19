@@ -19,6 +19,7 @@ class Photo < ApplicationRecord
   delegate :latitude, to: :illustrable
   delegate :feed_parent_id, to: :illustrable
   delegate :feed_parent_type, to: :illustrable
+  delegate :feed_parent_object, to: :illustrable
 
   def thumbnail_url
     Rails.application.routes.url_helpers.rails_representation_url(picture.variant(resize: '300x300').processed, only_path: true)

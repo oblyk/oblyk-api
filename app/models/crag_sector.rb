@@ -36,6 +36,7 @@ class CragSector < ApplicationRecord
 
   delegate :feed_parent_id, to: :crag
   delegate :feed_parent_type, to: :crag
+  delegate :feed_parent_object, to: :crag
 
   before_validation :historize_location
 
