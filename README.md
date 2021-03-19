@@ -61,6 +61,7 @@ User.__elasticsearch__.refresh_index!
 Recreate feeds :
 ```ruby
 Crag.all.find_each(&:save_feed!)
+CragRoute.all.find_each(&:save_feed!)
 Alert.all.find_each(&:save_feed!)
 Gym.all.find_each(&:save_feed!)
 GuideBookPaper.all.find_each(&:save_feed!)
@@ -79,6 +80,7 @@ Todo migration des tables :
 - [X] messages
 - [x] crags
 - [ ] ascents (old crosses)
+- [ ] user_ascents
 - [x] alerts (old exceptions)
 - [x] follows
 - [x] links
@@ -119,7 +121,7 @@ Feed :
 - community
   - [x] crags added
   - [x] alerts added
-  - [ ] crag_routes added
+  - [x] crag_routes added
   - [x] gyms added
   - [x] photos added
   - [x] videos created
