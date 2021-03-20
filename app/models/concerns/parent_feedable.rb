@@ -15,7 +15,7 @@ module ParentFeedable
     {
       type: self.class.name,
       id: id,
-      name: name,
+      name: full_name || name,
       slug_name: slug_name
     }
   end

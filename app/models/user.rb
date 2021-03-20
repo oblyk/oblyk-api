@@ -4,6 +4,7 @@ class User < ApplicationRecord
   include Searchable
   include Geolocable
   include Slugable
+  include ParentFeedable
 
   mattr_accessor :current, instance_accessor: false
 

@@ -70,6 +70,7 @@ GuideBookWeb.all.find_each(&:save_feed!)
 Word.all.find_each(&:save_feed!)
 Video.all.find_each(&:save_feed!)
 Photo.all.find_each(&:save_feed!)
+AscentCragRoute.all.find_each(&:save_feed!)
 ```
 
 Todo migration des tables :
@@ -133,7 +134,7 @@ Feed :
   - [ ] alerts posted
   - [ ] crags, routes, gyms, etc. if not community
 - follower
-  - [ ] subscribers ascents added
+  - [x] subscribers ascents added
   
 Notification :
 - [ ] New conversation

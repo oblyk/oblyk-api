@@ -20,9 +20,7 @@ json.extract! ascent_crag_route,
               :private_comment
 json.sections_done ascent_crag_route.sections_done
 json.crag_route do
-  json.id ascent_crag_route.crag_route.id
-  json.name ascent_crag_route.crag_route.name
-  json.slug_name ascent_crag_route.crag_route.slug_name
+  json.partial! 'api/v1/crag_routes/short_detail', crag_route: ascent_crag_route.crag_route
 end
 json.crag do
   json.id ascent_crag_route.crag.id

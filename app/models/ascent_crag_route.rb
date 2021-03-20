@@ -1,8 +1,17 @@
 # frozen_string_literal: true
 
 class AscentCragRoute < Ascent
+  include ActivityFeedable
+
   belongs_to :crag_route
   has_one :crag, through: :crag_route
+
+  delegate :latitude, to: :crag_route
+  delegate :longitude, to: :crag_route
+
+  delegate :feed_parent_id, to: :user
+  delegate :feed_parent_type, to: :user
+  delegate :feed_parent_object, to: :user
 
   validates :ascent_status, inclusion: { in: AscentStatus::LIST }
   validates :roping_status, inclusion: { in: RopingStatus::LIST }
@@ -23,6 +32,15 @@ class AscentCragRoute < Ascent
 
   def sections_done
     sections.pluck(:index)
+  end
+
+  def summary_to_json
+    JSON.parse(
+      ApplicationController.render(
+        template: 'api/v1/ascent_crag_routes/summary.json',
+        assigns: { ascent_crag_route: self }
+      )
+    )
   end
 
   private

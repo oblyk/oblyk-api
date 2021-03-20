@@ -10,7 +10,12 @@ module ActivityFeedable
   end
 
   def save_feed!
-    initialize_feed.save
+    if instance_of?(AscentCragRoute)
+      initialize_feed.save if %w[project repetition].exclude? ascent_status
+    else
+      initialize_feed.save
+    end
+
   end
 
   private
