@@ -30,7 +30,7 @@ module ActivityFeedable
     feed.feed_object = summary_to_json
     feed.latitude =  latitude if defined?(latitude)
     feed.longitude = longitude if defined?(longitude)
-    feed.posted_at ||= created_at
+    feed.posted_at = defined?(published_at) ? published_at : created_at
     feed.parent_id = feed_parent_id
     feed.parent_type = feed_parent_type
     feed.parent_object = feed_parent_object
