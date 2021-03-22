@@ -84,6 +84,10 @@ Accept: application/json
 GET {{api_url}}/guide_book_papers/1/photos.json
 Accept: application/json
 
+### GET all articles on guide_book_papers
+GET {{api_url}}/guide_book_papers/1/articles.json
+Accept: application/json
+
 ### GET all crags photos guide_book_papers
 GET {{api_url}}/guide_book_papers/1/geo_json.json
 Accept: application/json

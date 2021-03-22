@@ -98,6 +98,7 @@ Rails.application.routes.draw do
         get :guides, on: :member
         get :photos, on: :member
         get :videos, on: :member
+        get :articles, on: :member
         get :versions, on: :member
         get :guide_books_around, on: :member
         get :areas_around, on: :member
@@ -175,6 +176,7 @@ Rails.application.routes.draw do
         get :geo_json, on: :member
         get :photos, on: :member
         get :links, on: :member
+        get :articles, on: :member
         get :versions, on: :member
         get :search, on: :collection
         post :add_crag, on: :member

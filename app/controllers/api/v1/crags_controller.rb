@@ -5,7 +5,7 @@ module Api
     class CragsController < ApiController
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update]
-      before_action :set_crag, only: %i[show versions update guide_books_around areas_around geo_json_around destroy guides photos videos]
+      before_action :set_crag, only: %i[show versions update guide_books_around areas_around geo_json_around destroy guides photos videos articles]
 
       def index
         @crags = Crag.includes(:user, :crag_sectors).all
@@ -166,6 +166,11 @@ module Api
       def videos
         @videos = @crag.all_videos
         render 'api/v1/videos/index'
+      end
+
+      def articles
+        @articles = @crag.articles.published
+        render 'api/v1/articles/index'
       end
 
       def create
