@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_20_160541) do
+ActiveRecord::Schema.define(version: 2021_03_20_173123) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -84,6 +84,39 @@ ActiveRecord::Schema.define(version: 2021_03_20_160541) do
     t.index ["user_id"], name: "index_areas_on_user_id"
   end
 
+  create_table "article_crags", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "article_id"
+    t.bigint "crag_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["article_id"], name: "index_article_crags_on_article_id"
+    t.index ["crag_id", "article_id"], name: "unique_crag_and_article_index", unique: true
+    t.index ["crag_id"], name: "index_article_crags_on_crag_id"
+  end
+
+  create_table "article_guide_book_papers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "article_id"
+    t.bigint "guide_book_paper_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["article_id"], name: "index_article_guide_book_papers_on_article_id"
+    t.index ["guide_book_paper_id", "article_id"], name: "unique_guide_book_and_article_index", unique: true
+    t.index ["guide_book_paper_id"], name: "index_article_guide_book_papers_on_guide_book_paper_id"
+  end
+
+  create_table "articles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "slug_name"
+    t.text "description"
+    t.text "body"
+    t.integer "views"
+    t.bigint "author_id"
+    t.datetime "published_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["author_id"], name: "index_articles_on_author_id"
+  end
+
   create_table "ascents", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "type"
     t.string "ascent_status"
@@ -114,6 +147,15 @@ ActiveRecord::Schema.define(version: 2021_03_20_160541) do
     t.index ["crag_route_id"], name: "index_ascents_on_crag_route_id"
     t.index ["gym_route_id"], name: "index_ascents_on_gym_route_id"
     t.index ["user_id"], name: "index_ascents_on_user_id"
+  end
+
+  create_table "authors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_authors_on_user_id"
   end
 
   create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
@@ -282,6 +324,7 @@ ActiveRecord::Schema.define(version: 2021_03_20_160541) do
     t.integer "videos_count"
     t.integer "photos_count"
     t.integer "follows_count"
+    t.integer "articles_count"
     t.index ["name"], name: "index_crags_on_name"
     t.index ["photo_id"], name: "index_crags_on_photo_id"
     t.index ["user_id"], name: "index_crags_on_user_id"
@@ -348,6 +391,7 @@ ActiveRecord::Schema.define(version: 2021_03_20_160541) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "slug_name"
     t.integer "follows_count"
+    t.integer "articles_count"
     t.index ["user_id"], name: "index_guide_book_papers_on_user_id"
   end
 

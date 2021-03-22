@@ -74,6 +74,7 @@ AscentCragRoute.all.find_each(&:save_feed!)
 ```
 
 Todo migration des tables :
+- [x] articles
 - [x] approaches
 - [x] comments
 - [x] conversations
@@ -118,7 +119,7 @@ Gym later :
 
 Feed :
 - Oblyk
-  - [ ] Article
+  - [x] Article
 - community
   - [x] crags added
   - [x] alerts added

@@ -10,6 +10,7 @@ json.alert_count crag.alerts.count
 json.video_count crag.videos.count
 json.photo_count crag.photos.count
 json.versions_count crag.versions.count
+json.articles_count crag.articles_count
 
 json.guide_books do
   json.web_count crag.guide_book_webs.count

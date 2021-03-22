@@ -37,6 +37,17 @@ Rails.application.routes.draw do
       get 'partners/geo_json', controller: :partners, actions: :geo_json
       get 'partners/partners_around', controller: :partners, actions: :partners_around
 
+      resources :authors, only: %i[show update] do
+        post :add_cover, on: :member
+      end
+      resources :articles do
+        put :publish, on: :member
+        post :view, on: :member
+        post :add_cover, on: :member
+        post :add_crag, on: :member
+        post :add_guide_book_paper, on: :member
+      end
+
       resources :users, only: %i[show] do
         get :search, on: :collection
         get :photos, on: :member

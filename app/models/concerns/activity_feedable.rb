@@ -12,6 +12,8 @@ module ActivityFeedable
   def save_feed!
     if instance_of?(AscentCragRoute)
       initialize_feed.save if %w[project repetition].exclude? ascent_status
+    elsif instance_of?(Article)
+      initialize_feed.save if published?
     else
       initialize_feed.save
     end

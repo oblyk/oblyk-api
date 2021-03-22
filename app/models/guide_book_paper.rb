@@ -16,6 +16,8 @@ class GuideBookPaper < ApplicationRecord
   has_many :follows, as: :followable
   has_many :reports, as: :reportable
   has_many :place_of_sales
+  has_many :article_guide_book_papers
+  has_many :articles, through: :article_guide_book_papers
 
   validates :name, presence: true
   validates :cover, blob: { content_type: :image }, allow_nil: true

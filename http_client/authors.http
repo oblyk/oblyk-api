@@ -1,0 +1,24 @@
+### GET all published authors
+GET {{api_url}}/authors/1.json
+Accept: application/json
+
+### Update author
+PUT {{api_url}}/authors/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "author": {
+    "name": "Lucien C."
+  }
+}
+
+### Add author cover
+POST {{api_url}}/authors/1/add_cover.json
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="author[cover]"; filename="avatar.png"
+
+< ./imgs/avatar.png

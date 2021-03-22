@@ -1,0 +1,73 @@
+### GET all published articles
+GET {{api_url}}/articles.json
+Accept: application/json
+
+### Create articles
+POST {{api_url}}/articles.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "article": {
+    "name": "First news on Oblyk",
+    "description": "Hello, I am the frist news",
+    "body": "Blabla on the article body",
+    "author_id": 1
+  }
+}
+
+### Update article
+PUT {{api_url}}/articles/1.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "article": {
+    "name": "Update Oblyk first news"
+  }
+}
+
+### Get article 1
+GET {{api_url}}/articles/1.json
+Accept: application/json
+
+### Add one view in article 1
+POST {{api_url}}/articles/1/view.json
+Accept: application/json
+
+### Publish article
+PUT {{api_url}}/articles/1/publish.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### Add crag in article
+POST {{api_url}}/articles/1/add_crag.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "article": {
+    "crag_id": 1
+  }
+}
+
+### Add paper guide book in article
+POST {{api_url}}/articles/1/add_guide_book_paper.json
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "article": {
+    "guide_book_paper_id": 1
+  }
+}
+
+### Add article cover
+POST {{api_url}}/articles/1/add_cover.json
+Authorization: Bearer {{auth_token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="article[cover]"; filename="bellecombe.jpeg"
+
+< ./imgs/bellecombe.jpeg

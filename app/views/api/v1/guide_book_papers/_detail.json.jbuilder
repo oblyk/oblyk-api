@@ -6,6 +6,7 @@ json.photos_count guide_book_paper.all_photos.count
 json.crags_count guide_book_paper.crags.count
 json.links_count guide_book_paper.links.count
 json.versions_count guide_book_paper.versions.count
+json.articles_count guide_book_paper.articles_count
 
 json.crags do
   json.array! guide_book_paper.crags do |crag|
