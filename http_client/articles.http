@@ -10,7 +10,7 @@ Content-Type: application/json
 {
   "article": {
     "name": "First news on Oblyk",
-    "description": "Hello, I am the frist news",
+    "description": "Hello, I am the first news",
     "body": "Blabla on the article body",
     "author_id": 1
   }
