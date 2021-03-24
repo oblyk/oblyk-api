@@ -2,6 +2,10 @@
 GET {{api_url}}/articles.json
 Accept: application/json
 
+### GET all articles feed
+GET {{api_url}}/articles/feed.json
+Accept: application/json
+
 ### Create articles
 POST {{api_url}}/articles.json
 Authorization: Bearer {{auth_token}}

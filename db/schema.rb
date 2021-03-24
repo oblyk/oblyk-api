@@ -110,6 +110,7 @@ ActiveRecord::Schema.define(version: 2021_03_20_173123) do
     t.text "description"
     t.text "body"
     t.integer "views"
+    t.integer "comments_count"
     t.bigint "author_id"
     t.datetime "published_at"
     t.datetime "created_at", precision: 6, null: false

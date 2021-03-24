@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 json.partial! 'api/v1/articles/short_detail', article: article
+json.body article.body
+json.author_id article.author_id
 
 json.author do
   json.partial! 'api/v1/authors/detail', author: article.author

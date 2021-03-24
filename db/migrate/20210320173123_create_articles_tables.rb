@@ -13,6 +13,7 @@ class CreateArticlesTables < ActiveRecord::Migration[6.0]
       t.text :description
       t.text :body
       t.integer :views
+      t.integer :comments_count
       t.references :author
 
       t.datetime :published_at

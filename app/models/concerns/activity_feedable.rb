@@ -4,38 +4,18 @@ module ActivityFeedable
   extend ActiveSupport::Concern
 
   included do
-    after_create :save_feed!
-    after_update :save_feed!
+    after_save :save_feed!
     after_destroy :remove_feed
   end
 
   def save_feed!
-    if instance_of?(AscentCragRoute)
-      initialize_feed.save if %w[project repetition].exclude? ascent_status
-    elsif instance_of?(Article)
-      initialize_feed.save if published?
-    else
-      initialize_feed.save
-    end
+    return if instance_of?(AscentCragRoute) && %w[project repetition].include?(ascent_status)
+    return if instance_of?(Article) && unpublished?
 
+    AddInFeedJob.set(wait_until: DateTime.current + 10.seconds).perform_later(self)
   end
 
   private
-
-  def initialize_feed
-    feed = Feed.find_or_initialize_by(
-      feedable_id: id,
-      feedable_type: self.class.name
-    )
-    feed.feed_object = summary_to_json
-    feed.latitude =  latitude if defined?(latitude)
-    feed.longitude = longitude if defined?(longitude)
-    feed.posted_at = defined?(published_at) ? published_at : created_at
-    feed.parent_id = feed_parent_id
-    feed.parent_type = feed_parent_type
-    feed.parent_object = feed_parent_object
-    feed
-  end
 
   def remove_feed
     feed = Feed.find_by feedable_id: id, feedable_type: self.class.name

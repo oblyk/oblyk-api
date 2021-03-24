@@ -24,6 +24,8 @@ class Article < ApplicationRecord
   end
 
   def thumbnail_url
+    return unless cover.attached?
+
     Rails.application.routes.url_helpers.rails_representation_url(cover.variant(resize: '300x300').processed, only_path: true)
   end
 

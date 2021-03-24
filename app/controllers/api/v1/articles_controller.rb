@@ -3,8 +3,8 @@
 module Api
   module V1
     class ArticlesController < ApiController
-      before_action :protected_by_super_admin, only: %i[create update destroy publish add_cover add_crag add_guide_book_paper]
-      before_action :set_article, only: %i[show update destroy view publish add_cover add_crag add_guide_book_paper]
+      before_action :protected_by_super_admin, except: %i[index feed show view]
+      before_action :set_article, except: %i[index feed create]
 
       def index
         @articles = Article.published
@@ -12,16 +12,31 @@ module Api
                            .page(params.fetch(:page, 1))
       end
 
+      def feed
+        feeds = Feed.where(feedable_type: 'Article')
+                    .order(posted_at: :desc)
+                    .page(params.fetch(:page, 1))
+        render json: feeds, status: :ok
+      end
+
       def show; end
 
       # POST /articles/:id/view
       def view
-        @article.view!
+        # @article.view!
+        head :no_content
       end
 
       # PUT /articles/:id/publish
       def publish
         @article.publish!
+        head :no_content
+      end
+
+      # PUT /articles/:id/un_publish
+      def un_publish
+        @article.unpublish!
+        head :no_content
       end
 
       def create

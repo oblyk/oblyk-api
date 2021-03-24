@@ -41,7 +41,9 @@ Rails.application.routes.draw do
         post :add_cover, on: :member
       end
       resources :articles do
+        get :feed, on: :collection
         put :publish, on: :member
+        put :un_publish, on: :member
         post :view, on: :member
         post :add_cover, on: :member
         post :add_crag, on: :member
