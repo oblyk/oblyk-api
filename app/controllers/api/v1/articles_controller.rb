@@ -23,7 +23,7 @@ module Api
 
       # POST /articles/:id/view
       def view
-        # @article.view!
+        @article.view!
         head :no_content
       end
 
