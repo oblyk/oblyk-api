@@ -6,6 +6,15 @@ Accept: application/json
 GET {{api_url}}/articles/feed.json
 Accept: application/json
 
+### GET last 4 articles
+GET {{api_url}}/articles/last.json
+Accept: application/json
+
+### GET article photos
+GET {{api_url}}/articles/1/photos.json
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
 ### Create articles
 POST {{api_url}}/articles.json
 Authorization: Bearer {{auth_token}}

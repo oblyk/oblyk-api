@@ -11,6 +11,7 @@ module ActivityFeedable
   def save_feed!
     return if instance_of?(AscentCragRoute) && %w[project repetition].include?(ascent_status)
     return if instance_of?(Article) && unpublished?
+    return if instance_of?(Photo) && illustrable_type == 'Article'
 
     AddInFeedJob.set(wait_until: DateTime.current + 10.seconds).perform_later(self)
   end

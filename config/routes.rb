@@ -42,6 +42,8 @@ Rails.application.routes.draw do
       end
       resources :articles do
         get :feed, on: :collection
+        get :last, on: :collection
+        get :photos, on: :member
         put :publish, on: :member
         put :un_publish, on: :member
         post :view, on: :member

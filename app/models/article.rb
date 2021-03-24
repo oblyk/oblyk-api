@@ -14,6 +14,7 @@ class Article < ApplicationRecord
   has_many :crags, through: :article_crags
   has_many :article_guide_book_papers
   has_many :guide_book_papers, through: :article_guide_book_papers
+  has_many :photos, as: :illustrable
 
   validates :name, :description, :body, :author, presence: true
 
@@ -21,6 +22,14 @@ class Article < ApplicationRecord
     self.views ||= 0
     self.views += 1
     save
+  end
+
+  def rich_name
+    name
+  end
+
+  def location
+    []
   end
 
   def thumbnail_url
