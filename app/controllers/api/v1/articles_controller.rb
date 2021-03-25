@@ -3,7 +3,7 @@
 module Api
   module V1
     class ArticlesController < ApiController
-      before_action :protected_by_super_admin, except: %i[index last feed show view photos]
+      before_action :protected_by_super_admin, except: %i[index last feed show view crags guide_book_papers]
       before_action :set_article, except: %i[index last feed create]
 
       def index
@@ -31,6 +31,16 @@ module Api
       def photos
         @photos = @article.photos
         render 'api/v1/photos/index'
+      end
+
+      def crags
+        @crags = @article.crags
+        render 'api/v1/crags/index'
+      end
+
+      def guide_book_papers
+        @guide_book_papers = @article.guide_book_papers
+        render 'api/v1/guide_book_papers/index'
       end
 
       # POST /articles/:id/view

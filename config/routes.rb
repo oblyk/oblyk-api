@@ -44,6 +44,8 @@ Rails.application.routes.draw do
         get :feed, on: :collection
         get :last, on: :collection
         get :photos, on: :member
+        get :crags, on: :member
+        get :guide_book_papers, on: :member
         put :publish, on: :member
         put :un_publish, on: :member
         post :view, on: :member

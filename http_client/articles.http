@@ -15,6 +15,14 @@ GET {{api_url}}/articles/1/photos.json
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
+### GET article crags
+GET {{api_url}}/articles/1/crags.json
+Accept: application/json
+
+### GET article guide books
+GET {{api_url}}/articles/1/guide_book_papers.json
+Accept: application/json
+
 ### Create articles
 POST {{api_url}}/articles.json
 Authorization: Bearer {{auth_token}}
