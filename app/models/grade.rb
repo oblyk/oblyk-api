@@ -94,7 +94,7 @@ class Grade
 
   def self.valid?(grade)
     return false unless grade
-    
+
     grade.match?(GRADE_VALIDATION)
   end
 
@@ -120,5 +120,55 @@ class Grade
 
   def self.value_color(value)
     GRADES_COLOR[value + 1]
+  end
+
+  def self.degree(value)
+    return '1' if (1..6).cover? value
+    return '2' if (7..12).cover? value
+    return '3' if (13..18).cover? value
+    return '4' if (19..24).cover? value
+    return '5' if (25..30).cover? value
+    return '6' if (31..36).cover? value
+    return '7' if (37..42).cover? value
+    return '8' if (43..48).cover? value
+    return '9' if (49..54).cover? value
+  end
+
+  def self.level(value)
+    return '1a' if (1..2).cover? value
+    return '1b' if (3..4).cover? value
+    return '1c' if (5..6).cover? value
+
+    return '2a' if (7..8).cover? value
+    return '2b' if (9..10).cover? value
+    return '2c' if (11..12).cover? value
+
+    return '3a' if (13..14).cover? value
+    return '3b' if (15..16).cover? value
+    return '3c' if (17..18).cover? value
+
+    return '4a' if (19..20).cover? value
+    return '4b' if (21..22).cover? value
+    return '4c' if (23..24).cover? value
+
+    return '5a' if (25..26).cover? value
+    return '5b' if (27..28).cover? value
+    return '5c' if (29..30).cover? value
+
+    return '6a' if (31..32).cover? value
+    return '6b' if (33..34).cover? value
+    return '6c' if (35..36).cover? value
+
+    return '7a' if (37..38).cover? value
+    return '7b' if (39..40).cover? value
+    return '7c' if (41..42).cover? value
+
+    return '8a' if (43..44).cover? value
+    return '8b' if (45..46).cover? value
+    return '8c' if (47..48).cover? value
+
+    return '9a' if (49..50).cover? value
+    return '9b' if (51..52).cover? value
+    return '9c' if (53..54).cover? value
   end
 end

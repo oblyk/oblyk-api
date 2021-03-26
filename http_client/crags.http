@@ -75,6 +75,10 @@ Accept: application/json
 GET {{api_url}}/crags/1/articles.json
 Accept: application/json
 
+### GET videos in crag
+GET {{api_url}}/crags/1/route_figures.json
+Accept: application/json
+
 ### GET crag
 GET {{api_url}}/crags/1.json
 Accept: application/json

@@ -106,6 +106,7 @@ Rails.application.routes.draw do
         get :videos, on: :member
         get :articles, on: :member
         get :versions, on: :member
+        get :route_figures, on: :member
         get :guide_books_around, on: :member
         get :areas_around, on: :member
         get :geo_json_around, on: :member
