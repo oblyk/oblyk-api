@@ -5,7 +5,7 @@ module Api
     class CragSectorsController < ApiController
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update]
-      before_action :set_crag_sector, only: %i[show photos videos versions update destroy]
+      before_action :set_crag_sector, only: %i[show photos videos versions update destroy route_figures]
       before_action :set_crag, only: %i[index geo_json_around show create update]
 
       def index
@@ -87,6 +87,10 @@ module Api
         else
           render json: { error: @crag_sector.errors }, status: :unprocessable_entity
         end
+      end
+
+      def route_figures
+        render json: @crag_sector.route_figures
       end
 
       private

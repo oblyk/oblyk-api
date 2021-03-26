@@ -42,6 +42,11 @@ Accept: application/json
 GET {{api_url}}/crag_sectors/1.json
 Accept: application/json
 
+### GET sectore route figures
+GET {{api_url}}/crag_sectors/1/route_figures.json
+Accept: application/json
+
+
 ### GET all sectors in crag
 GET {{api_url}}/crag_sectors.json?crag_id=1
 Accept: application/json

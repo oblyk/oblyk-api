@@ -6,6 +6,7 @@ class CragSector < ApplicationRecord
   include Searchable
   include Slugable
   include GapGradable
+  include RouteFigurable
 
   has_paper_trail only: %i[
     name

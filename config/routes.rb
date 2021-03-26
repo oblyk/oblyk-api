@@ -130,6 +130,7 @@ Rails.application.routes.draw do
         get :versions, on: :member
         get :photos, on: :member
         get :videos, on: :member
+        get :route_figures, on: :member
         resources :crag_routes do
           get :search, on: :collection
         end
