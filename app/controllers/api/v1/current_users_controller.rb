@@ -9,7 +9,6 @@ module Api
       def show; end
 
       def feed
-        # .where(feedable_type: 'GuideBookPdf')
         feeds = Feed.order(posted_at: :desc)
                     .page(params.fetch(:page, 1))
         render json: feeds, status: :ok
