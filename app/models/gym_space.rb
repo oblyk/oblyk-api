@@ -26,6 +26,10 @@ class GymSpace < ApplicationRecord
   validates :banner, blob: { content_type: :image }, allow_nil: true
   validates :plan, blob: { content_type: :image }, allow_nil: true
 
+  def location
+    [latitude, longitude]
+  end
+
   def set_plan_dimension!
     return unless plan.attached?
 

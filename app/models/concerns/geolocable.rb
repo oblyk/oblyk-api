@@ -82,14 +82,6 @@ module Geolocable
     end
   end
 
-  def location
-    [latitude, longitude]
-  end
-
-  def partner_location
-    [partner_latitude, partner_longitude]
-  end
-
   def as_indexed_json(_options = {})
     if has_attribute?(:partner_latitude)
       as_json.merge(

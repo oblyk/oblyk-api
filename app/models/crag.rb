@@ -42,10 +42,6 @@ class Crag < ApplicationRecord
     north_west
   ]
 
-  mapping do
-    indexes :location, type: 'geo_point'
-  end
-
   belongs_to :user, optional: true
   belongs_to :photo, optional: true
   has_many :comments, as: :commentable
@@ -76,6 +72,14 @@ class Crag < ApplicationRecord
   validate :validate_rocks
 
   after_update :update_routes_location
+
+  mapping do
+    indexes :location, type: 'geo_point'
+  end
+
+  def location
+    [latitude, longitude]
+  end
 
   def summary_to_json
     JSON.parse(

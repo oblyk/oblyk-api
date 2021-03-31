@@ -9,6 +9,10 @@ class Park < ApplicationRecord
 
   validates :latitude, :longitude, presence: true
 
+  def location
+    [latitude, longitude]
+  end
+
   def to_geo_json
     {
       type: 'Feature',

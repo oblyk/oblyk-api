@@ -9,6 +9,10 @@ class PlaceOfSale < ApplicationRecord
 
   validates :name, presence: true
 
+  def location
+    [latitude, longitude]
+  end
+
   def to_geo_json
     {
       type: 'Feature',

@@ -30,10 +30,6 @@ class Gym < ApplicationRecord
     longitude
   ]
 
-  mapping do
-    indexes :location, type: 'geo_point'
-  end
-
   has_one_attached :logo
   has_one_attached :banner
   belongs_to :user, optional: true
@@ -47,6 +43,14 @@ class Gym < ApplicationRecord
   validates :logo, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true
   validates :name, :latitude, :longitude, :address, :postal_code, :country, :city, :big_city, presence: true
+
+  mapping do
+    indexes :location, type: 'geo_point'
+  end
+
+  def location
+    [latitude, longitude]
+  end
 
   def summary_to_json
     JSON.parse(

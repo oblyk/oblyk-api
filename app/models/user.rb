@@ -52,6 +52,14 @@ class User < ApplicationRecord
     indexes :location, type: 'geo_point'
   end
 
+  def location
+    [latitude, longitude]
+  end
+
+  def partner_location
+    [partner_latitude, partner_longitude]
+  end
+
   def full_name
     "#{first_name} #{last_name}".strip
   end

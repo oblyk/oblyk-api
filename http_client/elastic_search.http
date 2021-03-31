@@ -1,8 +1,19 @@
-### Get crag index
+### CRAG
+### Index
 GET http://localhost:19200/development-crag/_search
 
-### Get crag mapping
+### Mapping
 GET http://localhost:19200/development-crag/_mapping
 
-### Get crag index
+
+### CRAG ROUTE
+### Index
+GET http://localhost:19200/development-cragroute/_search
+
+### Mapping
+GET http://localhost:19200/development-cragroute/_mapping
+
+
+### GYM
+### Index
 GET http://localhost:19200/development-gym/_search

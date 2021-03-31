@@ -2,7 +2,7 @@ DELETE {{api_url}}/crag_sectors/1.json
 Authorization: Bearer {{auth_token}}
 
 ### Update crag 1
-PUT {{api_url}}/crag_sectors/1.json
+PUT {{api_url}}/crags/1/crag_sectors/1.json
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
