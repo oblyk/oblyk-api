@@ -31,7 +31,7 @@ class AscentCragRoute < Ascent
   scope :project, -> { where(ascent_status: :project) }
 
   def sections_done
-    sections.pluck(:index)
+    sections.map { |section| section['index'] }
   end
 
   def summary_to_json
