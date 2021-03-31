@@ -83,7 +83,7 @@ Todo migration des tables :
 - [X] messages
 - [x] crags
 - [ ] ascents (old crosses)
-- [ ] user_ascents
+- [x] user_ascents
 - [x] alerts (old exceptions)
 - [x] follows
 - [x] links

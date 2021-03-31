@@ -140,7 +140,10 @@ Rails.application.routes.draw do
         get :photos, on: :member
         get :videos, on: :member
       end
-      resources :ascent_crag_routes
+      resources :ascent_crag_routes do
+        post :add_ascent_user, on: :member
+        delete :remove_ascent_user, on: :member
+      end
       resources :words do
         get :search, on: :collection
         get :versions, on: :member

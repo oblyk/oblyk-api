@@ -2,6 +2,7 @@
 
 class Ascent < ApplicationRecord
   belongs_to :user
+  has_many :ascent_users
 
   validates :released_at, presence: true
   validates :hardness_status, inclusion: { in: Hardness::LIST }, allow_blank: true

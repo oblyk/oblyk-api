@@ -3,9 +3,9 @@
 module Api
   module V1
     class AscentCragRoutesController < ApiController
-      before_action :protected_by_session, only: %i[index create update destroy]
-      before_action :set_ascent_crag_route, only: %i[show update destroy]
-      before_action :protected_by_owner, only: %i[update destroy]
+      before_action :protected_by_session
+      before_action :set_ascent_crag_route, except: %i[create index]
+      before_action :protected_by_owner, only: %i[update destroy add_ascent_user remove_ascent_user]
 
       def index
         crag_route_id = params.fetch(:crag_route_id, nil)
@@ -22,6 +22,21 @@ module Api
         else
           render json: { error: @ascent_crag_route.errors }, status: :unprocessable_entity
         end
+      end
+
+      def add_ascent_user
+        ascent_user = AscentUser.new user_id: ascent_user_params[:user_id], ascent: @ascent_crag_route
+        if ascent_user.save
+          render json: nil, status: :created
+        else
+          render json: { error: ascent_user.errors }, status: :unprocessable_entity
+        end
+      end
+
+      def remove_ascent_user
+        ascent_user = AscentUser.find_by ascent: @ascent_crag_route, user_id: ascent_user_params[:user_id]
+        ascent_user.destroy
+        head :no_content
       end
 
       def update
@@ -58,6 +73,12 @@ module Api
           :private_comment,
           :released_at,
           selected_sections: %i[]
+        )
+      end
+
+      def ascent_user_params
+        params.require(:ascent_user).permit(
+          :user_id
         )
       end
 

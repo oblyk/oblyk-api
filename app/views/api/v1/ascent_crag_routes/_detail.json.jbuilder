@@ -27,6 +27,14 @@ json.crag do
   json.name ascent_crag_route.crag.name
   json.slug_name ascent_crag_route.crag.slug_name
 end
+json.ascent_users do
+  json.array! ascent_crag_route.ascent_users do |ascent_user|
+    json.id ascent_user.id
+    json.user do
+      json.partial! 'api/v1/users/short_detail', user: ascent_user.user
+    end
+  end
+end
 json.history do
   json.extract! ascent_crag_route, :created_at, :updated_at
 end
