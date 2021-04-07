@@ -39,6 +39,8 @@ class Gym < ApplicationRecord
   has_many :gym_grades
   has_many :gym_spaces
   has_many :reports, as: :reportable
+  has_many :organization_gyms
+  has_many :organizations, through: :organization_gyms
 
   validates :logo, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true

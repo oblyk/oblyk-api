@@ -28,6 +28,8 @@ class User < ApplicationRecord
   has_many :ascended_crags, through: :ascended_crag_routes, source: :crag
   has_many :ascent_gym_routes
   has_many :ascent_users
+  has_many :organization_users
+  has_many :organizations, through: :organization_users
 
   before_validation :set_uuid
   before_validation :last_activity_at

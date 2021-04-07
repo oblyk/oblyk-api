@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_31_153326) do
+ActiveRecord::Schema.define(version: 2021_04_01_143533) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -605,6 +605,45 @@ ActiveRecord::Schema.define(version: 2021_03_31_153326) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["linkable_type", "linkable_id"], name: "index_links_on_linkable_type_and_linkable_id"
     t.index ["user_id"], name: "index_links_on_user_id"
+  end
+
+  create_table "organization_gyms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "organization_id"
+    t.bigint "gym_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gym_id"], name: "index_organization_gyms_on_gym_id"
+    t.index ["organization_id"], name: "index_organization_gyms_on_organization_id"
+  end
+
+  create_table "organization_users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "organization_id"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_organization_users_on_organization_id"
+    t.index ["user_id"], name: "index_organization_users_on_user_id"
+  end
+
+  create_table "organizations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "api_access_token"
+    t.string "api_usage_type"
+    t.string "api_outdoor_right"
+    t.string "api_indoor_right"
+    t.string "api_community_right"
+    t.string "phone"
+    t.string "email"
+    t.string "address"
+    t.string "city"
+    t.string "zipcode"
+    t.string "website"
+    t.string "company_registration_number"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at"
+    t.index ["api_access_token"], name: "index_organizations_on_api_access_token", unique: true
+    t.index ["name"], name: "index_organizations_on_name", unique: true
   end
 
   create_table "parks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
