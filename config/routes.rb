@@ -37,6 +37,11 @@ Rails.application.routes.draw do
       get 'partners/geo_json', controller: :partners, actions: :geo_json
       get 'partners/partners_around', controller: :partners, actions: :partners_around
 
+      resources :organizations do
+        get :api_access_token, on: :member
+        put :refresh_api_access_token, on: :member
+      end
+
       resources :authors, only: %i[show update] do
         post :add_cover, on: :member
       end

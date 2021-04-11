@@ -1,8 +1,10 @@
 DELETE {{api_url}}/crag_routes/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Update route 1
 PUT {{api_url}}/crag_routes/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -14,6 +16,7 @@ Content-Type: application/json
 
 ### Create mutli pitch
 POST {{api_url}}/crag_routes.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -45,6 +48,7 @@ Content-Type: application/json
 
 ### Create sport climbing route
 POST {{api_url}}/crag_routes.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -70,20 +74,25 @@ Content-Type: application/json
 
 ### GET route
 GET {{api_url}}/crag_routes/1.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET search route in crag
 GET {{api_url}}/crags/1/crag_routes/search.json?query=manu
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET search route in sector
 GET {{api_url}}/crag_sectors/1/crag_routes/search.json?query=grand
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all route in crag
 GET {{api_url}}/crags/1/crag_routes.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all route in crag
 GET {{api_url}}/crag_routes.json&crag_id=1
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

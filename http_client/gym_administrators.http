@@ -1,8 +1,10 @@
 DELETE {{api_url}}/gyms/1/gym_administrators/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Update gym administrator 1
 PUT {{api_url}}/gyms/1/gym_administrators/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -14,6 +16,7 @@ Content-Type: application/json
 
 ### Create gym administrator
 POST {{api_url}}/gyms/1/gym_administrators.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -26,6 +29,7 @@ Content-Type: application/json
 
 ### Create gym administrator
 POST {{api_url}}/gyms/1/gym_administration_requests.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -40,11 +44,13 @@ Content-Type: application/json
 
 ### GET gym administrator
 GET {{api_url}}/gyms/1/gym_administrators/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ### GET gym administrators for gym
 GET {{api_url}}/gyms/1/gym_administrators.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 

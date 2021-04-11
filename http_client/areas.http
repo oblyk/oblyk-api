@@ -1,9 +1,11 @@
 ### Delete area crag
 DELETE {{api_url}}/area_crags/2.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Add crag in area
 POST {{api_url}}/areas/1/add_crag.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -15,10 +17,12 @@ Content-Type: application/json
 
 ### Delete area
 DELETE {{api_url}}/areas/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Update area 1
 PUT {{api_url}}/areas/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -30,6 +34,7 @@ Content-Type: application/json
 
 ### Create area
 POST {{api_url}}/areas.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -41,12 +46,15 @@ Content-Type: application/json
 
 ### GET area
 GET {{api_url}}/areas/1/crags.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET area
 GET {{api_url}}/areas/1.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all areas
 GET {{api_url}}/areas.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

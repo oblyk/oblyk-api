@@ -1,8 +1,10 @@
 DELETE {{api_url}}/comments/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Update comment 1
 PUT {{api_url}}/comments/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -14,6 +16,7 @@ Content-Type: application/json
 
 ### Create comment
 POST {{api_url}}/comments.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -27,8 +30,10 @@ Content-Type: application/json
 
 ### GET comment
 GET {{api_url}}/comments/1.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all comments for one item
 GET {{api_url}}/comments.json?commentable_type=Crag&commentable_id=1
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

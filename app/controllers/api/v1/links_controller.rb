@@ -35,7 +35,7 @@ module Api
       end
 
       def destroy
-        if @link.delete
+        if @link.destroy
           render json: {}, status: :ok
         else
           render json: { error: @link.errors }, status: :unprocessable_entity

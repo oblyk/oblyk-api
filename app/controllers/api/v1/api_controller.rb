@@ -3,11 +3,19 @@
 module Api
   module V1
     class ApiController < ApplicationController
+      before_action :set_current_organization
+
       def user_for_paper_trail
         @current_user ? @current_user.id : 'Public user'
       end
 
       private
+
+      def set_current_organization
+        Organization.current = Organization.find_by! api_access_token: request.headers['HttpApiAccessToken']
+      rescue StandardError
+        not_authorized
+      end
 
       def authorization_token
         request.headers['Authorization'].split(' ').last

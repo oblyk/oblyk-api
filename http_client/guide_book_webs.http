@@ -1,9 +1,11 @@
 ### Delete guide_book_web
 DELETE {{api_url}}/guide_book_webs/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Update guide_book_web 1
 PUT {{api_url}}/guide_book_webs/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -16,6 +18,7 @@ Content-Type: application/json
 
 ### Create guide_book_web
 POST {{api_url}}/guide_book_webs.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -30,8 +33,10 @@ Content-Type: application/json
 
 ### GET guide_book_web
 GET {{api_url}}/guide_book_webs/1.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all guide_book_webs
 GET {{api_url}}/guide_book_webs.json?crag_id=1
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

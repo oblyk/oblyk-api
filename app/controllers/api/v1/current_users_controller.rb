@@ -67,6 +67,25 @@ module Api
         render 'api/v1/crag_routes/index'
       end
 
+      def ascended_crags_geo_json
+        features = []
+
+        @user.ascended_crags.distinct.each do |crag|
+          features << crag.to_geo_json
+        end
+
+        render json: {
+          type: 'FeatureCollection',
+          crs: {
+            type: 'name',
+            properties: {
+              name: 'urn'
+            }
+          },
+          features: features
+        }, status: :ok
+      end
+
       def update
         if @user.update(user_params)
           render :show
@@ -89,25 +108,6 @@ module Api
         else
           render json: { error: @user.errors }, status: :unprocessable_entity
         end
-      end
-
-      def ascended_crags_geo_json
-        features = []
-
-        @user.ascended_crags.distinct.each do |crag|
-          features << crag.to_geo_json
-        end
-
-        render json: {
-          type: 'FeatureCollection',
-          crs: {
-            type: 'name',
-            properties: {
-              name: 'urn'
-            }
-          },
-          features: features
-        }, status: :ok
       end
 
       private

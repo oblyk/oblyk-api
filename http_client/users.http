@@ -1,24 +1,30 @@
 ### GET public user profile
 GET {{api_url}}/users/8b229ae9-aea0-4ea1-b7be-8af6fa6971f0.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET user contribution
 GET {{api_url}}/users/8b229ae9-aea0-4ea1-b7be-8af6fa6971f0/contribution.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET user contribution
 GET {{api_url}}/users/8b229ae9-aea0-4ea1-b7be-8af6fa6971f0/followers.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET user partner geo json
 GET {{api_url}}/users/8b229ae9-aea0-4ea1-b7be-8af6fa6971f0/partner_user_geo_json.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET failed to get private user profile
 GET {{api_url}}/users/1bfe6ca7-6a40-4896-9d1c-0efb593dbb16.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET success to get private user profile
 GET {{api_url}}/users/1bfe6ca7-6a40-4896-9d1c-0efb593dbb16.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json

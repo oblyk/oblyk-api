@@ -607,15 +607,6 @@ ActiveRecord::Schema.define(version: 2021_04_01_143533) do
     t.index ["user_id"], name: "index_links_on_user_id"
   end
 
-  create_table "organization_gyms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
-    t.bigint "organization_id"
-    t.bigint "gym_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["gym_id"], name: "index_organization_gyms_on_gym_id"
-    t.index ["organization_id"], name: "index_organization_gyms_on_organization_id"
-  end
-
   create_table "organization_users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "organization_id"
     t.bigint "user_id"
@@ -629,9 +620,6 @@ ActiveRecord::Schema.define(version: 2021_04_01_143533) do
     t.string "name"
     t.string "api_access_token"
     t.string "api_usage_type"
-    t.string "api_outdoor_right"
-    t.string "api_indoor_right"
-    t.string "api_community_right"
     t.string "phone"
     t.string "email"
     t.string "address"

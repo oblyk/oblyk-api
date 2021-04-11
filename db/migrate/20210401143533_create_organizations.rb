@@ -5,9 +5,6 @@ class CreateOrganizations < ActiveRecord::Migration[6.0]
 
       t.string :api_access_token
       t.string :api_usage_type
-      t.string :api_outdoor_right
-      t.string :api_indoor_right
-      t.string :api_community_right
 
       t.string :phone
       t.string :email
@@ -27,12 +24,6 @@ class CreateOrganizations < ActiveRecord::Migration[6.0]
     create_table :organization_users do |t|
       t.references :organization
       t.references :user
-      t.timestamps
-    end
-
-    create_table :organization_gyms do |t|
-      t.references :organization
-      t.references :gym
       t.timestamps
     end
   end

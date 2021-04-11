@@ -1,9 +1,11 @@
 ### Delete guide_book_paper cover
 DELETE {{api_url}}/guide_book_papers/1/remove_cover.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Add guide book cover
 POST {{api_url}}/guide_book_papers/1/add_cover.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
@@ -14,10 +16,12 @@ Content-Disposition: form-data; name="guide_book_paper[cover]"; filename="topo.p
 
 ### Delete guide_book_paper
 DELETE {{api_url}}/guide_book_papers/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Delete guide_book_paper
 DELETE {{api_url}}/guide_book_papers/1/remove_crag.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -29,6 +33,7 @@ Content-Type: application/json
 
 ### Add crag in paper guide book
 POST {{api_url}}/guide_book_papers/1/add_crag.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -41,6 +46,7 @@ Content-Type: application/json
 
 ### Update guide_book_paper 1
 PUT {{api_url}}/guide_book_papers/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -52,6 +58,7 @@ Content-Type: application/json
 
 ### Create guide_book_paper
 POST {{api_url}}/guide_book_papers.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -70,40 +77,50 @@ Content-Type: application/json
 
 ### GET guide_book_paper
 GET {{api_url}}/guide_book_papers/1.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all links guide_book_papers
 GET {{api_url}}/guide_book_papers/1/links.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all place_of_sales guide_book_papers
 GET {{api_url}}/guide_book_papers/1/place_of_sales.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all crags photos guide_book_papers
 GET {{api_url}}/guide_book_papers/1/photos.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all articles on guide_book_papers
 GET {{api_url}}/guide_book_papers/1/articles.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all crags photos guide_book_papers
 GET {{api_url}}/guide_book_papers/1/geo_json.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all crags guide_book_papers
 GET {{api_url}}/guide_book_papers/1/crags.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all guide_book_paper versions
 GET {{api_url}}/guide_book_papers/1/versions.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all guide_book_papers
 GET {{api_url}}/guide_book_papers/search.json?query=drome
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all guide_book_papers
 GET {{api_url}}/guide_book_papers.json?crag_id=1
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

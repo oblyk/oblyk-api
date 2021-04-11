@@ -1,5 +1,6 @@
 ### Create sector
 POST {{api_url}}/gyms/1/gym_spaces/1/gym_sectors.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -19,6 +20,7 @@ client.global.set("gym_sector_id", response.body.id);
 
 ### Update gym_sector 1
 PUT {{api_url}}/gyms/1/gym_spaces/1/gym_sectors/{{gym_sector_id}}.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -30,17 +32,21 @@ Content-Type: application/json
 
 ### GET gym_sector
 GET {{api_url}}/gyms/1/gym_spaces/1/gym_sectors/{{gym_sector_id}}.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all gym_sectors
 GET {{api_url}}/gyms/1/gym_spaces/1/gym_sectors.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### Dismounte routes in gym_sector
 DELETE {{api_url}}/gyms/1/gym_spaces/1/gym_sectors/6/dismount_routes.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ### Delete gym_sector
 DELETE {{api_url}}/gyms/1/gym_spaces/1/gym_sectors/{{gym_sector_id}}.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}

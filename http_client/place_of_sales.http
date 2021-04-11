@@ -1,8 +1,10 @@
 DELETE {{api_url}}/guide_book_papers/1/place_of_sales/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Update place_of_sale 1
 PUT {{api_url}}/guide_book_papers/1/place_of_sales/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -25,6 +27,7 @@ Content-Type: application/json
 
 ### Create place_of_sales
 POST {{api_url}}/guide_book_papers/1/place_of_sales.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -47,4 +50,5 @@ Content-Type: application/json
 
 ### GET place_of_sale
 GET {{api_url}}/guide_book_papers/1/place_of_sales/1.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

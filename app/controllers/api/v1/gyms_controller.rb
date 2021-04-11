@@ -79,7 +79,7 @@ module Api
       end
 
       def destroy
-        if @gym.delete
+        if @gym.destroy
           render json: {}, status: :ok
         else
           render json: { error: @gym.errors }, status: :unprocessable_entity

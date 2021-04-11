@@ -34,7 +34,7 @@ module Api
       end
 
       def destroy
-        if @place_of_sale.delete
+        if @place_of_sale.destroy
           render json: {}, status: :ok
         else
           render json: { error: @place_of_sale.errors }, status: :unprocessable_entity

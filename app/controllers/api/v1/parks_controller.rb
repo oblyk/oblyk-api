@@ -69,7 +69,7 @@ module Api
       end
 
       def destroy
-        if @park.delete
+        if @park.destroy
           render json: {}, status: :ok
         else
           render json: { error: @park.errors }, status: :unprocessable_entity

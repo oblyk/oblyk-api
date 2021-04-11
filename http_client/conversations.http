@@ -1,10 +1,12 @@
 ### Delete a message
 DELETE {{api_url}}/conversation_messages/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
 ### Update a message
 PUT {{api_url}}/conversation_messages/2.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -16,6 +18,7 @@ Content-Type: application/json
 
 ### Create a message
 POST {{api_url}}/conversations/1/conversation_messages.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -27,6 +30,7 @@ Content-Type: application/json
 
 ### Create conversation
 POST {{api_url}}/conversations.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -48,10 +52,12 @@ Content-Type: application/json
 
 ### GET conversation
 GET {{api_url}}/conversations/3.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ### GET all conversations for one item
 GET {{api_url}}/conversations.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json

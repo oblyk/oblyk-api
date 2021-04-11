@@ -1,3 +1,4 @@
 ### GET all tags for one item
 GET {{api_url}}/search.json?query=Leannec
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

@@ -71,7 +71,7 @@ module Api
       end
 
       def destroy
-        if @approach.delete
+        if @approach.destroy
           render json: {}, status: :ok
         else
           render json: { error: @approach.errors }, status: :unprocessable_entity

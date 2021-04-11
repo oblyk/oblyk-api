@@ -62,6 +62,10 @@ module Api
         render 'api/v1/photos/index'
       end
 
+      def route_figures
+        render json: @crag_sector.route_figures
+      end
+
       def create
         @crag_sector = CragSector.new(crag_sector_params)
         @crag_sector.crag = @crag
@@ -82,15 +86,11 @@ module Api
       end
 
       def destroy
-        if @crag_sector.delete
+        if @crag_sector.destroy
           render json: {}, status: :ok
         else
           render json: { error: @crag_sector.errors }, status: :unprocessable_entity
         end
-      end
-
-      def route_figures
-        render json: @crag_sector.route_figures
       end
 
       private

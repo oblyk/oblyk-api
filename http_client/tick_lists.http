@@ -1,4 +1,5 @@
 DELETE {{api_url}}/tick_lists.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -8,6 +9,7 @@ Content-Type: application/json
 
 ### Create tick_list
 POST {{api_url}}/tick_lists.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -17,5 +19,6 @@ Content-Type: application/json
 
 ### GET all tick_lists
 GET {{api_url}}/tick_lists.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json

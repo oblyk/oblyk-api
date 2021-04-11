@@ -1,8 +1,10 @@
 DELETE {{api_url}}/alerts/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Update alert 1
 PUT {{api_url}}/alerts/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -15,6 +17,7 @@ Content-Type: application/json
 
 ### Create alert
 POST {{api_url}}/alerts.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -29,8 +32,10 @@ Content-Type: application/json
 
 ### GET alert
 GET {{api_url}}/alerts/1.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all alerts for one item
 GET {{api_url}}/alerts.json?alertable_type=Crag&alertable_id=1
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

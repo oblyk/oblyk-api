@@ -1,8 +1,10 @@
 DELETE {{api_url}}/follows/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Create user follow
 POST {{api_url}}/follows.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -15,6 +17,7 @@ Content-Type: application/json
 
 ### Create follow
 POST {{api_url}}/follows.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -27,6 +30,7 @@ Content-Type: application/json
 
 ### Increment follow views
 PUT {{api_url}}/follows/increment.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -37,4 +41,5 @@ Content-Type: application/json
 
 ### GET all follows for one item
 GET {{api_url}}/follows.json?followable_type=Crag&followable_id=1
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

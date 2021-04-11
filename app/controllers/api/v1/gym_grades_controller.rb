@@ -31,7 +31,7 @@ module Api
       end
 
       def destroy
-        if @gym_grade.delete
+        if @gym_grade.destroy
           render json: {}, status: :ok
         else
           render json: { error: @gym_grade.errors }, status: :unprocessable_entity

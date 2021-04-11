@@ -1,9 +1,11 @@
 ### Get ascents for on routes
 GET {{api_url}}/ascent_crag_routes.json?crag_route_id=22
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Add user in ascents
 POST {{api_url}}/ascent_crag_routes/31/add_ascent_user.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -15,6 +17,7 @@ Content-Type: application/json
 
 ### Delete user in ascents
 DELETE {{api_url}}/ascent_crag_routes/31/remove_ascent_user.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 

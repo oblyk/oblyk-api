@@ -2,6 +2,7 @@
 ###
 # Sign In
 POST {{api_url}}/sessions/sign_in.json
+HttpApiAccessToken: {{api_access_token}}
 Content-Type: application/json
 
 {
@@ -20,6 +21,7 @@ client.global.set("refresh_token", response.body.refresh_token);
 ###
 # Refresh jwt token
 POST {{api_url}}/sessions/tokens.json
+HttpApiAccessToken: {{api_access_token}}
 Content-Type: application/json
 
 {
@@ -30,6 +32,7 @@ Content-Type: application/json
 ###
 # Sign Up Patrick Edlinger
 POST {{api_url}}/sessions/sign_up.json
+HttpApiAccessToken: {{api_access_token}}
 Content-Type: application/json
 
 {
@@ -45,6 +48,7 @@ Content-Type: application/json
 ###
 # Sign Up Seb Bouin
 POST {{api_url}}/sessions/sign_up.json
+HttpApiAccessToken: {{api_access_token}}
 Content-Type: application/json
 
 {
@@ -60,6 +64,7 @@ Content-Type: application/json
 ###
 # Sign Up Chris Sharma
 POST {{api_url}}/sessions/sign_up.json
+HttpApiAccessToken: {{api_access_token}}
 Content-Type: application/json
 
 {

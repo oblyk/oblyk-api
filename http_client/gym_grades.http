@@ -1,5 +1,6 @@
 ### Create gym grade
 POST {{api_url}}/gyms/1/gym_grades.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -15,6 +16,7 @@ client.global.set("gym_grade_id", response.body.id);
 
 ### Update gym grade 1
 PUT {{api_url}}/gyms/1/gym_grades/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -27,6 +29,7 @@ Content-Type: application/json
 
 ### Create gym grade line
 POST {{api_url}}/gyms/1/gym_grades/1/gym_grade_lines.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -41,6 +44,7 @@ Content-Type: application/json
 
 ### Update gym grade line 1
 PUT {{api_url}}/gyms/1/gym_grades/1/gym_grade_lines/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -52,18 +56,22 @@ Content-Type: application/json
 
 ### GET gym grade
 GET {{api_url}}/gyms/1/gym_grades/{{gym_grade_id}}.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ### GET gym grades for gym
 GET {{api_url}}/gyms/1/gym_grades.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ### Delete grade line gyms
 DELETE {{api_url}}/gyms/1/gym_grades/1/gym_grade_lines/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Delete grade gyms
 DELETE {{api_url}}/gyms/1/gym_grades/{{gym_grade_id}}.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}

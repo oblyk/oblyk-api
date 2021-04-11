@@ -1,55 +1,69 @@
 ###
 GET {{api_url}}/climbs.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
 GET {{api_url}}/inclines.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
 GET {{api_url}}/rains.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
 GET {{api_url}}/receptions.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
 GET {{api_url}}/suns.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
 GET {{api_url}}/rocks.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
 GET {{api_url}}/starts.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
 GET {{api_url}}/bolts.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
 GET {{api_url}}/anchors.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
 GET {{api_url}}/grade.json?grade=7b
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
 GET {{api_url}}/grade-types.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
 GET {{api_url}}/approach-types.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
 GET {{api_url}}/alert-types.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
 GET {{api_url}}/tags-list.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

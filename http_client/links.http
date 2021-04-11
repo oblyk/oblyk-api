@@ -1,8 +1,10 @@
 DELETE {{api_url}}/links/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Update link 1
 PUT {{api_url}}/links/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -14,6 +16,7 @@ Content-Type: application/json
 
 ### Create link
 POST {{api_url}}/links.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -29,8 +32,10 @@ Content-Type: application/json
 
 ### GET link
 GET {{api_url}}/links/1.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all links for one item
 GET {{api_url}}/links.json?linkable_type=Crag&linkable_id=1
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

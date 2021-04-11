@@ -28,7 +28,7 @@ module Api
       end
 
       def destroy
-        if @gym_grade_line.delete
+        if @gym_grade_line.destroy
           render 'api/v1/gym_grades/show'
         else
           render json: { error: @gym_grade_line.errors }, status: :unprocessable_entity

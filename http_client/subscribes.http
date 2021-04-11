@@ -1,4 +1,5 @@
 DELETE {{api_url}}/unsubscribes.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -10,6 +11,7 @@ Content-Type: application/json
 
 ### Create subscribe
 POST {{api_url}}/subscribes.json
+HttpApiAccessToken: {{api_access_token}}
 Content-Type: application/json
 
 {
@@ -20,5 +22,6 @@ Content-Type: application/json
 
 ### GET all subscribes
 GET {{api_url}}/subscribes.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json

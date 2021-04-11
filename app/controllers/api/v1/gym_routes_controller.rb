@@ -84,7 +84,7 @@ module Api
       end
 
       def destroy
-        if @gym_route.delete
+        if @gym_route.destroy
           render json: {}, status: :ok
         else
           render json: { error: @gym_route.errors }, status: :unprocessable_entity

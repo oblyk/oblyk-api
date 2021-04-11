@@ -173,6 +173,16 @@ module Api
         render 'api/v1/articles/index'
       end
 
+      def route_figures
+        render json: @crag.route_figures
+      end
+
+      def crags_around
+        distance = params.fetch(:distance, '20km')
+        @crags = Crag.geo_search(params[:latitude], params[:longitude], distance).records
+        render 'api/v1/crags/index'
+      end
+
       def create
         @crag = Crag.new(crag_params)
         @crag.user = @current_user
@@ -181,12 +191,6 @@ module Api
         else
           render json: { error: @crag.errors }, status: :unprocessable_entity
         end
-      end
-
-      def crags_around
-        distance = params.fetch(:distance, '20km')
-        @crags = Crag.geo_search(params[:latitude], params[:longitude], distance).records
-        render 'api/v1/crags/index'
       end
 
       def update
@@ -198,15 +202,11 @@ module Api
       end
 
       def destroy
-        if @crag.delete
+        if @crag.destroy
           render json: {}, status: :ok
         else
           render json: { error: @crag.errors }, status: :unprocessable_entity
         end
-      end
-
-      def route_figures
-        render json: @crag.route_figures
       end
 
       private

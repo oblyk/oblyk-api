@@ -1,8 +1,10 @@
 DELETE {{api_url}}/approaches/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Update approach 1
 PUT {{api_url}}/approaches/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -14,6 +16,7 @@ Content-Type: application/json
 
 ### Create Crag
 POST {{api_url}}/approaches.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -28,12 +31,15 @@ Content-Type: application/json
 
 ### GET approach
 GET {{api_url}}/crags/1/approaches/1/geo_json_around.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET approach
 GET {{api_url}}/approaches/1.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all approaches
 GET {{api_url}}/approaches.json?crag_id=1
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

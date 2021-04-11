@@ -1,5 +1,6 @@
 ### Create sapce
 POST {{api_url}}/gyms/1/gym_spaces.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -17,6 +18,7 @@ client.global.set("gym_space_id", response.body.id);
 
 ### Update gym_space 1
 PUT {{api_url}}/gyms/1/gym_spaces/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -28,16 +30,19 @@ Content-Type: application/json
 
 ### Publish gym_space
 PUT {{api_url}}/gyms/1/gym_spaces/{{gym_space_id}}/publish.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
 ### Unpublish gym_space
 PUT {{api_url}}/gyms/1/gym_spaces/{{gym_space_id}}/unpublish.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
 ### Add gym_sapce banner
 POST {{api_url}}/gyms/1/gym_spaces/1/add_banner.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
@@ -48,6 +53,7 @@ Content-Disposition: form-data; name="gym_space[banner]"; filename="bandeau-laen
 
 ### Add gym_sapce banner
 POST {{api_url}}/gyms/1/gym_spaces/1/add_plan.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
@@ -58,12 +64,15 @@ Content-Disposition: form-data; name="gym_space[plan]"; filename="laennec-plan.p
 
 ### GET gym_space
 GET {{api_url}}/gyms/1/gym_spaces/1.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all gym_spaces
 GET {{api_url}}/gyms/1/gym_spaces.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### Delete space
 DELETE {{api_url}}/gyms/1/gym_spaces/{{gym_space_id}}.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}

@@ -1,3 +1,4 @@
 ### Figures
 GET {{api_url}}/figures.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

@@ -32,7 +32,7 @@ module Api
       end
 
       def destroy
-        if @guide_book_pdf.delete
+        if @guide_book_pdf.destroy
           render json: {}, status: :ok
         else
           render json: { error: @guide_book_pdf.errors }, status: :unprocessable_entity

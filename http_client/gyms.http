@@ -1,8 +1,10 @@
 DELETE {{api_url}}/gyms/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Add gym banner
 POST {{api_url}}/gyms/1/add_banner.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
@@ -13,6 +15,7 @@ Content-Disposition: form-data; name="gym[banner]"; filename="bandeau-laennec.jp
 
 ### Add gym logo
 POST {{api_url}}/gyms/1/add_logo.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
@@ -23,6 +26,7 @@ Content-Disposition: form-data; name="gym[logo]"; filename="logo-laennec.png"
 
 ### Update gym 1
 PUT {{api_url}}/gyms/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -34,6 +38,7 @@ Content-Type: application/json
 
 ### Create Crag
 POST {{api_url}}/gyms.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -59,16 +64,20 @@ Content-Type: application/json
 
 ### GET all gym versions
 GET {{api_url}}/gyms/1/versions.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### Gym arrounds
 GET {{api_url}}/gyms/gyms_around.json?latitude=44.469592&longitude=5.058089&distance=20km
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET gym
 GET {{api_url}}/gyms/1.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all gyms
 GET {{api_url}}/gyms.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

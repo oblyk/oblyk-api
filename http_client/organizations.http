@@ -1,0 +1,38 @@
+### GET organization
+GET {{api_url}}/organizations.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET organization
+GET {{api_url}}/organizations/1.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET organization
+GET {{api_url}}/organizations/1/api_access_token.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### Update author
+POST {{api_url}}/organizations.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "organization": {
+    "name": "Parc des Ecrins",
+    "api_usage_type": "institutional",
+    "email": "contact@ecrins-parcnational.fr",
+    "website": "https://www.ecrins-parcnational.fr/"
+  }
+}
+
+### UPDATE refresh api access token
+PUT {{api_url}}/organizations/1/refresh_api_access_token.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json

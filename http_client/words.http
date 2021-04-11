@@ -1,8 +1,10 @@
 DELETE {{api_url}}/words/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Update word 1
 PUT {{api_url}}/words/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -14,6 +16,7 @@ Content-Type: application/json
 
 ### Create words
 POST {{api_url}}/words.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -26,16 +29,20 @@ Content-Type: application/json
 
 ### GET word
 GET {{api_url}}/words/1.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET word
 GET {{api_url}}/words/13/versions.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all words
 GET {{api_url}}/words.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### search
 GET {{api_url}}/words/search.json?query=yaniro
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

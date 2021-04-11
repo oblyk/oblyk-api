@@ -1,8 +1,10 @@
 DELETE {{api_url}}/videos/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Update video 1
 PUT {{api_url}}/videos/1.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -14,6 +16,7 @@ Content-Type: application/json
 
 ### Create video
 POST {{api_url}}/videos.json
+HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
@@ -28,8 +31,10 @@ Content-Type: application/json
 
 ### GET video
 GET {{api_url}}/videos/1.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all videos for one item
 GET {{api_url}}/videos.json?videoable_type=Crag&videoable_id=1
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
