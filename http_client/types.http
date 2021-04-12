@@ -1,69 +1,64 @@
 ###
-GET {{api_url}}/climbs.json
+GET {{api_url}}/public/climbs.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
-GET {{api_url}}/inclines.json
+GET {{api_url}}/public/inclines.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
-GET {{api_url}}/rains.json
+GET {{api_url}}/public/rains.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
-GET {{api_url}}/receptions.json
+GET {{api_url}}/public/receptions.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
-GET {{api_url}}/suns.json
+GET {{api_url}}/public/suns.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
-GET {{api_url}}/rocks.json
+GET {{api_url}}/public/rocks.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
-GET {{api_url}}/starts.json
+GET {{api_url}}/public/starts.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
-GET {{api_url}}/bolts.json
+GET {{api_url}}/public/bolts.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
-GET {{api_url}}/anchors.json
+GET {{api_url}}/public/anchors.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
-GET {{api_url}}/grade.json?grade=7b
+GET {{api_url}}/public/grade.json?grade=7b
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
-GET {{api_url}}/grade-types.json
+GET {{api_url}}/public/grade-types.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
-GET {{api_url}}/approach-types.json
+GET {{api_url}}/public/approach-types.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
-GET {{api_url}}/alert-types.json
-HttpApiAccessToken: {{api_access_token}}
-Accept: application/json
-
-###
-GET {{api_url}}/tags-list.json
+GET {{api_url}}/public/alert-types.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

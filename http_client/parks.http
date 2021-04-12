@@ -1,9 +1,9 @@
-DELETE {{api_url}}/parks/1.json
+DELETE {{api_url}}/public/parks/1.json
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Update park 1
-PUT {{api_url}}/parks/1.json
+PUT {{api_url}}/public/parks/1.json
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
@@ -15,7 +15,7 @@ Content-Type: application/json
 }
 
 ### Create Crag
-POST {{api_url}}/parks.json
+POST {{api_url}}/public/parks.json
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
@@ -30,17 +30,17 @@ Content-Type: application/json
 }
 
 ###
-GET {{api_url}}/crags/1/parks/geo_json_around.json
+GET {{api_url}}/public/crags/1/parks/geo_json_around.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 
 ### GET park
-GET {{api_url}}/parks/1.json
+GET {{api_url}}/public/parks/1.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all parks
-GET {{api_url}}/parks.json?crag_id=1
+GET {{api_url}}/public/parks.json?crag_id=1
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

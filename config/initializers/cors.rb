@@ -9,11 +9,22 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'http://localhost:8081', 'http://localhost:8080'
+    origins 'http://localhost:8081',
+            'http://localhost:8080',
+            'http://localhost:3000',
+            %r{\Ahttps://(.*?).oblyk.org\z}
 
     resource '*',
              headers: :any,
              credentials: true,
              methods: %i[get post put patch delete options head]
+  end
+
+  allow do
+    origins '*'
+
+    resource '/api/v1/public/*',
+             headers: :any,
+             methods: %i[get options]
   end
 end

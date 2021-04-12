@@ -1,10 +1,10 @@
 ### Delete guide_book_pdf
-DELETE {{api_url}}/guide_book_pdfs/1.json
+DELETE {{api_url}}/public/guide_book_pdfs/1.json
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Update guide_book_pdf 1
-PUT {{api_url}}/guide_book_pdfs/1.json
+PUT {{api_url}}/public/guide_book_pdfs/1.json
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
@@ -17,7 +17,7 @@ Content-Type: application/json
 }
 
 ### Create guide_book_pdf
-POST {{api_url}}/guide_book_pdfs.json
+POST {{api_url}}/public/guide_book_pdfs.json
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: multipart/form-data; boundary=WebAppBoundary
@@ -53,11 +53,11 @@ Content-Type: text/plain
 1
 
 ### GET guide_book_pdf
-GET {{api_url}}/guide_book_pdfs/1.json
+GET {{api_url}}/public/guide_book_pdfs/1.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET all guide_book_pdfs
-GET {{api_url}}/guide_book_pdfs.json?crag_id=1
+GET {{api_url}}/public/guide_book_pdfs.json?crag_id=1
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

@@ -15,20 +15,6 @@ Rails.application.routes.draw do
         put 'new_password', controller: :password, action: :update
         delete 'sign_in', controller: :signin, action: :destroy
       end
-      get 'rocks', controller: :rocks, action: :index
-      get 'suns', controller: :suns, action: :index
-      get 'rains', controller: :rains, action: :index
-      get 'inclines', controller: :inclines, action: :index
-      get 'climbs', controller: :climbs, action: :index
-      get 'receptions', controller: :receptions, action: :index
-      get 'starts', controller: :starts, action: :index
-      get 'bolts', controller: :bolts, action: :index
-      get 'anchors', controller: :anchors, action: :index
-      get 'approach-types', controller: :approach_types, action: :index
-      get 'alert-types', controller: :alert_types, action: :index
-
-      get 'grade', controller: :grades, action: :grade
-      get 'grade-types', controller: :grades, action: :types
       get 'search', controller: :searches, action: :index
 
       get 'figures', controller: :commons, action: :figures
@@ -103,63 +89,17 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :crags do
-        get :search, on: :collection
-        get :guides, on: :member
-        get :photos, on: :member
-        get :videos, on: :member
-        get :articles, on: :member
-        get :versions, on: :member
-        get :route_figures, on: :member
-        get :guide_books_around, on: :member
-        get :areas_around, on: :member
-        get :geo_json_around, on: :member
-        get :geo_json, on: :collection
-        get :geo_search, on: :collection
-        get :crags_around, on: :collection
-        resources :crag_routes do
-          get :search, on: :collection
-        end
-        resources :parks do
-          get :geo_json_around, on: :collection
-        end
-        resources :crag_sectors do
-          get :geo_json_around, on: :collection
-        end
-        resources :approaches do
-          get :geo_json_around, on: :collection
-        end
-      end
-      resources :crag_sectors do
-        get :versions, on: :member
-        get :photos, on: :member
-        get :videos, on: :member
-        get :route_figures, on: :member
-        resources :crag_routes do
-          get :search, on: :collection
-        end
-      end
-      resources :crag_routes do
-        get :versions, on: :member
-        get :photos, on: :member
-        get :videos, on: :member
-      end
       resources :ascent_crag_routes do
         post :add_ascent_user, on: :member
         delete :remove_ascent_user, on: :member
       end
-      resources :words do
-        get :search, on: :collection
-        get :versions, on: :member
-      end
+
       resources :comments
       resources :links
       resources :follows, only: %i[index create] do
         put :increment, on: :collection
       end
       delete 'follows', controller: :follows, action: :destroy
-      resources :parks
-      resources :approaches
       resources :alerts
       resources :conversations, only: %i[index show create] do
         post :read, on: :member
@@ -169,35 +109,10 @@ Rails.application.routes.draw do
       end
       resources :videos
       resources :photos
-      resources :areas do
-        get :crags, on: :member
-        get :photos, on: :member
-        get :search, on: :collection
-        post :add_crag, on: :member
-        get :geo_json, on: :member
-        delete :remove_crag, on: :member
-      end
-      resources :area_crags
       resources :subscribes, only: %i[index create]
       delete 'unsubscribes', controller: :subscribes, action: :unsubscribe
       resources :tick_lists, only: %i[index create] do
         delete :destroy, on: :collection
-      end
-      resources :guide_book_webs
-      resources :guide_book_pdfs
-      resources :guide_book_papers do
-        get :crags, on: :member
-        get :geo_json, on: :member
-        get :photos, on: :member
-        get :links, on: :member
-        get :articles, on: :member
-        get :versions, on: :member
-        get :search, on: :collection
-        post :add_crag, on: :member
-        post :add_cover, on: :member
-        delete :remove_crag, on: :member
-        delete :remove_cover, on: :member
-        resources :place_of_sales
       end
       resources :gyms do
         get :versions, on: :member
@@ -229,6 +144,102 @@ Rails.application.routes.draw do
         end
       end
       resources :reports, only: %i[create]
+
+      scope :public do
+        get 'rocks', controller: :rocks, action: :index
+        get 'suns', controller: :suns, action: :index
+        get 'rains', controller: :rains, action: :index
+        get 'inclines', controller: :inclines, action: :index
+        get 'climbs', controller: :climbs, action: :index
+        get 'receptions', controller: :receptions, action: :index
+        get 'starts', controller: :starts, action: :index
+        get 'bolts', controller: :bolts, action: :index
+        get 'anchors', controller: :anchors, action: :index
+        get 'approach-types', controller: :approach_types, action: :index
+        get 'alert-types', controller: :alert_types, action: :index
+
+        get 'grade', controller: :grades, action: :grade
+        get 'grade-types', controller: :grades, action: :types
+
+        resources :area_crags
+        resources :areas do
+          get :crags, on: :member
+          get :photos, on: :member
+          get :search, on: :collection
+          post :add_crag, on: :member
+          get :geo_json, on: :member
+          delete :remove_crag, on: :member
+        end
+
+        resources :crags do
+          get :search, on: :collection
+          get :guides, on: :member
+          get :photos, on: :member
+          get :videos, on: :member
+          get :articles, on: :member
+          get :versions, on: :member
+          get :route_figures, on: :member
+          get :guide_books_around, on: :member
+          get :areas_around, on: :member
+          get :geo_json_around, on: :member
+          get :geo_json, on: :collection
+          get :geo_search, on: :collection
+          get :crags_around, on: :collection
+          resources :crag_routes do
+            get :search, on: :collection
+          end
+          resources :parks do
+            get :geo_json_around, on: :collection
+          end
+          resources :crag_sectors do
+            get :geo_json_around, on: :collection
+          end
+          resources :approaches do
+            get :geo_json_around, on: :collection
+          end
+        end
+
+        resources :crag_sectors do
+          get :versions, on: :member
+          get :photos, on: :member
+          get :videos, on: :member
+          get :route_figures, on: :member
+          resources :crag_routes do
+            get :search, on: :collection
+          end
+        end
+
+        resources :crag_routes do
+          get :versions, on: :member
+          get :photos, on: :member
+          get :videos, on: :member
+        end
+
+        resources :parks
+        resources :approaches
+
+        resources :guide_book_webs
+        resources :guide_book_pdfs
+        resources :guide_book_papers do
+          get :crags, on: :member
+          get :geo_json, on: :member
+          get :photos, on: :member
+          get :links, on: :member
+          get :articles, on: :member
+          get :versions, on: :member
+          get :search, on: :collection
+          post :add_crag, on: :member
+          post :add_cover, on: :member
+          delete :remove_crag, on: :member
+          delete :remove_cover, on: :member
+          resources :place_of_sales
+        end
+
+        resources :words do
+          get :search, on: :collection
+          get :versions, on: :member
+        end
+      end
     end
   end
   mount Sidekiq::Web => '/sidekiq'

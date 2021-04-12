@@ -1,9 +1,9 @@
-DELETE {{api_url}}/crag_sectors/1.json
+DELETE {{api_url}}/public/crag_sectors/1.json
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
 ### Update crag 1
-PUT {{api_url}}/crags/1/crag_sectors/1.json
+PUT {{api_url}}/public/crags/1/crag_sectors/1.json
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
@@ -15,7 +15,7 @@ Content-Type: application/json
 }
 
 ### Create sector
-POST {{api_url}}/crag_sectors.json
+POST {{api_url}}/public/crag_sectors.json
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
@@ -30,32 +30,31 @@ Content-Type: application/json
 }
 
 ### GET crag routes sector
-GET {{api_url}}/crag_sectors/1/crag_routes.json
+GET {{api_url}}/public/crag_sectors/1/crag_routes.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET sector versions
-GET {{api_url}}/crag_sectors/1/versions.json
+GET {{api_url}}/public/crag_sectors/1/versions.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET approach
-GET {{api_url}}/crags/1/crag_sectors/1/geo_json_around.json
+GET {{api_url}}/public/crags/1/crag_sectors/1/geo_json_around.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET sector
-GET {{api_url}}/crag_sectors/1.json
+GET {{api_url}}/public/crag_sectors/1.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET sectore route figures
-GET {{api_url}}/crag_sectors/1/route_figures.json
+GET {{api_url}}/public/crag_sectors/1/route_figures.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
-
 ### GET all sectors in crag
-GET {{api_url}}/crag_sectors.json?crag_id=1
+GET {{api_url}}/public/crag_sectors.json?crag_id=1
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
