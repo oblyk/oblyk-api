@@ -26,7 +26,6 @@ class CragRoute < ApplicationRecord
   has_many :links, as: :linkable
   has_many :alerts, as: :alertable
   has_many :videos, as: :viewable
-  has_many :tags, as: :taggable
   has_many :photos, as: :illustrable
   has_many :reports, as: :reportable
   has_many :ascent_crag_routes

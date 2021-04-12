@@ -17,12 +17,6 @@ json.ascent_comments do
     end
   end
 end
-json.tags do
-  json.array! crag_route.tags do |tag|
-    json.id tag.id
-    json.name tag.name
-  end
-end
 json.link_count crag_route.links.count
 json.alert_count crag_route.alerts.count
 

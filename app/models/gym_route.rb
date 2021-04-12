@@ -9,7 +9,6 @@ class GymRoute < ApplicationRecord
   has_one :gym_space, through: :gym_sector
   has_one :gym, through: :gym_sector
   has_many :videos, as: :viewable
-  has_many :tags, as: :taggable
 
   delegate :feed_parent_id, to: :gym
   delegate :feed_parent_type, to: :gym
