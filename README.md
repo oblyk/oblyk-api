@@ -103,6 +103,7 @@ Todo migration des tables :
 - [x] videos
 - [x] photos
 - [x] words
+- [x] organization
 
 Gym :
 - [x] gym_administrators
