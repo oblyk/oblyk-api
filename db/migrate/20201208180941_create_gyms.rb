@@ -28,7 +28,7 @@ class CreateGyms < ActiveRecord::Migration[6.0]
 
       t.string :plan
       t.datetime :plan_start_at
-      t.datetime :plan_en_at
+      t.datetime :plan_end_at
 
       t.datetime :assigned_at
 

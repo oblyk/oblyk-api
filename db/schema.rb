@@ -581,7 +581,7 @@ ActiveRecord::Schema.define(version: 2021_04_01_143533) do
     t.bigint "user_id"
     t.string "plan"
     t.datetime "plan_start_at"
-    t.datetime "plan_en_at"
+    t.datetime "plan_end_at"
     t.datetime "assigned_at"
     t.bigint "legacy_id"
     t.datetime "deleted_at"
