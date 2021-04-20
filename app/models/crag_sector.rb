@@ -41,7 +41,7 @@ class CragSector < ApplicationRecord
 
   before_validation :historize_location
 
-  after_update :update_routes_location
+  after_update :update_routes_location!
 
   validates :name, presence: true
   validates :rain, inclusion: { in: Rain::LIST }, allow_nil: true
@@ -108,7 +108,7 @@ class CragSector < ApplicationRecord
                     end
   end
 
-  def update_routes_location
+  def update_routes_location!
     return unless saved_change_to_latitude? || saved_change_to_longitude?
 
     crag_routes.each(&:set_location!)

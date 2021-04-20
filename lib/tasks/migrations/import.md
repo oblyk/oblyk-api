@@ -6,6 +6,15 @@
 - down oblyk.org
 - get public storage
 
+## Deactivate concern
+
+```ruby
+include GapGradable
+include Searchable
+include ActivityFeedable
+after_save :update_crag_route
+```
+
 ## Tables
 
 - [x] users `bundle exec rake import:users["development","/home/lucien/Documents/oblyk/public"]`
@@ -25,9 +34,9 @@
 - [x] areas `bundle exec rake import:areas["development"]`
 - [x] area_crags `bundle exec rake import:area_crags["development"]`
 ----
-- [ ] ascents `bundle exec rake import:ascents["development"]`
+- [x] ascents `bundle exec rake import:ascents["development"]`
 - [x] tick_lists `bundle exec rake import:tick_lists["development"]`
-- [ ] ascent_users `bundle exec rake import:ascent_users["development"]`
+- [x] ascent_users `bundle exec rake import:ascent_users["development"]`
 ----
 - [x] comments `bundle exec rake import:comments["development"]`
 - [x] links `bundle exec rake import:links["development"]`
@@ -41,7 +50,7 @@
 - [x] place_of_sales `bundle exec rake import:place_of_sales["development"]`
 ----
 - [x] videos `bundle exec rake import:videos["development"]`
-- [ ] photos
+- [x] photos `bundle exec rake import:photos["development","/home/lucien/Documents/oblyk/public"]`
 ---
 - [x] gyms `bundle exec rake import:gyms["development","/home/lucien/Documents/oblyk/public"]`
 - [x] gym_administrators `bundle exec rake import:gym_administrators["development"]`
@@ -49,3 +58,14 @@
 - [x] gym_grade_lines `bundle exec rake import:gym_grade_lines["development"]`
 - [x] gym_spaces `bundle exec rake import:gym_spaces["development","/home/lucien/Documents/oblyk/public"]`
 - [x] gym_sectors `bundle exec rake import:gym_sectors["development"]`
+
+### function after import
+```ruby
+# Refresh crag climbing type
+Crag.all.each(&:update_climbing_type!)
+Crag.all.each(&:update_gap!)
+CragSector.all.each(&:update_gap!)
+CragRoute.all.each(&:update_form_ascents!)
+CragRoute.all.each(&:set_location!)
+```
+ 

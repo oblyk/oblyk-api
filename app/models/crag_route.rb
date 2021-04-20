@@ -2,21 +2,21 @@
 
 class CragRoute < ApplicationRecord
   include SoftDeletable
-  # include Searchable
+  include Searchable
   include Slugable
-  # include ActivityFeedable
+  include ActivityFeedable
 
-  # has_paper_trail only: %i[
-  #   name
-  #   height
-  #   open_year
-  #   opener
-  #   sections
-  #   climbing_type
-  #   incline_type
-  #   reception_type
-  #   start_type
-  # ]
+  has_paper_trail only: %i[
+    name
+    height
+    open_year
+    opener
+    sections
+    climbing_type
+    incline_type
+    reception_type
+    start_type
+  ]
 
   belongs_to :crag_sector, optional: true, counter_cache: :crag_routes_count
   belongs_to :user, optional: true
@@ -50,7 +50,7 @@ class CragRoute < ApplicationRecord
   before_save :historize_grade_gap
   before_save :historize_sections_count
   before_save :historize_max_bolt
-  # after_save :update_gap_grade
+  # after_save :update_gap_grade!
 
   def rich_name
     "#{grade_to_s} - #{name}"
@@ -232,7 +232,7 @@ class CragRoute < ApplicationRecord
     self.max_bolt = max_bolt
   end
 
-  def update_gap_grade
+  def update_gap_grade!
     crag.update_gap!
     crag.update_climbing_type!
     crag_sector&.update_gap!

@@ -59,7 +59,7 @@ namespace :import do
         # Import cover
         if File.exist?("#{storage_path}/topos/700/topo-#{guide_book_pdf.legacy_id}.jpg")
           cover = File.open("#{storage_path}/topos/700/topo-#{guide_book_pdf.legacy_id}.jpg")
-          guide_book_pdf.cover.attach(io: cover, filename: "avatar-#{data[3]}.jpg")
+          guide_book_pdf.cover.attach(io: cover, filename: "cover-#{data[3]}.jpg")
         end
       else
         binding.pry
