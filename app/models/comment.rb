@@ -6,5 +6,5 @@ class Comment < ApplicationRecord
   has_many :reports, as: :reportable
 
   validates :body, presence: true
-  validates :commentable_type, inclusion: { in: %w[Crag CragSector CragRoute GuideBookPaper Area GymRoute Article].freeze }
+  validates :commentable_type, inclusion: { in: %w[Crag CragSector CragRoute GuideBookPaper Area Gym GymRoute Article].freeze }
 end

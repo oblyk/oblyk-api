@@ -42,7 +42,7 @@ class Gym < ApplicationRecord
 
   validates :logo, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true
-  validates :name, :latitude, :longitude, :address, :postal_code, :country, :city, :big_city, presence: true
+  validates :name, :latitude, :longitude, :address, :country, :city, :big_city, presence: true
 
   mapping do
     indexes :location, type: 'geo_point'

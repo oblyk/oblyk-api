@@ -33,6 +33,7 @@ class Approach < ApplicationRecord
   end
 
   def walking_time
+    meter_by_hour = 4000
     meter_by_hour = 6000 if %w[steep_descent soft_descent].include?(approach_type)
     meter_by_hour = 4000 if %w[flat soft_ascent various].include?(approach_type)
     meter_by_hour = 2500 if %w[steep_ascent].include?(approach_type)

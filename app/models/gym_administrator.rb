@@ -4,8 +4,6 @@ class GymAdministrator < ApplicationRecord
   belongs_to :user
   belongs_to :gym
 
-  validates :level, presence: true
-
   after_create :set_gym_is_administered
 
   private

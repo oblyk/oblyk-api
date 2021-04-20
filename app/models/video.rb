@@ -17,7 +17,7 @@ class Video < ApplicationRecord
   URL_REGEXP = %r{(epictv\.com|/youtu\.be|youtube\.com|vimeo\.com|dai\.ly|dailymotion\.com)}.freeze
 
   validates :url, presence: true
-  validates :viewable_type, inclusion: { in: %w[Crag CragRoute GymRoute].freeze }
+  validates :viewable_type, inclusion: { in: %w[Crag CragRoute Gym GymRoute].freeze }
   validates :url, format: { with: URL_REGEXP }
 
   def valid_url?

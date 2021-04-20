@@ -36,11 +36,11 @@ class User < ApplicationRecord
   before_validation :init_partner_search_activated_at
 
   validates :first_name, :email, :uuid, presence: true
-  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, if: proc { |obj| obj.deleted_at.blank? }
   validates :email, uniqueness: true, on: :create
   validates :uuid, uniqueness: true, on: :create
   validates :genre, inclusion: { in: %w[male female] }, allow_blank: true
-  validates :language, inclusion: { in: %w[fr en] }
+  validates :language, inclusion: { in: %w[fr en] }, allow_blank: true
 
   validates :partner_latitude, numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }, allow_blank: true
   validates :partner_longitude, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }, allow_blank: true

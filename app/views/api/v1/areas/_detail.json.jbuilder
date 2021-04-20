@@ -32,9 +32,9 @@ end
 json.routes_figures do
   json.routes_count area.crag_routes_count
   json.grade do
-    json.min_value area.easiest_route.min_grade_value
-    json.min_text area.easiest_route.min_grade_text
-    json.max_value area.hardest_route.max_grade_value
-    json.max_text area.hardest_route.max_grade_text
+    json.min_value area.easiest_route&.min_grade_value
+    json.min_text area.easiest_route&.min_grade_text
+    json.max_value area.hardest_route&.max_grade_value
+    json.max_text area.hardest_route&.max_grade_text
   end
 end
