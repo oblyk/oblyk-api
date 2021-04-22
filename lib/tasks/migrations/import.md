@@ -60,12 +60,7 @@ after_save :update_crag_route
 - [x] gym_sectors `bundle exec rake import:gym_sectors["development"]`
 
 ### function after import
-```ruby
-# Refresh crag climbing type
-Crag.all.each(&:update_climbing_type!)
-Crag.all.each(&:update_gap!)
-CragSector.all.each(&:update_gap!)
-CragRoute.all.each(&:update_form_ascents!)
-CragRoute.all.each(&:set_location!)
-```
+- [x] refresh crag data `bundle exec rake refresh_data:crag`
+- [x] refresh crag sector data `bundle exec rake refresh_data:crag_sector`
+- [ ] refresh crag route data `bundle exec rake refresh_data:crag_route`
  

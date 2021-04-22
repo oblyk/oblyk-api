@@ -65,7 +65,7 @@ module LogBook
         end
 
         @user.ascent_crag_routes.made.each do |ascent|
-          next if ascent.min_grade_value.blank?
+          next if ascent.min_grade_value.blank? || ascent.min_grade_value.zero?
 
           grade_value = ascent.min_grade_value
           grade_value -= 1 if grade_value.even?

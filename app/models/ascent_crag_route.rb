@@ -25,7 +25,7 @@ class AscentCragRoute < Ascent
 
   after_save :update_crag_route!
   after_create :delete_tick_in_list
-  after_destroy :update_crag_route
+  after_destroy :update_crag_route!
 
   scope :made, -> { where.not(ascent_status: :project) }
   scope :project, -> { where(ascent_status: :project) }
