@@ -44,7 +44,7 @@ module RouteFigurable
       figures[:route_count] += 1
 
       crag_route.sections.each do |section|
-        next unless section['grade_value']
+        next unless section['grade_value']&.positive?
 
         figures[:section_count] += 1
         figures[:degrees][Grade.degree(section['grade_value'])] += 1
