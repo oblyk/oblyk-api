@@ -17,7 +17,7 @@ module Api
                 when 'difficulty_asc'
                   'max_grade_value ASC'
                 when 'note'
-                  'note'
+                  'note DESC'
                 else
                   'name'
                 end
