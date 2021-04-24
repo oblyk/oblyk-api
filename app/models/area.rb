@@ -14,6 +14,10 @@ class Area < ApplicationRecord
 
   validates :name, presence: true
 
+  mapping do
+    indexes :name, analyzer: 'french'
+  end
+
   def crag_routes_count
     crags.sum(:crag_routes_count)
   end
@@ -43,10 +47,19 @@ class Area < ApplicationRecord
           multi_match: {
             query: query,
             fields: %w[name],
-            fuzziness: :auto
+            fuzziness: 1
           }
         }
       }
+    )
+  end
+
+  def summary_to_json
+    JSON.parse(
+      ApplicationController.render(
+        template: 'api/v1/areas/summary.json',
+        assigns: { area: self }
+      )
     )
   end
 end

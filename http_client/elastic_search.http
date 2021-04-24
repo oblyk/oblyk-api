@@ -5,7 +5,6 @@ GET http://localhost:19200/development-crag/_search
 ### Mapping
 GET http://localhost:19200/development-crag/_mapping
 
-
 ### CRAG ROUTE
 ### Index
 GET http://localhost:19200/development-cragroute/_search

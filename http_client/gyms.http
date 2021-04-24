@@ -81,3 +81,8 @@ Accept: application/json
 GET {{api_url}}/gyms.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
+
+### GET all gyms
+GET {{api_url}}/gyms/search.json?query=mroc
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json

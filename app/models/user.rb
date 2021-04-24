@@ -53,6 +53,17 @@ class User < ApplicationRecord
   mapping do
     indexes :partner_location, type: 'geo_point'
     indexes :location, type: 'geo_point'
+    indexes :first_name, analyzer: 'french'
+    indexes :last_name, analyzer: 'french'
+  end
+
+  def summary_to_json
+    JSON.parse(
+      ApplicationController.render(
+        template: 'api/v1/users/summary.json',
+        assigns: { user: self }
+      )
+    )
   end
 
   def location

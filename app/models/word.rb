@@ -16,6 +16,10 @@ class Word < ApplicationRecord
 
   default_scope { order(:name) }
 
+  mapping do
+    indexes :name, analyzer: 'french'
+  end
+
   def summary_to_json
     JSON.parse(
       ApplicationController.render(

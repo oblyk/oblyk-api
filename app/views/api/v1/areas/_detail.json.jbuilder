@@ -1,15 +1,8 @@
 # frozen_string_literal: true
 
-json.extract! area, :id, :name, :slug_name
+json.partial! 'api/v1/areas/short_detail', area: area
 json.crags_count area.crags.count
 json.crag_routes_count area.crag_routes_count
-json.photo do
-  json.id area.photo&.id
-  json.url url_for(area.photo.picture) if area.photo
-  json.thumbnail_url area.photo.thumbnail_url if area.photo
-  json.illustrable_type area.photo.illustrable_type if area.photo
-  json.illustrable_name area.photo.illustrable.rich_name if area.photo
-end
 json.area_crags do
   json.array! area.area_crags do |area_crag|
     json.id area_crag.id

@@ -46,10 +46,27 @@ class Gym < ApplicationRecord
 
   mapping do
     indexes :location, type: 'geo_point'
+    indexes :name, analyzer: 'french'
+    indexes :city, analyzer: 'french'
+    indexes :big_city, analyzer: 'french'
   end
 
   def location
     [latitude, longitude]
+  end
+
+  def self.search(query)
+    __elasticsearch__.search(
+      {
+        query: {
+          multi_match: {
+            query: query,
+            fields: %w[name city big_city],
+            fuzziness: :auto
+          }
+        }
+      }
+    )
   end
 
   def summary_to_json

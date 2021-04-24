@@ -22,6 +22,10 @@ class GuideBookPaper < ApplicationRecord
   validates :name, presence: true
   validates :cover, blob: { content_type: :image }, allow_nil: true
 
+  mapping do
+    indexes :name, analyzer: 'french'
+  end
+
   def summary_to_json
     JSON.parse(
       ApplicationController.render(

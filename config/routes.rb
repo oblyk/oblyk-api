@@ -116,6 +116,7 @@ Rails.application.routes.draw do
       end
       resources :gyms do
         get :versions, on: :member
+        get :search, on: :collection
         get :geo_json, on: :collection
         get :gyms_around, on: :collection
         post :add_banner, on: :member

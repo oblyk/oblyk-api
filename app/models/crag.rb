@@ -74,6 +74,8 @@ class Crag < ApplicationRecord
   after_update :update_routes_location
 
   mapping do
+    indexes :name, analyzer: 'french'
+    indexes :city, analyzer: 'french'
     indexes :location, type: 'geo_point'
   end
 
@@ -96,7 +98,7 @@ class Crag < ApplicationRecord
         query: {
           multi_match: {
             query: query,
-            fields: %w[name city],
+            fields: %w[name^5 city],
             fuzziness: :auto
           }
         }

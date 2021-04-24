@@ -50,7 +50,11 @@ class CragRoute < ApplicationRecord
   before_save :historize_grade_gap
   before_save :historize_sections_count
   before_save :historize_max_bolt
-  # after_save :update_gap_grade!
+  after_save :update_gap_grade!
+
+  mapping do
+    indexes :name, analyzer: 'french'
+  end
 
   def rich_name
     "#{grade_to_s} - #{name}"

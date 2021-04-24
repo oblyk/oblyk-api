@@ -12,6 +12,12 @@ module Api
         @gyms = Gym.all
       end
 
+      def search
+        query = params[:query]
+        @gyms = Gym.search(query).records
+        render 'api/v1/gyms/index'
+      end
+
       def geo_json
         features = []
 
