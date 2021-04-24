@@ -101,7 +101,7 @@ Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ### GET ascended crag routes
-GET {{api_url}}/current_users/ascended_crag_routes.json
+GET {{api_url}}/current_users/ascended_crag_routes.json?page=1&order=released_at
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json

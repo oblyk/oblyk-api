@@ -48,9 +48,10 @@ module Api
                                   .order('crags.name')
                                   .page(page)
                        when 'released_at'
-                         CragRoute.includes(:crag, :crag_sector)
+                         CragRoute.joins(:ascent_crag_routes)
+                                  .includes(:crag, :crag_sector)
                                   .where(id: crag_route_ids)
-                                  .order(released_at: :desc)
+                                  .order('ascents.released_at DESC')
                                   .page(page)
                        else
                          CragRoute.includes(:crag, :crag_sector)
