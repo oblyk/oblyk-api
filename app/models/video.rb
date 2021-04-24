@@ -33,22 +33,23 @@ class Video < ApplicationRecord
   def url_for_iframe
     iframe_url = nil
 
-    if url.match? /(youtube\.com|youtu\.be)/
-      video_query = Addressable::URI.parse(url).query_values['v']
+    case url
+    when /(youtube\.com|youtu\.be)/
+      video_query = if url.match? /embed/
+                      Addressable::URI.parse(url).path.split('/').last
+                    else
+                      Addressable::URI.parse(url).query_values['v']
+                    end
       iframe_url = "https://www.youtube.com/embed/#{video_query}"
-
-    elsif url.match? /epictv\.com/
+    when /epictv\.com/
       video_query = Addressable::URI.parse(url).path.split('/').last
       iframe_url = "https://www.epictv.com/player/embed-player/#{video_query}"
-
-    elsif url.match? /vimeo\.com/
+    when /vimeo\.com/
       video_query = Addressable::URI.parse(url).path.split('/').last
       iframe_url = "https://player.vimeo.com/video/#{video_query}"
-
-    elsif url.match? /(dai\.ly|dailymotion\.com)/
+    when /(dai\.ly|dailymotion\.com)/
       video_query = Addressable::URI.parse(url).path.split('/').last
       iframe_url = "https://www.dailymotion.com/embed/video//#{video_query}"
-
     end
     iframe_url
   end
