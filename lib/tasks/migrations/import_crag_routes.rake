@@ -222,7 +222,7 @@ namespace :import do
         max_bolt: nil,
         crag: crag,
         crag_sector: crag_sector,
-        user_id: user,
+        user: user,
         legacy_id: data[0],
         created_at: data[14],
         updated_at: data[15],
