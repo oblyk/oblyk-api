@@ -89,6 +89,12 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :notifications, only: %i[index] do
+        get :unread_count, on: :collection
+        put :read, on: :member
+        put :read_all, on: :collection
+      end
+
       resources :ascent_crag_routes do
         post :add_ascent_user, on: :member
         delete :remove_ascent_user, on: :member

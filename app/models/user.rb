@@ -30,6 +30,7 @@ class User < ApplicationRecord
   has_many :ascent_users
   has_many :organization_users
   has_many :organizations, through: :organization_users
+  has_many :notifications
 
   before_validation :set_uuid
   before_validation :last_activity_at

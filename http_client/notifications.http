@@ -1,0 +1,9 @@
+### Get all notification for logged user
+GET {{api_url}}/notifications.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+
+### Count unread notification
+GET {{api_url}}/notifications/unread_count.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
