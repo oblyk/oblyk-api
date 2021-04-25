@@ -112,7 +112,7 @@ namespace :import do
         public_indoor_ascents: nil,
         partner_latitude: user_place[2],
         partner_longitude: user_place[3],
-        last_activity_at: data[12],
+        last_activity_at: data[12] || data[11],
         partner_search_activated_at: user_place[9]
       )
 
