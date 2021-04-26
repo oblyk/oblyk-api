@@ -85,14 +85,14 @@ fr:
         super_admin: "Super administration"
     errors:
       messages:
-        required: "est requis"
-        blank: "est obligatoire"
-        taken: 'est déjà pris'
-        too_short: 'est trop court'
-        greater_than: 'doit être positif'
-        invalid: 'est invalide'
-        email: 'est invalide'
-        inclusion: "n'est pas dans la liste des valeurs autorisées"
-        grade_system: "Vous devez choisir au moins un système"
-        one_point_system: "Vous ne pouvez pas avoir les deux systèmes de point"
-        content_type: "n'est pas au bon format"
+        required: "is_required"
+        blank: "is_mandatory"
+        taken: 'is_already_taken'
+        too_short: 'is_too_short'
+        greater_than: 'must_be_positive'
+        invalid: 'is_invalid'
+        email: 'is_invalid'
+        inclusion: 'is_not_a_permitted_value'
+        grade_system: "you_must_choose_at_least_one_system"
+        one_point_system: "you_cannot_have_both_point_systems."
+        content_type: "is_not_in_the_right_format"
