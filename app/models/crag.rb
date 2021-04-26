@@ -162,6 +162,14 @@ class Crag < ApplicationRecord
     videos
   end
 
+  def all_photos_count
+    sectors.sum(:photos_count) + crag_routes.sum(:photos_count) + (photos_count || 0)
+  end
+
+  def all_videos_count
+    crag_routes.sum(:videos_count) + (videos_count || 0)
+  end
+
   def update_climbing_type!
     climbing_types = crag_routes.select(:climbing_type).distinct&.pluck(:climbing_type)
 

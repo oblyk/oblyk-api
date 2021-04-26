@@ -63,4 +63,4 @@ after_save :update_crag_route
 - [x] refresh crag data `bundle exec rake refresh_data:crag`
 - [x] refresh crag sector data `bundle exec rake refresh_data:crag_sector`
 - [ ] refresh crag route data `bundle exec rake refresh_data:crag_route`
- 
+- [ ] refresh counters cache (see `reset_counters_cache` task)

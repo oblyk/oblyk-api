@@ -4,7 +4,7 @@ class Video < ApplicationRecord
   include ActivityFeedable
 
   belongs_to :user, optional: true
-  belongs_to :viewable, polymorphic: true
+  belongs_to :viewable, polymorphic: true, counter_cache: :videos_count
   has_many :reports, as: :reportable
 
   delegate :latitude, to: :viewable

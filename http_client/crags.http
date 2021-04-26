@@ -83,7 +83,7 @@ HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET crag
-GET {{api_url}}/public/crags/1.json
+GET {{api_url}}/public/crags/8.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_25_063709) do
+ActiveRecord::Schema.define(version: 2021_04_25_183037) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(version: 2021_04_25_063709) do
     t.datetime "published_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "photos_count"
     t.index ["author_id"], name: "index_articles_on_author_id"
   end
 
@@ -591,6 +592,7 @@ ActiveRecord::Schema.define(version: 2021_04_25_063709) do
     t.string "slug_name"
     t.integer "follows_count"
     t.integer "comments_count"
+    t.integer "videos_count"
     t.index ["name"], name: "index_gyms_on_name"
     t.index ["user_id"], name: "index_gyms_on_user_id"
   end
