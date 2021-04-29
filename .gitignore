@@ -33,3 +33,4 @@
 
 # Ignore pirvate http client configuration
 /http_client/http-client.private.env.json
+/config/local_env.yml

@@ -36,6 +36,22 @@ module OblykApi
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
+
+    # Load local env vars
+    config.before_configuration do
+      env_file = Rails.root.join('config/local_env.yml')
+      if File.exist?(env_file)
+        YAML.safe_load(File.open(env_file))&.each do |key, value|
+          ENV[key.to_s] = value.to_s
+        end
+      end
+    end
+
+    # Added manually session store for sidekiq web
+    config.session_store :cookie_store, key: '_interslice_session'
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use config.session_store, config.session_options
+
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run 'rake -D time' for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'

@@ -13,7 +13,7 @@ module ActivityFeedable
     return if instance_of?(Article) && unpublished?
     return if instance_of?(Photo) && illustrable_type == 'Article'
 
-    AddInFeedJob.set(wait_until: DateTime.current + 10.seconds).perform_later(self)
+    AddInFeedWorker.perform_in(10.seconds, self.class.name, id)
   end
 
   private

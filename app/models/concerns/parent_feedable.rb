@@ -15,7 +15,7 @@ module ParentFeedable
     {
       type: self.class.name,
       id: id,
-      name: has_attribute?(:full_name) ? full_name : name,
+      name: defined?(full_name) ? full_name : name,
       slug_name: slug_name
     }
   end

@@ -8,7 +8,7 @@ services:
     volumes:
       - data-elasticsearch:/usr/share/elasticsearch/data
   redis:
-    image: redis:4.0
+    image: redis:5.0
     ports:
       - 16379:6379
     volumes:

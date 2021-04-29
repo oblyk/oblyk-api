@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.5.3'
+ruby '2.6.5'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.3'
@@ -14,7 +14,7 @@ gem 'puma', '~> 4.1'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.7'
 # Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 4.0'
+gem 'redis', '~> 4.1.2'
 # Use Active Model has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 # provides a full set of stores (Cache, Session, HTTP Cache) for Ruby on Rails
@@ -53,6 +53,7 @@ gem 'kaminari'
 
 # Sidekiq
 gem 'sidekiq'
+gem 'sidekiq-statistic', '~> 1.4'
 
 # Track changes
 gem 'paper_trail', '~> 11.1'

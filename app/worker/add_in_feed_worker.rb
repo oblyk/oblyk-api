@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
-class AddInFeedJob < ApplicationJob
-  queue_as :default
+class AddInFeedWorker
+  include Sidekiq::Worker
 
-  def perform(feedable_object)
-    feedable_object = feedable_object.reload
+  def perform(class_object, class_id)
+    feedable_object = class_object.constantize.find class_id
+
     feed = Feed.find_or_initialize_by(
       feedable_id: feedable_object.id,
       feedable_type: feedable_object.class.name
