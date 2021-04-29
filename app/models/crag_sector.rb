@@ -92,7 +92,8 @@ class CragSector < ApplicationRecord
         crag: {
           id: crag.id,
           name: crag.name,
-          slug_name: crag.slug_name
+          slug_name: crag.slug_name,
+          map_thumbnail_url: crag.photo.present? ? crag.photo.thumbnail_url : nil
         }
       },
       geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
