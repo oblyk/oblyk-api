@@ -77,7 +77,8 @@ Rails.application.routes.draw do
           get :library
           get :subscribes
           get :followers
-          get :favorites
+          get :favorite_crags
+          get :favorite_gyms
           get :ascent_crag_routes
           get :ascended_crag_routes
           get :ascended_crags_geo_json

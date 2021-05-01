@@ -14,14 +14,30 @@ module Api
         render json: feeds, status: :ok
       end
 
-      def favorites
-        @subscribes = @user.subscribes.where.not(followable_type: %w[GuideBookPaper User]).order(views: :desc)
+      def favorite_crags
+        @subscribes = @user.subscribes
+                           .where(followable_type: 'Crag')
+                           .order(updated_at: :desc)
+                           .page(params.fetch(:page, 1))
+        render 'api/v1/current_users/subscribes'
+      end
+
+      def favorite_gyms
+        @subscribes = @user.subscribes
+                           .where(followable_type: 'Gym')
+                           .order(updated_at: :desc)
+                           .page(params.fetch(:page, 1))
         render 'api/v1/current_users/subscribes'
       end
 
       def subscribes
         @subscribes = @user.subscribes.where(followable_type: 'User').order(updated_at: :desc)
         render 'api/v1/current_users/subscribes'
+      end
+
+      def library
+        @subscribes = @user.subscribes.where(followable_type: 'GuideBookPaper').order(views: :desc)
+        render :subscribes
       end
 
       def followers
@@ -60,11 +76,6 @@ module Api
                                   .page(page)
                        end
         render 'api/v1/crag_routes/index'
-      end
-
-      def library
-        @subscribes = @user.subscribes.where(followable_type: %w[GuideBookPaper]).order(views: :desc)
-        render :subscribes
       end
 
       def projects
