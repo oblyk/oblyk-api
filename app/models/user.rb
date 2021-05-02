@@ -177,6 +177,11 @@ class User < ApplicationRecord
     Rails.application.routes.url_helpers.rails_representation_url(banner.variant(resize: '300x300').processed, only_path: true)
   end
 
+  def subscribe_to_newsletter?
+    subscribe = Subscribe.find_by(email: email)
+    subscribe.present?
+  end
+
   private
 
   def set_uuid

@@ -133,6 +133,10 @@ module Api
         end
       end
 
+      def subscribe_to_newsletter
+        render json: @user.subscribe_to_newsletter?, status: :ok
+      end
+
       private
 
       def set_user

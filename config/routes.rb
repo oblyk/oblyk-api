@@ -86,6 +86,7 @@ Rails.application.routes.draw do
           get :projects
           post :avatar
           post :banner
+          get :subscribe_to_newsletter
           namespace :log_books do
             resources :outdoors, only: %i[] do
               collection do
