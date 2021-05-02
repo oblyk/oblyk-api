@@ -10,6 +10,9 @@ module Api
       end
 
       def create
+        already_subscribe = Subscribe.find_by email: subscribe_params[:email]
+        head :no_content && return if already_subscribe
+
         @subscribe = Subscribe.new(subscribe_params)
         if @subscribe.save
           render 'api/v1/subscribes/show'
@@ -18,10 +21,12 @@ module Api
         end
       end
 
-      def unsubscribe
+      def destroy
         @subscribe = Subscribe.find_by email: subscribe_params[:email]
-        if @subscribe.delete
-          render json: {}, status: :ok
+        head :no_content && return unless @subscribe
+
+        if @subscribe&.destroy
+          head :no_content
         else
           render json: { error: @subscribe.errors }, status: :unprocessable_entity
         end

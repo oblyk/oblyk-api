@@ -1,0 +1,47 @@
+### GET all newsletters
+GET {{api_url}}/newsletters.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET newsletter photos
+GET {{api_url}}/newsletters/1/photos.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### Create newsletters
+POST {{api_url}}/newsletters.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "newsletter": {
+    "name": "First newsletter",
+    "body": "Blabla on the newsletter body"
+  }
+}
+
+### Update newsletter
+PUT {{api_url}}/newsletters/1.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "newsletter": {
+    "name": "Update first newsletter"
+  }
+}
+
+### Get newsletter 1
+GET {{api_url}}/newsletters/1.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
+### Sent newsletters 1
+POST {{api_url}}/newsletters/1/send_newsletter.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json

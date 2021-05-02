@@ -127,8 +127,13 @@ Rails.application.routes.draw do
       end
       resources :videos
       resources :photos
-      resources :subscribes, only: %i[index create]
-      delete 'unsubscribes', controller: :subscribes, action: :unsubscribe
+      resources :subscribes, only: %i[index create] do
+        delete :destroy, on: :collection
+      end
+      resources :newsletters do
+        get :photos, on: :member
+        post :send_newsletter, on: :member
+      end
       resources :tick_lists, only: %i[index create] do
         delete :destroy, on: :collection
       end

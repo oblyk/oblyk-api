@@ -12,7 +12,7 @@ class Photo < ApplicationRecord
 
   before_validation :init_posted_at
 
-  validates :illustrable_type, inclusion: { in: %w[Crag CragSector CragRoute Article].freeze }
+  validates :illustrable_type, inclusion: { in: %w[Crag CragSector CragRoute Article Newsletter].freeze }
   validates :picture, blob: { content_type: :image }
 
   delegate :longitude, to: :illustrable

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_25_183037) do
+ActiveRecord::Schema.define(version: 2021_05_01_184908) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -611,6 +611,16 @@ ActiveRecord::Schema.define(version: 2021_04_25_183037) do
     t.index ["user_id"], name: "index_links_on_user_id"
   end
 
+  create_table "newsletters", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "slug_name"
+    t.text "body"
+    t.integer "photos_count"
+    t.datetime "sent_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "notification_type"
     t.bigint "user_id"
@@ -736,6 +746,7 @@ ActiveRecord::Schema.define(version: 2021_04_25_183037) do
     t.bigint "legacy_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "complained_at"
     t.index ["email"], name: "index_subscribes_on_email", unique: true
   end
 
