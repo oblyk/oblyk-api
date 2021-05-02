@@ -1,0 +1,5 @@
+<%= t('mailer.notification.hello', name: @user.first_name) %>
+
+<%= t('mailer.notification.new_message.body') %>
+
+<%= t('mailer.notification.new_message.for_see_messenger') %> <%= @app_url %>/me/<%= @user.slug_name %>/messenger

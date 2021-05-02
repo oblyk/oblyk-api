@@ -169,7 +169,8 @@ module Api
           :public_outdoor_ascents,
           :public_indoor_ascents,
           :partner_latitude,
-          :partner_longitude
+          :partner_longitude,
+          email_notifiable_list: %i[]
         )
       end
 

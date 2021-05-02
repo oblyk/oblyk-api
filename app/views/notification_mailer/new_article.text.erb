@@ -1,0 +1,5 @@
+<%= @article.name %>
+
+<%= @article.description %>
+
+<%= t('mailer.notification.new_article.for_read_more') %> <%= @app_url %>/articles/<%= @article.id %>/<%= @article.slug_name %>

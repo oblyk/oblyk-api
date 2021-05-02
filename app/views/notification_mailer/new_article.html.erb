@@ -1,0 +1,14 @@
+<h3>
+  <%= @article.name %>
+</h3>
+
+<p>
+  <%= @article.description %>
+</p>
+
+<p style="text-align: center">
+  <a href="<%= @app_url %>/articles/<%= @article.id %>/<%= @article.slug_name %>">
+    <%= t('mailer.notification.new_article.read_more') %>
+  </a>
+</p>
+

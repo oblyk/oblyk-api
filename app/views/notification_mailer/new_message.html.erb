@@ -1,0 +1,14 @@
+<h1 style="font-size: 16px">
+  <%= t('mailer.notification.hello', name: @user.first_name) %>
+</h1>
+
+<p>
+  <%= t('mailer.notification.new_message.body') %>
+</p>
+
+<p style="text-align: center">
+  <a href="<%= @app_url %>/me/<%= @user.slug_name %>/messenger">
+    <%= t('mailer.notification.new_message.check_my_message') %>
+  </a>
+</p>
+

@@ -48,6 +48,7 @@ class User < ApplicationRecord
 
   validates :avatar, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true
+  validate :validate_email_notifiable_list
 
   scope :partner_geolocable, -> { where(partner_search: true).where.not(partner_latitude: nil).where.not(partner_longitude: nil) }
 
@@ -192,9 +193,21 @@ class User < ApplicationRecord
     self.last_activity_at ||= DateTime.current
   end
 
+  def init_email_notifiable_list
+    self.email_notifiable_list ||= ['new_message']
+  end
+
   def init_partner_search_activated_at
     return unless partner_search_changed?
 
     self.partner_search_activated_at = partner_search == true ? DateTime.current : nil
+  end
+
+  def validate_email_notifiable_list
+    return if email_notifiable_list&.count&.zero?
+
+    email_notifiable_list.each do |email_notifiable|
+      errors.add(:email_notifiable, I18n.t('activerecord.errors.messages.inclusion')) if Notification::EMAILABLE_NOTIFICATION_LIST.exclude? email_notifiable
+    end
   end
 end

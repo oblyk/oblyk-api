@@ -1,0 +1,5 @@
+<%= t('mailer.notification.hello', name: @user.first_name) %>
+
+<%= t('mailer.notification.request_for_follow_up.body', name: @follower.first_name) %>
+
+<%= t('mailer.notification.request_for_follow_up.for_see_subscribe_page') %>  <%= @app_url %>/me/<%= @user.slug_name %>/community/followers

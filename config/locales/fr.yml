@@ -20,6 +20,22 @@ fr:
       new_password_request: "Vous avez demandé un nouveau mot de passe."
       follow_link: "Merci de suivre ce lien et de renseigner votre nouveau mot de passe :"
       link_expiry: "(Ce lien à une durée de vie limitée, s'il ne fonction plus, faite une nouvelle demande de mot de passe.)"
+    notification:
+      hello: "Bonjour %{name}"
+      new_message:
+        title: "Oblyk | Vous avez un nouveau message"
+        body: "Vous avez des nouveaux messages non lu sur votre messagerie oblyk"
+        for_see_messenger: "Pour vous rendre sur votre messagerie, visitez ce lien :"
+        check_my_message: "Voir ma messagerie"
+      request_for_follow_up:
+        title: "Oblyk | %{name} souhaite à vous suivre"
+        body: "%{name} souhaite vous suivre, rendez vous sur la page de vos abonné·e·s pour accepter ou refuser sa demande"
+        for_see_subscribe_page: "Pour gérer vos abonné·e·s, rendez-vous ici :"
+        subscribe_page: "Gérer mes abonné·e·s"
+      new_article:
+        title: "Oblyk | Un nouvel article a était publié"
+        for_read_more: "Pour lire la suite, rendez-vous ici :"
+        read_more: "Lire la suite"
   activerecord:
     attributes:
       crag:

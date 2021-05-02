@@ -12,6 +12,12 @@ class Notification < ApplicationRecord
     new_article
   ].freeze
 
+  EMAILABLE_NOTIFICATION_LIST = %w[
+    new_message
+    request_for_follow_up
+    new_article
+  ].freeze
+
   belongs_to :user
   belongs_to :notifiable, polymorphic: true
 
@@ -22,10 +28,17 @@ class Notification < ApplicationRecord
   default_scope { order(posted_at: :desc) }
 
   before_validation :set_posted_at
+  after_create :send_email_notification
 
   private
 
   def set_posted_at
     self.posted_at ||= Time.current
+  end
+
+  def send_email_notification
+    return unless user.email_notifiable_list.include?(notification_type)
+
+    EmailNotificationWorker.perform_in(6.hours, id)
   end
 end

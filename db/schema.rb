@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_01_184908) do
+ActiveRecord::Schema.define(version: 2021_05_02_162627) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -800,6 +800,7 @@ ActiveRecord::Schema.define(version: 2021_05_01_184908) do
     t.decimal "partner_longitude", precision: 10, scale: 6
     t.datetime "last_activity_at"
     t.datetime "partner_search_activated_at"
+    t.json "email_notifiable_list"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["uuid"], name: "index_users_on_uuid", unique: true
   end
