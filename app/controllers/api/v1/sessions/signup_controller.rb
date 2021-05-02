@@ -20,6 +20,11 @@ module Api
               refresh_token.save
             end
 
+            if params.fetch(:newsletter_subscribe, false)
+              already_subscribe = Subscribe.find_by email: user.email
+              Subscribe.create(email: user.email) unless already_subscribe
+            end
+
             UserMailer.with(user: user).welcome.deliver_later
 
             render json: {

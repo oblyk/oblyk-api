@@ -96,3 +96,4 @@ fr:
         grade_system: "you_must_choose_at_least_one_system"
         one_point_system: "you_cannot_have_both_point_systems."
         content_type: "is_not_in_the_right_format"
+        confirmation: "confirm"
