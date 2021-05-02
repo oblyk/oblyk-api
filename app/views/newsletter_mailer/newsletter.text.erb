@@ -1,0 +1,9 @@
+Pour voir cette newsletter dans un navigateur, rendez-vous sur ce lien : <%= @app_url %>/newsletters/<%= @newsletter.id %>/<%= @newsletter.slug_name %>
+
+---------------------------------
+
+<%= strip_tags @newsletter.body %>
+
+---------------------------------
+
+Pour vous désinscrire, copier ce lien dans un navigateur : <%= @app_url %>/newsletters/unsubscribe?email=<%= @subscribe.email %>

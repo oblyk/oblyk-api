@@ -1,0 +1,19 @@
+<p style="text-align: center; font-size: 0.9em; margin-bottom: 2em; margin-top: 0">
+  <a
+    href="<%= @app_url %>/newsletters/<%= @newsletter.id %>/<%= @newsletter.slug_name %>"
+    style="color: rgb(100, 100, 100)"
+  >
+    Voir dans un navigateur
+  </a>
+  <span style="display: inline-block; margin-left: 0.5em; margin-right: 0.5em">|</span>
+  <a
+    href="<%= @app_url %>/newsletters/unsubscribe?email=<%= @subscribe.email %>"
+    style="color: rgb(100, 100, 100)"
+  >
+    Me désinscrire
+  </a>
+</p>
+
+<div>
+  <%= @newsletter.body.html_safe %>
+</div>

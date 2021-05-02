@@ -23,6 +23,9 @@ class Newsletter < ApplicationRecord
     return if sent?
 
     update_attribute :sent_at, Time.current
-    # run jobs
+
+    Subscribe.sendable.find_each do |subscribe|
+      SendNewsletterWorker.perform_async(subscribe.id, id)
+    end
   end
 end

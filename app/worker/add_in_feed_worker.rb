@@ -2,6 +2,7 @@
 
 class AddInFeedWorker
   include Sidekiq::Worker
+  sidekiq_options queue: :default
 
   def perform(class_object, class_id)
     feedable_object = class_object.constantize.find class_id
