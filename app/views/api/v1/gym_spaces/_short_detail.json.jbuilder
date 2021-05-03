@@ -17,5 +17,5 @@ json.extract! gym_space,
               :latitude,
               :longitude,
               :published_at
-json.banner gym_space.banner.attached? ? url_for(gym_space.banner) : nil
-json.plan gym_space.plan.attached? ? url_for(gym_space.plan) : nil
+json.banner gym_space.banner.attached? ? gym_space.banner_large_url : nil
+json.plan gym_space.plan.attached? ? gym_space.plan_large_url : nil

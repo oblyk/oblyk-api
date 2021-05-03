@@ -5,6 +5,7 @@ class Article < ApplicationRecord
   include Publishable
   include ParentFeedable
   include ActivityFeedable
+  include AttachmentResizable
 
   has_one_attached :cover
 
@@ -32,10 +33,12 @@ class Article < ApplicationRecord
     []
   end
 
-  def thumbnail_url
-    return unless cover.attached?
+  def cover_large_url
+    resize_attachment cover, '1920x1920'
+  end
 
-    Rails.application.routes.url_helpers.rails_representation_url(cover.variant(resize: '300x300').processed, only_path: true)
+  def cover_thumbnail_url
+    resize_attachment cover, '300x300'
   end
 
   def summary_to_json

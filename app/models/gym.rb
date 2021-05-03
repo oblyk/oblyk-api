@@ -7,6 +7,7 @@ class Gym < ApplicationRecord
   include Slugable
   include ParentFeedable
   include ActivityFeedable
+  include AttachmentResizable
 
   has_paper_trail only: %i[
     name
@@ -119,7 +120,19 @@ class Gym < ApplicationRecord
     key
   end
 
-  def thumbnail_banner_url
-    Rails.application.routes.url_helpers.rails_representation_url(banner.variant(resize: '300x300').processed, only_path: true)
+  def banner_large_url
+    resize_attachment banner, '1920x1920'
+  end
+
+  def banner_thumbnail_url
+    resize_attachment banner, '300x300'
+  end
+
+  def logo_large_url
+    resize_attachment banner, '500x500'
+  end
+
+  def logo_thumbnail_url
+    resize_attachment banner, '100x100'
   end
 end

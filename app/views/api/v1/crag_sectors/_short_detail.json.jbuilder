@@ -36,12 +36,12 @@ json.crag do
   json.region crag_sector.crag.region
   json.photo do
     json.id crag_sector.crag&.photo&.id
-    json.url url_for(crag_sector.crag.photo.picture) if crag_sector.crag&.photo
+    json.url crag_sector.crag.photo.large_url if crag_sector.crag&.photo
     json.thumbnail_url crag_sector.crag.photo.thumbnail_url if crag_sector.crag&.photo
   end
 end
 json.photo do
   json.id crag_sector.photo&.id
-  json.url url_for(crag_sector.photo.picture) if crag_sector.photo
+  json.url crag_sector.photo.large_url if crag_sector.photo
   json.thumbnail_url crag_sector.photo.thumbnail_url if crag_sector.photo
 end

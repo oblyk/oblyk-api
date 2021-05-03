@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class GymRoute < ApplicationRecord
+  include AttachmentResizable
+
   has_one_attached :picture
   has_one_attached :thumbnail
   belongs_to :gym_sector, optional: true
@@ -78,6 +80,14 @@ class GymRoute < ApplicationRecord
   def mount!
     self.dismounted_at = nil
     save
+  end
+
+  def picture_large_url
+    resize_attachment picture, '700x700'
+  end
+
+  def thumbnail_url
+    resize_attachment picture, '300x300'
   end
 
   private

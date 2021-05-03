@@ -5,6 +5,7 @@ class GymSpace < ApplicationRecord
   include SoftDeletable
   include Publishable
   include Slugable
+  include AttachmentResizable
 
   attribute :banner_color, :string, default: '#ffffff'
   attribute :banner_bg_color, :string, default: '#f44336'
@@ -38,5 +39,21 @@ class GymSpace < ApplicationRecord
     self.scheme_height = meta[:height]
     self.scheme_width = meta[:width]
     save
+  end
+
+  def plan_large_url
+    resize_attachment plan, '4000x4000'
+  end
+
+  def plan_thumbnail_url
+    resize_attachment plan, '500x500'
+  end
+
+  def banner_large_url
+    resize_attachment banner, '1920x1920'
+  end
+
+  def banner_thumbnail_url
+    resize_attachment banner, '300x300'
   end
 end

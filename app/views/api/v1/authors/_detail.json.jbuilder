@@ -2,5 +2,5 @@
 
 json.extract! author, :id, :name, :description, :user_id
 
-json.cover_url author.cover.attached? ? url_for(author.cover) : nil
-json.thumbnail_url author.cover.attached? ? author.thumbnail_url : nil
+json.cover_url author.cover.attached? ? author.cover_large_url : nil
+json.thumbnail_url author.cover.attached? ? author.cover_thumbnail_url : nil

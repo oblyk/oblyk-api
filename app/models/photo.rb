@@ -2,6 +2,7 @@
 
 class Photo < ApplicationRecord
   include ActivityFeedable
+  include AttachmentResizable
 
   has_one_attached :picture
 
@@ -21,8 +22,12 @@ class Photo < ApplicationRecord
   delegate :feed_parent_type, to: :illustrable
   delegate :feed_parent_object, to: :illustrable
 
+  def large_url
+    resize_attachment picture, '1920x1920'
+  end
+
   def thumbnail_url
-    Rails.application.routes.url_helpers.rails_representation_url(picture.variant(resize: '300x300').processed, only_path: true)
+    resize_attachment picture, '300x300'
   end
 
   def photo_height

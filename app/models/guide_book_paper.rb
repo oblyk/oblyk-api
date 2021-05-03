@@ -5,6 +5,7 @@ class GuideBookPaper < ApplicationRecord
   include Slugable
   include ParentFeedable
   include ActivityFeedable
+  include AttachmentResizable
 
   has_paper_trail only: %i[name author editor publication_year price_cents ean number_of_page weight]
 
@@ -49,8 +50,12 @@ class GuideBookPaper < ApplicationRecord
     )
   end
 
-  def thumbnail_url
-    Rails.application.routes.url_helpers.rails_representation_url(cover.variant(resize: '300x300').processed, only_path: true)
+  def cover_large_url
+    resize_attachment cover, '700x700'
+  end
+
+  def cover_thumbnail_url
+    resize_attachment cover, '300x300'
   end
 
   def all_photos

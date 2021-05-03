@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 json.partial! 'api/v1/gym_routes/short_detail', gym_route: gym_route
-json.picture gym_route.picture.attached? ? url_for(gym_route.picture) : nil
+json.picture gym_route.picture.attached? ? gym_route.picture_large_url : nil
 
 json.gym_sector do
   json.partial! 'api/v1/gym_sectors/short_detail', gym_sector: gym_route.gym_sector

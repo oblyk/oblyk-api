@@ -32,8 +32,8 @@ json.extract! @user,
               :public_indoor_ascents,
               :email_notifiable_list
 json.full_name @user.full_name
-json.banner @user.banner.attached? ? url_for(@user.banner) : nil
-json.avatar @user.avatar.attached? ? url_for(@user.avatar) : nil
+json.banner @user.banner.attached? ? @user.banner_large_url : nil
+json.avatar @user.avatar.attached? ? @user.avatar_large_url : nil
 
 json.subscribes_count @user.subscribes.count
 json.follower_count @user.follows.count
@@ -44,6 +44,6 @@ json.gyms do
     json.id gym.id
     json.name gym.name
     json.slug_name gym.slug_name
-    json.logo gym.logo.attached? ? url_for(gym.logo) : nil
+    json.logo gym.logo.attached? ? gym.logo_thumbnail_url : nil
   end
 end

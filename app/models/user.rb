@@ -5,6 +5,7 @@ class User < ApplicationRecord
   include Geolocable
   include Slugable
   include ParentFeedable
+  include AttachmentResizable
 
   mattr_accessor :current, instance_accessor: false
 
@@ -166,16 +167,20 @@ class User < ApplicationRecord
     }
   end
 
-  def avatar_thumbnail_url
-    return unless avatar.attached?
+  def avatar_large_url
+    resize_attachment avatar, '500x500'
+  end
 
-    Rails.application.routes.url_helpers.rails_representation_url(avatar.variant(resize: '300x300').processed, only_path: true)
+  def avatar_thumbnail_url
+    resize_attachment avatar, '300x300'
+  end
+
+  def banner_large_url
+    resize_attachment banner, '1920x1920'
   end
 
   def banner_thumbnail_url
-    return unless banner.attached?
-
-    Rails.application.routes.url_helpers.rails_representation_url(banner.variant(resize: '300x300').processed, only_path: true)
+    resize_attachment banner, '300x300'
   end
 
   def subscribe_to_newsletter?

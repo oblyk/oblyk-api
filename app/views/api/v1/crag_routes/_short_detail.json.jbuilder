@@ -32,7 +32,7 @@ json.crag_sector do
   json.slug_name crag_route.crag_sector&.slug_name
   json.photo do
     json.id crag_route.crag_sector&.photo&.id
-    json.url url_for(crag_route.crag_sector.photo.picture) if crag_route.crag_sector&.photo
+    json.url crag_route.crag_sector.photo.large_url if crag_route.crag_sector&.photo
     json.thumbnail_url crag_route.crag_sector.photo.thumbnail_url if crag_route.crag_sector&.photo
   end
 end
@@ -45,13 +45,13 @@ json.crag do
   json.city crag_route.crag.city
   json.photo do
     json.id crag_route.crag&.photo&.id
-    json.url url_for(crag_route.crag.photo.picture) if crag_route.crag&.photo
+    json.url crag_route.crag.photo.large_url if crag_route.crag&.photo
     json.thumbnail_url crag_route.crag.photo.thumbnail_url if crag_route.crag&.photo
   end
 end
 
 json.photo do
   json.id crag_route.photo&.id
-  json.url url_for(crag_route.photo.picture) if crag_route.photo
+  json.url crag_route.photo.large_url if crag_route.photo
   json.thumbnail_url crag_route.photo.thumbnail_url if crag_route.photo
 end

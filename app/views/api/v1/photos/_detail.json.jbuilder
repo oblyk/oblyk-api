@@ -12,7 +12,7 @@ json.extract! photo,
               :copyright_nd,
               :photo_height,
               :photo_width
-json.picture url_for(photo.picture)
+json.picture photo.large_url
 json.thumbnail photo.thumbnail_url
 json.illustrable do
   json.type photo.illustrable_type
