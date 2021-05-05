@@ -129,10 +129,10 @@ class Gym < ApplicationRecord
   end
 
   def logo_large_url
-    resize_attachment banner, '500x500'
+    resize_attachment logo, '500x500'
   end
 
   def logo_thumbnail_url
-    resize_attachment banner, '100x100'
+    resize_attachment logo, '100x100'
   end
 end
