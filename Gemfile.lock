@@ -224,6 +224,7 @@ GEM
     request_store (1.5.0)
       rack (>= 1.4)
     rexml (3.2.5)
+    rollbar (3.1.2)
     rubocop (1.13.0)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
@@ -309,6 +310,7 @@ DEPENDENCIES
   redis (~> 4.1.2)
   redis-namespace
   redis-rails
+  rollbar
   rubocop-faker
   rubocop-performance
   rubocop-rails

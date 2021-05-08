@@ -5,3 +5,5 @@
 # This file overrides ENV variables in the Unix shell.
 SIDEKIQ_USERNAME: 'sidekiq'
 SIDEKIQ_PASSWORD: 'password'
+
+ROLLBAR_ACCESS_TOKEN: ''
