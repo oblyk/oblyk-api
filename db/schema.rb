@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_02_162627) do
+ActiveRecord::Schema.define(version: 2021_05_08_134655) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -595,6 +595,16 @@ ActiveRecord::Schema.define(version: 2021_05_02_162627) do
     t.integer "videos_count"
     t.index ["name"], name: "index_gyms_on_name"
     t.index ["user_id"], name: "index_gyms_on_user_id"
+  end
+
+  create_table "ip_black_lists", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "ip"
+    t.text "params_sent"
+    t.integer "block_count"
+    t.datetime "blocked_at"
+    t.datetime "block_expired_at"
+    t.index ["block_expired_at"], name: "index_ip_black_lists_on_block_expired_at"
+    t.index ["ip"], name: "index_ip_black_lists_on_ip"
   end
 
   create_table "links", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

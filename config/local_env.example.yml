@@ -7,3 +7,7 @@ SIDEKIQ_USERNAME: 'sidekiq'
 SIDEKIQ_PASSWORD: 'password'
 
 ROLLBAR_ACCESS_TOKEN: ''
+
+# If honeypot params is find in request params :
+# -> then the applicant's ip is add to ip_black_list for a little moment
+HONEYPOT_PARAMS: 'honeypot_params'
