@@ -97,7 +97,7 @@ class Gym < ApplicationRecord
         pan: pan,
         fun_climbing: fun_climbing,
         training_space: training_space,
-        map_thumbnail_url: banner.present? ? thumbnail_banner_url : nil
+        map_thumbnail_url: banner.present? ? banner_thumbnail_url : nil
       },
       geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
     }
