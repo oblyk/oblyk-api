@@ -10,6 +10,10 @@ class Photo < ApplicationRecord
   belongs_to :illustrable, polymorphic: true, counter_cache: :photos_count
   has_many :reports, as: :reportable, dependent: :destroy
   has_many :feeds, as: :feedable
+  has_many :crag_sectors
+  has_many :crags
+  has_many :crag_routes
+  has_many :areas
 
   before_validation :init_posted_at
 
@@ -45,6 +49,10 @@ class Photo < ApplicationRecord
         assigns: { photo: self }
       )
     )
+  end
+
+  def destroyable?
+    crag_routes.count.zero? && crag_sectors.count.zero? && crags.count.zero? && areas.count.zero?
   end
 
   private

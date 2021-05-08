@@ -3,9 +3,9 @@
 module Api
   module V1
     class PhotosController < ApiController
-      before_action :protected_by_super_admin, only: %i[destroy]
-      before_action :protected_by_session, only: %i[create update]
+      before_action :protected_by_session, only: %i[create update destroy]
       before_action :set_photo, only: %i[show update destroy]
+      before_action :protected_by_owner, only: %i[update destroy]
 
       def index
         @photos = Photo.where(id: params[:photo_ids])
@@ -32,6 +32,11 @@ module Api
       end
 
       def destroy
+        unless @photo.destroyable?
+          render json: { error: { base: ['un_destroyable'] } }, status: :unprocessable_entity
+          return
+        end
+
         if @photo.destroy
           render json: {}, status: :ok
         else
@@ -59,6 +64,10 @@ module Api
           :copyright_nd,
           :picture
         )
+      end
+
+      def protected_by_owner
+        not_authorized if @current_user.id != @photo.user_id
       end
     end
   end
