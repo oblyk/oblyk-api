@@ -58,6 +58,15 @@ class GuideBookPaper < ApplicationRecord
     resize_attachment cover, '300x300'
   end
 
+  def all_photos_count
+    photos_count = 0
+    crags_ids = crags.pluck(:id)
+    photos_count += Crag.where(id: crags_ids).sum(:photos_count)
+    photos_count += CragSector.where(crag_id: crags_ids).sum(:photos_count)
+    photos_count += CragRoute.where(crag_id: crags_ids).sum(:photos_count)
+    photos_count
+  end
+
   def all_photos
     photos = []
     crags.each { |crag| photos += crag.all_photos }

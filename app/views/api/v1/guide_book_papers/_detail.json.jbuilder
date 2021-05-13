@@ -2,7 +2,7 @@
 
 json.partial! 'api/v1/guide_book_papers/short_detail', guide_book_paper: guide_book_paper
 
-json.photos_count guide_book_paper.all_photos.count
+json.photos_count guide_book_paper.all_photos_count
 json.crags_count guide_book_paper.crags.count
 json.links_count guide_book_paper.links.count
 json.versions_count guide_book_paper.versions.count
