@@ -119,7 +119,7 @@ Authorization: Bearer {{auth_token}}
 Accept: application/json
 
 ### GET feed
-GET {{api_url}}/current_users/feed.json
+GET {{api_url}}/current_users/feed.json?page=1&local_news=true&articles=true&guide_books=true&subscribes=true
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json

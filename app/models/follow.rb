@@ -17,6 +17,8 @@ class Follow < ApplicationRecord
     Gym
   ].freeze
 
+  scope :accepted, -> { where.not(accepted_at: nil) }
+
   validates :followable_type, inclusion: { in: FOLLOWABLE_LIST }
 
   def accepted?
