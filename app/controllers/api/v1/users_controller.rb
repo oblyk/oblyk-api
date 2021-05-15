@@ -6,6 +6,7 @@ module Api
       before_action :protected_by_session, only: %i[search]
       before_action :set_user, except: %i[search]
       before_action :protected_private_profile, except: %i[search]
+      before_action :protected_media, only: %i[photos videos]
       before_action :protected_outdoor_log_book, only: %i[outdoor_figures outdoor_climb_types_chart ascended_crag_routes outdoor_grades_chart]
 
       def show; end
@@ -114,10 +115,30 @@ module Api
       end
 
       def protected_outdoor_log_book
+        # Ok if user have public profile && public outdoor ascents
         return if @user.public_profile && @user.public_outdoor_ascents
+
+        # Ok if I have logged user && user have public outdoor logbook
         return if login? && @user.public_outdoor_ascents
 
+        # Ok if current user is subscribe to user
+        return if current_user_is_subscribed?
+
         render json: {}, status: :unauthorized
+      end
+
+      def protected_media
+        # Ok if user have public profile
+        return if @user.public_profile
+
+        # Ok if current user is subscribe to user
+        return if current_user_is_subscribed?
+
+        render json: {}, status: :unauthorized
+      end
+
+      def current_user_is_subscribed?
+        login? && User.current.subscribes.accepted.where(followable_type: 'User', followable_id: @user.id).exists?
       end
 
       def set_user
