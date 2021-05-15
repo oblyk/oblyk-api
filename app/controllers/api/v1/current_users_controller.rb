@@ -44,10 +44,10 @@ module Api
         feeds = feeds.or(guide_books_feed) if guide_books
 
         # Subscribe feed
-        feeds = feeds.or(subscribe_crags_feed) if crags.positive?
-        feeds = feeds.or(subscribe_gyms_feed) if gyms.positive?
-        feeds = feeds.or(subscribe_guides_feed) if guides.positive?
-        feeds = feeds.or(subscribe_users_feed) if users.positive?
+        feeds = feeds.or(subscribe_crags_feed) if crags.count.positive?
+        feeds = feeds.or(subscribe_gyms_feed) if gyms.count.positive?
+        feeds = feeds.or(subscribe_guides_feed) if guides.count.positive?
+        feeds = feeds.or(subscribe_users_feed) if users.count.positive?
 
         # Order & Pagination
         feeds = feeds.order(posted_at: :desc)

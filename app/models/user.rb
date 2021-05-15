@@ -22,7 +22,8 @@ class User < ApplicationRecord
   has_many :photos
   has_many :videos
   has_many :gym_administrators
-  has_many :gyms, through: :gym_administrators
+  has_many :administered_gyms, through: :gym_administrators, source: :gym
+  has_many :gyms
   has_many :reports, as: :reportable
   has_many :ascent_crag_routes
   has_many :ascended_crag_routes, through: :ascent_crag_routes, source: :crag_route
@@ -32,6 +33,26 @@ class User < ApplicationRecord
   has_many :organization_users
   has_many :organizations, through: :organization_users
   has_many :notifications
+  has_many :alerts
+  has_many :approaches
+  has_many :area_crags
+  has_many :areas
+  has_many :article_crags
+  has_many :article_guide_book_papers
+  has_many :authors
+  has_many :comments
+  has_many :crag_routes
+  has_many :crag_sectors
+  has_many :crags
+  has_many :guide_book_papers
+  has_many :guide_book_pdfs
+  has_many :guide_book_webs
+  has_many :links
+  has_many :parks
+  has_many :place_of_sales
+  has_many :refresh_tokens
+  has_many :reports
+  has_many :words
 
   before_validation :set_uuid
   before_validation :last_activity_at

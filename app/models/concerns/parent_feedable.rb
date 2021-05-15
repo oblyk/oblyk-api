@@ -4,7 +4,7 @@ module ParentFeedable
   extend ActiveSupport::Concern
 
   def feed_parent_id
-    has_attribute?(:uuid) ? uuid : id
+    id
   end
 
   def feed_parent_type
@@ -15,6 +15,7 @@ module ParentFeedable
     {
       type: self.class.name,
       id: id,
+      uuid: has_attribute?(:uuid) ? uuid : nil,
       name: defined?(full_name) ? full_name : name,
       slug_name: slug_name
     }

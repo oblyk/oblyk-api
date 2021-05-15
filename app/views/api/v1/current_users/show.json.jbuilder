@@ -39,8 +39,8 @@ json.subscribes_count @user.subscribes.count
 json.follower_count @user.follows.count
 json.photo_count @user.photos.count
 
-json.gyms do
-  json.array! @user.gyms do |gym|
+json.administered_gyms do
+  json.array! @user.administered_gyms do |gym|
     json.id gym.id
     json.name gym.name
     json.slug_name gym.slug_name
