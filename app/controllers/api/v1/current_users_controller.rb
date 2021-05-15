@@ -97,10 +97,22 @@ module Api
       def ascended_crag_routes
         crag_route_ids = @user.ascent_crag_routes.made.pluck(:crag_route_id)
         page = params.fetch(:page, 1)
+
+        climbing_type_filter = params.fetch(:climbing_type, 'all')
+        climbing_filters = []
+        climbing_filters << 'sport_climbing' if %w[sport_climbing all].include?(climbing_type_filter)
+        climbing_filters << 'bouldering' if %w[bouldering all].include?(climbing_type_filter)
+        climbing_filters << 'multi_pitch' if %w[multi_pitch all].include?(climbing_type_filter)
+        climbing_filters << 'trad_climbing' if %w[trad_climbing all].include?(climbing_type_filter)
+        climbing_filters << 'aid_climbing' if %w[aid_climbing all].include?(climbing_type_filter)
+        climbing_filters << 'deep_water' if %w[deep_water all].include?(climbing_type_filter)
+        climbing_filters << 'via_ferrata' if %w[via_ferrata all].include?(climbing_type_filter)
+
         @crag_routes = case params[:order]
                        when 'crags'
                          CragRoute.includes(:crag, :crag_sector)
                                   .where(id: crag_route_ids)
+                                  .where(climbing_type: climbing_filters)
                                   .joins(:crag)
                                   .order('crags.name')
                                   .page(page)
@@ -108,11 +120,13 @@ module Api
                          CragRoute.joins("INNER JOIN ascents ON ascents.crag_route_id = crag_routes.id AND ascents.type = 'AscentCragRoute' AND ascents.user_id = #{@user.id}")
                                   .includes(:crag, :crag_sector)
                                   .where(id: crag_route_ids)
+                                  .where(climbing_type: climbing_filters)
                                   .order('ascents.released_at DESC')
                                   .page(page)
                        else
                          CragRoute.includes(:crag, :crag_sector)
                                   .where(id: crag_route_ids)
+                                  .where(climbing_type: climbing_filters)
                                   .order(max_grade_value: :desc)
                                   .page(page)
                        end
