@@ -73,6 +73,7 @@ Rails.application.routes.draw do
         collection do
           get '', action: :show
           put '', action: :update
+          delete '', action: :destroy
           get :feed
           get :library
           get :subscribes

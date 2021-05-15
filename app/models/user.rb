@@ -73,6 +73,8 @@ class User < ApplicationRecord
   validate :validate_email_notifiable_list
 
   scope :partner_geolocable, -> { where(partner_search: true).where.not(partner_latitude: nil).where.not(partner_longitude: nil) }
+  scope :deleted, -> { where(deleted_at: nil) }
+  scope :undeleted, -> { where.not(deleted_at: nil) }
 
   mapping do
     indexes :partner_location, type: 'geo_point'
@@ -209,6 +211,77 @@ class User < ApplicationRecord
     subscribe.present?
   end
 
+  def deletable?
+    deleted_at.blank?
+  end
+
+  def destroy
+    delete
+  end
+
+  def delete
+    return unless deletable?
+
+    ActiveRecord::Base.transaction do
+      self.first_name = 'Anonyme'
+      self.last_name = nil
+      self.email = "#{Date.current}-#{id}@delete.mail"
+      self.password_digest = "deleted-user-#{id}"
+      self.date_of_birth = Date.current
+      self.genre = nil
+      self.description = nil
+      self.partner_search = 0
+      self.latitude = nil
+      self.longitude = nil
+      self.bouldering = 0
+      self.sport_climbing = 0
+      self.multi_pitch = 0
+      self.trad_climbing = 0
+      self.aid_climbing = 0
+      self.deep_water = 0
+      self.via_ferrata = 0
+      self.pan = 0
+      self.grade_max = nil
+      self.grade_min = nil
+      self.slug_name = 'anonymous'
+      self.localization = nil
+      self.language = nil
+      self.reset_password_token = nil
+      self.reset_password_token_expired_at = nil
+      self.public_profile = 0
+      self.public_outdoor_ascents = 0
+      self.public_indoor_ascents = 0
+      self.partner_latitude = nil
+      self.partner_longitude = nil
+      self.last_activity_at = nil
+      self.partner_search_activated_at = nil
+      self.email_notifiable_list = nil
+      self.deleted_at = Time.current
+
+      if save
+        # Purge avatar & banner
+        avatar.purge
+        banner.purge
+
+        # Destroy relation
+        follows.destroy_all
+        subscribes.destroy_all
+        tick_lists.destroy_all
+        ascent_crag_routes.destroy_all
+        ascent_gym_routes.destroy_all
+        gym_administrators.destroy_all
+        ascent_users.destroy_all
+        organization_users.destroy_all
+        notifications.destroy_all
+        refresh_tokens.destroy_all
+
+        # Purge feed in relation
+        Feed.where(parent_id: id, parent_type: 'User').destroy_all
+        Feed.where(feedable_id: id, feedable_type: 'User').destroy_all
+      end
+    end
+  end
+
   private
 
   def set_uuid
@@ -230,7 +303,7 @@ class User < ApplicationRecord
   end
 
   def validate_email_notifiable_list
-    return if email_notifiable_list&.count&.zero?
+    return if email_notifiable_list.blank? || email_notifiable_list&.count&.zero?
 
     email_notifiable_list.each do |email_notifiable|
       errors.add(:email_notifiable, I18n.t('activerecord.errors.messages.inclusion')) if Notification::EMAILABLE_NOTIFICATION_LIST.exclude? email_notifiable

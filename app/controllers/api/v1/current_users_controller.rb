@@ -178,6 +178,11 @@ module Api
         render json: @user.subscribe_to_newsletter?, status: :ok
       end
 
+      def destroy
+        @user.delete
+        head :no_content
+      end
+
       private
 
       def set_user
