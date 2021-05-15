@@ -105,7 +105,7 @@ module Api
                                   .order('crags.name')
                                   .page(page)
                        when 'released_at'
-                         CragRoute.joins(:ascent_crag_routes)
+                         CragRoute.joins("INNER JOIN ascents ON ascents.crag_route_id = crag_routes.id AND ascents.type = 'AscentCragRoute' AND ascents.user_id = #{@user.id}")
                                   .includes(:crag, :crag_sector)
                                   .where(id: crag_route_ids)
                                   .order('ascents.released_at DESC')

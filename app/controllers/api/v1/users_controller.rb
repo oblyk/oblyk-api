@@ -62,13 +62,25 @@ module Api
 
       def ascended_crag_routes
         crag_route_ids = @user.ascent_crag_routes.made.pluck(:crag_route_id)
+        page = params.fetch(:page, 1)
         @crag_routes = case params[:order]
                        when 'crags'
-                         CragRoute.where(id: crag_route_ids).joins(:crag).order('crags.name')
+                         CragRoute.includes(:crag, :crag_sector)
+                                  .where(id: crag_route_ids)
+                                  .joins(:crag)
+                                  .order('crags.name')
+                                  .page(page)
                        when 'released_at'
-                         CragRoute.where(id: crag_route_ids).order(released_at: :desc)
+                         CragRoute.joins("INNER JOIN ascents ON ascents.crag_route_id = crag_routes.id AND ascents.type = 'AscentCragRoute' AND ascents.user_id = #{@user.id}")
+                                  .includes(:crag, :crag_sector)
+                                  .where(id: crag_route_ids)
+                                  .order('ascents.released_at DESC')
+                                  .page(page)
                        else
-                         CragRoute.where(id: crag_route_ids).order(max_grade_value: :desc)
+                         CragRoute.includes(:crag, :crag_sector)
+                                  .where(id: crag_route_ids)
+                                  .order(max_grade_value: :desc)
+                                  .page(page)
                        end
         render 'api/v1/crag_routes/index'
       end
