@@ -22,6 +22,7 @@ class Report < ApplicationRecord
     Video
     Word
     User
+    Organization
   ].freeze
 
   validates :reportable_type, inclusion: { in: REPORTABLE_LIST }
