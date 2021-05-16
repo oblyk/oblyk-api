@@ -32,5 +32,5 @@ json.subscribes_count @user.subscribes.count
 json.videos_count @user.videos.count
 json.photos_count @user.photos.count
 json.full_name @user.full_name
-json.banner @user.banner.attached? ? @user.avatar_thumbnail_url : nil
+json.banner @user.banner.attached? ? @user.banner_large_url : nil
 json.avatar @user.avatar.attached? ? @user.avatar_large_url : nil
