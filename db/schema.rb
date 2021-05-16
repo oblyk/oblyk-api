@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_08_134655) do
+ActiveRecord::Schema.define(version: 2021_05_16_094319) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -811,8 +811,10 @@ ActiveRecord::Schema.define(version: 2021_05_08_134655) do
     t.datetime "last_activity_at"
     t.datetime "partner_search_activated_at"
     t.json "email_notifiable_list"
+    t.string "ws_token"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["uuid"], name: "index_users_on_uuid", unique: true
+    t.index ["ws_token"], name: "index_users_on_ws_token", unique: true
   end
 
   create_table "versions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci", force: :cascade do |t|

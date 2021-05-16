@@ -37,6 +37,7 @@ class Notification < ApplicationRecord
   end
 
   def send_email_notification
+    return if user.email_notifiable_list.blank?
     return unless user.email_notifiable_list.include?(notification_type)
 
     EmailNotificationWorker.perform_in(6.hours, id)

@@ -12,8 +12,7 @@ module ApplicationCable
     private
 
     def find_verified_user(token)
-      RefreshToken.find_by(token: token)&.user || reject_unauthorized_connection
+      User.find_by(ws_token: token) || reject_unauthorized_connection
     end
-
   end
 end

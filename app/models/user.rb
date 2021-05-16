@@ -55,13 +55,15 @@ class User < ApplicationRecord
   has_many :words
 
   before_validation :set_uuid
+  before_validation :set_ws_token
   before_validation :last_activity_at
   before_validation :init_partner_search_activated_at
 
-  validates :first_name, :email, :uuid, presence: true
+  validates :first_name, :email, :uuid, :ws_token, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, if: proc { |obj| obj.deleted_at.blank? }
-  validates :email, uniqueness: true, on: :create
+  validates :email, uniqueness: true
   validates :uuid, uniqueness: true, on: :create
+  validates :ws_token, uniqueness: true, on: :create
   validates :genre, inclusion: { in: %w[male female] }, allow_blank: true
   validates :language, inclusion: { in: %w[fr en] }, allow_blank: true
 
@@ -286,6 +288,10 @@ class User < ApplicationRecord
 
   def set_uuid
     self.uuid ||= SecureRandom.uuid
+  end
+
+  def set_ws_token
+    self.ws_token ||= SecureRandom.urlsafe_base64(32)
   end
 
   def init_last_activity_at

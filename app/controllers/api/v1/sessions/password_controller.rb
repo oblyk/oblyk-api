@@ -46,6 +46,7 @@ module Api
               token: token,
               expired_at: exp,
               refresh_token: refresh_token,
+              ws_token: user.ws_token,
               administered_gyms: user.administered_gyms.map(&:id),
               subscribes: user.subscribes_to_a,
               ascent_crag_routes: user.ascent_crag_routes_to_a,
