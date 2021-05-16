@@ -29,6 +29,7 @@ class Notification < ApplicationRecord
 
   before_validation :set_posted_at
   after_create :send_email_notification
+  after_save :broadcast_notification
 
   private
 
@@ -41,5 +42,9 @@ class Notification < ApplicationRecord
     return unless user.email_notifiable_list.include?(notification_type)
 
     EmailNotificationWorker.perform_in(6.hours, id)
+  end
+
+  def broadcast_notification
+    ActionCable.server.broadcast "notification_#{user.id}", user.notifications.unread.count.positive?
   end
 end
