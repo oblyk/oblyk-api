@@ -10,7 +10,13 @@ module Api
       before_action :protected_by_message_owner, except: %i[index last_messages create]
 
       def index
-        messages = @conversation.conversation_messages.includes(:user).order(posted_at: :desc).page(params.fetch(:page, 1))
+        older_than = params.fetch(:older_than, nil)
+        older_than = older_than.present? ? DateTime.parse(older_than) : DateTime.current
+        messages = @conversation.conversation_messages
+                                .includes(:user)
+                                .where('posted_at < ?', older_than)
+                                .order(posted_at: :desc)
+                                .limit(25)
         @conversation_messages = messages.reverse || []
       end
 
