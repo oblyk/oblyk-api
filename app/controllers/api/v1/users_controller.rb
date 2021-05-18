@@ -32,7 +32,8 @@ module Api
       end
 
       def photos
-        @photos = @user.photos
+        page = params.fetch(:page, 1)
+        @photos = @user.photos.page(page)
         render 'api/v1/photos/index'
       end
 
