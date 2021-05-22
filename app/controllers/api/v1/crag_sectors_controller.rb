@@ -53,7 +53,14 @@ module Api
       end
 
       def photos
-        @photos = @crag_sector.all_photos
+        page = params.fetch(:page, 1)
+        @photos = Photo.where(
+          '(illustrable_type = "CragSector" AND illustrable_id = :crag_sector_id) OR
+           (illustrable_type = "CragRoute" AND illustrable_id IN (SELECT id FROM crag_routes WHERE crag_sector_id = :crag_sector_id))',
+          crag_sector_id: @crag_sector.id
+        )
+                       .order(posted_at: :desc)
+                       .page(page)
         render 'api/v1/photos/index'
       end
 

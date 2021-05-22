@@ -50,7 +50,10 @@ module Api
       end
 
       def photos
+        page = params.fetch(:page, 1)
         @photos = @crag_route.photos
+                             .order(posted_at: :desc)
+                             .page(page)
         render 'api/v1/photos/index'
       end
 
