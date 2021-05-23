@@ -164,6 +164,18 @@ module Api
         }, status: :ok
       end
 
+      def photos
+        page = params.fetch(:page, 1)
+        @photos = @user.photos.order(posted_at: :desc).page(page)
+        render 'api/v1/photos/index'
+      end
+
+      def videos
+        page = params.fetch(:page, 1)
+        @videos = @user.videos.order(created_at: :desc).page(page)
+        render 'api/v1/videos/index'
+      end
+
       def update
         if @user.update(user_params)
           render :show

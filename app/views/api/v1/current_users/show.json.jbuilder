@@ -37,7 +37,8 @@ json.avatar @user.avatar.attached? ? @user.avatar_large_url : nil
 
 json.subscribes_count @user.subscribes.count
 json.follower_count @user.follows.count
-json.photo_count @user.photos.count
+json.photos_count @user.photos.count
+json.videos_count @user.videos.count
 
 json.administered_gyms do
   json.array! @user.administered_gyms do |gym|

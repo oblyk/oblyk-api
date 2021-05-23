@@ -85,6 +85,8 @@ Rails.application.routes.draw do
           get :ascended_crags_geo_json
           get :tick_lists
           get :projects
+          get :photos
+          get :videos
           post :avatar
           post :banner
           get :subscribe_to_newsletter
