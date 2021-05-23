@@ -18,13 +18,15 @@ module Api
       end
 
       def subscribes
-        @subscribes = @user.subscribes.order(views: :desc)
+        page = params.fetch(:page, 1)
+        @subscribes = @user.subscribes.order(views: :desc).page(page)
         render 'api/v1/current_users/subscribes'
       end
 
       def followers
         @users = []
-        followers = @user.follows.order(created_at: :desc)
+        page = params.fetch(:page, 1)
+        followers = @user.follows.order(created_at: :desc).page(page)
         followers.each do |follower|
           @users << follower.user
         end
