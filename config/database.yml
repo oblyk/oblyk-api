@@ -31,3 +31,7 @@ test:
 production:
   <<: *default
   database: oblyk_production
+
+staging:
+  <<: *default
+  database: oblyk_staging
