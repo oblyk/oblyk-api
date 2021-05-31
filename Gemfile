@@ -81,6 +81,14 @@ group :development do
 
   # Open mail in browser rather than send real email
   gem 'letter_opener'
+
+  # Capistrano
+  gem 'capistrano'
+  gem 'capistrano3-puma'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rails'
+  gem 'capistrano-rbenv'
+  gem 'capistrano-sidekiq'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
