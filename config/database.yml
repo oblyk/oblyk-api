@@ -28,10 +28,10 @@ test:
   <<: *default
   database: oblyk_test
 
-production:
-  <<: *default
-  database: oblyk_production
-
 staging:
   <<: *default
   database: oblyk_staging
+
+production:
+  <<: *default
+  database: oblyk_production
