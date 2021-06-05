@@ -74,72 +74,12 @@ AscentCragRoute.all.find_each(&:save_feed!)
 Article.all.find_each(&:save_feed!)
 ```
 
-Todo migration des tables :
-- [x] articles
-- [x] approaches
-- [x] comments
-- [x] conversations
-- [X] conversation_users
-- [X] messages
-- [x] crags
-- [ ] ascents (old crosses)
-- [x] user_ascents
-- [x] alerts (old exceptions)
-- [x] follows
-- [x] links
-- [x] area (old massives)
-- [x] area_crag (old massive_crags)
-- [x] parkings
-- [x] crag_routes
-- [x] crag_sectors
-- [x] subscribes
-- [x] tags
-- [x] tick_lists
-- [x] guide_book_papers
-- [x] guide_book_paper_crags
-- [x] guide_book_pdfs
-- [x] guide_book_webs
-- [x] users
-- [x] videos
-- [x] photos
-- [x] words
-- [x] organization
+# Server
 
-Gym :
-- [x] gym_administrators
-- [x] gym_grade_lines
-- [x] gym_grades
-- [x] gym_rooms
-- [x] gym_routes
-- [x] gym_sectors
-- [x] gyms
-
-Gym later :
-- [ ] contest_routes
-- [ ] contest_users
-- [ ] contests
-
-Feed :
-- Oblyk
-  - [x] Article
-- community
-  - [x] crags added
-  - [x] alerts added
-  - [x] crag_routes added
-  - [x] gyms added
-  - [x] photos added
-  - [x] videos created
-  - [x] guide book paper added
-  - [x] guide book pdf added
-  - [x] guide book web added
-  - [x] word
-- around
-  - [ ] alerts posted
-  - [ ] crags, routes, gyms, etc. if not community
-- follower
-  - [x] subscribers ascents added
-  
-Notification :
-- [ ] New conversation
-- [ ] New message
-- [ ] New follower
+Check oblyk service
+```shell
+systemctl status nginx
+systemctl status redis
+systemctl status elasticsearch.service
+systemctl status mysql.service
+```
