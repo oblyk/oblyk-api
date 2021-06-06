@@ -5,7 +5,18 @@ lock '3.16.0'
 set :application, 'oblyk-api'
 set :repo_url, 'git@github.com:lucien-chastan/oblyk-api.git'
 
-set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system', 'public/uploads', 'uploads', 'lib/certs')
+set :linked_dirs, fetch(:linked_dirs, []).push(
+  'log',
+  'tmp/pids',
+  'tmp/cache',
+  'tmp/sockets',
+  'vendor/bundle',
+  'public/system',
+  'public/uploads',
+  'uploads',
+  'lib/certs',
+  'storage'
+)
 set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/master.key', 'config/local_env.yml')
 
 set :puma_role, :web
