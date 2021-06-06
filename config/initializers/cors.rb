@@ -12,7 +12,8 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     origins 'http://localhost:8081',
             'http://localhost:8080',
             'http://localhost:3000',
-            %r{\Ahttps://(.*?).oblyk.org\z}
+            'https://next.oblyk.org',
+            'https://oblyk.org'
 
     resource '*',
              headers: :any,
