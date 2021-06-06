@@ -6,8 +6,8 @@ workers 2
 # Min and Max threads per worker
 threads 1, 6
 
-app_dir = File.expand_path('../..', __FILE__)
-shared_dir = "#{app_dir}/shared"
+app_dir = File.expand_path('../../..', __FILE__)
+shared_dir = "#{app_dir}/tmp"
 
 # Default to production
 rails_env = ENV['RAILS_ENV'] || 'production'
@@ -35,7 +35,7 @@ end
 # before forking the application. This takes advantage of Copy On Write
 # process behavior so workers use less memory.
 #
-# preload_app!
+preload_app!
 
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
