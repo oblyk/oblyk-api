@@ -36,6 +36,8 @@ module OblykApi
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
+    # Allow requests from any domain (cors takes care of that)
+    Rails.application.config.hosts = nil
 
     # Load local env vars
     config.before_configuration do
