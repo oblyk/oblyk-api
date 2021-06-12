@@ -35,15 +35,15 @@ Rails.application.configure do
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
-  # config.action_cable.url = 'wss://example.com/cable'
-  # config.action_cable.allowed_request_origins = [ 'http://example.com', /http:\/\/example.*/ ]
+  config.action_cable.url = "wss://#{ENV['OBLYK_API_DOMAIN']}/cable"
+  config.action_cable.allowed_request_origins = %w[https://next.oblyk.org https://oblyk.org https://www.oblyk.org]
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  config.force_ssl = true
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
-  config.log_level = :debug
+  config.log_level = ENV.fetch('LOG_LEVEL', :debug)
 
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
@@ -56,7 +56,7 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "oblyk_api_production"
 
   config.action_mailer.perform_caching = false
-  config.action_mailer.default_url_options = { host: 'https://oblyk.org' }
+  config.action_mailer.default_url_options = { host: ENV['OBLYK_API_URL'] }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.

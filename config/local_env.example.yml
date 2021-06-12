@@ -8,6 +8,10 @@ SIDEKIQ_PASSWORD: 'password'
 
 ROLLBAR_ACCESS_TOKEN: ''
 
+OBLYK_API_DOMAIN: 'localhost:3000'
+OBLYK_API_URL: 'http://localhost:3000'
+LOG_LEVEL: 'debug'
+
 # If honeypot params is find in request params :
 # -> then the applicant's ip is add to ip_black_list for a little moment
 HONEYPOT_PARAMS: 'honeypot_params'
