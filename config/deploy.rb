@@ -12,6 +12,7 @@ set :linked_dirs, fetch(:linked_dirs, []).push(
   'tmp/cache',
   'tmp/sockets',
   'vendor/bundle',
+  '.bundle',
   'public/system',
   'public/uploads',
   'uploads',
@@ -30,5 +31,7 @@ set :linked_files, fetch(:linked_files, []).push(
 set :puma_role, :web
 
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
+
+set :assets_roles, []
 
 set :keep_releases, 5
