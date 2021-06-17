@@ -13,7 +13,7 @@ module Api
 
       def search
         query = params[:query]
-        @areas = Area.search(query).records
+        @areas = Area.search(query)
         render 'api/v1/areas/index'
       end
 

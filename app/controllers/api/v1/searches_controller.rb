@@ -8,13 +8,13 @@ module Api
         return unless query
 
         results = {
-          crags: Crag.search(query).records.map(&:summary_to_json),
-          gyms: Gym.search(query).records.map(&:summary_to_json),
-          guide_book_papers: GuideBookPaper.search(query).records.map(&:summary_to_json),
-          users: User.search(query).records.map(&:summary_to_json),
-          crag_routes: CragRoute.search(query).records.map(&:summary_to_json),
-          words: Word.search(query).records.map(&:summary_to_json),
-          areas: Area.search(query).records.map(&:summary_to_json)
+          crags: Crag.search(query).map(&:summary_to_json),
+          gyms: Gym.search(query).map(&:summary_to_json),
+          guide_book_papers: GuideBookPaper.search(query).map(&:summary_to_json),
+          users: User.search(query).map(&:summary_to_json),
+          crag_routes: CragRoute.search(query).map(&:summary_to_json),
+          words: Word.search(query).map(&:summary_to_json),
+          areas: Area.search(query).map(&:summary_to_json)
         }
 
         render json: results

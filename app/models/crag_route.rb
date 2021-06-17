@@ -52,10 +52,6 @@ class CragRoute < ApplicationRecord
   before_save :historize_max_bolt
   after_save :update_gap_grade!
 
-  mapping do
-    indexes :name, analyzer: 'french'
-  end
-
   def rich_name
     "#{grade_to_s} - #{name}"
   end
@@ -77,31 +73,12 @@ class CragRoute < ApplicationRecord
     end
   end
 
-  def self.search(query, crag_id = nil, crag_sector_id = nil)
-    filter = []
-    filter << { term: { crag_id: crag_id } } if crag_id
-    filter << { term: { crag_sector_id: crag_sector_id } } if crag_sector_id
+  def self.search_in_crag(query, crag_id)
+    search(query, "CragRoute_in_Crag_#{crag_id}")
+  end
 
-    __elasticsearch__.search(
-      {
-        query: {
-          bool: {
-            filter: filter,
-            should: [
-              {
-                match: {
-                  name: {
-                    query: query,
-                    fuzziness: 'auto'
-                  }
-                }
-              }
-            ],
-            minimum_should_match: 1
-          }
-        }
-      }
-    )
+  def self.search_in_crag_sector(query, crag_sector_id)
+    search(query, "CragRoute_in_CragSector_#{crag_sector_id}")
   end
 
   def set_location!
@@ -170,6 +147,15 @@ class CragRoute < ApplicationRecord
   end
 
   private
+
+  def sonic_indexes
+    indexes = [
+      { bucket: 'all', value: name },
+      { bucket: "CragRoute_in_Crag_#{crag.id}", value: name }
+    ]
+    indexes << { bucket: "CragRoute_in_CragSector_#{crag_sector.id}", value: name } if crag_sector
+    indexes
+  end
 
   def historize_location
     self.location = [latitude, longitude]

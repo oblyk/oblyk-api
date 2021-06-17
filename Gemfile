@@ -22,9 +22,8 @@ gem 'redis-rails'
 # Adds a Redis::Namespace class which can be used to namespace Redis keys
 gem 'redis-namespace'
 
-# Ruby and Rails integrations for Elasticsearch
-gem 'elasticsearch-model', '~> 6'
-gem 'elasticsearch-rails', '~> 6'
+# Ruby on rails integration for Sonic, Fast and Lighter search engine
+gem 'sonic-ruby'
 
 # Use Active Storage variant
 gem 'image_processing', '~> 1.2'

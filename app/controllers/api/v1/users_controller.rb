@@ -13,7 +13,7 @@ module Api
 
       def search
         query = params[:query]
-        @users = User.search(query).records
+        @users = User.search(query)
         render 'api/v1/users/index'
       end
 

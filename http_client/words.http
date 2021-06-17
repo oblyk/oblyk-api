@@ -43,6 +43,6 @@ HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### search
-GET {{api_url}}/public/words/search.json?query=yaniro
+GET {{api_url}}/public/words/search.json?query=Aseptisé
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

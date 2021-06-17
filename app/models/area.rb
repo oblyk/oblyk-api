@@ -14,10 +14,6 @@ class Area < ApplicationRecord
 
   validates :name, presence: true
 
-  mapping do
-    indexes :name, analyzer: 'french'
-  end
-
   def crag_routes_count
     crags.sum(:crag_routes_count)
   end
@@ -40,20 +36,6 @@ class Area < ApplicationRecord
     photos
   end
 
-  def self.search(query)
-    __elasticsearch__.search(
-      {
-        query: {
-          multi_match: {
-            query: query,
-            fields: %w[name],
-            fuzziness: 1
-          }
-        }
-      }
-    )
-  end
-
   def summary_to_json
     JSON.parse(
       ApplicationController.render(
@@ -61,5 +43,11 @@ class Area < ApplicationRecord
         assigns: { area: self }
       )
     )
+  end
+
+  private
+
+  def sonic_indexes
+    [{ bucket: 'all', value: name }]
   end
 end

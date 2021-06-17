@@ -47,29 +47,8 @@ class Gym < ApplicationRecord
   validates :banner, blob: { content_type: :image }, allow_nil: true
   validates :name, :latitude, :longitude, :address, :country, :city, :big_city, presence: true
 
-  mapping do
-    indexes :location, type: 'geo_point'
-    indexes :name, analyzer: 'french'
-    indexes :city, analyzer: 'french'
-    indexes :big_city, analyzer: 'french'
-  end
-
   def location
     [latitude, longitude]
-  end
-
-  def self.search(query)
-    __elasticsearch__.search(
-      {
-        query: {
-          multi_match: {
-            query: query,
-            fields: %w[name city big_city],
-            fuzziness: :auto
-          }
-        }
-      }
-    )
   end
 
   def summary_to_json
@@ -134,5 +113,15 @@ class Gym < ApplicationRecord
 
   def logo_thumbnail_url
     resize_attachment logo, '100x100'
+  end
+
+  private
+
+  def sonic_indexes
+    [
+      { bucket: 'all', value: name },
+      { bucket: 'all', value: city },
+      { bucket: 'all', value: big_city }
+    ]
   end
 end

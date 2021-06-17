@@ -13,7 +13,7 @@ module Api
 
       def search
         query = params[:query]
-        @words = Word.search(query).records
+        @words = Word.search(query)
         render 'api/v1/words/index'
       end
 

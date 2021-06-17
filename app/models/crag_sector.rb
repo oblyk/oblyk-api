@@ -47,24 +47,6 @@ class CragSector < ApplicationRecord
   validates :rain, inclusion: { in: Rain::LIST }, allow_nil: true
   validates :sun, inclusion: { in: Sun::LIST }, allow_nil: true
 
-  mapping do
-    indexes :name, analyzer: 'french'
-  end
-
-  def self.search(query)
-    __elasticsearch__.search(
-      {
-        query: {
-          multi_match: {
-            query: query,
-            fields: %w[name],
-            fuzziness: :auto
-          }
-        }
-      }
-    )
-  end
-
   def rich_name
     name
   end
@@ -118,6 +100,10 @@ class CragSector < ApplicationRecord
   end
 
   private
+
+  def sonic_indexes
+    [{ bucket: 'all', value: name }]
+  end
 
   def historize_location
     self.location = if latitude

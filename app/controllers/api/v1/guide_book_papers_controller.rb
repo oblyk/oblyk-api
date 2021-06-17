@@ -29,7 +29,7 @@ module Api
 
       def search
         query = params[:query]
-        @guide_book_papers = GuideBookPaper.search(query).records
+        @guide_book_papers = GuideBookPaper.search(query)
         render 'api/v1/guide_book_papers/index'
       end
 

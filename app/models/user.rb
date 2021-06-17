@@ -78,13 +78,6 @@ class User < ApplicationRecord
   scope :deleted, -> { where(deleted_at: nil) }
   scope :undeleted, -> { where.not(deleted_at: nil) }
 
-  mapping do
-    indexes :partner_location, type: 'geo_point'
-    indexes :location, type: 'geo_point'
-    indexes :first_name, analyzer: 'french'
-    indexes :last_name, analyzer: 'french'
-  end
-
   def summary_to_json
     JSON.parse(
       ApplicationController.render(
@@ -104,20 +97,6 @@ class User < ApplicationRecord
 
   def full_name
     "#{first_name} #{last_name}".strip
-  end
-
-  def self.search(query)
-    __elasticsearch__.search(
-      {
-        query: {
-          multi_match: {
-            query: query,
-            fields: %w[first_name last_name],
-            fuzziness: :auto
-          }
-        }
-      }
-    )
   end
 
   def send_reset_password_instructions
@@ -285,6 +264,10 @@ class User < ApplicationRecord
   end
 
   private
+
+  def sonic_indexes
+    [{ bucket: 'all', value: full_name }]
+  end
 
   def set_uuid
     self.uuid ||= SecureRandom.uuid

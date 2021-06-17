@@ -16,10 +16,6 @@ class Word < ApplicationRecord
 
   default_scope { order(:name) }
 
-  mapping do
-    indexes :name, analyzer: 'french'
-  end
-
   def summary_to_json
     JSON.parse(
       ApplicationController.render(
@@ -29,17 +25,9 @@ class Word < ApplicationRecord
     )
   end
 
-  def self.search(query)
-    __elasticsearch__.search(
-      {
-        query: {
-          multi_match: {
-            query: query,
-            fields: %w[name],
-            fuzziness: :auto
-          }
-        }
-      }
-    )
+  private
+
+  def sonic_indexes
+    [{ bucket: 'all', value: name }]
   end
 end

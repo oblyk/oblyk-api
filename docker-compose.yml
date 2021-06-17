@@ -1,12 +1,13 @@
 version: "3.7"
 
 services:
-  elasticsearch:
-    image: elasticsearch:6.5.1
+  sonic:
+    image: valeriansaliou/sonic:v1.3.0
     ports:
-      - 19200:9200
+      - 1491:1491
     volumes:
-      - data-elasticsearch:/usr/share/elasticsearch/data
+      - ./config/sonic.cfg:/etc/sonic.cfg
+      - ./sonic/store:/var/lib/sonic/store
   redis:
     image: redis:5.0
     ports:
@@ -24,8 +25,6 @@ services:
       - data-mysql:/var/lib/mysql
 
 volumes:
-  data-elasticsearch:
-    name: oblyk-api-data-elasticsearch
   data-redis:
     name: oblyk-api-data-redis
   data-mysql:

@@ -13,7 +13,7 @@ module Api
 
       def search
         query = params[:query]
-        @crags = Crag.search(query).records
+        @crags = Crag.search(query)
         render 'api/v1/crags/index'
       end
 

@@ -17,7 +17,8 @@ set :linked_dirs, fetch(:linked_dirs, []).push(
   'public/uploads',
   'uploads',
   'lib/certs',
-  'storage'
+  'storage',
+  'sonic'
 )
 
 # Shared files
@@ -25,7 +26,8 @@ set :linked_files, fetch(:linked_files, []).push(
   'config/database.yml',
   'config/master.key',
   'config/credentials.yml.enc',
-  'config/local_env.yml'
+  'config/local_env.yml',
+  'config/sonic.cfg'
 )
 
 set :puma_role, :web

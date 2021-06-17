@@ -73,12 +73,6 @@ class Crag < ApplicationRecord
 
   after_update :update_routes_location
 
-  mapping do
-    indexes :name, analyzer: 'french'
-    indexes :city, analyzer: 'french'
-    indexes :location, type: 'geo_point'
-  end
-
   def location
     [latitude, longitude]
   end
@@ -89,20 +83,6 @@ class Crag < ApplicationRecord
         template: 'api/v1/crags/summary.json',
         assigns: { crag: self }
       )
-    )
-  end
-
-  def self.search(query)
-    __elasticsearch__.search(
-      {
-        query: {
-          multi_match: {
-            query: query,
-            fields: %w[name^5 city],
-            fuzziness: :auto
-          }
-        }
-      }
     )
   end
 
@@ -185,6 +165,13 @@ class Crag < ApplicationRecord
   end
 
   private
+
+  def sonic_indexes
+    [
+      { bucket: 'all', value: name },
+      { bucket: 'all', value: city }
+    ]
+  end
 
   def validate_rocks
     return if rocks&.count&.zero?

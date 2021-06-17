@@ -23,30 +23,12 @@ class GuideBookPaper < ApplicationRecord
   validates :name, presence: true
   validates :cover, blob: { content_type: :image }, allow_nil: true
 
-  mapping do
-    indexes :name, analyzer: 'french'
-  end
-
   def summary_to_json
     JSON.parse(
       ApplicationController.render(
         template: 'api/v1/guide_book_papers/summary.json',
         assigns: { guide_book_paper: self }
       )
-    )
-  end
-
-  def self.search(query)
-    __elasticsearch__.search(
-      {
-        query: {
-          multi_match: {
-            query: query,
-            fields: %w[name],
-            fuzziness: :auto
-          }
-        }
-      }
     )
   end
 
@@ -71,5 +53,11 @@ class GuideBookPaper < ApplicationRecord
     photos = []
     crags.each { |crag| photos += crag.all_photos }
     photos
+  end
+
+  private
+
+  def sonic_indexes
+    [{ bucket: 'all', value: name }]
   end
 end

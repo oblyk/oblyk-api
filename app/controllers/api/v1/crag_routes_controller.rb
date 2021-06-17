@@ -35,11 +35,11 @@ module Api
       def search
         query = params[:query]
         @crag_routes = if @crag_sector
-                         CragRoute.search(query, nil, @crag_sector.id).records
+                         CragRoute.search_in_crag_sector(query, @crag_sector.id)
                        elsif @crag
-                         CragRoute.search(query, @crag.id, nil).records
+                         CragRoute.search_in_crag(query, @crag.id)
                        else
-                         CragRoute.search(query).records
+                         CragRoute.search(query)
                        end
         render 'api/v1/crag_routes/index'
       end
