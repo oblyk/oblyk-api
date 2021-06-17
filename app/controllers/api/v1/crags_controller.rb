@@ -27,14 +27,14 @@ module Api
           params[:latitude],
           params[:longitude],
           params[:distance]
-        ).records
+        )
         render 'api/v1/crags/index'
       end
 
       def guide_books_around
         guides_already_have = @crag.guide_book_papers.pluck(:id)
         guide_ids = []
-        crags_around = Crag.geo_search(@crag.latitude, @crag.longitude, '50km').records
+        crags_around = Crag.geo_search(@crag.latitude, @crag.longitude, 50)
         crags_around.each do |crag|
           guide_ids.concat(crag.guide_book_papers.pluck(:id)) if crag.guide_book_papers.count.positive?
         end
@@ -46,7 +46,7 @@ module Api
       def areas_around
         areas_already_have = @crag.areas.pluck(:id)
         area_ids = []
-        crags_around = Crag.geo_search(@crag.latitude, @crag.longitude, '50km').records
+        crags_around = Crag.geo_search(@crag.latitude, @crag.longitude, 50)
         crags_around.each do |crag|
           area_ids.concat(crag.areas.pluck(:id)) if crag.areas.count.positive?
         end
@@ -76,7 +76,7 @@ module Api
 
       def geo_json_around
         features = []
-        crags_around = Crag.geo_search(@crag.latitude, @crag.longitude, '50km').records
+        crags_around = Crag.geo_search(@crag.latitude, @crag.longitude, 50)
 
         # Crags around this crag
         crags_around.each do |crag|
@@ -186,8 +186,8 @@ module Api
       end
 
       def crags_around
-        distance = params.fetch(:distance, '20km')
-        @crags = Crag.geo_search(params[:latitude], params[:longitude], distance).records
+        distance = params.fetch(:distance, 20)
+        @crags = Crag.geo_search(params[:latitude], params[:longitude], distance)
         render 'api/v1/crags/index'
       end
 

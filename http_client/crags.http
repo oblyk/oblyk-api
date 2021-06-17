@@ -118,7 +118,7 @@ HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### search crags geo_json
-GET {{api_url}}/public/crags/geo_search.json?latitude=44.469592&longitude=5.058089&distance=20km
+GET {{api_url}}/public/crags/geo_search.json?latitude=44.469592&longitude=5.058089&distance=20
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 

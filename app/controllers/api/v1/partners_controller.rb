@@ -33,8 +33,8 @@ module Api
       end
 
       def partners_around
-        distance = params.fetch(:distance, '20km')
-        @users = User.partner_geo_search(params[:latitude], params[:longitude], distance).records
+        distance = params.fetch(:distance, 20)
+        @users = User.partner_geo_search(params[:latitude], params[:longitude], distance)
         render 'api/v1/users/index'
       end
     end

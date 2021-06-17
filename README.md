@@ -23,42 +23,20 @@ Things you may want to cover:
 
 * ...
 
-### Elastic Search
-```ruby
-Crag.__elasticsearch__.create_index! force: true
-Crag.import
-Crag.__elasticsearch__.refresh_index!
 
-CragSector.__elasticsearch__.create_index! force: true
-CragSector.import
-CragSector.__elasticsearch__.refresh_index!
-
-CragRoute.__elasticsearch__.create_index! force: true
-CragRoute.import
-CragRoute.__elasticsearch__.refresh_index!
-
-GuideBookPaper.__elasticsearch__.create_index! force: true
-GuideBookPaper.import
-GuideBookPaper.__elasticsearch__.refresh_index!
-
-Area.__elasticsearch__.create_index! force: true
-Area.import
-Area.__elasticsearch__.refresh_index!
-
-Gym.__elasticsearch__.create_index! force: true
-Gym.import
-Gym.__elasticsearch__.refresh_index!
-
-Word.__elasticsearch__.create_index! force: true
-Word.import
-Word.__elasticsearch__.refresh_index!
-
-User.__elasticsearch__.create_index! force: true
-User.import
-User.__elasticsearch__.refresh_index!
+### Index sonic value
+```shell
+bundle exec rake sonic_tasks:import["Crag"]
+bundle exec rake sonic_tasks:import["CragSector"]
+bundle exec rake sonic_tasks:import["CragRoute"]
+bundle exec rake sonic_tasks:import["GuideBookPaper"]
+bundle exec rake sonic_tasks:import["Area"]
+bundle exec rake sonic_tasks:import["Gym"]
+bundle exec rake sonic_tasks:import["Word"]
+bundle exec rake sonic_tasks:import["User"]
 ```
 
-Recreate feeds :
+### Recreate feeds
 ```ruby
 Crag.all.find_each(&:save_feed!)
 CragRoute.all.find_each(&:save_feed!)
@@ -80,6 +58,18 @@ Check oblyk service
 ```shell
 systemctl status nginx
 systemctl status redis
-systemctl status elasticsearch.service
 systemctl status mysql.service
+```
+
+# Sonic Search
+
+Run sonic search in production mode
+```shell
+su
+cd /root/.cargo/
+./sonic -c /var/www/oblyk/api/shared/config/sonic.cfg &
+disown
+
+# Show sonic background service
+ps aux
 ```

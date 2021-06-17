@@ -8,6 +8,11 @@ namespace :sonic_tasks do
 
     klass = Object.const_get model
 
+    out.puts "Flush #{model}"
+    sonic = SonicSearch.new
+    sonic.flushc model
+
+    out.puts ''
     out.puts "Import #{model} in sonic"
 
     total_count = klass.count
