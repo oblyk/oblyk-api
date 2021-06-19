@@ -1,10 +1,47 @@
+# Oblyk Migration 
 
-# Import order and todo list
+## Mettre en maintenance Oblyk
+/!\ À vérifier
+```shell
+ssh-oblyk
+cd ~/www/oblyk.org/web/
+php artisan down
+```
 
-## TODO before import
+## Dump old oblyk data
+- utilise PhpStorm pour faire un mysqldum de sql9097_1 (ajouter --column-statistics=0 dans le run)
+- supprimer l'ancienne base de donée : `DROP DATABASE sql9097_1;`
+- créer un nouvelle pour l'import : `CREATE DATABASE sql9097_1 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`
+- sur RubyMine, au niveau de sql9097_1 faire "Run SQL script" et séléctionner le dump fait si dessus (prend environs 8 mintues)
 
-- down oblyk.org
-- get public storage
+## Upload du dossier image
+Se connecter en ssh sur l'ancien serveur d'oblyk : `ssh-oblyk`
+```shell
+cd ~/www/oblyk.org/web/
+tar -czvf import_storage.tar.gz storage/app/public
+```
+
+En puis en local
+```shell
+cd /home/lucien/www
+scp -P 27597 p7597@p7597.phpnet.org:/home/www/oblyk.org/web/import_storage.tar.gz .
+```
+
+De nouveau sur le serveur d'oblyk -> supprimer le storage
+```shell
+cd ~/www/oblyk.org/web/
+rm import_storage.tar.gz
+```
+
+Envoyer le storage sur le nouveau serveur et le décompresser
+```shell
+# en local
+cd /home/lucien/www
+scp -P 1622 import_storage.tar.gz lucien@next.oblyk.org:/var/www/oblyk/api/current
+
+# sur le server
+tar -xvzf import_storage.tar.gz
+```
 
 ## Deactivate concern
 
@@ -17,50 +54,50 @@ after_save :update_crag_route
 
 ## Tables
 
-- [x] users `bundle exec rake import:users["development","/home/lucien/Documents/oblyk/public"]`
-- [x] subscribes `bundle exec rake import:subscribes["development"]`
+- [x] users `RAILS_ENV=production bundle exec rake import:users["production","/var/www/oblyk/api/current/storage/app/public"]`
+- [X] subscribes `RAILS_ENV=production bundle exec rake import:subscribes["production"]`
 ----
-- [x] conversations `bundle exec rake import:conversations["development"]`
-- [x] conversation_users `bundle exec rake import:conversation_users["development"]`
-- [X] conversation_messages `bundle exec rake import:conversation_messages["development"]`
+- [x] conversations `RAILS_ENV=production bundle exec rake import:conversations["production"]`
+- [x] conversation_users `RAILS_ENV=production bundle exec rake import:conversation_users["production"]`
+- [x] conversation_messages `RAILS_ENV=production bundle exec rake import:conversation_messages["production"]`
 ----
-- [x] words `bundle exec rake import:words["development"]`
+- [x] words `RAILS_ENV=production bundle exec rake import:words["production"]`
 ----
-- [x] crags `bundle exec rake import:crags["development"]`
-- [x] crag_sectors `bundle exec rake import:crag_sectors["development"]`
-- [x] crag_routes `bundle exec rake import:crag_routes["development"]`
-- [x] parks `bundle exec rake import:parks["development"]`
-- [x] approaches `bundle exec rake import:approaches["development"]`
-- [x] areas `bundle exec rake import:areas["development"]`
-- [x] area_crags `bundle exec rake import:area_crags["development"]`
+- [x] crags `RAILS_ENV=production bundle exec rake import:crags["production"]`
+- [x] crag_sectors `RAILS_ENV=production bundle exec rake import:crag_sectors["production"]`
+- [ ] crag_routes `RAILS_ENV=production bundle exec rake import:crag_routes["production"]`
+- [ ] parks `RAILS_ENV=production bundle exec rake import:parks["production"]`
+- [ ] approaches `RAILS_ENV=production bundle exec rake import:approaches["production"]`
+- [ ] areas `RAILS_ENV=production bundle exec rake import:areas["production"]`
+- [ ] area_crags `RAILS_ENV=production bundle exec rake import:area_crags["production"]`
 ----
-- [x] ascents `bundle exec rake import:ascents["development"]`
-- [x] tick_lists `bundle exec rake import:tick_lists["development"]`
-- [x] ascent_users `bundle exec rake import:ascent_users["development"]`
+- [ ] ascents `RAILS_ENV=production bundle exec rake import:ascents["production"]`
+- [ ] tick_lists `RAILS_ENV=production bundle exec rake import:tick_lists["production"]`
+- [ ] ascent_users `RAILS_ENV=production bundle exec rake import:ascent_users["production"]`
 ----
-- [x] comments `bundle exec rake import:comments["development"]`
-- [x] links `bundle exec rake import:links["development"]`
-- [x] follows `bundle exec rake import:follows["development"]`
-- [x] alerts `bundle exec rake import:alerts["development"]`
+- [ ] comments `RAILS_ENV=production bundle exec rake import:comments["production"]`
+- [ ] links `RAILS_ENV=production bundle exec rake import:links["production"]`
+- [ ] follows `RAILS_ENV=production bundle exec rake import:follows["production"]`
+- [ ] alerts `RAILS_ENV=production bundle exec rake import:alerts["production"]`
 ----  
-- [x] guide_book_webs `bundle exec rake import:guide_book_webs["development"]`
-- [x] guide_book_pdfs `bundle exec rake import:guide_book_pdfs["development","/home/lucien/Documents/oblyk/public"]`
-- [x] guide_book_papers `bundle exec rake import:guide_book_papers["development","/home/lucien/Documents/oblyk/public"]`
-- [x] guide_book_paper_crags `bundle exec rake import:guide_book_paper_crags["development"]`
-- [x] place_of_sales `bundle exec rake import:place_of_sales["development"]`
+- [ ] guide_book_webs `RAILS_ENV=production bundle exec rake import:guide_book_webs["production"]`
+- [ ] guide_book_pdfs `RAILS_ENV=production bundle exec rake import:guide_book_pdfs["production","/var/www/oblyk/api/current/storage/app/public"]`
+- [ ] guide_book_papers `RAILS_ENV=production bundle exec rake import:guide_book_papers["production","/var/www/oblyk/api/current/storage/app/public"]`
+- [ ] guide_book_paper_crags `RAILS_ENV=production bundle exec rake import:guide_book_paper_crags["production"]`
+- [ ] place_of_sales `RAILS_ENV=production bundle exec rake import:place_of_sales["production"]`
 ----
-- [x] videos `bundle exec rake import:videos["development"]`
-- [x] photos `bundle exec rake import:photos["development","/home/lucien/Documents/oblyk/public"]`
+- [ ] videos `RAILS_ENV=production bundle exec rake import:videos["production"]`
+- [ ] photos `RAILS_ENV=production bundle exec rake import:photos["production","/var/www/oblyk/api/current/storage/app/public"]`
 ---
-- [x] gyms `bundle exec rake import:gyms["development","/home/lucien/Documents/oblyk/public"]`
-- [x] gym_administrators `bundle exec rake import:gym_administrators["development"]`
-- [x] gym_grades `bundle exec rake import:gym_grades["development"]`
-- [x] gym_grade_lines `bundle exec rake import:gym_grade_lines["development"]`
-- [x] gym_spaces `bundle exec rake import:gym_spaces["development","/home/lucien/Documents/oblyk/public"]`
-- [x] gym_sectors `bundle exec rake import:gym_sectors["development"]`
+- [ ] gyms `RAILS_ENV=production bundle exec rake import:gyms["production","/var/www/oblyk/api/current/storage/app/public"]`
+- [ ] gym_administrators `RAILS_ENV=production bundle exec rake import:gym_administrators["production"]`
+- [ ] gym_grades `RAILS_ENV=production bundle exec rake import:gym_grades["production"]`
+- [ ] gym_grade_lines `RAILS_ENV=production bundle exec rake import:gym_grade_lines["production"]`
+- [ ] gym_spaces `RAILS_ENV=production bundle exec rake import:gym_spaces["production","/var/www/oblyk/api/current/storage/app/public"]`
+- [ ] gym_sectors `RAILS_ENV=production bundle exec rake import:gym_sectors["production"]`
 
 ### function after import
-- [x] refresh crag data `bundle exec rake refresh_data:crag`
-- [x] refresh crag sector data `bundle exec rake refresh_data:crag_sector`
-- [ ] refresh crag route data `bundle exec rake refresh_data:crag_route`
+- [x] refresh crag data `RAILS_ENV=production bundle exec rake refresh_data:crag`
+- [x] refresh crag sector data `RAILS_ENV=production bundle exec rake refresh_data:crag_sector`
+- [ ] refresh crag route data `RAILS_ENV=production bundle exec rake refresh_data:crag_route`
 - [ ] refresh counters cache (see `reset_counters_cache` task)
