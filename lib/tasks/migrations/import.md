@@ -79,10 +79,10 @@ Ajouter à la liste de normalisation dans la task d'import des voies si c'est le
 - [x] crags `RAILS_ENV=production bundle exec rake import:crags["production"]`
 - [x] crag_sectors `RAILS_ENV=production bundle exec rake import:crag_sectors["production"]`
 - [ ] crag_routes `RAILS_ENV=production bundle exec rake import:crag_routes["production"]`
-- [ ] parks `RAILS_ENV=production bundle exec rake import:parks["production"]`
-- [ ] approaches `RAILS_ENV=production bundle exec rake import:approaches["production"]`
-- [ ] areas `RAILS_ENV=production bundle exec rake import:areas["production"]`
-- [ ] area_crags `RAILS_ENV=production bundle exec rake import:area_crags["production"]`
+- [x] parks `RAILS_ENV=production bundle exec rake import:parks["production"]`
+- [x] approaches `RAILS_ENV=production bundle exec rake import:approaches["production"]`
+- [x] areas `RAILS_ENV=production bundle exec rake import:areas["production"]`
+- [x] area_crags `RAILS_ENV=production bundle exec rake import:area_crags["production"]`
 ----
 - [ ] ascents `RAILS_ENV=production bundle exec rake import:ascents["production"]`
 - [ ] tick_lists `RAILS_ENV=production bundle exec rake import:tick_lists["production"]`
@@ -91,23 +91,23 @@ Ajouter à la liste de normalisation dans la task d'import des voies si c'est le
 - [ ] comments `RAILS_ENV=production bundle exec rake import:comments["production"]`
 - [ ] links `RAILS_ENV=production bundle exec rake import:links["production"]`
 - [ ] follows `RAILS_ENV=production bundle exec rake import:follows["production"]`
-- [ ] alerts `RAILS_ENV=production bundle exec rake import:alerts["production"]`
+- [x] alerts `RAILS_ENV=production bundle exec rake import:alerts["production"]`
 ----  
-- [ ] guide_book_webs `RAILS_ENV=production bundle exec rake import:guide_book_webs["production"]`
-- [ ] guide_book_pdfs `RAILS_ENV=production bundle exec rake import:guide_book_pdfs["production","/var/www/oblyk/api/current/storage/app/public"]`
-- [ ] guide_book_papers `RAILS_ENV=production bundle exec rake import:guide_book_papers["production","/var/www/oblyk/api/current/storage/app/public"]`
-- [ ] guide_book_paper_crags `RAILS_ENV=production bundle exec rake import:guide_book_paper_crags["production"]`
-- [ ] place_of_sales `RAILS_ENV=production bundle exec rake import:place_of_sales["production"]`
+- [x] guide_book_webs `RAILS_ENV=production bundle exec rake import:guide_book_webs["production"]`
+- [x] guide_book_pdfs `RAILS_ENV=production bundle exec rake import:guide_book_pdfs["production","/var/www/oblyk/api/current/storage/app/public"]`
+- [x] guide_book_papers `RAILS_ENV=production bundle exec rake import:guide_book_papers["production","/var/www/oblyk/api/current/storage/app/public"]`
+- [x] guide_book_paper_crags `RAILS_ENV=production bundle exec rake import:guide_book_paper_crags["production"]`
+- [x] place_of_sales `RAILS_ENV=production bundle exec rake import:place_of_sales["production"]`
 ----
 - [ ] videos `RAILS_ENV=production bundle exec rake import:videos["production"]`
 - [ ] photos `RAILS_ENV=production bundle exec rake import:photos["production","/var/www/oblyk/api/current/storage/app/public"]`
 ---
-- [ ] gyms `RAILS_ENV=production bundle exec rake import:gyms["production","/var/www/oblyk/api/current/storage/app/public"]`
-- [ ] gym_administrators `RAILS_ENV=production bundle exec rake import:gym_administrators["production"]`
-- [ ] gym_grades `RAILS_ENV=production bundle exec rake import:gym_grades["production"]`
-- [ ] gym_grade_lines `RAILS_ENV=production bundle exec rake import:gym_grade_lines["production"]`
-- [ ] gym_spaces `RAILS_ENV=production bundle exec rake import:gym_spaces["production","/var/www/oblyk/api/current/storage/app/public"]`
-- [ ] gym_sectors `RAILS_ENV=production bundle exec rake import:gym_sectors["production"]`
+- [x] gyms `RAILS_ENV=production bundle exec rake import:gyms["production","/var/www/oblyk/api/current/storage/app/public"]`
+- [x] gym_administrators `RAILS_ENV=production bundle exec rake import:gym_administrators["production"]`
+- [x] gym_grades `RAILS_ENV=production bundle exec rake import:gym_grades["production"]`
+- [x] gym_grade_lines `RAILS_ENV=production bundle exec rake import:gym_grade_lines["production"]`
+- [x] gym_spaces `RAILS_ENV=production bundle exec rake import:gym_spaces["production","/var/www/oblyk/api/current/storage/app/public"]`
+- [x] gym_sectors `RAILS_ENV=production bundle exec rake import:gym_sectors["production"]`
 
 ### function after import
 - [x] refresh crag data `RAILS_ENV=production bundle exec rake refresh_data:crag`

@@ -23,3 +23,9 @@ CRAG_ROUTE_ASCENTS_HISTORIZATION: 'true'
 SEARCH_INGESTABLE: 'true'
 FEEDABLE: 'true'
 PAPER_TRAIL: 'true'
+
+# Smtp email params
+SMTP_ADDRESS: 'smtp.gmail.com'
+SMTP_PORT: '587'
+SMTP_user_name: 'your mail'
+SMTP_password: 'your password'
