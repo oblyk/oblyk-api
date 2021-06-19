@@ -4,6 +4,7 @@ namespace :import do
   task :areas, %i[database out] => :environment do |_t, args|
     out = args[:out] || $stdout
     database = args[:database].to_sym
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -33,15 +34,23 @@ namespace :import do
         updated_at: data[5]
       )
 
-      binding.pry unless area.save
+      errors << "#{data[0]} : #{area.errors.full_messages}" unless area.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 
   task :area_crags, %i[database out] => :environment do |_t, args|
     out = args[:out] || $stdout
     database = args[:database].to_sym
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -73,9 +82,16 @@ namespace :import do
         updated_at: data[5]
       )
 
-      binding.pry unless area_crag.save
+      errors << "#{data[0]} : #{area_crag.errors.full_messages}" unless area_crag.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 end

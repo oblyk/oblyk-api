@@ -7,6 +7,7 @@ namespace :import do
     out = args[:out] || $stdout
     database = args[:database].to_sym
     storage_path = args[:storage_path]
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -57,9 +58,16 @@ namespace :import do
       picture = File.open("#{storage_path}/photos/crags/1300/#{data[3]}")
       photo.picture.attach(io: picture, filename: data[3])
 
-      binding.pry unless photo.save
+      errors << "#{data[0]} : #{photo.errors.full_messages}" unless photo.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 end

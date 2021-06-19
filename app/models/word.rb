@@ -6,7 +6,7 @@ class Word < ApplicationRecord
   include ParentFeedable
   include ActivityFeedable
 
-  has_paper_trail only: %i[name definition]
+  has_paper_trail only: %i[name definition], if: proc { |_obj| ENV['PAPER_TRAIL'] == 'true' }
 
   has_one_attached :picture
   belongs_to :user, optional: true

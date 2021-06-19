@@ -5,6 +5,7 @@ namespace :import do
     out = args[:out] || $stdout
     database = args[:database].to_sym
     storage_path = args[:storage_path]
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -129,10 +130,17 @@ namespace :import do
           user.banner.attach(io: avatar, filename: "banner-#{data[3]}.jpg")
         end
       else
-        binding.pry
+        errors << "#{data[0]} : #{user.errors.full_messages}"
       end
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 end

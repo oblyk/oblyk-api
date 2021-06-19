@@ -4,6 +4,7 @@ namespace :import do
   task :crag_routes, %i[database out] => :environment do |_t, args|
     out = args[:out] || $stdout
     database = args[:database].to_sym
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -107,7 +108,7 @@ namespace :import do
         reception_type = 'bad' if route_section[10] == 4
         reception_type = 'dangerous' if route_section[10] == 5
 
-        grade = "#{route_section[2]}#{route_section[3]}"
+        grade = "#{route_section[2]}#{route_section[3]}".strip
         grade = '?' if grade.blank?
         grade = '?' if grade == '??'
         grade = '?' if grade == '???'
@@ -178,6 +179,10 @@ namespace :import do
         grade = '5b/6c' if grade == '5b ou 6c ou '
         grade = '6c/A1' if grade == '6c OU A1+ OU '
         grade = '5c/A0' if grade == 'A0 & 5C & C'
+        grade = '5c/A0' if grade == '5c/4bA0///'
+        grade = '5c/A2' if grade == '5c A2'
+        grade = '6b/A1' if grade == '6b A1'
+        grade = '6a/A1' if grade == '6a A1'
         grade = '6a/A0' if grade == '6a/A0/'
         grade = '7a/A0' if grade == '7a/A0+/'
         grade = '7a/A1' if grade == '7a/A1/'
@@ -236,9 +241,16 @@ namespace :import do
         votes: nil
       )
 
-      binding.pry unless crag_route.save
+      errors << "#{crag_route.legacy_id} : #{crag_route.errors.full_messages}" unless crag_route.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 end

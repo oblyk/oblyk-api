@@ -5,6 +5,7 @@ namespace :import do
     out = args[:out] || $stdout
     database = args[:database].to_sym
     storage_path = args[:storage_path]
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -47,9 +48,16 @@ namespace :import do
       pdf_file = File.open("#{storage_path}/topos/PDF/#{data[6]}")
       guide_book_pdf.pdf_file.attach(io: pdf_file, filename: data[6])
 
-      binding.pry unless guide_book_pdf.save
+      errors << "#{data[0]} : #{guide_book_pdf.errors.full_messages}" unless guide_book_pdf.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 end

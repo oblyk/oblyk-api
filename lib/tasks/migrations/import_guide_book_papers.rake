@@ -5,6 +5,7 @@ namespace :import do
     out = args[:out] || $stdout
     database = args[:database].to_sym
     storage_path = args[:storage_path]
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -39,7 +40,7 @@ namespace :import do
       price_cents = nil
       price_cents = data[6] * 100 if (data[6] || 0).positive?
 
-      guide_book_pdf = GuideBookPaper.new(
+      guide_book_paper = GuideBookPaper.new(
         name: name,
         author: data[3],
         editor: data[4],
@@ -55,23 +56,31 @@ namespace :import do
         updated_at: data[11]
       )
 
-      if guide_book_pdf.save
+      if guide_book_paper.save
         # Import cover
-        if File.exist?("#{storage_path}/topos/700/topo-#{guide_book_pdf.legacy_id}.jpg")
-          cover = File.open("#{storage_path}/topos/700/topo-#{guide_book_pdf.legacy_id}.jpg")
-          guide_book_pdf.cover.attach(io: cover, filename: "cover-#{data[3]}.jpg")
+        if File.exist?("#{storage_path}/topos/700/topo-#{guide_book_paper.legacy_id}.jpg")
+          cover = File.open("#{storage_path}/topos/700/topo-#{guide_book_paper.legacy_id}.jpg")
+          guide_book_paper.cover.attach(io: cover, filename: "cover-#{data[3]}.jpg")
         end
       else
-        binding.pry
+        errors << "#{data[0]} : #{guide_book_paper.errors.full_messages}"
       end
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 
   task :guide_book_paper_crags, %i[database out] => :environment do |_t, args|
     out = args[:out] || $stdout
     database = args[:database].to_sym
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -105,9 +114,16 @@ namespace :import do
         updated_at: data[5]
       )
 
-      binding.pry unless guide_book_paper_crag.save
+      errors << "#{data[0]} : #{guide_book_paper_crag.errors.full_messages}" unless guide_book_paper_crag.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 end

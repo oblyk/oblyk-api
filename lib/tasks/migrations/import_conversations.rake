@@ -4,6 +4,7 @@ namespace :import do
   task :conversations, %i[database out] => :environment do |_t, args|
     out = args[:out] || $stdout
     database = args[:database].to_sym
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -26,15 +27,23 @@ namespace :import do
         created_at: data[2],
         updated_at: data[3]
       )
-      binding.pry unless conversation.save
+      errors << "#{data[0]} : #{conversation.errors.full_messages}" unless conversation.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 
   task :conversation_users, %i[database out] => :environment do |_t, args|
     out = args[:out] || $stdout
     database = args[:database].to_sym
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -64,15 +73,23 @@ namespace :import do
         created_at: data[4],
         updated_at: data[5]
       )
-      binding.pry unless conversation_user.save
+      errors << "#{data[0]} : #{conversation_user.errors.full_messages}" unless conversation_user.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 
   task :conversation_messages, %i[database out] => :environment do |_t, args|
     out = args[:out] || $stdout
     database = args[:database].to_sym
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -108,9 +125,16 @@ namespace :import do
         updated_at: data[5]
       )
 
-      binding.pry unless conversation_message.save
+      errors << "#{data[0]} : #{conversation_message.errors.full_messages}" unless conversation_message.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 end

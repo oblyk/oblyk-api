@@ -29,7 +29,7 @@ class Gym < ApplicationRecord
     training_space
     latitude
     longitude
-  ]
+  ], if: proc { |_obj| ENV['PAPER_TRAIL'] == 'true' }
 
   has_one_attached :logo
   has_one_attached :banner

@@ -4,6 +4,7 @@ namespace :import do
   task :guide_book_webs, %i[database out] => :environment do |_t, args|
     out = args[:out] || $stdout
     database = args[:database].to_sym
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -38,9 +39,16 @@ namespace :import do
         updated_at: data[6]
       )
 
-      binding.pry unless guide_book_web.save
+      errors << "#{data[0]} : #{guide_book_web.errors.full_messages}" unless guide_book_web.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 end

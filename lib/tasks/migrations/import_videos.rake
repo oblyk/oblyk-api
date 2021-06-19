@@ -4,6 +4,7 @@ namespace :import do
   task :videos, %i[database out] => :environment do |_t, args|
     out = args[:out] || $stdout
     database = args[:database].to_sym
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -60,9 +61,16 @@ namespace :import do
         created_at: data[6],
         updated_at: data[7]
       )
-      binding.pry unless video.save
+      errors << "#{data[0]} : #{video.errors.full_messages}" unless video.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 end

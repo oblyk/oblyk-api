@@ -27,13 +27,22 @@ module Searchable
   private
 
   def sonic_push
+    return unless sonic_activated?
+
     sonic = SonicSearch.new
     sonic.flusho self.class.name, id
     sonic_indexes.each { |index| sonic.push self.class.name, index[:value], id, index[:bucket] }
   end
 
   def sonic_destroy
+    return unless sonic_activated?
+
     sonic = SonicSearch.new
     sonic.flusho self.class.name, id
+  end
+
+  def sonic_activated?
+    sonic_ingest = ENV.fetch('SEARCH_INGESTABLE', 'false')
+    sonic_ingest != 'false'
   end
 end

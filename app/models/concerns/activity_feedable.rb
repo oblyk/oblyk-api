@@ -9,6 +9,9 @@ module ActivityFeedable
   end
 
   def save_feed!
+    feedable = ENV.fetch('FEEDABLE', 'false')
+    return if feedable == 'false'
+
     return if instance_of?(AscentCragRoute) && %w[project repetition].include?(ascent_status)
     return if instance_of?(Article) && unpublished?
     return if instance_of?(Photo) && %w[Article Newsletter].include?(illustrable_type)

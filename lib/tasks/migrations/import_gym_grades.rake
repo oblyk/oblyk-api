@@ -4,6 +4,7 @@ namespace :import do
   task :gym_grades, %i[database out] => :environment do |_t, args|
     out = args[:out] || $stdout
     database = args[:database].to_sym
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -47,15 +48,23 @@ namespace :import do
         use_point_division_system: false
       )
 
-      binding.pry unless gym_grade.save
+      errors << "#{data[0]} : #{gym_grade.errors.full_messages}" unless gym_grade.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 
   task :gym_grade_lines, %i[database out] => :environment do |_t, args|
     out = args[:out] || $stdout
     database = args[:database].to_sym
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -91,9 +100,16 @@ namespace :import do
         updated_at: data[7]
       )
 
-      binding.pry unless gym_grade_line.save
+      errors << "#{data[0]} : #{gym_grade_line.errors.full_messages}" unless gym_grade_line.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 end

@@ -7,7 +7,16 @@ class GuideBookPaper < ApplicationRecord
   include ActivityFeedable
   include AttachmentResizable
 
-  has_paper_trail only: %i[name author editor publication_year price_cents ean number_of_page weight]
+  has_paper_trail only: %i[
+    name
+    author
+    editor
+    publication_year
+    price_cents
+    ean
+    number_of_page
+    weight
+  ], if: proc { |_obj| ENV['PAPER_TRAIL'] == 'true' }
 
   has_one_attached :cover
   belongs_to :user, optional: true

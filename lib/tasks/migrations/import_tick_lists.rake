@@ -4,6 +4,7 @@ namespace :import do
   task :tick_lists, %i[database out] => :environment do |_t, args|
     out = args[:out] || $stdout
     database = args[:database].to_sym
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -32,9 +33,16 @@ namespace :import do
         updated_at: data[4]
       )
 
-      binding.pry unless tick_list.save
+      errors << "#{data[0]} : #{tick_list.errors.full_messages}" unless tick_list.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 end

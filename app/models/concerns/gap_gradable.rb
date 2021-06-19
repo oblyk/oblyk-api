@@ -4,6 +4,9 @@ module GapGradable
   extend ActiveSupport::Concern
 
   def update_gap!
+    gap_gradable = ENV.fetch('GAP_GRADABLE', 'false')
+    return if gap_gradable == 'false'
+
     max_grade = crag_routes.order(max_grade_value: :desc).first
     min_grade = crag_routes.order(min_grade_value: :asc).first
 

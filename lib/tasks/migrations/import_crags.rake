@@ -4,6 +4,7 @@ namespace :import do
   task :crags, %i[database out] => :environment do |_t, args|
     out = args[:out] || $stdout
     database = args[:database].to_sym
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -114,9 +115,16 @@ namespace :import do
         updated_at: data[20]
       )
 
-      binding.pry unless crag.save
+      errors << "#{data[0]} : #{crag.errors.full_messages}" unless crag.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 end

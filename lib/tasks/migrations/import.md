@@ -8,7 +8,7 @@ cd ~/www/oblyk.org/web/
 php artisan down
 ```
 
-## Dump old oblyk data
+## Récupération des anciennes données d'oblyk
 - utilise PhpStorm pour faire un mysqldum de sql9097_1 (ajouter --column-statistics=0 dans le run)
 - supprimer l'ancienne base de donée : `DROP DATABASE sql9097_1;`
 - créer un nouvelle pour l'import : `CREATE DATABASE sql9097_1 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`
@@ -40,22 +40,35 @@ cd /home/lucien/www
 scp -P 1622 import_storage.tar.gz lucien@next.oblyk.org:/var/www/oblyk/api/current
 
 # sur le server
+cd /var/www/oblyk/api/current/
 tar -xvzf import_storage.tar.gz
 ```
 
-## Deactivate concern
+## Désactivation des tâche de fond
+```shell
+# Sur le serveur
+cd /var/www/oblyk/api/shared/config/
+nano local_env.yml
 
-```ruby
-include GapGradable
-include Searchable
-include ActivityFeedable
-after_save :update_crag_route
+# Passer à false les clés suivantes :
+GAP_GRADABLE: 'false'
+CRAG_ROUTE_ASCENTS_HISTORIZATION: 'false'
+SEARCH_INGESTABLE: 'false'
+FEEDABLE: 'false'
+PAPER_TRAIL: 'false'
 ```
+
+## Control des cotations
+Avant de lancer les import, vérifier qu'il n'y a pas eu d'ajout de cotation chelou depuis le dernier inmport
+```mysql
+SELECT DISTINCT CONCAT(grade, sub_grade) FROM route_sections WHERE DATE(updated_at) > '2021-06-17';
+```
+Ajouter à la liste de normalisation dans la task d'import des voies si c'est le cas
 
 ## Tables
 
 - [x] users `RAILS_ENV=production bundle exec rake import:users["production","/var/www/oblyk/api/current/storage/app/public"]`
-- [X] subscribes `RAILS_ENV=production bundle exec rake import:subscribes["production"]`
+- [x] subscribes `RAILS_ENV=production bundle exec rake import:subscribes["production"]`
 ----
 - [x] conversations `RAILS_ENV=production bundle exec rake import:conversations["production"]`
 - [x] conversation_users `RAILS_ENV=production bundle exec rake import:conversation_users["production"]`

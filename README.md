@@ -25,6 +25,7 @@ Things you may want to cover:
 
 
 ### Index sonic value
+Add `RAILS_ENV=production` before bundle if in production environment
 ```shell
 bundle exec rake sonic_tasks:import["Crag"]
 bundle exec rake sonic_tasks:import["CragSector"]
@@ -37,6 +38,13 @@ bundle exec rake sonic_tasks:import["User"]
 ```
 
 ### Recreate feeds
+```shell
+# development environment
+bundle exec rails c
+
+# Production environment
+RAILS_ENV=production bundle exec rails c
+```
 ```ruby
 Crag.all.find_each(&:save_feed!)
 CragRoute.all.find_each(&:save_feed!)

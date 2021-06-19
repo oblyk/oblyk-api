@@ -4,6 +4,7 @@ namespace :import do
   task :ascents, %i[database out] => :environment do |_t, args|
     out = args[:out] || $stdout
     database = args[:database].to_sym
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -109,15 +110,23 @@ namespace :import do
         private_comment: private_comment,
         hardness_status: hardness_status
       )
-      binding.pry unless ascent_crag_route.save
+      errors << "#{data[0]} : #{ascent_crag_route.errors.full_messages}" unless ascent_crag_route.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 
   task :ascent_users, %i[database out] => :environment do |_t, args|
     out = args[:out] || $stdout
     database = args[:database].to_sym
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -146,9 +155,16 @@ namespace :import do
         updated_at: data[4]
       )
 
-      binding.pry unless ascent_user.save
+      errors << "#{data[0]} : #{ascent_user.errors.full_messages}" unless ascent_user.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 end

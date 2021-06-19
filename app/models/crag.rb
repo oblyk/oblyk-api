@@ -40,7 +40,7 @@ class Crag < ApplicationRecord
     south_west
     west
     north_west
-  ]
+  ], if: proc { |_obj| ENV['PAPER_TRAIL'] == 'true' }
 
   belongs_to :user, optional: true
   belongs_to :photo, optional: true

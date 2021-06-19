@@ -4,6 +4,7 @@ namespace :import do
   task :place_of_sales, %i[database out] => :environment do |_t, args|
     out = args[:out] || $stdout
     database = args[:database].to_sym
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -51,9 +52,16 @@ namespace :import do
         updated_at: data[9]
       )
 
-      binding.pry unless place_of_sale.save
+      errors << "#{data[0]} : #{place_of_sale.errors.full_messages}" unless place_of_sale.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 end

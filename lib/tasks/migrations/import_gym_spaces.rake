@@ -5,6 +5,7 @@ namespace :import do
     out = args[:out] || $stdout
     database = args[:database].to_sym
     storage_path = args[:storage_path]
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -64,16 +65,24 @@ namespace :import do
           gym_space.plan.attach(io: plan, filename: "plan-#{data[3]}.png")
         end
       else
-        binding.pry
+        errors << "#{data[0]} : #{gym_space.errors.full_messages}"
       end
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 
   task :gym_sectors, %i[database out] => :environment do |_t, args|
     out = args[:out] || $stdout
     database = args[:database].to_sym
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -119,9 +128,16 @@ namespace :import do
         updated_at: data[10]
       )
 
-      binding.pry unless gym_sector.save
+      errors << "#{data[0]} : #{gym_sector.errors.full_messages}" unless gym_sector.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 end

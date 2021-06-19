@@ -5,6 +5,7 @@ namespace :import do
     out = args[:out] || $stdout
     database = args[:database].to_sym
     storage_path = args[:storage_path]
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -101,16 +102,24 @@ namespace :import do
           gym.banner.attach(io: banner, filename: "banner-#{gym.slug_name}.jpg")
         end
       else
-        binding.pry
+        errors << "#{data[0]} : #{gym.errors.full_messages}"
       end
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 
   task :gym_administrators, %i[database out] => :environment do |_t, args|
     out = args[:out] || $stdout
     database = args[:database].to_sym
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -139,9 +148,16 @@ namespace :import do
         level: data[3]
       )
 
-      binding.pry unless gym_administrator.save
+      errors << "#{data[0]} : #{gym_administrator.errors.full_messages}" unless gym_administrator.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 end

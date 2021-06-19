@@ -16,7 +16,7 @@ class CragRoute < ApplicationRecord
     incline_type
     reception_type
     start_type
-  ]
+  ], if: proc { |_obj| ENV['PAPER_TRAIL'] == 'true' }
 
   belongs_to :crag_sector, optional: true, counter_cache: :crag_routes_count
   belongs_to :user, optional: true
@@ -87,6 +87,9 @@ class CragRoute < ApplicationRecord
   end
 
   def update_form_ascents!
+    ascents_historization = ENV.fetch('CRAG_ROUTE_ASCENTS_HISTORIZATION', 'false')
+    return if ascents_historization == 'false'
+
     ascent_count = nil
     note_count = nil
     sum_note = nil

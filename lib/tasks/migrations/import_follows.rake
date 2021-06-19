@@ -4,6 +4,7 @@ namespace :import do
   task :follows, %i[database out] => :environment do |_t, args|
     out = args[:out] || $stdout
     database = args[:database].to_sym
+    errors = []
 
     ## cache data
     import_db = ActiveRecord::Base.establish_connection(:import_db).connection
@@ -73,9 +74,16 @@ namespace :import do
         created_at: data[4],
         updated_at: data[5]
       )
-      binding.pry unless follow.save
+      errors << "#{data[0]} : #{follow.errors.full_messages}" unless follow.save
     end
 
-    out.puts 'End'
+    out.puts ''
+    out.puts 'Errors list :'
+    errors.each do |error|
+      out.puts error
+    end
+
+    out.puts ''
+    out.puts 'end'
   end
 end
