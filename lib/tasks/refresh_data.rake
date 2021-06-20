@@ -43,7 +43,7 @@ namespace :refresh_data do
 
     CragRoute.all.find_each do |crag_route|
       out.puts ''
-      out.puts "#{crag_route.id} / #{crag_route_count} : Refresh crag sector #{crag_route.name}"
+      out.puts "#{crag_route.id} / #{crag_route_count} : Refresh crag route #{crag_route.name}"
 
       out.puts ' -> update from ascents'
       crag_route.update_form_ascents!
