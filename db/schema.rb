@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_16_094319) do
+ActiveRecord::Schema.define(version: 2021_06_20_131558) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -747,6 +747,19 @@ ActiveRecord::Schema.define(version: 2021_05_16_094319) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["reportable_type", "reportable_id"], name: "index_reports_on_reportable_type_and_reportable_id"
     t.index ["user_id"], name: "index_reports_on_user_id"
+  end
+
+  create_table "searches", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "index_name"
+    t.bigint "index_id"
+    t.string "collection"
+    t.string "bucket"
+    t.string "secondary_bucket"
+    t.index ["bucket"], name: "index_searches_on_bucket"
+    t.index ["collection"], name: "index_searches_on_collection"
+    t.index ["index_id"], name: "index_searches_on_index_id"
+    t.index ["index_name"], name: "index_searches_on_index_name"
+    t.index ["secondary_bucket"], name: "index_searches_on_secondary_bucket"
   end
 
   create_table "subscribes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

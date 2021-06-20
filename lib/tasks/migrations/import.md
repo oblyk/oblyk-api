@@ -132,12 +132,11 @@ PAPER_TRAIL: 'true'
 
 ### recréer les index de recherche
 ```shell
-RAILS_ENV=production bundle exec rake sonic_tasks:import["Crag"]
-RAILS_ENV=production bundle exec rake sonic_tasks:import["CragSector"]
-RAILS_ENV=production bundle exec rake sonic_tasks:import["CragRoute"]
-RAILS_ENV=production bundle exec rake sonic_tasks:import["GuideBookPaper"]
-RAILS_ENV=production bundle exec rake sonic_tasks:import["Area"]
-RAILS_ENV=production bundle exec rake sonic_tasks:import["Gym"]
-RAILS_ENV=production bundle exec rake sonic_tasks:import["Word"]
-RAILS_ENV=production bundle exec rake sonic_tasks:import["User"]
+RAILS_ENV=production bundle exec rake search_tasks:import["Crag"]
+RAILS_ENV=production bundle exec rake search_tasks:import["CragRoute"]
+RAILS_ENV=production bundle exec rake search_tasks:import["GuideBookPaper"]
+RAILS_ENV=production bundle exec rake search_tasks:import["Area"]
+RAILS_ENV=production bundle exec rake search_tasks:import["Gym"]
+RAILS_ENV=production bundle exec rake search_tasks:import["Word"]
+RAILS_ENV=production bundle exec rake search_tasks:import["User"]
 ```

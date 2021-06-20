@@ -4,45 +4,42 @@ module Searchable
   extend ActiveSupport::Concern
 
   included do
-    after_touch   { sonic_push }
-    after_save    { sonic_push }
-    after_destroy { sonic_destroy }
+    after_touch   { search_push }
+    after_save    { search_push }
+    after_destroy { search_destroy }
 
-    def self.search(query, bucket = 'all')
-      sonic = SonicSearch.new
-      sonic_results = sonic.search(name, query, bucket).split(' ')
-      sql_results = where id: sonic_results
+    def self.search(query, bucket = nil)
+      search_results = Search.search query, name, bucket
+      sql_results = where id: search_results
       order_results = []
-      sonic_results.each do |sonic_result|
-        order_results += sql_results.select { |sql_result| sql_result.id == sonic_result.to_i }
+      search_results.each do |search_result|
+        order_results += sql_results.select { |sql_result| sql_result.id == search_result }
       end
       order_results
     end
   end
 
-  def refresh_sonic_index
-    sonic_push
+  def refresh_search_index
+    search_push
   end
 
   private
 
-  def sonic_push
-    return unless sonic_activated?
+  def search_push
+    return unless search_activated?
 
-    sonic = SonicSearch.new
-    sonic.flusho self.class.name, id
-    sonic_indexes.each { |index| sonic.push self.class.name, index[:value], id, index[:bucket] }
+    Search.delete_object self.class.name, id
+    search_indexes.each { |index| Search.push index[:value], id, self.class.name, index[:bucket], index[:secondary_bucket] }
   end
 
-  def sonic_destroy
-    return unless sonic_activated?
+  def search_destroy
+    return unless search_activated?
 
-    sonic = SonicSearch.new
-    sonic.flusho self.class.name, id
+    Search.delete_object self.class.name, id
   end
 
-  def sonic_activated?
-    sonic_ingest = ENV.fetch('SEARCH_INGESTABLE', 'false')
-    sonic_ingest != 'false'
+  def search_activated?
+    search_ingest = ENV.fetch('SEARCH_INGESTABLE', 'false')
+    search_ingest != 'false'
   end
 end

@@ -47,7 +47,7 @@ class Area < ApplicationRecord
 
   private
 
-  def sonic_indexes
-    [{ bucket: 'all', value: name }]
+  def search_indexes
+    [{ value: name }]
   end
 end

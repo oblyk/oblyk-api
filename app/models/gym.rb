@@ -117,11 +117,11 @@ class Gym < ApplicationRecord
 
   private
 
-  def sonic_indexes
+  def search_indexes
     [
-      { bucket: 'all', value: name },
-      { bucket: 'all', value: city },
-      { bucket: 'all', value: big_city }
+      { value: name },
+      { value: city },
+      { value: big_city }
     ]
   end
 end

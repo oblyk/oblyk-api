@@ -3,7 +3,6 @@
 class CragSector < ApplicationRecord
   include Geolocable
   include SoftDeletable
-  include Searchable
   include Slugable
   include GapGradable
   include RouteFigurable
@@ -100,10 +99,6 @@ class CragSector < ApplicationRecord
   end
 
   private
-
-  def sonic_indexes
-    [{ bucket: 'all', value: name }]
-  end
 
   def historize_location
     self.location = if latitude

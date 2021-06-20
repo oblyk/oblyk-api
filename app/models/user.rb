@@ -265,8 +265,8 @@ class User < ApplicationRecord
 
   private
 
-  def sonic_indexes
-    [{ bucket: 'all', value: full_name }]
+  def search_indexes
+    [{ value: full_name }]
   end
 
   def set_uuid

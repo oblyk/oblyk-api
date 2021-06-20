@@ -166,10 +166,10 @@ class Crag < ApplicationRecord
 
   private
 
-  def sonic_indexes
+  def search_indexes
     [
-      { bucket: 'all', value: name },
-      { bucket: 'all', value: city }
+      { value: name },
+      { value: city }
     ]
   end
 

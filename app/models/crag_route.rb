@@ -151,13 +151,9 @@ class CragRoute < ApplicationRecord
 
   private
 
-  def sonic_indexes
-    indexes = [
-      { bucket: 'all', value: name },
-      { bucket: "CragRoute_in_Crag_#{crag.id}", value: name }
-    ]
-    indexes << { bucket: "CragRoute_in_CragSector_#{crag_sector.id}", value: name } if crag_sector
-    indexes
+  def search_indexes
+    secondary_bucket = crag_sector.present? ? "CragRoute_in_CragSector_#{crag_sector.id}" : nil
+    [{ value: name, bucket: "CragRoute_in_Crag_#{crag.id}", secondary_bucket: secondary_bucket }]
   end
 
   def historize_location

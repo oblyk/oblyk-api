@@ -24,17 +24,16 @@ Things you may want to cover:
 * ...
 
 
-### Index sonic value
+### Index search value
 Add `RAILS_ENV=production` before bundle if in production environment
 ```shell
-bundle exec rake sonic_tasks:import["Crag"]
-bundle exec rake sonic_tasks:import["CragSector"]
-bundle exec rake sonic_tasks:import["CragRoute"]
-bundle exec rake sonic_tasks:import["GuideBookPaper"]
-bundle exec rake sonic_tasks:import["Area"]
-bundle exec rake sonic_tasks:import["Gym"]
-bundle exec rake sonic_tasks:import["Word"]
-bundle exec rake sonic_tasks:import["User"]
+bundle exec rake search_tasks:import["Crag"]
+bundle exec rake search_tasks:import["CragRoute"]
+bundle exec rake search_tasks:import["GuideBookPaper"]
+bundle exec rake search_tasks:import["Area"]
+bundle exec rake search_tasks:import["Gym"]
+bundle exec rake search_tasks:import["Word"]
+bundle exec rake search_tasks:import["User"]
 ```
 
 ### Recreate feeds
@@ -67,17 +66,4 @@ Check oblyk service
 systemctl status nginx
 systemctl status redis
 systemctl status mysql.service
-```
-
-# Sonic Search
-
-Run sonic search in production mode
-```shell
-su
-cd /root/.cargo/
-./sonic -c /var/www/oblyk/api/shared/config/sonic.cfg &
-disown
-
-# Show sonic background service
-ps aux
 ```
