@@ -78,19 +78,19 @@ Ajouter à la liste de normalisation dans la task d'import des voies si c'est le
 ----
 - [x] crags `RAILS_ENV=production bundle exec rake import:crags["production"]`
 - [x] crag_sectors `RAILS_ENV=production bundle exec rake import:crag_sectors["production"]`
-- [ ] crag_routes `RAILS_ENV=production bundle exec rake import:crag_routes["production"]`
+- [x] crag_routes `RAILS_ENV=production bundle exec rake import:crag_routes["production"]`
 - [x] parks `RAILS_ENV=production bundle exec rake import:parks["production"]`
 - [x] approaches `RAILS_ENV=production bundle exec rake import:approaches["production"]`
 - [x] areas `RAILS_ENV=production bundle exec rake import:areas["production"]`
 - [x] area_crags `RAILS_ENV=production bundle exec rake import:area_crags["production"]`
 ----
-- [ ] ascents `RAILS_ENV=production bundle exec rake import:ascents["production"]`
-- [ ] tick_lists `RAILS_ENV=production bundle exec rake import:tick_lists["production"]`
-- [ ] ascent_users `RAILS_ENV=production bundle exec rake import:ascent_users["production"]`
+- [x] ascents `RAILS_ENV=production bundle exec rake import:ascents["production"]`
+- [x] tick_lists `RAILS_ENV=production bundle exec rake import:tick_lists["production"]`
+- [x] ascent_users `RAILS_ENV=production bundle exec rake import:ascent_users["production"]`
 ----
-- [ ] comments `RAILS_ENV=production bundle exec rake import:comments["production"]`
-- [ ] links `RAILS_ENV=production bundle exec rake import:links["production"]`
-- [ ] follows `RAILS_ENV=production bundle exec rake import:follows["production"]`
+- [x] comments `RAILS_ENV=production bundle exec rake import:comments["production"]`
+- [x] links `RAILS_ENV=production bundle exec rake import:links["production"]`
+- [x] follows `RAILS_ENV=production bundle exec rake import:follows["production"]`
 - [x] alerts `RAILS_ENV=production bundle exec rake import:alerts["production"]`
 ----  
 - [x] guide_book_webs `RAILS_ENV=production bundle exec rake import:guide_book_webs["production"]`
@@ -99,8 +99,8 @@ Ajouter à la liste de normalisation dans la task d'import des voies si c'est le
 - [x] guide_book_paper_crags `RAILS_ENV=production bundle exec rake import:guide_book_paper_crags["production"]`
 - [x] place_of_sales `RAILS_ENV=production bundle exec rake import:place_of_sales["production"]`
 ----
-- [ ] videos `RAILS_ENV=production bundle exec rake import:videos["production"]`
-- [ ] photos `RAILS_ENV=production bundle exec rake import:photos["production","/var/www/oblyk/api/current/storage/app/public"]`
+- [x] videos `RAILS_ENV=production bundle exec rake import:videos["production"]`
+- [x] photos `RAILS_ENV=production bundle exec rake import:photos["production","/var/www/oblyk/api/current/storage/app/public"]`
 ---
 - [x] gyms `RAILS_ENV=production bundle exec rake import:gyms["production","/var/www/oblyk/api/current/storage/app/public"]`
 - [x] gym_administrators `RAILS_ENV=production bundle exec rake import:gym_administrators["production"]`
@@ -109,8 +109,35 @@ Ajouter à la liste de normalisation dans la task d'import des voies si c'est le
 - [x] gym_spaces `RAILS_ENV=production bundle exec rake import:gym_spaces["production","/var/www/oblyk/api/current/storage/app/public"]`
 - [x] gym_sectors `RAILS_ENV=production bundle exec rake import:gym_sectors["production"]`
 
+## Supprimer les notifications
+```mysql
+TRUNCATE notifications;
+```
+
+## Réactiver les tâches de fond (feedable, gap grade, etc.)
+
+```shell
+GAP_GRADABLE: 'true'
+CRAG_ROUTE_ASCENTS_HISTORIZATION: 'true'
+SEARCH_INGESTABLE: 'true'
+FEEDABLE: 'true'
+PAPER_TRAIL: 'true'
+```
+
 ### function after import
 - [x] refresh crag data `RAILS_ENV=production bundle exec rake refresh_data:crag`
 - [x] refresh crag sector data `RAILS_ENV=production bundle exec rake refresh_data:crag_sector`
 - [ ] refresh crag route data `RAILS_ENV=production bundle exec rake refresh_data:crag_route`
 - [ ] refresh counters cache (see `reset_counters_cache` task)
+
+### recréer les index de recherche
+```shell
+RAILS_ENV=production bundle exec rake sonic_tasks:import["Crag"]
+RAILS_ENV=production bundle exec rake sonic_tasks:import["CragSector"]
+RAILS_ENV=production bundle exec rake sonic_tasks:import["CragRoute"]
+RAILS_ENV=production bundle exec rake sonic_tasks:import["GuideBookPaper"]
+RAILS_ENV=production bundle exec rake sonic_tasks:import["Area"]
+RAILS_ENV=production bundle exec rake sonic_tasks:import["Gym"]
+RAILS_ENV=production bundle exec rake sonic_tasks:import["Word"]
+RAILS_ENV=production bundle exec rake sonic_tasks:import["User"]
+```
