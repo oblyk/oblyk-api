@@ -258,7 +258,6 @@ GEM
     sidekiq-statistic (1.4.0)
       sidekiq (>= 5.0)
       tilt (~> 2.0)
-    sonic-ruby (0.2.3)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -324,7 +323,6 @@ DEPENDENCIES
   rubocop-rails
   sidekiq
   sidekiq-statistic (~> 1.4)
-  sonic-ruby
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data
