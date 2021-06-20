@@ -45,11 +45,12 @@ namespace :refresh_data do
       out.puts ''
       out.puts "#{crag_route.id} / #{crag_route_count} : Refresh crag route #{crag_route.name}"
 
-      out.puts ' -> update from ascents'
-      crag_route.update_form_ascents!
-
       out.puts ' -> set location'
-      crag_route.set_location!
+      crag_route.set_location
+
+      out.puts ' -> update from ascents'
+      crag_route.skip_update_gap_grade = true
+      crag_route.update_form_ascents!
     end
 
     out.puts 'End'

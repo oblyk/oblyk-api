@@ -6,6 +6,8 @@ class CragRoute < ApplicationRecord
   include Slugable
   include ActivityFeedable
 
+  attr_accessor :skip_update_gap_grade
+
   has_paper_trail only: %i[
     name
     height
@@ -84,6 +86,10 @@ class CragRoute < ApplicationRecord
   def set_location!
     historize_location
     save
+  end
+
+  def set_location
+    historize_location
   end
 
   def update_form_ascents!
@@ -222,6 +228,8 @@ class CragRoute < ApplicationRecord
   end
 
   def update_gap_grade!
+    return if skip_update_gap_grade
+
     crag.update_gap!
     crag.update_climbing_type!
     crag_sector&.update_gap!
