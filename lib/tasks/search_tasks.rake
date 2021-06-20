@@ -16,7 +16,7 @@ namespace :search_tasks do
 
     total_count = klass.count
     loop_count = 0
-    klass.all.each do |object|
+    klass.all.find_each do |object|
       loop_count += 1
       name = object.has_attribute?(:first_name) ? object.full_name : object.name
       out.puts "-> #{loop_count} / #{total_count} : #{name}"
