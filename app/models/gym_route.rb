@@ -6,8 +6,7 @@ class GymRoute < ApplicationRecord
   has_one_attached :picture
   has_one_attached :thumbnail
   belongs_to :gym_sector, optional: true
-  belongs_to :gym_grade_line
-  has_one :gym_grade, through: :gym_grade_line
+  belongs_to :gym_grade_line, optional: true
   has_one :gym_space, through: :gym_sector
   has_one :gym, through: :gym_sector
   has_many :videos, as: :viewable
@@ -17,6 +16,7 @@ class GymRoute < ApplicationRecord
   delegate :feed_parent_object, to: :gym
 
   validates :opened_at, presence: true
+  validates :gym_grade_line, presence: true, if: proc { |obj| obj.gym_sector.gym_grade.need_grade_line? }
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }
   validates :height, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
   validate :validate_sections
@@ -30,6 +30,10 @@ class GymRoute < ApplicationRecord
 
   scope :dismounted, -> { where.not(dismounted_at: nil) }
   scope :mounted, -> { where(dismounted_at: nil) }
+
+  def gym_grade
+    gym_grade_line&.gym_grade || gym_sector.gym_grade
+  end
 
   def points_to_s
     return '' unless gym_grade.use_point_system || gym_grade.use_point_division_system

@@ -17,6 +17,10 @@ class GymGrade < ApplicationRecord
     order + 1
   end
 
+  def need_grade_line?
+    difficulty_system != 'grade'
+  end
+
   private
 
   def validate_grading_system

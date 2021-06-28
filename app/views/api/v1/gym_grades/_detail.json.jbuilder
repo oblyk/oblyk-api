@@ -9,6 +9,7 @@ json.extract! gym_grade,
               :use_point_system,
               :use_point_division_system
 json.next_grade_lines_order gym_grade.next_grade_lines_order
+json.need_grade_line gym_grade.need_grade_line?
 
 json.gym do
   json.id gym_grade.gym.id
