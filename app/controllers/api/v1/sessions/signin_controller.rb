@@ -12,15 +12,12 @@ module Api
             user_data = user.as_json(only: %i[id first_name last_name slug_name email uuid super_admin])
             exp = Time.now.to_i + Rails.application.config.jwt_session_lifetime
             token = JwtToken::Token.generate(user_data, exp)
-            refresh_token = nil
 
-            if params.fetch(:remember_me, false)
-              http_user_agent = UserAgent.parse(request.user_agent)
-              user_agent = "#{http_user_agent.platform || 'platform'}, #{http_user_agent.browser || 'browser'}"
-              refresh_token = RefreshToken.find_or_initialize_by user_agent: user_agent, user: user
-              refresh_token.unused_token
-              refresh_token.save
-            end
+            http_user_agent = UserAgent.parse(request.user_agent)
+            user_agent = "#{http_user_agent.platform || 'platform'}, #{http_user_agent.browser || 'browser'}"
+            refresh_token = RefreshToken.find_or_initialize_by user_agent: user_agent, user: user
+            refresh_token.unused_token
+            refresh_token.save
 
             user.activity!
 
@@ -29,7 +26,7 @@ module Api
               user: user_data,
               token: token,
               expired_at: exp,
-              refresh_token: refresh_token&.token,
+              refresh_token: refresh_token.token,
               ws_token: user.ws_token,
               administered_gyms: user.administered_gyms.map(&:id),
               subscribes: user.subscribes_to_a,
