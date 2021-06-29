@@ -27,7 +27,7 @@ module Api
       def add_ascent_user
         ascent_user = AscentUser.new user_id: ascent_user_params[:user_id], ascent: @ascent_crag_route
         if ascent_user.save
-          render json: nil, status: :created
+          head :no_content
         else
           render json: { error: ascent_user.errors }, status: :unprocessable_entity
         end
