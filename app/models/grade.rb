@@ -92,6 +92,15 @@ class Grade
     rgb(128,128,128) rgb(102,102,102) rgb(77,77,77) rgb(51,51,51) rgb(25,25,25) rgb(0,0,0)
   ].freeze
 
+  def self.clean_grade(grade)
+    grade = grade.strip
+    grade = grade.downcase if /^[0-9][abc]/i.match?(grade)
+    grade = grade.downcase if /^5\.[0-9]{1,2}[abcd]/i.match?(grade)
+    grade = grade.upcase if /^B[0-9]{1,2}/i.match?(grade)
+    grade = grade.upcase if /^V/i.match?(grade)
+    grade
+  end
+
   def self.valid?(grade)
     return false unless grade
 

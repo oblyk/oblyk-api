@@ -180,7 +180,7 @@ class CragRoute < ApplicationRecord
       new_sections << {
         climbing_type: single_pitch ? climbing_type : section['climbing_type'] || climbing_type,
         description: !single_pitch ? section['description'] : nil,
-        grade: section['grade'],
+        grade: Grade.clean_grade(section['grade']),
         grade_value: Grade.to_value(section['grade']),
         height: single_pitch ? height : section_height,
         bolt_count: boltable ? section_bolt_count : nil,
