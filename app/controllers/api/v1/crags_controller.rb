@@ -56,12 +56,6 @@ module Api
       end
 
       def geo_json
-        features = []
-
-        Crag.all.each do |crag|
-          features << crag.to_geo_json
-        end
-
         render json: {
           type: 'FeatureCollection',
           crs: {
@@ -70,7 +64,7 @@ module Api
               name: 'urn'
             }
           },
-          features: features
+          features: geo_json_features
         }, status: :ok
       end
 
@@ -218,6 +212,18 @@ module Api
       end
 
       private
+
+      def geo_json_features
+        last_crag_update = Crag.maximum(:updated_at)
+        Rails.cache.fetch("#{last_crag_update}/crags/geo_json", expires_in: 1.day) do
+          features = []
+
+          Crag.all.each do |crag|
+            features << crag.to_geo_json
+          end
+          features
+        end
+      end
 
       def set_crag
         @crag = Crag.includes(:user, :crag_sectors).find params[:id]

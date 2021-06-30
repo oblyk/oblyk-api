@@ -27,5 +27,5 @@ PAPER_TRAIL: 'true'
 # Smtp email params
 SMTP_ADDRESS: 'smtp.gmail.com'
 SMTP_PORT: '587'
-SMTP_user_name: 'your mail'
-SMTP_password: 'your password'
+SMTP_USER_NAME: 'your mail'
+SMTP_PASSWORD: 'your password'
