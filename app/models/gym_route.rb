@@ -10,6 +10,7 @@ class GymRoute < ApplicationRecord
   has_one :gym_space, through: :gym_sector
   has_one :gym, through: :gym_sector
   has_many :videos, as: :viewable
+  has_many :ascent_gym_routes
 
   delegate :feed_parent_id, to: :gym
   delegate :feed_parent_type, to: :gym
@@ -92,6 +93,18 @@ class GymRoute < ApplicationRecord
 
   def thumbnail_url
     resize_attachment picture, '300x300'
+  end
+
+  def update_form_ascents!
+    ascent_count = 0
+    ascent_gym_routes.each do |ascent|
+      if ascent.ascent_status != 'project'
+        ascent_count ||= 0
+        ascent_count += 1
+      end
+    end
+    self.ascents_count = ascent_count
+    save
   end
 
   private

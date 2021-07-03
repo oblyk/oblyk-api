@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class GymGrade < ApplicationRecord
+  include SoftDeletable
+
   belongs_to :gym
   has_many :gym_grade_lines, dependent: :destroy
   has_many :gym_spaces

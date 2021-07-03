@@ -116,6 +116,8 @@ Rails.application.routes.draw do
         delete :remove_ascent_user, on: :member
       end
 
+      resources :ascent_gym_routes
+
       resources :comments
       resources :links
       resources :follows, only: %i[index create] do

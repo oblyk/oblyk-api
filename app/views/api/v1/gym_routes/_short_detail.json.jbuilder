@@ -39,4 +39,5 @@ end
 json.gym do
   json.id gym_route.gym.id
   json.slug_name gym_route.gym.slug_name
+  json.banner_thumbnail_url gym_route.gym.banner_thumbnail_url
 end

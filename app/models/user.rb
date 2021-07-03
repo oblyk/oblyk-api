@@ -133,6 +133,18 @@ class User < ApplicationRecord
     json_ascents
   end
 
+  def ascent_gym_routes_to_a
+    json_ascents = []
+    ascent_gym_routes.where.not(gym_route_id: nil).each do |ascent|
+      json_ascents << {
+        gym_route_id: ascent.gym_route_id,
+        ascent_status: ascent.ascent_status,
+        released_at: ascent.released_at
+      }
+    end
+    json_ascents
+  end
+
   def tick_list_to_a
     tick_lists.pluck(:crag_route_id)
   end

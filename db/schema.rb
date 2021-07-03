@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_20_131558) do
+ActiveRecord::Schema.define(version: 2021_07_02_145430) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -139,8 +139,6 @@ ActiveRecord::Schema.define(version: 2021_06_20_131558) do
     t.bigint "gym_route_id"
     t.json "sections"
     t.integer "height"
-    t.json "hold_colors"
-    t.json "tag_colors"
     t.string "climbing_type"
     t.integer "note"
     t.text "comment"
@@ -156,7 +154,12 @@ ActiveRecord::Schema.define(version: 2021_06_20_131558) do
     t.integer "points"
     t.boolean "private_comment"
     t.string "hardness_status"
+    t.integer "gym_grade_level"
+    t.bigint "gym_id"
+    t.bigint "gym_grade_id"
     t.index ["crag_route_id"], name: "index_ascents_on_crag_route_id"
+    t.index ["gym_grade_id"], name: "index_ascents_on_gym_grade_id"
+    t.index ["gym_id"], name: "index_ascents_on_gym_id"
     t.index ["gym_route_id"], name: "index_ascents_on_gym_route_id"
     t.index ["user_id"], name: "index_ascents_on_user_id"
   end
@@ -481,6 +484,7 @@ ActiveRecord::Schema.define(version: 2021_06_20_131558) do
     t.boolean "use_grade_system", default: false
     t.boolean "use_point_system", default: false
     t.boolean "use_point_division_system", default: false
+    t.datetime "deleted_at"
     t.index ["gym_id"], name: "index_gym_grades_on_gym_id"
   end
 
