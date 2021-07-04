@@ -35,6 +35,7 @@ end
 json.gym_space do
   json.id gym_route.gym_space.id
   json.slug_name gym_route.gym_space.slug_name
+  json.name gym_route.gym_space.name
 end
 json.gym do
   json.id gym_route.gym.id

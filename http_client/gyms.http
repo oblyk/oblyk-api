@@ -62,6 +62,18 @@ Content-Type: application/json
   }
 }
 
+### GET count gym route
+GET {{api_url}}/gyms/49/routes_count.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET all gym routes
+GET {{api_url}}/gyms/49/routes.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
 ### GET all gym versions
 GET {{api_url}}/gyms/1/versions.json
 HttpApiAccessToken: {{api_access_token}}
@@ -73,7 +85,7 @@ HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET gym
-GET {{api_url}}/gyms/1.json
+GET {{api_url}}/gyms/49.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 

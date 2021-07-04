@@ -4,9 +4,9 @@ module Api
   module V1
     class GymsController < ApiController
       before_action :protected_by_super_admin, only: %i[destroy]
-      before_action :protected_by_session, only: %i[create update add_banner add_logo]
-      before_action :set_gym, only: %i[show versions update destroy add_banner add_logo]
-      before_action :protected_by_administrator, only: %i[update add_banner add_logo]
+      before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes]
+      before_action :set_gym, only: %i[show versions update destroy add_banner add_logo routes_count routes]
+      before_action :protected_by_administrator, only: %i[update add_banner add_logo routes_count routes]
 
       def index
         @gyms = Gym.all
@@ -84,6 +84,19 @@ module Api
         else
           render json: { error: @gym.errors }, status: :unprocessable_entity
         end
+      end
+
+      def routes_count
+        render json: @gym.gym_routes.mounted.count, status: :ok
+      end
+
+      def routes
+        @gym_routes = if params.fetch(:dismounted, 'false') == 'true'
+                        @gym.gym_routes.dismounted
+                      else
+                        @gym.gym_routes.mounted
+                      end
+        render 'api/v1/gyms/routes'
       end
 
       private

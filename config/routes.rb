@@ -150,6 +150,8 @@ Rails.application.routes.draw do
         get :gyms_around, on: :collection
         post :add_banner, on: :member
         post :add_logo, on: :member
+        get :routes_count, on: :member
+        get :routes, on: :member
         resources :gym_administrators
         resources :gym_administration_requests, only: %i[create]
         resources :gym_grades do
@@ -171,6 +173,8 @@ Rails.application.routes.draw do
           post :add_thumbnail, on: :member
           put :dismount, on: :member
           put :mount, on: :member
+          put :dismount_collection, on: :collection
+          put :mount_collection, on: :collection
         end
       end
       resources :reports, only: %i[create]

@@ -6,8 +6,8 @@ module Api
       include Gymable
       skip_before_action :protected_by_session, only: %i[show index]
       skip_before_action :protected_by_gym_administrator, only: %i[show index]
-      before_action :set_gym_space, except: %i[add_picture add_thumbnail dismount mount]
-      before_action :set_gym_sector, except: %i[index show add_picture add_thumbnail dismount mount]
+      before_action :set_gym_space, except: %i[add_picture add_thumbnail dismount mount dismount_collection mount_collection]
+      before_action :set_gym_sector, except: %i[index show add_picture add_thumbnail dismount mount dismount_collection mount_collection]
       before_action :set_gym_route, only: %i[show update destroy add_picture add_thumbnail dismount mount]
 
       def index
@@ -105,6 +105,16 @@ module Api
         else
           render json: { error: @gym_route.errors }, status: :unprocessable_entity
         end
+      end
+
+      def dismount_collection
+        @gym.gym_routes.where(id: params[:route_ids]).each(&:dismount!)
+        head :no_content
+      end
+
+      def mount_collection
+        @gym.gym_routes.where(id: params[:route_ids]).each(&:mount!)
+        head :no_content
       end
 
       private
