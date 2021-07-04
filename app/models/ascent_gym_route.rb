@@ -3,10 +3,9 @@
 class AscentGymRoute < Ascent
   belongs_to :gym_route, optional: true
   belongs_to :gym
-  belongs_to :gym_grade
+  belongs_to :gym_grade, optional: true
 
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }
-  validates :gym_grade_level, presence: true
 
   before_validation :set_gym_and_system
   before_validation :historize_ascents
@@ -27,8 +26,8 @@ class AscentGymRoute < Ascent
     return unless gym_route
 
     self.gym = gym_route.gym
-    self.gym_grade = gym_route.gym_grade_line.gym_grade
-    self.gym_grade_level = gym_route.gym_grade_line.order
+    self.gym_grade = gym_route.gym_grade_line.gym_grade if gym_route.gym_grade_line
+    self.gym_grade_level = gym_route.gym_grade_line.order if gym_route.gym_grade_line
   end
 
   def historize_ascents
