@@ -14,6 +14,7 @@ module Geolocable
         lng: longitude.to_f,
         distance: distance.to_i * 1000
       )
+        .order("getRange(latitude, longitude, #{latitude.to_f} , #{longitude.to_f})")
     end
 
     def self.partner_geo_search(latitude, longitude, distance)
@@ -23,6 +24,7 @@ module Geolocable
         lng: longitude.to_f,
         distance: distance.to_i * 1000
       )
+        .order("getRange(partner_latitude, partner_longitude, #{latitude.to_f} , #{longitude.to_f})")
     end
   end
 end
