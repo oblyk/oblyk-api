@@ -144,7 +144,11 @@ module Api
       def group_by_grade(routes)
         grades = {}
         routes.each do |route|
-          grade = "#{route.gym_grade.id}-#{route.gym_grade_line.order}"
+          grade = if route.gym_grade.difficulty_system == 'grade'
+                    route.max_grade_value
+                  else
+                    "#{route.gym_grade.id}-#{route.gym_grade_line.order}"
+                  end
           grades[grade] = grades[grade] || { grade: grade, routes: [] }
           grades[grade][:routes] << route
         end
