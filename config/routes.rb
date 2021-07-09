@@ -78,6 +78,7 @@ Rails.application.routes.draw do
           get :library
           get :subscribes
           get :followers
+          get :waiting_followers
           get :favorite_crags
           get :favorite_gyms
           get :ascent_crag_routes
@@ -90,6 +91,8 @@ Rails.application.routes.draw do
           post :avatar
           post :banner
           get :subscribe_to_newsletter
+          post :accept_followers
+          delete :reject_followers
           namespace :log_books do
             resources :outdoors, only: %i[] do
               collection do

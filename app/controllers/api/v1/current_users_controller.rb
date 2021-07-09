@@ -72,7 +72,8 @@ module Api
       end
 
       def subscribes
-        @subscribes = @user.subscribes.where(followable_type: 'User').order(updated_at: :desc)
+        page = params.fetch(:page, 1)
+        @subscribes = @user.subscribes.where(followable_type: 'User').order(updated_at: :desc).page(page)
         render 'api/v1/current_users/subscribes'
       end
 
@@ -83,11 +84,31 @@ module Api
 
       def followers
         @users = []
-        followers = @user.follows.order(created_at: :desc)
+        page = params.fetch(:page, 1)
+        followers = @user.follows.accepted.order(created_at: :desc).page(page)
         followers.each do |follower|
           @users << follower.user
         end
         render 'api/v1/users/index'
+      end
+
+      def waiting_followers
+        @users = []
+        followers = @user.follows.awaiting_acceptance.order(created_at: :desc)
+        followers.each do |follower|
+          @users << follower.user
+        end
+        render 'api/v1/users/full_index'
+      end
+
+      def accept_followers
+        follower = @user.follows.awaiting_acceptance.find_by user_id: params[:user_id]
+        follower.accept!
+      end
+
+      def reject_followers
+        follower = @user.follows.awaiting_acceptance.find_by user_id: params[:user_id]
+        follower.reject!
       end
 
       def ascents_crag_routes

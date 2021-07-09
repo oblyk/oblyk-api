@@ -18,6 +18,7 @@ class Follow < ApplicationRecord
   ].freeze
 
   scope :accepted, -> { where.not(accepted_at: nil) }
+  scope :awaiting_acceptance, -> { where(accepted_at: nil) }
 
   validates :followable_type, inclusion: { in: FOLLOWABLE_LIST }
 
@@ -25,7 +26,7 @@ class Follow < ApplicationRecord
     accepted_at.present?
   end
 
-  def accepted!
+  def accept!
     self.accepted_at = Time.current
     save
   end
@@ -33,6 +34,10 @@ class Follow < ApplicationRecord
   def increment!
     self.views = views + 1
     save!
+  end
+
+  def reject!
+    delete
   end
 
   private

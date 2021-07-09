@@ -19,7 +19,7 @@ module Api
 
       def subscribes
         page = params.fetch(:page, 1)
-        @subscribes = @user.subscribes.order(views: :desc).page(page)
+        @subscribes = @user.subscribes.accepted.order(views: :desc).page(page)
         render 'api/v1/current_users/subscribes'
       end
 
