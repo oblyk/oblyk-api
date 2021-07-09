@@ -76,10 +76,14 @@ namespace :import do
         end
       end
 
+      name = data[1].strip.split ' '
+      first_name = name.shift
+      last_name = name.join ' '
+
       user = User.new(
         legacy_id: data[0],
-        first_name: data[1],
-        last_name: nil,
+        first_name: first_name,
+        last_name: last_name,
         email: data[2],
         password_digest: data[3],
         date_of_birth: date_of_birth,
