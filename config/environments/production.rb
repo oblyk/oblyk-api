@@ -86,15 +86,15 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Email delivery
-  # config.action_mailer.delivery_method = :smtp
-  # config.action_mailer.smtp_settings = {
-  #   address: ENV['SMTP_ADDRESS'],
-  #   port: ENV['SMTP_PORT'],
-  #   user_name: ENV['SMTP_USER_NAME'],
-  #   password: ENV['SMTP_PASSWORD'],
-  #   authentication: :plain,
-  #   enable_starttls_auto: true
-  # }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: ENV['SMTP_ADDRESS'],
+    port: ENV['SMTP_PORT'],
+    user_name: ENV['SMTP_USER_NAME'],
+    password: ENV['SMTP_PASSWORD'],
+    authentication: :plain,
+    enable_starttls_auto: true
+  }
 
   # Inserts middleware to perform automatic connection switching.
   # The `database_selector` hash is used to pass options to the DatabaseSelector
