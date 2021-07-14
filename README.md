@@ -1,28 +1,39 @@
-# README
+# Oblyk API | Climbing Community API   
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Dependencies
 
-Things you may want to cover:
+- ruby 2.6.5
+- bundle >= 2.0.0
+- docker >= 20.10
+    - docker-compose >= 1.25
 
-* Ruby version
+# Installation
+```shell
+# Clone project
+git clone git@github.com:oblyk/oblyk-api.git
 
-* System dependencies
+# Go to project folder
+cd oblyk-api
 
-* Configuration
+# Install gem
+bundle
 
-* Database creation
+# Copy example local_env.yml 
+cp config/local_env.example.yml config/local_env.yml
 
-* Database initialization
+# Up docker
+docker-compose up -d
 
-* How to run the test suite
+# Create oblyk_development database
+bundle exec rails db:setup
+```
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
+# Launch Oblyk rails server
+```shell
+bundle exec rails s
+```
+Go to [localhost:3000](http://localhost:3000)  
+Enjoy !
 
 ### Index search value
 Add `RAILS_ENV=production` before bundle if in production environment
