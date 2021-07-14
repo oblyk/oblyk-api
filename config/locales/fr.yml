@@ -3,7 +3,7 @@ fr:
     signature: "L'ékip Oblyk"
     hello: "Bonjour %{name}"
     welcome:
-      subject: "Oblyk | Bienvenue %{name}"
+      subject: "Bienvenue %{name}"
       title: "Bienvenue %{name} !"
       happy_to_see_you: "Nous sommes heureux de te compter parmi nous :)"
       take_a_tour: "Laisse nous te faire faire un petit tour du domaine :"
@@ -16,24 +16,24 @@ fr:
       help: "Si tu cherche de l'aide, tu en trouvera <a href='%{help_url}'>ici</a>, tu peux aussi nous contacter à cette adresse : <a href='mailto:ekip@oblyk.org'>ekip@oblyk.org</a>"
       see_you_later: "À bientôt et bonne grimpe !"
     reset_password:
-      subject: "Oblyk | Mot de passe oublié"
+      subject: "Mot de passe oublié"
       new_password_request: "Vous avez demandé un nouveau mot de passe."
       follow_link: "Merci de suivre ce lien et de renseigner votre nouveau mot de passe :"
       link_expiry: "(Ce lien à une durée de vie limitée, s'il ne fonction plus, faite une nouvelle demande de mot de passe.)"
     notification:
       hello: "Bonjour %{name}"
       new_message:
-        title: "Oblyk | Vous avez un nouveau message"
+        title: "Vous avez un nouveau message"
         body: "Vous avez des nouveaux messages non lu sur votre messagerie oblyk"
         for_see_messenger: "Pour vous rendre sur votre messagerie, visitez ce lien :"
         check_my_message: "Voir ma messagerie"
       request_for_follow_up:
-        title: "Oblyk | %{name} souhaite à vous suivre"
+        title: "%{name} souhaite à vous suivre"
         body: "%{name} souhaite vous suivre, rendez vous sur la page de vos abonné·e·s pour accepter ou refuser sa demande"
         for_see_subscribe_page: "Pour gérer vos abonné·e·s, rendez-vous ici :"
         subscribe_page: "Gérer mes abonné·e·s"
       new_article:
-        title: "Oblyk | Un nouvel article a était publié"
+        title: "Un nouvel article a était publié"
         for_read_more: "Pour lire la suite, rendez-vous ici :"
         read_more: "Lire la suite"
   activerecord:

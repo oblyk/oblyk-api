@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ApplicationMailer < ActionMailer::Base
-  default from: 'ekip@oblyk.org'
+  default from: ENV['EMAIL_DEFAULT_FROM']
   layout 'mailer'
 
   before_action :app_url

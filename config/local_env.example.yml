@@ -11,6 +11,7 @@ ROLLBAR_ACCESS_TOKEN: ''
 
 OBLYK_API_DOMAIN: 'localhost:3000'
 OBLYK_API_URL: 'http://localhost:3000'
+OBLYK_APP_URL: 'http://localhost:8080'
 LOG_LEVEL: 'debug'
 
 # If honeypot params is find in request params :
@@ -25,6 +26,7 @@ FEEDABLE: 'true'
 PAPER_TRAIL: 'true'
 
 # Smtp email params
+EMAIL_DEFAULT_FROM: 'Example <example@mail.net>'
 SMTP_ADDRESS: 'smtp.gmail.com'
 SMTP_PORT: '587'
 SMTP_USER_NAME: 'your mail'
