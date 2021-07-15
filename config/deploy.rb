@@ -3,7 +3,7 @@
 lock '3.16.0'
 
 set :application, 'oblyk-api'
-set :repo_url, 'git@github.com:lucien-chastan/oblyk-api.git'
+set :repo_url, 'git@github.com:oblyk/oblyk-api.git'
 
 # Shared directories
 set :linked_dirs, fetch(:linked_dirs, []).push(
