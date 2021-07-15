@@ -41,7 +41,7 @@ Go to [localhost:3000](http://localhost:3000)
 Enjoy !
 
 
-## Create your first organization for set yours API private key
+## Create your organization for set yours API private key
 First open rails console
 ```shell
 bundle exec rails c
