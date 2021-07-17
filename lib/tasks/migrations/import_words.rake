@@ -20,6 +20,7 @@ namespace :import do
       user = User.find_by legacy_id: data[3]
 
       word = Word.new(
+        id: data[0],
         legacy_id: data[0],
         user: user,
         name: data[1],

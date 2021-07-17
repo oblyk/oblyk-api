@@ -80,6 +80,7 @@ namespace :import do
       new_rocks = rocks[data[2]].present? ? [rocks[data[2]]] : []
 
       crag = Crag.new(
+        id: data[0],
         legacy_id: data[0],
         user: user,
         name: data[1],

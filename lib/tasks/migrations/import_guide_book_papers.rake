@@ -41,6 +41,7 @@ namespace :import do
       price_cents = data[6] * 100 if (data[6] || 0).positive?
 
       guide_book_paper = GuideBookPaper.new(
+        id: data[0],
         name: name,
         author: data[3],
         editor: data[4],

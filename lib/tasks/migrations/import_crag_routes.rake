@@ -207,6 +207,7 @@ namespace :import do
       name = data[1].presence || 'sans nom'
 
       crag_route = CragRoute.new(
+        id: data[0],
         name: name,
         height: (data[6] || 0).positive? ? data[6] : nil,
         open_year: data[7],

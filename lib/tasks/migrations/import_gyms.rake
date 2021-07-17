@@ -57,6 +57,7 @@ namespace :import do
       address = 'Place du groupe scolaire' if data[0] == 176
 
       gym = Gym.new(
+        id: data[0],
         name: data[2],
         description: data[3],
         address: address,

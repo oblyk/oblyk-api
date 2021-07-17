@@ -27,6 +27,7 @@ namespace :import do
       user = User.find_by legacy_id: data[2]
 
       area = Area.new(
+        id: data[0],
         name: data[2],
         user: user,
         legacy_id: data[0],
