@@ -97,12 +97,28 @@ class GymRoute < ApplicationRecord
 
   def update_form_ascents!
     ascent_count = 0
+    note_count = nil
+    sum_note = nil
+
     ascent_gym_routes.each do |ascent|
       if ascent.ascent_status != 'project'
         ascent_count ||= 0
         ascent_count += 1
       end
+
+      next unless ascent.note.present?
+
+      note_count ||= 0
+      sum_note ||= 0
+      note_votes ||= {}
+      note_votes[ascent.note] ||= { count: 0 }
+      note_count += 1
+      note_votes[ascent.note][:count] += 1
+      sum_note += ascent.note
     end
+
+    self.note = note_count ? sum_note / note_count : nil
+    self.note_count = note_count
     self.ascents_count = ascent_count
     save
   end

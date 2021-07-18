@@ -55,6 +55,7 @@ module Api
           :gym_grade_id,
           :level,
           :note,
+          :comment,
           :released_at,
           selected_sections: %i[]
         )

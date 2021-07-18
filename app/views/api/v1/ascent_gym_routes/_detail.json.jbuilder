@@ -33,3 +33,10 @@ end
 json.history do
   json.extract! ascent_gym_route, :created_at, :updated_at
 end
+json.user do
+  json.uuid ascent_gym_route.user.uuid
+  json.first_name ascent_gym_route.user.first_name
+  json.last_name ascent_gym_route.user.last_name
+  json.slug_name ascent_gym_route.user.slug_name
+end
+

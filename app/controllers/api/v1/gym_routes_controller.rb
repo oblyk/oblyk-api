@@ -4,11 +4,11 @@ module Api
   module V1
     class GymRoutesController < ApiController
       include Gymable
-      skip_before_action :protected_by_session, only: %i[show index]
-      skip_before_action :protected_by_gym_administrator, only: %i[show index]
-      before_action :set_gym_space, except: %i[add_picture add_thumbnail dismount mount dismount_collection mount_collection]
-      before_action :set_gym_sector, except: %i[index show add_picture add_thumbnail dismount mount dismount_collection mount_collection]
-      before_action :set_gym_route, only: %i[show update destroy add_picture add_thumbnail dismount mount]
+      skip_before_action :protected_by_session, only: %i[show index ascents]
+      skip_before_action :protected_by_gym_administrator, only: %i[show index ascents]
+      before_action :set_gym_space, except: %i[add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents]
+      before_action :set_gym_sector, except: %i[index show add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents]
+      before_action :set_gym_route, only: %i[show update destroy add_picture add_thumbnail dismount mount ascents]
 
       def index
         @group_by = params.fetch(:group_by, nil)
@@ -48,6 +48,11 @@ module Api
       end
 
       def show; end
+
+      def ascents
+        @ascent_gym_routes = @gym_route.ascent_gym_routes
+        render 'api/v1/ascent_gym_routes/index'
+      end
 
       def create
         @gym_route = GymRoute.new(gym_route_params)

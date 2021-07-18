@@ -172,6 +172,7 @@ Rails.application.routes.draw do
           resources :gym_routes
         end
         resources :gym_routes do
+          get :ascents, on: :member
           post :add_picture, on: :member
           post :add_thumbnail, on: :member
           put :dismount, on: :member
