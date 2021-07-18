@@ -22,6 +22,11 @@ module Api
         render 'api/v1/versions/index'
       end
 
+      def random
+        @crag = Crag.order('RAND()').first
+        render 'api/v1/crags/show'
+      end
+
       def geo_search
         @crags = Crag.geo_search(
           params[:latitude],

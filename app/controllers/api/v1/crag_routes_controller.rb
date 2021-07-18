@@ -62,6 +62,11 @@ module Api
         render 'api/v1/videos/index'
       end
 
+      def random
+        @crag_route = CragRoute.order('RAND()').first
+        render 'api/v1/crag_routes/show'
+      end
+
       def show; end
 
       def create

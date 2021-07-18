@@ -126,3 +126,8 @@ Accept: application/json
 GET {{api_url}}/public/crags/search.json?query=rocher des aures
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
+
+### GET random crag
+GET {{api_url}}/public/crags/random.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json

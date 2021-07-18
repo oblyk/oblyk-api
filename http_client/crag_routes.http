@@ -101,3 +101,8 @@ Accept: application/json
 GET {{api_url}}/public/crag_routes/10657/videos.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
+
+### GET random crag route
+GET {{api_url}}/public/crag_routes/random.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
