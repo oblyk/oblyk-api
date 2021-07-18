@@ -171,6 +171,7 @@ module Api
         params.require(:gym_route).permit(
           :name,
           :height,
+          :description,
           :climbing_type,
           :openers,
           :polyline,
