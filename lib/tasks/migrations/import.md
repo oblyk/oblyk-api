@@ -10,7 +10,7 @@ php artisan down
 
 ## Récupération des anciennes données d'oblyk
 - utilise PhpStorm pour faire un mysqldum de sql9097_1 (ajouter --column-statistics=0 dans le run)
-- supprimer l'ancienne base de donée : `DROP DATABASE sql9097_1;`
+- supprimer l'ancienne base de donnée : `DROP DATABASE sql9097_1;`
 - créer un nouvelle pour l'import : `CREATE DATABASE sql9097_1 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`
 - sur RubyMine, au niveau de sql9097_1 faire "Run SQL script" et séléctionner le dump fait si dessus (prend environs 8 mintues)
 
@@ -32,6 +32,8 @@ De nouveau sur le serveur d'oblyk -> supprimer le storage
 cd ~/www/oblyk.org/web/
 rm import_storage.tar.gz
 ```
+
+renomer le dossier `storage` de l'archive pour `import_storage` 
 
 Envoyer le storage sur le nouveau serveur et le décompresser
 ```shell
@@ -61,13 +63,13 @@ PAPER_TRAIL: 'false'
 ## Control des cotations
 Avant de lancer les import, vérifier qu'il n'y a pas eu d'ajout de cotation chelou depuis le dernier inmport
 ```mysql
-SELECT DISTINCT CONCAT(grade, sub_grade) FROM route_sections WHERE DATE(updated_at) > '2021-06-17';
+SELECT DISTINCT CONCAT(grade, sub_grade) FROM route_sections WHERE DATE(updated_at) > '2021-07-18';
 ```
 Ajouter à la liste de normalisation dans la task d'import des voies si c'est le cas
 
-## Tables
+## Import des tables 'sur le serveur'
 
-- [x] users `RAILS_ENV=production bundle exec rake import:users["production","/var/www/oblyk/api/current/storage/app/public"]`
+- [x] users `RAILS_ENV=production bundle exec rake import:users["production","/var/www/oblyk/api/current/import_storage/app/public"]`
 - [x] subscribes `RAILS_ENV=production bundle exec rake import:subscribes["production"]`
 ----
 - [x] conversations `RAILS_ENV=production bundle exec rake import:conversations["production"]`
@@ -94,20 +96,35 @@ Ajouter à la liste de normalisation dans la task d'import des voies si c'est le
 - [x] alerts `RAILS_ENV=production bundle exec rake import:alerts["production"]`
 ----  
 - [x] guide_book_webs `RAILS_ENV=production bundle exec rake import:guide_book_webs["production"]`
-- [x] guide_book_pdfs `RAILS_ENV=production bundle exec rake import:guide_book_pdfs["production","/var/www/oblyk/api/current/storage/app/public"]`
-- [x] guide_book_papers `RAILS_ENV=production bundle exec rake import:guide_book_papers["production","/var/www/oblyk/api/current/storage/app/public"]`
+- [x] guide_book_pdfs `RAILS_ENV=production bundle exec rake import:guide_book_pdfs["production","/var/www/oblyk/api/current/import_storage/app/public"]`
+- [x] guide_book_papers `RAILS_ENV=production bundle exec rake import:guide_book_papers["production","/var/www/oblyk/api/current/import_storage/app/public"]`
 - [x] guide_book_paper_crags `RAILS_ENV=production bundle exec rake import:guide_book_paper_crags["production"]`
 - [x] place_of_sales `RAILS_ENV=production bundle exec rake import:place_of_sales["production"]`
 ----
 - [x] videos `RAILS_ENV=production bundle exec rake import:videos["production"]`
-- [x] photos `RAILS_ENV=production bundle exec rake import:photos["production","/var/www/oblyk/api/current/storage/app/public"]`
+- [x] photos `RAILS_ENV=production bundle exec rake import:photos["production","/var/www/oblyk/api/current/import_storage/app/public"]`
 ---
-- [x] gyms `RAILS_ENV=production bundle exec rake import:gyms["production","/var/www/oblyk/api/current/storage/app/public"]`
+- [x] gyms `RAILS_ENV=production bundle exec rake import:gyms["production","/var/www/oblyk/api/current/import_storage/app/public"]`
 - [x] gym_administrators `RAILS_ENV=production bundle exec rake import:gym_administrators["production"]`
 - [x] gym_grades `RAILS_ENV=production bundle exec rake import:gym_grades["production"]`
 - [x] gym_grade_lines `RAILS_ENV=production bundle exec rake import:gym_grade_lines["production"]`
-- [x] gym_spaces `RAILS_ENV=production bundle exec rake import:gym_spaces["production","/var/www/oblyk/api/current/storage/app/public"]`
+- [x] gym_spaces `RAILS_ENV=production bundle exec rake import:gym_spaces["production","/var/www/oblyk/api/current/import_storage/app/public"]`
 - [x] gym_sectors `RAILS_ENV=production bundle exec rake import:gym_sectors["production"]`
+
+## Suppression de la base donnée de développement (en développement)
+Supprimer la base de donnée de développement
+```mysql
+DROP DATABASE oblyk_development;
+```
+
+Lancer la création de la migration
+```shell
+bundle exec rails db:setup
+```
+
+## Import des tables 'sur en local'
+
+date && bundle exec rake import:users["development","/home/lucien/www/oblyk-api/import_storage/app/public"] && bundle exec rake import:subscribes["development"] && bundle exec rake import:conversations["development"] && bundle exec rake import:conversation_users["development"] && bundle exec rake import:conversation_messages["development"] && bundle exec rake import:words["development"] && bundle exec rake import:crags["development"] && bundle exec rake import:crag_sectors["development"] && bundle exec rake import:crag_routes["development"] && bundle exec rake import:parks["development"] && bundle exec rake import:approaches["development"] && bundle exec rake import:areas["development"] && bundle exec rake import:area_crags["development"] && bundle exec rake import:ascents["development"] && bundle exec rake import:tick_lists["development"] && bundle exec rake import:ascent_users["development"] && bundle exec rake import:comments["development"] && bundle exec rake import:links["development"] && bundle exec rake import:follows["development"] && bundle exec rake import:alerts["development"] && bundle exec rake import:guide_book_webs["development"] && bundle exec rake import:guide_book_pdfs["development","/home/lucien/www/oblyk-api/import_storage/app/public"] && bundle exec rake import:guide_book_papers["development","/home/lucien/www/oblyk-api/import_storage/app/public"] && bundle exec rake import:guide_book_paper_crags["development"] && bundle exec rake import:place_of_sales["development"] && bundle exec rake import:videos["development"] && bundle exec rake import:photos["development","/home/lucien/www/oblyk-api/import_storage/app/public"] && bundle exec rake import:gyms["development","/home/lucien/www/oblyk-api/import_storage/app/public"] && bundle exec rake import:gym_administrators["development"] && bundle exec rake import:gym_grades["development"] && bundle exec rake import:gym_grade_lines["development"] && bundle exec rake import:gym_spaces["development","/home/lucien/www/oblyk-api/import_storage/app/public"] && bundle exec rake import:gym_sectors["development"] && date
 
 ## Supprimer les notifications
 ```mysql

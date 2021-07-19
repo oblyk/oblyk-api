@@ -187,6 +187,7 @@ namespace :import do
         grade = '7a/A0' if grade == '7a/A0+/'
         grade = '7a/A1' if grade == '7a/A1/'
         grade = '5c/6a' if grade == '5c/6a/'
+        grade = '4b/A0' if grade == '4b/A0/'
 
         sections << {
           climbing_type: climbing_type,
