@@ -174,3 +174,9 @@ bundle exec rake search_tasks:import["Crag"] && bundle exec rake search_tasks:im
 bundle exec rake create_feeds:for_model["Alert"] && bundle exec rake create_feeds:for_model["Gym"] && bundle exec rake create_feeds:for_model["GuideBookPaper"] && bundle exec rake create_feeds:for_model["GuideBookPdf"] && bundle exec rake create_feeds:for_model["GuideBookWeb"] && bundle exec rake create_feeds:for_model["Word"] && bundle exec rake create_feeds:for_model["Video"] && bundle exec rake create_feeds:for_model["Photo"] && bundle exec rake create_feeds:for_model["AscentCragRoute"] && bundle exec rake create_feeds:for_model["Article"] && date
 bundle exec rake create_feeds:for_model["Crag"] && bundle exec rake create_feeds:for_model["CragRoute"] && date
 ```
+
+### rejouer les migrations des procédures stockées
+```mysql
+DELETE FROM schema_migrations WHERE version IN (20210320160541, 20210720150547);
+```
++ envoyer un déploiemment
