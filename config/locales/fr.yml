@@ -6,11 +6,11 @@ fr:
       subject: "Bienvenue %{name}"
       title: "Bienvenue %{name} !"
       happy_to_see_you: "Nous sommes heureux de te compter parmi nous :)"
-      take_a_tour: "Laisse nous te faire faire un petit tour du domaine :"
-      for_crag: "Tu es peut-être ici pour trouver des infos sur les falaises de France et du monde ? alors la <a href='%{url}'>carte des falaises</a> est un bon point de départ."
-      for_partner: "Ou alors cherches-tu un partenaire de grimpe ? on t'explique comme on a pensé ça <a href='%{explain_url}'>ici</a>, ensuite c'est sûr <a href='%{map_url}'>la carte des grimpeurs</a> que ça se passe."
-      for_ascents_log: "C'est pour un carnet de croix ?<br>
-                        alors rends-toi sur les falaises où tu as grimpé (<a href='%{cuvier_url}'>Bas Cuvier</a> ? <a href='%{buoux_url}'>Buoux</a> ? <a href='%{cimai_url}'>Cimaï</a> ?) et coche tes croix<br>
+      take_a_tour: "Ton inscription a pu être motivée par différente raison, que cherche-tu à faire sur Oblyk :"
+      for_crag: "Tu es ici pour trouver des <strong>infos sur les falaises</strong> de France et du monde ? alors la <a href='%{url}'>carte des falaises</a> est un bon point de départ."
+      for_partner: "Tu cherches un <strong>partenaire de grimpe</strong> ? on t'explique comme on a pensé ça <a href='%{explain_url}'>ici</a>, ensuite c'est sûr <a href='%{map_url}'>la carte des grimpeurs</a> que ça se passe."
+      for_ascents_log: "Tu veux <strong>tenire un carnet de croix</strong> et suivre ta progression ?<br>
+                        Alors rends-toi sur les falaises où tu as grimpé (<a href='%{cuvier_url}'>Bas Cuvier</a> ? <a href='%{buoux_url}'>Buoux</a> ? <a href='%{cimai_url}'>Cimaï</a> ?) et coche tes croix<br>
                         Tu trouvera ensuite quelques <a href='%{chart_url}'>graphiques</a> sympa sur ton dashboard."
       discover_the_rest: "On te laisse découvrir le reste !"
       help: "Si tu cherche de l'aide, tu en trouvera <a href='%{help_url}'>ici</a>, tu peux aussi nous contacter à cette adresse : <a href='mailto:ekip@oblyk.org'>ekip@oblyk.org</a>"
