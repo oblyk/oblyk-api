@@ -141,13 +141,19 @@ FEEDABLE: 'true'
 PAPER_TRAIL: 'true'
 ```
 
-### function after import
+### function after import (prod)
 - [x] refresh crag data `RAILS_ENV=production bundle exec rake refresh_data:crag`
 - [x] refresh crag sector data `RAILS_ENV=production bundle exec rake refresh_data:crag_sector`
 - [ ] refresh crag route data `RAILS_ENV=production bundle exec rake refresh_data:crag_route`
 - [ ] refresh counters cache (see `reset_counters_cache` task)
 
-### recréer les index de recherche
+### function after import (local)
+```shell
+bundle exec rake refresh_data:crag && bundle exec rake refresh_data:crag_sector && bundle exec rake refresh_data:crag_route && date
+bundle exec rake reset_counters_cache:crags["all"] && bundle exec rake reset_counters_cache:crag_sectors["all"] && bundle exec rake reset_counters_cache:crag_routes["all"] && bundle exec rake reset_counters_cache:gyms["all"] && bundle exec rake reset_counters_cache:users["all"] && date
+```
+
+### recréer les index de recherche (en prod)
 ```shell
 RAILS_ENV=production bundle exec rake search_tasks:import["Crag"]
 RAILS_ENV=production bundle exec rake search_tasks:import["CragRoute"]
@@ -156,4 +162,15 @@ RAILS_ENV=production bundle exec rake search_tasks:import["Area"]
 RAILS_ENV=production bundle exec rake search_tasks:import["Gym"]
 RAILS_ENV=production bundle exec rake search_tasks:import["Word"]
 RAILS_ENV=production bundle exec rake search_tasks:import["User"]
+```
+
+### recréer les index de recherche (en local)
+```shell
+bundle exec rake search_tasks:import["Crag"] && bundle exec rake search_tasks:import["CragRoute"] && bundle exec rake search_tasks:import["GuideBookPaper"] && bundle exec rake search_tasks:import["Area"] && bundle exec rake search_tasks:import["Gym"] && bundle exec rake search_tasks:import["Word"] && bundle exec rake search_tasks:import["User"] && date
+``` 
+
+### recréer les feeds
+```shell
+bundle exec rake create_feeds:for_model["Alert"] && bundle exec rake create_feeds:for_model["Gym"] && bundle exec rake create_feeds:for_model["GuideBookPaper"] && bundle exec rake create_feeds:for_model["GuideBookPdf"] && bundle exec rake create_feeds:for_model["GuideBookWeb"] && bundle exec rake create_feeds:for_model["Word"] && bundle exec rake create_feeds:for_model["Video"] && bundle exec rake create_feeds:for_model["Photo"] && bundle exec rake create_feeds:for_model["AscentCragRoute"] && bundle exec rake create_feeds:for_model["Article"] && date
+bundle exec rake create_feeds:for_model["Crag"] && bundle exec rake create_feeds:for_model["CragRoute"] && date
 ```
