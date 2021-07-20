@@ -94,11 +94,17 @@ class Grade
 
   def self.clean_grade(grade)
     grade = grade.strip
-    grade = grade.downcase if /^[0-9][abc]/i.match?(grade)
-    grade = grade.downcase if /^5\.[0-9]{1,2}[abcd]/i.match?(grade)
-    grade = grade.upcase if /^B[0-9]{1,2}/i.match?(grade)
-    grade = grade.upcase if /^V/i.match?(grade)
-    grade
+    grade_parts = grade.split '/'
+    clean_grade = []
+    grade_parts.each do |grade_part|
+      grade_part = grade_part.downcase if /^[0-9][abc]/i.match?(grade_part)
+      grade_part = grade_part.downcase if /^5\.[0-9]{1,2}[abcd]/i.match?(grade_part)
+      grade_part = grade_part.upcase if /^B[0-9]{1,2}/i.match?(grade_part)
+      grade_part = grade_part.upcase if /^A[0-9]/i.match?(grade_part)
+      grade_part = grade_part.upcase if /^V/i.match?(grade_part)
+      clean_grade << grade_part
+    end
+    clean_grade.join '/'
   end
 
   def self.valid?(grade)
