@@ -6,7 +6,6 @@ json.extract! user,
               :first_name,
               :last_name,
               :slug_name,
-              :date_of_birth,
               :genre,
               :description,
               :localization,
@@ -27,6 +26,7 @@ json.extract! user,
               :public_outdoor_ascents,
               :public_indoor_ascents,
               :last_activity_at
+json.age user.age
 json.followers_count user.follows.count || 0
 json.subscribes_count user.subscribes.count
 json.videos_count user.videos.count

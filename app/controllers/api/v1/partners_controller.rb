@@ -3,8 +3,6 @@
 module Api
   module V1
     class PartnersController < ApiController
-      before_action :protected_by_session, only: %i[partners_around]
-
       def geo_json
         features = []
 

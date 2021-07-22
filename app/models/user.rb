@@ -153,6 +153,10 @@ class User < ApplicationRecord
     update_attribute(:last_activity_at, DateTime.current)
   end
 
+  def age
+    date_of_birth.present? ? ((Time.zone.now - Time.zone.parse(date_of_birth.to_s)) / 1.year.seconds).floor : nil
+  end
+
   def to_partner_geo_json
     Rails.cache.fetch("#{cache_key_with_version}/partner_geo_json", expires_in: 1.day) do
       {
@@ -163,7 +167,7 @@ class User < ApplicationRecord
           full_name: full_name,
           slug_name: slug_name,
           description: description,
-          date_of_birth: date_of_birth,
+          age: age,
           genre: genre,
           icon: 'partner-user',
           sport_climbing: sport_climbing,
