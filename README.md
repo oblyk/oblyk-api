@@ -79,22 +79,17 @@ bundle exec rake search_tasks:import["User"]
 ### Recreate feeds
 _(sidekiq must be started)_
 
-Open rails console
 ```shell
-bundle exec rails c
-```
-
-```ruby
-Crag.all.find_each(&:save_feed!)
-CragRoute.all.find_each(&:save_feed!)
-Alert.all.find_each(&:save_feed!)
-Gym.all.find_each(&:save_feed!)
-GuideBookPaper.all.find_each(&:save_feed!)
-GuideBookPdf.all.find_each(&:save_feed!)
-GuideBookWeb.all.find_each(&:save_feed!)
-Word.all.find_each(&:save_feed!)
-Video.all.find_each(&:save_feed!)
-Photo.all.find_each(&:save_feed!)
-AscentCragRoute.all.find_each(&:save_feed!)
-Article.all.find_each(&:save_feed!)
+bundle exec rake create_feeds:for_model["Alert"]
+bundle exec rake create_feeds:for_model["Gym"]
+bundle exec rake create_feeds:for_model["GuideBookPaper"]
+bundle exec rake create_feeds:for_model["GuideBookPdf"]
+bundle exec rake create_feeds:for_model["GuideBookWeb"]
+bundle exec rake create_feeds:for_model["Word"]
+bundle exec rake create_feeds:for_model["Video"]
+bundle exec rake create_feeds:for_model["Photo"]
+bundle exec rake create_feeds:for_model["AscentCragRoute"]
+bundle exec rake create_feeds:for_model["Article"]
+bundle exec rake create_feeds:for_model["Crag"]
+bundle exec rake create_feeds:for_model["CragRoute"]
 ```
