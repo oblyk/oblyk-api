@@ -174,6 +174,7 @@ class Crag < ApplicationRecord
   end
 
   def validate_rocks
+    self.rocks ||= []
     return if rocks&.count&.zero?
 
     rocks.each do |rock|
