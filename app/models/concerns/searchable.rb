@@ -8,8 +8,8 @@ module Searchable
     after_save    { search_push }
     after_destroy { search_destroy }
 
-    def self.search(query, bucket = nil)
-      search_results = Search.search query, name, bucket
+    def self.search(query, bucket = nil, exact_name: false)
+      search_results = Search.search query, name, bucket, exact_name: exact_name
       sql_results = where id: search_results
       order_results = []
       search_results.each do |search_result|

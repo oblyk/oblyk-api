@@ -2,24 +2,38 @@
 
 class Search < ApplicationRecord
 
-  def self.search(query, collection, bucket)
+  def self.search(query, collection, bucket, exact_name: false)
     return [] if query.blank?
 
     parameterize_query = Search.normalize_index_name query
+
+    if exact_name
+      query = "`index_name` LIKE '%#{parameterize_query}%'"
+    else
+      words = parameterize_query.split '-'
+      query = words.map { |word| "`index_name` LIKE '%#{word}%'" }.join(' OR ')
+    end
+
+    limit_length = if parameterize_query.size <= 3
+                     "CHAR_LENGTH(index_name) <= #{parameterize_query.size}"
+                   else
+                     '1 = 1'
+                   end
+
     results = if bucket
                 Search.select(:index_id)
                       .where(collection: collection)
                       .where('bucket = :bucket OR secondary_bucket = :bucket', bucket: bucket)
-                      .where('SOUNDEX(index_name) = SOUNDEX(:query)', query: parameterize_query)
-                      .where('levenshtein(index_name, :query) <= 2', query: parameterize_query)
-                      .order("levenshtein(index_name, '#{parameterize_query}') DESC")
+                      .where(query)
+                      .where(limit_length)
+                      .order("levenshtein(index_name, '#{parameterize_query}') ASC")
                       .limit(15)
               else
                 Search.select(:index_id)
                       .where(collection: collection)
-                      .where('SOUNDEX(index_name) = SOUNDEX(:query)', query: parameterize_query)
-                      .where('levenshtein(index_name, :query) <= 2', query: parameterize_query)
-                      .order("levenshtein(index_name, '#{parameterize_query}') DESC")
+                      .where(query)
+                      .where(limit_length)
+                      .order("levenshtein(index_name, '#{parameterize_query}') ASC")
                       .limit(15)
               end
     results.pluck(:index_id).uniq
