@@ -56,7 +56,8 @@ class User < ApplicationRecord
 
   before_validation :set_uuid
   before_validation :set_ws_token
-  before_validation :last_activity_at
+  before_validation :init_last_activity_at
+  before_create :init_email_notifiable_list
   before_validation :init_partner_search_activated_at
 
   validates :first_name, :email, :uuid, :ws_token, presence: true
