@@ -8,6 +8,7 @@ class Ascent < ApplicationRecord
 
   validates :released_at, presence: true
   validates :hardness_status, inclusion: { in: Hardness::LIST }, allow_blank: true
+  validates :ascent_status, inclusion: { in: AscentStatus::LIST }
 
   scope :made, -> { where.not(ascent_status: :project) }
   scope :project, -> { where(ascent_status: :project) }
