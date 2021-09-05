@@ -30,6 +30,7 @@ module Api
 
         honeypot_params = params.fetch(ENV['HONEYPOT_PARAMS'], false)
         return unless honeypot_params
+        return if honeypot_params.blank?
 
         blocked_ip = IpBlackList.new ip: request.env['HTTP_X_REAL_IP']
         blocked_ip.blocked!(params)
