@@ -227,6 +227,7 @@ GEM
       rack (>= 1.4)
     rexml (3.2.5)
     rollbar (3.1.2)
+    rorvswild (1.5.12)
     rubocop (1.13.0)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
@@ -320,6 +321,7 @@ DEPENDENCIES
   redis-namespace
   redis-rails
   rollbar
+  rorvswild
   rubocop-faker
   rubocop-performance
   rubocop-rails

@@ -31,3 +31,7 @@ SMTP_ADDRESS: 'smtp.gmail.com'
 SMTP_PORT: '587'
 SMTP_USER_NAME: 'your mail'
 SMTP_PASSWORD: 'your password'
+
+# Ror vs Wild configuration
+ENABLE_ROR_WS_WILD: 'false'
+ROR_WS_WILD_API_KEY: 'your-ws-wild-api-token'

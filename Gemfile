@@ -59,6 +59,9 @@ gem 'paper_trail', '~> 11.1'
 # Rollbar for track errors
 gem 'rollbar'
 
+# Monitoring rails performance with RoR vs Wild
+gem 'rorvswild'
+
 group :development, :test do
   # Ruby static code analyzer
   gem 'rubocop-faker'
