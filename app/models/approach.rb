@@ -40,7 +40,57 @@ class Approach < ApplicationRecord
     (length.to_d * 60 / meter_by_hour).to_i
   end
 
+  def init_path_metadata
+    metadata = []
+    elevations = elevations_form_api
+    cumulative_distance = 0
+    cumulative_time = 0
+
+    return unless elevations
+
+    elevations.each_with_index do |elevation, index|
+      if index != 0
+        distance_bwt = distance(
+          [elevation['latitude'], elevation['longitude']],
+          [elevations[index - 1]['latitude'], elevations[index - 1]['longitude']]
+        )
+        cumulative_distance += distance_bwt
+        cumulative_time += time_for_length(distance_bwt, 'flat')
+      end
+      metadata << {
+        latitude: elevation['latitude'],
+        longitude: elevation['longitude'],
+        elevation: elevation['elevation'],
+        cumulative_distance: cumulative_distance,
+        cumulative_time: cumulative_time
+      }
+    end
+    metadata
+  end
+
   private
+
+  def time_for_length(length, type)
+    meter_by_hour = 4000
+    meter_by_hour = 6000 if %w[steep_descent soft_descent].include?(type)
+    meter_by_hour = 4000 if %w[flat soft_ascent various].include?(type)
+    meter_by_hour = 2500 if %w[steep_ascent].include?(type)
+    (length.to_d * 60.to_d / meter_by_hour.to_d)
+  end
+
+  def elevations_form_api
+    return unless polyline
+
+    coordinates = []
+    polyline.each do |point|
+      coordinates << {
+        latitude: point[0],
+        longitude: point[1]
+      }
+    end
+
+    OpenElevationApi.elevations coordinates
+  end
 
   def revers_lat_lng
     reverse_polyline = []

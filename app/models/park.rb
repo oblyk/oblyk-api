@@ -2,6 +2,7 @@
 
 class Park < ApplicationRecord
   include Geolocable
+  include Elevable
 
   belongs_to :user, optional: true
   belongs_to :crag

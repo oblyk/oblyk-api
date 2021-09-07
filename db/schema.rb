@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_20_150547) do
+ActiveRecord::Schema.define(version: 2021_09_05_104054) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 2021_07_20_150547) do
     t.bigint "legacy_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.json "path_metadata"
     t.index ["crag_id"], name: "index_approaches_on_crag_id"
     t.index ["user_id"], name: "index_approaches_on_user_id"
   end
@@ -287,6 +288,7 @@ ActiveRecord::Schema.define(version: 2021_07_20_150547) do
     t.integer "comments_count"
     t.integer "photos_count"
     t.json "location"
+    t.decimal "elevation", precision: 10, scale: 6
     t.index ["crag_id"], name: "index_crag_sectors_on_crag_id"
     t.index ["name"], name: "index_crag_sectors_on_name"
     t.index ["photo_id"], name: "index_crag_sectors_on_photo_id"
@@ -340,6 +342,7 @@ ActiveRecord::Schema.define(version: 2021_07_20_150547) do
     t.integer "photos_count"
     t.integer "follows_count"
     t.integer "articles_count"
+    t.decimal "elevation", precision: 10, scale: 6
     t.index ["name"], name: "index_crags_on_name"
     t.index ["photo_id"], name: "index_crags_on_photo_id"
     t.index ["user_id"], name: "index_crags_on_user_id"
@@ -686,6 +689,7 @@ ActiveRecord::Schema.define(version: 2021_07_20_150547) do
     t.bigint "legacy_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "elevation", precision: 10, scale: 6
     t.index ["crag_id"], name: "index_parks_on_crag_id"
     t.index ["user_id"], name: "index_parks_on_user_id"
   end
