@@ -1,0 +1,12 @@
+### Get elevation from coordinate
+POST https://api.open-elevation.com/api/v1/lookup
+Content-Type: application/json
+
+{
+  "locations": [
+    {
+      "latitude": 44.469592,
+      "longitude": 5.058089
+    }
+  ]
+}

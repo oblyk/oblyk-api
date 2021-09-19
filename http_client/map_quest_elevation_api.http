@@ -1,0 +1,3 @@
+### Get elevation from coordinate
+GET https://open.mapquestapi.com/elevation/v1/profile?key={{map_quest_key}}&shapeFormat=raw&latLngCollection=44.469592,5.058089
+Content-Type: application/json

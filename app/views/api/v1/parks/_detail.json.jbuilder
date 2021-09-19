@@ -4,7 +4,8 @@ json.extract! park,
               :id,
               :description,
               :latitude,
-              :longitude
+              :longitude,
+              :elevation
 json.crag do
   json.id park.crag.id
   json.name park.crag.name

@@ -5,8 +5,15 @@ json.extract! approach,
               :description,
               :approach_type,
               :polyline,
+              :path_metadata,
               :length
 json.walking_time approach.walking_time
+json.elevation do
+  json.start approach.elevation_start
+  json.end approach.elevation_end
+  json.positive_drop approach.positive_drop
+  json.negative_drop approach.negative_drop
+end
 json.crag do
   json.id approach.crag.id
   json.name approach.crag.name

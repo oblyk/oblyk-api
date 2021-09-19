@@ -9,6 +9,7 @@ class Crag < ApplicationRecord
   include ParentFeedable
   include ActivityFeedable
   include RouteFigurable
+  include Elevable
 
   has_paper_trail only: %i[
     name
