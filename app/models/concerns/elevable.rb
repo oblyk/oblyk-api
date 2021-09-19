@@ -8,10 +8,10 @@ module Elevable
   end
 
   def api_elevation
-    elevation = OpenElevationApi.elevations([{ latitude: latitude, longitude: longitude }])
+    elevation = GoogleMapElevationApi.elevations([{ latitude: latitude, longitude: longitude }])
     return nil unless elevation
 
-    elevation.first['elevation']
+    elevation.first['elevation'].round
   end
 
   def init_elevation

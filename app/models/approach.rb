@@ -7,9 +7,9 @@ class Approach < ApplicationRecord
 
   STYLES_LIST = %w[steep_descent soft_descent flat soft_ascent steep_ascent various].freeze
 
-  before_validation :set_length
+  before_save :init_path_metadata
 
-  validates :polyline, :length, presence: true
+  validates :polyline, presence: true
   validates :approach_type, inclusion: { in: STYLES_LIST }, allow_nil: true
 
   def to_geo_json
@@ -33,49 +33,9 @@ class Approach < ApplicationRecord
   end
 
   def walking_time
-    meter_by_hour = 4000
-    meter_by_hour = 6000 if %w[steep_descent soft_descent].include?(approach_type)
-    meter_by_hour = 4000 if %w[flat soft_ascent various].include?(approach_type)
-    meter_by_hour = 2500 if %w[steep_ascent].include?(approach_type)
-    (length.to_d * 60 / meter_by_hour).to_i
-  end
+    return if path_metadata.blank?
 
-  def init_path_metadata
-    metadata = []
-    elevations = elevations_form_api
-    cumulative_distance = 0
-    cumulative_time = 0
-
-    return unless elevations
-
-    elevations.each_with_index do |elevation, index|
-      if index != 0
-        distance_bwt = distance(
-          [elevation['latitude'], elevation['longitude']],
-          [elevations[index - 1]['latitude'], elevations[index - 1]['longitude']]
-        )
-        cumulative_distance += distance_bwt
-        cumulative_time += time_for_length(distance_bwt, 'flat')
-      end
-      metadata << {
-        latitude: elevation['latitude'],
-        longitude: elevation['longitude'],
-        elevation: elevation['elevation'],
-        cumulative_distance: cumulative_distance,
-        cumulative_time: cumulative_time
-      }
-    end
-    metadata
-  end
-
-  private
-
-  def time_for_length(length, type)
-    meter_by_hour = 4000
-    meter_by_hour = 6000 if %w[steep_descent soft_descent].include?(type)
-    meter_by_hour = 4000 if %w[flat soft_ascent various].include?(type)
-    meter_by_hour = 2500 if %w[steep_ascent].include?(type)
-    (length.to_d * 60.to_d / meter_by_hour.to_d)
+    path_metadata.last['cumulative_time']
   end
 
   def elevations_form_api
@@ -89,7 +49,116 @@ class Approach < ApplicationRecord
       }
     end
 
-    OpenElevationApi.elevations coordinates
+    GoogleMapElevationApi.elevations coordinates
+  end
+
+  def elevation_start
+    return if path_metadata.blank?
+
+    path_metadata.first['elevation']
+  end
+
+  def elevation_end
+    return if path_metadata.blank?
+
+    path_metadata.last['elevation']
+  end
+
+  def positive_drop
+    drop_difference(:positive)
+  end
+
+  def negative_drop
+    drop_difference(:negative)
+  end
+
+  def path_metadata!
+    init_path_metadata(force: true)
+    save
+  end
+
+  private
+
+  def drop_difference(type)
+    return if path_metadata.blank?
+
+    drop = 0
+
+    path_metadata.each_with_index do |point, index|
+      next if index.zero?
+
+      previous_elevation = path_metadata[index - 1]['elevation']
+      elevation = point['elevation']
+      drop += elevation - previous_elevation if elevation > previous_elevation && type == :positive
+      drop += elevation - previous_elevation if elevation < previous_elevation && type == :negative
+    end
+    drop
+  end
+
+  def init_path_metadata(force: false)
+    return if !polyline_changed? && !force
+
+    metadata = []
+    elevations = elevations_form_api
+    cumulative_distance = 0
+    cumulative_time = 0
+    developed_distance = 0
+
+    return unless elevations
+
+    elevations.each_with_index do |elevation, index|
+      if index != 0
+        location = elevation['location']
+        previous_location = elevations[index - 1]['location']
+        elevation_drop = elevation['elevation'] - elevations[index - 1]['elevation']
+        distance_bwt = distance(
+          [location['lat'], location['lng']],
+          [previous_location['lat'], previous_location['lng']]
+        )
+        developed_distance_bwt = distance(
+          [location['lat'], location['lng']],
+          [previous_location['lat'], previous_location['lng']],
+          elevation_drop
+        )
+        cumulative_distance += distance_bwt
+        cumulative_time += time_by_length_and_degree(distance_bwt, developed_distance_bwt, elevation_drop).to_d
+        developed_distance += developed_distance_bwt
+      end
+      metadata << {
+        latitude: elevation['location']['lat'],
+        longitude: elevation['location']['lng'],
+        elevation: elevation['elevation'].round,
+        cumulative_distance: cumulative_distance.round,
+        cumulative_time: cumulative_time.round
+      }
+    end
+    self.length = developed_distance
+    self.path_metadata = metadata
+  end
+
+  def time_for_length(length, type)
+    meter_by_hour = 4000
+    meter_by_hour = 6000 if %w[steep_descent soft_descent].include?(type)
+    meter_by_hour = 4000 if %w[flat soft_ascent various].include?(type)
+    meter_by_hour = 2500 if %w[steep_ascent].include?(type)
+    (length.to_d * 60.to_d / meter_by_hour.to_d)
+  end
+
+  def time_by_length_and_degree(length, developed_length, elevation)
+    degree = Math.atan(elevation / length) * (180.0 / Math::PI)
+    if degree <= 0
+      (developed_length.to_d * 60.to_d / 4200.to_d)
+    elsif degree <= 5
+      (developed_length.to_d * 60.to_d / 4100.to_d)
+    elsif degree <= 10
+      (developed_length.to_d * 60.to_d / 4000.to_d)
+    elsif degree <= 15
+      (developed_length.to_d * 60.to_d / 3500.to_d)
+    elsif degree <= 20
+      (developed_length.to_d * 60.to_d / 1500.to_d)
+    elsif degree >= 25
+      (developed_length.to_d * 60.to_d / 600.to_d)
+    end
   end
 
   def revers_lat_lng
@@ -100,17 +169,7 @@ class Approach < ApplicationRecord
     reverse_polyline
   end
 
-  def set_length
-    cumulate_distance = 0
-    polyline.each_with_index do |coordinate, index|
-      break if index >= polyline.count - 1
-
-      cumulate_distance += distance(coordinate, polyline[index + 1])
-    end
-    self.length = cumulate_distance
-  end
-
-  def distance(loc1, loc2)
+  def distance(loc1, loc2, elevation = 0)
     rad_per_deg = Math::PI / 180 # PI / 180
     rkm = 6371 # Earth radius in kilometers
     rm = rkm * 1000 # Radius in meters
@@ -124,6 +183,11 @@ class Approach < ApplicationRecord
     a = Math.sin(dlat_rad / 2)**2 + Math.cos(lat1_rad) * Math.cos(lat2_rad) * Math.sin(dlon_rad / 2)**2
     c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 
-    rm * c # Delta in meters
+    meters = rm * c # Delta in meters
+    if elevation.zero?
+      meters
+    else
+      Math.sqrt(meters**2 + elevation.abs**2)
+    end
   end
 end
