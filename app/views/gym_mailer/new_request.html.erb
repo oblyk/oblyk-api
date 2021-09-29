@@ -1,0 +1,18 @@
+<h1 style="font-size: 16px">
+  Nouvelle demande d'administration de <%= @gym.name  %>
+</h1>
+
+<table style="width: 100%">
+  <tr>
+    <th style="text-align: right">Salle :</th>
+    <td><%= @gym.name %> (id: <%= @gym.id %>)</td>
+  </tr>
+  <tr>
+    <th style="text-align: right">Utilisateur :</th>
+    <td><%= @email %> <%= @name %></td>
+  </tr>
+  <tr>
+    <th style="text-align: right">Justification :</th>
+    <td><%= @justification %></td>
+  </tr>
+</table>

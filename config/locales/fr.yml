@@ -36,6 +36,9 @@ fr:
         title: "Un nouvel article a était publié"
         for_read_more: "Pour lire la suite, rendez-vous ici :"
         read_more: "Lire la suite"
+    gym:
+      administration_request:
+        title: "Nouvelle demande d'administation : %{gym_name}"
   activerecord:
     attributes:
       crag:
