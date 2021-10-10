@@ -13,7 +13,7 @@ module Api
       end
 
       def types
-        render json: Grade::GRADE_STYLES
+        render json: Grade::GRADE_STYLES, status: :ok
       end
 
       private

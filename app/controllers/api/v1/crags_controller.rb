@@ -8,32 +8,32 @@ module Api
       before_action :set_crag, only: %i[show versions update guide_books_around areas_around geo_json_around destroy guides photos videos articles route_figures]
 
       def index
-        @crags = Crag.includes(:user, :crag_sectors).all
+        render json: Crag.all.map(&:summary_to_json), status: :ok
       end
 
       def search
         query = params[:query]
-        @crags = Crag.search(query)
-        render 'api/v1/crags/index'
+        crags = Crag.search(query)
+        render json: crags.map(&:summary_to_json), status: :ok
       end
 
       def versions
-        @versions = @crag.versions
-        render 'api/v1/versions/index'
+        versions = @crag.versions
+        render json: OblykVersion.index(versions), status: :ok
       end
 
       def random
-        @crag = Crag.order('RAND()').first
-        render 'api/v1/crags/show'
+        crag = Crag.order('RAND()').first
+        render json: crag.detail_to_json, status: :ok
       end
 
       def geo_search
-        @crags = Crag.geo_search(
+        crags = Crag.geo_search(
           params[:latitude],
           params[:longitude],
           params[:distance]
         )
-        render 'api/v1/crags/index'
+        render json: crags.map(&:summary_to_json), status: :ok
       end
 
       def guide_books_around
@@ -44,8 +44,8 @@ module Api
           guide_ids.concat(crag.guide_book_papers.pluck(:id)) if crag.guide_book_papers.count.positive?
         end
         other_guides = guide_ids - guides_already_have
-        @guide_book_papers = GuideBookPaper.where(id: other_guides)
-        render 'api/v1/guide_book_papers/index'
+        guide_book_papers = GuideBookPaper.where(id: other_guides)
+        render json: guide_book_papers.map(&:summary_to_json), status: :ok
       end
 
       def areas_around
@@ -56,8 +56,8 @@ module Api
           area_ids.concat(crag.areas.pluck(:id)) if crag.areas.count.positive?
         end
         other_areas = area_ids - areas_already_have
-        @areas = Area.where(id: other_areas)
-        render 'api/v1/areas/index'
+        areas = Area.where(id: other_areas)
+        render json: areas.map(&:summary_to_json), status: :ok
       end
 
       def geo_json
@@ -111,7 +111,9 @@ module Api
         }, status: :ok
       end
 
-      def show; end
+      def show
+        render json: @crag.detail_to_json, status: :ok
+      end
 
       def guides
         papers = @crag.guide_book_papers
@@ -122,36 +124,21 @@ module Api
         papers.each do |paper|
           guides << {
             guide_type: 'GuideBookPaper',
-            guide: JSON.parse(
-              render_to_string(
-                template: 'api/v1/guide_book_papers/summary',
-                assigns: { guide_book_paper: paper }
-              )
-            )
+            guide: paper.summary_to_json
           }
         end
 
         pdfs.each do |pdf|
           guides << {
             guide_type: 'GuideBookPdf',
-            guide: JSON.parse(
-              render_to_string(
-                template: 'api/v1/guide_book_pdfs/show',
-                assigns: { guide_book_pdf: pdf }
-              )
-            )
+            guide: pdf.summary_to_json
           }
         end
 
         webs.each do |web|
           guides << {
             guide_type: 'GuideBookWeb',
-            guide: JSON.parse(
-              render_to_string(
-                template: 'api/v1/guide_book_webs/show',
-                assigns: { guide_book_web: web }
-              )
-            )
+            guide: web.summary_to_json
           }
         end
         render json: guides, status: :ok
@@ -159,42 +146,42 @@ module Api
 
       def photos
         page = params.fetch(:page, 1)
-        @photos = Photo.where(
+        photos = Photo.where(
           '(illustrable_type = "Crag" AND illustrable_id = :crag_id) OR
            (illustrable_type = "CragSector" AND illustrable_id IN (SELECT id FROM crag_sectors WHERE crag_id = :crag_id)) OR
            (illustrable_type = "CragRoute" AND illustrable_id IN (SELECT id FROM crag_routes WHERE crag_id = :crag_id))',
           crag_id: @crag.id
         )
-                       .order(posted_at: :desc)
-                       .page(page)
-        render 'api/v1/photos/index'
+                      .order(posted_at: :desc)
+                      .page(page)
+        render json: photos.map(&:summary_to_json), status: :ok
       end
 
       def videos
-        @videos = @crag.all_videos
-        render 'api/v1/videos/index'
+        videos = @crag.all_videos
+        render json: videos.map(&:summary_to_json), status: :ok
       end
 
       def articles
-        @articles = @crag.articles.published
-        render 'api/v1/articles/index'
+        articles = @crag.articles.published
+        render json: articles.map(&:summary_to_json), status: :ok
       end
 
       def route_figures
-        render json: @crag.route_figures
+        render json: @crag.route_figures, status: :ok
       end
 
       def crags_around
         distance = params.fetch(:distance, 20)
-        @crags = Crag.geo_search(params[:latitude], params[:longitude], distance)
-        render 'api/v1/crags/index'
+        crags = Crag.geo_search(params[:latitude], params[:longitude], distance)
+        render json: crags.map(&:short_detail), status: :ok
       end
 
       def create
         @crag = Crag.new(crag_params)
         @crag.user = @current_user
         if @crag.save
-          render 'api/v1/crags/show'
+          render json: @crag.detail_to_json, status: :ok
         else
           render json: { error: @crag.errors }, status: :unprocessable_entity
         end
@@ -202,7 +189,7 @@ module Api
 
       def update
         if @crag.update(crag_params)
-          render 'api/v1/crags/show'
+          render json: @crag.detail_to_json, status: :ok
         else
           render json: { error: @crag.errors }, status: :unprocessable_entity
         end

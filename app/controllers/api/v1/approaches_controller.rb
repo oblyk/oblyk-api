@@ -9,7 +9,7 @@ module Api
       before_action :set_approach, only: %i[show update destroy]
 
       def index
-        @approaches = @crag.approaches
+        render json: @crag.approaches.map(&:summary_to_json), status: :ok
       end
 
       def geo_json_around
@@ -47,7 +47,9 @@ module Api
         }, status: :ok
       end
 
-      def show; end
+      def show
+        render json: @approach.detail_to_json, status: :ok
+      end
 
       def create
         @approach = Approach.new(approach_params)
@@ -55,7 +57,7 @@ module Api
         @approach.user = @current_user
         @approach.crag = @crag
         if @approach.save
-          render 'api/v1/approaches/show'
+          render json: @approach.detail_to_json, status: :ok
         else
           render json: { error: @approach.errors }, status: :unprocessable_entity
         end
@@ -64,7 +66,7 @@ module Api
       def update
         @approach.polyline = params[:approach][:polyline]
         if @approach.update(approach_params)
-          render 'api/v1/approaches/show'
+          render json: @approach.detail_to_json, status: :ok
         else
           render json: { error: @approach.errors }, status: :unprocessable_entity
         end

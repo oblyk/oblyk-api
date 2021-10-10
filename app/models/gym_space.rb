@@ -56,4 +56,41 @@ class GymSpace < ApplicationRecord
   def banner_thumbnail_url
     resize_attachment banner, '300x300'
   end
+
+  def summary_to_json
+    {
+      id: id,
+      gym_grade_id: gym_grade_id,
+      name: name,
+      slug_name: slug_name,
+      description: description,
+      order: order,
+      climbing_type: climbing_type,
+      banner_color: banner_color,
+      banner_bg_color: banner_bg_color,
+      banner_opacity: banner_opacity,
+      scheme_bg_color: scheme_bg_color,
+      scheme_height: scheme_height,
+      scheme_width: scheme_width,
+      latitude: latitude,
+      longitude: longitude,
+      published_at: published_at,
+      banner: banner.attached? ? banner_large_url : nil,
+      plan: plan.attached? ? plan_large_url : nil
+    }
+  end
+
+  def detail_to_json
+    summary_to_json.merge(
+      {
+        gym: {
+          id: gym.id,
+          name: gym.name,
+          slug_name: gym.slug_name,
+          banner: gym.banner.attached? ? gym.banner_large_url : nil,
+          gym_sectors: gym_sectors.map(&:summary_to_json)
+        }
+      }
+    )
+  end
 end

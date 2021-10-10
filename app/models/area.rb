@@ -37,11 +37,45 @@ class Area < ApplicationRecord
   end
 
   def summary_to_json
-    JSON.parse(
-      ApplicationController.render(
-        template: 'api/v1/areas/summary.json',
-        assigns: { area: self }
-      )
+    {
+      id: id,
+      name: name,
+      slug_name: slug_name,
+      photo: {
+        id: photo&.id,
+        url: photo ? photo.large_url : nil,
+        thumbnail_url: photo ? photo.thumbnail_url : nil,
+        illustrable_type: photo ? photo.illustrable_type : nil,
+        illustrable_name: photo ? photo.illustrable.rich_name : nil
+      }
+    }
+  end
+
+  def detail_to_json
+    summary_to_json.merge(
+      {
+        crags_count: crags.count,
+        crag_routes_count: crag_routes_count,
+        area_crags: area_crags.map { |area_crag| { id: area_crag.id, crags: { id: area_crag.crag.id, name: area_crag.crag.name } } },
+        routes_figures: {
+          routes_count: crag_routes_count,
+          grade: {
+            min_value: easiest_route&.min_grade_value,
+            min_text: easiest_route&.min_grade_text,
+            max_value: hardest_route&.max_grade_value,
+            max_text: hardest_route&.max_grade_text
+          }
+        },
+        creator: {
+          uuid: user&.uuid,
+          name: user&.full_name,
+          slug_name: user&.slug_name
+        },
+        history: {
+          created_at: created_at,
+          updated_at: updated_at
+        }
+      }
     )
   end
 

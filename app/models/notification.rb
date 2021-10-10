@@ -31,6 +31,27 @@ class Notification < ApplicationRecord
   after_create :send_email_notification
   after_save :broadcast_notification
 
+  def summary_to_json
+    detail_to_json
+  end
+
+  def detail_to_json
+    {
+      id: id,
+      notification_type: notification_type,
+      notifiable_type: notifiable_type,
+      notifiable_id: notifiable_id,
+      posted_at: posted_at,
+      read_at: read_at,
+      notifiable_object: notifiable.summary_to_json,
+      parent_object: notifiable_type == 'ConversationMessage' ? notifiable.user.summary_to_json : nil,
+      history: {
+        created_at: created_at,
+        updated_at: updated_at
+      }
+    }
+  end
+
   private
 
   def set_posted_at

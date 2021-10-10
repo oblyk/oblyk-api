@@ -28,4 +28,35 @@ class PlaceOfSale < ApplicationRecord
       geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
     }
   end
+
+  def summary_to_json
+    detail_to_json
+  end
+
+  def detail_to_json
+    {
+      id: id,
+      name: name,
+      url: url,
+      description: description,
+      latitude: latitude,
+      longitude: longitude,
+      code_country: code_country,
+      country: country,
+      postal_code: postal_code,
+      city: city,
+      region: region,
+      address: address,
+      guide_book_paper_id: guide_book_paper_id,
+      creator: {
+        uuid: user&.uuid,
+        name: user&.full_name,
+        slug_name: user&.slug_name
+      },
+      history: {
+        created_at: created_at,
+        updated_at: updated_at
+      }
+    }
+  end
 end

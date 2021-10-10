@@ -10,16 +10,19 @@ module Api
       before_action :set_gym_sector, only: %i[show update destroy dismount_routes]
 
       def index
-        @gym_sectors = @gym_space.gym_sectors
+        gym_sectors = @gym_space.gym_sectors
+        render json: gym_sectors.map(&:summary_to_json), status: :ok
       end
 
-      def show; end
+      def show
+        render json: @gym_sector.detail_to_json, status: :ok
+      end
 
       def create
         @gym_sector = GymSector.new(gym_sector_params)
         @gym_sector.gym_space = @gym_space
         if @gym_sector.save
-          render 'api/v1/gym_sectors/show'
+          render json: @gym_sector.detail_to_json, status: :ok
         else
           render json: { error: @gym_sector.errors }, status: :unprocessable_entity
         end
@@ -27,7 +30,7 @@ module Api
 
       def update
         if @gym_sector.update(gym_sector_params)
-          render 'api/v1/gym_sectors/show'
+          render json: @gym_sector.detail_to_json, status: :ok
         else
           render json: { error: @gym_sector.errors }, status: :unprocessable_entity
         end
@@ -44,7 +47,7 @@ module Api
       def dismount_routes
         routes = GymRoute.mounted.where(gym_sector: @gym_sector)
         routes.each(&:dismount!)
-        render 'api/v1/gym_sectors/show'
+        render json: @gym_sector.detail_to_json, status: :ok
       end
 
       private

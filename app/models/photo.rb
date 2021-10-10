@@ -42,17 +42,57 @@ class Photo < ApplicationRecord
     picture.blob.metadata['width']
   end
 
-  def summary_to_json
-    JSON.parse(
-      ApplicationController.render(
-        template: 'api/v1/photos/summary.json',
-        assigns: { photo: self }
-      )
-    )
-  end
-
   def destroyable?
     crag_routes.count.zero? && crag_sectors.count.zero? && crags.count.zero? && areas.count.zero?
+  end
+
+  def summary_to_json
+    detail_to_json
+  end
+
+  def detail_to_json
+    illustrable_json = {
+      type: illustrable_type,
+      id: illustrable.id,
+      name: illustrable.rich_name,
+      slug_name: illustrable.slug_name,
+      location: illustrable.location
+    }
+    if %w[CragSector CragRoute].include? illustrable_type
+      illustrable_json[:crag] =
+        {
+          crag: {
+            id: illustrable.crag.id,
+            name: illustrable.crag.name,
+            slug_name: illustrable.crag.slug_name
+          }
+        }
+    end
+    {
+      id: id,
+      description: description,
+      exif_model: exif_model,
+      exif_make: exif_make,
+      source: source,
+      alt: alt,
+      copyright_by: copyright_by,
+      copyright_nc: copyright_nc,
+      copyright_nd: copyright_nd,
+      photo_height: photo_height,
+      photo_width: photo_width,
+      picture: large_url,
+      thumbnail: thumbnail_url,
+      illustrable: illustrable_json,
+      creator: {
+        uuid: user&.uuid,
+        name: user&.full_name,
+        slug_name: user&.slug_name
+      },
+      history: {
+        created_at: created_at,
+        updated_at: updated_at
+      }
+    }
   end
 
   private

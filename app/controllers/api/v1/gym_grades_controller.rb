@@ -7,16 +7,19 @@ module Api
       before_action :set_gym_grade, only: %i[show update destroy]
 
       def index
-        @gym_grades = @gym.gym_grades
+        gym_grades = @gym.gym_grades
+        render json: gym_grades.map(&:summary_to_json), status: :ok
       end
 
-      def show; end
+      def show
+        render json: @gym_grade.detail_to_json, status: :ok
+      end
 
       def create
         @gym_grade = GymGrade.new(gym_grade_params)
         @gym_grade.gym = @gym
         if @gym_grade.save
-          render 'api/v1/gym_grades/show'
+          render json: @gym_grade.detail_to_json, status: :ok
         else
           render json: { error: @gym_grade.errors }, status: :unprocessable_entity
         end
@@ -24,7 +27,7 @@ module Api
 
       def update
         if @gym_grade.update(gym_grade_params)
-          render 'api/v1/gym_grades/show'
+          render json: @gym_grade.detail_to_json, status: :ok
         else
           render json: { error: @gym_grade.errors }, status: :unprocessable_entity
         end

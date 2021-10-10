@@ -8,19 +8,22 @@ module Api
       before_action :protected_by_owner, only: %i[update destroy]
 
       def index
-        @links = Link.where(
+        links = Link.where(
           linkable_type: params[:linkable_type],
           linkable_id: params[:linkable_id]
         )
+        render json: links.map(&:summary_to_json), status: :ok
       end
 
-      def show; end
+      def show
+        render json: @link.detail_to_json, status: :ok
+      end
 
       def create
         @link = Link.new(link_params)
         @link.user = @current_user
         if @link.save
-          render 'api/v1/links/show'
+          render json: @link.detail_to_json, status: :ok
         else
           render json: { error: @link.errors }, status: :unprocessable_entity
         end
@@ -28,7 +31,7 @@ module Api
 
       def update
         if @link.update(link_params)
-          render 'api/v1/links/show'
+          render json: @link.detail_to_json, status: :ok
         else
           render json: { error: @link.errors }, status: :unprocessable_entity
         end

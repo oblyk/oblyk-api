@@ -9,17 +9,20 @@ module Api
       before_action :protected_by_owner, only: %i[update destroy]
 
       def index
-        @place_of_sales = @guide_book_paper.place_of_sales
+        place_of_sales = @guide_book_paper.place_of_sales
+        render json: place_of_sales.map(&:summary_to_json), status: :ok
       end
 
-      def show; end
+      def show
+        render json: @place_of_sale.detail_to_json, status: :ok
+      end
 
       def create
         @place_of_sale = PlaceOfSale.new(place_of_sale_params)
         @place_of_sale.user = @current_user
         @place_of_sale.guide_book_paper = @guide_book_paper
         if @place_of_sale.save
-          render 'api/v1/place_of_sales/show'
+          render json: @place_of_sale.detail_to_json, status: :ok
         else
           render json: { error: @place_of_sale.errors }, status: :unprocessable_entity
         end
@@ -27,7 +30,7 @@ module Api
 
       def update
         if @place_of_sale.update(place_of_sale_params)
-          render 'api/v1/place_of_sales/show'
+          render json: @place_of_sale.detail_to_json, status: :ok
         else
           render json: { error: @place_of_sale.errors }, status: :unprocessable_entity
         end

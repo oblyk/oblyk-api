@@ -11,6 +11,34 @@ class GymGradeLine < ApplicationRecord
 
   default_scope { order(:order) }
 
+  def summary_to_json
+    detail_to_json
+  end
+
+  def detail_to_json
+    {
+      id: id,
+      name: name,
+      colors: colors,
+      order: order,
+      grade_text: grade_text,
+      grade_value: grade_value,
+      points: points,
+      gym_grade: {
+        id: gym_grade.id,
+        slug_name: gym_grade.name,
+        difficulty_system: gym_grade.difficulty_system,
+        use_grade_system: gym_grade.use_grade_system,
+        use_point_system: gym_grade.use_point_system,
+        use_point_division_system: gym_grade.use_point_division_system
+      },
+      gym: {
+        id: gym.id,
+        slug_name: gym.slug_name
+      }
+    }
+  end
+
   private
 
   def init_grade_value

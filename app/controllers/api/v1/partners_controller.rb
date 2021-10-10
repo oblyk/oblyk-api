@@ -27,13 +27,13 @@ module Api
         render json: {
           count_global: climbers.count,
           count_last_week: climbers.where('partner_search_activated_at > ?', DateTime.current - 1.week).count
-        }
+        }, status: :ok
       end
 
       def partners_around
         distance = params.fetch(:distance, 20)
-        @users = User.partner_geo_search(params[:latitude], params[:longitude], distance)
-        render 'api/v1/users/index'
+        users = User.partner_geo_search(params[:latitude], params[:longitude], distance)
+        render json: users.map(&:summary_to_json), status: :ok
       end
     end
   end

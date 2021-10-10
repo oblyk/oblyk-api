@@ -7,13 +7,18 @@ module Api
       before_action :set_conversation, only: %i[show read]
 
       def index
-        @conversations = Conversation.joins(:conversation_users)
-                                     .where(conversation_users: { user_id: @current_user.id })
-                                     .order(last_message_at: :desc)
+        conversations = Conversation.joins(:conversation_users)
+                                    .where(conversation_users: { user_id: @current_user.id })
+                                    .order(last_message_at: :desc)
+        render json: conversations.map(&:summary_to_json), status: :ok
       end
 
       def show
-        render json: {}, status: :unauthorized if @conversation.conversation_users.where(user: @current_user).count.zero?
+        if @conversation.conversation_users.where(user: @current_user).count.zero?
+          render json: {}, status: :unauthorized
+        else
+          render json: @conversation.detail_to_json, status: :ok
+        end
       end
 
       def create
@@ -23,7 +28,7 @@ module Api
         @conversation = same_conversation if same_conversation.present?
 
         if @conversation.save
-          render 'api/v1/conversations/show'
+          render json: @conversation.detail_to_json, status: :ok
         else
           render json: { error: @conversation.errors }, status: :unprocessable_entity
         end

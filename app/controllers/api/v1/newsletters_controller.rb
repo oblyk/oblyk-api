@@ -7,20 +7,23 @@ module Api
       before_action :set_newsletter, only: %i[show photos update send_newsletter destroy]
 
       def index
-        @newsletters = Newsletter.order(created_at: :desc)
+        newsletters = Newsletter.order(created_at: :desc)
+        render json: newsletters.map(&:summary_to_json), status: :ok
       end
 
-      def show; end
+      def show
+        render json: @newsletter.detail_to_json, status: :ok
+      end
 
       def photos
-        @photos = @newsletter.photos
-        render 'api/v1/photos/index'
+        photos = @newsletter.photos
+        render json: photos.map(&:summary_to_json), status: :ok
       end
 
       def create
         @newsletter = Newsletter.new(newsletter_params)
         if @newsletter.save
-          render 'api/v1/newsletters/show'
+          render json: @newsletter.detail_to_json, status: :ok
         else
           render json: { error: @newsletter.errors }, status: :unprocessable_entity
         end
@@ -28,7 +31,7 @@ module Api
 
       def update
         if @newsletter.update(newsletter_params)
-          render 'api/v1/newsletters/show'
+          render json: @newsletter.detail_to_json, status: :ok
         else
           render json: { error: @newsletter.errors }, status: :unprocessable_entity
         end

@@ -9,16 +9,19 @@ module Api
       before_action :set_gym_space, except: %i[index create]
 
       def index
-        @gym_spaces = @gym.gym_spaces
+        gym_spaces = @gym.gym_spaces
+        render json: gym_spaces.map(&:summary_to_json), status: :ok
       end
 
-      def show; end
+      def show
+        render json: @gym_space.detail_to_json, status: :ok
+      end
 
       def create
         @gym_space = GymSpace.new(gym_space_params)
         @gym_space.gym = @gym
         if @gym_space.save
-          render 'api/v1/gym_spaces/show'
+          render json: @gym_space.detail_to_json, status: :ok
         else
           render json: { error: @gym_space.errors }, status: :unprocessable_entity
         end
@@ -26,7 +29,7 @@ module Api
 
       def update
         if @gym_space.update(gym_space_params)
-          render 'api/v1/gym_spaces/show'
+          render json: @gym_space.detail_to_json, status: :ok
         else
           render json: { error: @gym_space.errors }, status: :unprocessable_entity
         end
@@ -42,7 +45,7 @@ module Api
 
       def publish
         if @gym_space.publish!
-          render 'api/v1/gym_spaces/show'
+          render json: @gym_space.detail_to_json, status: :ok
         else
           render json: { error: @gym_space.errors }, status: :unprocessable_entity
         end
@@ -50,7 +53,7 @@ module Api
 
       def unpublish
         if @gym_space.unpublish!
-          render 'api/v1/gym_spaces/show'
+          render json: @gym_space.detail_to_json, status: :ok
         else
           render json: { error: @gym_space.errors }, status: :unprocessable_entity
         end
@@ -58,7 +61,7 @@ module Api
 
       def add_banner
         if @gym_space.update(banner_params)
-          render 'api/v1/gym_spaces/show'
+          render json: @gym_space.detail_to_json, status: :ok
         else
           render json: { error: @gym_space.errors }, status: :unprocessable_entity
         end
@@ -67,7 +70,7 @@ module Api
       def add_plan
         if @gym_space.update(plan_params)
           @gym_space.set_plan_dimension!
-          render 'api/v1/gym_spaces/show'
+          render json: @gym_space.detail_to_json, status: :ok
         else
           render json: { error: @gym_space.errors }, status: :unprocessable_entity
         end

@@ -6,7 +6,8 @@ module Api
       before_action :protected_by_super_admin, only: %i[index]
 
       def index
-        @subscribes = Subscribe.all
+        subscribes = Subscribe.all
+        render json: subscribes.map(&:summary_to_json), status: :ok
       end
 
       def create
@@ -15,7 +16,7 @@ module Api
 
         @subscribe = Subscribe.new(subscribe_params)
         if @subscribe.save
-          render 'api/v1/subscribes/show'
+          render json: @subscribe.detail_to_json, status: :ok
         else
           render json: { error: @subscribe.errors }, status: :unprocessable_entity
         end

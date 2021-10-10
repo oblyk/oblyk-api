@@ -55,11 +55,28 @@ class Video < ApplicationRecord
   end
 
   def summary_to_json
-    JSON.parse(
-      ApplicationController.render(
-        template: 'api/v1/videos/summary.json',
-        assigns: { video: self }
-      )
-    )
+    detail_to_json
+  end
+
+  def detail_to_json
+    {
+      id: id,
+      url: url,
+      description: description,
+      viewable_type: viewable_type,
+      viewable_id: viewable_id,
+      iframe: iframe,
+      url_for_iframe: url_for_iframe,
+      viewable: viewable.summary_to_json,
+      creator: {
+        uuid: user&.uuid,
+        name: user&.full_name,
+        slug_name: user&.slug_name
+      },
+      history: {
+        created_at: created_at,
+        updated_at: updated_at
+      }
+    }
   end
 end

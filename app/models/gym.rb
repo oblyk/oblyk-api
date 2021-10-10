@@ -53,15 +53,6 @@ class Gym < ApplicationRecord
     [latitude, longitude]
   end
 
-  def summary_to_json
-    JSON.parse(
-      ApplicationController.render(
-        template: 'api/v1/gyms/summary.json',
-        assigns: { gym: self }
-      )
-    )
-  end
-
   def to_geo_json
     {
       type: 'Feature',
@@ -115,6 +106,55 @@ class Gym < ApplicationRecord
 
   def logo_thumbnail_url
     resize_attachment logo, '100x100'
+  end
+
+  def summary_to_json
+    {
+      id: id,
+      name: name,
+      slug_name: slug_name,
+      description: description,
+      email: email,
+      phone_number: phone_number,
+      web_site: web_site,
+      latitude: latitude,
+      longitude: longitude,
+      code_country: code_country,
+      country: country,
+      city: city,
+      big_city: big_city,
+      region: region,
+      address: address,
+      postal_code: postal_code,
+      sport_climbing: sport_climbing,
+      bouldering: bouldering,
+      pan: pan,
+      fun_climbing: fun_climbing,
+      training_space: training_space,
+      administered: administered?,
+      banner: banner.attached? ? banner_large_url : nil,
+      logo: logo.attached? ? logo_large_url : nil
+    }
+  end
+
+  def detail_to_json
+    summary_to_json.merge(
+      {
+        follow_count: follows.count,
+        gym_grades_count: gym_grades.count,
+        versions_count: versions.count,
+        gym_spaces: gym_spaces.map(&:summary_to_json),
+        creator: {
+          uuid: user&.uuid,
+          name: user&.full_name,
+          slug_name: user&.slug_name
+        },
+        history: {
+          created_at: created_at,
+          updated_at: updated_at
+        }
+      }
+    )
   end
 
   private

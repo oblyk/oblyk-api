@@ -12,7 +12,7 @@ module Api
         area_crag.user = @current_user
         @area = Area.find area_crag_params[:area_id]
         if area_crag.save
-          render 'api/v1/areas/show'
+          render json: @area.detail_to_json, status: :ok
         else
           render json: { error: area_crag.errors }, status: :unprocessable_entity
         end
@@ -21,7 +21,7 @@ module Api
       def destroy
         @area = @area_crag.area
         if @area_crag.destroy
-          render 'api/v1/areas/show'
+          render json: @area.detail_to_json, status: :ok
         else
           render json: { error: @area_crag.errors }, status: :unprocessable_entity
         end

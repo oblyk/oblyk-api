@@ -6,7 +6,9 @@ module Api
       before_action :protected_by_session
       before_action :set_user
 
-      def show; end
+      def show
+        render json: @user.detail_to_json(current_user: true), status: :ok
+      end
 
       def feed
         articles = params.fetch(:articles, false) == 'true'
@@ -56,49 +58,49 @@ module Api
       end
 
       def favorite_crags
-        @subscribes = @user.subscribes
-                           .where(followable_type: 'Crag')
-                           .order(updated_at: :desc)
-                           .page(params.fetch(:page, 1))
-        render 'api/v1/current_users/subscribes'
+        subscribes = @user.subscribes
+                          .where(followable_type: 'Crag')
+                          .order(updated_at: :desc)
+                          .page(params.fetch(:page, 1))
+        render json: subscribes.map(&:summary_to_json), status: :ok
       end
 
       def favorite_gyms
-        @subscribes = @user.subscribes
-                           .where(followable_type: 'Gym')
-                           .order(updated_at: :desc)
-                           .page(params.fetch(:page, 1))
-        render 'api/v1/current_users/subscribes'
+        subscribes = @user.subscribes
+                          .where(followable_type: 'Gym')
+                          .order(updated_at: :desc)
+                          .page(params.fetch(:page, 1))
+        render json: subscribes.map(&:summary_to_json), status: :ok
       end
 
       def subscribes
         page = params.fetch(:page, 1)
-        @subscribes = @user.subscribes.where(followable_type: 'User').order(updated_at: :desc).page(page)
-        render 'api/v1/current_users/subscribes'
+        subscribes = @user.subscribes.where(followable_type: 'User').order(updated_at: :desc).page(page)
+        render json: subscribes.map(&:summary_to_json), status: :ok
       end
 
       def library
-        @subscribes = @user.subscribes.where(followable_type: 'GuideBookPaper').order(views: :desc)
-        render :subscribes
+        subscribes = @user.subscribes.where(followable_type: 'GuideBookPaper').order(views: :desc)
+        render json: subscribes.map(&:summary_to_json), status: :ok
       end
 
       def followers
-        @users = []
+        users = []
         page = params.fetch(:page, 1)
         followers = @user.follows.accepted.order(created_at: :desc).page(page)
         followers.each do |follower|
-          @users << follower.user
+          users << follower.user
         end
-        render 'api/v1/users/index'
+        render json: users.map(&:summary_to_json), status: :ok
       end
 
       def waiting_followers
-        @users = []
+        users = []
         followers = @user.follows.awaiting_acceptance.order(created_at: :desc)
         followers.each do |follower|
-          @users << follower.user
+          users << follower.user
         end
-        render 'api/v1/users/full_index'
+        render json: users.map(&:detail_to_json), status: :ok
       end
 
       def accept_followers
@@ -129,41 +131,41 @@ module Api
         climbing_filters << 'deep_water' if %w[deep_water all].include?(climbing_type_filter)
         climbing_filters << 'via_ferrata' if %w[via_ferrata all].include?(climbing_type_filter)
 
-        @crag_routes = case params[:order]
-                       when 'crags'
-                         CragRoute.includes(:crag, :crag_sector)
-                                  .where(id: crag_route_ids)
-                                  .where(climbing_type: climbing_filters)
-                                  .joins(:crag)
-                                  .order('crags.name')
-                                  .page(page)
-                       when 'released_at'
-                         CragRoute.joins("INNER JOIN ascents ON ascents.crag_route_id = crag_routes.id AND ascents.type = 'AscentCragRoute' AND ascents.user_id = #{@user.id}")
-                                  .includes(:crag, :crag_sector)
-                                  .where(id: crag_route_ids)
-                                  .where(climbing_type: climbing_filters)
-                                  .order('ascents.released_at DESC')
-                                  .page(page)
-                       else
-                         CragRoute.includes(:crag, :crag_sector)
-                                  .where(id: crag_route_ids)
-                                  .where(climbing_type: climbing_filters)
-                                  .order(max_grade_value: :desc)
-                                  .page(page)
-                       end
-        render 'api/v1/crag_routes/index'
+        crag_routes = case params[:order]
+                      when 'crags'
+                        CragRoute.includes(:crag, :crag_sector)
+                                 .where(id: crag_route_ids)
+                                 .where(climbing_type: climbing_filters)
+                                 .joins(:crag)
+                                 .order('crags.name')
+                                 .page(page)
+                      when 'released_at'
+                        CragRoute.joins("INNER JOIN ascents ON ascents.crag_route_id = crag_routes.id AND ascents.type = 'AscentCragRoute' AND ascents.user_id = #{@user.id}")
+                                 .includes(:crag, :crag_sector)
+                                 .where(id: crag_route_ids)
+                                 .where(climbing_type: climbing_filters)
+                                 .order('ascents.released_at DESC')
+                                 .page(page)
+                      else
+                        CragRoute.includes(:crag, :crag_sector)
+                                 .where(id: crag_route_ids)
+                                 .where(climbing_type: climbing_filters)
+                                 .order(max_grade_value: :desc)
+                                 .page(page)
+                      end
+        render json: crag_routes.map(&:summary_to_json), status: :ok
       end
 
       def projects
         project_crag_route_ids = @user.ascent_crag_routes.project.pluck(:crag_route_id)
         crag_route_ids = @user.ascent_crag_routes.made.pluck(:crag_route_id)
-        @crag_routes = CragRoute.where(id: project_crag_route_ids).where.not(id: crag_route_ids).joins(:crag).order('crags.name')
-        render 'api/v1/crag_routes/index'
+        crag_routes = CragRoute.where(id: project_crag_route_ids).where.not(id: crag_route_ids).joins(:crag).order('crags.name')
+        render json: crag_routes.map(&:summary_to_json), status: :ok
       end
 
       def tick_lists
-        @crag_routes = @user.ticked_crag_routes.joins(:crag).order('crags.name')
-        render 'api/v1/crag_routes/index'
+        crag_routes = @user.ticked_crag_routes.joins(:crag).order('crags.name')
+        render json: crag_routes.map(&:summary_to_json), status: :ok
       end
 
       def ascended_crags_geo_json
@@ -187,19 +189,19 @@ module Api
 
       def photos
         page = params.fetch(:page, 1)
-        @photos = @user.photos.order(posted_at: :desc).page(page)
-        render 'api/v1/photos/index'
+        photos = @user.photos.order(posted_at: :desc).page(page)
+        render json: photos.map(&:summary_to_json), status: :ok
       end
 
       def videos
         page = params.fetch(:page, 1)
-        @videos = @user.videos.order(created_at: :desc).page(page)
-        render 'api/v1/videos/index'
+        videos = @user.videos.order(created_at: :desc).page(page)
+        render json: videos.map(&:summary_to_json), status: :ok
       end
 
       def update
         if @user.update(user_params)
-          render :show
+          render json: @user.detail_to_json(current_user: true), status: :ok
         else
           render json: @user.errors, status: :unprocessable_entity
         end
@@ -207,7 +209,7 @@ module Api
 
       def banner
         if @user.update(banner_params)
-          render :show
+          render json: @user.detail_to_json(current_user: true), status: :ok
         else
           render json: { error: @user.errors }, status: :unprocessable_entity
         end
@@ -215,7 +217,7 @@ module Api
 
       def avatar
         if @user.update(avatar_params)
-          render :show
+          render json: @user.detail_to_json(current_user: true), status: :ok
         else
           render json: { error: @user.errors }, status: :unprocessable_entity
         end

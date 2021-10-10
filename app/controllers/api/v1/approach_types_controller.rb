@@ -4,7 +4,7 @@ module Api
   module V1
     class ApproachTypesController < ApiController
       def index
-        render json: Approach::STYLES_LIST
+        render json: Approach::STYLES_LIST, status: :ok
       end
     end
   end

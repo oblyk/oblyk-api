@@ -24,6 +24,7 @@ module Api
                        GymSector.joins(:gym_space).where(gym_spaces: { gym_id: @gym.id })
                      end
           @gym_routes = group_by_sector(@sectors, dismounted)
+          render json: { sectors: @sectors.map { |sector| { sector: sector.summary_to_json, routes: sector.gym_routes.map(&:summary_to_json) } } }, status: :ok
         else
           routes = if @gym_sector.present?
                      GymRoute.where(gym_sector: @gym_sector)
@@ -42,23 +43,33 @@ module Api
           @gym_routes = @gym_routes.includes(:sector).order('sectors.name ASC') if order_by == 'sector'
 
           # group by
-          @gym_routes = group_by_opened_at(@gym_routes) if @group_by == 'opened_at'
-          @gym_routes = group_by_grade(@gym_routes) if @group_by == 'grade'
+          case @group_by
+          when 'opened_at'
+            @opened_routes = group_by_opened_at(@gym_routes)
+            render json: { opened_at: @opened_routes.map { |opened_route| { opened_at: opened_route[0], routes: opened_route[1][:routes].map(&:summary_to_json) } } }, status: :ok
+          when 'grade'
+            @grade_routes = group_by_grade(@gym_routes)
+            render json: { grade: @grade_routes.map { |grade_route| { grade: grade_route[0], routes: grade_route[1][:routes].map(&:summary_to_json) } } }, status: :ok
+          else
+            render json: @gym_routes.map(&:summary_to_json), status: :ok
+          end
         end
       end
 
-      def show; end
+      def show
+        render json: @gym_route.detail_to_json, status: :ok
+      end
 
       def ascents
-        @ascent_gym_routes = @gym_route.ascent_gym_routes
-        render 'api/v1/ascent_gym_routes/index'
+        ascent_gym_routes = @gym_route.ascent_gym_routes
+        render json: ascent_gym_routes.map(&:summary_to_json), status: :ok
       end
 
       def create
         @gym_route = GymRoute.new(gym_route_params)
         @gym_route.gym_sector = @gym_sector
         if @gym_route.save
-          render 'api/v1/gym_routes/show'
+          render json: @gym_route.detail_to_json, status: :ok
         else
           render json: { error: @gym_route.errors }, status: :unprocessable_entity
         end
@@ -66,7 +77,7 @@ module Api
 
       def update
         if @gym_route.update(gym_route_params)
-          render 'api/v1/gym_routes/show'
+          render json: @gym_route.detail_to_json, status: :ok
         else
           render json: { error: @gym_route.errors }, status: :unprocessable_entity
         end
@@ -74,7 +85,7 @@ module Api
 
       def add_picture
         if @gym_route.update(picture_params)
-          render 'api/v1/gym_routes/show'
+          render json: @gym_route.detail_to_json, status: :ok
         else
           render json: { error: @gym_route.errors }, status: :unprocessable_entity
         end
@@ -82,7 +93,7 @@ module Api
 
       def add_thumbnail
         if @gym_route.update(thumbnail_params)
-          render 'api/v1/gym_routes/show'
+          render json: @gym_route.detail_to_json, status: :ok
         else
           render json: { error: @gym_route.errors }, status: :unprocessable_entity
         end

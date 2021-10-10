@@ -8,20 +8,23 @@ module Api
       before_action :protected_by_owner, except: %i[create index]
 
       def index
-        @organizations = User.current.organizations
+        organizations = User.current.organizations
+        render json: organizations.map(&:summary_to_json), status: :ok
       end
 
-      def show; end
+      def show
+        render json: @organization.detail_to_json, status: :ok
+      end
 
       def api_access_token
-        render json: { api_access_token: @organization.api_access_token }
+        render json: { api_access_token: @organization.api_access_token }, status: :ok
       end
 
       def create
         @organization = Organization.new organization_params
         @organization.organization_users << OrganizationUser.new(user: User.current)
         if @organization.save
-          render 'api/v1/organizations/show'
+          render json: @organization.detail_to_json, status: :ok
         else
           render json: { error: @organization.errors }, status: :unprocessable_entity
         end
@@ -29,12 +32,12 @@ module Api
 
       def refresh_api_access_token
         @organization.refresh_api_access_token!
-        render json: { api_access_token: @organization.api_access_token }
+        render json: { api_access_token: @organization.api_access_token }, status: :ok
       end
 
       def update
         if @organization.update(organization_params)
-          render 'api/v1/organizations/show'
+          render json: @organization.detail_to_json, status: :ok
         else
           render json: { error: @organization.errors }, status: :unprocessable_entity
         end

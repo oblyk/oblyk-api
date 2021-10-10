@@ -8,18 +8,18 @@ module Api
       before_action :set_area, only: %i[show crags geo_json photos add_crag remove_crag update destroy]
 
       def index
-        @areas = Area.all
+        render json: Area.all.map(&:summary_to_json), status: :ok
       end
 
       def search
         query = params[:query]
-        @areas = Area.search(query)
-        render 'api/v1/areas/index'
+        areas = Area.search(query)
+        render json: areas.map(&:summary_to_json), status: :ok
       end
 
       def crags
-        @crags = @area.crags
-        render 'api/v1/crags/index'
+        crags = @area.crags
+        render json: crags.map(&:summary_to_json), status: :ok
       end
 
       def geo_json
@@ -59,26 +59,28 @@ module Api
         }, status: :ok
       end
 
-      def show; end
+      def show
+        render json: @area.detail_to_json, status: :ok
+      end
 
       def photos
         page = params.fetch(:page, 1)
-        @photos = Photo.where(
+        photos = Photo.where(
           '(illustrable_type = "Crag" AND illustrable_id IN (SELECT crag_id FROM area_crags WHERE area_id = :area)) OR
            (illustrable_type = "CragSector" AND illustrable_id IN (SELECT id FROM crag_sectors WHERE crag_id IN (SELECT crag_id FROM area_crags WHERE area_id = :area))) OR
            (illustrable_type = "CragRoute" AND illustrable_id IN (SELECT id FROM crag_routes WHERE crag_id IN (SELECT crag_id FROM area_crags WHERE area_id = :area)))',
           area: @area.id
         )
-                       .order(posted_at: :desc)
-                       .page(page)
-        render 'api/v1/photos/index'
+                      .order(posted_at: :desc)
+                      .page(page)
+        render json: photos.map(&:summary_to_json), status: :ok
       end
 
       def create
         @area = Area.new(area_params)
         @area.user = @current_user
         if @area.save
-          render 'api/v1/areas/show'
+          render json: @area.detail_to_json, status: :ok
         else
           render json: { error: @area.errors }, status: :unprocessable_entity
         end
@@ -86,7 +88,7 @@ module Api
 
       def update
         if @area.update(area_params)
-          render 'api/v1/areas/show'
+          render json: @area.detail_to_json, status: :ok
         else
           render json: { error: @area.errors }, status: :unprocessable_entity
         end
@@ -107,7 +109,7 @@ module Api
         )
 
         if area_crag.save
-          render 'api/v1/areas/show'
+          render json: @area.detail_to_json, status: :ok
         else
           render json: { error: area_crag.errors }, status: :unprocessable_entity
         end
@@ -117,7 +119,7 @@ module Api
         area_crag = @area.area_crags.find_by crag_id: crag_params[:crag_id]
 
         if area_crag.delete
-          render 'api/v1/areas/show'
+          render json: @area.detail_to_json, status: :ok
         else
           render json: { error: area_crag.errors }, status: :unprocessable_entity
         end

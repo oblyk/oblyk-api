@@ -17,7 +17,7 @@ module Api
           areas: Area.search(query).map(&:summary_to_json)
         }
 
-        render json: results
+        render json: results, status: :ok
       end
     end
   end

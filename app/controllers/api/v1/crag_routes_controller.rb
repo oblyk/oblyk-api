@@ -29,51 +29,54 @@ module Api
                       else
                         CragRoute.where(crag_id: params[:crag_id]).order(order)
                       end
-        @crag_routes = crag_routes.page(params.fetch(:page, 1))
+        crag_routes = crag_routes.page(params.fetch(:page, 1))
+        render json: crag_routes.map(&:summary_to_json), status: :ok
       end
 
       def search
         query = params[:query]
-        @crag_routes = if @crag_sector
-                         CragRoute.search_in_crag_sector(query, @crag_sector.id)
-                       elsif @crag
-                         CragRoute.search_in_crag(query, @crag.id)
-                       else
-                         CragRoute.search(query)
-                       end
-        render 'api/v1/crag_routes/index'
+        crag_routes = if @crag_sector
+                        CragRoute.search_in_crag_sector(query, @crag_sector.id)
+                      elsif @crag
+                        CragRoute.search_in_crag(query, @crag.id)
+                      else
+                        CragRoute.search(query)
+                      end
+        render json: crag_routes.map(&:summary_to_json), status: :ok
       end
 
       def versions
-        @versions = @crag_route.versions
-        render 'api/v1/versions/index'
+        versions = @crag_route.versions
+        render json: OblykVersion.index(versions), status: :ok
       end
 
       def photos
         page = params.fetch(:page, 1)
-        @photos = @crag_route.photos
-                             .order(posted_at: :desc)
-                             .page(page)
-        render 'api/v1/photos/index'
+        photos = @crag_route.photos
+                            .order(posted_at: :desc)
+                            .page(page)
+        render json: photos.map(&:summary_to_json), status: :ok
       end
 
       def videos
-        @videos = @crag_route.videos
-        render 'api/v1/videos/index'
+        videos = @crag_route.videos
+        render json: videos.map(&:summary_to_json), status: :ok
       end
 
       def random
-        @crag_route = CragRoute.order('RAND()').first
-        render 'api/v1/crag_routes/show'
+        crag_route = CragRoute.order('RAND()').first
+        render json: crag_route.detail_to_json, status: :ok
       end
 
-      def show; end
+      def show
+        render json: @crag_route.detail_to_json, status: :ok
+      end
 
       def create
         @crag_route = CragRoute.new(crag_route_params)
         @crag_route.user = @current_user
         if @crag_route.save
-          render 'api/v1/crag_routes/show'
+          render json: @crag_route.detail_to_json, status: :ok
         else
           render json: { error: @crag_route.errors }, status: :unprocessable_entity
         end
@@ -81,7 +84,7 @@ module Api
 
       def update
         if @crag_route.update(crag_route_params)
-          render 'api/v1/crag_routes/show'
+          render json: @crag_route.detail_to_json, status: :ok
         else
           render json: { error: @crag_route.errors }, status: :unprocessable_entity
         end

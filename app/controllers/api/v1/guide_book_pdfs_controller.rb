@@ -8,16 +8,19 @@ module Api
       before_action :set_guide_book_pdf, only: %i[show update destroy]
 
       def index
-        @guide_book_pdfs = GuideBookPdf.where crag_id: params[:crag_id]
+        guide_book_pdfs = GuideBookPdf.where crag_id: params[:crag_id]
+        render json: guide_book_pdfs.map(&:summary_to_json), status: :ok
       end
 
-      def show; end
+      def show
+        render json: @guide_book_pdf.detail_to_json, status: :ok
+      end
 
       def create
         @guide_book_pdf = GuideBookPdf.new(guide_book_pdf_params)
         @guide_book_pdf.user = @current_user
         if @guide_book_pdf.save
-          render 'api/v1/guide_book_pdfs/show'
+          render json: @guide_book_pdf.detail_to_json, status: :ok
         else
           render json: { error: @guide_book_pdf.errors }, status: :unprocessable_entity
         end
@@ -25,7 +28,7 @@ module Api
 
       def update
         if @guide_book_pdf.update(guide_book_pdf_params)
-          render 'api/v1/guide_book_pdfs/show'
+          render json: @guide_book_pdf.detail_to_json, status: :ok
         else
           render json: { error: @guide_book_pdf.errors }, status: :unprocessable_entity
         end

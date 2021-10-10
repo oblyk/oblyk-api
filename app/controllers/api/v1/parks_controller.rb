@@ -9,7 +9,8 @@ module Api
       before_action :set_crag, only: %i[index geo_json_around show create update destroy]
 
       def index
-        @parks = @crag.parks
+        parks = @crag.parks
+        render json: parks.map(&:summary_to_json), status: :ok
       end
 
       def geo_json_around
@@ -47,14 +48,16 @@ module Api
         }, status: :ok
       end
 
-      def show; end
+      def show
+        render json: @park.detail_to_json, status: :ok
+      end
 
       def create
         @park = Park.new(park_params)
         @park.crag = @crag
         @park.user = @current_user
         if @park.save
-          render 'api/v1/parks/show'
+          render json: @park.detail_to_json, status: :ok
         else
           render json: { error: @park.errors }, status: :unprocessable_entity
         end
@@ -62,7 +65,7 @@ module Api
 
       def update
         if @park.update(park_params)
-          render 'api/v1/parks/show'
+          render json: @park.detail_to_json, status: :ok
         else
           render json: { error: @park.errors }, status: :unprocessable_entity
         end

@@ -7,7 +7,8 @@ module Api
       before_action :set_gym_administrator, only: %i[update destroy]
 
       def index
-        @gym_administrators = @gym.gym_administrators
+        gym_administrators = @gym.gym_administrators
+        render json: gym_administrators.map(&:summary_to_json), status: :ok
       end
 
       def create
@@ -16,7 +17,7 @@ module Api
         @gym_administrator.user = user
         @gym_administrator.gym = @gym
         if @gym_administrator.save
-          render 'api/v1/gym_administrators/show'
+          render json: @gym_administrator.detail_to_json, status: :ok
         else
           render json: { error: @gym_administrator.errors }, status: :unprocessable_entity
         end
@@ -24,7 +25,7 @@ module Api
 
       def update
         if @gym_administrator.update(gym_administrator_params)
-          render 'api/v1/gym_administrators/show'
+          render json: @gym_administrator.detail_to_json, status: :ok
         else
           render json: { error: @gym_administrator.errors }, status: :unprocessable_entity
         end

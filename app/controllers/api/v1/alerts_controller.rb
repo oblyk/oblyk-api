@@ -7,19 +7,22 @@ module Api
       before_action :set_alert, only: %i[show update destroy]
 
       def index
-        @alerts = Alert.where(
+        alerts = Alert.where(
           alertable_type: params[:alertable_type],
           alertable_id: params[:alertable_id]
         )
+        render json: alerts.map(&:summary_to_json), status: :ok
       end
 
-      def show; end
+      def show
+        render json: @alert.detail_to_json, status: :ok
+      end
 
       def create
         @alert = Alert.new(alert_params)
         @alert.user = @current_user
         if @alert.save
-          render 'api/v1/alerts/show'
+          render json: @alert.detail_to_json, status: :ok
         else
           render json: { error: @alert.errors }, status: :unprocessable_entity
         end
@@ -27,7 +30,7 @@ module Api
 
       def update
         if @alert.update(alert_params)
-          render 'api/v1/alerts/show'
+          render json: @alert.detail_to_json, status: :ok
         else
           render json: { error: @alert.errors }, status: :unprocessable_entity
         end

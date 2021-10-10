@@ -24,12 +24,28 @@ class Alert < ApplicationRecord
   default_scope { order(alerted_at: :desc) }
 
   def summary_to_json
-    JSON.parse(
-      ApplicationController.render(
-        template: 'api/v1/alerts/summary.json',
-        assigns: { alert: self }
-      )
-    )
+    detail_to_json
+  end
+
+  def detail_to_json
+    {
+      id: id,
+      description: description,
+      alert_type: alert_type,
+      alerted_at: alerted_at,
+      alertable_type: alertable_type,
+      alertable_id: alertable_id,
+      alertable: alertable.summary_to_json,
+      creator: {
+        uuid: user&.uuid,
+        name: user&.full_name,
+        slug_name: user&.slug_name
+      },
+      history: {
+        created_at: created_at,
+        updated_at: updated_at
+      }
+    }
   end
 
   private

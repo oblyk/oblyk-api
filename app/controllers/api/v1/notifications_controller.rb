@@ -8,7 +8,8 @@ module Api
 
       def index
         unread_only = params.fetch(:unread_only, 'true')
-        @notifications = unread_only == 'true' ? @current_user.notifications.unread : @current_user.notifications.page(params.fetch(:page, 1))
+        notifications = unread_only == 'true' ? @current_user.notifications.unread : @current_user.notifications.page(params.fetch(:page, 1))
+        render json: notifications.map(&:summary_to_json), status: :ok
       end
 
       def unread_count

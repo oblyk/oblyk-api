@@ -123,6 +123,67 @@ class GymRoute < ApplicationRecord
     save
   end
 
+  def summary_to_json
+    {
+      id: id,
+      name: name,
+      height: height,
+      description: description,
+      openers: openers,
+      opened_at: opened_at,
+      dismounted_at: dismounted_at,
+      polyline: polyline,
+      hold_colors: hold_colors,
+      tag_colors: tag_colors,
+      sections: sections,
+      grade_value_appreciation: grade_value_appreciation,
+      note: note,
+      note_count: note_count,
+      ascents_count: ascents_count,
+      sections_count: sections_count,
+      gym_sector_id: gym_sector_id,
+      gym_grade_line_id: gym_grade_line_id,
+      points: points,
+      dismounted: dismounted?,
+      points_to_s: points_to_s,
+      grade_to_s: grade_to_s,
+      identification_to_s: identification_to_s,
+      thumbnail: thumbnail.attached? ? thumbnail_url : nil,
+      gym_sector_name: gym_sector.name,
+      grade_gap: {
+        max_grade_value: max_grade_value,
+        min_grade_value: min_grade_value,
+        max_grade_text: max_grade_text,
+        min_grade_text: min_grade_text
+      },
+      gym_space: {
+        id: gym_space.id,
+        slug_name: gym_space.slug_name,
+        name: gym_space.name
+      },
+      gym: {
+        id: gym.id,
+        slug_name: gym.slug_name,
+        banner_thumbnail_url: gym.banner_thumbnail_url
+      }
+    }
+  end
+
+  def detail_to_json
+    summary_to_json.merge(
+      {
+        picture: picture.attached? ? picture_large_url : nil,
+        video_count: videos.count,
+        gym_sector: gym_sector.summary_to_json,
+        history: {
+          created_at: created_at,
+          updated_at: updated_at
+        }
+      }
+    )
+
+  end
+
   private
 
   def format_route_section

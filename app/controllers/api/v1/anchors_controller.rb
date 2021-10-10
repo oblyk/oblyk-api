@@ -4,7 +4,7 @@ module Api
   module V1
     class AnchorsController < ApiController
       def index
-        render json: Anchor::LIST
+        render json: Anchor::LIST, status: :ok
       end
     end
   end

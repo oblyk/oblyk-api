@@ -40,6 +40,24 @@ class Follow < ApplicationRecord
     delete
   end
 
+  def summary_to_json
+    detail_to_json
+  end
+
+  def detail_to_json
+    {
+      id: id,
+      followable_type: followable_type,
+      followable_id: followable_id,
+      followable_object: followable.summary_to_json,
+      follower: user.summary_to_json,
+      history: {
+        created_at: created_at,
+        updated_at: updated_at
+      }
+    }
+  end
+
   private
 
   def auto_accepted

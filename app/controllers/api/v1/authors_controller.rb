@@ -7,11 +7,13 @@ module Api
       before_action :set_author, only: %i[show update add_cover]
       before_action :protected_by_owner, only: %i[update add_cover]
 
-      def show; end
+      def show
+        render json: @author.detail_to_json, status: :ok
+      end
 
       def update
         if @author.update(author_params)
-          render 'api/v1/authors/show'
+          render json: @author.detail_to_json, status: :ok
         else
           render json: { error: @author.errors }, status: :unprocessable_entity
         end
@@ -19,7 +21,7 @@ module Api
 
       def add_cover
         if @author.update(cover_params)
-          render 'api/v1/authors/show'
+          render json: @author.detail_to_json, status: :ok
         else
           render json: { error: @author.errors }, status: :unprocessable_entity
         end

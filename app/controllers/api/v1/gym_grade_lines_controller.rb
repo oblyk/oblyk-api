@@ -7,13 +7,15 @@ module Api
       before_action :set_gym_grade
       before_action :set_gym_grade_line, only: %i[show update destroy]
 
-      def show; end
+      def show
+        render json: @gym_grade_line.detail_to_json, status: :ok
+      end
 
       def create
         @gym_grade_line = GymGradeLine.new(gym_grade_line_params)
         @gym_grade_line.gym_grade = @gym_grade
         if @gym_grade_line.save
-          render 'api/v1/gym_grade_lines/show'
+          render json: @gym_grade_line.detail_to_json, status: :ok
         else
           render json: { error: @gym_grade_line.errors }, status: :unprocessable_entity
         end
@@ -21,7 +23,7 @@ module Api
 
       def update
         if @gym_grade_line.update(gym_grade_line_params)
-          render 'api/v1/gym_grade_lines/show'
+          render json: @gym_grade_line.detail_to_json, status: :ok
         else
           render json: { error: @gym_grade_line.errors }, status: :unprocessable_entity
         end
@@ -29,7 +31,7 @@ module Api
 
       def destroy
         if @gym_grade_line.destroy
-          render 'api/v1/gym_grades/show'
+          render json: @gym_grade.detail_to_json, status: :ok
         else
           render json: { error: @gym_grade_line.errors }, status: :unprocessable_entity
         end

@@ -19,11 +19,31 @@ class GuideBookPdf < ApplicationRecord
   validates :pdf_file, blob: { content_type: ['application/pdf'] }
 
   def summary_to_json
-    JSON.parse(
-      ApplicationController.render(
-        template: 'api/v1/guide_book_pdfs/summary.json',
-        assigns: { guide_book_pdf: self }
-      )
-    )
+    detail_to_json
+  end
+
+  def detail_to_json
+    {
+      id: id,
+      name: name,
+      description: description,
+      author: author,
+      publication_year: publication_year,
+      pdf_file: Rails.application.routes.url_helpers.polymorphic_url(pdf_file, only_path: true),
+      crag: {
+        id: crag.id,
+        name: crag.name,
+        slug_name: crag.slug_name
+      },
+      creator: {
+        uuid: user&.uuid,
+        name: user&.full_name,
+        slug_name: user&.slug_name
+      },
+      history: {
+        created_at: created_at,
+        updated_at: updated_at
+      }
+    }
   end
 end

@@ -8,16 +8,19 @@ module Api
       before_action :protected_by_owner, only: %i[update destroy]
 
       def index
-        @photos = Photo.where(id: params[:photo_ids])
+        photos = Photo.where(id: params[:photo_ids])
+        render json: photos.map(&:summary_to_json), status: :ok
       end
 
-      def show; end
+      def show
+        render json: @photo.detail_to_json, status: :ok
+      end
 
       def create
         @photo = Photo.new(photo_params)
         @photo.user = @current_user
         if @photo.save
-          render 'api/v1/photos/show'
+          render json: @photo.detail_to_json, status: :ok
         else
           render json: { error: @photo.errors }, status: :unprocessable_entity
         end
@@ -25,7 +28,7 @@ module Api
 
       def update
         if @photo.update(photo_params)
-          render 'api/v1/photos/show'
+          render json: @photo.detail_to_json, status: :ok
         else
           render json: { error: @photo.errors }, status: :unprocessable_entity
         end

@@ -7,9 +7,10 @@ module Api
       before_action :set_article, except: %i[index last feed create]
 
       def index
-        @articles = Article.published
-                           .order(published_at: :desc)
-                           .page(params.fetch(:page, 1))
+        articles = Article.published
+                          .order(published_at: :desc)
+                          .page(params.fetch(:page, 1))
+        render json: articles.map(&:summary_to_json), status: :ok
       end
 
       def last
@@ -26,21 +27,23 @@ module Api
         render json: feeds, status: :ok
       end
 
-      def show; end
+      def show
+        render json: @article.detail_to_json, status: :ok
+      end
 
       def photos
-        @photos = @article.photos
-        render 'api/v1/photos/index'
+        photos = @article.photos
+        render json: photos.map(&:summary_to_json), status: :ok
       end
 
       def crags
-        @crags = @article.crags
-        render 'api/v1/crags/index'
+        crags = @article.crags
+        render json: crags.map(&:summary_to_json), status: :ok
       end
 
       def guide_book_papers
-        @guide_book_papers = @article.guide_book_papers
-        render 'api/v1/guide_book_papers/index'
+        guide_book_papers = @article.guide_book_papers
+        render json: guide_book_papers.map(&:summary_to_json), status: :ok
       end
 
       # POST /articles/:id/view
@@ -64,7 +67,7 @@ module Api
       def create
         @article = Article.new(article_params)
         if @article.save
-          render 'api/v1/articles/show'
+          render json: @article.detail_to_json, status: :ok
         else
           render json: { error: @article.errors }, status: :unprocessable_entity
         end
@@ -72,7 +75,7 @@ module Api
 
       def update
         if @article.update(article_params)
-          render 'api/v1/articles/show'
+          render json: @article.detail_to_json, status: :ok
         else
           render json: { error: @article.errors }, status: :unprocessable_entity
         end
@@ -88,7 +91,7 @@ module Api
 
       def add_cover
         if @article.update(cover_params)
-          render 'api/v1/articles/show'
+          render json: @article.detail_to_json, status: :ok
         else
           render json: { error: @article.errors }, status: :unprocessable_entity
         end
@@ -100,6 +103,7 @@ module Api
           crag_id: crag_params[:crag_id]
         )
         article_crag.save
+        head :no_content
       end
 
       def add_guide_book_paper
@@ -108,6 +112,7 @@ module Api
           guide_book_paper_id: guide_book_paper_params[:guide_book_paper_id]
         )
         article_guide_book_paper.save
+        head :no_content
       end
 
       private

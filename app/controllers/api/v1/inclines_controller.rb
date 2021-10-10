@@ -4,7 +4,7 @@ module Api
   module V1
     class InclinesController < ApiController
       def index
-        render json: Incline::LIST
+        render json: Incline::LIST, status: :ok
       end
     end
   end

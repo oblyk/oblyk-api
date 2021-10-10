@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Search < ApplicationRecord
-
   def self.search(query, collection, bucket, exact_name: false)
     return [] if query.blank?
 

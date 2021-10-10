@@ -9,7 +9,8 @@ module Api
       before_action :set_crag, only: %i[index geo_json_around show create update]
 
       def index
-        @crag_sectors = @crag.crag_sectors
+        crag_sectors = @crag.crag_sectors
+        render json: crag_sectors.map(&:detail_to_json), status: :ok
       end
 
       def geo_json_around
@@ -45,32 +46,34 @@ module Api
         }, status: :ok
       end
 
-      def show; end
+      def show
+        render json: @crag_sector.detail_to_json, status: :ok
+      end
 
       def versions
-        @versions = @crag_sector.versions
-        render 'api/v1/versions/index'
+        versions = @crag_sector.versions
+        render json: OblykVersion.index(versions), status: :ok
       end
 
       def photos
         page = params.fetch(:page, 1)
-        @photos = Photo.where(
+        photos = Photo.where(
           '(illustrable_type = "CragSector" AND illustrable_id = :crag_sector_id) OR
            (illustrable_type = "CragRoute" AND illustrable_id IN (SELECT id FROM crag_routes WHERE crag_sector_id = :crag_sector_id))',
           crag_sector_id: @crag_sector.id
         )
-                       .order(posted_at: :desc)
-                       .page(page)
-        render 'api/v1/photos/index'
+                      .order(posted_at: :desc)
+                      .page(page)
+        render json: photos.map(&:summary_to_json), status: :ok
       end
 
       def videos
-        @videos = @crag_sector.all_videos
-        render 'api/v1/photos/index'
+        videos = @crag_sector.all_videos
+        render json: videos.map(&:summary_to_json), status: :ok
       end
 
       def route_figures
-        render json: @crag_sector.route_figures
+        render json: @crag_sector.route_figures, status: :ok
       end
 
       def create
@@ -78,7 +81,7 @@ module Api
         @crag_sector.crag = @crag
         @crag_sector.user = @current_user
         if @crag_sector.save
-          render 'api/v1/crag_sectors/show'
+          render json: @crag_sector.detail_to_json, status: :ok
         else
           render json: { error: @crag_sector.errors }, status: :unprocessable_entity
         end
@@ -86,7 +89,7 @@ module Api
 
       def update
         if @crag_sector.update(crag_sector_params)
-          render 'api/v1/crag_sectors/show'
+          render json: @crag_sector.detail_to_json, status: :ok
         else
           render json: { error: @crag_sector.errors }, status: :unprocessable_entity
         end

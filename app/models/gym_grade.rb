@@ -23,6 +23,29 @@ class GymGrade < ApplicationRecord
     difficulty_system != 'grade'
   end
 
+  def summary_to_json
+    detail_to_json
+  end
+
+  def detail_to_json
+    {
+      id: id,
+      name: name,
+      difficulty_system: difficulty_system,
+      has_hold_color: has_hold_color,
+      use_grade_system: use_grade_system,
+      use_point_system: use_point_system,
+      use_point_division_system: use_point_division_system,
+      next_grade_lines_order: next_grade_lines_order,
+      need_grade_line: need_grade_line?,
+      gym: {
+        id: gym.id,
+        slug_name: gym.slug_name
+      },
+      grade_lines: gym_grade_lines.map(&:summary_to_json)
+    }
+  end
+
   private
 
   def validate_grading_system

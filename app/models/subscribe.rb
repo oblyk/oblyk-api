@@ -11,6 +11,21 @@ class Subscribe < ApplicationRecord
 
   scope :sendable, -> { where('`subscribes`.`error` < 3').where(complained_at: nil) }
 
+  def summary_to_json
+    detail_to_json
+  end
+
+  def detail_to_json
+    {
+      email: email,
+      subscribed_at: subscribed_at,
+      history: {
+        created_at: created_at,
+        updated_at: updated_at
+      }
+    }
+  end
+
   private
 
   def init_subscribed_at

@@ -8,19 +8,22 @@ module Api
       before_action :protected_by_owner, only: %i[update destroy]
 
       def index
-        @comments = Comment.where(
+        comments = Comment.where(
           commentable_type: params[:commentable_type],
           commentable_id: params[:commentable_id]
         )
+        render json: comments.map(&:summary_to_json), status: :ok
       end
 
-      def show; end
+      def show
+        render json: @comment.detail_to_json, status: :ok
+      end
 
       def create
         @comment = Comment.new(comment_params)
         @comment.user = @current_user
         if @comment.save
-          render 'api/v1/comments/show'
+          render json: @comment.detail_to_json, status: :ok
         else
           render json: { error: @comment.errors }, status: :unprocessable_entity
         end
@@ -28,7 +31,7 @@ module Api
 
       def update
         if @comment.update(comment_params)
-          render 'api/v1/comments/show'
+          render json: @comment.detail_to_json, status: :ok
         else
           render json: { error: @comment.errors }, status: :unprocessable_entity
         end

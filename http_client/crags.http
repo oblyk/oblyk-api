@@ -62,14 +62,17 @@ Content-Type: application/json
 
 ### GET photo in crag
 GET {{api_url}}/public/crags/1/photos.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET guides in crag
 GET {{api_url}}/public/crags/1/guides.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET videos in crag
 GET {{api_url}}/public/crags/1/videos.json
+HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET videos in crag
@@ -83,7 +86,7 @@ HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET crag
-GET {{api_url}}/public/crags/8.json
+GET {{api_url}}/public/crags/18.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 

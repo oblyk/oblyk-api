@@ -25,12 +25,41 @@ class AscentCragRoute < Ascent
   after_destroy :update_crag_route!
 
   def summary_to_json
-    JSON.parse(
-      ApplicationController.render(
-        template: 'api/v1/ascent_crag_routes/summary.json',
-        assigns: { ascent_crag_route: self }
-      )
-    )
+    detail_to_json
+  end
+
+  def detail_to_json
+    {
+      id: id,
+      ascent_status: ascent_status,
+      roping_status: roping_status,
+      hardness_status: hardness_status,
+      attempt: attempt,
+      crag_route_id: crag_route_id,
+      sections: sections,
+      height: height,
+      note: note,
+      comment: comment,
+      sections_count: sections_count,
+      max_grade_value: max_grade_value,
+      min_grade_value: min_grade_value,
+      max_grade_text: max_grade_text,
+      min_grade_text: min_grade_text,
+      released_at: released_at,
+      private_comment: private_comment,
+      sections_done: sections_done,
+      crag_route: crag_route.summary_to_json,
+      crag: {
+        id: crag.id,
+        name: crag.name,
+        slug_name: crag.slug_name
+      },
+      ascent_users: ascent_users.map { |ascent_user| { id: ascent_user.id, user: ascent_user.user.summary_to_json } },
+      history: {
+        created_at: created_at,
+        updated_at: updated_at
+      }
+    }
   end
 
   private

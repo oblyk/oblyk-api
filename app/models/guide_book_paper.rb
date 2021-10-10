@@ -32,15 +32,6 @@ class GuideBookPaper < ApplicationRecord
   validates :name, presence: true
   validates :cover, blob: { content_type: :image }, allow_nil: true
 
-  def summary_to_json
-    JSON.parse(
-      ApplicationController.render(
-        template: 'api/v1/guide_book_papers/summary.json',
-        assigns: { guide_book_paper: self }
-      )
-    )
-  end
-
   def cover_large_url
     resize_attachment cover, '700x700'
   end
@@ -62,6 +53,47 @@ class GuideBookPaper < ApplicationRecord
     photos = []
     crags.each { |crag| photos += crag.all_photos }
     photos
+  end
+
+  def summary_to_json
+    {
+      id: id,
+      name: name,
+      slug_name: slug_name,
+      author: author,
+      editor: editor,
+      publication_year: publication_year,
+      price_cents: price_cents,
+      ean: ean,
+      vc_reference: vc_reference,
+      number_of_page: number_of_page,
+      weight: weight,
+      price: price_cents ? price_cents / 100 : nil,
+      cover: cover.attached? ? cover_large_url : nil,
+      thumbnail_url: cover.attached? ? cover_thumbnail_url : nil
+    }
+  end
+
+  def detail_to_json
+    summary_to_json.merge(
+      {
+        photos_count: all_photos_count,
+        crags_count: crags.count,
+        links_count: links.count,
+        versions_count: versions.count,
+        articles_count: articles_count,
+        crags: crags.map { |crag| { id: crag.id, name: crag.name } },
+        creator: {
+          uuid: user&.uuid,
+          name: user&.full_name,
+          slug_name: user&.slug_name
+        },
+        history: {
+          created_at: created_at,
+          updated_at: updated_at
+        }
+      }
+    )
   end
 
   private

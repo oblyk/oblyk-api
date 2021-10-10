@@ -15,13 +15,27 @@ class ConversationMessage < ApplicationRecord
     ConversationUser.find_by conversation: conversation, user: user
   end
 
-  def show_to_json
-    JSON.parse(
-      ApplicationController.render(
-        template: 'api/v1/conversation_messages/show.json',
-        assigns: { conversation_message: self }
-      )
-    )
+  def summary_to_json
+    detail_to_json
+  end
+
+  def detail_to_json
+    {
+      id: id,
+      conversation_id: conversation_id,
+      body: body,
+      posted_at: posted_at,
+      creator: {
+        uuid: user.uuid,
+        name: user.full_name,
+        first_name: user.first_name,
+        slug_name: user.slug_name
+      },
+      history: {
+        created_at: created_at,
+        updated_at: updated_at
+      }
+    }
   end
 
   private

@@ -31,4 +31,32 @@ class Park < ApplicationRecord
       geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
     }
   end
+
+  def summary_to_json
+    detail_to_json
+  end
+
+  def detail_to_json
+    {
+      id: id,
+      description: description,
+      latitude: latitude,
+      longitude: longitude,
+      elevation: elevation,
+      crag: {
+        id: crag.id,
+        name: crag.name,
+        slug_name: crag.slug_name
+      },
+      creator: {
+        uuid: user&.uuid,
+        name: user&.full_name,
+        slug_name: user&.slug_name
+      },
+      history: {
+        created_at: created_at,
+        updated_at: updated_at
+      }
+    }
+  end
 end

@@ -9,10 +9,13 @@ module Api
 
       def index
         crag_route_id = params.fetch(:crag_route_id, nil)
-        @ascent_crag_routes = crag_route_id ? @current_user.ascent_crag_routes.where(crag_route_id: crag_route_id) : @current_user.ascents_crag_routes
+        ascent_crag_routes = crag_route_id ? @current_user.ascent_crag_routes.where(crag_route_id: crag_route_id) : @current_user.ascents_crag_routes
+        render json: ascent_crag_routes.map(&:summary_to_json), status: :ok
       end
 
-      def show; end
+      def show
+        render json: @ascent_crag_route.detail_to_json, status: :ok
+      end
 
       def create
         @ascent_crag_route = AscentCragRoute.new(ascent_crag_route_params)

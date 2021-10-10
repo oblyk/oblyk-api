@@ -9,28 +9,29 @@ module Api
 
       def index
         crag_id = params.fetch :crag_id, nil
-        @guide_book_papers = if crag_id
-                               GuideBookPaper.includes(:guide_book_paper_crags)
-                                             .where(guide_book_paper_crags: { crag_id: params[:crag_id] })
-                             else
-                               GuideBookPaper.all
-                             end
+        guide_book_papers = if crag_id
+                              GuideBookPaper.includes(:guide_book_paper_crags)
+                                            .where(guide_book_paper_crags: { crag_id: params[:crag_id] })
+                            else
+                              GuideBookPaper.all
+                            end
+        render json: guide_book_papers.map(&:summary_to_json), status: :ok
       end
 
       def crags
-        @crags = @guide_book_paper.crags
-        render 'api/v1/crags/index'
+        crags = @guide_book_paper.crags
+        render json: crags.map(&:summary_to_json), status: :ok
       end
 
       def versions
-        @versions = @guide_book_paper.versions
-        render 'api/v1/versions/index'
+        versions = @guide_book_paper.versions
+        render json: OblykVersion.index(versions), status: :ok
       end
 
       def search
         query = params[:query]
-        @guide_book_papers = GuideBookPaper.search(query)
-        render 'api/v1/guide_book_papers/index'
+        @guide_book_paper = GuideBookPaper.search(query)
+        render json: @guide_book_paper.map(&:summary_to_json), status: :ok
       end
 
       def geo_json
@@ -58,34 +59,36 @@ module Api
 
       def photos
         page = params.fetch(:page, 1)
-        @photos = Photo.where(
+        photos = Photo.where(
           '(illustrable_type = "Crag" AND illustrable_id IN (SELECT crag_id FROM guide_book_paper_crags WHERE guide_book_paper_id = :guide_book_paper_id)) OR
            (illustrable_type = "CragSector" AND illustrable_id IN (SELECT id FROM crag_sectors WHERE crag_id IN (SELECT crag_id FROM guide_book_paper_crags WHERE guide_book_paper_id = :guide_book_paper_id))) OR
            (illustrable_type = "CragRoute" AND illustrable_id IN (SELECT id FROM crag_routes WHERE crag_id IN (SELECT crag_id FROM guide_book_paper_crags WHERE guide_book_paper_id = :guide_book_paper_id)))',
           guide_book_paper_id: @guide_book_paper.id
         )
-                       .order(posted_at: :desc)
-                       .page(page)
-        render 'api/v1/photos/index'
+                      .order(posted_at: :desc)
+                      .page(page)
+        render json: photos.map(&:summary_to_json), status: :ok
       end
 
       def links
-        @links = @guide_book_paper.links
-        render 'api/v1/links/index'
+        links = @guide_book_paper.links
+        render json: links.map(&:summary_to_json), status: :ok
       end
 
       def articles
-        @articles = @guide_book_paper.articles.published
-        render 'api/v1/articles/index'
+        articles = @guide_book_paper.articles.published
+        render json: articles.map(&:summary_to_json), status: :ok
       end
 
-      def show; end
+      def show
+        render json: @guide_book_paper.detail_to_json, status: :ok
+      end
 
       def create
         @guide_book_paper = GuideBookPaper.new(guide_book_params)
         @guide_book_paper.user = @current_user
         if @guide_book_paper.save
-          render 'api/v1/guide_book_papers/show'
+          render json: @guide_book_paper.detail_to_json, status: :ok
         else
           render json: { error: @guide_book_paper.errors }, status: :unprocessable_entity
         end
@@ -93,7 +96,7 @@ module Api
 
       def update
         if @guide_book_paper.update(guide_book_params)
-          render 'api/v1/guide_book_papers/show'
+          render json: @guide_book_paper.detail_to_json, status: :ok
         else
           render json: { error: @guide_book_paper.errors }, status: :unprocessable_entity
         end
@@ -114,7 +117,7 @@ module Api
         )
 
         if guide_book_paper_crag.save
-          render 'api/v1/guide_book_papers/show'
+          render json: @guide_book_paper.detail_to_json, status: :ok
         else
           render json: { error: guide_book_paper_crag.errors }, status: :unprocessable_entity
         end
@@ -124,7 +127,7 @@ module Api
         guide_book_paper_crag = @guide_book_paper.guide_book_paper_crags.find_by crag_id: crag_params[:crag_id]
 
         if guide_book_paper_crag.delete
-          render 'api/v1/guide_book_papers/show'
+          render json: @guide_book_paper.detail_to_json, status: :ok
         else
           render json: { error: guide_book_paper_crag.errors }, status: :unprocessable_entity
         end
@@ -132,7 +135,7 @@ module Api
 
       def add_cover
         if @guide_book_paper.update(cover_params)
-          render 'api/v1/guide_book_papers/show'
+          render json: @guide_book_paper.detail_to_json, status: :ok
         else
           render json: { error: @guide_book_paper.errors }, status: :unprocessable_entity
         end
@@ -140,7 +143,7 @@ module Api
 
       def remove_cover
         @guide_book_paper.cover.purge if @guide_book_paper.cover.attached?
-        render 'api/v1/guide_book_papers/show'
+        render json: @guide_book_paper.detail_to_json, status: :ok
       end
 
       private

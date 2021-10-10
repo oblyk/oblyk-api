@@ -42,11 +42,33 @@ class Article < ApplicationRecord
   end
 
   def summary_to_json
-    JSON.parse(
-      ApplicationController.render(
-        template: 'api/v1/articles/summary.json',
-        assigns: { article: self }
-      )
+    {
+      id: id,
+      slug_name: slug_name,
+      name: name,
+      description: description,
+      views: views,
+      comments_count: comments_count,
+      published_at: published_at,
+      published: published?,
+      cover_url: cover.attached? ? cover_large_url : nil,
+      thumbnail_url: cover.attached? ? cover_thumbnail_url : nil
+    }
+  end
+
+  def detail_to_json
+    summary_to_json.merge(
+      {
+        body: body,
+        author_id: author_id,
+        author: author.summary_to_json,
+        crags: crags.map(&:summary_to_json),
+        guide_book_papers: guide_book_papers.map(&:summary_to_json),
+        history: {
+          created_at: created_at,
+          updated_at: updated_at
+        }
+      }
     )
   end
 end

@@ -7,7 +7,8 @@ module Api
       before_action :set_tick_list, only: %i[destroy]
 
       def index
-        @tick_lists = TickList.where user: @current_user
+        tick_lists = TickList.where user: @current_user
+        render json: tick_lists.map(&:summary_to_json), status: :ok
       end
 
       def create

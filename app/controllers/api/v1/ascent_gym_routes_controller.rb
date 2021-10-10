@@ -9,10 +9,13 @@ module Api
 
       def index
         gym_route_id = params.fetch(:gym_route_id, nil)
-        @ascent_gym_routes = gym_route_id ? @current_user.ascent_gym_routes.where(gym_route_id: gym_route_id) : @current_user.ascent_gym_routes
+        ascent_gym_routes = gym_route_id ? @current_user.ascent_gym_routes.where(gym_route_id: gym_route_id) : @current_user.ascent_gym_routes
+        render json: ascent_gym_routes.map(&:summary_to_json), status: :ok
       end
 
-      def show; end
+      def show
+        render json: @ascent_gym_route.detail_to_json, status: :ok
+      end
 
       def create
         @ascent_gym_route = AscentGymRoute.new(ascent_gym_route_params)

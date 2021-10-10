@@ -58,15 +58,6 @@ class CragRoute < ApplicationRecord
     "#{grade_to_s} - #{name}"
   end
 
-  def summary_to_json
-    JSON.parse(
-      ApplicationController.render(
-        template: 'api/v1/crag_routes/summary.json',
-        assigns: { crag_route: self }
-      )
-    )
-  end
-
   def grade_to_s
     if sections_count > 1
       "#{sections_count}L."
@@ -153,6 +144,95 @@ class CragRoute < ApplicationRecord
 
   def longitude
     crag_sector&.longitude || crag.longitude
+  end
+
+  def summary_to_json
+    {
+      id: id,
+      name: name,
+      slug_name: slug_name,
+      height: height,
+      open_year: open_year,
+      opener: opener,
+      climbing_type: climbing_type,
+      sections_count: sections_count,
+      max_bolt: max_bolt,
+      note: note,
+      note_count: note_count,
+      ascents_count: ascents_count,
+      photos_count: photos_count,
+      videos_count: videos_count,
+      comments_count: comments_count,
+      votes: votes,
+      difficulty_appreciation: difficulty_appreciation,
+      grade_to_s: grade_to_s,
+      grade_gap: {
+        max_grade_value: max_grade_value,
+        min_grade_value: min_grade_value,
+        max_grade_text: max_grade_text,
+        min_grade_text: min_grade_text
+      },
+      crag_sector: {
+        id: crag_sector&.id,
+        name: crag_sector&.name,
+        slug_name: crag_sector&.slug_name,
+        photo: {
+          id: crag_sector&.photo&.id,
+          url: crag_sector&.photo ? crag_sector.photo.large_url : nil,
+          thumbnail_url: crag_sector&.photo ? crag_sector.photo.thumbnail_url : nil
+        }
+      },
+      crag: {
+        id: crag.id,
+        name: crag.name,
+        slug_name: crag.slug_name,
+        country: crag.country,
+        region: crag.region,
+        city: crag.city,
+        photo: {
+          id: crag&.photo&.id,
+          url: crag&.photo ? crag.photo.large_url : nil,
+          thumbnail_url: crag&.photo ? crag.photo.thumbnail_url : nil
+        }
+      },
+      photo: {
+        id: photo&.id,
+        url: photo ? photo.large_url : nil,
+        thumbnail_url: photo ? photo.thumbnail_url : nil
+      }
+    }
+  end
+
+  def detail_to_json
+    summary_to_json.merge(
+      {
+        versions_count: versions.count,
+        sections: sections,
+        ascent_comments: public_ascents.map do |ascent|
+          {
+            comment: ascent.comment,
+            note: ascent.note,
+            released_at: ascent.released_at,
+            creator: {
+              id: ascent.user_id,
+              slug_name: ascent.user&.slug_name,
+              name: ascent.user&.full_name,
+            }
+          }
+        end,
+        link_count: links.count,
+        alert_count: alerts.count,
+        creator: {
+          uuid: user&.uuid,
+          name: user&.full_name,
+          slug_name: user&.slug_name
+        },
+        history: {
+          created_at: created_at,
+          updated_at: updated_at
+        }
+      }
+    )
   end
 
   private

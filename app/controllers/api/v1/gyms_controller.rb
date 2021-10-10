@@ -9,13 +9,14 @@ module Api
       before_action :protected_by_administrator, only: %i[update add_banner add_logo routes_count routes]
 
       def index
-        @gyms = Gym.all
+        gyms = Gym.all
+        render json: gyms.map(&:summary_to_json), status: :ok
       end
 
       def search
         query = params[:query]
-        @gyms = Gym.search(query).records
-        render 'api/v1/gyms/index'
+        gyms = Gym.search(query).records
+        render json: gyms.map(&:summary_to_json), status: :ok
       end
 
       def geo_json
@@ -31,24 +32,26 @@ module Api
         }, status: :ok
       end
 
-      def show; end
+      def show
+        render json: @gym.detail_to_json, status: :ok
+      end
 
       def gyms_around
         distance = params.fetch(:distance, 20)
-        @gyms = Gym.geo_search(params[:latitude], params[:longitude], distance)
-        render 'api/v1/gyms/index'
+        gyms = Gym.geo_search(params[:latitude], params[:longitude], distance)
+        render json: gyms.map(&:summary_to_json), status: :ok
       end
 
       def versions
-        @versions = @gym.versions
-        render 'api/v1/versions/index'
+        versions = @gym.versions
+        render json: OblykVersion.index(versions), status: :ok
       end
 
       def create
         @gym = Gym.new(gym_params)
         @gym.user = @current_user
         if @gym.save
-          render 'api/v1/gyms/show'
+          render json: @gym.detail_to_json, status: :ok
         else
           render json: { error: @gym.errors }, status: :unprocessable_entity
         end
@@ -56,7 +59,7 @@ module Api
 
       def update
         if @gym.update(gym_params)
-          render 'api/v1/gyms/show'
+          render json: @gym.detail_to_json, status: :ok
         else
           render json: { error: @gym.errors }, status: :unprocessable_entity
         end
@@ -64,7 +67,7 @@ module Api
 
       def add_banner
         if @gym.update(banner_params)
-          render 'api/v1/gyms/show'
+          render json: @gym.detail_to_json, status: :ok
         else
           render json: { error: @gym.errors }, status: :unprocessable_entity
         end
@@ -72,7 +75,7 @@ module Api
 
       def add_logo
         if @gym.update(logo_params)
-          render 'api/v1/gyms/show'
+          render json: @gym.detail_to_json, status: :ok
         else
           render json: { error: @gym.errors }, status: :unprocessable_entity
         end
@@ -91,12 +94,12 @@ module Api
       end
 
       def routes
-        @gym_routes = if params.fetch(:dismounted, 'false') == 'true'
-                        @gym.gym_routes.dismounted
-                      else
-                        @gym.gym_routes.mounted
-                      end
-        render 'api/v1/gyms/routes'
+        gym_routes = if params.fetch(:dismounted, 'false') == 'true'
+                       @gym.gym_routes.dismounted
+                     else
+                       @gym.gym_routes.mounted
+                     end
+        render json: gym_routes.map(&:summary_to_json), status: :ok
       end
 
       private

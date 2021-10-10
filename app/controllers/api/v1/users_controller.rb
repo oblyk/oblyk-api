@@ -9,40 +9,42 @@ module Api
       before_action :protected_media, only: %i[photos videos]
       before_action :protected_outdoor_log_book, only: %i[outdoor_figures outdoor_climb_types_chart ascended_crag_routes outdoor_grades_chart]
 
-      def show; end
+      def show
+        render json: @user.detail_to_json, status: :ok
+      end
 
       def search
         query = params[:query]
-        @users = User.search(query)
-        render 'api/v1/users/index'
+        users = User.search(query)
+        render json: users.map(&:summary_to_json), status: :ok
       end
 
       def subscribes
         page = params.fetch(:page, 1)
-        @subscribes = @user.subscribes.accepted.order(views: :desc).page(page)
-        render 'api/v1/current_users/subscribes'
+        subscribes = @user.subscribes.accepted.order(views: :desc).page(page)
+        render json: subscribes.map(&:summary_to_json), status: :ok
       end
 
       def followers
-        @users = []
+        users = []
         page = params.fetch(:page, 1)
         followers = @user.follows.order(created_at: :desc).page(page)
         followers.each do |follower|
-          @users << follower.user
+          users << follower.user.summary_to_json
         end
-        render 'api/v1/users/index'
+        render json: users, status: :ok
       end
 
       def photos
         page = params.fetch(:page, 1)
-        @photos = @user.photos.order(posted_at: :desc).page(page)
-        render 'api/v1/photos/index'
+        photos = @user.photos.order(posted_at: :desc).page(page)
+        render json: photos.map(&:summary_to_json), status: :ok
       end
 
       def videos
         page = params.fetch(:page, 1)
-        @videos = @user.videos.order(created_at: :desc).page(page)
-        render 'api/v1/videos/index'
+        videos = @user.videos.order(created_at: :desc).page(page)
+        render json: videos.map(&:summary_to_json), status: :ok
       end
 
       def contribution
@@ -101,7 +103,7 @@ module Api
                                   .order(max_grade_value: :desc)
                                   .page(page)
                        end
-        render 'api/v1/crag_routes/index'
+        render json: @crag_routes.map(&:summary_to_json), status: :ok
       end
 
       def outdoor_grades_chart

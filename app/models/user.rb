@@ -79,15 +79,6 @@ class User < ApplicationRecord
   scope :deleted, -> { where(deleted_at: nil) }
   scope :undeleted, -> { where.not(deleted_at: nil) }
 
-  def summary_to_json
-    JSON.parse(
-      ApplicationController.render(
-        template: 'api/v1/users/summary.json',
-        assigns: { user: self }
-      )
-    )
-  end
-
   def location
     [latitude, longitude]
   end
@@ -280,6 +271,59 @@ class User < ApplicationRecord
         Feed.where(feedable_id: id, feedable_type: 'User').destroy_all
       end
     end
+  end
+
+  def summary_to_json
+    {
+      id: id,
+      uuid: uuid,
+      slug_name: slug_name,
+      first_name: first_name,
+      full_name: full_name,
+      avatar_thumbnail_url: avatar_thumbnail_url
+    }
+  end
+
+  def detail_to_json(current_user: false)
+    {
+      id: id,
+      uuid: uuid,
+      first_name: first_name,
+      last_name: last_name,
+      slug_name: slug_name,
+      genre: genre,
+      description: description,
+      localization: localization,
+      partner_search: partner_search,
+      partner_latitude: partner_latitude,
+      partner_longitude: partner_longitude,
+      bouldering: bouldering,
+      sport_climbing: sport_climbing,
+      multi_pitch: multi_pitch,
+      trad_climbing: trad_climbing,
+      aid_climbing: aid_climbing,
+      deep_water: deep_water,
+      via_ferrata: via_ferrata,
+      pan: pan,
+      grade_max: grade_max,
+      grade_min: grade_min,
+      public_profile: public_profile,
+      public_outdoor_ascents: public_outdoor_ascents,
+      public_indoor_ascents: public_indoor_ascents,
+      last_activity_at: last_activity_at,
+      age: age,
+      followers_count: follows.count || 0,
+      subscribes_count: subscribes.count,
+      videos_count: videos.count,
+      photos_count: photos.count,
+      full_name: full_name,
+      banner: banner.attached? ? banner_large_url : nil,
+      avatar: avatar.attached? ? avatar_large_url : nil,
+      email: current_user ? email : nil,
+      date_of_birth: current_user ? date_of_birth : nil,
+      language: current_user ? language : nil,
+      administered_gyms: current_user ? administered_gyms.map(&:summary_to_json) : []
+    }
   end
 
   private

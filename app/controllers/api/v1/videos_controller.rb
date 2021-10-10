@@ -8,19 +8,22 @@ module Api
       before_action :protected_by_owner, only: %i[update destroy]
 
       def index
-        @videos = Video.where(
+        videos = Video.where(
           viewable_type: params[:viewable_type],
           viewable_id: params[:viewable_id]
         )
+        render json: videos.map(&:summary_to_json), status: :ok
       end
 
-      def show; end
+      def show
+        render json: @video.detail_to_json, status: :ok
+      end
 
       def create
         @video = Video.new(video_params)
         @video.user = @current_user
         if @video.save
-          render 'api/v1/videos/show'
+          render json: @video.detail_to_json, status: :ok
         else
           render json: { error: @video.errors }, status: :unprocessable_entity
         end
@@ -28,7 +31,7 @@ module Api
 
       def update
         if @video.update(video_params)
-          render 'api/v1/videos/show'
+          render json: @video.detail_to_json, status: :ok
         else
           render json: { error: @video.errors }, status: :unprocessable_entity
         end

@@ -17,11 +17,29 @@ class GuideBookWeb < ApplicationRecord
   validates :name, :url, presence: true
 
   def summary_to_json
-    JSON.parse(
-      ApplicationController.render(
-        template: 'api/v1/guide_book_webs/summary.json',
-        assigns: { guide_book_web: self }
-      )
-    )
+    detail_to_json
+  end
+
+  def detail_to_json
+    {
+      id: id,
+      name: name,
+      url: url,
+      publication_year: publication_year,
+      crag: {
+        id: crag.id,
+        name: crag.name,
+        slug_name: crag.slug_name
+      },
+      creator: {
+        uuid: user&.uuid,
+        name: user&.full_name,
+        slug_name: user&.slug_name
+      },
+      history: {
+        created_at: created_at,
+        updated_at: updated_at
+      }
+    }
   end
 end

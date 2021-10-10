@@ -17,12 +17,26 @@ class Word < ApplicationRecord
   default_scope { order(:name) }
 
   def summary_to_json
-    JSON.parse(
-      ApplicationController.render(
-        template: 'api/v1/words/summary.json',
-        assigns: { word: self }
-      )
-    )
+    detail_to_json
+  end
+
+  def detail_to_json
+    {
+      id: id,
+      name: name,
+      slug_name: slug_name,
+      definition: definition,
+      versions_count: versions.length,
+      creator: {
+        uuid: user&.uuid,
+        name: user&.full_name,
+        slug_name: user&.slug_name
+      },
+      history: {
+        created_at: created_at,
+        updated_at: updated_at
+      }
+    }
   end
 
   private

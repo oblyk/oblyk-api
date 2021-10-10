@@ -28,4 +28,23 @@ class Newsletter < ApplicationRecord
       SendNewsletterWorker.perform_async(subscribe.id, id)
     end
   end
+
+  def summary_to_json
+    detail_to_json
+  end
+
+  def detail_to_json
+    {
+      id: id,
+      slug_name: slug_name,
+      name: name,
+      body: body,
+      sent_at: sent_at,
+      sent: sent?,
+      history: {
+        created_at: created_at,
+        updated_at: updated_at
+      }
+    }
+  end
 end

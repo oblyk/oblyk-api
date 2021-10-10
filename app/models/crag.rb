@@ -78,46 +78,8 @@ class Crag < ApplicationRecord
     [latitude, longitude]
   end
 
-  def summary_to_json
-    JSON.parse(
-      ApplicationController.render(
-        template: 'api/v1/crags/summary.json',
-        assigns: { crag: self }
-      )
-    )
-  end
-
   def rich_name
     "#{name} (#{city})"
-  end
-
-  def to_geo_json
-    {
-      type: 'Feature',
-      properties: {
-        type: 'Crag',
-        id: id,
-        name: name,
-        slug_name: slug_name,
-        climbing_key: climbing_key,
-        icon: "crag-marker-#{climbing_key}",
-        localization: "#{city}, #{region}",
-        sport_climbing: sport_climbing,
-        bouldering: bouldering,
-        multi_pitch: multi_pitch,
-        trad_climbing: trad_climbing,
-        aid_climbing: aid_climbing,
-        deep_water: deep_water,
-        via_ferrata: via_ferrata,
-        map_thumbnail_url: photo.present? ? photo.thumbnail_url : nil,
-        route_count: crag_routes_count,
-        grade_min_value: min_grade_value,
-        grade_max_value: max_grade_value,
-        grade_max_text: max_grade_text,
-        grade_min_text: min_grade_text
-      },
-      geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
-    }
   end
 
   def climbing_key
@@ -163,6 +125,120 @@ class Crag < ApplicationRecord
     self.via_ferrata = climbing_types.include?('via_ferrata')
 
     save
+  end
+
+  def summary_to_json
+    {
+      id: id,
+      name: name,
+      slug_name: slug_name,
+      rain: rain,
+      sun: sun,
+      sport_climbing: sport_climbing,
+      bouldering: bouldering,
+      multi_pitch: multi_pitch,
+      trad_climbing: trad_climbing,
+      aid_climbing: aid_climbing,
+      deep_water: deep_water,
+      via_ferrata: via_ferrata,
+      north: north,
+      north_east: north_east,
+      east: east,
+      south_east: south_east,
+      south: south,
+      south_west: south_west,
+      west: west,
+      north_west: north_west,
+      summer: summer,
+      autumn: autumn,
+      winter: winter,
+      spring: spring,
+      latitude: latitude,
+      longitude: longitude,
+      elevation: elevation,
+      code_country: code_country,
+      country: country,
+      city: city,
+      region: region,
+      rocks: rocks,
+      photo: {
+        id: photo&.id,
+        url: photo ? photo.large_url : nil,
+        thumbnail_url: photo ? photo.thumbnail_url : nil
+      },
+      routes_figures: {
+        route_count: crag_routes_count,
+        grade: {
+          min_value: min_grade_value,
+          max_value: max_grade_value,
+          max_text: max_grade_text,
+          min_text: min_grade_text
+        }
+      }
+    }
+  end
+
+  def detail_to_json
+    summary_to_json.merge(
+      {
+        comment_count: comments.count,
+        link_count: links.count,
+        follow_count: follows.count,
+        park_count: parks.count,
+        alert_count: alerts.count,
+        video_count: videos.count,
+        photo_count: photos.count,
+        versions_count: versions.count,
+        articles_count: articles_count,
+        all_photos_count: all_photos_count,
+        all_videos_count: all_videos_count,
+        guide_books: {
+          web_count: guide_book_webs.count,
+          pdf_count: guide_book_pdfs.count,
+          paper_count: guide_book_papers.count
+        },
+        creator: {
+          uuid: user&.uuid,
+          name: user&.full_name,
+          slug_name: user&.slug_name
+        },
+        sectors: sectors.map { |sector| { id: sector.id, name: sector.name } },
+        areas: areas.map { |area| { id: area.id, name: area.name, slug_name: area.slug_name } },
+        history: {
+          created_at: created_at,
+          updated_at: updated_at
+        }
+      }
+    )
+  end
+
+  def to_geo_json
+    {
+      type: 'Feature',
+      properties: {
+        type: 'Crag',
+        id: id,
+        name: name,
+        slug_name: slug_name,
+        climbing_key: climbing_key,
+        icon: "crag-marker-#{climbing_key}",
+        localization: "#{city}, #{region}",
+        sport_climbing: sport_climbing,
+        bouldering: bouldering,
+        multi_pitch: multi_pitch,
+        trad_climbing: trad_climbing,
+        aid_climbing: aid_climbing,
+        deep_water: deep_water,
+        via_ferrata: via_ferrata,
+        map_thumbnail_url: photo.present? ? photo.thumbnail_url : nil,
+        route_count: crag_routes_count,
+        grade_min_value: min_grade_value,
+        grade_max_value: max_grade_value,
+        grade_max_text: max_grade_text,
+        grade_min_text: min_grade_text
+      },
+      geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
+    }
   end
 
   private

@@ -8,10 +8,11 @@ module Api
       before_action :protected_by_owner, only: %i[destroy increment]
 
       def index
-        @follows = Follow.where(
+        follows = Follow.where(
           followable_type: params[:followable_type],
           followable_id: params[:followable_id]
         )
+        render json: follows.map(&:summary_to_json), status: :ok
       end
 
       def create
