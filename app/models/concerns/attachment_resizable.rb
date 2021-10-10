@@ -7,5 +7,7 @@ module AttachmentResizable
     return unless attachment.attached?
 
     Rails.application.routes.url_helpers.rails_representation_url(attachment.variant(resize: size).processed, only_path: true)
+  rescue StandardError
+    nil
   end
 end
