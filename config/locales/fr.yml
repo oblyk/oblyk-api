@@ -38,7 +38,10 @@ fr:
         read_more: "Lire la suite"
     gym:
       administration_request:
-        title: "Nouvelle demande d'administation : %{gym_name}"
+        title: "[admin] Nouvelle demande d'administation : %{gym_name}"
+    report:
+      new_report:
+        title: "[admin] Nouveau probleme %{report_id}"
   activerecord:
     attributes:
       crag:

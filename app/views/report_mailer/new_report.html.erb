@@ -1,0 +1,22 @@
+<h1 style="font-size: 16px">
+  Nouveau problème (<%= @report_id %>)
+</h1>
+
+<table style="width: 100%">
+  <tr>
+    <th style="text-align: right">Description :</th>
+    <td><%= @body %></td>
+  </tr>
+  <tr>
+    <th style="text-align: right">Url :</th>
+    <td><%= @report_from_url %></td>
+  </tr>
+  <tr>
+    <th style="text-align: right">Reportable :</th>
+    <td><%= @reportable_type %>, id : <%= @reportable_id %></td>
+  </tr>
+  <tr>
+    <th style="text-align: right">Utilisateur :</th>
+    <td><%= @user_full_name %>, id : <%= @user_id %></td>
+  </tr>
+</table>

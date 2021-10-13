@@ -26,4 +26,20 @@ class Report < ApplicationRecord
   ].freeze
 
   validates :reportable_type, inclusion: { in: REPORTABLE_LIST }
+
+  after_create :send_email_notification
+
+  private
+
+  def send_email_notification
+    ReportMailer.with(
+      report_id: id,
+      body: body,
+      reportable_type: reportable_type,
+      reportable_id: reportable_id,
+      report_from_url: report_from_url,
+      user_full_name: user&.full_name,
+      user_id: user&.id
+    ).new_report.deliver_later
+  end
 end
