@@ -1,0 +1,54 @@
+{
+  "resource": "Crags",
+  "resource_explanation": "The most complete and interesting part of the APIs, the climbing crag endpoints !",
+  "http_method": "GET",
+  "route": "/api/v1/public/crags/crags_around",
+  "description": "Crags around lat, lng & distance",
+  "explanation": "Find crags list within a distance of a gps point.",
+  "parameters": [
+    {
+      "type": "decimal",
+      "required": true,
+      "name": "latitude",
+      "description": "Latitude of the desired point"
+    },
+    {
+      "type": "decimal",
+      "required": true,
+      "name": "longitude",
+      "description": "Longitude of the desired point"
+    },
+    {
+      "type": "integer",
+      "default": 20,
+      "name": "distance",
+      "description": "Distance in kilometres from the research"
+    }
+  ],
+  "response_fields": [
+
+  ],
+  "requests": [
+    {
+      "request_method": "GET",
+      "request_path": "/api/v1/public/crags/crags_around?latitude=44.47&longitude=5.06&distance=10",
+      "request_body": null,
+      "request_headers": {
+        "Httpapiaccesstoken": "oblyk-api-access-token"
+      },
+      "request_query_parameters": {
+        "latitude": "44.47",
+        "longitude": "5.06",
+        "distance": "10"
+      },
+      "request_content_type": null,
+      "response_status": 200,
+      "response_status_text": "OK",
+      "response_body": "[\n  {\n    \"id\": 1,\n    \"name\": \"Rocher des aures\",\n    \"slug_name\": \"rocher-des-aures\",\n    \"rain\": \"exposed\",\n    \"sun\": \"sunny_all_day\",\n    \"sport_climbing\": true,\n    \"bouldering\": false,\n    \"multi_pitch\": false,\n    \"trad_climbing\": false,\n    \"aid_climbing\": false,\n    \"deep_water\": false,\n    \"via_ferrata\": false,\n    \"north\": null,\n    \"north_east\": null,\n    \"east\": null,\n    \"south_east\": null,\n    \"south\": true,\n    \"south_west\": null,\n    \"west\": null,\n    \"north_west\": null,\n    \"summer\": null,\n    \"autumn\": null,\n    \"winter\": null,\n    \"spring\": null,\n    \"latitude\": \"44.469592\",\n    \"longitude\": \"5.058089\",\n    \"elevation\": \"713.0\",\n    \"code_country\": \"FR\",\n    \"country\": \"France\",\n    \"city\": \"Roche-Saint-Secret-Béconne\",\n    \"region\": \"Drôme\",\n    \"rocks\": [\n      \"limestone\"\n    ],\n    \"photo\": {\n      \"id\": null,\n      \"url\": null,\n      \"thumbnail_url\": null\n    },\n    \"routes_figures\": {\n      \"route_count\": null,\n      \"grade\": {\n        \"min_value\": null,\n        \"max_value\": null,\n        \"max_text\": null,\n        \"min_text\": null\n      }\n    }\n  }\n]",
+      "response_headers": {
+      },
+      "response_content_type": "application/json; charset=utf-8",
+      "curl": null
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "resource": "Words",
+  "resource_explanation": "The climbing glossary create by climbers community",
+  "http_method": "GET",
+  "route": "/api/v1/public/words/search",
+  "description": "Search",
+  "explanation": "Search words in glossary",
+  "parameters": [
+    {
+      "type": "string",
+      "required": true,
+      "name": "query",
+      "description": "word to search"
+    }
+  ],
+  "response_fields": [
+
+  ],
+  "requests": [
+    {
+      "request_method": "GET",
+      "request_path": "/api/v1/public/words/search?query=climbing",
+      "request_body": null,
+      "request_headers": {
+        "Httpapiaccesstoken": "oblyk-api-access-token"
+      },
+      "request_query_parameters": {
+        "query": "climbing"
+      },
+      "request_content_type": null,
+      "response_status": 200,
+      "response_status_text": "OK",
+      "response_body": "[\n  {\n    \"id\": 3,\n    \"name\": \"Climbing\",\n    \"slug_name\": \"climbing\",\n    \"definition\": \"Best sport ever\",\n    \"versions_count\": 1,\n    \"creator\": {\n      \"uuid\": null,\n      \"name\": null,\n      \"slug_name\": null\n    },\n    \"history\": {\n      \"created_at\": \"2021-10-27T20:59:11.472+02:00\",\n      \"updated_at\": \"2021-10-27T20:59:11.472+02:00\"\n    }\n  }\n]",
+      "response_headers": {
+      },
+      "response_content_type": "application/json; charset=utf-8",
+      "curl": null
+    }
+  ]
+}

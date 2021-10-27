@@ -14,7 +14,7 @@ require 'action_mailbox/engine'
 require 'action_text/engine'
 require 'action_view/railtie'
 require 'action_cable/engine'
-# require "sprockets/railtie"
+require 'sprockets/railtie'
 require 'rails/test_unit/railtie'
 
 # Require the gems listed in Gemfile, including any gems
@@ -38,6 +38,8 @@ module OblykApi
 
     # Allow requests from any domain (cors takes care of that)
     Rails.application.config.hosts = nil
+
+    config.assets.check_precompiled_asset = false
 
     # Load local env vars
     config.before_configuration do

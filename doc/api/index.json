@@ -1,0 +1,169 @@
+{
+  "resources": [
+    {
+      "name": "Crags",
+      "explanation": "The most complete and interesting part of the APIs, the climbing crag endpoints !",
+      "examples": [
+        {
+          "description": "Approaches",
+          "link": "crags/approaches.json",
+          "groups": "all",
+          "route": "/api/v1/public/crags/:id/approaches",
+          "method": "get"
+        },
+        {
+          "description": "Crags around lat, lng & distance",
+          "link": "crags/crags_around_lat,_lng_&_distance.json",
+          "groups": "all",
+          "route": "/api/v1/public/crags/crags_around",
+          "method": "get"
+        },
+        {
+          "description": "Guide books",
+          "link": "crags/guide_books.json",
+          "groups": "all",
+          "route": "/api/v1/public/crags/:id/guides",
+          "method": "get"
+        },
+        {
+          "description": "Parks",
+          "link": "crags/parks.json",
+          "groups": "all",
+          "route": "/api/v1/public/crags/:id/parks",
+          "method": "get"
+        },
+        {
+          "description": "Routes",
+          "link": "crags/routes.json",
+          "groups": "all",
+          "route": "/api/v1/public/crags/:id/crag_routes",
+          "method": "get"
+        },
+        {
+          "description": "Routes figures",
+          "link": "crags/routes_figures.json",
+          "groups": "all",
+          "route": "/api/v1/public/crags/:id/route_figures",
+          "method": "get"
+        },
+        {
+          "description": "Search",
+          "link": "crags/search.json",
+          "groups": "all",
+          "route": "/api/v1/public/crags/search",
+          "method": "get"
+        },
+        {
+          "description": "Sectors",
+          "link": "crags/sectors.json",
+          "groups": "all",
+          "route": "/api/v1/public/crags/:id/crag_sectors",
+          "method": "get"
+        },
+        {
+          "description": "Show",
+          "link": "crags/show.json",
+          "groups": "all",
+          "route": "/api/v1/public/crags/:id",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "name": "Types",
+      "explanation": "This part of the API documentation shows you the different types of elements that oblyk uses, such as bolt types, sunlight, rain exposure, etc.",
+      "examples": [
+        {
+          "description": "Anchors",
+          "link": "types/anchors.json",
+          "groups": "all",
+          "route": "/api/v1/public/anchors",
+          "method": "get"
+        },
+        {
+          "description": "Bolts",
+          "link": "types/bolts.json",
+          "groups": "all",
+          "route": "/api/v1/public/bolts",
+          "method": "get"
+        },
+        {
+          "description": "Climbs",
+          "link": "types/climbs.json",
+          "groups": "all",
+          "route": "/api/v1/public/climbs",
+          "method": "get"
+        },
+        {
+          "description": "Inclines",
+          "link": "types/inclines.json",
+          "groups": "all",
+          "route": "/api/v1/public/inclines",
+          "method": "get"
+        },
+        {
+          "description": "Rains",
+          "link": "types/rains.json",
+          "groups": "all",
+          "route": "/api/v1/public/rains",
+          "method": "get"
+        },
+        {
+          "description": "Receptions",
+          "link": "types/receptions.json",
+          "groups": "all",
+          "route": "/api/v1/public/receptions",
+          "method": "get"
+        },
+        {
+          "description": "Rocks",
+          "link": "types/rocks.json",
+          "groups": "all",
+          "route": "/api/v1/public/rocks",
+          "method": "get"
+        },
+        {
+          "description": "Starts",
+          "link": "types/starts.json",
+          "groups": "all",
+          "route": "/api/v1/public/starts",
+          "method": "get"
+        },
+        {
+          "description": "Suns",
+          "link": "types/suns.json",
+          "groups": "all",
+          "route": "/api/v1/public/suns",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "name": "Words",
+      "explanation": "The climbing glossary create by climbers community",
+      "examples": [
+        {
+          "description": "Index",
+          "link": "words/index.json",
+          "groups": "all",
+          "route": "/api/v1/public/words",
+          "method": "get"
+        },
+        {
+          "description": "Search",
+          "link": "words/search.json",
+          "groups": "all",
+          "route": "/api/v1/public/words/search",
+          "method": "get"
+        },
+        {
+          "description": "Show",
+          "link": "words/show.json",
+          "groups": "all",
+          "route": "/api/v1/public/words/:id",
+          "method": "get"
+        }
+      ]
+    }
+  ]
+}

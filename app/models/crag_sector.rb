@@ -51,15 +51,6 @@ class CragSector < ApplicationRecord
     name
   end
 
-  def summary_to_json
-    JSON.parse(
-      ApplicationController.render(
-        template: 'api/v1/crag_sectors/summary.json',
-        assigns: { crag_sector: self }
-      )
-    )
-  end
-
   def to_geo_json
     {
       type: 'Feature',

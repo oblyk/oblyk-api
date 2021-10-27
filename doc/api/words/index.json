@@ -1,0 +1,40 @@
+{
+  "resource": "Words",
+  "resource_explanation": "The climbing glossary create by climbers community",
+  "http_method": "GET",
+  "route": "/api/v1/public/words",
+  "description": "Index",
+  "explanation": "List words in glossary",
+  "parameters": [
+    {
+      "type": "integer",
+      "default": 1,
+      "name": "page",
+      "description": "Page of pagination"
+    }
+  ],
+  "response_fields": [
+
+  ],
+  "requests": [
+    {
+      "request_method": "GET",
+      "request_path": "/api/v1/public/words?page=1",
+      "request_body": null,
+      "request_headers": {
+        "Httpapiaccesstoken": "oblyk-api-access-token"
+      },
+      "request_query_parameters": {
+        "page": "1"
+      },
+      "request_content_type": null,
+      "response_status": 200,
+      "response_status_text": "OK",
+      "response_body": "[\n  {\n    \"id\": 1,\n    \"name\": \"Climbing\",\n    \"slug_name\": \"climbing\",\n    \"definition\": \"Best sport ever\",\n    \"versions_count\": 1,\n    \"creator\": {\n      \"uuid\": null,\n      \"name\": null,\n      \"slug_name\": null\n    },\n    \"history\": {\n      \"created_at\": \"2021-10-27T20:59:11.372+02:00\",\n      \"updated_at\": \"2021-10-27T20:59:11.372+02:00\"\n    }\n  },\n  {\n    \"id\": 2,\n    \"name\": \"Oblyk\",\n    \"slug_name\": \"oblyk\",\n    \"definition\": \"Best climbing community ever : )\",\n    \"versions_count\": 1,\n    \"creator\": {\n      \"uuid\": null,\n      \"name\": null,\n      \"slug_name\": null\n    },\n    \"history\": {\n      \"created_at\": \"2021-10-27T20:59:11.398+02:00\",\n      \"updated_at\": \"2021-10-27T20:59:11.398+02:00\"\n    }\n  }\n]",
+      "response_headers": {
+      },
+      "response_content_type": "application/json; charset=utf-8",
+      "curl": null
+    }
+  ]
+}

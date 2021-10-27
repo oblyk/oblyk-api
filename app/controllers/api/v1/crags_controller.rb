@@ -174,7 +174,7 @@ module Api
       def crags_around
         distance = params.fetch(:distance, 20)
         crags = Crag.geo_search(params[:latitude], params[:longitude], distance)
-        render json: crags.map(&:short_detail), status: :ok
+        render json: crags.map(&:summary_to_json), status: :ok
       end
 
       def create

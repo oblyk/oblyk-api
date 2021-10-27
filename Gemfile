@@ -73,6 +73,13 @@ group :development, :test do
   # Small gem which causes rails console to open pry
   gem 'pry-doc'
   gem 'pry-rails'
+  # Gem for test and documentation API
+  gem 'apitome', github: 'jejacks0n/apitome'
+  gem 'database_cleaner'
+  gem 'rspec_api_documentation'
+  gem 'rspec-rails', '~> 5.0.0'
+  gem 'faker'
+  gem 'factory_bot_rails'
 end
 
 group :development do

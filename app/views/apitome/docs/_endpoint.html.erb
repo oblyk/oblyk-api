@@ -1,0 +1,5 @@
+<section class="endpoint">
+  <h3><%= t(:endpoint, scope: :apitome) %></h3>
+<!--  <small>Endpoint</small>-->
+  <pre><%= "#{method} #{endpoint}" %><%= '?' if request['request_query_parameters'].present? %><%= request['request_query_parameters'].map{ |k,_v| "#{k}=:#{k}" }.join("&") if request['request_query_parameters'] %></pre>
+</section>
