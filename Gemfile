@@ -63,6 +63,9 @@ gem 'rest-client'
 # Monitoring rails performance with RoR vs Wild
 gem 'rorvswild'
 
+# Gem for test and documentation API
+gem 'apitome', github: 'jejacks0n/apitome'
+
 group :development, :test do
   # Ruby static code analyzer
   gem 'rubocop-faker'
@@ -73,8 +76,6 @@ group :development, :test do
   # Small gem which causes rails console to open pry
   gem 'pry-doc'
   gem 'pry-rails'
-  # Gem for test and documentation API
-  gem 'apitome', github: 'jejacks0n/apitome'
   gem 'database_cleaner'
   gem 'rspec_api_documentation'
   gem 'rspec-rails', '~> 5.0.0'
