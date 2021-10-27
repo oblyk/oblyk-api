@@ -64,6 +64,7 @@ gem 'rest-client'
 gem 'rorvswild'
 
 # Gem for test and documentation API
+gem 'rspec_api_documentation'
 gem 'apitome', github: 'jejacks0n/apitome'
 
 group :development, :test do
@@ -77,7 +78,6 @@ group :development, :test do
   gem 'pry-doc'
   gem 'pry-rails'
   gem 'database_cleaner'
-  gem 'rspec_api_documentation'
   gem 'rspec-rails', '~> 5.0.0'
   gem 'faker'
   gem 'factory_bot_rails'
