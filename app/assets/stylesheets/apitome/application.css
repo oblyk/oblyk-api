@@ -18,8 +18,8 @@ Original style from softwaremaniacs.org (c) Ivan Sagalaev <Maniac@SoftwareManiac
 
 body {
     font-size: 17px;
-    background-color: #0d1117;
-    color: white;
+    background-color: #011d28;
+    color: rgb(210, 210, 210);
 }
 
 h1 {
@@ -47,14 +47,14 @@ a {
 }
 
 code {
-    background-color: #161b22;
-    color: #a987de;
+    background-color: #22272e;
+    color: #6cb6ff;
 }
 
 .btn-primary {
-    color: #fff;
-    background-color: #24094b;
-    border-color: #100323;
+    color: rgb(210, 210, 210);
+    background-color: #01161e;
+    border-color: #01161e;
 }
 
 .readme h1 {
@@ -80,16 +80,16 @@ code {
 }
 
 .readme table th {
-    background-color: #22272e;
+    background-color: #01161e;
 }
 
 .params table th {
-    background-color: #22272e;
+    background-color: #01161e;
 }
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
-    color: #fff;
-    background-color: #100323;
-    border-color: #100323;
+    color: rgb(210, 210, 210);
+    background-color: #02212e;
+    border-color: #01161e;
 }
 
 #scroll-to-top {
@@ -99,12 +99,12 @@ code {
 
 pre {
     border: none;
-    color: #a987de;
+    color: #6cb6ff;
 }
 pre code {
     display: block;
     padding: 0.5em;
-    background: #161b22;
+    background: #22272e;
 }
 
 pre code,
@@ -270,7 +270,7 @@ pre code {
 .example h1 {
     padding-top: 0.5em;
     border-top-style: solid;
-    border-color: #290b58;
+    border-color: #01161e;
     border-width: 6px;
 }
 
@@ -284,8 +284,8 @@ pre code {
 }
 
 .docs-nav {
-    background-color: #161b22;
-    box-shadow: 0 1px 8px rgba(0, 0, 0, .4);
+    background-color: #01161e;
+    /*box-shadow: 0 1px 8px rgba(0, 0, 0, .4);*/
     margin-bottom: 25px;
 }
 
@@ -295,7 +295,7 @@ pre code {
 }
 
 .docs-nav .navbar-brand a {
-    color: white;
+    color: rgb(210, 210, 210);
     text-decoration: none;
 }
 
@@ -312,30 +312,30 @@ pre code {
     margin-bottom: 30px;
     padding-top: 10px;
     padding-bottom: 10px;
-    background-color: #161b22;
+    background-color: #01161e;
     border-radius: 5px;
 }
 
 .sidebar .nav > li > a {
     display: block;
-    color: white;
+    color: rgb(210, 210, 210);
     padding: 5px 20px;
 }
 
 .sidebar .nav > li > a:hover,
 .sidebar .nav > li > a:focus {
     text-decoration: none;
-    background-color: #0d1117;
-    border-right: 6px solid #3f177b;
+    background-color: #011118;
+    border-right: 6px solid #fd46be;
 }
 
 .sidebar .nav > .active > a,
 .sidebar .nav > .active:hover > a,
 .sidebar .nav > .active:focus > a {
     font-weight: bold;
-    color: #7834d4;
+    color: #fd46be;
     background-color: transparent;
-    border-right: 6px solid #3f177b;
+    border-right: 6px solid #fd46be;
 }
 
 .sidebar .nav .nav {

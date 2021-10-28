@@ -24,7 +24,7 @@
       "request_content_type": null,
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "[\n  {\n    \"id\": 7,\n    \"description\": \"Parking principal\",\n    \"latitude\": \"44.46635\",\n    \"longitude\": \"5.05527\",\n    \"elevation\": \"529.0\",\n    \"crag\": {\n      \"id\": 8,\n      \"name\": \"Rocher des aures\",\n      \"slug_name\": \"rocher-des-aures\"\n    },\n    \"creator\": {\n      \"uuid\": null,\n      \"name\": null,\n      \"slug_name\": null\n    },\n    \"history\": {\n      \"created_at\": \"2021-10-27T21:15:36.825+02:00\",\n      \"updated_at\": \"2021-10-27T21:15:36.825+02:00\"\n    }\n  }\n]",
+      "response_body": "[\n  {\n    \"id\": 7,\n    \"description\": \"Parking principal\",\n    \"latitude\": \"44.46635\",\n    \"longitude\": \"5.05527\",\n    \"elevation\": \"529.0\",\n    \"crag\": {\n      \"id\": 8,\n      \"name\": \"Rocher des aures\",\n      \"slug_name\": \"rocher-des-aures\"\n    },\n    \"creator\": {\n      \"uuid\": null,\n      \"name\": null,\n      \"slug_name\": null\n    },\n    \"history\": {\n      \"created_at\": \"2021-10-28T16:25:59.753+02:00\",\n      \"updated_at\": \"2021-10-28T16:25:59.753+02:00\"\n    }\n  }\n]",
       "response_headers": {
       },
       "response_content_type": "application/json; charset=utf-8",

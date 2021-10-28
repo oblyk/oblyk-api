@@ -4,25 +4,6 @@ Oblyk Api Documentation
 Welcome to the oblyk API documentation.  
 Here, you will find a set of endpoints allowing you to freely consult the open database of climbing crags and routes of the world.
 
-### Version
-
-<table>
-    <thead>
-        <tr>
-            <th>Version</th>
-            <th>Date</th>
-            <th>Breaking changes</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>1.0</td>
-            <td>2021-10-16</td>
-            <td>First commit</td>
-        </tr>
-    </tbody>
-</table>
-
 ### Authorization
 
 There are no limitations to the use of Oblyk's APIs.  
@@ -44,3 +25,22 @@ on the [oblyk/oblyk-api](https://github.com/oblyk/oblyk-api) GitHub project
 
 Enjoy reading 🙂  
 Oblyk Team.
+
+### Versions
+
+<table>
+    <thead>
+        <tr>
+            <th>Version</th>
+            <th>Date</th>
+            <th>Breaking changes</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1.0</td>
+            <td>2021-10-16</td>
+            <td>First commit</td>
+        </tr>
+    </tbody>
+</table>
