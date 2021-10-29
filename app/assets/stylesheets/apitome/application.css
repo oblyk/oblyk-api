@@ -86,6 +86,9 @@ code {
 .params table th {
     background-color: #01161e;
 }
+.params table td {
+    background-color: #011d28;
+}
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
     color: rgb(210, 210, 210);
     background-color: #02212e;

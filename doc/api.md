@@ -17,9 +17,9 @@ And for all your requests to the API add the following header:
 
 ### Suggesting an evolution
 
-If you need a particular route that is not in this documentation, 
+If you need a particular endpoint that is not in this documentation, 
 you can suggest that we develop it by posting an issue 
-on the [oblyk/oblyk-api](https://github.com/oblyk/oblyk-api) GitHub project
+on the [oblyk/oblyk-api](https://github.com/oblyk/oblyk-api) GitHub project.
 
 <br>
 
