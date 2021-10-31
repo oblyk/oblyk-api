@@ -23,11 +23,11 @@ module Api
                 end
 
         crag_routes = if @crag
-                        @crag.crag_routes.order(order)
+                        @crag.crag_routes.includes(:crag_sector).order(order)
                       elsif @crag_sector
-                        @crag_sector.crag_routes.order(order)
+                        @crag_sector.crag_routes.includes(:crag_sector).order(order)
                       else
-                        CragRoute.where(crag_id: params[:crag_id]).order(order)
+                        CragRoute.includes(:crag_sector).where(crag_id: params[:crag_id]).order(order)
                       end
         crag_routes = crag_routes.page(params.fetch(:page, 1))
         render json: crag_routes.map(&:summary_to_json), status: :ok
