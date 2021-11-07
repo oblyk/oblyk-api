@@ -43,6 +43,11 @@ module Api
         end
       end
 
+      def destroy
+        @organization.destroy
+        head :no_content
+      end
+
       private
 
       def set_organization

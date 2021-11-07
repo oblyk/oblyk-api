@@ -322,7 +322,8 @@ class User < ApplicationRecord
       email: current_user ? email : nil,
       date_of_birth: current_user ? date_of_birth : nil,
       language: current_user ? language : nil,
-      administered_gyms: current_user ? administered_gyms.map(&:summary_to_json) : []
+      administered_gyms: current_user ? administered_gyms.map(&:summary_to_json) : [],
+      organizations: current_user ? organizations.map(&:summary_to_json) : []
     }
   end
 

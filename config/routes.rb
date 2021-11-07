@@ -91,6 +91,7 @@ Rails.application.routes.draw do
           post :avatar
           post :banner
           get :subscribe_to_newsletter
+          get :organizations
           post :accept_followers
           delete :reject_followers
           namespace :log_books do

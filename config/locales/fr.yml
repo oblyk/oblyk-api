@@ -42,6 +42,9 @@ fr:
     report:
       new_report:
         title: "[admin] Nouveau probleme %{report_id}"
+    organization:
+      new_organization:
+        title: "[admin] Nouvelle organisation %{organization_id}"
   activerecord:
     attributes:
       crag:

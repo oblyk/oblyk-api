@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Organization < ApplicationRecord
+  include Slugable
+
   has_secure_token :api_access_token
 
   mattr_accessor :current, instance_accessor: false
@@ -15,6 +17,8 @@ class Organization < ApplicationRecord
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :api_usage_type, inclusion: { in: API_USAGE_LIST }
 
+  after_create :send_email_notification
+
   def refresh_api_access_token!
     regenerate_api_access_token
   end
@@ -23,6 +27,7 @@ class Organization < ApplicationRecord
     {
       id: id,
       name: name,
+      slug_name: slug_name,
       api_usage_type: api_usage_type,
       phone: phone,
       email: email,
@@ -44,5 +49,16 @@ class Organization < ApplicationRecord
         }
       }
     )
+  end
+
+  private
+
+  def send_email_notification
+    OrganizationMailer.with(
+      organization_id: id,
+      name: name,
+      email: email,
+      api_usage_type: api_usage_type
+    ).new_organization.deliver_later
   end
 end
