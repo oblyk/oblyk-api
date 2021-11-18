@@ -3,6 +3,17 @@ GET {{api_url}}/ascent_crag_routes.json?crag_route_id=22
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 
+### Get ascents
+GET {{api_url}}/ascent_crag_routes.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+
+### export ascents
+GET {{api_url}}/ascent_crag_routes/export.csv
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+
+
 ### Add user in ascents
 POST {{api_url}}/ascent_crag_routes/31/add_ascent_user.json
 HttpApiAccessToken: {{api_access_token}}

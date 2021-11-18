@@ -4,13 +4,23 @@ module Api
   module V1
     class AscentCragRoutesController < ApiController
       before_action :protected_by_session
-      before_action :set_ascent_crag_route, except: %i[create index]
+      before_action :set_ascent_crag_route, except: %i[create index export]
       before_action :protected_by_owner, only: %i[update destroy add_ascent_user remove_ascent_user]
 
       def index
         crag_route_id = params.fetch(:crag_route_id, nil)
-        ascent_crag_routes = crag_route_id ? @current_user.ascent_crag_routes.where(crag_route_id: crag_route_id) : @current_user.ascents_crag_routes
+        ascent_crag_routes = crag_route_id ? @current_user.ascent_crag_routes.where(crag_route_id: crag_route_id) : @current_user.ascent_crag_routes
         render json: ascent_crag_routes.map(&:summary_to_json), status: :ok
+      end
+
+      def export
+        type = params.fetch(:type, 'ascents')
+        ascents = if type == 'ascents'
+                    @current_user.ascent_crag_routes.where.not(ascent_status: :project)
+                  else
+                    @current_user.ascent_crag_routes.where(ascent_status: :project)
+                  end
+        send_data ascents.to_csv, filename: "export-ascents-#{Date.current}.csv"
       end
 
       def show

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'csv'
+
 class AscentCragRoute < Ascent
   include ActivityFeedable
 
@@ -60,6 +62,61 @@ class AscentCragRoute < Ascent
         updated_at: updated_at
       }
     }
+  end
+
+  def self.to_csv
+    CSV.generate(headers: true, encoding: 'utf-8', col_sep: "\t") do |csv|
+      csv << [
+        'Crag Route : Name',
+        'Crag Route : Grade',
+        'Crag Route : Height',
+        'Crag Route : Climbing type',
+        'Ascent : Status',
+        'Ascent - Roping status',
+        'Ascent - Attempt',
+        'Ascent - Released at',
+        'Ascent - My note',
+        'Ascent - My comment',
+        'Ascent - Grade value',
+        'Crag - Name',
+        'Crag - City',
+        'Crag - Region',
+        'Crag - Country',
+        'Crag - Latitude',
+        'Crag - Longitude',
+        'Crag - Rocks',
+        'Crag Sector - Name'
+      ]
+      all.includes(crag_route: :crag_sector).includes(crag_route: :crag).find_each do |ascent|
+        route = ascent.crag_route
+        crag = route.crag
+        grade = route.sections.map { |section| section['grade'] }.join(', ')
+        roping = Climb.ropable?(route.climbing_type) ? ascent.roping_status : nil
+        released_at = ascent.ascent_status != 'project' ? ascent.released_at : nil
+        grad_value = route.sections.map { |section| section['grade_value'] }.join(', ')
+        csv << [
+          route.name,
+          grade,
+          route.height,
+          route.climbing_type,
+          ascent.ascent_status,
+          roping,
+          ascent.attempt,
+          released_at,
+          ascent.note,
+          ascent.comment,
+          grad_value,
+          crag.name,
+          crag.city,
+          crag.region,
+          crag.country,
+          crag.latitude,
+          crag.longitude,
+          crag.rocks,
+          route.crag_sector&.name
+        ]
+      end
+    end
   end
 
   private

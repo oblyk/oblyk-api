@@ -118,6 +118,7 @@ Rails.application.routes.draw do
       resources :ascent_crag_routes do
         post :add_ascent_user, on: :member
         delete :remove_ascent_user, on: :member
+        get :export, on: :collection
       end
 
       resources :ascent_gym_routes

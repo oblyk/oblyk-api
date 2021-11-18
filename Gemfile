@@ -67,6 +67,9 @@ gem 'rorvswild'
 gem 'rspec_api_documentation'
 gem 'apitome', github: 'jejacks0n/apitome'
 
+# Gem for export to csv
+gem 'csv'
+
 group :development, :test do
   # Ruby static code analyzer
   gem 'rubocop-faker'

@@ -101,6 +101,7 @@ GEM
     concurrent-ruby (1.1.8)
     connection_pool (2.2.5)
     crass (1.0.6)
+    csv (3.0.9)
     database_cleaner (2.0.1)
       database_cleaner-active_record (~> 2.0.0)
     database_cleaner-active_record (2.0.1)
@@ -366,6 +367,7 @@ DEPENDENCIES
   capistrano-rbenv
   capistrano-sidekiq
   capistrano3-puma
+  csv
   database_cleaner
   factory_bot_rails
   faker

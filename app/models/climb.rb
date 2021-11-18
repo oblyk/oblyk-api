@@ -44,6 +44,10 @@ class Climb
     [SPORT_CLIMBING, MULTI_PITCH, TRAD_CLIMBING, AID_CLIMBING].include? climbing_type
   end
 
+  def self.ropable?(climbing_type)
+    [SPORT_CLIMBING, MULTI_PITCH, TRAD_CLIMBING, AID_CLIMBING].include? climbing_type
+  end
+
   def self.startable?(climbing_type)
     [BOULDERING].include? climbing_type
   end
