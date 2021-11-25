@@ -84,6 +84,43 @@ module Api
         render json: subscribes.map(&:summary_to_json), status: :ok
       end
 
+      def library_figures
+        subscribes = @user.subscribes.where(followable_type: 'GuideBookPaper')
+        guide_books = GuideBookPaper.includes(:crags).where(id: subscribes.pluck(:followable_id))
+
+        crags_count = 0
+        routes_count = 0
+        pages_count = 0
+        sum_price = 0.0
+        sum_weight = 0.0
+        crags_id = []
+
+        guide_books.each do |guide_book|
+          pages_count += guide_book.number_of_page || 0
+          sum_price += (guide_book.price_cents || 0).to_d
+          sum_weight += (guide_book.weight || 0).to_d
+          guide_book.crags.each do |crag|
+            next if crags_id.include? crag.id
+
+            crags_id << crag.id
+            crags_count += 1
+            routes_count += crag.crag_routes_count || 0
+          end
+        end
+
+        sum_weight /= 1000 unless sum_weight.zero?
+        sum_price /= 100 unless sum_price.zero?
+
+        render json: {
+          guide_book_count: guide_books.count,
+          pages_count: pages_count,
+          sum_price: sum_price,
+          sum_weight: sum_weight,
+          crags_count: crags_count,
+          routes_count: routes_count
+        }, status: :ok
+      end
+
       def followers
         users = []
         page = params.fetch(:page, 1)

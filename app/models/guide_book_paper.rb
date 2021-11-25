@@ -68,7 +68,7 @@ class GuideBookPaper < ApplicationRecord
       vc_reference: vc_reference,
       number_of_page: number_of_page,
       weight: weight,
-      price: price_cents ? price_cents / 100 : nil,
+      price: price_cents ? price_cents.to_d / 100 : nil,
       cover: cover.attached? ? cover_large_url : nil,
       thumbnail_url: cover.attached? ? cover_thumbnail_url : nil
     }

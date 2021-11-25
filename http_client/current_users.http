@@ -64,6 +64,12 @@ HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
+### GET user library figures
+GET {{api_url}}/current_users/library_figures.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
 ### GET user tick list
 GET {{api_url}}/current_users/tick_lists.json
 HttpApiAccessToken: {{api_access_token}}

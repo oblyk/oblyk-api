@@ -76,6 +76,7 @@ Rails.application.routes.draw do
           delete '', action: :destroy
           get :feed
           get :library
+          get :library_figures
           get :subscribes
           get :followers
           get :waiting_followers
