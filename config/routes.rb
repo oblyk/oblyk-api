@@ -271,6 +271,7 @@ Rails.application.routes.draw do
           get :articles, on: :member
           get :versions, on: :member
           get :search, on: :collection
+          get :around, on: :collection
           post :add_crag, on: :member
           post :add_cover, on: :member
           delete :remove_crag, on: :member

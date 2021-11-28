@@ -124,3 +124,8 @@ Accept: application/json
 GET {{api_url}}/public/guide_book_papers.json?crag_id=1
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
+
+### GET all guide_book_papers
+GET {{api_url}}/public/guide_book_papers/around.json?lat=44.5215991&lng=5.15152&dist=20
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json

@@ -146,6 +146,41 @@ module Api
         render json: @guide_book_paper.detail_to_json, status: :ok
       end
 
+      def around
+        lat = params[:lat]
+        lng = params[:lng]
+        dist = params.fetch(:dist, '20').to_i
+        dist = 100 if dist > 100
+        guide_ids = []
+        crags_around = Crag.includes(:guide_book_papers).geo_search(lat, lng, dist)
+        crags_around.each do |crag|
+          guide_ids.concat(crag.guide_book_papers.pluck(:id))
+        end
+        guide_book_papers = GuideBookPaper.includes(:crags).where(id: guide_ids)
+
+        crags_around_ids = crags_around.pluck(:id)
+        guides = []
+        guide_book_papers.each do |guide|
+          crags_in_area = []
+          crags_out_of_area = []
+          guide.crags.each do |crag|
+            if crags_around_ids.include?(crag.id)
+              crags_in_area << crag.summary_to_json
+            else
+              crags_out_of_area << crag.summary_to_json
+            end
+          end
+          guides << {
+            guide: guide.summary_to_json,
+            geo_json: guide.crags_to_geo_json,
+            crags_in_area: crags_in_area,
+            crags_out_of_area: crags_out_of_area
+          }
+        end
+
+        render json: guides, status: :ok
+      end
+
       private
 
       def set_guide_book_paper

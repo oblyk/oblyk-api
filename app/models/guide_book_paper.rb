@@ -96,6 +96,23 @@ class GuideBookPaper < ApplicationRecord
     )
   end
 
+  def crags_to_geo_json
+    features = []
+    crags.each do |crag|
+      features << crag.to_geo_json
+    end
+    {
+      type: 'FeatureCollection',
+      crs: {
+        type: 'name',
+        properties: {
+          name: 'urn'
+        }
+      },
+      features: features
+    }
+  end
+
   private
 
   def search_indexes
