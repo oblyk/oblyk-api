@@ -319,6 +319,7 @@ class User < ApplicationRecord
       full_name: full_name,
       banner: banner.attached? ? banner_large_url : nil,
       avatar: avatar.attached? ? avatar_large_url : nil,
+      email_notifiable_list: current_user ? email_notifiable_list : nil,
       email: current_user ? email : nil,
       date_of_birth: current_user ? date_of_birth : nil,
       language: current_user ? language : nil,
