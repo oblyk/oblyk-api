@@ -18,6 +18,12 @@ class GuideBookPaper < ApplicationRecord
     weight
   ], if: proc { |_obj| ENV['PAPER_TRAIL'] == 'true' }
 
+  FUNDING_STATUS_LIST = %w[
+    contributes_to_financing
+    not_contributes_to_financing
+    undefined
+  ].freeze
+
   has_one_attached :cover
   belongs_to :user, optional: true
   has_many :guide_book_paper_crags
@@ -28,9 +34,12 @@ class GuideBookPaper < ApplicationRecord
   has_many :place_of_sales
   has_many :article_guide_book_papers
   has_many :articles, through: :article_guide_book_papers
+  belongs_to :next_guide_book_paper, class_name: 'GuideBookPaper', optional: true
+  has_many :previous_guide_book_paper, class_name: 'GuideBookPaper', foreign_key: :next_guide_book_paper_id
 
   validates :name, presence: true
   validates :cover, blob: { content_type: :image }, allow_nil: true
+  validates :funding_status, inclusion: { in: FUNDING_STATUS_LIST }, allow_blank: true
 
   def cover_large_url
     resize_attachment cover, '700x700'
@@ -69,6 +78,7 @@ class GuideBookPaper < ApplicationRecord
       number_of_page: number_of_page,
       weight: weight,
       price: price_cents ? price_cents.to_d / 100 : nil,
+      funding_status: funding_status,
       cover: cover.attached? ? cover_large_url : nil,
       thumbnail_url: cover.attached? ? cover_thumbnail_url : nil
     }
@@ -82,6 +92,7 @@ class GuideBookPaper < ApplicationRecord
         links_count: links.count,
         versions_count: versions.count,
         articles_count: articles_count,
+        next_guide_book_paper: next_guide_book_paper&.summary_to_json,
         crags: crags.map { |crag| { id: crag.id, name: crag.name } },
         creator: {
           uuid: user&.uuid,

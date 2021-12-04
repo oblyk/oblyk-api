@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_01_120440) do
+ActiveRecord::Schema.define(version: 2021_11_30_121005) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -411,6 +411,9 @@ ActiveRecord::Schema.define(version: 2021_11_01_120440) do
     t.integer "follows_count"
     t.integer "articles_count"
     t.integer "comments_count"
+    t.string "funding_status"
+    t.bigint "next_guide_book_paper_id"
+    t.index ["next_guide_book_paper_id"], name: "index_guide_book_papers_on_next_guide_book_paper_id"
     t.index ["user_id"], name: "index_guide_book_papers_on_user_id"
   end
 

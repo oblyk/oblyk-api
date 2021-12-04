@@ -197,7 +197,8 @@ module Api
           :ean,
           :number_of_page,
           :vc_reference,
-          :weight
+          :weight,
+          :funding_status
         )
       end
 
