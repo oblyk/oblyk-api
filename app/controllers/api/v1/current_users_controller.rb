@@ -84,6 +84,19 @@ module Api
         render json: subscribes.map(&:summary_to_json), status: :ok
       end
 
+      def ascents_without_guides
+        crag_ids = @user.ascended_crags.pluck(:id)
+        library_guides = @user.subscribes.where(followable_type: 'GuideBookPaper').pluck(:followable_id)
+        guides = GuideBookPaper
+                 .includes(:guide_book_paper_crags)
+                 .where(guide_book_paper_crags: { crag_id: crag_ids })
+                 .where(next_guide_book_paper_id: nil)
+                 .where.not(id: library_guides)
+                 .where("guide_book_papers.funding_status != 'not_contributes_to_financing' OR guide_book_papers.funding_status IS NULL")
+                 .order(publication_year: :desc)
+        render json: guides.map(&:summary_to_json), status: :ok
+      end
+
       def library_figures
         subscribes = @user.subscribes.where(followable_type: 'GuideBookPaper')
         guide_books = GuideBookPaper.includes(:crags).where(id: subscribes.pluck(:followable_id))
