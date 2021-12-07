@@ -78,6 +78,7 @@ Rails.application.routes.draw do
           get :library
           get :library_figures
           get :ascents_without_guides
+          get :new_guide_books_version
           get :subscribes
           get :followers
           get :waiting_followers

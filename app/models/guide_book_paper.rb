@@ -35,7 +35,7 @@ class GuideBookPaper < ApplicationRecord
   has_many :article_guide_book_papers
   has_many :articles, through: :article_guide_book_papers
   belongs_to :next_guide_book_paper, class_name: 'GuideBookPaper', optional: true
-  has_many :previous_guide_book_paper, class_name: 'GuideBookPaper', foreign_key: :next_guide_book_paper_id
+  has_many :previous_guide_book_papers, class_name: 'GuideBookPaper', foreign_key: :next_guide_book_paper_id
 
   validates :name, presence: true
   validates :cover, blob: { content_type: :image }, allow_nil: true

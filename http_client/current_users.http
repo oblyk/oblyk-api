@@ -76,6 +76,12 @@ HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json
 
+### GET new guide books version
+GET {{api_url}}/current_users/new_guide_books_version.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
 ### GET user tick list
 GET {{api_url}}/current_users/tick_lists.json
 HttpApiAccessToken: {{api_access_token}}

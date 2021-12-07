@@ -97,6 +97,21 @@ module Api
         render json: guides.map(&:summary_to_json), status: :ok
       end
 
+      def new_guide_books_version
+        subscribe_guides = @user.subscribes.where(followable_type: 'GuideBookPaper').pluck(:followable_id)
+        old_guides = GuideBookPaper
+                     .where(id: subscribe_guides)
+                     .where.not(next_guide_book_paper_id: subscribe_guides)
+        guides = []
+        old_guides.each do |guide|
+          guides << {
+            old_guide: guide.summary_to_json,
+            new_guide: guide.next_guide_book_paper.summary_to_json
+          }
+        end
+        render json: guides, status: :ok
+      end
+
       def library_figures
         subscribes = @user.subscribes.where(followable_type: 'GuideBookPaper')
         guide_books = GuideBookPaper.includes(:crags).where(id: subscribes.pluck(:followable_id))

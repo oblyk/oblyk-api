@@ -1,6 +1,5 @@
 
-###
-# Sign In
+### Sign In
 POST {{api_url}}/sessions/sign_in.json
 HttpApiAccessToken: {{api_access_token}}
 Content-Type: application/json
@@ -18,8 +17,7 @@ client.global.set("refresh_token", response.body.refresh_token);
 %}
 
 
-###
-# Refresh jwt token
+### Refresh jwt token
 POST {{api_url}}/sessions/tokens.json
 HttpApiAccessToken: {{api_access_token}}
 Content-Type: application/json
@@ -29,8 +27,7 @@ Content-Type: application/json
   "refresh_token": "{{refresh_token}}"
 }
 
-###
-# Sign Up Patrick Edlinger
+### Sign Up Patrick Edlinger
 POST {{api_url}}/sessions/sign_up.json
 HttpApiAccessToken: {{api_access_token}}
 Content-Type: application/json
@@ -45,8 +42,7 @@ Content-Type: application/json
   "remember_me": false
 }
 
-###
-# Sign Up Seb Bouin
+### Sign Up Seb Bouin
 POST {{api_url}}/sessions/sign_up.json
 HttpApiAccessToken: {{api_access_token}}
 Content-Type: application/json
@@ -61,8 +57,7 @@ Content-Type: application/json
   "remember_me": false
 }
 
-###
-# Sign Up Chris Sharma
+### Sign Up Chris Sharma
 POST {{api_url}}/sessions/sign_up.json
 HttpApiAccessToken: {{api_access_token}}
 Content-Type: application/json
