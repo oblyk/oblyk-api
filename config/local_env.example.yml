@@ -31,6 +31,8 @@ SMTP_ADDRESS: 'smtp.gmail.com'
 SMTP_PORT: '587'
 SMTP_USER_NAME: 'your mail'
 SMTP_PASSWORD: 'your password'
+SMTP_DOMAIN: 'mail.net'
+SMTP_AUTHENTICATION: 'plain'
 
 # Ror vs Wild configuration
 ENABLE_ROR_WS_WILD: 'false'
