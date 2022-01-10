@@ -6,7 +6,7 @@ module Api
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update]
       before_action :set_crag_sector, only: %i[show photos videos versions update destroy route_figures]
-      before_action :set_crag, only: %i[index geo_json_around show create update]
+      before_action :set_crag, only: %i[index geo_json_around create update]
 
       def index
         crag_sectors = @crag.crag_sectors
