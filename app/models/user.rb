@@ -285,7 +285,7 @@ class User < ApplicationRecord
   end
 
   def detail_to_json(current_user: false)
-    {
+    user_data = {
       id: id,
       uuid: uuid,
       first_name: first_name,
@@ -318,14 +318,27 @@ class User < ApplicationRecord
       photos_count: photos.count,
       full_name: full_name,
       banner: banner.attached? ? banner_large_url : nil,
-      avatar: avatar.attached? ? avatar_large_url : nil,
-      email_notifiable_list: current_user ? email_notifiable_list : nil,
-      email: current_user ? email : nil,
-      date_of_birth: current_user ? date_of_birth : nil,
-      language: current_user ? language : nil,
-      administered_gyms: current_user ? administered_gyms.map(&:summary_to_json) : [],
-      organizations: current_user ? organizations.map(&:summary_to_json) : []
+      avatar: avatar.attached? ? avatar_large_url : nil
     }
+    if current_user
+      user_data = user_data.merge(
+        {
+          super_admin: super_admin,
+          email_notifiable_list: email_notifiable_list,
+          email: email,
+          ws_token: ws_token,
+          date_of_birth: date_of_birth,
+          language: language,
+          administered_gyms: administered_gyms.map(&:summary_to_json),
+          organizations: organizations.map(&:summary_to_json),
+          subscribes: subscribes_to_a,
+          ascent_crag_routes: ascent_crag_routes_to_a,
+          ascent_gym_routes: ascent_gym_routes_to_a,
+          tick_list: tick_list_to_a
+        }
+      )
+    end
+    user_data
   end
 
   private
