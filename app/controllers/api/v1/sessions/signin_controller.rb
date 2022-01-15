@@ -39,6 +39,10 @@ module Api
           end
         end
 
+        def destroy
+          head :no_content
+        end
+
         private
 
         def not_found
