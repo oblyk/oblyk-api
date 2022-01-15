@@ -161,6 +161,10 @@ class GymRoute < ApplicationRecord
         slug_name: gym_space.slug_name,
         name: gym_space.name
       },
+      gym_sector: {
+        id: gym_sector_id,
+        name: gym_sector&.name
+      },
       gym: {
         id: gym.id,
         slug_name: gym.slug_name,
