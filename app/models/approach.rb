@@ -96,11 +96,7 @@ class Approach < ApplicationRecord
         positive_drop: positive_drop,
         negative_drop: negative_drop
       },
-      crag: {
-        id: crag.id,
-        name: crag.name,
-        slug_name: crag.slug_name
-      },
+      crag: crag.summary_to_json,
       creator: {
         uuid: user&.uuid,
         name: user&.full_name,
