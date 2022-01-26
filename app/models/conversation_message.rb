@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ConversationMessage < ApplicationRecord
+  include StripTagable
+
   belongs_to :conversation
   belongs_to :user
 

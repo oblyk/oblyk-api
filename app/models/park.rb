@@ -3,6 +3,7 @@
 class Park < ApplicationRecord
   include Geolocable
   include Elevable
+  include StripTagable
 
   belongs_to :user, optional: true
   belongs_to :crag

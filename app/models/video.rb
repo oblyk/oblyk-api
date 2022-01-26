@@ -2,6 +2,7 @@
 
 class Video < ApplicationRecord
   include ActivityFeedable
+  include StripTagable
 
   belongs_to :user, optional: true
   belongs_to :viewable, polymorphic: true, counter_cache: :videos_count

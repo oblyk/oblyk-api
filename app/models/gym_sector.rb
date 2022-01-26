@@ -2,6 +2,7 @@
 
 class GymSector < ApplicationRecord
   include SoftDeletable
+  include StripTagable
 
   belongs_to :gym_space
   has_one :gym, through: :gym_space

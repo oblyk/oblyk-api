@@ -5,6 +5,7 @@ class Word < ApplicationRecord
   include Searchable
   include ParentFeedable
   include ActivityFeedable
+  include StripTagable
 
   has_paper_trail only: %i[name definition], if: proc { |_obj| ENV['PAPER_TRAIL'] == 'true' }
 

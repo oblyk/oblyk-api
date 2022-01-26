@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Ascent < ApplicationRecord
+  include StripTagable
+
   belongs_to :user
   has_many :ascent_users
 

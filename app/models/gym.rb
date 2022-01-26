@@ -8,6 +8,7 @@ class Gym < ApplicationRecord
   include ParentFeedable
   include ActivityFeedable
   include AttachmentResizable
+  include StripTagable
 
   has_paper_trail only: %i[
     name

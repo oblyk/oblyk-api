@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Report < ApplicationRecord
+  include StripTagable
+
   belongs_to :user, optional: true
   belongs_to :reportable, polymorphic: true
 

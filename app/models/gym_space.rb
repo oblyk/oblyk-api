@@ -6,6 +6,7 @@ class GymSpace < ApplicationRecord
   include Publishable
   include Slugable
   include AttachmentResizable
+  include StripTagable
 
   attribute :banner_color, :string, default: '#ffffff'
   attribute :banner_bg_color, :string, default: '#f44336'

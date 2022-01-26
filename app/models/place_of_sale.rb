@@ -2,6 +2,7 @@
 
 class PlaceOfSale < ApplicationRecord
   include Geolocable
+  include StripTagable
 
   belongs_to :user, optional: true
   belongs_to :guide_book_paper

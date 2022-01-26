@@ -2,6 +2,7 @@
 
 class Alert < ApplicationRecord
   include ActivityFeedable
+  include StripTagable
 
   belongs_to :user, optional: true
   belongs_to :alertable, polymorphic: true

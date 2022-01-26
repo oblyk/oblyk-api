@@ -3,6 +3,7 @@
 class Photo < ApplicationRecord
   include ActivityFeedable
   include AttachmentResizable
+  include StripTagable
 
   has_one_attached :picture
 

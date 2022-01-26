@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Link < ApplicationRecord
+  include StripTagable
+
   belongs_to :user, optional: true
   belongs_to :linkable, polymorphic: true
   has_many :reports, as: :reportable

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Comment < ApplicationRecord
+  include StripTagable
+
   belongs_to :user, optional: true
   belongs_to :commentable, polymorphic: true, counter_cache: :comments_count
   has_many :reports, as: :reportable

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Author < ApplicationRecord
+  include StripTagable
   include AttachmentResizable
 
   has_one_attached :cover

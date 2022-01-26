@@ -6,6 +6,7 @@ class User < ApplicationRecord
   include Slugable
   include ParentFeedable
   include AttachmentResizable
+  include StripTagable
 
   mattr_accessor :current, instance_accessor: false
 
@@ -158,7 +159,7 @@ class User < ApplicationRecord
           uuid: uuid,
           full_name: full_name,
           slug_name: slug_name,
-          description: description,
+          description: description ? Markdown.new(description, :hard_wrap).to_html.html_safe : '',
           age: age,
           genre: genre,
           icon: 'partner-user',
