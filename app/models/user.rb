@@ -143,7 +143,7 @@ class User < ApplicationRecord
   end
 
   def activity!
-    update_attribute(:last_activity_at, DateTime.current)
+    update_column(:last_activity_at, DateTime.current)
   end
 
   def age
