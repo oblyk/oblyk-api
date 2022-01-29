@@ -41,7 +41,7 @@ module Api
       def set_current_organization
         Organization.current = Organization.find_by! api_access_token: request.headers['HttpApiAccessToken']
       rescue StandardError
-        not_authorized
+        forbidden
       end
 
       # Extract login (/authorization) token
@@ -73,6 +73,10 @@ module Api
         render json: { error: 'Not Authorized' }, status: :unauthorized
       end
 
+      def forbidden
+        render json: { error: 'Forbidden' }, status: :forbidden
+      end
+
       # response for bot spammer
       def honeypot_response
         render json: { go_fly_a_kite: true }, status: :ok
@@ -87,7 +91,7 @@ module Api
       # Return error if current user is not a super admin
       def protected_by_super_admin
         protected_by_session
-        not_authorized unless @current_user.super_admin
+        forbidden unless @current_user.super_admin
       end
 
       # Return if a request tries to write

@@ -5,29 +5,25 @@ module Api
     module Sessions
       class TokenController < ApiController
         def refresh
-          # user = User.find_by RefreshToken: params[:refresh_token]
-          http_user_agent = UserAgent.parse(request.user_agent)
-          user_agent = "#{http_user_agent.platform || 'platform'}, #{http_user_agent.browser || 'browser'}"
-          refresh_token = RefreshToken.find_by token: params[:refresh_token], user_agent: user_agent
+          refresh_token = JwtToken::Token.decode(params[:refresh_token]).try(:[], 'data')
 
-          if refresh_token.present?
-            user = refresh_token.user
-            user_data = user.as_json(only: %i[id first_name last_name slug_name email uuid super_admin])
-            exp = Time.now.to_i + Rails.application.config.jwt_session_lifetime
-            token = JwtToken::Token.generate(user_data, exp)
-            refresh_token.unused_token
-            refresh_token.save
+          user_id = refresh_token.try(:[], 'id')
+          render json: {}, status: :forbidden unless user_id
 
-            user.activity!
+          user = User.find_by id: user_id
+          render json: {}, status: :forbidden unless user
 
-            render json: {
-              token: token,
-              expired_at: exp,
-              refresh_token: refresh_token.token
-            }, status: :created
-          else
-            render json: {}, status: :unauthorized
-          end
+          user_data = user.as_json(only: %i[id first_name last_name slug_name email uuid super_admin])
+          exp = Time.now.to_i + Rails.application.config.jwt_session_lifetime
+          token = JwtToken::Token.generate(user_data, exp)
+          new_refresh_token = JwtToken::Token.generate(user_data, exp + 3.months)
+
+          user.activity!
+
+          render json: {
+            token: token,
+            refresh_token: new_refresh_token
+          }, status: :created
         end
       end
     end

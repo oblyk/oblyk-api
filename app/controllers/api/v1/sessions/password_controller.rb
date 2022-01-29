@@ -22,35 +22,18 @@ module Api
           user.password_confirmation = params[:password_confirmation]
 
           if user.save
-
             user.reset_password_token = nil
             user.reset_password_token_expired_at = nil
             user.save
 
-            user_data = user.as_json(only: %i[id first_name last_name slug_name email uuid super_admin])
+            user_data = user.as_json(only: %i[id first_name last_name])
             exp = Time.now.to_i + Rails.application.config.jwt_session_lifetime
             token = JwtToken::Token.generate(user_data, exp)
-            refresh_token = nil
-
-            if params.fetch(:remember_me, false)
-              http_user_agent = UserAgent.parse(request.user_agent)
-              user_agent = "#{http_user_agent.platform || 'platform'}, #{http_user_agent.browser || 'browser'}"
-              refresh_token = RefreshToken.find_or_initialize_by user_agent: user_agent, user: user
-              refresh_token.unused_token
-              refresh_token.save
-            end
+            refresh_token = JwtToken::Token.generate(user_data, exp + 3.months)
 
             render json: {
-              auth: true,
-              user: user_data,
               token: token,
-              expired_at: exp,
-              refresh_token: refresh_token,
-              ws_token: user.ws_token,
-              administered_gyms: user.administered_gyms.map(&:id),
-              subscribes: user.subscribes_to_a,
-              ascent_crag_routes: user.ascent_crag_routes_to_a,
-              tick_list: user.tick_list_to_a
+              refresh_token: refresh_token
             }, status: :created
           else
             render json: { error: user.errors }, status: :unprocessable_entity
