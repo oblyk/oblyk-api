@@ -8,7 +8,7 @@ class EmailNotificationWorker
     notification = Notification.find notification_id
     return if notification.read?
 
-    case notification.notifiable_type
+    case notification.notification_type
     when 'new_message'
       NotificationMailer.with(user: notification.user).new_message.deliver_now
     when 'request_for_follow_up'
