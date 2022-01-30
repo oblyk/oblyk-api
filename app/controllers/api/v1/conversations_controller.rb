@@ -8,6 +8,7 @@ module Api
 
       def index
         conversations = Conversation.joins(:conversation_users)
+                                    .includes(:users, conversation_messages: :user, conversation_users: { user: :avatar_attachment })
                                     .where(conversation_users: { user_id: @current_user.id })
                                     .order(last_message_at: :desc)
         render json: conversations.map(&:summary_to_json), status: :ok

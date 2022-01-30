@@ -38,7 +38,6 @@ class Conversation < ApplicationRecord
           avatar_thumbnail_url: conversation_user.user.avatar_thumbnail_url
         }
       end,
-      conversation_message_count: conversation_messages.count,
       last_message: {
         body: conversation_messages.last&.body,
         user_uuid: conversation_messages.last&.user&.uuid,
