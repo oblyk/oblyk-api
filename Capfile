@@ -42,6 +42,7 @@ require 'capistrano/sidekiq'
 require 'capistrano/bundler'
 require 'capistrano/rbenv'
 require 'capistrano/puma'
+require 'capistrano/sitemap_generator'
 
 install_plugin Capistrano::Puma
 install_plugin Capistrano::Puma::Daemon

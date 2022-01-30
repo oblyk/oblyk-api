@@ -13,6 +13,7 @@ set :linked_dirs, fetch(:linked_dirs, []).push(
   'tmp/sockets',
   'vendor/bundle',
   '.bundle',
+  'public/sitemaps',
   'public/system',
   'public/uploads',
   'uploads',
@@ -25,7 +26,9 @@ set :linked_files, fetch(:linked_files, []).push(
   'config/database.yml',
   'config/master.key',
   'config/credentials.yml.enc',
-  'config/local_env.yml'
+  'config/local_env.yml',
+  'public/sitemap.xml',
+  'public/sitemap1.xml'
 )
 
 set :puma_role, :web
