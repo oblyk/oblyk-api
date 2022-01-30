@@ -73,6 +73,9 @@ gem 'csv'
 # Gem for markdown
 gem 'redcarpet'
 
+# Sitemap gem
+gem 'sitemap_generator'
+
 group :development, :test do
   # Ruby static code analyzer
   gem 'rubocop-faker'

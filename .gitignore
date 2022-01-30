@@ -34,3 +34,8 @@
 # Ignore pirvate http client configuration
 /http_client/http-client.private.env.json
 /config/local_env.yml
+
+# Ignore sitemap
+/public/sitemap.xml
+/public/sitemap1.xml
+/public/sitemaps/*
