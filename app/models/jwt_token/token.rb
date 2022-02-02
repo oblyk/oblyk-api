@@ -10,6 +10,8 @@ module JwtToken
     def self.decode(token)
       # `JWT.token()` return `[payload, header]`, we use `.first` to retrieve the decode token.
       JWT.decode(token, api_secret).first
+    rescue StandardError
+      {}
     end
 
     def self.api_secret
