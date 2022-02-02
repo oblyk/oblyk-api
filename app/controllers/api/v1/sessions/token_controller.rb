@@ -8,10 +8,16 @@ module Api
           refresh_token = JwtToken::Token.decode(params[:refresh_token]).try(:[], 'data')
 
           user_id = refresh_token.try(:[], 'id')
-          render json: {}, status: :forbidden unless user_id
+          unless user_id
+            render json: {}, status: :forbidden
+            return
+          end
 
           user = User.find_by id: user_id
-          render json: {}, status: :forbidden unless user
+          unless user
+            render json: {}, status: :forbidden
+            return
+          end
 
           user_data = user.as_json(only: %i[id first_name last_name slug_name email uuid super_admin])
           exp = Time.now.to_i + Rails.application.config.jwt_session_lifetime
