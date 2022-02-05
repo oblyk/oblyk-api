@@ -266,6 +266,7 @@ Rails.application.routes.draw do
         resources :guide_book_webs
         resources :guide_book_pdfs
         resources :guide_book_papers do
+          get :grouped, on: :collection
           get :crags, on: :member
           get :geo_json, on: :member
           get :photos, on: :member
