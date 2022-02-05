@@ -6,7 +6,7 @@ module Api
       def geo_json
         features = []
 
-        User.partner_geolocable.each do |user|
+        User.with_attached_avatar.with_attached_banner.partner_geolocable.each do |user|
           features << user.to_partner_geo_json
         end
 
