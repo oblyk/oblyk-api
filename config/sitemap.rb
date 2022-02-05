@@ -12,6 +12,7 @@ SitemapGenerator::Sitemap.create do
   add '/about/partner-search', priority: 1, changefreq: 'yearly'
   add '/grades', priority: 1, changefreq: 'yearly'
   add '/about', priority: 0.8, changefreq: 'yearly'
+  add '/library', priority: 0.8, changefreq: 'monthly'
   add '/guide-book-papers/find', priority: 0.6, changefreq: 'yearly'
   add '/support-us', priority: 0.6, changefreq: 'yearly'
   add '/contact', priority: 0.4, changefreq: 'yearly'
