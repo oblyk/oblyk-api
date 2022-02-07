@@ -5,7 +5,7 @@ module Api
     class GuideBookPapersController < ApiController
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update add_crag remove_crag add_cover remove_cover]
-      before_action :set_guide_book_paper, only: %i[crags photos links versions geo_json show update destroy add_crag remove_crag add_cover remove_cover articles]
+      before_action :set_guide_book_paper, only: %i[crags photos links versions geo_json alternatives show update destroy add_crag remove_crag add_cover remove_cover articles]
 
       def index
         crag_id = params.fetch :crag_id, nil
@@ -108,6 +108,24 @@ module Api
       def articles
         articles = @guide_book_paper.articles.published
         render json: articles.map(&:summary_to_json), status: :ok
+      end
+
+      def alternatives
+        alternatives = []
+        @guide_book_paper.crags.includes(photo: :picture_attachment, guide_book_papers: :cover_attachment).each do |crag|
+          crag_guide = {
+            crag: crag.summary_to_json,
+            guides: []
+          }
+          crag.guide_book_papers.order(publication_year: :desc).each do |guide|
+            next if guide.id == @guide_book_paper.id
+
+            crag_guide[:guides] << guide.summary_to_json
+          end
+          alternatives << crag_guide
+        end
+
+        render json: alternatives, status: :ok
       end
 
       def show

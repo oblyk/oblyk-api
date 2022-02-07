@@ -273,6 +273,7 @@ Rails.application.routes.draw do
           get :links, on: :member
           get :articles, on: :member
           get :versions, on: :member
+          get :alternatives, on: :member
           get :search, on: :collection
           get :around, on: :collection
           post :add_crag, on: :member

@@ -134,3 +134,8 @@ Accept: application/json
 GET {{api_url}}/public/guide_book_papers/grouped?group=publication_year&direction=desc
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
+
+### GET all guide_book_paper versions
+GET {{api_url}}/public/guide_book_papers/261/alternatives.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
