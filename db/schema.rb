@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_30_121005) do
+ActiveRecord::Schema.define(version: 2022_02_11_145631) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -828,7 +828,7 @@ ActiveRecord::Schema.define(version: 2021_11_30_121005) do
     t.string "reset_password_token"
     t.datetime "reset_password_token_expired_at"
     t.integer "follows_count"
-    t.string "uuid"
+    t.string "uuid", limit: 36
     t.boolean "public_profile"
     t.boolean "public_outdoor_ascents"
     t.boolean "public_indoor_ascents"
