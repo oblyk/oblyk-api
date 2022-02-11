@@ -275,14 +275,16 @@ class User < ApplicationRecord
   end
 
   def summary_to_json
-    {
-      id: id,
-      uuid: uuid,
-      slug_name: slug_name,
-      first_name: first_name,
-      full_name: full_name,
-      avatar_thumbnail_url: avatar_thumbnail_url
-    }
+    Rails.cache.fetch("#{cache_key_with_version}/summary_user") do
+      {
+        id: id,
+        uuid: uuid,
+        slug_name: slug_name,
+        first_name: first_name,
+        full_name: full_name,
+        avatar_thumbnail_url: avatar_thumbnail_url
+      }
+    end
   end
 
   def detail_to_json(current_user: false)

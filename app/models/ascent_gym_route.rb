@@ -39,21 +39,12 @@ class AscentGymRoute < Ascent
       private_comment: private_comment,
       sections_done: sections_done,
       gym_route: gym_route ? gym_route.summary_to_json : nil,
-      gym: {
-        id: gym.id,
-        name: gym.name,
-        slug_name: gym.slug_name
-      },
+      gym: gym.summary_to_json,
       history: {
         created_at: created_at,
         updated_at: updated_at
       },
-      user: {
-        uuid: user.uuid,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        slug_name: user.slug_name
-      }
+      user: user.summary_to_json
     }
   end
 

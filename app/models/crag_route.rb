@@ -147,60 +147,41 @@ class CragRoute < ApplicationRecord
   end
 
   def summary_to_json
-    {
-      id: id,
-      name: name,
-      slug_name: slug_name,
-      height: height,
-      open_year: open_year,
-      opener: opener,
-      climbing_type: climbing_type,
-      sections_count: sections_count,
-      max_bolt: max_bolt,
-      note: note,
-      note_count: note_count,
-      ascents_count: ascents_count,
-      photos_count: photos_count,
-      videos_count: videos_count,
-      comments_count: comments_count,
-      votes: votes,
-      difficulty_appreciation: difficulty_appreciation,
-      grade_to_s: grade_to_s,
-      grade_gap: {
-        max_grade_value: max_grade_value,
-        min_grade_value: min_grade_value,
-        max_grade_text: max_grade_text,
-        min_grade_text: min_grade_text
-      },
-      crag_sector: {
-        id: crag_sector&.id,
-        name: crag_sector&.name,
-        slug_name: crag_sector&.slug_name,
+    Rails.cache.fetch("#{cache_key_with_version}/summary_crag_route") do
+      {
+        id: id,
+        name: name,
+        slug_name: slug_name,
+        height: height,
+        open_year: open_year,
+        opener: opener,
+        climbing_type: climbing_type,
+        sections_count: sections_count,
+        max_bolt: max_bolt,
+        note: note,
+        note_count: note_count,
+        ascents_count: ascents_count,
+        photos_count: photos_count,
+        videos_count: videos_count,
+        comments_count: comments_count,
+        votes: votes,
+        difficulty_appreciation: difficulty_appreciation,
+        grade_to_s: grade_to_s,
+        grade_gap: {
+          max_grade_value: max_grade_value,
+          min_grade_value: min_grade_value,
+          max_grade_text: max_grade_text,
+          min_grade_text: min_grade_text
+        },
+        crag_sector: crag_sector&.summary_to_json,
+        crag: crag&.summary_to_json,
         photo: {
-          id: crag_sector&.photo&.id,
-          url: crag_sector&.photo ? crag_sector.photo.large_url : nil,
-          thumbnail_url: crag_sector&.photo ? crag_sector.photo.thumbnail_url : nil
+          id: photo&.id,
+          url: photo ? photo.large_url : nil,
+          thumbnail_url: photo ? photo.thumbnail_url : nil
         }
-      },
-      crag: {
-        id: crag.id,
-        name: crag.name,
-        slug_name: crag.slug_name,
-        country: crag.country,
-        region: crag.region,
-        city: crag.city,
-        photo: {
-          id: crag&.photo&.id,
-          url: crag&.photo ? crag.photo.large_url : nil,
-          thumbnail_url: crag&.photo ? crag.photo.thumbnail_url : nil
-        }
-      },
-      photo: {
-        id: photo&.id,
-        url: photo ? photo.large_url : nil,
-        thumbnail_url: photo ? photo.thumbnail_url : nil
       }
-    }
+    end
   end
 
   def detail_to_json
@@ -213,20 +194,12 @@ class CragRoute < ApplicationRecord
             comment: ascent.comment,
             note: ascent.note,
             released_at: ascent.released_at,
-            creator: {
-              id: ascent.user_id,
-              slug_name: ascent.user&.slug_name,
-              name: ascent.user&.full_name,
-            }
+            creator: ascent.user&.summary_to_json
           }
         end,
         link_count: links.count,
         alert_count: alerts.count,
-        creator: {
-          uuid: user&.uuid,
-          name: user&.full_name,
-          slug_name: user&.slug_name
-        },
+        creator: user&.summary_to_json,
         history: {
           created_at: created_at,
           updated_at: updated_at

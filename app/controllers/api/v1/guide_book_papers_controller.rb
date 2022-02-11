@@ -14,7 +14,7 @@ module Api
                                             .where(guide_book_paper_crags: { crag_id: params[:crag_id] })
                                             .order(publication_year: :desc)
                             else
-                              GuideBookPaper.with_attached_cover.all.order(:name)
+                              GuideBookPaper.all.order(:name)
                             end
         render json: guide_book_papers.map(&:summary_to_json), status: :ok
       end
@@ -26,7 +26,7 @@ module Api
 
         case group
         when 'publication_year'
-          guides = GuideBookPaper.with_attached_cover.all.order(publication_year: direction)
+          guides = GuideBookPaper.all.order(publication_year: direction)
           guides.each do |guide|
             groups["year-#{guide.publication_year}"] ||= { title: guide.publication_year, guides: [] }
             groups["year-#{guide.publication_year}"][:guides] << guide.summary_to_json
@@ -36,7 +36,7 @@ module Api
             direction == 'desc' ? key : -key
           end.to_h
         when 'alphabetic'
-          guides = GuideBookPaper.with_attached_cover.all.order(name: direction)
+          guides = GuideBookPaper.all.order(name: direction)
           guides.each do |guide|
             groups[guide.name.first] ||= { title: guide.name.first, guides: [] }
             groups[guide.name.first][:guides] << guide.summary_to_json

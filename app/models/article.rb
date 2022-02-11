@@ -42,18 +42,20 @@ class Article < ApplicationRecord
   end
 
   def summary_to_json
-    {
-      id: id,
-      slug_name: slug_name,
-      name: name,
-      description: description,
-      views: views,
-      comments_count: comments_count,
-      published_at: published_at,
-      published: published?,
-      cover_url: cover.attached? ? cover_large_url : nil,
-      thumbnail_url: cover.attached? ? cover_thumbnail_url : nil
-    }
+    Rails.cache.fetch("#{cache_key_with_version}/summary_article") do
+      {
+        id: id,
+        slug_name: slug_name,
+        name: name,
+        description: description,
+        views: views,
+        comments_count: comments_count,
+        published_at: published_at,
+        published: published?,
+        cover_url: cover.attached? ? cover_large_url : nil,
+        thumbnail_url: cover.attached? ? cover_thumbnail_url : nil
+      }
+    end
   end
 
   def detail_to_json

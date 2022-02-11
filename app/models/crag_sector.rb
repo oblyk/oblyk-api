@@ -92,41 +92,43 @@ class CragSector < ApplicationRecord
   end
 
   def summary_to_json
-    {
-      id: id,
-      crag_id: crag_id,
-      name: name,
-      slug_name: slug_name,
-      description: description,
-      rain: rain,
-      sun: sun,
-      latitude: latitude,
-      longitude: longitude,
-      elevation: elevation,
-      north: north,
-      north_east: north_east,
-      east: east,
-      south_east: south_east,
-      south: south,
-      south_west: south_west,
-      west: west,
-      north_west: north_west,
-      routes_figures: {
-        count: crag_routes_count,
-        grade: {
-          min_value: min_grade_value,
-          max_value: max_grade_value,
-          max_text: max_grade_text,
-          min_text: min_grade_text
+    Rails.cache.fetch("#{cache_key_with_version}/summary_crag_sector") do
+      {
+        id: id,
+        crag_id: crag_id,
+        name: name,
+        slug_name: slug_name,
+        description: description,
+        rain: rain,
+        sun: sun,
+        latitude: latitude,
+        longitude: longitude,
+        elevation: elevation,
+        north: north,
+        north_east: north_east,
+        east: east,
+        south_east: south_east,
+        south: south,
+        south_west: south_west,
+        west: west,
+        north_west: north_west,
+        routes_figures: {
+          count: crag_routes_count,
+          grade: {
+            min_value: min_grade_value,
+            max_value: max_grade_value,
+            max_text: max_grade_text,
+            min_text: min_grade_text
+          }
+        },
+        crag: crag.summary_to_json,
+        photo: {
+          id: photo&.id,
+          url: photo ? photo.large_url : nil,
+          thumbnail_url: photo ? photo.thumbnail_url : nil
         }
-      },
-      crag: crag.summary_to_json,
-      photo: {
-        id: photo&.id,
-        url: photo ? photo.large_url : nil,
-        thumbnail_url: photo ? photo.thumbnail_url : nil
       }
-    }
+    end
   end
 
   def detail_to_json
@@ -134,11 +136,7 @@ class CragSector < ApplicationRecord
       {
         versions_count: versions.count,
         photo_count: photos.count,
-        creator: {
-          uuid: user&.uuid,
-          name: user&.full_name,
-          slug_name: user&.slug_name
-        },
+        creator: user&.summary_to_json,
         history: {
           created_at: created_at,
           updated_at: updated_at

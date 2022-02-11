@@ -28,11 +28,7 @@ class Word < ApplicationRecord
       slug_name: slug_name,
       definition: definition,
       versions_count: versions.length,
-      creator: {
-        uuid: user&.uuid,
-        name: user&.full_name,
-        slug_name: user&.slug_name
-      },
+      creator: user&.summary_to_json,
       history: {
         created_at: created_at,
         updated_at: updated_at

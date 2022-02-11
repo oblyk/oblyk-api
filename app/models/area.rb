@@ -37,18 +37,20 @@ class Area < ApplicationRecord
   end
 
   def summary_to_json
-    {
-      id: id,
-      name: name,
-      slug_name: slug_name,
-      photo: {
-        id: photo&.id,
-        url: photo ? photo.large_url : nil,
-        thumbnail_url: photo ? photo.thumbnail_url : nil,
-        illustrable_type: photo ? photo.illustrable_type : nil,
-        illustrable_name: photo ? photo.illustrable.rich_name : nil
+    Rails.cache.fetch("#{cache_key_with_version}/summary_area") do
+      {
+        id: id,
+        name: name,
+        slug_name: slug_name,
+        photo: {
+          id: photo&.id,
+          url: photo ? photo.large_url : nil,
+          thumbnail_url: photo ? photo.thumbnail_url : nil,
+          illustrable_type: photo ? photo.illustrable_type : nil,
+          illustrable_name: photo ? photo.illustrable.rich_name : nil
+        }
       }
-    }
+    end
   end
 
   def detail_to_json
@@ -66,11 +68,7 @@ class Area < ApplicationRecord
             max_text: hardest_route&.max_grade_text
           }
         },
-        creator: {
-          uuid: user&.uuid,
-          name: user&.full_name,
-          slug_name: user&.slug_name
-        },
+        creator: user&.summary_to_json,
         history: {
           created_at: created_at,
           updated_at: updated_at

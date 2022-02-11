@@ -30,13 +30,7 @@ class Conversation < ApplicationRecord
     {
       id: id,
       conversation_users: conversation_users.map do |conversation_user|
-        {
-          last_read_at: conversation_user.last_read_at,
-          uuid: conversation_user.user.uuid,
-          name: conversation_user.user.full_name,
-          slug_name: conversation_user.user.slug_name,
-          avatar_thumbnail_url: conversation_user.user.avatar_thumbnail_url
-        }
+        conversation_user.user.summary_to_json.merge({ last_read_at: conversation_user.last_read_at })
       end,
       last_message: {
         body: conversation_messages.last&.body,

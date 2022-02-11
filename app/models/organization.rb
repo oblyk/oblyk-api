@@ -24,19 +24,21 @@ class Organization < ApplicationRecord
   end
 
   def summary_to_json
-    {
-      id: id,
-      name: name,
-      slug_name: slug_name,
-      api_usage_type: api_usage_type,
-      phone: phone,
-      email: email,
-      address: address,
-      city: city,
-      zipcode: zipcode,
-      website: website,
-      company_registration_number: company_registration_number
-    }
+    Rails.cache.fetch("#{cache_key_with_version}/summary_organization") do
+      {
+        id: id,
+        name: name,
+        slug_name: slug_name,
+        api_usage_type: api_usage_type,
+        phone: phone,
+        email: email,
+        address: address,
+        city: city,
+        zipcode: zipcode,
+        website: website,
+        company_registration_number: company_registration_number
+      }
+    end
   end
 
   def detail_to_json

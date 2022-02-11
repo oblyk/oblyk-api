@@ -51,11 +51,7 @@ class AscentCragRoute < Ascent
       private_comment: private_comment,
       sections_done: sections_done,
       crag_route: crag_route.summary_to_json,
-      crag: {
-        id: crag.id,
-        name: crag.name,
-        slug_name: crag.slug_name
-      },
+      crag: crag.summary_to_json,
       ascent_users: ascent_users.map { |ascent_user| { id: ascent_user.id, user: ascent_user.user.summary_to_json } },
       history: {
         created_at: created_at,

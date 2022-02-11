@@ -27,12 +27,7 @@ class ConversationMessage < ApplicationRecord
       conversation_id: conversation_id,
       body: body,
       posted_at: posted_at,
-      creator: {
-        uuid: user.uuid,
-        name: user.full_name,
-        first_name: user.first_name,
-        slug_name: user.slug_name
-      },
+      creator: user&.summary_to_json,
       history: {
         created_at: created_at,
         updated_at: updated_at

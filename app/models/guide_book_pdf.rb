@@ -31,16 +31,8 @@ class GuideBookPdf < ApplicationRecord
       author: author,
       publication_year: publication_year,
       pdf_file: Rails.application.routes.url_helpers.polymorphic_url(pdf_file, only_path: true),
-      crag: {
-        id: crag.id,
-        name: crag.name,
-        slug_name: crag.slug_name
-      },
-      creator: {
-        uuid: user&.uuid,
-        name: user&.full_name,
-        slug_name: user&.slug_name
-      },
+      crag: crag.summary_to_json,
+      creator: user&.summary_to_json,
       history: {
         created_at: created_at,
         updated_at: updated_at

@@ -16,10 +16,7 @@ class GymAdministrator < ApplicationRecord
       user_id: user_id,
       gym_id: gym_id,
       level: level,
-      gym: {
-        name: gym.name,
-        id: gym.id
-      },
+      gym: gym.summary_to_json,
       user: {
         name: user.full_name,
         slug_name: user&.slug_name,

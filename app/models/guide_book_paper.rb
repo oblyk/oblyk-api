@@ -65,23 +65,25 @@ class GuideBookPaper < ApplicationRecord
   end
 
   def summary_to_json
-    {
-      id: id,
-      name: name,
-      slug_name: slug_name,
-      author: author,
-      editor: editor,
-      publication_year: publication_year,
-      price_cents: price_cents,
-      ean: ean,
-      vc_reference: vc_reference,
-      number_of_page: number_of_page,
-      weight: weight,
-      price: price_cents ? price_cents.to_d / 100 : nil,
-      funding_status: funding_status,
-      cover: cover.attached? ? cover_large_url : nil,
-      thumbnail_url: cover.attached? ? cover_thumbnail_url : nil
-    }
+    Rails.cache.fetch("#{cache_key_with_version}/summary_guide_book_paper") do
+      {
+        id: id,
+        name: name,
+        slug_name: slug_name,
+        author: author,
+        editor: editor,
+        publication_year: publication_year,
+        price_cents: price_cents,
+        ean: ean,
+        vc_reference: vc_reference,
+        number_of_page: number_of_page,
+        weight: weight,
+        price: price_cents ? price_cents.to_d / 100 : nil,
+        funding_status: funding_status,
+        cover: cover.attached? ? cover_large_url : nil,
+        thumbnail_url: cover.attached? ? cover_thumbnail_url : nil
+      }
+    end
   end
 
   def detail_to_json
@@ -94,11 +96,7 @@ class GuideBookPaper < ApplicationRecord
         articles_count: articles_count,
         next_guide_book_paper: next_guide_book_paper&.summary_to_json,
         crags: crags.map { |crag| { id: crag.id, name: crag.name } },
-        creator: {
-          uuid: user&.uuid,
-          name: user&.full_name,
-          slug_name: user&.slug_name
-        },
+        creator: user&.summary_to_json,
         history: {
           created_at: created_at,
           updated_at: updated_at

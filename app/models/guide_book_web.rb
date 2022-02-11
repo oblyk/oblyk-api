@@ -26,16 +26,8 @@ class GuideBookWeb < ApplicationRecord
       name: name,
       url: url,
       publication_year: publication_year,
-      crag: {
-        id: crag.id,
-        name: crag.name,
-        slug_name: crag.slug_name
-      },
-      creator: {
-        uuid: user&.uuid,
-        name: user&.full_name,
-        slug_name: user&.slug_name
-      },
+      crag: crag.summary_to_json,
+      creator: user&.summary_to_json,
       history: {
         created_at: created_at,
         updated_at: updated_at

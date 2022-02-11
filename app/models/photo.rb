@@ -48,7 +48,9 @@ class Photo < ApplicationRecord
   end
 
   def summary_to_json
-    detail_to_json
+    Rails.cache.fetch("#{cache_key_with_version}/summary_photo") do
+      detail_to_json
+    end
   end
 
   def detail_to_json
@@ -84,11 +86,7 @@ class Photo < ApplicationRecord
       picture: large_url,
       thumbnail: thumbnail_url,
       illustrable: illustrable_json,
-      creator: {
-        uuid: user&.uuid,
-        name: user&.full_name,
-        slug_name: user&.slug_name
-      },
+      creator: user&.summary_to_json,
       history: {
         created_at: created_at,
         updated_at: updated_at

@@ -158,7 +158,7 @@ module Api
       end
 
       def videos
-        videos = @crag.all_videos
+        videos = Crag.includes(:videos, crag_routes: :videos).find(params[:id]).all_videos
         render json: videos.map(&:summary_to_json), status: :ok
       end
 
@@ -206,15 +206,12 @@ module Api
       private
 
       def geo_json_features
-        last_crag_update = Crag.maximum(:updated_at)
-        Rails.cache.fetch("#{last_crag_update}/crags/geo_json", expires_in: 1.day) do
-          features = []
+        features = []
 
-          Crag.all.each do |crag|
-            features << crag.to_geo_json
-          end
-          features
+        Crag.all.each do |crag|
+          features << crag.to_geo_json
         end
+        features
       end
 
       def set_crag

@@ -49,11 +49,7 @@ class PlaceOfSale < ApplicationRecord
       region: region,
       address: address,
       guide_book_paper_id: guide_book_paper_id,
-      creator: {
-        uuid: user&.uuid,
-        name: user&.full_name,
-        slug_name: user&.slug_name
-      },
+      creator: user&.summary_to_json,
       history: {
         created_at: created_at,
         updated_at: updated_at

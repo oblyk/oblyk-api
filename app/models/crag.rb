@@ -128,54 +128,56 @@ class Crag < ApplicationRecord
   end
 
   def summary_to_json
-    {
-      id: id,
-      name: name,
-      slug_name: slug_name,
-      rain: rain,
-      sun: sun,
-      sport_climbing: sport_climbing,
-      bouldering: bouldering,
-      multi_pitch: multi_pitch,
-      trad_climbing: trad_climbing,
-      aid_climbing: aid_climbing,
-      deep_water: deep_water,
-      via_ferrata: via_ferrata,
-      north: north,
-      north_east: north_east,
-      east: east,
-      south_east: south_east,
-      south: south,
-      south_west: south_west,
-      west: west,
-      north_west: north_west,
-      summer: summer,
-      autumn: autumn,
-      winter: winter,
-      spring: spring,
-      latitude: latitude,
-      longitude: longitude,
-      elevation: elevation,
-      code_country: code_country,
-      country: country,
-      city: city,
-      region: region,
-      rocks: rocks,
-      photo: {
-        id: photo&.id,
-        url: photo ? photo.large_url : nil,
-        thumbnail_url: photo ? photo.thumbnail_url : nil
-      },
-      routes_figures: {
-        route_count: crag_routes_count,
-        grade: {
-          min_value: min_grade_value,
-          max_value: max_grade_value,
-          max_text: max_grade_text,
-          min_text: min_grade_text
+    Rails.cache.fetch("#{cache_key_with_version}/summary_crag") do
+      {
+        id: id,
+        name: name,
+        slug_name: slug_name,
+        rain: rain,
+        sun: sun,
+        sport_climbing: sport_climbing,
+        bouldering: bouldering,
+        multi_pitch: multi_pitch,
+        trad_climbing: trad_climbing,
+        aid_climbing: aid_climbing,
+        deep_water: deep_water,
+        via_ferrata: via_ferrata,
+        north: north,
+        north_east: north_east,
+        east: east,
+        south_east: south_east,
+        south: south,
+        south_west: south_west,
+        west: west,
+        north_west: north_west,
+        summer: summer,
+        autumn: autumn,
+        winter: winter,
+        spring: spring,
+        latitude: latitude,
+        longitude: longitude,
+        elevation: elevation,
+        code_country: code_country,
+        country: country,
+        city: city,
+        region: region,
+        rocks: rocks,
+        photo: {
+          id: photo&.id,
+          url: photo ? photo.large_url : nil,
+          thumbnail_url: photo ? photo.thumbnail_url : nil
+        },
+        routes_figures: {
+          route_count: crag_routes_count,
+          grade: {
+            min_value: min_grade_value,
+            max_value: max_grade_value,
+            max_text: max_grade_text,
+            min_text: min_grade_text
+          }
         }
       }
-    }
+    end
   end
 
   def detail_to_json
@@ -197,11 +199,7 @@ class Crag < ApplicationRecord
           pdf_count: guide_book_pdfs.count,
           paper_count: guide_book_papers.count
         },
-        creator: {
-          uuid: user&.uuid,
-          name: user&.full_name,
-          slug_name: user&.slug_name
-        },
+        creator: user&.summary_to_json,
         sectors: sectors.map { |sector| { id: sector.id, name: sector.name } },
         areas: areas.map { |area| { id: area.id, name: area.name, slug_name: area.slug_name } },
         history: {
@@ -213,32 +211,34 @@ class Crag < ApplicationRecord
   end
 
   def to_geo_json
-    {
-      type: 'Feature',
-      properties: {
-        type: 'Crag',
-        id: id,
-        name: name,
-        slug_name: slug_name,
-        climbing_key: climbing_key,
-        icon: "crag-marker-#{climbing_key}",
-        localization: "#{city}, #{region}",
-        sport_climbing: sport_climbing,
-        bouldering: bouldering,
-        multi_pitch: multi_pitch,
-        trad_climbing: trad_climbing,
-        aid_climbing: aid_climbing,
-        deep_water: deep_water,
-        via_ferrata: via_ferrata,
-        map_thumbnail_url: photo.present? ? photo.thumbnail_url : nil,
-        route_count: crag_routes_count,
-        grade_min_value: min_grade_value,
-        grade_max_value: max_grade_value,
-        grade_max_text: max_grade_text,
-        grade_min_text: min_grade_text
-      },
-      geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
-    }
+    Rails.cache.fetch("#{cache_key_with_version}/geo_json_crag") do
+      {
+        type: 'Feature',
+        properties: {
+          type: 'Crag',
+          id: id,
+          name: name,
+          slug_name: slug_name,
+          climbing_key: climbing_key,
+          icon: "crag-marker-#{climbing_key}",
+          localization: "#{city}, #{region}",
+          sport_climbing: sport_climbing,
+          bouldering: bouldering,
+          multi_pitch: multi_pitch,
+          trad_climbing: trad_climbing,
+          aid_climbing: aid_climbing,
+          deep_water: deep_water,
+          via_ferrata: via_ferrata,
+          map_thumbnail_url: photo.present? ? photo.thumbnail_url : nil,
+          route_count: crag_routes_count,
+          grade_min_value: min_grade_value,
+          grade_max_value: max_grade_value,
+          grade_max_text: max_grade_text,
+          grade_min_text: min_grade_text
+        },
+        geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
+      }
+    end
   end
 
   private
