@@ -76,6 +76,9 @@ gem 'redcarpet'
 # Sitemap gem
 gem 'sitemap_generator'
 
+# Dalli for memcached
+gem 'dalli'
+
 group :development, :test do
   # Ruby static code analyzer
   gem 'rubocop-faker'
