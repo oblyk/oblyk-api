@@ -49,7 +49,7 @@ gem 'kaminari'
 
 # Sidekiq
 gem 'sidekiq'
-gem 'sidekiq-statistic', '~> 1.4'
+# gem 'sidekiq-statistic'
 
 # Track changes
 gem 'paper_trail', '~> 11.1'
@@ -111,6 +111,8 @@ group :development do
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
   gem 'capistrano-sidekiq'
+
+  gem 'bundler-leak'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
