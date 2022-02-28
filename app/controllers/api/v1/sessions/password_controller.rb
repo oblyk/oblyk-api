@@ -22,9 +22,8 @@ module Api
           user.password_confirmation = params[:password_confirmation]
 
           if user.save
-            user.reset_password_token = nil
-            user.reset_password_token_expired_at = nil
-            user.save
+            user.update_column :reset_password_token, nil
+            user.update_column :reset_password_token_expired_at, nil
 
             user_data = user.as_json(only: %i[id first_name last_name])
             exp = Time.now.to_i + Rails.application.config.jwt_session_lifetime
@@ -32,6 +31,7 @@ module Api
             refresh_token = JwtToken::Token.generate(user_data, exp + 3.months)
 
             render json: {
+              email: user.email,
               token: token,
               refresh_token: refresh_token
             }, status: :created

@@ -38,7 +38,7 @@ Rails.application.configure do
   # Open letter delivery method
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.perform_deliveries = true
-  config.action_mailer.default_url_options = { host: 'http://localhost:8080' }
+  config.action_mailer.default_url_options = { host: 'http://localhost:4500' }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
