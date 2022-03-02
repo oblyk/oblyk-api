@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Follow < ApplicationRecord
-  belongs_to :followable, polymorphic: true, counter_cache: :follows_count
+  belongs_to :followable, polymorphic: true, counter_cache: :follows_count, touch: true
   belongs_to :user
 
   before_validation :auto_accepted

@@ -8,7 +8,7 @@ class Photo < ApplicationRecord
   has_one_attached :picture
 
   belongs_to :user, optional: true
-  belongs_to :illustrable, polymorphic: true, counter_cache: :photos_count
+  belongs_to :illustrable, polymorphic: true, counter_cache: :photos_count, touch: true
   has_many :reports, as: :reportable, dependent: :destroy
   has_many :feeds, as: :feedable
   has_many :crag_sectors

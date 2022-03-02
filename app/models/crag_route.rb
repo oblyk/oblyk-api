@@ -20,10 +20,10 @@ class CragRoute < ApplicationRecord
     start_type
   ], if: proc { |_obj| ENV['PAPER_TRAIL'] == 'true' }
 
-  belongs_to :crag_sector, optional: true, counter_cache: :crag_routes_count
+  belongs_to :crag_sector, optional: true, counter_cache: :crag_routes_count, touch: true
   belongs_to :user, optional: true
   belongs_to :photo, optional: true
-  belongs_to :crag, counter_cache: :crag_routes_count
+  belongs_to :crag, counter_cache: :crag_routes_count, touch: true
   has_many :comments, as: :commentable
   has_many :links, as: :linkable
   has_many :alerts, as: :alertable

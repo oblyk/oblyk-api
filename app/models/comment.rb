@@ -4,7 +4,7 @@ class Comment < ApplicationRecord
   include StripTagable
 
   belongs_to :user, optional: true
-  belongs_to :commentable, polymorphic: true, counter_cache: :comments_count
+  belongs_to :commentable, polymorphic: true, counter_cache: :comments_count, touch: true
   has_many :reports, as: :reportable
 
   validates :body, presence: true

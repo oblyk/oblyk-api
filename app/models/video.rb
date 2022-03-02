@@ -5,7 +5,7 @@ class Video < ApplicationRecord
   include StripTagable
 
   belongs_to :user, optional: true
-  belongs_to :viewable, polymorphic: true, counter_cache: :videos_count
+  belongs_to :viewable, polymorphic: true, counter_cache: :videos_count, touch: true
   has_many :reports, as: :reportable
 
   delegate :latitude, to: :viewable
