@@ -135,6 +135,7 @@ class Gym < ApplicationRecord
         training_space: training_space,
         administered: administered?,
         banner: banner.attached? ? banner_large_url : nil,
+        banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil,
         logo: logo.attached? ? logo_large_url : nil
       }
     end
