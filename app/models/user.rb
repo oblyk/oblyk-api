@@ -320,6 +320,7 @@ class User < ApplicationRecord
       videos_count: videos.count,
       photos_count: photos.count,
       full_name: full_name,
+      banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil,
       banner: banner.attached? ? banner_large_url : nil,
       avatar: avatar.attached? ? avatar_large_url : nil
     }
