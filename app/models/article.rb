@@ -41,6 +41,10 @@ class Article < ApplicationRecord
     resize_attachment cover, '300x300'
   end
 
+  def cover_cropped_medium_url
+    crop_attachment cover, '500x500'
+  end
+
   def summary_to_json
     Rails.cache.fetch("#{cache_key_with_version}/summary_article") do
       {
@@ -53,6 +57,7 @@ class Article < ApplicationRecord
         published_at: published_at,
         published: published?,
         cover_url: cover.attached? ? cover_large_url : nil,
+        cover_cropped_url: cover.attached? ? cover_cropped_medium_url : nil,
         thumbnail_url: cover.attached? ? cover_thumbnail_url : nil
       }
     end

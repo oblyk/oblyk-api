@@ -31,6 +31,10 @@ class Photo < ApplicationRecord
     resize_attachment picture, '1920x1920'
   end
 
+  def cropped_medium_url
+    crop_attachment picture, '500x500'
+  end
+
   def thumbnail_url
     resize_attachment picture, '300x300'
   end

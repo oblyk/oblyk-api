@@ -198,6 +198,10 @@ class User < ApplicationRecord
     resize_attachment banner, '300x300'
   end
 
+  def banner_cropped_medium_url
+    crop_attachment banner, '500x500'
+  end
+
   def subscribe_to_newsletter?
     subscribe = Subscribe.find_by(email: email)
     subscribe.present?
@@ -321,6 +325,7 @@ class User < ApplicationRecord
       photos_count: photos.count,
       full_name: full_name,
       banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil,
+      banner_cropped_url: banner.attached? ? banner_cropped_medium_url : nil,
       banner: banner.attached? ? banner_large_url : nil,
       avatar: avatar.attached? ? avatar_large_url : nil
     }

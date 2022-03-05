@@ -101,6 +101,10 @@ class Gym < ApplicationRecord
     resize_attachment banner, '300x300'
   end
 
+  def banner_cropped_medium_url
+    crop_attachment banner, '500x500'
+  end
+
   def logo_large_url
     resize_attachment logo, '500x500'
   end
@@ -136,6 +140,7 @@ class Gym < ApplicationRecord
         administered: administered?,
         banner: banner.attached? ? banner_large_url : nil,
         banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil,
+        banner_cropped_url: banner ? banner_cropped_medium_url : nil,
         logo: logo.attached? ? logo_large_url : nil
       }
     end

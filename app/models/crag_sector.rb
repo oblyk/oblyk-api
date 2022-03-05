@@ -125,6 +125,7 @@ class CragSector < ApplicationRecord
         photo: {
           id: photo&.id,
           url: photo ? photo.large_url : nil,
+          cropped_url: photo ? photo.cropped_medium_url : nil,
           thumbnail_url: photo ? photo.thumbnail_url : nil
         }
       }

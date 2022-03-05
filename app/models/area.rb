@@ -45,6 +45,7 @@ class Area < ApplicationRecord
         photo: {
           id: photo&.id,
           url: photo ? photo.large_url : nil,
+          cropped_url: photo ? photo.cropped_medium_url : nil,
           thumbnail_url: photo ? photo.thumbnail_url : nil,
           illustrable_type: photo ? photo.illustrable_type : nil,
           illustrable_name: photo ? photo.illustrable.rich_name : nil
