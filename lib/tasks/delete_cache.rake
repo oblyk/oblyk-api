@@ -12,7 +12,7 @@ namespace :delete_cache do
 
     klass.all.find_each do |item|
       loop += 1
-      cache_key = "#{item.cache_key_with_version}/summary_#{model.downcase}"
+      cache_key = "#{item.cache_key_with_version}/summary_#{model.underscore}"
       out.puts "#{loop}/#{item_count} : delete #{cache_key}"
       Rails.cache.delete(cache_key)
     end
