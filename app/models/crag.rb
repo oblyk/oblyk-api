@@ -128,7 +128,7 @@ class Crag < ApplicationRecord
   end
 
   def summary_to_json
-    Rails.cache.fetch("#{cache_key_with_version}/summary_crag") do
+    Rails.cache.fetch("#{cache_key_with_version}/summary_crag", expires_in: 1.month) do
       {
         id: id,
         name: name,
@@ -212,7 +212,7 @@ class Crag < ApplicationRecord
   end
 
   def to_geo_json
-    Rails.cache.fetch("#{cache_key_with_version}/geo_json_crag") do
+    Rails.cache.fetch("#{cache_key_with_version}/geo_json_crag", expires_in: 1.month) do
       {
         type: 'Feature',
         properties: {

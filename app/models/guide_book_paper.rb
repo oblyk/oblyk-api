@@ -65,7 +65,7 @@ class GuideBookPaper < ApplicationRecord
   end
 
   def summary_to_json
-    Rails.cache.fetch("#{cache_key_with_version}/summary_guide_book_paper") do
+    Rails.cache.fetch("#{cache_key_with_version}/summary_guide_book_paper", expires_in: 1.month) do
       {
         id: id,
         name: name,

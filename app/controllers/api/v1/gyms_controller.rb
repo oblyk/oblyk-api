@@ -105,15 +105,12 @@ module Api
       private
 
       def geo_json_features
-        last_gym_update = Gym.maximum(:updated_at)
-        Rails.cache.fetch("#{last_gym_update}/gyms/geo_json", expires_in: 1.day) do
-          features = []
+        features = []
 
-          Gym.all.each do |gym|
-            features << gym.to_geo_json
-          end
-          features
+        Gym.all.each do |gym|
+          features << gym.to_geo_json
         end
+        features
       end
 
       def set_gym

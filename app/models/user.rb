@@ -151,7 +151,7 @@ class User < ApplicationRecord
   end
 
   def to_partner_geo_json
-    Rails.cache.fetch("#{cache_key_with_version}/partner_geo_json", expires_in: 1.day) do
+    Rails.cache.fetch("#{cache_key_with_version}/partner_geo_json", expires_in: 1.month) do
       {
         type: 'Feature',
         properties: {
@@ -279,7 +279,7 @@ class User < ApplicationRecord
   end
 
   def summary_to_json
-    Rails.cache.fetch("#{cache_key_with_version}/summary_user") do
+    Rails.cache.fetch("#{cache_key_with_version}/summary_user", expires_in: 1.month) do
       {
         id: id,
         uuid: uuid,

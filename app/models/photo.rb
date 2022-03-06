@@ -52,7 +52,7 @@ class Photo < ApplicationRecord
   end
 
   def summary_to_json
-    Rails.cache.fetch("#{cache_key_with_version}/summary_photo") do
+    Rails.cache.fetch("#{cache_key_with_version}/summary_photo", expires_in: 1.month) do
       detail_to_json
     end
   end

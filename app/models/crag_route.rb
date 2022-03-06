@@ -147,7 +147,7 @@ class CragRoute < ApplicationRecord
   end
 
   def summary_to_json
-    Rails.cache.fetch("#{cache_key_with_version}/summary_crag_route") do
+    Rails.cache.fetch("#{cache_key_with_version}/summary_crag_route", expires_in: 1.month) do
       {
         id: id,
         name: name,

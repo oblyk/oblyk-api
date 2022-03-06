@@ -55,25 +55,27 @@ class Gym < ApplicationRecord
   end
 
   def to_geo_json
-    {
-      type: 'Feature',
-      properties: {
-        type: 'Gym',
-        id: id,
-        name: name,
-        slug_name: slug_name,
-        climbing_key: climbing_key,
-        icon: "gym-marker-#{climbing_key}",
-        localization: "#{city}, #{region}",
-        bouldering: bouldering,
-        sport_climbing: sport_climbing,
-        pan: pan,
-        fun_climbing: fun_climbing,
-        training_space: training_space,
-        map_thumbnail_url: banner.present? ? banner_thumbnail_url : nil
-      },
-      geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
-    }
+    Rails.cache.fetch("#{cache_key_with_version}/geo_json_gym", expires_in: 1.month) do
+      {
+        type: 'Feature',
+        properties: {
+          type: 'Gym',
+          id: id,
+          name: name,
+          slug_name: slug_name,
+          climbing_key: climbing_key,
+          icon: "gym-marker-#{climbing_key}",
+          localization: "#{city}, #{region}",
+          bouldering: bouldering,
+          sport_climbing: sport_climbing,
+          pan: pan,
+          fun_climbing: fun_climbing,
+          training_space: training_space,
+          map_thumbnail_url: banner.present? ? banner_thumbnail_url : nil
+        },
+        geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
+      }
+    end
   end
 
   def administered?
@@ -114,7 +116,7 @@ class Gym < ApplicationRecord
   end
 
   def summary_to_json
-    Rails.cache.fetch("#{cache_key_with_version}/summary_gym") do
+    Rails.cache.fetch("#{cache_key_with_version}/summary_gym", expires_in: 1.month) do
       {
         id: id,
         name: name,
