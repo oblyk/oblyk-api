@@ -16,8 +16,11 @@ module Api
       end
 
       def create
-        @follow = Follow.new(follow_params)
-        @follow.user = @current_user
+        @follow = Follow.find_or_initialize_by(
+          followable_type: follow_params[:followable_type],
+          followable_id: follow_params[:followable_id],
+          user_id: @current_user.id
+        )
         if @follow.save
           render json: @current_user.subscribes_to_a, status: :ok
         else
