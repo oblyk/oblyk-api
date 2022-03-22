@@ -202,20 +202,20 @@ module Api
                                  .where(id: crag_route_ids)
                                  .where(climbing_type: climbing_filters)
                                  .joins(:crag)
-                                 .order('crags.name')
+                                 .order('crags.name, crag_routes.name, crag_routes.id')
                                  .page(page)
                       when 'released_at'
                         CragRoute.joins("INNER JOIN ascents ON ascents.crag_route_id = crag_routes.id AND ascents.type = 'AscentCragRoute' AND ascents.user_id = #{@user.id}")
                                  .includes(:crag, :crag_sector)
                                  .where(id: crag_route_ids)
                                  .where(climbing_type: climbing_filters)
-                                 .order('ascents.released_at DESC')
+                                 .order('ascents.released_at DESC, crag_routes.name, crag_routes.id')
                                  .page(page)
                       else
                         CragRoute.includes(:crag, :crag_sector)
                                  .where(id: crag_route_ids)
                                  .where(climbing_type: climbing_filters)
-                                 .order(max_grade_value: :desc)
+                                 .order('crag_routes.max_grade_value DESC, crag_routes.name, crag_routes.id')
                                  .page(page)
                       end
         render json: crag_routes.map(&:summary_to_json), status: :ok

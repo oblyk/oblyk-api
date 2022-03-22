@@ -13,13 +13,13 @@ module Api
         order_by = params.fetch(:order_by, 'difficulty_desc')
         order = case order_by
                 when 'difficulty_desc'
-                  'max_grade_value DESC'
+                  'crag_routes.max_grade_value DESC, crag_routes.name, crag_routes.id'
                 when 'difficulty_asc'
-                  'max_grade_value ASC'
+                  'crag_routes.max_grade_value ASC, crag_routes.name, crag_routes.id'
                 when 'note'
-                  'note DESC'
+                  'crag_routes.note DESC, crag_routes.name, crag_routes.id'
                 else
-                  'name'
+                  'crag_routes.name.crag_routes.id'
                 end
 
         crag_routes = if @crag
