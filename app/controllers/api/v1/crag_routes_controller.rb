@@ -19,7 +19,7 @@ module Api
                 when 'note'
                   'crag_routes.note DESC, crag_routes.name, crag_routes.id'
                 else
-                  'crag_routes.name.crag_routes.id'
+                  'crag_routes.name, crag_routes.id'
                 end
 
         crag_routes = if @crag
