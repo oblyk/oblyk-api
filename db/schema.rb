@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_11_145631) do
+ActiveRecord::Schema.define(version: 2022_03_22_191807) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -216,6 +216,17 @@ ActiveRecord::Schema.define(version: 2022_02_11_145631) do
     t.datetime "last_message_at"
   end
 
+  create_table "countries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.string "slug_name"
+    t.string "code_country", limit: 5
+    t.json "geo_polygon"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_countries_on_name"
+    t.index ["slug_name"], name: "index_countries_on_slug_name", unique: true
+  end
+
   create_table "crag_routes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.integer "height"
@@ -343,9 +354,27 @@ ActiveRecord::Schema.define(version: 2022_02_11_145631) do
     t.integer "follows_count"
     t.integer "articles_count"
     t.decimal "elevation", precision: 10, scale: 6
+    t.bigint "department_id"
+    t.index ["department_id"], name: "index_crags_on_department_id"
     t.index ["name"], name: "index_crags_on_name"
     t.index ["photo_id"], name: "index_crags_on_photo_id"
     t.index ["user_id"], name: "index_crags_on_user_id"
+  end
+
+  create_table "departments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.string "slug_name"
+    t.string "department_number", limit: 5
+    t.string "name_prefix_type"
+    t.string "in_sentence_prefix_type"
+    t.json "geo_polygon"
+    t.bigint "country_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["country_id"], name: "index_departments_on_country_id"
+    t.index ["department_number"], name: "index_departments_on_department_number"
+    t.index ["name"], name: "index_departments_on_name"
+    t.index ["slug_name"], name: "index_departments_on_slug_name", unique: true
   end
 
   create_table "feeds", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
@@ -604,6 +633,8 @@ ActiveRecord::Schema.define(version: 2022_02_11_145631) do
     t.integer "follows_count"
     t.integer "comments_count"
     t.integer "videos_count"
+    t.bigint "department_id"
+    t.index ["department_id"], name: "index_gyms_on_department_id"
     t.index ["name"], name: "index_gyms_on_name"
     t.index ["user_id"], name: "index_gyms_on_user_id"
   end
@@ -793,6 +824,24 @@ ActiveRecord::Schema.define(version: 2022_02_11_145631) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["crag_route_id"], name: "index_tick_lists_on_crag_route_id"
     t.index ["user_id"], name: "index_tick_lists_on_user_id"
+  end
+
+  create_table "towns", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.string "slug_name"
+    t.decimal "latitude", precision: 10, scale: 6
+    t.decimal "longitude", precision: 10, scale: 6
+    t.integer "population"
+    t.string "town_code", limit: 5
+    t.string "zipcode", limit: 5
+    t.bigint "department_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["department_id"], name: "index_towns_on_department_id"
+    t.index ["latitude"], name: "index_towns_on_latitude"
+    t.index ["longitude"], name: "index_towns_on_longitude"
+    t.index ["name"], name: "index_towns_on_name"
+    t.index ["slug_name"], name: "index_towns_on_slug_name", unique: true
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

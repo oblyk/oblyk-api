@@ -35,6 +35,7 @@ class Gym < ApplicationRecord
   has_one_attached :logo
   has_one_attached :banner
   belongs_to :user, optional: true
+  belongs_to :department, optional: true
   has_many :follows, as: :followable
   has_many :videos, as: :viewable
   has_many :comments, as: :commentable

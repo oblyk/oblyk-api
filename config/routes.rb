@@ -214,6 +214,25 @@ Rails.application.routes.draw do
           delete :remove_crag, on: :member
         end
 
+        resources :towns, only: %i[show] do
+          get :search, on: :collection
+          get :geo_search, on: :collection
+          get :geo_json, on: :member
+        end
+
+        resources :countries, only: %i[index show] do
+          get :route_figures, on: :member
+          get :geo_json, on: :member
+          resources :departments, only: %i[index show] do
+            get :route_figures, on: :member
+            get :geo_json, on: :member
+          end
+        end
+
+        resources :departments, only: %i[index show] do
+          get :route_figures, on: :member
+        end
+
         resources :crags do
           get :search, on: :collection
           get :random, on: :collection

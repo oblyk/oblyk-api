@@ -93,4 +93,19 @@ SitemapGenerator::Sitemap.create do
       add "/users/#{user.uuid}/#{user.slug_name}/ascents", lastmod: user.updated_at, priority: 0.6, changefreq: 'monthly' if user.public_outdoor_ascents
     end
   end
+
+  # Department & Country
+  group(sitemaps_path: 'sitemaps/', filename: 'departments') do
+    add '/escalade-en/france', priority: 1, changefreq: 'never'
+    Department.find_each do |department|
+      add "/escalade-en/france/#{department.department_number}/#{department.slug_name}", lastmod: department.updated_at, priority: 0.8, changefreq: 'monthly'
+    end
+  end
+
+  # Town
+  group(sitemaps_path: 'sitemaps/', filename: 'towns') do
+    Town.find_each do |town|
+      add "/escalade-autour-de/#{town.slug_name}", lastmod: town.updated_at, priority: 0.6, changefreq: 'monthly'
+    end
+  end
 end

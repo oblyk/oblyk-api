@@ -7,6 +7,18 @@ module RouteFigurable
     figures = {
       section_count: 0,
       route_count: 0,
+      grade: {
+        min: {
+          value: nil,
+          text: nil,
+          crag_route: nil
+        },
+        max: {
+          value: nil,
+          text: nil,
+          crag_route: nil
+        }
+      },
       climbing_types: {
         sport_climbing: 0,
         bouldering: 0,
@@ -42,6 +54,18 @@ module RouteFigurable
     crag_routes.each do |crag_route|
       figures[:climbing_types][crag_route.climbing_type.to_sym] += 1
       figures[:route_count] += 1
+
+      if crag_route.max_grade_value.positive? && (figures[:grade][:min][:value].nil? || figures[:grade][:min][:value] > crag_route.max_grade_value)
+        figures[:grade][:min][:value] = crag_route.max_grade_value
+        figures[:grade][:min][:text] = crag_route.max_grade_text
+        figures[:grade][:min][:crag_route] = crag_route.summary_to_json
+      end
+
+      if crag_route.max_grade_value.positive? && (figures[:grade][:max][:value].nil? || figures[:grade][:max][:value] < crag_route.max_grade_value)
+        figures[:grade][:max][:value] = crag_route.max_grade_value
+        figures[:grade][:max][:text] = crag_route.max_grade_text
+        figures[:grade][:max][:crag_route] = crag_route.summary_to_json
+      end
 
       crag_route.sections.each do |section|
         next unless section['grade_value']&.positive?

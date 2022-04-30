@@ -45,6 +45,7 @@ class Crag < ApplicationRecord
 
   belongs_to :user, optional: true
   belongs_to :photo, optional: true
+  belongs_to :department, optional: true
   has_many :comments, as: :commentable
   has_many :links, as: :linkable
   has_many :follows, as: :followable

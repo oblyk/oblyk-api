@@ -1,0 +1,59 @@
+### All countries
+GET {{api_url}}/public/countries.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
+### Show "fr" country
+GET {{api_url}}/public/countries/fr.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
+### List departments in country
+GET {{api_url}}/public/countries/fr/departments.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
+### Countries route figures
+GET {{api_url}}/public/countries/fr/route_figures.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
+### Countries geo json
+GET {{api_url}}/public/countries/fr/geo_json.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
+### Show Departments "26" in "fr" country
+GET {{api_url}}/public/countries/fr/departments/26.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
+### Route figures of department "26"
+GET {{api_url}}/public/countries/fr/departments/26/route_figures.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
+### Geo json of department "974"
+GET {{api_url}}/public/countries/fr/departments/974/geo_json.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
+### Search town by name
+GET {{api_url}}/public/towns/search.json?query=dieulefit
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
+### Search town by localization
+GET {{api_url}}/public/towns/geo_search.json?latitude=44.516701&longitude=5.06667
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
+### GET town
+GET {{api_url}}/public/towns/dieulefit.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
+### GET town
+GET {{api_url}}/public/towns/dieulefit/geo_json.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json

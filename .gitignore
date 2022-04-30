@@ -39,3 +39,6 @@
 /public/sitemap.xml
 /public/sitemap1.xml
 /public/sitemaps/*
+
+# Ignore http
+/http_client/ignore/*
