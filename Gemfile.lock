@@ -399,6 +399,7 @@ DEPENDENCIES
   rorvswild
   rspec-rails (~> 5.0.0)
   rspec_api_documentation
+  rubocop
   rubocop-faker
   rubocop-performance
   rubocop-rails

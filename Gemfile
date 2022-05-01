@@ -81,6 +81,7 @@ gem 'dalli'
 
 group :development, :test do
   # Ruby static code analyzer
+  gem 'rubocop'
   gem 'rubocop-faker'
   gem 'rubocop-performance'
   gem 'rubocop-rails'
