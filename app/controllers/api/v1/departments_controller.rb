@@ -7,7 +7,18 @@ module Api
       before_action :set_department, only: %i[show route_figures geo_json]
 
       def index
-        departments = @country.departments.order(:department_number)
+        departments = @country.departments
+                              .select(
+                                :id,
+                                :name,
+                                :slug_name,
+                                :department_number,
+                                :name_prefix_type,
+                                :in_sentence_prefix_type,
+                                :country_id,
+                                :updated_at
+                              )
+                              .order(:department_number)
         render json: departments.map(&:summary_to_json), status: :ok
       end
 
