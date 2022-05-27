@@ -16,9 +16,16 @@ module Api
         subscribes = params.fetch(:subscribes, false) == 'true'
         local_news = params.fetch(:local_news, false) == 'true'
 
+        latitude = params.fetch(:latitude, nil)
+        longitude = params.fetch(:longitude, nil)
+
         articles_feed = Feed.where(feedable_type: 'Article')
         guide_books_feed = Feed.where(feedable_type: 'GuideBookPaper')
-        local_feed = Feed.where("getRange(latitude, longitude, :user_lat, :user_lng) < 30000 AND feedable_type IN ('Crag', 'CragRoute', 'GuideBookWeb', 'GuideBookPdf', 'Gym', 'Alert', 'Photo', 'Video')", user_lat: User.current.latitude, user_lng: User.current.longitude)
+        local_feed = Feed.where(
+          "getRange(latitude, longitude, :user_lat, :user_lng) < 30000 AND feedable_type IN ('Crag', 'CragRoute', 'GuideBookWeb', 'GuideBookPdf', 'Gym', 'Alert', 'Photo', 'Video')",
+          user_lat: latitude.presence || User.current.latitude,
+          user_lng: longitude.presence || User.current.longitude
+        )
 
         crags = []
         gyms = []
