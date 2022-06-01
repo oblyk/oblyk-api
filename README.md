@@ -93,3 +93,12 @@ bundle exec rake create_feeds:for_model["Article"]
 bundle exec rake create_feeds:for_model["Crag"]
 bundle exec rake create_feeds:for_model["CragRoute"]
 ```
+
+### Generate API documentation
+
+```shell
+RAILS_ENV=test rails db:migrate # if necessary
+bundle exec rake docs:generate
+```
+
+Go to [http://localhost:3000/documentation](http://localhost:3000/documentation)

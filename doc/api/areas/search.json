@@ -1,0 +1,40 @@
+{
+  "resource": "Areas",
+  "resource_explanation": "Areas are groupings of climbing sites, they allow the creation of logical groups such as the \"Forest of Fontainebleau\", or the Calanques",
+  "http_method": "GET",
+  "route": "/api/v1/public/areas/search",
+  "description": "Search",
+  "explanation": "Search area by `:query` name",
+  "parameters": [
+    {
+      "type": "string",
+      "required": true,
+      "name": "query",
+      "description": "Area to search"
+    }
+  ],
+  "response_fields": [
+
+  ],
+  "requests": [
+    {
+      "request_method": "GET",
+      "request_path": "/api/v1/public/areas/search?query=drome",
+      "request_body": null,
+      "request_headers": {
+        "Httpapiaccesstoken": "oblyk-api-access-token"
+      },
+      "request_query_parameters": {
+        "query": "drome"
+      },
+      "request_content_type": null,
+      "response_status": 200,
+      "response_status_text": "OK",
+      "response_body": "[\n  {\n    \"id\": 1,\n    \"name\": \"Drôme provençale\",\n    \"slug_name\": \"drome-provencale\",\n    \"photo\": {\n      \"id\": null,\n      \"url\": null,\n      \"cropped_url\": null,\n      \"thumbnail_url\": null,\n      \"illustrable_type\": null,\n      \"illustrable_name\": null\n    }\n  }\n]",
+      "response_headers": {
+      },
+      "response_content_type": "application/json; charset=utf-8",
+      "curl": null
+    }
+  ]
+}

@@ -1,6 +1,54 @@
 {
   "resources": [
     {
+      "name": "Areas",
+      "explanation": "Areas are groupings of climbing sites, they allow the creation of logical groups such as the \"Forest of Fontainebleau\", or the Calanques",
+      "examples": [
+        {
+          "description": "Crags",
+          "link": "areas/crags.json",
+          "groups": "all",
+          "route": "/api/v1/public/areas/:id/crags",
+          "method": "get"
+        },
+        {
+          "description": "GeoJson",
+          "link": "areas/geojson.json",
+          "groups": "all",
+          "route": "/api/v1/public/areas/:id/geo_json",
+          "method": "get"
+        },
+        {
+          "description": "Index",
+          "link": "areas/index.json",
+          "groups": "all",
+          "route": "/api/v1/public/areas",
+          "method": "get"
+        },
+        {
+          "description": "Photos",
+          "link": "areas/photos.json",
+          "groups": "all",
+          "route": "/api/v1/public/areas/:id/photos",
+          "method": "get"
+        },
+        {
+          "description": "Search",
+          "link": "areas/search.json",
+          "groups": "all",
+          "route": "/api/v1/public/areas/search",
+          "method": "get"
+        },
+        {
+          "description": "Show",
+          "link": "areas/show.json",
+          "groups": "all",
+          "route": "/api/v1/public/areas/:id",
+          "method": "get"
+        }
+      ]
+    },
+    {
       "name": "Crags",
       "explanation": "The most complete and interesting part of the APIs, the climbing crag endpoints !",
       "examples": [
