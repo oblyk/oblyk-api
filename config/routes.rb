@@ -106,6 +106,7 @@ Rails.application.routes.draw do
                 get :years_chart
                 get :months_chart
                 get :evolutions_chart
+                get :daily_ascents
               end
             end
           end
