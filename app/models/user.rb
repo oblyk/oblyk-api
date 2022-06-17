@@ -150,6 +150,10 @@ class User < ApplicationRecord
     date_of_birth.present? ? ((Time.zone.now - Time.zone.parse(date_of_birth.to_s)) / 1.year.seconds).floor : nil
   end
 
+  def user_subscribes
+    subscribes.accepted.where(followable_type: 'User')
+  end
+
   def to_partner_geo_json
     Rails.cache.fetch("#{cache_key_with_version}/partner_geo_json", expires_in: 1.month) do
       {
@@ -321,6 +325,7 @@ class User < ApplicationRecord
       age: age,
       followers_count: follows.count || 0,
       subscribes_count: subscribes.count,
+      user_subscribes_count: user_subscribes.count,
       videos_count: videos.count,
       photos_count: photos.count,
       full_name: full_name,

@@ -111,3 +111,9 @@ GET {{api_url}}/current_users/ascended_crags_geo_json.json
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json
+
+### GET subscribes ascents
+GET {{api_url}}/current_users/subscribes_ascents.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json

@@ -259,6 +259,14 @@ module Api
         }, status: :ok
       end
 
+      def subscribes_ascents
+        page = params.fetch(:page, 1)
+        subscribe_ids = @user.subscribes.accepted.where(followable_type: 'User').pluck(:followable_id)
+        ascents = AscentCragRoute.made.where(user_id: subscribe_ids).order(created_at: :desc, user_id: :asc).page(page)
+
+        render json: ascents.map { |ascent| ascent.summary_to_json(with_user: true) }, status: :ok
+      end
+
       def photos
         page = params.fetch(:page, 1)
         photos = @user.photos.order(posted_at: :desc).page(page)

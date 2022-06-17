@@ -26,12 +26,12 @@ class AscentCragRoute < Ascent
   after_create :delete_tick_in_list
   after_destroy :update_crag_route!
 
-  def summary_to_json
-    detail_to_json
+  def summary_to_json(with_user: false)
+    detail_to_json(with_user: with_user)
   end
 
-  def detail_to_json
-    {
+  def detail_to_json(with_user: false)
+    detail = {
       id: id,
       ascent_status: ascent_status,
       roping_status: roping_status,
@@ -58,6 +58,8 @@ class AscentCragRoute < Ascent
         updated_at: updated_at
       }
     }
+    detail[:user] = user.summary_to_json if with_user
+    detail
   end
 
   def self.to_csv
