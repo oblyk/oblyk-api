@@ -94,7 +94,8 @@ module Api
         params.require(:approach).permit(
           :description,
           :length,
-          :approach_type
+          :approach_type,
+          :from_park
         )
       end
     end

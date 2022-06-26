@@ -169,6 +169,10 @@ class Crag < ApplicationRecord
           cropped_url: photo ? photo.cropped_medium_url : nil,
           thumbnail_url: photo ? photo.thumbnail_url : nil
         },
+        approaches: {
+          min_time: min_approach_time,
+          max_time: max_approach_time
+        },
         routes_figures: {
           route_count: crag_routes_count,
           grade: {
@@ -241,6 +245,21 @@ class Crag < ApplicationRecord
         geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
       }
     end
+  end
+
+  def historize_approach_times
+    approaches_from_park = approaches.where(from_park: true)
+    return if approaches_from_park.count.zero?
+
+    min_time = nil
+    max_time = nil
+    approaches_from_park.find_each do |approach|
+      next if approach.walking_time.blank?
+
+      min_time = approach.walking_time if min_time.nil? || approach.walking_time < min_time
+      max_time = approach.walking_time if max_time.nil? || approach.walking_time > max_time
+    end
+    update min_approach_time: min_time, max_approach_time: max_time
   end
 
   private

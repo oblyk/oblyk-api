@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_22_191807) do
+ActiveRecord::Schema.define(version: 2022_06_26_101547) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 2022_03_22_191807) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.json "path_metadata"
+    t.boolean "from_park", default: true
     t.index ["crag_id"], name: "index_approaches_on_crag_id"
     t.index ["user_id"], name: "index_approaches_on_user_id"
   end
@@ -355,6 +356,8 @@ ActiveRecord::Schema.define(version: 2022_03_22_191807) do
     t.integer "articles_count"
     t.decimal "elevation", precision: 10, scale: 6
     t.bigint "department_id"
+    t.integer "min_approach_time"
+    t.integer "max_approach_time"
     t.index ["department_id"], name: "index_crags_on_department_id"
     t.index ["name"], name: "index_crags_on_name"
     t.index ["photo_id"], name: "index_crags_on_photo_id"

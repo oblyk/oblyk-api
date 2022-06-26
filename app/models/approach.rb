@@ -8,6 +8,7 @@ class Approach < ApplicationRecord
   STYLES_LIST = %w[steep_descent soft_descent flat soft_ascent steep_ascent various].freeze
 
   before_save :init_path_metadata
+  after_save :update_crag_approach_times
 
   validates :polyline, presence: true
   validates :approach_type, inclusion: { in: STYLES_LIST }, allow_nil: true
@@ -90,6 +91,7 @@ class Approach < ApplicationRecord
       path_metadata: path_metadata,
       length: length,
       walking_time: walking_time,
+      from_park: from_park,
       elevation: {
         start: elevation_start,
         end: elevation_end,
@@ -217,5 +219,9 @@ class Approach < ApplicationRecord
     else
       Math.sqrt(meters**2 + elevation.abs**2)
     end
+  end
+
+  def update_crag_approach_times
+    crag.historize_approach_times
   end
 end
