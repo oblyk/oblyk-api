@@ -108,6 +108,7 @@ Rails.application.routes.draw do
                 get :months_chart
                 get :evolutions_chart
                 get :daily_ascents
+                get :ascents_of_crag
               end
             end
           end
