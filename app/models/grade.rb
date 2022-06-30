@@ -93,6 +93,8 @@ class Grade
   ].freeze
 
   def self.clean_grade(grade)
+    return unless grade
+
     grade = grade.strip
     grade_parts = grade.split '/'
     clean_grade = []
