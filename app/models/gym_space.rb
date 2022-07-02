@@ -88,9 +88,9 @@ class GymSpace < ApplicationRecord
           id: gym.id,
           name: gym.name,
           slug_name: gym.slug_name,
-          banner: gym.banner.attached? ? gym.banner_large_url : nil,
-          gym_sectors: gym_sectors.map(&:summary_to_json)
-        }
+          banner: gym.banner.attached? ? gym.banner_large_url : nil
+        },
+        gym_sectors: gym_sectors.map(&:summary_to_json)
       }
     )
   end
