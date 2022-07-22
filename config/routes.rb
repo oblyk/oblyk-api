@@ -253,12 +253,16 @@ Rails.application.routes.draw do
           get :crags_around, on: :collection
           resources :crag_routes do
             get :search, on: :collection
+            get :search_by_grades, on: :collection
           end
           resources :parks do
             get :geo_json_around, on: :collection
           end
           resources :crag_sectors do
             get :geo_json_around, on: :collection
+            resources :crag_routes, only: %i[] do
+              get :search_by_grades, on: :collection
+            end
           end
           resources :approaches do
             get :geo_json_around, on: :collection
@@ -272,6 +276,7 @@ Rails.application.routes.draw do
           get :route_figures, on: :member
           resources :crag_routes do
             get :search, on: :collection
+            get :search_by_grades, on: :collection
           end
         end
 

@@ -106,3 +106,8 @@ Accept: application/json
 GET {{api_url}}/public/crag_routes/random.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
+
+### GET Search by grades name
+GET {{api_url}}/public/crags/18/crag_routes/search_by_grades.json?grade=7
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json

@@ -6,8 +6,8 @@ module Api
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update]
       before_action :set_crag_route, only: %i[show photos videos versions update destroy]
-      before_action :set_crag_sector, only: %i[index search]
-      before_action :set_crag, only: %i[index search]
+      before_action :set_crag_sector, only: %i[index search search_by_grades]
+      before_action :set_crag, only: %i[index search search_by_grades]
 
       def index
         order_by = params.fetch(:order_by, 'difficulty_desc')
@@ -42,6 +42,32 @@ module Api
                       else
                         CragRoute.search(query)
                       end
+        render json: crag_routes.map(&:summary_to_json), status: :ok
+      end
+
+      def search_by_grades
+        grade_params = params[:grade]
+        (1..9).each do |level|
+          grade_params = "#{level}a #{level}c+" if grade_params == level.to_s
+        end
+        grades = grade_params.split ' '
+        min_grade = Grade.to_value grades.first
+        max_grade = grades[1] ? Grade.to_value(grades[1]) : min_grade
+        sql_query = '(crag_routes.min_grade_value BETWEEN :min AND :max) OR (crag_routes.max_grade_value BETWEEN :min AND :max)'
+
+        crag_routes = if @crag_sector
+                        CragRoute.where(crag_sector: @crag_sector)
+                                 .where(sql_query, min: min_grade, max: max_grade)
+                                 .order(:min_grade_value)
+                      elsif @crag
+                        CragRoute.where(crag: @crag)
+                                 .where(sql_query, min: min_grade, max: max_grade)
+                                 .order(:min_grade_value)
+                      else
+                        CragRoute.where(sql_query, min: min_grade, max: max_grade)
+                                 .order(:min_grade_value)
+                      end
+
         render json: crag_routes.map(&:summary_to_json), status: :ok
       end
 
