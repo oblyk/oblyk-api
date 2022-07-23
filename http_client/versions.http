@@ -1,0 +1,4 @@
+### GET crag version
+GET {{api_url}}/public/crags/18/versions.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json

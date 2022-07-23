@@ -4,13 +4,11 @@ class OblykVersion
   def self.index(versions)
     {
       versions_count: versions.length,
-      versions: versions.map { |version| version_detail(version) }
+      versions: versions.map { |version| OblykVersion.version_detail(version) }
     }
   end
 
-  private
-
-  def version_detail(version)
+  def self.version_detail(version)
     json = {
       event: version.event,
       created_at: version.created_at,
@@ -18,15 +16,11 @@ class OblykVersion
     }
     user = User.find_by id: version.whodunnit
     if user
-      json.merge(
-        {
-          user: {
-            uuid: uuid,
-            name: full_name,
-            slug_name: slug_name
-          }
-        }
-      )
+      json[:user] = {
+        uuid: user.uuid,
+            name: user.full_name,
+            slug_name: user.slug_name
+      }
     end
     json
   end
