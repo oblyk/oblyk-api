@@ -215,6 +215,9 @@ Rails.application.routes.draw do
           post :add_crag, on: :member
           get :geo_json, on: :member
           delete :remove_crag, on: :member
+          resources :crag_routes, only: %i[index] do
+            get :search_by_grades, on: :collection
+          end
         end
 
         resources :towns, only: %i[show] do

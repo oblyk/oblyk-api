@@ -8,6 +8,7 @@ module Api
       before_action :set_crag_route, only: %i[show photos videos versions update destroy]
       before_action :set_crag_sector, only: %i[index search search_by_grades]
       before_action :set_crag, only: %i[index search search_by_grades]
+      before_action :set_area, only: %i[index search_by_grades]
 
       def index
         order_by = params.fetch(:order_by, 'difficulty_desc')
@@ -26,11 +27,14 @@ module Api
                         @crag.crag_routes.includes(:crag_sector).order(order)
                       elsif @crag_sector
                         @crag_sector.crag_routes.includes(:crag_sector).order(order)
+                      elsif @area
+                        @area.crag_routes.includes(:crag, :crag_sector).order(order)
                       else
                         CragRoute.includes(:crag_sector).where(crag_id: params[:crag_id]).order(order)
                       end
-        crag_routes = crag_routes.page(params.fetch(:page, 1))
-        render json: crag_routes.map(&:summary_to_json), status: :ok
+
+        crag_routes = crag_routes.page(params.fetch(:page, 1)).per(params.fetch(:page_limit, 25)) if params[:page] != 'all'
+        render json: crag_routes.map { |crag_route| crag_route.summary_to_json(with_crag_in_sector: false) }, status: :ok
       end
 
       def search
@@ -63,12 +67,16 @@ module Api
                         CragRoute.where(crag: @crag)
                                  .where(sql_query, min: min_grade, max: max_grade)
                                  .order(:min_grade_value)
+                      elsif @area
+                        @area.crag_routes
+                             .where(sql_query, min: min_grade, max: max_grade)
+                             .order(:min_grade_value)
                       else
                         CragRoute.where(sql_query, min: min_grade, max: max_grade)
                                  .order(:min_grade_value)
                       end
 
-        render json: crag_routes.map(&:summary_to_json), status: :ok
+        render json: crag_routes.map { |crag_route| crag_route.summary_to_json(with_crag_in_sector: false) }, status: :ok
       end
 
       def versions
@@ -132,6 +140,10 @@ module Api
 
       def set_crag
         @crag = Crag.find_by id: params[:crag_id]
+      end
+
+      def set_area
+        @area = Area.find_by id: params[:area_id]
       end
 
       def set_crag_route

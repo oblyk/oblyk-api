@@ -91,9 +91,9 @@ class CragSector < ApplicationRecord
     save
   end
 
-  def summary_to_json
-    Rails.cache.fetch("#{cache_key_with_version}/summary_crag_sector", expires_in: 1.month) do
-      {
+  def summary_to_json(with_crag: true)
+    Rails.cache.fetch("#{cache_key_with_version}/summary_crag_sector#{'_without_crag' unless with_crag}", expires_in: 1.month) do
+      json = {
         id: id,
         crag_id: crag_id,
         name: name,
@@ -121,7 +121,6 @@ class CragSector < ApplicationRecord
             min_text: min_grade_text
           }
         },
-        crag: crag.summary_to_json,
         photo: {
           id: photo&.id,
           url: photo ? photo.large_url : nil,
@@ -129,6 +128,8 @@ class CragSector < ApplicationRecord
           thumbnail_url: photo ? photo.thumbnail_url : nil
         }
       }
+      json[:crag] = crag.summary_to_json if with_crag
+      json
     end
   end
 

@@ -58,3 +58,22 @@ Accept: application/json
 GET {{api_url}}/public/areas.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
+
+### GET crag routes in area
+GET {{api_url}}/public/areas/1/crag_routes.json
+HttpApiAccessToken: {{api_access_token}}
+Content-Type: application/json
+
+{
+  "page": 1,
+  "page_limit": 1
+}
+
+### GET crag routes in area filtred by grade
+GET {{api_url}}/public/areas/1/crag_routes/search_by_grades.json
+HttpApiAccessToken: {{api_access_token}}
+Content-Type: application/json
+
+{
+  "grade": "6a 6a+"
+}

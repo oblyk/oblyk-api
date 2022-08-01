@@ -33,10 +33,24 @@
           "method": "get"
         },
         {
+          "description": "Routes",
+          "link": "areas/routes.json",
+          "groups": "all",
+          "route": "/api/v1/public/areas/:id/crag_routes",
+          "method": "get"
+        },
+        {
           "description": "Search",
           "link": "areas/search.json",
           "groups": "all",
           "route": "/api/v1/public/areas/search",
+          "method": "get"
+        },
+        {
+          "description": "Search routes by grade",
+          "link": "areas/search_routes_by_grade.json",
+          "groups": "all",
+          "route": "/api/v1/public/areas/:id/crag_routes/search_by_grades",
           "method": "get"
         },
         {

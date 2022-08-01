@@ -146,8 +146,8 @@ class CragRoute < ApplicationRecord
     crag_sector&.longitude || crag.longitude
   end
 
-  def summary_to_json
-    Rails.cache.fetch("#{cache_key_with_version}/summary_crag_route", expires_in: 1.month) do
+  def summary_to_json(with_crag_in_sector: true)
+    Rails.cache.fetch("#{cache_key_with_version}/summary_crag_route#{'_without_crag_in_sector' if with_crag_in_sector}", expires_in: 1.month) do
       {
         id: id,
         name: name,
@@ -173,7 +173,7 @@ class CragRoute < ApplicationRecord
           max_grade_text: max_grade_text,
           min_grade_text: min_grade_text
         },
-        crag_sector: crag_sector&.summary_to_json,
+        crag_sector: crag_sector&.summary_to_json(with_crag: with_crag_in_sector),
         crag: crag&.summary_to_json,
         photo: {
           id: photo&.id,
