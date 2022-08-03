@@ -45,12 +45,17 @@ Content-Type: application/json
 }
 
 ### GET area
+GET {{api_url}}/public/areas/1.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
+### GET crags in area
 GET {{api_url}}/public/areas/1/crags.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
-### GET area
-GET {{api_url}}/public/areas/1.json
+### GET paper guide book in area
+GET {{api_url}}/public/areas/1/guide_book_papers.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 

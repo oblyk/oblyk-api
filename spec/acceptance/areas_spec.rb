@@ -62,6 +62,16 @@ resource 'Areas' do
     end
   end
 
+  get '/api/v1/public/areas/:id/guide_book_papers', headers: { 'HttpApiAccessToken' => 'oblyk-api-access-token' } do
+    example 'Paper guide books' do
+      explanation 'Get all paper guide books that cover the crags in the area `:id`'
+
+      area = FactoryBot.create(:area_with_crag_and_routes)
+      do_request({ id: area.id })
+      expect(status).to eq 200
+    end
+  end
+
   get '/api/v1/public/areas/:id/crag_routes', headers: { 'HttpApiAccessToken' => 'oblyk-api-access-token' } do
     example 'Routes' do
       explanation '

@@ -1,0 +1,34 @@
+{
+  "resource": "CragRoutes",
+  "resource_explanation": "\n  The `crag_routes` represent a line of boulder, routes, multi pitch, trad, aid, deep water or via ferrata.<br>\n  A `crag_route` necessarily belongs to a climbing site (`crag`) and optionally to a sector of a crag (`crag_sectors`).\n  ",
+  "http_method": "GET",
+  "route": "/api/v1/public/crag_routes/:id",
+  "description": "Show",
+  "explanation": "Show crag_route `:id`",
+  "parameters": [
+
+  ],
+  "response_fields": [
+
+  ],
+  "requests": [
+    {
+      "request_method": "GET",
+      "request_path": "/api/v1/public/crag_routes/7",
+      "request_body": null,
+      "request_headers": {
+        "Httpapiaccesstoken": "oblyk-api-access-token"
+      },
+      "request_query_parameters": {
+      },
+      "request_content_type": null,
+      "response_status": 200,
+      "response_status_text": "OK",
+      "response_body": "{\n  \"id\": 7,\n  \"name\": \"Joly\",\n  \"slug_name\": \"joly\",\n  \"height\": 16,\n  \"open_year\": 1997,\n  \"opener\": \"François Crespo\",\n  \"climbing_type\": \"sport_climbing\",\n  \"sections_count\": 1,\n  \"max_bolt\": null,\n  \"note\": null,\n  \"note_count\": null,\n  \"ascents_count\": null,\n  \"photos_count\": null,\n  \"videos_count\": null,\n  \"comments_count\": null,\n  \"votes\": null,\n  \"difficulty_appreciation\": null,\n  \"grade_to_s\": \"6b\",\n  \"grade_gap\": {\n    \"max_grade_value\": 33,\n    \"min_grade_value\": 33,\n    \"max_grade_text\": \"6b\",\n    \"min_grade_text\": \"6b\"\n  },\n  \"crag_sector\": null,\n  \"crag\": {\n    \"id\": 8,\n    \"name\": \"Rocher des aures\",\n    \"slug_name\": \"rocher-des-aures\",\n    \"rain\": \"exposed\",\n    \"sun\": \"sunny_all_day\",\n    \"sport_climbing\": true,\n    \"bouldering\": false,\n    \"multi_pitch\": false,\n    \"trad_climbing\": false,\n    \"aid_climbing\": false,\n    \"deep_water\": false,\n    \"via_ferrata\": false,\n    \"north\": null,\n    \"north_east\": null,\n    \"east\": null,\n    \"south_east\": null,\n    \"south\": true,\n    \"south_west\": null,\n    \"west\": null,\n    \"north_west\": null,\n    \"summer\": null,\n    \"autumn\": null,\n    \"winter\": null,\n    \"spring\": null,\n    \"latitude\": \"44.469592\",\n    \"longitude\": \"5.058089\",\n    \"elevation\": \"713.0\",\n    \"code_country\": \"FR\",\n    \"country\": \"France\",\n    \"city\": \"Roche-Saint-Secret-Béconne\",\n    \"region\": \"Drôme\",\n    \"rocks\": [\n      \"limestone\"\n    ],\n    \"photo\": {\n      \"id\": null,\n      \"url\": null,\n      \"cropped_url\": null,\n      \"thumbnail_url\": null\n    },\n    \"approaches\": {\n      \"min_time\": null,\n      \"max_time\": null\n    },\n    \"routes_figures\": {\n      \"route_count\": 1,\n      \"grade\": {\n        \"min_value\": 33,\n        \"max_value\": 33,\n        \"max_text\": \"6b\",\n        \"min_text\": \"6b\"\n      }\n    }\n  },\n  \"photo\": {\n    \"id\": null,\n    \"url\": null,\n    \"cropped_url\": null,\n    \"thumbnail_url\": null\n  },\n  \"versions_count\": 1,\n  \"sections\": [\n    {\n      \"tags\": null,\n      \"grade\": \"6b\",\n      \"height\": 16,\n      \"bolt_type\": null,\n      \"bolt_count\": null,\n      \"start_type\": null,\n      \"anchor_type\": null,\n      \"description\": null,\n      \"grade_value\": 33,\n      \"incline_type\": \"vertical\",\n      \"climbing_type\": \"sport_climbing\",\n      \"reception_type\": null\n    }\n  ],\n  \"ascent_comments\": [\n\n  ],\n  \"link_count\": 0,\n  \"alert_count\": 0,\n  \"creator\": null,\n  \"history\": {\n    \"created_at\": \"2022-08-03T13:57:53.767+02:00\",\n    \"updated_at\": \"2022-08-03T13:57:53.767+02:00\"\n  }\n}",
+      "response_headers": {
+      },
+      "response_content_type": "application/json; charset=utf-8",
+      "curl": null
+    }
+  ]
+}

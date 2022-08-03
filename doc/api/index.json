@@ -26,6 +26,13 @@
           "method": "get"
         },
         {
+          "description": "Paper guide books",
+          "link": "areas/paper_guide_books.json",
+          "groups": "all",
+          "route": "/api/v1/public/areas/:id/guide_book_papers",
+          "method": "get"
+        },
+        {
           "description": "Photos",
           "link": "areas/photos.json",
           "groups": "all",
@@ -58,6 +65,19 @@
           "link": "areas/show.json",
           "groups": "all",
           "route": "/api/v1/public/areas/:id",
+          "method": "get"
+        }
+      ]
+    },
+    {
+      "name": "CragRoutes",
+      "explanation": "\n  The `crag_routes` represent a line of boulder, routes, multi pitch, trad, aid, deep water or via ferrata.<br>\n  A `crag_route` necessarily belongs to a climbing site (`crag`) and optionally to a sector of a crag (`crag_sectors`).\n  ",
+      "examples": [
+        {
+          "description": "Show",
+          "link": "cragroutes/show.json",
+          "groups": "all",
+          "route": "/api/v1/public/crag_routes/:id",
           "method": "get"
         }
       ]

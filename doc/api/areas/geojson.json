@@ -14,7 +14,7 @@
   "requests": [
     {
       "request_method": "GET",
-      "request_path": "/api/v1/public/areas/11/geo_json",
+      "request_path": "/api/v1/public/areas/13/geo_json",
       "request_body": null,
       "request_headers": {
         "Httpapiaccesstoken": "oblyk-api-access-token"
@@ -24,7 +24,7 @@
       "request_content_type": null,
       "response_status": 200,
       "response_status_text": "OK",
-      "response_body": "{\n  \"type\": \"FeatureCollection\",\n  \"crs\": {\n    \"type\": \"name\",\n    \"properties\": {\n      \"name\": \"urn\"\n    }\n  },\n  \"features\": [\n    {\n      \"type\": \"Feature\",\n      \"properties\": {\n        \"type\": \"Crag\",\n        \"id\": 6,\n        \"name\": \"Rocher des aures\",\n        \"slug_name\": \"rocher-des-aures\",\n        \"climbing_key\": \"10000\",\n        \"icon\": \"crag-marker-10000\",\n        \"localization\": \"Roche-Saint-Secret-Béconne, Drôme\",\n        \"sport_climbing\": true,\n        \"bouldering\": false,\n        \"multi_pitch\": false,\n        \"trad_climbing\": false,\n        \"aid_climbing\": false,\n        \"deep_water\": false,\n        \"via_ferrata\": false,\n        \"map_thumbnail_url\": null,\n        \"route_count\": null,\n        \"grade_min_value\": null,\n        \"grade_max_value\": null,\n        \"grade_max_text\": null,\n        \"grade_min_text\": null\n      },\n      \"geometry\": {\n        \"type\": \"Point\",\n        \"coordinates\": [\n          5.058089,\n          44.469592,\n          0.0\n        ]\n      }\n    }\n  ]\n}",
+      "response_body": "{\n  \"type\": \"FeatureCollection\",\n  \"crs\": {\n    \"type\": \"name\",\n    \"properties\": {\n      \"name\": \"urn\"\n    }\n  },\n  \"features\": [\n    {\n      \"type\": \"Feature\",\n      \"properties\": {\n        \"type\": \"Crag\",\n        \"id\": 7,\n        \"name\": \"Rocher des aures\",\n        \"slug_name\": \"rocher-des-aures\",\n        \"climbing_key\": \"10000\",\n        \"icon\": \"crag-marker-10000\",\n        \"localization\": \"Roche-Saint-Secret-Béconne, Drôme\",\n        \"sport_climbing\": true,\n        \"bouldering\": false,\n        \"multi_pitch\": false,\n        \"trad_climbing\": false,\n        \"aid_climbing\": false,\n        \"deep_water\": false,\n        \"via_ferrata\": false,\n        \"map_thumbnail_url\": null,\n        \"route_count\": null,\n        \"grade_min_value\": null,\n        \"grade_max_value\": null,\n        \"grade_max_text\": null,\n        \"grade_min_text\": null\n      },\n      \"geometry\": {\n        \"type\": \"Point\",\n        \"coordinates\": [\n          5.058089,\n          44.469592,\n          0.0\n        ]\n      }\n    }\n  ]\n}",
       "response_headers": {
       },
       "response_content_type": "application/json; charset=utf-8",

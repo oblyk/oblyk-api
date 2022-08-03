@@ -5,7 +5,7 @@ module Api
     class AreasController < ApiController
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update]
-      before_action :set_area, only: %i[show crags geo_json photos add_crag remove_crag update destroy]
+      before_action :set_area, only: %i[show crags guide_book_papers geo_json photos add_crag remove_crag update destroy]
 
       def index
         render json: Area.all.map(&:summary_to_json), status: :ok
@@ -20,6 +20,13 @@ module Api
       def crags
         crags = @area.crags
         render json: crags.map(&:summary_to_json), status: :ok
+      end
+
+      def guide_book_papers
+        crags = @area.crags
+        guide_book_crags = GuideBookPaperCrag.where(crag_id: crags.pluck(:id))
+        guide_books = GuideBookPaper.where(id: guide_book_crags.pluck(:guide_book_paper_id))
+        render json: guide_books.map(&:summary_to_json), status: :ok
       end
 
       def geo_json

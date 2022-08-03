@@ -122,3 +122,4 @@ fr:
         one_point_system: "you_cannot_have_both_point_systems."
         content_type: "is_not_in_the_right_format"
         confirmation: "confirm"
+        record_invalid: "Enregistrement non valide"
