@@ -208,7 +208,7 @@ module Api
       def geo_json_features
         features = []
 
-        Crag.all.each do |crag|
+        Crag.includes(photo: { picture_attachment: :blob }).all.each do |crag|
           features << crag.to_geo_json
         end
         features

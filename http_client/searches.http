@@ -1,4 +1,17 @@
-### GET all tags for one item
-GET {{api_url}}/search.json?query=laennec
+### Search "laennec"
+GET {{api_url}}/search.json
 HttpApiAccessToken: {{api_access_token}}
-Accept: application/json
+Content-Type: application/json
+
+{
+  "query": "laennec"
+}
+
+### Search "Rocher des a"
+GET {{api_url}}/search.json
+HttpApiAccessToken: {{api_access_token}}
+Content-Type: application/json
+
+{
+  "query": "rocher des a"
+}
