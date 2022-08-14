@@ -2,3 +2,8 @@
 GET {{api_url}}/figures.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
+
+### Last activity feed
+GET {{api_url}}/last_activity_feed.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json

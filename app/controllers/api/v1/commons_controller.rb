@@ -30,6 +30,13 @@ module Api
           }
         }, status: :ok
       end
+
+      def last_activity_feed
+        feeds = Feed.where(feedable_type: %w[Crag Gym GuideBookPaper])
+                    .order(posted_at: :desc)
+                    .page(params.fetch(:page, 1))
+        render json: feeds, status: :ok
+      end
     end
   end
 end
