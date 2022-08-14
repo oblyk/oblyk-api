@@ -79,6 +79,9 @@ gem 'sitemap_generator'
 # Dalli for memcached
 gem 'dalli'
 
+# Levenshtein in C
+gem 'levenshtein-ffi', require: 'levenshtein'
+
 group :development, :test do
   # Ruby static code analyzer
   gem 'rubocop'

@@ -6,36 +6,43 @@ class Search < ApplicationRecord
 
     parameterize_query = Search.normalize_index_name query
 
-    if exact_name
-      query = "`index_name` LIKE '%#{parameterize_query}%'"
-    else
-      words = parameterize_query.split '-'
-      query = words.map { |word| "`index_name` LIKE '%#{word}%'" }.join(' OR ')
-    end
+    query = if exact_name
+              "`index_name` LIKE '%#{parameterize_query}%'"
+            else
+              Search.ngram_splitter(parameterize_query, 4).map { |word| "`index_name` LIKE '%#{word}%'" }.join(' OR ')
+            end
 
-    limit_length = if parameterize_query.size <= 3
+    limit_length = if parameterize_query.size <= 2
                      "CHAR_LENGTH(index_name) <= #{parameterize_query.size}"
                    else
                      '1 = 1'
                    end
 
     results = if bucket
-                Search.select(:index_id)
+                Search.select(:index_id, :index_name)
                       .where(collection: collection)
                       .where('bucket = :bucket OR secondary_bucket = :bucket', bucket: bucket)
                       .where(query)
                       .where(limit_length)
-                      .order("levenshtein(index_name, '#{parameterize_query}') ASC")
-                      .limit(15)
               else
-                Search.select(:index_id)
+                Search.select(:index_id, :index_name)
                       .where(collection: collection)
                       .where(query)
                       .where(limit_length)
-                      .order("levenshtein(index_name, '#{parameterize_query}') ASC")
-                      .limit(15)
               end
-    results.pluck(:index_id).uniq
+    levenshtein_results = []
+    results.each do |result|
+      levenshtein_score = Levenshtein.distance(result.index_name, parameterize_query)
+
+      levenshtein_results << { index_id: result.index_id, levenshtein_score: levenshtein_score }
+    end
+    levenshtein_results.sort_by! { |levenshtein_result| levenshtein_result[:levenshtein_score] }
+    limited_results = []
+    levenshtein_results.each_with_index do |levenshtein_result, index|
+      limited_results << levenshtein_result[:index_id]
+      break if index > 14
+    end
+    limited_results.uniq
   end
 
   def self.push(name, id, collection, bucket = nil, secondary_bucket = nil)
@@ -67,5 +74,15 @@ class Search < ApplicationRecord
       name.gsub!(/-(de|des|l|la|le|d|du|et|en)-/, '-')
     end
     name
+  end
+
+  def self.ngram_splitter(query, gram = 3)
+    return [query] if query.size < gram
+
+    ngram_array = []
+    (0..query.size - gram).each do |index|
+      ngram_array << query.at(index..index + gram - 1)
+    end
+    ngram_array
   end
 end
