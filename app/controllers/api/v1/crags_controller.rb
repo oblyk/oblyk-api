@@ -61,16 +61,20 @@ module Api
       end
 
       def geo_json
-        render json: {
-          type: 'FeatureCollection',
-          crs: {
-            type: 'name',
-            properties: {
-              name: 'urn'
-            }
-          },
-          features: geo_json_features
-        }, status: :ok
+        last_updated_crag = Crag.order(updated_at: :desc).first
+        json = Rails.cache.fetch("#{last_updated_crag.cache_key_with_version}/crags_geo_json", expires_in: 10.minutes) do
+          {
+            type: 'FeatureCollection',
+            crs: {
+              type: 'name',
+              properties: {
+                name: 'urn'
+              }
+            },
+            features: geo_json_features
+          }
+        end
+        render json: json, status: :ok
       end
 
       def geo_json_around
