@@ -39,7 +39,9 @@ module Api
 
       # Set current organization by http api access token
       def set_current_organization
-        Organization.current = Organization.find_by! api_access_token: request.headers['HttpApiAccessToken']
+        Organization.current = Rails.cache.fetch("#{request.headers['HttpApiAccessToken']}/organization_cache", expires_in: 10.minutes) do
+          Organization.find_by! api_access_token: request.headers['HttpApiAccessToken']
+        end
       rescue StandardError
         forbidden
       end
