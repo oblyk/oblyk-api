@@ -10,11 +10,11 @@ module Api
       def index
         crag_id = params.fetch :crag_id, nil
         guide_book_papers = if crag_id
-                              GuideBookPaper.includes(:guide_book_paper_crags)
+                              GuideBookPaper.includes(:guide_book_paper_crags, cover_attachment: :blob)
                                             .where(guide_book_paper_crags: { crag_id: params[:crag_id] })
                                             .order(publication_year: :desc)
                             else
-                              GuideBookPaper.all.order(:name)
+                              GuideBookPaper.includes(cover_attachment: :blob).all.order(:name)
                             end
         render json: guide_book_papers.map(&:summary_to_json), status: :ok
       end
@@ -26,7 +26,7 @@ module Api
 
         case group
         when 'publication_year'
-          guides = GuideBookPaper.all.order(publication_year: direction)
+          guides = GuideBookPaper.includes(cover_attachment: :blob).all.order(publication_year: direction)
           guides.each do |guide|
             groups["year-#{guide.publication_year}"] ||= { title: guide.publication_year, guides: [] }
             groups["year-#{guide.publication_year}"][:guides] << guide.summary_to_json
@@ -36,7 +36,7 @@ module Api
             direction == 'desc' ? key : -key
           end.to_h
         when 'alphabetic'
-          guides = GuideBookPaper.all.order(name: direction)
+          guides = GuideBookPaper.includes(cover_attachment: :blob).all.order(name: direction)
           guides.each do |guide|
             groups[guide.name.first] ||= { title: guide.name.first, guides: [] }
             groups[guide.name.first][:guides] << guide.summary_to_json
@@ -49,7 +49,7 @@ module Api
       end
 
       def crags
-        crags = @guide_book_paper.crags
+        crags = @guide_book_paper.crags.includes(photo: { picture_attachment: :blob })
         render json: crags.map(&:summary_to_json), status: :ok
       end
 
@@ -67,11 +67,11 @@ module Api
       def geo_json
         features = []
 
-        @guide_book_paper.crags.each do |crag|
+        @guide_book_paper.crags.includes(photo: { picture_attachment: :blob}).each do |crag|
           features << crag.to_geo_json
         end
 
-        @guide_book_paper.place_of_sales.each do |place_of_sale|
+        @guide_book_paper.place_of_sales.includes(:user).each do |place_of_sale|
           features << place_of_sale.to_geo_json
         end
 
@@ -89,7 +89,7 @@ module Api
 
       def photos
         page = params.fetch(:page, 1)
-        photos = Photo.where(
+        photos = Photo.includes(:illustrable, :user, picture_attachment: :blob).where(
           '(illustrable_type = "Crag" AND illustrable_id IN (SELECT crag_id FROM guide_book_paper_crags WHERE guide_book_paper_id = :guide_book_paper_id)) OR
            (illustrable_type = "CragSector" AND illustrable_id IN (SELECT id FROM crag_sectors WHERE crag_id IN (SELECT crag_id FROM guide_book_paper_crags WHERE guide_book_paper_id = :guide_book_paper_id))) OR
            (illustrable_type = "CragRoute" AND illustrable_id IN (SELECT id FROM crag_routes WHERE crag_id IN (SELECT crag_id FROM guide_book_paper_crags WHERE guide_book_paper_id = :guide_book_paper_id)))',
@@ -101,7 +101,7 @@ module Api
       end
 
       def links
-        links = @guide_book_paper.links
+        links = @guide_book_paper.links.includes(:user)
         render json: links.map(&:summary_to_json), status: :ok
       end
 
@@ -112,12 +112,12 @@ module Api
 
       def alternatives
         alternatives = []
-        @guide_book_paper.crags.includes(photo: :picture_attachment, guide_book_papers: :cover_attachment).each do |crag|
+        @guide_book_paper.crags.includes(photo: :picture_attachment).each do |crag|
           crag_guide = {
             crag: crag.summary_to_json,
             guides: []
           }
-          crag.guide_book_papers.order(publication_year: :desc).each do |guide|
+          crag.guide_book_papers.includes(cover_attachment: :blob).order(publication_year: :desc).each do |guide|
             next if guide.id == @guide_book_paper.id
 
             crag_guide[:guides] << guide.summary_to_json

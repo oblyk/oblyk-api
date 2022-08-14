@@ -200,7 +200,7 @@ class CragRoute < ApplicationRecord
         end,
         link_count: links.count,
         alert_count: alerts.count,
-        creator: user&.summary_to_json,
+        creator: user&.summary_to_json(with_avatar: false),
         history: {
           created_at: created_at,
           updated_at: updated_at

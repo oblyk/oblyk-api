@@ -7,7 +7,7 @@ module Api
 
       def search
         query = params[:query].parameterize
-        towns = Town.where('slug_name LIKE ?', "%#{query}%").order("levenshtein(name, '#{query}')").limit(25)
+        towns = Town.includes(department: :country).where('slug_name LIKE ?', "%#{query}%").order("levenshtein(name, '#{query}')").limit(25)
         render json: towns.map(&:summary_to_json), status: :ok
       end
 
@@ -29,12 +29,12 @@ module Api
         @town.dist_around = params.fetch(:dist, @town.default_dist)
 
         # Crags
-        @town.crags.find_each do |crag|
+        @town.crags.includes(photo: { picture_attachment: :blob }).find_each do |crag|
           features << crag.to_geo_json
         end
 
         # Gyms
-        @town.gyms.find_each do |gym|
+        @town.gyms.includes(banner_attachment: :blob).find_each do |gym|
           features << gym.to_geo_json
         end
 

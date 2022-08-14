@@ -34,22 +34,25 @@ class Park < ApplicationRecord
   end
 
   def summary_to_json
-    detail_to_json
-  end
-
-  def detail_to_json
     {
       id: id,
       description: description,
       latitude: latitude,
       longitude: longitude,
-      elevation: elevation,
-      crag: crag.summary_to_json,
-      creator: user&.summary_to_json,
-      history: {
-        created_at: created_at,
-        updated_at: updated_at
-      }
+      elevation: elevation
     }
+  end
+
+  def detail_to_json
+    detail_to_json.merge(
+      {
+        crag: crag.summary_to_json,
+        creator: user&.summary_to_json(with_avatar: false),
+        history: {
+          created_at: created_at,
+          updated_at: updated_at
+        }
+      }
+    )
   end
 end

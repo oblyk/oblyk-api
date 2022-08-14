@@ -75,7 +75,8 @@ module Api
 
       def geo_json_around
         features = []
-        crags_around = Crag.geo_search(@crag.latitude, @crag.longitude, 50)
+        crags_around = Crag.includes(photo: { picture_attachment: :blob })
+                           .geo_search(@crag.latitude, @crag.longitude, 50)
 
         # Crags around this crag
         crags_around.each do |crag|
@@ -83,7 +84,7 @@ module Api
         end
 
         # Crag sectors
-        @crag.crag_sectors.each do |sector|
+        @crag.crag_sectors.includes(photo: { picture_attachment: :blob }).each do |sector|
           next unless sector.latitude
 
           features << sector.to_geo_json
@@ -116,8 +117,8 @@ module Api
       end
 
       def guides
-        papers = @crag.guide_book_papers
-        pdfs = @crag.guide_book_pdfs
+        papers = @crag.guide_book_papers.includes(cover_attachment: :blob)
+        pdfs = @crag.guide_book_pdfs.includes(:user, pdf_file_attachment: :blob)
         webs = @crag.guide_book_webs
         guides = []
 
@@ -146,7 +147,7 @@ module Api
 
       def photos
         page = params.fetch(:page, 1)
-        photos = Photo.where(
+        photos = Photo.includes(:illustrable, :user, picture_attachment: :blob).where(
           '(illustrable_type = "Crag" AND illustrable_id = :crag_id) OR
            (illustrable_type = "CragSector" AND illustrable_id IN (SELECT id FROM crag_sectors WHERE crag_id = :crag_id)) OR
            (illustrable_type = "CragRoute" AND illustrable_id IN (SELECT id FROM crag_routes WHERE crag_id = :crag_id))',
@@ -215,7 +216,7 @@ module Api
       end
 
       def set_crag
-        @crag = Crag.includes(:user, :crag_sectors).find params[:id]
+        @crag = Crag.find params[:id]
       end
 
       def crag_params

@@ -26,13 +26,7 @@ class Town < ApplicationRecord
   end
 
   def crag_routes
-    routes = []
-    crags.each do |crag|
-      crag.crag_routes.each do |crag_route|
-        routes << crag_route
-      end
-    end
-    routes
+    CragRoute.where(crag_id: crags.pluck(:id))
   end
 
   def gyms
@@ -62,10 +56,11 @@ class Town < ApplicationRecord
     nearest_crag_dist = GeoHelper.geo_range(latitude, longitude, nearest_crag.latitude, nearest_crag.longitude)
     nearest_gym_dist = GeoHelper.geo_range(latitude, longitude, nearest_gym.latitude, nearest_gym.longitude)
 
-    around_crags = crags
-    around_gyms = gyms
+    around_crags = crags.includes(photo: { picture_attachment: :blob })
+    around_gyms = gyms.includes(logo_attachment: :blob, banner_attachment: :blob)
 
-    guide_book_papers = GuideBookPaper.includes(:guide_book_paper_crags).where(guide_book_paper_crags: { crag_id: around_crags.select(:id) })
+    guide_book_papers = GuideBookPaper.includes(:guide_book_paper_crags, cover_attachment: :blob )
+                                      .where(guide_book_paper_crags: { crag_id: around_crags.select(:id) })
 
     crag_with_levels = {}
     around_crags.each do |crag|

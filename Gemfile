@@ -83,6 +83,7 @@ gem 'dalli'
 gem 'levenshtein-ffi', require: 'levenshtein'
 
 group :development, :test do
+  gem 'bullet'
   # Ruby static code analyzer
   gem 'rubocop'
   gem 'rubocop-faker'
@@ -90,13 +91,13 @@ group :development, :test do
   gem 'rubocop-rails'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'database_cleaner'
+  gem 'factory_bot_rails'
+  gem 'faker'
   # Small gem which causes rails console to open pry
   gem 'pry-doc'
   gem 'pry-rails'
-  gem 'database_cleaner'
   gem 'rspec-rails', '~> 5.0.0'
-  gem 'faker'
-  gem 'factory_bot_rails'
 end
 
 group :development do

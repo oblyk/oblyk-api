@@ -37,7 +37,7 @@ class Alert < ApplicationRecord
       alertable_type: alertable_type,
       alertable_id: alertable_id,
       alertable: alertable.summary_to_json,
-      creator: user&.summary_to_json,
+      creator: user&.summary_to_json(with_avatar: false),
       history: {
         created_at: created_at,
         updated_at: updated_at

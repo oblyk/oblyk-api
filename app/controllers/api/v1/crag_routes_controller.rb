@@ -24,11 +24,11 @@ module Api
                 end
 
         crag_routes = if @crag
-                        @crag.crag_routes.includes(:crag_sector).order(order)
+                        @crag.crag_routes.includes(crag_sector: { photo: { picture_attachment: :blob } }, photo: { picture_attachment: :blob }).order(order)
                       elsif @crag_sector
                         @crag_sector.crag_routes.includes(:crag_sector).order(order)
                       elsif @area
-                        @area.crag_routes.includes(:crag, :crag_sector).order(order)
+                        @area.crag_routes.includes(:crag, :crag_sector, photo: { picture_attachment: :blob }).order(order)
                       else
                         CragRoute.includes(:crag_sector).where(crag_id: params[:crag_id]).order(order)
                       end

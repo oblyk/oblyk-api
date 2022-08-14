@@ -18,22 +18,25 @@ class Word < ApplicationRecord
   default_scope { order(:name) }
 
   def summary_to_json
-    detail_to_json
-  end
-
-  def detail_to_json
     {
       id: id,
       name: name,
       slug_name: slug_name,
-      definition: definition,
-      versions_count: versions.length,
-      creator: user&.summary_to_json,
-      history: {
-        created_at: created_at,
-        updated_at: updated_at
-      }
+      definition: definition
     }
+  end
+
+  def detail_to_json
+    summary_to_json.merge(
+      {
+        versions_count: versions.length,
+        creator: user&.summary_to_json(with_avatar: false),
+        history: {
+          created_at: created_at,
+          updated_at: updated_at
+        }
+      }
+    )
   end
 
   private

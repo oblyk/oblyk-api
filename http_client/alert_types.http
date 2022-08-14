@@ -1,0 +1,4 @@
+### GET alert types
+GET {{api_url}}/public/alert-types.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json

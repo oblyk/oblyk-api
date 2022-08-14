@@ -18,8 +18,8 @@ class OblykVersion
     if user
       json[:user] = {
         uuid: user.uuid,
-            name: user.full_name,
-            slug_name: user.slug_name
+        name: user.full_name,
+        slug_name: user.slug_name
       }
     end
     json

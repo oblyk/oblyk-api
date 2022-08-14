@@ -8,7 +8,7 @@ module Api
       before_action :protected_by_owner, only: %i[update destroy]
 
       def index
-        links = Link.where(
+        links = Link.includes(:user).where(
           linkable_type: params[:linkable_type],
           linkable_id: params[:linkable_id]
         )

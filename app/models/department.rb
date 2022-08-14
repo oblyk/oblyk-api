@@ -40,7 +40,7 @@ class Department < ApplicationRecord
     summary_to_json.merge(
       {
         towns: towns.order(:name).map { |town| { name: town.name, slug_name: town.slug_name, zipcode: town.zipcode } },
-        guide_book_papers: GuideBookPaper.where(id: guide_ids).order(publication_year: :desc).map(&:summary_to_json),
+        guide_book_papers: GuideBookPaper.includes(cover_attachment: :blob).where(id: guide_ids).order(publication_year: :desc).map(&:summary_to_json),
         figures: {
           crags: {
             count: {

@@ -27,7 +27,7 @@ class GuideBookWeb < ApplicationRecord
       url: url,
       publication_year: publication_year,
       crag: crag.summary_to_json,
-      creator: user&.summary_to_json,
+      creator: user&.summary_to_json(with_avatar: false),
       history: {
         created_at: created_at,
         updated_at: updated_at

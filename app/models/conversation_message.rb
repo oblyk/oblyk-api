@@ -27,7 +27,7 @@ class ConversationMessage < ApplicationRecord
       conversation_id: conversation_id,
       body: body,
       posted_at: posted_at,
-      creator: user&.summary_to_json,
+      creator: user&.summary_to_json(with_avatar: false),
       history: {
         created_at: created_at,
         updated_at: updated_at

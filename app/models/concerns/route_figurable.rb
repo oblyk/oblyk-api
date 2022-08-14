@@ -3,7 +3,7 @@
 module RouteFigurable
   extend ActiveSupport::Concern
 
-  def route_figures
+  def route_figures(include_crags: false)
     figures = {
       section_count: 0,
       route_count: 0,
@@ -51,20 +51,26 @@ module RouteFigurable
         '9a' => 0, '9b' => 0, '9c' => 0
       }
     }
-    crag_routes.each do |crag_route|
+    
+    routes = if include_crags
+               crag_routes.includes(:photo, crag: { photo: { picture_attachment: :blob } }, crag_sector: { photo: { picture_attachment: :blob } })
+             else
+               crag_routes.includes(:photo, crag_sector: { photo: { picture_attachment: :blob } })
+             end
+    routes.find_each do |crag_route|
       figures[:climbing_types][crag_route.climbing_type.to_sym] += 1
       figures[:route_count] += 1
 
       if crag_route.max_grade_value.positive? && (figures[:grade][:min][:value].nil? || figures[:grade][:min][:value] > crag_route.max_grade_value)
         figures[:grade][:min][:value] = crag_route.max_grade_value
         figures[:grade][:min][:text] = crag_route.max_grade_text
-        figures[:grade][:min][:crag_route] = crag_route.summary_to_json
+        figures[:grade][:min][:crag_route] = crag_route.summary_to_json(with_crag_in_sector: false)
       end
 
       if crag_route.max_grade_value.positive? && (figures[:grade][:max][:value].nil? || figures[:grade][:max][:value] < crag_route.max_grade_value)
         figures[:grade][:max][:value] = crag_route.max_grade_value
         figures[:grade][:max][:text] = crag_route.max_grade_text
-        figures[:grade][:max][:crag_route] = crag_route.summary_to_json
+        figures[:grade][:max][:crag_route] = crag_route.summary_to_json(with_crag_in_sector: false)
       end
 
       crag_route.sections.each do |section|

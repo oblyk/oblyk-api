@@ -27,7 +27,7 @@ module Api
       end
 
       def route_figures
-        render json: @department.route_figures, status: :ok
+        render json: @department.route_figures(include_crags: true), status: :ok
       end
 
       def geo_json
@@ -38,14 +38,14 @@ module Api
 
         # Crags
         if params.fetch(:crags, 'true') == 'true'
-          @department.crags.where(climbing_filter).find_each do |crag|
+          @department.crags.includes(photo: { picture_attachment: :blob }).where(climbing_filter).find_each do |crag|
             features << crag.to_geo_json
           end
         end
 
         # Gyms
         if params.fetch(:gyms, 'true') == 'true'
-          @department.gyms.find_each do |gym|
+          @department.gyms.includes(banner_attachment: :blob).find_each do |gym|
             features << gym.to_geo_json
           end
         end

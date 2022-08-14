@@ -66,6 +66,7 @@ module Api
 
       def favorite_crags
         subscribes = @user.subscribes
+                          .includes(:user, followable: { photo: { picture_attachment: :blob } })
                           .where(followable_type: 'Crag')
                           .order(updated_at: :desc)
                           .page(params.fetch(:page, 1))
@@ -74,6 +75,7 @@ module Api
 
       def favorite_gyms
         subscribes = @user.subscribes
+                          .includes(:user, followable: { photo: { picture_attachment: :blob } })
                           .where(followable_type: 'Gym')
                           .order(updated_at: :desc)
                           .page(params.fetch(:page, 1))
@@ -82,12 +84,12 @@ module Api
 
       def subscribes
         page = params.fetch(:page, 1)
-        subscribes = @user.subscribes.where(followable_type: 'User').order(updated_at: :desc).page(page)
+        subscribes = @user.subscribes.includes(followable: { avatar_attachment: :blob }, user: { avatar_attachment: :blob }).where(followable_type: 'User').order(updated_at: :desc).page(page)
         render json: subscribes.map(&:summary_to_json), status: :ok
       end
 
       def library
-        subscribes = @user.subscribes.where(followable_type: 'GuideBookPaper').order(views: :desc)
+        subscribes = @user.subscribes.includes(:user, followable: { cover_attachment: :blob }).where(followable_type: 'GuideBookPaper').order(views: :desc)
         render json: subscribes.map(&:summary_to_json), status: :ok
       end
 
@@ -95,7 +97,7 @@ module Api
         crag_ids = @user.ascended_crags.pluck(:id)
         library_guides = @user.subscribes.where(followable_type: 'GuideBookPaper').pluck(:followable_id)
         guides = GuideBookPaper
-                 .includes(:guide_book_paper_crags)
+                 .includes(:guide_book_paper_crags, cover_attachment: :blob)
                  .where(guide_book_paper_crags: { crag_id: crag_ids })
                  .where(next_guide_book_paper_id: nil)
                  .where.not(id: library_guides)
@@ -159,7 +161,7 @@ module Api
       def followers
         users = []
         page = params.fetch(:page, 1)
-        followers = @user.follows.accepted.order(created_at: :desc).page(page)
+        followers = @user.follows.includes(user: { avatar_attachment: :blob }).accepted.order(created_at: :desc).page(page)
         followers.each do |follower|
           users << follower.user
         end
@@ -205,7 +207,11 @@ module Api
 
         crag_routes = case params[:order]
                       when 'crags'
-                        CragRoute.includes(:crag, :crag_sector)
+                        CragRoute.includes(
+                          crag_sector: { photo: { picture_attachment: :blob } },
+                          crag: { photo: { picture_attachment: :blob } },
+                          photo: { picture_attachment: :blob }
+                        )
                                  .where(id: crag_route_ids)
                                  .where(climbing_type: climbing_filters)
                                  .joins(:crag)
@@ -213,37 +219,52 @@ module Api
                                  .page(page)
                       when 'released_at'
                         CragRoute.joins("INNER JOIN ascents ON ascents.crag_route_id = crag_routes.id AND ascents.type = 'AscentCragRoute' AND ascents.user_id = #{@user.id}")
-                                 .includes(:crag, :crag_sector)
+                                 .includes(
+                                   crag_sector: { photo: { picture_attachment: :blob } },
+                                   crag: { photo: { picture_attachment: :blob } },
+                                   photo: { picture_attachment: :blob }
+                                 )
                                  .where(id: crag_route_ids)
                                  .where(climbing_type: climbing_filters)
                                  .order('ascents.released_at DESC, crag_routes.name, crag_routes.id')
                                  .page(page)
                       else
-                        CragRoute.includes(:crag, :crag_sector)
+                        CragRoute.includes(
+                          crag_sector: { photo: { picture_attachment: :blob } },
+                          crag: { photo: { picture_attachment: :blob } },
+                          photo: { picture_attachment: :blob }
+                        )
                                  .where(id: crag_route_ids)
                                  .where(climbing_type: climbing_filters)
                                  .order('crag_routes.max_grade_value DESC, crag_routes.name, crag_routes.id')
                                  .page(page)
                       end
-        render json: crag_routes.map(&:summary_to_json), status: :ok
+        render json: crag_routes.map { |crag_route| crag_route.summary_to_json(with_crag_in_sector: false) }, status: :ok
       end
 
       def projects
         project_crag_route_ids = @user.ascent_crag_routes.project.pluck(:crag_route_id)
         crag_route_ids = @user.ascent_crag_routes.made.pluck(:crag_route_id)
-        crag_routes = CragRoute.where(id: project_crag_route_ids).where.not(id: crag_route_ids).joins(:crag).order('crags.name')
-        render json: crag_routes.map(&:summary_to_json), status: :ok
+        crag_routes = CragRoute.includes(crag: { photo: { picture_attachment: :blob } }, crag_sector: { photo: { picture_attachment: :blob } }, photo: { picture_attachment: :blob })
+                               .where(id: project_crag_route_ids)
+                               .where.not(id: crag_route_ids)
+                               .joins(:crag)
+                               .order('crags.name')
+        render json: crag_routes.map { |crag_route| crag_route.summary_to_json(with_crag_in_sector: false) }, status: :ok
       end
 
       def tick_lists
-        crag_routes = @user.ticked_crag_routes.joins(:crag).order('crags.name')
-        render json: crag_routes.map(&:summary_to_json), status: :ok
+        crag_routes = @user.ticked_crag_routes
+                           .includes(crag: { photo: { picture_attachment: :blob } }, crag_sector: { photo: { picture_attachment: :blob } }, photo: { picture_attachment: :blob })
+                           .joins(:crag)
+                           .order('crags.name')
+        render json: crag_routes.map { |crag_route| crag_route.summary_to_json(with_crag_in_sector: false) }, status: :ok
       end
 
       def ascended_crags_geo_json
         features = []
 
-        @user.ascended_crags.distinct.each do |crag|
+        @user.ascended_crags.includes(photo: { picture_attachment: :blob }).distinct.each do |crag|
           features << crag.to_geo_json
         end
 

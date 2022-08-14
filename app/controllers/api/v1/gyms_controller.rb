@@ -107,7 +107,7 @@ module Api
       def geo_json_features
         features = []
 
-        Gym.all.each do |gym|
+        Gym.includes(banner_attachment: :blob).all.each do |gym|
           features << gym.to_geo_json
         end
         features

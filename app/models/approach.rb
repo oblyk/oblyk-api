@@ -99,7 +99,7 @@ class Approach < ApplicationRecord
         negative_drop: negative_drop
       },
       crag: crag.summary_to_json,
-      creator: user&.summary_to_json,
+      creator: user&.summary_to_json(with_avatar: false),
       history: {
         created_at: created_at,
         updated_at: updated_at

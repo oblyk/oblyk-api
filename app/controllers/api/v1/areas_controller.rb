@@ -8,7 +8,7 @@ module Api
       before_action :set_area, only: %i[show crags guide_book_papers geo_json photos add_crag remove_crag update destroy]
 
       def index
-        render json: Area.all.map(&:summary_to_json), status: :ok
+        render json: Area.includes(photo: { picture_attachment: :blob }).all.map(&:summary_to_json), status: :ok
       end
 
       def search
@@ -18,7 +18,7 @@ module Api
       end
 
       def crags
-        crags = @area.crags
+        crags = @area.crags.includes(photo: { picture_attachment: :blob })
         render json: crags.map(&:summary_to_json), status: :ok
       end
 
@@ -33,7 +33,7 @@ module Api
         features = []
 
         # Crags
-        @area.crags.each do |crag|
+        @area.crags.includes(:parks, :approaches, crag_sectors: { photo: { picture_attachment: :blob } }, photo: { picture_attachment: :blob }).each do |crag|
           # Crag sectors
           crag.crag_sectors.each do |sector|
             next unless sector.latitude
@@ -72,7 +72,7 @@ module Api
 
       def photos
         page = params.fetch(:page, 1)
-        photos = Photo.where(
+        photos = Photo.includes(:illustrable, :user, picture_attachment: :blob).where(
           '(illustrable_type = "Crag" AND illustrable_id IN (SELECT crag_id FROM area_crags WHERE area_id = :area)) OR
            (illustrable_type = "CragSector" AND illustrable_id IN (SELECT id FROM crag_sectors WHERE crag_id IN (SELECT crag_id FROM area_crags WHERE area_id = :area))) OR
            (illustrable_type = "CragRoute" AND illustrable_id IN (SELECT id FROM crag_routes WHERE crag_id IN (SELECT crag_id FROM area_crags WHERE area_id = :area)))',

@@ -90,7 +90,7 @@ class Photo < ApplicationRecord
       picture: large_url,
       thumbnail: thumbnail_url,
       illustrable: illustrable_json,
-      creator: user&.summary_to_json,
+      creator: user&.summary_to_json(with_avatar: false),
       history: {
         created_at: created_at,
         updated_at: updated_at

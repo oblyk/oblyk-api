@@ -9,7 +9,7 @@ module Api
       before_action :protected_by_owner, only: %i[update destroy]
 
       def index
-        place_of_sales = @guide_book_paper.place_of_sales
+        place_of_sales = @guide_book_paper.place_of_sales.includes(:user)
         render json: place_of_sales.map(&:summary_to_json), status: :ok
       end
 

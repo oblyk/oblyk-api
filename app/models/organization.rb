@@ -44,7 +44,7 @@ class Organization < ApplicationRecord
   def detail_to_json
     summary_to_json.merge(
       {
-        organization_users: organization_users.map { |organization_user| { id: organization_user.id, user: organization_user.user.summary_to_json } },
+        organization_users: organization_users.map { |organization_user| { id: organization_user.id, user: organization_user.user.summary_to_json(with_avatar: false) } },
         history: {
           created_at: created_at,
           updated_at: updated_at

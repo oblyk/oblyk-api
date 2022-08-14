@@ -52,7 +52,7 @@ class AscentCragRoute < Ascent
       sections_done: sections_done,
       crag_route: crag_route.summary_to_json,
       crag: crag.summary_to_json,
-      ascent_users: ascent_users.map { |ascent_user| { id: ascent_user.id, user: ascent_user.user.summary_to_json } },
+      ascent_users: ascent_users.map { |ascent_user| { id: ascent_user.id, user: ascent_user.user.summary_to_json(with_avatar: false) } },
       history: {
         created_at: created_at,
         updated_at: updated_at

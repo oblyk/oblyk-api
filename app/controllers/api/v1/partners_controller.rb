@@ -32,7 +32,7 @@ module Api
 
       def partners_around
         distance = params.fetch(:distance, 20)
-        users = User.partner_geo_search(params[:latitude], params[:longitude], distance)
+        users = User.includes(avatar_attachment: :blob).partner_geo_search(params[:latitude], params[:longitude], distance)
         render json: users.map(&:summary_to_json), status: :ok
       end
     end

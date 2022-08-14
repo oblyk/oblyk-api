@@ -69,7 +69,7 @@ class Video < ApplicationRecord
       iframe: iframe,
       url_for_iframe: url_for_iframe,
       viewable: viewable.summary_to_json,
-      creator: user&.summary_to_json,
+      creator: user&.summary_to_json(with_avatar: false),
       history: {
         created_at: created_at,
         updated_at: updated_at

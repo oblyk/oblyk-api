@@ -282,16 +282,17 @@ class User < ApplicationRecord
     end
   end
 
-  def summary_to_json
-    Rails.cache.fetch("#{cache_key_with_version}/summary_user", expires_in: 1.month) do
-      {
+  def summary_to_json(with_avatar: true)
+    Rails.cache.fetch("#{cache_key_with_version}/summary_user#{'_with_avatar' if with_avatar}", expires_in: 1.month) do
+      json = {
         id: id,
         uuid: uuid,
         slug_name: slug_name,
         first_name: first_name,
-        full_name: full_name,
-        avatar_thumbnail_url: avatar_thumbnail_url
+        full_name: full_name
       }
+      json[:avatar_thumbnail_url] = avatar_thumbnail_url if with_avatar
+      json
     end
   end
 

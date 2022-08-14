@@ -59,7 +59,7 @@ class Area < ApplicationRecord
       {
         crags_count: crags.count,
         crag_routes_count: crag_routes_count,
-        area_crags: area_crags.map { |area_crag| { id: area_crag.id, crags: { id: area_crag.crag.id, name: area_crag.crag.name } } },
+        area_crags: area_crags.includes(:crag).map { |area_crag| { id: area_crag.id, crags: { id: area_crag.crag.id, name: area_crag.crag.name } } },
         routes_figures: {
           routes_count: crag_routes_count,
           grade: {
@@ -69,7 +69,7 @@ class Area < ApplicationRecord
             max_text: hardest_route&.max_grade_text
           }
         },
-        creator: user&.summary_to_json,
+        creator: user&.summary_to_json(with_avatar: false),
         history: {
           created_at: created_at,
           updated_at: updated_at

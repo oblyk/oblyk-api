@@ -44,7 +44,7 @@ class AscentGymRoute < Ascent
         created_at: created_at,
         updated_at: updated_at
       },
-      user: user.summary_to_json
+      user: user.summary_to_json(with_avatar: false)
     }
   end
 
