@@ -243,6 +243,7 @@ Rails.application.routes.draw do
 
         resources :crags do
           get :search, on: :collection
+          post :advanced_search, on: :collection
           get :random, on: :collection
           get :guides, on: :member
           get :photos, on: :member

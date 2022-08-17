@@ -17,6 +17,107 @@ module Api
         render json: crags.map(&:summary_to_json), status: :ok
       end
 
+      def geo_search
+        crags = Crag.geo_search(
+          params[:latitude],
+          params[:longitude],
+          params[:distance]
+        )
+        render json: crags.map(&:summary_to_json), status: :ok
+      end
+
+      def advanced_search
+        latitude = params.fetch(:latitude, nil)
+        longitude = params.fetch(:longitude, nil)
+        distance = params.fetch(:distance, 20).to_i * 1000
+        distance = 50_000 if distance > 50_000
+        max_approach_time = params.fetch(:max_approach_time, nil)
+        orientation = params.fetch(:orientation, nil)
+        climbing_type = params.fetch(:climbing_type, nil)
+        season = params.fetch(:season, nil)
+        grade = params.fetch(:grade, nil)
+
+        crag_object = Crag.includes(:crag_routes, photo: { picture_attachment: :blob })
+
+        # Approach time
+        if max_approach_time.present?
+          crag_object = crag_object.where(
+            'max_approach_time <= :max_approach_time',
+            max_approach_time: max_approach_time.to_i
+          )
+        end
+
+        # Orientation
+        if orientation.present?
+          crag_object = crag_object.where('north OR north_east OR north_west') if orientation[:north]
+          crag_object = crag_object.where('south OR south_east OR south_west') if orientation[:south]
+          crag_object = crag_object.where('east OR south_east OR south_east') if orientation[:east]
+          crag_object = crag_object.where('west OR north_west OR south_west') if orientation[:west]
+        end
+
+        # Climbing type
+        if climbing_type.present?
+          crag_object = crag_object.where('sport_climbing') if climbing_type[:sport_climbing]
+          crag_object = crag_object.where('bouldering') if climbing_type[:bouldering]
+          crag_object = crag_object.where('multi_pitch') if climbing_type[:multi_pitch]
+          crag_object = crag_object.where('trad_climbing') if climbing_type[:trad_climbing]
+          crag_object = crag_object.where('aid_climbing') if climbing_type[:aid_climbing]
+          crag_object = crag_object.where('deep_water') if climbing_type[:deep_water]
+          crag_object = crag_object.where('via_ferrata') if climbing_type[:via_ferrata]
+        end
+
+        # Season
+        if season.present?
+          crag_object = crag_object.where('summer') if season[:summer]
+          crag_object = crag_object.where('autumn') if season[:autumn]
+          crag_object = crag_object.where('winter') if season[:winter]
+          crag_object = crag_object.where('spring') if season[:spring]
+        end
+
+        if grade.present?
+          min_grade_value = Grade.to_value grade[:min]
+          max_grade_value = Grade.to_value grade[:max]
+          crag_object = crag_object.where('`crags`.`id` IN (SELECT DISTINCT c.id FROM crags c INNER JOIN crag_routes cr ON c.id = cr.crag_id WHERE cr.min_grade_value BETWEEN :min AND :max)', min: min_grade_value, max: max_grade_value)
+        end
+
+        # Localisation
+        if latitude.present? && longitude.present?
+          crag_object = crag_object.where(
+            'getRange(latitude, longitude, :latitude, :longitude) <= :limit',
+            latitude: latitude.to_f,
+            longitude: longitude.to_f,
+            limit: distance
+          )
+          crag_object = crag_object.order("getRange(latitude, longitude, #{latitude.to_f}, #{longitude.to_f})")
+        else
+          crag_object = crag_object.limit(params.fetch(:limit, 20))
+        end
+
+        crags = crag_object
+        crag_statics = Statistics::CragStatistic.new
+        crag_statics.crags = crags
+
+        crag_with_levels = {}
+        crags.each do |crag|
+          crag_with_levels["crag-#{crag.id}"] ||= {
+            levels: {},
+            crag: crag
+          }
+
+          crag.crag_routes.each do |crag_route|
+            next if crag_route.max_grade_value.zero?
+
+            crag_with_levels["crag-#{crag.id}"][:levels][crag_route.max_grade_value] ||= { count: 0 }
+            crag_with_levels["crag-#{crag.id}"][:levels][crag_route.max_grade_value][:count] += 1
+          end
+        end
+
+        render json: {
+          route_figures: crag_statics.route_figures,
+          crag_with_levels: crag_with_levels
+        }, status: :ok
+      end
+
       def versions
         versions = @crag.versions
         render json: OblykVersion.index(versions), status: :ok
@@ -25,15 +126,6 @@ module Api
       def random
         crag = Crag.order('RAND()').first
         render json: crag.detail_to_json, status: :ok
-      end
-
-      def geo_search
-        crags = Crag.geo_search(
-          params[:latitude],
-          params[:longitude],
-          params[:distance]
-        )
-        render json: crags.map(&:summary_to_json), status: :ok
       end
 
       def guide_books_around

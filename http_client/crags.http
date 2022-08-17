@@ -125,6 +125,22 @@ GET {{api_url}}/public/crags/geo_search.json?latitude=44.469592&longitude=5.0580
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
+### Advanced search
+POST {{api_url}}/public/crags/advanced_search.json
+HttpApiAccessToken: {{api_access_token}}
+Content-Type: application/json
+
+{
+  "latitude": 44.469592,
+  "longitude": 5.058089,
+  "limit": 25,
+  "max_approach_time": null,
+  "grade": {
+    "min": "7b",
+    "max": "8a"
+  }
+}
+
 ### search gras
 GET {{api_url}}/public/crags/search.json?query=rocher des aures
 HttpApiAccessToken: {{api_access_token}}
