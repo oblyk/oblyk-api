@@ -7,8 +7,24 @@ module Api
 
       def search
         query = params[:query].parameterize
-        towns = Town.includes(department: :country).where('slug_name LIKE ?', "%#{query}%").order("levenshtein(name, '#{query}')").limit(25)
-        render json: towns.map(&:summary_to_json), status: :ok
+        like_ngram = Search.ngram_splitter(query, 4).map { |word| "`slug_name` LIKE '%#{word}%'" }.join(' OR ')
+        towns = Town.includes(department: :country).where(like_ngram)
+
+        levenshtein_results = []
+        towns.each do |town|
+          levenshtein_score = Levenshtein.distance(town.slug_name, query)
+
+          levenshtein_results << { town: town, levenshtein_score: levenshtein_score }
+        end
+
+        levenshtein_results.sort_by! { |levenshtein_result| levenshtein_result[:levenshtein_score] }
+        results = []
+        levenshtein_results.each_with_index do |levenshtein_result, index|
+          results << levenshtein_result[:town].summary_to_json
+          break if index > 24
+        end
+
+        render json: results, status: :ok
       end
 
       def geo_search

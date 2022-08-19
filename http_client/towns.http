@@ -39,7 +39,7 @@ HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### Search town by name
-GET {{api_url}}/public/towns/search.json?query=dieulefit
+GET {{api_url}}/public/towns/search.json?query=saint
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
