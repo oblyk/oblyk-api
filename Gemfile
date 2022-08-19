@@ -54,9 +54,6 @@ gem 'sidekiq'
 # Track changes
 gem 'paper_trail', '~> 11.1'
 
-# Rollbar for track errors
-gem 'rollbar'
-
 # Simple Rest Client
 gem 'rest-client'
 

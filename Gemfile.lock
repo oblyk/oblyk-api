@@ -272,7 +272,6 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     rexml (3.2.5)
-    rollbar (3.1.2)
     rorvswild (1.5.15)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
@@ -403,7 +402,6 @@ DEPENDENCIES
   redis-namespace
   redis-rails
   rest-client
-  rollbar
   rorvswild
   rspec-rails (~> 5.0.0)
   rspec_api_documentation

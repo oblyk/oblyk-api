@@ -7,8 +7,6 @@
 SIDEKIQ_USERNAME: 'sidekiq'
 SIDEKIQ_PASSWORD: 'password'
 
-ROLLBAR_ACCESS_TOKEN: ''
-
 OBLYK_API_DOMAIN: 'localhost:3000'
 OBLYK_API_URL: 'http://localhost:3000'
 OBLYK_APP_URL: 'http://localhost:8080'
