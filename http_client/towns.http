@@ -49,7 +49,7 @@ HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### GET town
-GET {{api_url}}/public/towns/dieulefit.json
+GET {{api_url}}/public/towns/grenoble.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 

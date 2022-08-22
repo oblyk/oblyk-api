@@ -6,7 +6,7 @@ class CragRoute < ApplicationRecord
   include Slugable
   include ActivityFeedable
 
-  attr_accessor :skip_update_gap_grade
+  attr_accessor :skip_update_gap_grade, :crag_name, :crag_slug_name
 
   has_paper_trail only: %i[
     name

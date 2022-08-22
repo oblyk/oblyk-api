@@ -3,7 +3,7 @@
 module RouteFigurable
   extend ActiveSupport::Concern
 
-  def route_figures(include_crags: false)
+  def route_figures
     figures = {
       section_count: 0,
       route_count: 0,
@@ -51,26 +51,36 @@ module RouteFigurable
         '9a' => 0, '9b' => 0, '9c' => 0
       }
     }
-    
-    routes = if include_crags
-               crag_routes.includes(:photo, crag: { photo: { picture_attachment: :blob } }, crag_sector: { photo: { picture_attachment: :blob } })
-             else
-               crag_routes.includes(:photo, crag_sector: { photo: { picture_attachment: :blob } })
-             end
-    routes.find_each do |crag_route|
+
+    routes = crag_routes.select(
+      'climbing_type,
+      crag_routes.max_grade_value,
+      crag_routes.max_grade_text,
+      crag_routes.min_grade_value,
+      crag_routes.min_grade_text,
+      crag_routes.id,
+      crag_id,
+      crag_routes.name,
+      crag_routes.slug_name,
+      sections_count,
+      sections,
+      crags.name AS crag_name,
+      crags.slug_name AS crag_slug_name'
+    ).joins(:crag)
+    routes.each do |crag_route|
       figures[:climbing_types][crag_route.climbing_type.to_sym] += 1
       figures[:route_count] += 1
 
       if crag_route.max_grade_value.positive? && (figures[:grade][:min][:value].nil? || figures[:grade][:min][:value] > crag_route.max_grade_value)
         figures[:grade][:min][:value] = crag_route.max_grade_value
         figures[:grade][:min][:text] = crag_route.max_grade_text
-        figures[:grade][:min][:crag_route] = crag_route.summary_to_json(with_crag_in_sector: false)
+        figures[:grade][:min][:crag_route] = crag_route_json(crag_route)
       end
 
       if crag_route.max_grade_value.positive? && (figures[:grade][:max][:value].nil? || figures[:grade][:max][:value] < crag_route.max_grade_value)
         figures[:grade][:max][:value] = crag_route.max_grade_value
         figures[:grade][:max][:text] = crag_route.max_grade_text
-        figures[:grade][:max][:crag_route] = crag_route.summary_to_json(with_crag_in_sector: false)
+        figures[:grade][:max][:crag_route] = crag_route_json(crag_route)
       end
 
       crag_route.sections.each do |section|
@@ -82,5 +92,27 @@ module RouteFigurable
       end
     end
     figures
+  end
+
+  private
+
+  def crag_route_json(crag_route)
+    {
+      id: crag_route.id,
+      name: crag_route.name,
+      slug_name: crag_route.slug_name,
+      sections_count: crag_route.sections_count,
+      grade_gap: {
+        max_grade_value: crag_route.max_grade_value,
+        min_grade_value: crag_route.min_grade_value,
+        max_grade_text: crag_route.max_grade_text,
+        min_grade_text: crag_route.min_grade_text
+      },
+      crag: {
+        id: crag_route.crag_id,
+        name: crag_route[:crag_name],
+        slug_name: crag_route[:crag_slug_name]
+      }
+    }
   end
 end

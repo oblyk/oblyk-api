@@ -27,7 +27,7 @@ module Api
       end
 
       def route_figures
-        render json: @department.route_figures(include_crags: true), status: :ok
+        render json: @department.route_figures, status: :ok
       end
 
       def geo_json
