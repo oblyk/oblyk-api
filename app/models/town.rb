@@ -6,6 +6,7 @@ class Town < ApplicationRecord
 
   belongs_to :department
   has_one :country, through: :department
+  has_many :town_json_objects
 
   attr_accessor :dist_around
 
@@ -113,6 +114,17 @@ class Town < ApplicationRecord
         guide_book_papers: guide_book_papers.map(&:summary_to_json)
       }
     )
+  end
+
+  def historize!
+    touch
+    reload
+    historize_date = updated_at
+    dist = default_dist
+    town_json_object = TownJsonObject.find_or_initialize_by town: self, dist: dist
+    town_json_object.json_object = detail_to_json dist
+    town_json_object.version_date = historize_date
+    town_json_object.save!
   end
 
   private

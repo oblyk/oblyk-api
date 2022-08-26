@@ -51,6 +51,8 @@ class Gym < ApplicationRecord
   validates :banner, blob: { content_type: :image }, allow_nil: true
   validates :name, :latitude, :longitude, :address, :country, :city, :big_city, presence: true
 
+  after_save :historize_around_towns
+
   def location
     [latitude, longitude]
   end
@@ -173,5 +175,9 @@ class Gym < ApplicationRecord
       { value: city },
       { value: big_city }
     ]
+  end
+
+  def historize_around_towns
+    HistorizeTownsAroundWorker.perform_in(1.hour, latitude, longitude, Time.current)
   end
 end

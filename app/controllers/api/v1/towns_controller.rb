@@ -37,7 +37,10 @@ module Api
 
       def show
         around_dist = params.fetch(:dist, @town.default_dist)
-        render json: @town.detail_to_json(around_dist), status: :ok
+        historize_version = @town.town_json_objects.find_by dist: @town.default_dist, version_date: @town.updated_at
+        data = historize_version&.json_object || @town.detail_to_json(around_dist)
+        data[:date_version] = @town.updated_at
+        render json: data, status: :ok
       end
 
       def geo_json

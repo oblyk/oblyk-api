@@ -74,6 +74,7 @@ class Crag < ApplicationRecord
   validate :validate_rocks
 
   after_update :update_routes_location
+  after_save :historize_around_towns
 
   def location
     [latitude, longitude]
@@ -284,5 +285,9 @@ class Crag < ApplicationRecord
     return unless saved_change_to_latitude? || saved_change_to_longitude?
 
     crag_routes.each(&:set_location!)
+  end
+
+  def historize_around_towns
+    HistorizeTownsAroundWorker.perform_in(1.hour, latitude, longitude, Time.current)
   end
 end

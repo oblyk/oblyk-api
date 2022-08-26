@@ -41,6 +41,8 @@ class GuideBookPaper < ApplicationRecord
   validates :cover, blob: { content_type: :image }, allow_nil: true
   validates :funding_status, inclusion: { in: FUNDING_STATUS_LIST }, allow_blank: true
 
+  after_save :historize_around_towns
+
   def cover_large_url
     resize_attachment cover, '700x700'
   end
@@ -126,5 +128,14 @@ class GuideBookPaper < ApplicationRecord
 
   def search_indexes
     [{ value: name }]
+  end
+
+  def historize_around_towns
+    index = 0
+    crags.find_each do |crag|
+      interval = 1.hour + index.minute
+      HistorizeTownsAroundWorker.perform_in(interval, crag.latitude, crag.longitude, Time.current)
+      index += 1
+    end
   end
 end

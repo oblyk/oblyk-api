@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_26_101547) do
+ActiveRecord::Schema.define(version: 2022_08_24_112241) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -827,6 +827,17 @@ ActiveRecord::Schema.define(version: 2022_06_26_101547) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["crag_route_id"], name: "index_tick_lists_on_crag_route_id"
     t.index ["user_id"], name: "index_tick_lists_on_user_id"
+  end
+
+  create_table "town_json_objects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "dist"
+    t.bigint "town_id"
+    t.json "json_object"
+    t.datetime "version_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["dist"], name: "index_town_json_objects_on_dist"
+    t.index ["town_id"], name: "index_town_json_objects_on_town_id"
   end
 
   create_table "towns", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
