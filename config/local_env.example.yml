@@ -35,3 +35,6 @@ SMTP_AUTHENTICATION: 'plain'
 # Ror vs Wild configuration
 ENABLE_ROR_WS_WILD: 'false'
 ROR_WS_WILD_API_KEY: 'your-ws-wild-api-token'
+
+# Active N+1 query analyzer
+ENABLE_BULLET: 'false'
