@@ -5,7 +5,7 @@ module Api
     class GuideBookPapersController < ApiController
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update add_crag remove_crag add_cover remove_cover]
-      before_action :set_guide_book_paper, only: %i[crags photos links versions geo_json alternatives show update destroy add_crag remove_crag add_cover remove_cover articles]
+      before_action :set_guide_book_paper, only: %i[crags crags_figures photos links versions geo_json alternatives show update destroy add_crag remove_crag add_cover remove_cover articles]
 
       def index
         crag_id = params.fetch :crag_id, nil
@@ -51,6 +51,56 @@ module Api
       def crags
         crags = @guide_book_paper.crags.includes(photo: { picture_attachment: :blob })
         render json: crags.map(&:summary_to_json), status: :ok
+      end
+
+      def crags_figures
+        crag_statics = Statistics::CragStatistic.new
+        crag_statics.crags = @guide_book_paper.crags
+
+        crag_with_levels = {}
+        @guide_book_paper.crags.select(
+          :id,
+          :name,
+          :slug_name,
+          :sport_climbing,
+          :bouldering,
+          :multi_pitch,
+          :trad_climbing,
+          :aid_climbing,
+          :deep_water,
+          :via_ferrata,
+          :north,
+          :north_east,
+          :east,
+          :south_east,
+          :south,
+          :south_west,
+          :west,
+          :north_west,
+          :summer,
+          :autumn,
+          :winter,
+          :spring,
+          :min_approach_time,
+          :max_approach_time
+        ).each do |crag|
+          crag_with_levels["crag-#{crag.id}"] ||= {
+            levels: {},
+            crag: crag
+          }
+
+          crag.crag_routes.each do |crag_route|
+            next if crag_route.max_grade_value.zero?
+
+            crag_with_levels["crag-#{crag.id}"][:levels][crag_route.max_grade_value] ||= { count: 0 }
+            crag_with_levels["crag-#{crag.id}"][:levels][crag_route.max_grade_value][:count] += 1
+          end
+        end
+
+        render json: {
+          route_figures: crag_statics.route_figures,
+          crag_with_levels: crag_with_levels
+        }, status: :ok
       end
 
       def versions

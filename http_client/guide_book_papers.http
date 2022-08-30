@@ -115,6 +115,11 @@ GET {{api_url}}/public/guide_book_papers/1/crags.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
+### GET crags with grade level detail guide_book_papers
+GET {{api_url}}/public/guide_book_papers/1/crags_figures.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
 ### GET all guide_book_paper versions
 GET {{api_url}}/public/guide_book_papers/1/versions.json
 HttpApiAccessToken: {{api_access_token}}
