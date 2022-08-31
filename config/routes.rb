@@ -211,6 +211,7 @@ Rails.application.routes.draw do
         resources :area_crags
         resources :areas do
           get :crags, on: :member
+          get :crags_figures, on: :member
           get :guide_book_papers, on: :member
           get :photos, on: :member
           get :search, on: :collection

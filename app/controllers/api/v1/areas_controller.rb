@@ -5,7 +5,7 @@ module Api
     class AreasController < ApiController
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update]
-      before_action :set_area, only: %i[show crags guide_book_papers geo_json photos add_crag remove_crag update destroy]
+      before_action :set_area, only: %i[show crags crags_figures guide_book_papers geo_json photos add_crag remove_crag update destroy]
 
       def index
         render json: Area.includes(photo: { picture_attachment: :blob }).all.map(&:summary_to_json), status: :ok
@@ -20,6 +20,56 @@ module Api
       def crags
         crags = @area.crags.includes(photo: { picture_attachment: :blob })
         render json: crags.map(&:summary_to_json), status: :ok
+      end
+
+      def crags_figures
+        crag_statics = Statistics::CragStatistic.new
+        crag_statics.crags = @area.crags
+
+        crag_with_levels = {}
+        @area.crags.select(
+          :id,
+          :name,
+          :slug_name,
+          :sport_climbing,
+          :bouldering,
+          :multi_pitch,
+          :trad_climbing,
+          :aid_climbing,
+          :deep_water,
+          :via_ferrata,
+          :north,
+          :north_east,
+          :east,
+          :south_east,
+          :south,
+          :south_west,
+          :west,
+          :north_west,
+          :summer,
+          :autumn,
+          :winter,
+          :spring,
+          :min_approach_time,
+          :max_approach_time
+        ).each do |crag|
+          crag_with_levels["crag-#{crag.id}"] ||= {
+            levels: {},
+            crag: crag
+          }
+
+          crag.crag_routes.each do |crag_route|
+            next if crag_route.max_grade_value.zero?
+
+            crag_with_levels["crag-#{crag.id}"][:levels][crag_route.max_grade_value] ||= { count: 0 }
+            crag_with_levels["crag-#{crag.id}"][:levels][crag_route.max_grade_value][:count] += 1
+          end
+        end
+
+        render json: {
+          route_figures: crag_statics.route_figures,
+          crag_with_levels: crag_with_levels
+        }, status: :ok
       end
 
       def guide_book_papers
