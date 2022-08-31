@@ -29,7 +29,11 @@ module Searchable
     return unless search_activated?
 
     Search.delete_object self.class.name, id
-    search_indexes.each { |index| Search.push index[:value], id, self.class.name, index[:bucket], index[:secondary_bucket] }
+    search_indexes.each do |index|
+      next index[:value].blank?
+
+      Search.push index[:value], id, self.class.name, index[:bucket], index[:secondary_bucket]
+    end
   end
 
   def search_destroy
