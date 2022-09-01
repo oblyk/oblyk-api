@@ -44,7 +44,7 @@ class Park < ApplicationRecord
   end
 
   def detail_to_json
-    detail_to_json.merge(
+    summary_to_json.merge(
       {
         crag: crag.summary_to_json,
         creator: user&.summary_to_json(with_avatar: false),
