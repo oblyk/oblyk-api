@@ -321,7 +321,7 @@ module Api
         features = []
 
         if minimalistic
-          Crag.select(:id, :sport_climbing, :multi_pitch, :trad_climbing, :aid_climbing, :bouldering, :deep_water, :via_ferrata, :longitude, :latitude, :updated_at).all.find_each do |crag|
+          Crag.select(:id, :name, :sport_climbing, :multi_pitch, :trad_climbing, :aid_climbing, :bouldering, :deep_water, :via_ferrata, :longitude, :latitude, :updated_at).all.find_each do |crag|
             features << crag.to_geo_json(minimalistic: true)
           end
         else
