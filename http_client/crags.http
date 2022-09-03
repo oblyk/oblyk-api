@@ -98,7 +98,11 @@ Accept: application/json
 ### GET all crags geo_json
 GET {{api_url}}/public/crags/geo_json.json
 HttpApiAccessToken: {{api_access_token}}
-Accept: application/json
+Content-Type: application/json
+
+{
+  "minimalistic": true
+}
 
 ### GET crag versions
 GET {{api_url}}/public/crags/1/versions.json

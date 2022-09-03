@@ -13,24 +13,33 @@ class Approach < ApplicationRecord
   validates :polyline, presence: true
   validates :approach_type, inclusion: { in: STYLES_LIST }, allow_nil: true
 
-  def to_geo_json
-    {
+  def to_geo_json(minimalistic: false)
+    features = {
       type: 'Feature',
       properties: {
         type: 'Approach',
         id: id,
-        description: description,
-        approach_type: approach_type,
-        length: length,
-        walking_time: walking_time,
-        crag: {
-          id: crag.id,
-          name: crag.name,
-          slug_name: crag.slug_name
-        }
+        crag_id: crag_id,
+        icon: nil
       },
       geometry: { type: 'LineString', "coordinates": revers_lat_lng }
     }
+    unless minimalistic
+      features[:properties].merge!(
+        {
+          description: description,
+          approach_type: approach_type,
+          length: length,
+          walking_time: walking_time,
+          crag: {
+            id: crag.id,
+            name: crag.name,
+            slug_name: crag.slug_name
+          }
+        }
+      )
+    end
+    features
   end
 
   def walking_time

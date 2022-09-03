@@ -4,10 +4,12 @@ module Api
   module V1
     class PartnersController < ApiController
       def geo_json
+        minimalistic = params.fetch(:minimalistic, false) != false
         features = []
 
-        User.with_attached_avatar.with_attached_banner.partner_geolocable.each do |user|
-          features << user.to_partner_geo_json
+        users = minimalistic ? User.partner_geolocable : User.with_attached_avatar.with_attached_banner.partner_geolocable
+        users.each do |user|
+          features << user.to_partner_geo_json(minimalistic: minimalistic)
         end
 
         render json: {

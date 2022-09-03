@@ -31,6 +31,7 @@ module Api
       end
 
       def geo_json
+        minimalistic = params.fetch(:minimalistic, false) != false
         features = []
 
         climbing_filter = '1 = 1'
@@ -38,15 +39,17 @@ module Api
 
         # Crags
         if params.fetch(:crags, 'true') == 'true'
-          @department.crags.includes(photo: { picture_attachment: :blob }).where(climbing_filter).find_each do |crag|
-            features << crag.to_geo_json
+          crags = minimalistic ? @department.crags : @department.crags.includes(photo: { picture_attachment: :blob })
+          crags.where(climbing_filter).find_each do |crag|
+            features << crag.to_geo_json(minimalistic: minimalistic)
           end
         end
 
         # Gyms
         if params.fetch(:gyms, 'true') == 'true'
-          @department.gyms.includes(banner_attachment: :blob).find_each do |gym|
-            features << gym.to_geo_json
+          gyms = minimalistic ? @department.gyms : @department.gyms.includes(banner_attachment: :blob)
+          gyms.find_each do |gym|
+            features << gym.to_geo_json(minimalistic: minimalistic)
           end
         end
 

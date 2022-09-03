@@ -80,28 +80,34 @@ module Api
       end
 
       def geo_json
+        minimalistic = params.fetch(:minimalistic, false) != false
         features = []
 
         # Crags
-        @area.crags.includes(:parks, :approaches, crag_sectors: { photo: { picture_attachment: :blob } }, photo: { picture_attachment: :blob }).each do |crag|
+        crags = if minimalistic
+                  @area.crags.includes(:parks, :approaches, :crag_sectors)
+                else
+                  @area.crags.includes(:parks, :approaches, crag_sectors: { photo: { picture_attachment: :blob } }, photo: { picture_attachment: :blob })
+                end
+        crags.each do |crag|
           # Crag sectors
           crag.crag_sectors.each do |sector|
             next unless sector.latitude
 
-            features << sector.to_geo_json
+            features << sector.to_geo_json(minimalistic: minimalistic)
           end
 
           # Crag parks
           crag.parks.each do |park|
-            features << park.to_geo_json
+            features << park.to_geo_json(minimalistic: minimalistic)
           end
 
           # Crag approaches
           crag.approaches.each do |approach|
-            features << approach.to_geo_json
+            features << approach.to_geo_json(minimalistic: minimalistic)
           end
 
-          features << crag.to_geo_json
+          features << crag.to_geo_json(minimalistic: minimalistic)
         end
 
         render json: {

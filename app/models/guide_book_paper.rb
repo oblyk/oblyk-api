@@ -107,10 +107,10 @@ class GuideBookPaper < ApplicationRecord
     )
   end
 
-  def crags_to_geo_json
+  def crags_to_geo_json(minimalistic: false)
     features = []
     crags.each do |crag|
-      features << crag.to_geo_json
+      features << crag.to_geo_json(minimalistic: minimalistic)
     end
     {
       type: 'FeatureCollection',

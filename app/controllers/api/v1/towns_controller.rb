@@ -44,17 +44,20 @@ module Api
       end
 
       def geo_json
+        minimalistic = params.fetch(:minimalistic, false) != false
         features = []
         @town.dist_around = params.fetch(:dist, @town.default_dist)
 
         # Crags
-        @town.crags.includes(photo: { picture_attachment: :blob }).find_each do |crag|
-          features << crag.to_geo_json
+        crags = minimalistic ? @town.crags : @town.crags.includes(photo: { picture_attachment: :blob })
+        crags.find_each do |crag|
+          features << crag.to_geo_json(minimalistic: minimalistic)
         end
 
         # Gyms
-        @town.gyms.includes(banner_attachment: :blob).find_each do |gym|
-          features << gym.to_geo_json
+        gyms = minimalistic ? @town.gyms : @town.gyms.includes(banner_attachment: :blob)
+        gyms.find_each do |gym|
+          features << gym.to_geo_json(minimalistic: minimalistic)
         end
 
         render json: {

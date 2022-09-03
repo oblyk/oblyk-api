@@ -115,14 +115,17 @@ module Api
       end
 
       def geo_json
+        minimalistic = params.fetch(:minimalistic, false) != false
         features = []
 
-        @guide_book_paper.crags.includes(photo: { picture_attachment: :blob}).each do |crag|
-          features << crag.to_geo_json
+        crags = minimalistic ? @guide_book_paper.crags : @guide_book_paper.crags.includes(photo: { picture_attachment: :blob })
+        crags.each do |crag|
+          features << crag.to_geo_json(minimalistic: minimalistic)
         end
 
-        @guide_book_paper.place_of_sales.includes(:user).each do |place_of_sale|
-          features << place_of_sale.to_geo_json
+        place_of_sales = minimalistic ? @guide_book_paper.place_of_sales : @guide_book_paper.place_of_sales.includes(:user)
+        place_of_sales.each do |place_of_sale|
+          features << place_of_sale.to_geo_json(minimalistic: minimalistic)
         end
 
         render json: {
@@ -245,6 +248,7 @@ module Api
       end
 
       def around
+        minimalistic_geo_json = params.fetch(:minimalistic_geo_json, false) != false
         lat = params[:lat]
         lng = params[:lng]
         dist = params.fetch(:dist, '20').to_i
@@ -270,7 +274,7 @@ module Api
           end
           guides << {
             guide: guide.summary_to_json,
-            geo_json: guide.crags_to_geo_json,
+            geo_json: guide.crags_to_geo_json(minimalistic: minimalistic_geo_json),
             crags_in_area: crags_in_area,
             crags_out_of_area: crags_out_of_area
           }

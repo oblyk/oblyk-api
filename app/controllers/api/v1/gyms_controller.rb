@@ -20,6 +20,7 @@ module Api
       end
 
       def geo_json
+        minimalistic = params.fetch(:minimalistic, false) != false
         render json: {
           type: 'FeatureCollection',
           crs: {
@@ -28,7 +29,7 @@ module Api
               name: 'urn'
             }
           },
-          features: geo_json_features
+          features: geo_json_features(minimalistic)
         }, status: :ok
       end
 
@@ -104,11 +105,11 @@ module Api
 
       private
 
-      def geo_json_features
+      def geo_json_features(minimalistic)
         features = []
-
-        Gym.includes(banner_attachment: :blob).all.each do |gym|
-          features << gym.to_geo_json
+        gyms = minimalistic ? Gym.all : Gym.includes(banner_attachment: :blob).all
+        gyms.each do |gym|
+          features << gym.to_geo_json(minimalistic: minimalistic)
         end
         features
       end

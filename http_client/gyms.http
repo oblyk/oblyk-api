@@ -94,7 +94,16 @@ GET {{api_url}}/gyms.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
-### GET all gyms
+### GET search gym like mroc
 GET {{api_url}}/gyms/search.json?query=mroc
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
+
+### GET all gyms geo_json
+GET {{api_url}}/gyms/geo_json.json
+HttpApiAccessToken: {{api_access_token}}
+Content-Type: application/json
+
+{
+  "minimalistic": true
+}

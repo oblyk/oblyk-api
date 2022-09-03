@@ -217,34 +217,42 @@ class Crag < ApplicationRecord
     )
   end
 
-  def to_geo_json
-    Rails.cache.fetch("#{cache_key_with_version}/geo_json_crag", expires_in: 1.month) do
-      {
+  def to_geo_json(minimalistic: false)
+    Rails.cache.fetch("#{cache_key_with_version}/#{'minimalistic_' if minimalistic}geo_json_crag", expires_in: 1.month) do
+      features = {
         type: 'Feature',
         properties: {
           type: 'Crag',
           id: id,
           name: name,
-          slug_name: slug_name,
-          climbing_key: climbing_key,
-          icon: "crag-marker-#{climbing_key}",
-          localization: "#{city}, #{region}",
-          sport_climbing: sport_climbing,
-          bouldering: bouldering,
-          multi_pitch: multi_pitch,
-          trad_climbing: trad_climbing,
-          aid_climbing: aid_climbing,
-          deep_water: deep_water,
-          via_ferrata: via_ferrata,
-          map_thumbnail_url: photo.present? ? photo.thumbnail_url : nil,
-          route_count: crag_routes_count,
-          grade_min_value: min_grade_value,
-          grade_max_value: max_grade_value,
-          grade_max_text: max_grade_text,
-          grade_min_text: min_grade_text
+          icon: "crag-marker-#{climbing_key}"
         },
         geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
       }
+      unless minimalistic
+        features[:properties].merge!(
+          {
+            name: name,
+            slug_name: slug_name,
+            climbing_key: climbing_key,
+            localization: "#{city}, #{region}",
+            sport_climbing: sport_climbing,
+            bouldering: bouldering,
+            multi_pitch: multi_pitch,
+            trad_climbing: trad_climbing,
+            aid_climbing: aid_climbing,
+            deep_water: deep_water,
+            via_ferrata: via_ferrata,
+            map_thumbnail_url: photo.present? ? photo.thumbnail_url : nil,
+            route_count: crag_routes_count,
+            grade_min_value: min_grade_value,
+            grade_max_value: max_grade_value,
+            grade_max_text: max_grade_text,
+            grade_min_text: min_grade_text
+          }
+        )
+      end
+      features
     end
   end
 

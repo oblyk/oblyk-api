@@ -153,47 +153,62 @@ module Api
       end
 
       def geo_json
+        minimalistic = params.fetch(:minimalistic, false) != false
         last_updated_crag = Crag.order(updated_at: :desc).first
-        json = Rails.cache.fetch("#{last_updated_crag.cache_key_with_version}/crags_geo_json", expires_in: 10.minutes) do
-          {
-            type: 'FeatureCollection',
-            crs: {
-              type: 'name',
-              properties: {
-                name: 'urn'
-              }
-            },
-            features: geo_json_features
-          }
+
+        json_features = Rails.cache.fetch("#{last_updated_crag.cache_key_with_version}/#{'minimalistic_' if minimalistic}crags_geo_json", expires_in: 1.day) do
+          geo_json_features(minimalistic)
         end
+
+        json = {
+          type: 'FeatureCollection',
+          crs: {
+            type: 'name',
+            properties: {
+              name: 'urn'
+            }
+          },
+          features: json_features
+        }
         render json: json, status: :ok
       end
 
       def geo_json_around
+        minimalistic = params.fetch(:minimalistic, false) != false
         features = []
-        crags_around = Crag.includes(photo: { picture_attachment: :blob })
-                           .geo_search(@crag.latitude, @crag.longitude, 50)
+
+        crags_around = if minimalistic
+                         Crag.includes(photo: { picture_attachment: :blob }).geo_search(@crag.latitude, @crag.longitude, 50)
+                       else
+                         Crag.geo_search(@crag.latitude, @crag.longitude, 50)
+                       end
+
 
         # Crags around this crag
         crags_around.each do |crag|
-          features << crag.to_geo_json
+          features << crag.to_geo_json(minimalistic: minimalistic)
         end
 
         # Crag sectors
-        @crag.crag_sectors.includes(photo: { picture_attachment: :blob }).each do |sector|
+        crag_sectors = if minimalistic
+                         @crag.crag_sectors
+                       else
+                         @crag.crag_sectors.includes(photo: { picture_attachment: :blob })
+                       end
+        crag_sectors.each do |sector|
           next unless sector.latitude
 
-          features << sector.to_geo_json
+          features << sector.to_geo_json(minimalistic: minimalistic)
         end
 
         # Crag parks
         @crag.parks.each do |park|
-          features << park.to_geo_json
+          features << park.to_geo_json(minimalistic: minimalistic)
         end
 
         # Crag approaches
         @crag.approaches.each do |approach|
-          features << approach.to_geo_json
+          features << approach.to_geo_json(minimalistic: minimalistic)
         end
 
         render json: {
@@ -302,11 +317,17 @@ module Api
 
       private
 
-      def geo_json_features
+      def geo_json_features(minimalistic)
         features = []
 
-        Crag.includes(photo: { picture_attachment: :blob }).all.each do |crag|
-          features << crag.to_geo_json
+        if minimalistic
+          Crag.select(:id, :sport_climbing, :multi_pitch, :trad_climbing, :aid_climbing, :bouldering, :deep_water, :via_ferrata, :longitude, :latitude, :updated_at).all.find_each do |crag|
+            features << crag.to_geo_json(minimalistic: true)
+          end
+        else
+          Crag.includes(photo: { picture_attachment: :blob }).all.each do |crag|
+            features << crag.to_geo_json
+          end
         end
         features
       end

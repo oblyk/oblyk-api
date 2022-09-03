@@ -110,6 +110,7 @@ module Api
       end
 
       def partner_user_geo_json
+        minimalistic = params.fetch(:minimalistic, false) != false
         render json: {
           type: 'FeatureCollection',
           crs: {
@@ -119,7 +120,7 @@ module Api
             }
           },
           features: [
-            @user.to_partner_geo_json
+            @user.to_partner_geo_json(minimalistic: minimalistic)
           ]
         }, status: :ok
       end

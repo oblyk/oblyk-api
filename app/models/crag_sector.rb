@@ -52,26 +52,33 @@ class CragSector < ApplicationRecord
     name
   end
 
-  def to_geo_json
-    {
+  def to_geo_json(minimalistic: false)
+    features = {
       type: 'Feature',
       properties: {
         type: 'CragSector',
         id: id,
-        name: name,
-        description: description,
-        slug_name: slug_name,
-        icon: 'sector-marker',
-        map_thumbnail_url: photo.present? ? photo.thumbnail_url : nil,
-        crag: {
-          id: crag.id,
-          name: crag.name,
-          slug_name: crag.slug_name,
-          map_thumbnail_url: crag.photo.present? ? crag.photo.thumbnail_url : nil
-        }
+        icon: 'sector-marker'
       },
       geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
     }
+    unless minimalistic
+      features[:properties].merge!(
+        {
+          name: name,
+          description: description,
+          slug_name: slug_name,
+          map_thumbnail_url: photo.present? ? photo.thumbnail_url : nil,
+          crag: {
+            id: crag.id,
+            name: crag.name,
+            slug_name: crag.slug_name,
+            map_thumbnail_url: crag.photo.present? ? crag.photo.thumbnail_url : nil
+          }
+        }
+      )
+    end
+    features
   end
 
   def all_photos

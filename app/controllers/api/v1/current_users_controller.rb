@@ -262,10 +262,12 @@ module Api
       end
 
       def ascended_crags_geo_json
+        minimalistic = params.fetch(:minimalistic, false) != false
         features = []
 
-        @user.ascended_crags.includes(photo: { picture_attachment: :blob }).distinct.each do |crag|
-          features << crag.to_geo_json
+        crags = minimalistic ? @user.ascended_crags : @user.ascended_crags.includes(photo: { picture_attachment: :blob })
+        crags.distinct.each do |crag|
+          features << crag.to_geo_json(minimalistic: minimalistic)
         end
 
         render json: {

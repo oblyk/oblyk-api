@@ -154,35 +154,42 @@ class User < ApplicationRecord
     subscribes.accepted.where(followable_type: 'User')
   end
 
-  def to_partner_geo_json
-    Rails.cache.fetch("#{cache_key_with_version}/partner_geo_json", expires_in: 1.month) do
-      {
+  def to_partner_geo_json(minimalistic: false)
+    Rails.cache.fetch("#{cache_key_with_version}/#{'minimalistic_' if minimalistic}partner_geo_json", expires_in: 1.month) do
+      features = {
         type: 'Feature',
         properties: {
           type: 'PartnerUser',
           uuid: uuid,
-          full_name: full_name,
-          slug_name: slug_name,
-          description: description ? Markdown.new(description, :hard_wrap).to_html.html_safe : '',
-          age: age,
-          genre: genre,
           icon: 'partner-user',
-          sport_climbing: sport_climbing,
-          bouldering: bouldering,
-          multi_pitch: multi_pitch,
-          trad_climbing: trad_climbing,
-          aid_climbing: aid_climbing,
-          deep_water: deep_water,
-          via_ferrata: via_ferrata,
-          pan: pan,
-          avatar_thumbnail_url: avatar_thumbnail_url,
-          banner_thumbnail_url: banner_thumbnail_url,
-          grade_min: grade_min,
-          grade_max: grade_max,
-          last_activity_at: last_activity_at
+          avatar_thumbnail_url: avatar_thumbnail_url
         },
         geometry: { type: 'Point', "coordinates": [Float(partner_longitude), Float(partner_latitude), 0.0] }
       }
+      unless minimalistic
+        features[:properties].merge!(
+          {
+            full_name: full_name,
+            slug_name: slug_name,
+            description: description ? Markdown.new(description, :hard_wrap).to_html.html_safe : '',
+            age: age,
+            genre: genre,
+            sport_climbing: sport_climbing,
+            bouldering: bouldering,
+            multi_pitch: multi_pitch,
+            trad_climbing: trad_climbing,
+            aid_climbing: aid_climbing,
+            deep_water: deep_water,
+            via_ferrata: via_ferrata,
+            pan: pan,
+            banner_thumbnail_url: banner_thumbnail_url,
+            grade_min: grade_min,
+            grade_max: grade_max,
+            last_activity_at: last_activity_at
+          }
+        )
+      end
+      features
     end
   end
 
