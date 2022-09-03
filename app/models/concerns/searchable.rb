@@ -30,7 +30,7 @@ module Searchable
 
     Search.delete_object self.class.name, id
     search_indexes.each do |index|
-      next index[:value].blank?
+      next if index[:value].blank?
 
       Search.push index[:value], id, self.class.name, index[:bucket], index[:secondary_bucket]
     end
