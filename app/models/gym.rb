@@ -179,9 +179,9 @@ class Gym < ApplicationRecord
 
   def search_indexes
     [
-      { value: name },
-      { value: city },
-      { value: big_city }
+      { value: name, column_names: %i[name] },
+      { value: city, column_names: %i[city] },
+      { value: big_city, column_names: %i[big_city] }
     ]
   end
 

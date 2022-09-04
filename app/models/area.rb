@@ -81,6 +81,6 @@ class Area < ApplicationRecord
   private
 
   def search_indexes
-    [{ value: name }]
+    [{ value: name, column_names: %i[name] }]
   end
 end

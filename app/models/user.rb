@@ -366,7 +366,7 @@ class User < ApplicationRecord
   private
 
   def search_indexes
-    [{ value: full_name }]
+    [{ value: full_name, column_names: %i[first_name last_name] }]
   end
 
   def set_uuid

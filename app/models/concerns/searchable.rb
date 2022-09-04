@@ -20,13 +20,21 @@ module Searchable
   end
 
   def refresh_search_index
-    search_push
+    search_push(force: true)
   end
 
   private
 
-  def search_push
+  def search_push(force: false)
     return unless search_activated?
+
+    have_changes = false
+    search_indexes.each do |search_index|
+      search_index[:column_names].each do |column_name|
+        have_changes = true if saved_change_to_attribute? column_name
+      end
+    end
+    return true if !have_changes && !force
 
     Search.delete_object self.class.name, id
     search_indexes.each do |index|

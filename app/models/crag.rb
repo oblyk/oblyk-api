@@ -275,8 +275,8 @@ class Crag < ApplicationRecord
 
   def search_indexes
     [
-      { value: name },
-      { value: city }
+      { value: name, column_names: %i[name] },
+      { value: city, column_names: %i[city] }
     ]
   end
 

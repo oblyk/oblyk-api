@@ -213,7 +213,14 @@ class CragRoute < ApplicationRecord
 
   def search_indexes
     secondary_bucket = crag_sector.present? ? "CragRoute_in_CragSector_#{crag_sector.id}" : nil
-    [{ value: name, bucket: "CragRoute_in_Crag_#{crag.id}", secondary_bucket: secondary_bucket }]
+    [
+      {
+        value: name,
+        bucket: "CragRoute_in_Crag_#{crag.id}",
+        secondary_bucket: secondary_bucket,
+        column_names: %i[name crag_id]
+      }
+    ]
   end
 
   def historize_location
