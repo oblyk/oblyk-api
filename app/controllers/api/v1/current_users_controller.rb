@@ -306,7 +306,15 @@ module Api
         if @user.update(user_params)
           render json: @user.detail_to_json(current_user: true), status: :ok
         else
-          render json: @user.errors, status: :unprocessable_entity
+          render json: { error: @user.errors }, status: :unprocessable_entity
+        end
+      end
+
+      def update_password
+        if @user.update(password_params)
+          render json: @user.detail_to_json(current_user: true), status: :ok
+        else
+          render json: { error: @user.errors }, status: :unprocessable_entity
         end
       end
 
@@ -369,6 +377,14 @@ module Api
           :partner_latitude,
           :partner_longitude,
           email_notifiable_list: %i[]
+        )
+      end
+
+      def password_params
+        params.require(:user).permit(
+          :email,
+          :password,
+          :password_confirmation
         )
       end
 

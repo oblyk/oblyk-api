@@ -95,6 +95,7 @@ Rails.application.routes.draw do
           get :videos
           post :avatar
           post :banner
+          put :update_password
           get :subscribe_to_newsletter
           get :organizations
           post :accept_followers
