@@ -8,6 +8,13 @@ class User < ApplicationRecord
   include AttachmentResizable
   include StripTagable
 
+  PASSWORD_FORMAT = /\A
+      (?=.{8,128}) # Must contain 8 or more characters
+      (?=.*\d)     # Must contain a digit
+      (?=.*[a-z])  # Must contain a lower case character
+      (?=.*[A-Z])  # Must contain an upper case character
+    /x.freeze
+
   mattr_accessor :current, instance_accessor: false
 
   has_secure_password
@@ -74,6 +81,10 @@ class User < ApplicationRecord
 
   validates :avatar, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true
+
+  validates :password, presence: true, format: { with: PASSWORD_FORMAT }, confirmation: true, on: :create
+  validates :password, allow_nil: true, format: { with: PASSWORD_FORMAT }, confirmation: true, on: :update
+
   validate :validate_email_notifiable_list
 
   scope :partner_geolocable, -> { where(partner_search: true).where.not(partner_latitude: nil).where.not(partner_longitude: nil) }
