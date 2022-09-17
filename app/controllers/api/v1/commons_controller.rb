@@ -37,6 +37,17 @@ module Api
                     .page(params.fetch(:page, 1))
         render json: feeds, status: :ok
       end
+
+      def last_added
+        crags = Crag.where.not(photo_id: nil).order(created_at: :desc).limit(10)
+        gyms = Gym.order(created_at: :desc).limit(10)
+        crag_routes = CragRoute.order(created_at: :desc).limit(10)
+        render json: {
+          crags: crags.map(&:summary_to_json),
+          gyms: gyms.map(&:summary_to_json),
+          crag_routes: crag_routes.map(&:summary_to_json)
+        }, status: :ok
+      end
     end
   end
 end

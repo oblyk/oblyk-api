@@ -30,6 +30,7 @@ Rails.application.routes.draw do
 
       get 'figures', controller: :commons, action: :figures
       get 'last_activity_feed', controller: :commons, action: :last_activity_feed
+      get 'last_added', controller: :commons, action: :last_added
       get 'partners/figures', controller: :partners, action: :figures
       get 'partners/geo_json', controller: :partners, actions: :geo_json
       get 'partners/partners_around', controller: :partners, actions: :partners_around

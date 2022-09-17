@@ -7,3 +7,8 @@ Accept: application/json
 GET {{api_url}}/last_activity_feed.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
+
+### Last crags, gyms, crag_routes added on oblyk
+GET {{api_url}}/last_added.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
