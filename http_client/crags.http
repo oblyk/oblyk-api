@@ -142,6 +142,10 @@ Content-Type: application/json
   "grade": {
     "min": "7b",
     "max": "8a"
+  },
+  "climbing_type": {
+    "bouldering": true,
+    "sport_climbing": true
   }
 }
 

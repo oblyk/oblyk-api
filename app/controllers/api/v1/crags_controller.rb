@@ -49,29 +49,39 @@ module Api
 
         # Orientation
         if orientation.present?
-          crag_object = crag_object.where('north OR north_east OR north_west') if orientation[:north]
-          crag_object = crag_object.where('south OR south_east OR south_west') if orientation[:south]
-          crag_object = crag_object.where('east OR south_east OR south_east') if orientation[:east]
-          crag_object = crag_object.where('west OR north_west OR south_west') if orientation[:west]
+          orientations = []
+
+          orientations << 'north OR north_east OR north_west' if orientation[:north]
+          orientations << 'south OR south_east OR south_west' if orientation[:south]
+          orientations << 'east OR south_east OR south_east' if orientation[:east]
+          orientations << 'west OR north_west OR south_west' if orientation[:west]
+
+          crag_object = crag_object.where(orientations.join(' OR '))
         end
 
         # Climbing type
         if climbing_type.present?
-          crag_object = crag_object.where('sport_climbing') if climbing_type[:sport_climbing]
-          crag_object = crag_object.where('bouldering') if climbing_type[:bouldering]
-          crag_object = crag_object.where('multi_pitch') if climbing_type[:multi_pitch]
-          crag_object = crag_object.where('trad_climbing') if climbing_type[:trad_climbing]
-          crag_object = crag_object.where('aid_climbing') if climbing_type[:aid_climbing]
-          crag_object = crag_object.where('deep_water') if climbing_type[:deep_water]
-          crag_object = crag_object.where('via_ferrata') if climbing_type[:via_ferrata]
+          climbing_types = []
+          climbing_types << 'sport_climbing' if climbing_type[:sport_climbing]
+          climbing_types << 'bouldering' if climbing_type[:bouldering]
+          climbing_types << 'multi_pitch' if climbing_type[:multi_pitch]
+          climbing_types << 'trad_climbing' if climbing_type[:trad_climbing]
+          climbing_types << 'aid_climbing' if climbing_type[:aid_climbing]
+          climbing_types << 'deep_water' if climbing_type[:deep_water]
+          climbing_types << 'via_ferrata' if climbing_type[:via_ferrata]
+
+          crag_object = crag_object.where(climbing_types.join(' OR '))
         end
 
         # Season
         if season.present?
-          crag_object = crag_object.where('summer') if season[:summer]
-          crag_object = crag_object.where('autumn') if season[:autumn]
-          crag_object = crag_object.where('winter') if season[:winter]
-          crag_object = crag_object.where('spring') if season[:spring]
+          seasons = []
+          seasons << 'summer' if season[:summer]
+          seasons << 'autumn' if season[:autumn]
+          seasons << 'winter' if season[:winter]
+          seasons << 'spring' if season[:spring]
+
+          crag_object = crag_object.where(seasons.join(' OR '))
         end
 
         if grade.present?
