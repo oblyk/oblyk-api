@@ -33,7 +33,8 @@ module Api
         return if honeypot_params.blank?
 
         blocked_ip = IpBlackList.new ip: request.env['HTTP_X_REAL_IP']
-        blocked_ip.blocked!(params)
+        f = ActionDispatch::Http::ParameterFilter.new(Rails.application.config.filter_parameters)
+        blocked_ip.blocked! f.filter(params)
         honeypot_response
       end
 
