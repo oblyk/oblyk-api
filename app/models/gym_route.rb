@@ -93,7 +93,7 @@ class GymRoute < ApplicationRecord
   end
 
   def thumbnail_url
-    resize_attachment picture, '300x300'
+    resize_attachment thumbnail, '300x300'
   end
 
   def update_form_ascents!
