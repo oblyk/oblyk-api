@@ -11,20 +11,27 @@ module Api
       before_action :set_gym_route, only: %i[show update destroy add_picture add_thumbnail dismount mount ascents]
 
       def index
-        @group_by = params.fetch(:group_by, nil)
+        group_by = params.fetch(:group_by, nil)
         order_by = params.fetch(:order_by, nil)
         dismounted = params.fetch(:dismounted, false)
 
-        if @group_by == 'sector'
-          @sectors = if @gym_sector.present?
-                       @gym_sector
-                     elsif @gym_space.present?
-                       GymSector.where(gym_space: @gym_space)
-                     else
-                       GymSector.joins(:gym_space).where(gym_spaces: { gym_id: @gym.id })
-                     end
-          @gym_routes = group_by_sector(@sectors, dismounted)
-          render json: { sectors: @sectors.map { |sector| { sector: sector.summary_to_json, routes: sector.gym_routes.map(&:summary_to_json) } } }, status: :ok
+        if group_by == 'sector'
+          sectors = if @gym_sector.present?
+                      @gym_sector
+                    elsif @gym_space.present?
+                      GymSector.where(gym_space: @gym_space)
+                    else
+                      GymSector.joins(:gym_space).where(gym_spaces: { gym_id: @gym.id })
+                    end
+          routes_json = { sectors: [] }
+          sectors.each do |sector|
+            routes = dismounted ? sector.gym_routes.dismounted : sector.gym_routes.mounted
+            routes_json[:sectors] << {
+              sector: sector.summary_to_json,
+              routes: routes.map(&:summary_to_json)
+            }
+          end
+          render json: routes_json, status: :ok
         else
           routes = if @gym_sector.present?
                      GymRoute.where(gym_sector: @gym_sector)
@@ -35,23 +42,23 @@ module Api
                    end
 
           # Mount or dismount
-          @gym_routes = dismounted ? routes.dismounted : routes.mounted
+          routes = dismounted ? routes.dismounted : routes.mounted
 
           # Order
-          @gym_routes = @gym_routes.order(opened_at: :desc) if order_by == 'opened_at'
-          @gym_routes = @gym_routes.includes(gym_grade_line: :gym_grade).order('gym_grades.name ASC, gym_grade_lines.order DESC') if order_by == 'grade'
-          @gym_routes = @gym_routes.includes(:sector).order('sectors.name ASC') if order_by == 'sector'
+          routes = routes.order(opened_at: :desc) if order_by == 'opened_at'
+          routes = routes.includes(gym_grade_line: :gym_grade).order('gym_grades.name ASC, gym_grade_lines.order DESC') if order_by == 'grade'
+          routes = routes.includes(:sector).order('sectors.name ASC') if order_by == 'sector'
 
           # group by
-          case @group_by
+          case group_by
           when 'opened_at'
-            @opened_routes = group_by_opened_at(@gym_routes)
-            render json: { opened_at: @opened_routes.map { |opened_route| { opened_at: opened_route[0], routes: opened_route[1][:routes].map(&:summary_to_json) } } }, status: :ok
+            opened_routes = group_by_opened_at(routes)
+            render json: { opened_at: opened_routes.map { |opened_route| { opened_at: opened_route[0], routes: opened_route[1][:routes].map(&:summary_to_json) } } }, status: :ok
           when 'grade'
-            @grade_routes = group_by_grade(@gym_routes)
-            render json: { grade: @grade_routes.map { |grade_route| { grade: grade_route[0], routes: grade_route[1][:routes].map(&:summary_to_json) } } }, status: :ok
+            grade_routes = group_by_grade(routes)
+            render json: { grade: grade_routes.map { |grade_route| { grade: grade_route[0], routes: grade_route[1][:routes].map(&:summary_to_json) } } }, status: :ok
           else
-            render json: @gym_routes.map(&:summary_to_json), status: :ok
+            render json: routes.map(&:summary_to_json), status: :ok
           end
         end
       end
