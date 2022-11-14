@@ -40,7 +40,8 @@ class GymGrade < ApplicationRecord
       need_grade_line: need_grade_line?,
       gym: {
         id: gym.id,
-        slug_name: gym.slug_name
+        slug_name: gym.slug_name,
+        name: gym.name
       },
       grade_lines: gym_grade_lines.map(&:summary_to_json)
     }
