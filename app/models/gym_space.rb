@@ -77,19 +77,20 @@ class GymSpace < ApplicationRecord
       longitude: longitude,
       published_at: published_at,
       banner: banner.attached? ? banner_large_url : nil,
-      plan: plan.attached? ? plan_large_url : nil
+      plan: plan.attached? ? plan_large_url : nil,
+      plan_thumbnail_url: plan.attached? ? plan_thumbnail_url : nil,
+      gym: {
+        id: gym.id,
+        name: gym.name,
+        slug_name: gym.slug_name,
+        banner: gym.banner.attached? ? gym.banner_large_url : nil
+      }
     }
   end
 
   def detail_to_json
     summary_to_json.merge(
       {
-        gym: {
-          id: gym.id,
-          name: gym.name,
-          slug_name: gym.slug_name,
-          banner: gym.banner.attached? ? gym.banner_large_url : nil
-        },
         gym_sectors: gym_sectors.map(&:summary_to_json)
       }
     )
