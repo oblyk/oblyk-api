@@ -8,10 +8,10 @@ class GymGrade < ApplicationRecord
   has_many :gym_spaces
   has_many :gym_sectors
 
-  DIFFICULTY_SYSTEM_LIST = %w[hold_color tag_color grade pan].freeze
+  POINT_SYSTEM_TYPE_LIST = %w[fix divisible none].freeze
 
   validates :name, presence: true
-  validates :difficulty_system, inclusion: { in: DIFFICULTY_SYSTEM_LIST }
+  validates :point_system_type, inclusion: { in: POINT_SYSTEM_TYPE_LIST }
   validate :validate_grading_system
 
   def next_grade_lines_order
@@ -20,7 +20,7 @@ class GymGrade < ApplicationRecord
   end
 
   def need_grade_line?
-    difficulty_system != 'grade'
+    difficulty_by_level?
   end
 
   def summary_to_json
@@ -31,11 +31,11 @@ class GymGrade < ApplicationRecord
     {
       id: id,
       name: name,
-      difficulty_system: difficulty_system,
-      has_hold_color: has_hold_color,
-      use_grade_system: use_grade_system,
-      use_point_system: use_point_system,
-      use_point_division_system: use_point_division_system,
+      difficulty_by_grade: difficulty_by_grade,
+      difficulty_by_level: difficulty_by_level,
+      tag_color: tag_color,
+      hold_color: hold_color,
+      point_system_type: point_system_type,
       next_grade_lines_order: next_grade_lines_order,
       need_grade_line: need_grade_line?,
       gym: {
@@ -50,7 +50,7 @@ class GymGrade < ApplicationRecord
   private
 
   def validate_grading_system
-    errors.add(:base, I18n.t('activerecord.errors.messages.grade_system')) if !use_grade_system && !use_point_system && !use_point_division_system
-    errors.add(:base, I18n.t('activerecord.errors.messages.one_point_system')) if use_point_system && use_point_division_system
+    errors.add(:base, I18n.t('activerecord.errors.messages.difficulty_system')) if !difficulty_by_grade && !difficulty_by_level
+    errors.add(:base, I18n.t('activerecord.errors.messages.identification_system')) if !difficulty_by_grade && !difficulty_by_level
   end
 end

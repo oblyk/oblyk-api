@@ -50,11 +50,11 @@ module Api
       def gym_grade_params
         params.require(:gym_grade).permit(
           :name,
-          :difficulty_system,
-          :has_hold_color,
-          :use_grade_system,
-          :use_point_system,
-          :use_point_division_system
+          :difficulty_by_grade,
+          :difficulty_by_level,
+          :tag_color,
+          :hold_color,
+          :point_system_type
         )
       end
     end

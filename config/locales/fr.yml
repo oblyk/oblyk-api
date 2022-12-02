@@ -118,8 +118,8 @@ fr:
         invalid: 'is_invalid'
         email: 'is_invalid'
         inclusion: 'is_not_a_permitted_value'
-        grade_system: "you_must_choose_at_least_one_system"
-        one_point_system: "you_cannot_have_both_point_systems."
+        difficulty_system: "you_must_choose_at_least_one_difficulty_system"
+        identification_system: "you_must_choose_at_least_one_identification_system"
         content_type: "is_not_in_the_right_format"
         confirmation: "confirm"
         record_invalid: "Enregistrement non valide"

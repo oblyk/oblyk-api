@@ -38,16 +38,16 @@ class GymRoute < ApplicationRecord
   end
 
   def points_to_s
-    return '' unless gym_grade.use_point_system || gym_grade.use_point_division_system
+    return '' if gym_grade.point_system_type == 'none'
 
     ascents_count = self.ascents_count&.positive? ? self.ascents_count : 1
-    points = self.points if gym_grade.use_point_system
-    points = 1000 / ascents_count if gym_grade.use_point_division_system
+    points = self.points if gym_grade.point_system_type == 'fix'
+    points = 1000 / ascents_count if gym_grade.point_system_type == 'divisible'
     "#{points}pts"
   end
 
   def grade_to_s
-    return '' unless gym_grade.use_grade_system
+    return '' unless gym_grade.difficulty_by_grade?
 
     if sections_count > 1
       sections_array = []
@@ -58,16 +58,6 @@ class GymRoute < ApplicationRecord
     else
       min_grade_text
     end
-  end
-
-  def identification_to_s
-    identifications = {
-      hold_color: :hold,
-      pan: :tag,
-      tag_color: :tag_and_hold,
-      grade: :hold
-    }
-    identifications[gym_grade.difficulty_system.to_sym]
   end
 
   def mounted?
@@ -148,7 +138,6 @@ class GymRoute < ApplicationRecord
       dismounted: dismounted?,
       points_to_s: points_to_s,
       grade_to_s: grade_to_s,
-      identification_to_s: identification_to_s,
       thumbnail: thumbnail.attached? ? thumbnail_url : nil,
       gym_sector_name: gym_sector.name,
       grade_gap: {

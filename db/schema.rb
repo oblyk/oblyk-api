@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_24_112241) do
+ActiveRecord::Schema.define(version: 2022_11_29_120430) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -513,16 +513,15 @@ ActiveRecord::Schema.define(version: 2022_08_24_112241) do
 
   create_table "gym_grades", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
-    t.string "difficulty_system"
-    t.boolean "has_hold_color"
     t.bigint "gym_id"
-    t.bigint "legacy_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.boolean "use_grade_system", default: false
-    t.boolean "use_point_system", default: false
-    t.boolean "use_point_division_system", default: false
     t.datetime "deleted_at"
+    t.boolean "difficulty_by_grade", default: false
+    t.boolean "difficulty_by_level"
+    t.boolean "tag_color"
+    t.boolean "hold_color"
+    t.string "point_system_type", default: "none"
     t.index ["gym_id"], name: "index_gym_grades_on_gym_id"
   end
 

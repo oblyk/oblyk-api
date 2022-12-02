@@ -46,7 +46,8 @@ module Api
 
           # Order
           routes = routes.order(opened_at: :desc) if order_by == 'opened_at'
-          routes = routes.includes(gym_grade_line: :gym_grade).order('gym_grades.name ASC, gym_grade_lines.order DESC') if order_by == 'grade'
+          routes = routes.order('max_grade_value DESC') if order_by == 'grade'
+          routes = routes.includes(gym_grade_line: :gym_grade).order('gym_grade_lines.order DESC, gym_grades.name ASC') if order_by == 'level'
           routes = routes.includes(:sector).order('sectors.name ASC') if order_by == 'sector'
 
           # group by
@@ -56,6 +57,9 @@ module Api
             render json: { opened_at: opened_routes.map { |opened_route| { opened_at: opened_route[0], routes: opened_route[1][:routes].map(&:summary_to_json) } } }, status: :ok
           when 'grade'
             grade_routes = group_by_grade(routes)
+            render json: { grade: grade_routes.map { |grade_route| { grade: grade_route[0], routes: grade_route[1][:routes].map(&:summary_to_json) } } }, status: :ok
+          when 'level'
+            grade_routes = group_by_level(routes)
             render json: { grade: grade_routes.map { |grade_route| { grade: grade_route[0], routes: grade_route[1][:routes].map(&:summary_to_json) } } }, status: :ok
           else
             render json: routes.map(&:summary_to_json), status: :ok
@@ -167,11 +171,21 @@ module Api
       def group_by_grade(routes)
         grades = {}
         routes.each do |route|
-          grade = if route.gym_grade.difficulty_system == 'grade'
-                    route.max_grade_value
-                  else
-                    "#{route.gym_grade.id}-#{route.gym_grade_line.order}"
-                  end
+          next unless route.gym_grade.difficulty_by_grade?
+
+          grade = route.max_grade_value
+          grades[grade] = grades[grade] || { grade: grade, routes: [] }
+          grades[grade][:routes] << route
+        end
+        grades
+      end
+
+      def group_by_level(routes)
+        grades = {}
+        routes.each do |route|
+          next unless route.gym_grade.difficulty_by_level?
+
+          grade = "#{route.gym_grade.id}-#{route.gym_grade_line.order}"
           grades[grade] = grades[grade] || { grade: grade, routes: [] }
           grades[grade][:routes] << route
         end

@@ -26,11 +26,12 @@ class GymGradeLine < ApplicationRecord
       points: points,
       gym_grade: {
         id: gym_grade.id,
-        slug_name: gym_grade.name,
-        difficulty_system: gym_grade.difficulty_system,
-        use_grade_system: gym_grade.use_grade_system,
-        use_point_system: gym_grade.use_point_system,
-        use_point_division_system: gym_grade.use_point_division_system
+        name: gym_grade.name,
+        difficulty_by_grade: gym_grade.difficulty_by_grade,
+        difficulty_by_level: gym_grade.difficulty_by_level,
+        tag_color: gym_grade.tag_color,
+        hold_color: gym_grade.hold_color,
+        point_system_type: gym_grade.point_system_type
       },
       gym: {
         id: gym.id,
@@ -46,7 +47,7 @@ class GymGradeLine < ApplicationRecord
   end
 
   def grading_value
-    errors.add(:grade_text, I18n.t('activerecord.errors.messages.blank')) if gym_grade.use_grade_system && grade_text.blank?
-    errors.add(:points, I18n.t('activerecord.errors.messages.blank')) if gym_grade.use_point_system && points.blank?
+    errors.add(:grade_text, I18n.t('activerecord.errors.messages.blank')) if gym_grade.difficulty_by_grade? && grade_text.blank?
+    errors.add(:points, I18n.t('activerecord.errors.messages.blank')) if gym_grade.point_system_type == 'fix' && points.blank?
   end
 end
