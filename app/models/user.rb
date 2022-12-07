@@ -61,6 +61,7 @@ class User < ApplicationRecord
   has_many :refresh_tokens
   has_many :reports
   has_many :words
+  has_many :climbing_sessions
 
   before_validation :set_uuid
   before_validation :set_ws_token

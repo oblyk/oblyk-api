@@ -10,6 +10,7 @@ class GymRoute < ApplicationRecord
   belongs_to :gym_grade_line, optional: true
   has_one :gym_space, through: :gym_sector
   has_one :gym, through: :gym_sector
+  has_one :gym_grade, through: :gym_grade_line
   has_many :videos, as: :viewable
   has_many :ascent_gym_routes
 

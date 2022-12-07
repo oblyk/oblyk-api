@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_29_120430) do
+ActiveRecord::Schema.define(version: 2022_12_03_200253) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -159,6 +159,11 @@ ActiveRecord::Schema.define(version: 2022_11_29_120430) do
     t.integer "gym_grade_level"
     t.bigint "gym_id"
     t.bigint "gym_grade_id"
+    t.integer "quantity", default: 1
+    t.bigint "climbing_session_id"
+    t.bigint "color_system_line_id"
+    t.index ["climbing_session_id"], name: "index_ascents_on_climbing_session_id"
+    t.index ["color_system_line_id"], name: "index_ascents_on_color_system_line_id"
     t.index ["crag_route_id"], name: "index_ascents_on_crag_route_id"
     t.index ["gym_grade_id"], name: "index_ascents_on_gym_grade_id"
     t.index ["gym_id"], name: "index_ascents_on_gym_id"
@@ -173,6 +178,32 @@ ActiveRecord::Schema.define(version: 2022_11_29_120430) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_authors_on_user_id"
+  end
+
+  create_table "climbing_sessions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.text "description"
+    t.date "session_date"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["session_date"], name: "index_climbing_sessions_on_session_date"
+    t.index ["user_id"], name: "index_climbing_sessions_on_user_id"
+  end
+
+  create_table "color_system_lines", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "color_system_id"
+    t.string "hex_color"
+    t.integer "order"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["color_system_id"], name: "index_color_system_lines_on_color_system_id"
+  end
+
+  create_table "color_systems", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "colors_mark"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["colors_mark"], name: "index_color_systems_on_colors_mark", unique: true
   end
 
   create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

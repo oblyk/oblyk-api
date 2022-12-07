@@ -47,6 +47,10 @@ class GymGrade < ApplicationRecord
     }
   end
 
+  def colors_system_mark
+    gym_grade_lines.map { |gym_grade_line| gym_grade_line.colors.first }.join
+  end
+
   private
 
   def validate_grading_system

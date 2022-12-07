@@ -4,6 +4,7 @@ class AscentGymRoute < Ascent
   belongs_to :gym_route, optional: true
   belongs_to :gym
   belongs_to :gym_grade, optional: true
+  belongs_to :color_system_line, optional: true
 
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }
 
@@ -84,17 +85,19 @@ class AscentGymRoute < Ascent
   end
 
   def historize_grade_gap
-    max_grade_value = Grade::MIN_GRADE
-    max_grade_text = ''
-    min_grade_value = Grade::MAX_GRADE
-    min_grade_text = ''
+    max_grade_value = nil
+    max_grade_text = nil
+    min_grade_value = nil
+    min_grade_text = nil
 
     sections.each do |section|
-      max_grade_text = section['grade'] if section['grade_value'] > max_grade_value
-      max_grade_value = section['grade_value'] if section['grade_value'] > max_grade_value
+      next unless section['grade_value']
 
-      min_grade_text = section['grade'] if section['grade_value'] < min_grade_value
-      min_grade_value = section['grade_value'] if section['grade_value'] < min_grade_value
+      max_grade_text = section['grade'] if max_grade_value.blank? || section['grade_value'] > max_grade_value
+      max_grade_value = section['grade_value'] if max_grade_value.blank? || section['grade_value'] > max_grade_value
+
+      min_grade_text = section['grade'] if min_grade_value.blank? || section['grade_value'] < min_grade_value
+      min_grade_value = section['grade_value'] if min_grade_value.blank? || section['grade_value'] < min_grade_value
     end
 
     self.max_grade_text = max_grade_text

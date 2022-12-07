@@ -4,6 +4,9 @@ class Ascent < ApplicationRecord
   include StripTagable
 
   belongs_to :user
+  belongs_to :climbing_session, optional: true
+  belongs_to :color_system_line, optional: true
+  belongs_to :crag_route, optional: true
   has_many :ascent_users
 
   attr_accessor :selected_sections
@@ -11,9 +14,13 @@ class Ascent < ApplicationRecord
   validates :released_at, presence: true
   validates :hardness_status, inclusion: { in: Hardness::LIST }, allow_blank: true
   validates :ascent_status, inclusion: { in: AscentStatus::LIST }
+  validates :climbing_type, inclusion: { in: Climb::GYM_LIST }
 
   scope :made, -> { where.not(ascent_status: :project) }
   scope :project, -> { where(ascent_status: :project) }
+
+  after_save :attache_to_climbing_session
+  after_destroy :purge_climbing_session
 
   def hardness_value
     return -1 if hardness_status == 'easy_for_the_grade'
@@ -24,5 +31,21 @@ class Ascent < ApplicationRecord
 
   def sections_done
     sections.map { |section| section['index'] }
+  end
+
+  private
+
+  def attache_to_climbing_session
+    climbing_session_found = ClimbingSession.find_or_initialize_by session_date: released_at, user_id: user_id
+
+    climbing_session_found.save
+    last_climbing_session = climbing_session
+    update_column :climbing_session_id, climbing_session_found.id
+
+    last_climbing_session.remove_if_empty! if last_climbing_session && last_climbing_session.id != climbing_session_found.id
+  end
+
+  def purge_climbing_session
+    climbing_session&.remove_if_empty!
   end
 end

@@ -20,6 +20,12 @@ class Climb
     VIA_FERRATA
   ].freeze
 
+  GYM_LIST = [
+    SPORT_CLIMBING,
+    BOULDERING,
+    PAN
+  ].freeze
+
   COLOR = {
     SPORT_CLIMBING => '#3a71c7',
     BOULDERING => '#ffcb00',

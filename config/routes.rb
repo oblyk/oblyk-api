@@ -114,7 +114,13 @@ Rails.application.routes.draw do
                 get :ascents_of_crag
               end
             end
+            resources :indoors, only: %i[] do
+              collection do
+                get :simple_stats_by_gyms
+              end
+            end
           end
+          resources :climbing_sessions, only: %i[index show update]
         end
       end
 

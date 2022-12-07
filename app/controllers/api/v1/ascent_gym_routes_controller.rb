@@ -8,8 +8,27 @@ module Api
       before_action :protected_by_owner, only: %i[update destroy]
 
       def index
+        # Fetch filters
         gym_route_id = params.fetch(:gym_route_id, nil)
-        ascent_gym_routes = gym_route_id ? @current_user.ascent_gym_routes.where(gym_route_id: gym_route_id) : @current_user.ascent_gym_routes
+        gym_id = params.fetch(:gym_id, nil)
+        ascent_status = params.fetch(:ascent_status, [])
+        climbing_types = params.fetch(:climbing_types, [])
+
+        # Ascents base
+        ascent_gym_routes = @current_user.ascent_gym_routes
+
+        # Ascents in gym
+        ascent_gym_routes = ascent_gym_routes.where(gym_id: gym_id) if gym_id
+
+        # Ascents in gym_route
+        ascent_gym_routes = ascent_gym_routes.where(gym_route_id: gym_route_id) if gym_route_id
+
+        # Filter by ascents status [project, sent, red_point, flash, onsight, repetition]
+        ascent_gym_routes = ascent_gym_routes.where(ascent_status: ascent_status) if ascent_status.size.positive?
+
+        # Filter by climbing types [sport_climbing, bouldering, pan]
+        ascent_gym_routes = ascent_gym_routes.where(climbing_types: climbing_types) if climbing_types.size.positive?
+
         render json: ascent_gym_routes.map(&:summary_to_json), status: :ok
       end
 
@@ -20,6 +39,13 @@ module Api
       def create
         @ascent_gym_route = AscentGymRoute.new(ascent_gym_route_params)
         @ascent_gym_route.user = @current_user
+
+        if @ascent_gym_route.gym_route&.gym_grade && @ascent_gym_route.gym_route.gym_grade.difficulty_by_level
+          gym_grade = @ascent_gym_route.gym_route.gym_grade
+          color_system = ColorSystem.create_form_grade gym_grade
+          @ascent_gym_route.color_system_line = color_system.color_system_lines.where(order: @ascent_gym_route.gym_route.gym_grade_line.order).first if color_system
+        end
+
         if @ascent_gym_route.save
           render json: @current_user.ascent_gym_routes_to_a, status: :created
         else
