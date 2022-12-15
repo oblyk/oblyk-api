@@ -24,7 +24,7 @@ class ClimbingSession < ApplicationRecord
           color: gym_ascent.color_system_line.hex_color,
           count: 0
         }
-        by_colors[gym_ascent.color_system_line.hex_color][:count] += 1
+        by_colors[gym_ascent.color_system_line.hex_color][:count] += gym_ascent.quantity
       end
 
       next unless gym_ascent.max_grade_value
@@ -34,7 +34,7 @@ class ClimbingSession < ApplicationRecord
         grade_value: gym_ascent.max_grade_value,
         count: 0
       }
-      by_grade[gym_ascent.max_grade_text][:count] += 1
+      by_grade[gym_ascent.max_grade_text][:count] += gym_ascent.quantity
     end
 
     crag_ascents.each do |crag_ascent|

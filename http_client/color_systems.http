@@ -1,0 +1,21 @@
+### Get all color systems
+GET {{api_url}}/color_systems.json
+HttpApiAccessToken: {{api_access_token}}
+Content-Type: application/json
+
+### Get all color systems but usage count filtred by gym
+GET {{api_url}}/gyms/212/color_systems.json
+HttpApiAccessToken: {{api_access_token}}
+Content-Type: application/json
+
+### Create new color systems
+POST {{api_url}}/color_systems.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "color_system": {
+    "colors": ["#e9afdd", "#ff2ad4", "#800000"]
+  }
+}

@@ -17,7 +17,7 @@ module LogBook
           grade_value = ascent.min_grade_value
           grade_value -= 1 if grade_value.even?
 
-          grades[grade_value][:count] += 1
+          grades[grade_value][:count] += ascent.quantity
         end
 
         {
@@ -42,7 +42,7 @@ module LogBook
           color_system.color_system_lines.each do |color_system_line|
             background << color_system_line.hex_color
             labels << color_system_line.order
-            data << ascents_in_level.count { |ascent| ascent.color_system_line_id == color_system_line.id }
+            data << ascents_in_level.sum { |ascent| ascent.color_system_line_id == color_system_line.id ? ascent.quantity : 0 }
           end
 
           charts << {

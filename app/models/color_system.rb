@@ -5,6 +5,18 @@ class ColorSystem < ApplicationRecord
 
   validates :colors_mark, presence: true, uniqueness: true
 
+  def init_line_form_colors(colors)
+    order = 1
+    colors.each do |color|
+      color_system_line = ColorSystemLine.new(
+        hex_color: color,
+        order: order
+      )
+      color_system_lines << color_system_line
+      order += 1
+    end
+  end
+
   def init_line_form_grade_line(gym_grade)
     gym_grade.gym_grade_lines.each do |gym_grade_line|
       color_system_line = ColorSystemLine.new(

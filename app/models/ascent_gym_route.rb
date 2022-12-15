@@ -66,6 +66,8 @@ class AscentGymRoute < Ascent
   end
 
   def historize_ascents
+    return unless gym_route
+
     self.height = gym_route.height
     self.climbing_type = gym_route.climbing_type
 

@@ -136,7 +136,9 @@ Rails.application.routes.draw do
         get :export, on: :collection
       end
 
-      resources :ascent_gym_routes
+      resources :ascent_gym_routes do
+        post :create_bulk, on: :collection
+      end
 
       resources :comments
       resources :links
@@ -172,6 +174,7 @@ Rails.application.routes.draw do
         post :add_logo, on: :member
         get :routes_count, on: :member
         get :routes, on: :member
+        resources :color_systems, only: %i[index create show]
         resources :gym_administrators
         resources :gym_administration_requests, only: %i[create]
         resources :gym_grades do
@@ -198,6 +201,7 @@ Rails.application.routes.draw do
           put :mount_collection, on: :collection
         end
       end
+      resources :color_systems, only: %i[index show create]
       resources :reports, only: %i[create]
 
       scope :public do

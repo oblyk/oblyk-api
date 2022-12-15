@@ -4,7 +4,7 @@ module Api
   module V1
     class AscentGymRoutesController < ApiController
       before_action :protected_by_session
-      before_action :set_ascent_gym_route, except: %i[create index]
+      before_action :set_ascent_gym_route, except: %i[create index create_bulk]
       before_action :protected_by_owner, only: %i[update destroy]
 
       def index
@@ -53,6 +53,65 @@ module Api
         end
       end
 
+      def create_bulk
+        gym = Gym.find ascent_bulk_params[:gym_id]
+        released_at = Date.parse(ascent_bulk_params[:released_at])
+
+        new_ascents = []
+        ascent_bulk_params[:ascents].each do |ascent|
+          gym_ascent = AscentGymRoute.new(
+            ascent_status: ascent[:ascent_status],
+            quantity: ascent[:quantity],
+            climbing_type: ascent_bulk_params[:climbing_type],
+            height: ascent[:height],
+            released_at: released_at,
+            user: @current_user,
+            gym: gym
+          )
+          grade = Grade.clean_grade ascent[:grade]
+          grade_value = Grade.to_value grade
+          gym_ascent.color_system_line_id = ascent[:color_system_line_id] if ascent_bulk_params[:ascents_by] == 'color'
+          gym_ascent.sections = if ascent_bulk_params[:ascents_by] == 'grade'
+                                  [{
+                                    grade: grade,
+                                    index: 0,
+                                    height: ascent[:height],
+                                    grade_value: grade_value
+                                  }]
+                                else
+                                  [{
+                                    grade: nil,
+                                    index: 0,
+                                    height: ascent[:height],
+                                    grade_value: nil
+                                  }]
+                                end
+          new_ascents << gym_ascent
+        end
+
+        errors = []
+        new_ascents.each do |new_ascent|
+          unless new_ascent.valid?
+            errors << new_ascent.errors
+            break
+          end
+        end
+
+        if errors.size.zero?
+          if ascent_bulk_params[:description].present?
+            climbing_session = ClimbingSession.find_or_initialize_by(user: @current_user, session_date: released_at)
+            ascent_description = climbing_session.description.present? ? "\n#{ascent_bulk_params[:description]}" : ascent_bulk_params[:description]
+            climbing_session.description = ascent_description
+            climbing_session.save
+          end
+
+          new_ascents.each(&:save)
+          render json: { status: 'ok' }, status: :created
+        else
+          render json: { error: errors }, status: :unprocessable_entity
+        end
+      end
+
       def update
         if @ascent_gym_route.update(ascent_gym_route_params)
           render json: @current_user.ascent_gym_routes_to_a, status: :created
@@ -87,6 +146,17 @@ module Api
           :comment,
           :released_at,
           selected_sections: %i[]
+        )
+      end
+
+      def ascent_bulk_params
+        params.require(:gym_ascents).permit(
+          :ascents_by,
+          :climbing_type,
+          :gym_id,
+          :description,
+          :released_at,
+          ascents: %i[height grade color_system_line_id quantity ascent_status]
         )
       end
 

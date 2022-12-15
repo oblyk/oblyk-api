@@ -11,5 +11,5 @@ Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 
 {
-  "gym_id": 212
+  "gym_id": 3
 }

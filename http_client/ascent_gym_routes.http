@@ -1,0 +1,29 @@
+### Create many gym ascents in one route
+POST {{api_url}}/ascent_gym_routes/create_bulk.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym_ascents": {
+    "ascents_by": "grade",
+    "climbing_type": "bouldering",
+    "gym_id": 3,
+    "description": "Mes première corix en salle !",
+    "released_at": "2022-12-11",
+    "ascents": [
+      {
+        "height": 4,
+        "grade": "6a",
+        "quantity": 2,
+        "ascent_status": "flash"
+      },
+      {
+        "height": 5,
+        "grade": "7a+",
+        "quantity": 1,
+        "ascent_status": "sent"
+      }
+    ]
+  }
+}
