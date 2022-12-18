@@ -58,7 +58,7 @@ module Api
       private
 
       def set_climbing_session
-        @climbing_session = ClimbingSession.find params[:id]
+        @climbing_session = ClimbingSession.find_by session_date: params[:id]
       end
 
       def climbing_session_params

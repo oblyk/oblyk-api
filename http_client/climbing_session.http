@@ -8,8 +8,8 @@ Content-Type: application/json
   "only_gym": true
 }
 
-### GET one climbing session
-GET {{api_url}}/current_users/climbing_sessions/8543.json
+### GET one climbing session by date
+GET {{api_url}}/current_users/climbing_sessions/2022-12-18.json
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
