@@ -9,7 +9,19 @@ Content-Type: application/json
 }
 
 ### GET one climbing session by date
-GET {{api_url}}/current_users/climbing_sessions/2022-12-18.json
+GET {{api_url}}/current_users/climbing_sessions/2022-12-11.json
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
+
+### Upate climbing session description
+PUT {{api_url}}/current_users/climbing_sessions/2022-11-12.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "climbing_session": {
+    "description": "Je change la description"
+  }
+}

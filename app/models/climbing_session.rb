@@ -59,16 +59,36 @@ class ClimbingSession < ApplicationRecord
         count: ascents.size,
         by_grades: by_grade.map { |grade| grade[1] },
         by_colors: by_colors.map { |color| color[1] }
+      },
+      user: {
+        uuid: user.uuid,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        slug_name: user.slug_name
       }
     }
   end
 
   def detail_to_json
+    previous_climbing_session = ClimbingSession
+                                .where(user: user)
+                                .where('climbing_sessions.session_date < ?', session_date)
+                                .maximum(:session_date)
+    next_climbing_session = ClimbingSession
+                            .where(user: user)
+                            .where('climbing_sessions.session_date > ?', session_date)
+                            .minimum(:session_date)
+
+    user_ids = AscentUser.where(ascent_id: ascent_crag_routes.pluck(:id)).pluck(:user_id).uniq
+
     summary = summary_to_json
     summary[:crags] = Crag.where(id: summary[:crags]).map(&:summary_to_json)
     summary[:gyms] = Gym.where(id: summary[:gyms]).map(&:summary_to_json)
     summary[:gym_ascents] = ascent_gym_routes.map(&:summary_to_json)
     summary[:crag_ascents] = ascent_crag_routes.map(&:summary_to_json)
+    summary[:previous_climbing_session] = previous_climbing_session
+    summary[:next_climbing_session] = next_climbing_session
+    summary[:users] = User.where(id: user_ids).map(&:summary_to_json)
     summary
   end
 

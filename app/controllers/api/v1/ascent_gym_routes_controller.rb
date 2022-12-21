@@ -145,6 +145,11 @@ module Api
           :note,
           :comment,
           :released_at,
+          :quantity,
+          :color_system_line_id,
+          :height,
+          :climbing_type,
+          sections: %i[grade index height grade_value],
           selected_sections: %i[]
         )
       end

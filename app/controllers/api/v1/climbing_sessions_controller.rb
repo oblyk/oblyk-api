@@ -49,7 +49,7 @@ module Api
 
       def update
         if @climbing_session.update(climbing_session_params)
-          render json: @climbing_session.detail_to_json, status: :ok
+          head :no_content
         else
           render json: { error: @climbing_session.errors }, status: :unprocessable_entity
         end
@@ -58,7 +58,7 @@ module Api
       private
 
       def set_climbing_session
-        @climbing_session = ClimbingSession.find_by session_date: params[:id]
+        @climbing_session = ClimbingSession.find_by session_date: params[:id], user: @current_user
       end
 
       def climbing_session_params

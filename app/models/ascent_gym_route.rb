@@ -31,6 +31,7 @@ class AscentGymRoute < Ascent
       height: height,
       note: note,
       comment: comment,
+      quantity: quantity,
       sections_count: sections_count,
       max_grade_value: max_grade_value,
       min_grade_value: min_grade_value,
@@ -41,10 +42,13 @@ class AscentGymRoute < Ascent
       sections_done: sections_done,
       gym_route: gym_route ? gym_route.summary_to_json : nil,
       gym: gym.summary_to_json,
+      climbing_type: climbing_type,
       history: {
         created_at: created_at,
         updated_at: updated_at
       },
+      color_system_line: color_system_line&.summary_to_json,
+      color_system: color_system_line&.color_system&.summary_to_json,
       user: user.summary_to_json(with_avatar: false)
     }
   end
