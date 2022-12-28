@@ -116,6 +116,12 @@ Rails.application.routes.draw do
             end
             resources :indoors, only: %i[] do
               collection do
+                get :figures
+                get :climb_types_chart
+                get :years_chart
+                get :months_chart
+                get :grades_chart
+                get :by_levels_chart
                 get :simple_stats_by_gyms
               end
             end

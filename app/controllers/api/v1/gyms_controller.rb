@@ -15,7 +15,7 @@ module Api
 
       def search
         query = params[:query]
-        gyms = Gym.search(query).records
+        gyms = Gym.search(query)
         render json: gyms.map(&:summary_to_json), status: :ok
       end
 

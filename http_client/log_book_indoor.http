@@ -1,3 +1,9 @@
+### GET indoor log book figures
+GET {{api_url}}/current_users/log_books/indoors/figures.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
 ### GET indoor log book simple stats for all gyms
 GET {{api_url}}/current_users/log_books/indoors/simple_stats_by_gyms.json
 HttpApiAccessToken: {{api_access_token}}
@@ -13,3 +19,33 @@ Content-Type: application/json
 {
   "gym_id": 3
 }
+
+### GET indoor climbing type
+GET {{api_url}}/current_users/log_books/indoors/climb_types_chart.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET indoor years
+GET {{api_url}}/current_users/log_books/indoors/years_chart.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET indoor months
+GET {{api_url}}/current_users/log_books/indoors/months_chart.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET indoor by grades
+GET {{api_url}}/current_users/log_books/indoors/grades_chart.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET indoor by levels
+GET {{api_url}}/current_users/log_books/indoors/by_levels_chart.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json

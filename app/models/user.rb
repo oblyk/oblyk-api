@@ -37,6 +37,7 @@ class User < ApplicationRecord
   has_many :ascended_crag_routes, through: :ascent_crag_routes, source: :crag_route
   has_many :ascended_crags, through: :ascended_crag_routes, source: :crag
   has_many :ascent_gym_routes
+  has_many :ascended_gyms, through: :ascent_gym_routes, source: :gym
   has_many :ascent_users
   has_many :organization_users
   has_many :organizations, through: :organization_users

@@ -5,7 +5,31 @@ module Api
     module LogBooks
       class IndoorsController < ApiController
         before_action :protected_by_session
-        before_action :set_ascents
+        before_action :set_ascents, only: %i[grades_chart simple_stats_by_gyms by_levels_chart]
+
+        def figures
+          render json: LogBook::Indoor::Figure.new(@current_user).figures, status: :ok
+        end
+
+        def climb_types_chart
+          render json: LogBook::Indoor::Chart.new(@current_user).climb_type, status: :ok
+        end
+
+        def years_chart
+          render json: LogBook::Indoor::Chart.new(@current_user).years, status: :ok
+        end
+
+        def months_chart
+          render json: LogBook::Indoor::Chart.new(@current_user).months, status: :ok
+        end
+
+        def grades_chart
+          render json: LogBook::Indoor::Chart.grade(@ascents), status: :ok
+        end
+
+        def by_levels_chart
+          render json: LogBook::Indoor::Chart.by_levels(@ascents), status: :ok
+        end
 
         def simple_stats_by_gyms
           stats_by_gyms = {}
@@ -64,7 +88,7 @@ module Api
           start_date = params.fetch(:start_date, '')
           end_date = params.fetch(:end_date, '')
 
-          @ascents = @current_user.ascent_gym_routes.includes(color_system_line: :color_system)
+          @ascents = @current_user.ascent_gym_routes.made.includes(color_system_line: :color_system)
 
           # Filter on gyms
           @ascents = @ascents.where(gym_id: gym_ids) if gym_ids.size.positive?

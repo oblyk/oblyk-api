@@ -33,7 +33,8 @@ class Climb
     TRAD_CLIMBING => '#e92b2b',
     AID_CLIMBING => '#d40000',
     DEEP_WATER => '#86ccdd',
-    VIA_FERRATA => '#3cc770'
+    VIA_FERRATA => '#3cc770',
+    PAN => '#ff5656',
   }.freeze
 
   GYM_LIST = [SPORT_CLIMBING, BOULDERING, MULTI_PITCH, PAN].freeze
