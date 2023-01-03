@@ -69,6 +69,10 @@ Rails.application.routes.draw do
         get :outdoor_climb_types_chart, on: :member
         get :ascended_crag_routes, on: :member
         get :outdoor_grades_chart, on: :member
+        get :indoor_figures, on: :member
+        get :indoor_climb_types_chart, on: :member
+        get :indoor_grade_chart, on: :member
+        get :indoor_by_level_chart, on: :member
       end
 
       resources :current_users, only: %i[] do

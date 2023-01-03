@@ -8,6 +8,8 @@ module Api
       before_action :protected_private_profile, except: %i[search]
       before_action :protected_media, only: %i[photos videos]
       before_action :protected_outdoor_log_book, only: %i[outdoor_figures outdoor_climb_types_chart ascended_crag_routes outdoor_grades_chart]
+      before_action :protected_indoor_log_book, only: %i[indoor_figures indoor_climb_types_chart indoor_grade_chart indoor_by_level_chart]
+      before_action :set_indoor_ascents, only: %i[indoor_grade_chart indoor_by_level_chart]
 
       def show
         render json: @user.detail_to_json, status: :ok
@@ -109,6 +111,22 @@ module Api
         render json: LogBook::Outdoor::Chart.new(@user).grade, status: :ok
       end
 
+      def indoor_figures
+        render json: LogBook::Indoor::Figure.new(@user).figures, status: :ok
+      end
+
+      def indoor_climb_types_chart
+        render json: LogBook::Indoor::Chart.new(@user).climb_type, status: :ok
+      end
+
+      def indoor_grade_chart
+        render json: LogBook::Indoor::Chart.grade(@ascents), status: :ok
+      end
+
+      def indoor_by_level_chart
+        render json: LogBook::Indoor::Chart.by_levels(@ascents), status: :ok
+      end
+
       def partner_user_geo_json
         minimalistic = params.fetch(:minimalistic, false) != false
         render json: {
@@ -147,6 +165,19 @@ module Api
         render json: {}, status: :unauthorized
       end
 
+      def protected_indoor_log_book
+        # Ok if user have public profile && public indoor ascents
+        return if @user.public_profile && @user.public_indoor_ascents
+
+        # Ok if I have logged user && user have public indoor logbook
+        return if login? && @user.public_indoor_ascents
+
+        # Ok if current user is subscribe to user
+        return if current_user_is_subscribed?
+
+        render json: {}, status: :unauthorized
+      end
+
       def protected_media
         # Ok if user have public profile
         return if @user.public_profile
@@ -163,6 +194,10 @@ module Api
 
       def set_user
         @user = User.find_by uuid: params[:id]
+      end
+
+      def set_indoor_ascents
+        @ascents = @user.ascent_gym_routes.made.includes(color_system_line: :color_system)
       end
     end
   end
