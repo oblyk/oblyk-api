@@ -59,8 +59,8 @@ module Api
             grade_routes = group_by_grade(routes)
             render json: { grade: grade_routes.map { |grade_route| { grade: grade_route[0], routes: grade_route[1][:routes].map(&:summary_to_json) } } }, status: :ok
           when 'level'
-            grade_routes = group_by_level(routes)
-            render json: { grade: grade_routes.map { |grade_route| { grade: grade_route[0], routes: grade_route[1][:routes].map(&:summary_to_json) } } }, status: :ok
+            level_routes = group_by_level(routes)
+            render json: { level: level_routes.map { |level_route| { name: level_route[1][:name], colors: level_route[1][:colors], tag_color: level_route[1][:tag_color], hold_color: level_route[1][:hold_color], routes: level_route[1][:routes].map(&:summary_to_json) } } }, status: :ok
           else
             render json: routes.map(&:summary_to_json), status: :ok
           end
@@ -181,15 +181,21 @@ module Api
       end
 
       def group_by_level(routes)
-        grades = {}
+        levels = {}
         routes.each do |route|
           next unless route.gym_grade.difficulty_by_level?
 
-          grade = "#{route.gym_grade.id}-#{route.gym_grade_line.order}"
-          grades[grade] = grades[grade] || { grade: grade, routes: [] }
-          grades[grade][:routes] << route
+          level = "#{route.gym_grade.id}-#{route.gym_grade_line.order}"
+          levels[level] = levels[level] || {
+            name: route.gym_grade_line.name,
+            colors: route.gym_grade_line.colors,
+            tag_color: route.gym_grade.tag_color?,
+            hold_color: route.gym_grade.hold_color?,
+            routes: []
+          }
+          levels[level][:routes] << route
         end
-        grades
+        levels
       end
 
       def set_gym_space
