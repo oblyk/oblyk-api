@@ -184,6 +184,7 @@ module Api
         levels = {}
         routes.each do |route|
           next unless route.gym_grade.difficulty_by_level?
+          next unless route.gym_grade_line
 
           level = "#{route.gym_grade.id}-#{route.gym_grade_line.order}"
           levels[level] = levels[level] || {
