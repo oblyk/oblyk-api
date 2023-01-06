@@ -11,12 +11,11 @@ class ReportMailer < ApplicationMailer
     @user_id = params[:user_id]
 
     subject = t('mailer.report.new_report.title', report_id: @report_id)
-    to = ENV['SMTP_USER_NAME']
 
     if ENV['SEND_EMAIL_WITH'] == 'send_in_blue'
       html_content = render_to_string('report_mailer/new_report')
       @sid_email = SibApiV3Sdk::SendSmtpEmail.new
-      @sid_email.to = [{ email: to }]
+      @sid_email.to = [{ email: ENV['SEND_IN_BLUE_REPLY_EMAIL'] }]
       @sid_email.subject = subject
       @sid_email.html_content = html_content
       @sid_email.text_content = ActionView::Base.full_sanitizer.sanitize(html_content)
@@ -35,7 +34,7 @@ class ReportMailer < ApplicationMailer
         Rails.logger.error "Exception when calling TransactionalEmailsApi -> send_transac_email: #{e}"
       end
     else
-      mail(to: to, subject: subject)
+      mail(to: ENV['SMTP_USER_NAME'], subject: subject)
     end
   end
 end
