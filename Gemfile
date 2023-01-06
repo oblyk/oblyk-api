@@ -79,6 +79,9 @@ gem 'dalli'
 # Levenshtein in C
 gem 'levenshtein-ffi', require: 'levenshtein'
 
+# Sendinblue email sdk
+gem 'sib-api-v3-sdk'
+
 group :development, :test do
   gem 'bullet'
   # Ruby static code analyzer

@@ -23,14 +23,25 @@ SEARCH_INGESTABLE: 'true'
 FEEDABLE: 'true'
 PAPER_TRAIL: 'true'
 
+# Send email with smtp or send_in_blue transactional email service
+# On development mode, choose `smpt`, emails will not be sent but opened in a browser tab
+# Tow type of value : smtp, ou send_in_blue
+SEND_EMAIL_WITH: 'smpt'
+
 # Smtp email params
 EMAIL_DEFAULT_FROM: 'Example <example@mail.net>'
 SMTP_ADDRESS: 'smtp.gmail.com'
 SMTP_PORT: '587'
-SMTP_USER_NAME: 'your mail'
+SMTP_USER_NAME: 'your mail, example: example@mail.net'
 SMTP_PASSWORD: 'your password'
 SMTP_DOMAIN: 'mail.net'
 SMTP_AUTHENTICATION: 'plain'
+
+# API key for send in blue
+# https://sendinblue.com
+SEND_IN_BLUE_SENDER_NAME: 'Me'
+SEND_IN_BLUE_SENDER_EMAIL: 'my@mail.com'
+SEND_IN_BLUE_API_KEY: 'your-send-in-blue-api-key'
 
 # Ror vs Wild configuration
 ENABLE_ROR_WS_WILD: 'false'

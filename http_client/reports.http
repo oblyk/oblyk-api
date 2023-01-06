@@ -1,4 +1,4 @@
-### Create link
+### Create report
 POST {{api_url}}/reports.json
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
