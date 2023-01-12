@@ -12,6 +12,6 @@
 
 <%= t('mailer.welcome.discover_the_rest') %>
 
-<%= t('mailer.welcome.help', help_url: "#{@app_url}/helps").html_safe.gsub(/(<a href=')/, '').gsub(/('>)/, ' ').gsub(/(<\/a>)/, '').gsub(/(<br>)/, '') %>
+<%= t('mailer.welcome.help', help_url: "https://oblyk.github.io/app-user-doc").html_safe.gsub(/(<a href=')/, '').gsub(/('>)/, ' ').gsub(/(<\/a>)/, '').gsub(/(<br>)/, '') %>
 
 <%= t('mailer.welcome.see_you_later') %>
