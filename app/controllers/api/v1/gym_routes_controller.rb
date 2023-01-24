@@ -9,6 +9,7 @@ module Api
       before_action :set_gym_space, except: %i[add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents]
       before_action :set_gym_sector, except: %i[index show add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents]
       before_action :set_gym_route, only: %i[show update destroy add_picture add_thumbnail dismount mount ascents]
+      before_action :set_gym, only: %i[index]
 
       def index
         group_by = params.fetch(:group_by, nil)
@@ -38,7 +39,7 @@ module Api
                    elsif @gym_space.present?
                      GymRoute.joins(:gym_sector).where(gym_sectors: { gym_space: @gym_space })
                    else
-                     GymRoute.where(gym: @gym)
+                     GymRoute.joins(:gym_space).where(gym_spaces: { gym: @gym })
                    end
 
           # Mount or dismount
@@ -200,11 +201,15 @@ module Api
       end
 
       def set_gym_space
-        @gym_space = GymSpace.find params[:gym_space_id]
+        @gym_space = GymSpace.find_by id: params[:gym_space_id]
       end
 
       def set_gym_sector
-        @gym_sector = GymSector.find params[:gym_sector_id]
+        @gym_sector = GymSector.find_by id: params[:gym_sector_id]
+      end
+
+      def set_gym
+        @gym = Gym.find_by id: params[:gym_id]
       end
 
       def set_gym_route
