@@ -58,8 +58,8 @@ class GymSpace < ApplicationRecord
     resize_attachment banner, '300x300'
   end
 
-  def summary_to_json
-    {
+  def summary_to_json(with_figures: false)
+    data = {
       id: id,
       gym_grade_id: gym_grade_id,
       name: name,
@@ -86,6 +86,14 @@ class GymSpace < ApplicationRecord
         banner: gym.banner.attached? ? gym.banner_large_url : nil
       }
     }
+    if with_figures
+      routes_figures = gym_routes.mounted.select('MAX(opened_at) AS max_opened_at, COUNT(*) AS routes_count').first
+      data[:figures] = {
+        routes_count: routes_figures[:routes_count],
+        last_route_opened_at: routes_figures[:max_opened_at]
+      }
+    end
+    data
   end
 
   def detail_to_json

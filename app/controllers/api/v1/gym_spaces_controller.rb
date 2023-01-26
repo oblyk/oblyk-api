@@ -10,7 +10,7 @@ module Api
 
       def index
         gym_spaces = @gym.gym_spaces
-        render json: gym_spaces.map(&:summary_to_json), status: :ok
+        render json: gym_spaces.map { |gym_space| gym_space.summary_to_json(with_figures: true) }, status: :ok
       end
 
       def show
