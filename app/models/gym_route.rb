@@ -13,6 +13,8 @@ class GymRoute < ApplicationRecord
   has_one :gym_grade, through: :gym_grade_line
   has_many :videos, as: :viewable
   has_many :ascent_gym_routes
+  has_many :gym_route_openers
+  has_many :gym_openers, through: :gym_route_openers
 
   delegate :feed_parent_id, to: :gym
   delegate :feed_parent_type, to: :gym
@@ -121,7 +123,8 @@ class GymRoute < ApplicationRecord
       name: name,
       height: height,
       description: description,
-      openers: openers,
+      openers: gym_openers.map(&:summary_to_json),
+      gym_opener_ids: gym_openers.map(&:id),
       opened_at: opened_at,
       dismounted_at: dismounted_at,
       polyline: polyline,

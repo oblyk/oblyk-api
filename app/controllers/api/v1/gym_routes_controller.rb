@@ -227,6 +227,7 @@ module Api
           :gym_grade_line_id,
           :points,
           :opened_at,
+          gym_opener_ids: [],
           sections: [:climbing_type, :description, :grade, :height, { tags: [] }],
           hold_colors: %i[],
           tag_colors: %i[]

@@ -187,6 +187,10 @@ Rails.application.routes.draw do
         resources :color_systems, only: %i[index create show]
         resources :gym_administrators
         resources :gym_administration_requests, only: %i[create]
+        resources :gym_openers do
+          put :deactivate, on: :member
+          put :activate, on: :member
+        end
         resources :gym_grades do
           resources :gym_grade_lines
         end

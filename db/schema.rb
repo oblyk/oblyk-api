@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_03_200253) do
+ActiveRecord::Schema.define(version: 2023_01_28_114328) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -554,6 +554,30 @@ ActiveRecord::Schema.define(version: 2022_12_03_200253) do
     t.boolean "hold_color"
     t.string "point_system_type", default: "none"
     t.index ["gym_id"], name: "index_gym_grades_on_gym_id"
+  end
+
+  create_table "gym_openers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "slug_name"
+    t.string "email"
+    t.bigint "user_id"
+    t.bigint "gym_id"
+    t.datetime "deactivated_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gym_id"], name: "index_gym_openers_on_gym_id"
+    t.index ["user_id"], name: "index_gym_openers_on_user_id"
+  end
+
+  create_table "gym_route_openers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "gym_opener_id"
+    t.bigint "gym_route_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gym_opener_id"], name: "index_gym_route_openers_on_gym_opener_id"
+    t.index ["gym_route_id"], name: "index_gym_route_openers_on_gym_route_id"
   end
 
   create_table "gym_routes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

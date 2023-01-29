@@ -63,6 +63,7 @@ class User < ApplicationRecord
   has_many :reports
   has_many :words
   has_many :climbing_sessions
+  has_many :gym_openers
 
   before_validation :set_uuid
   before_validation :set_ws_token

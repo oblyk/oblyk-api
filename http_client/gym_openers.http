@@ -1,0 +1,50 @@
+### GET gym openers
+GET {{api_url}}/gyms/212/gym_openers.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET on gym opener
+GET {{api_url}}/gyms/212/gym_openers/1.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### Create gym opener
+POST {{api_url}}/gyms/212/gym_openers.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym_opener": {
+    "name": "John",
+    "first_name": "John",
+    "last_name": "Do",
+    "email": "johndo@mail.com"
+  }
+}
+
+### Update gym opener
+PUT {{api_url}}/gyms/212/gym_openers/1.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym_opener": {
+    "name": "Jojo"
+  }
+}
+
+### Deactivate gym opener
+PUT {{api_url}}/gyms/212/gym_openers/1/deactivate.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+### Activate gym opener
+PUT {{api_url}}/gyms/212/gym_openers/1/activate.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
