@@ -15,26 +15,28 @@ class GymSector < ApplicationRecord
   default_scope { order(:name) }
 
   def summary_to_json
-    {
-      id: id,
-      name: name,
-      description: description,
-      group_sector_name: group_sector_name,
-      climbing_type: climbing_type,
-      height: height,
-      polygon: polygon,
-      gym_space_id: gym_space_id,
-      gym_grade_id: gym_grade_id,
-      can_be_more_than_one_pitch: can_be_more_than_one_pitch,
-      gym: {
-        id: gym.id,
-        slug_name: gym.slug_name
-      },
-      gym_space: {
-        id: gym_space.id,
-        slug_name: gym_space.slug_name
+    Rails.cache.fetch("#{cache_key_with_version}/summary_gym_sector", expires_in: 1.month) do
+      {
+        id: id,
+        name: name,
+        description: description,
+        group_sector_name: group_sector_name,
+        climbing_type: climbing_type,
+        height: height,
+        polygon: polygon,
+        gym_space_id: gym_space_id,
+        gym_grade_id: gym_grade_id,
+        can_be_more_than_one_pitch: can_be_more_than_one_pitch,
+        gym: {
+          id: gym.id,
+          slug_name: gym.slug_name
+        },
+        gym_space: {
+          id: gym_space.id,
+          slug_name: gym_space.slug_name
+        }
       }
-    }
+    end
   end
 
   def detail_to_json

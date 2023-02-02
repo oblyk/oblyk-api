@@ -59,33 +59,35 @@ class GymSpace < ApplicationRecord
   end
 
   def summary_to_json(with_figures: false)
-    data = {
-      id: id,
-      gym_grade_id: gym_grade_id,
-      name: name,
-      slug_name: slug_name,
-      description: description,
-      order: order,
-      climbing_type: climbing_type,
-      banner_color: banner_color,
-      banner_bg_color: banner_bg_color,
-      banner_opacity: banner_opacity,
-      scheme_bg_color: scheme_bg_color,
-      scheme_height: scheme_height,
-      scheme_width: scheme_width,
-      latitude: latitude,
-      longitude: longitude,
-      published_at: published_at,
-      banner: banner.attached? ? banner_large_url : nil,
-      plan: plan.attached? ? plan_large_url : nil,
-      plan_thumbnail_url: plan.attached? ? plan_thumbnail_url : nil,
-      gym: {
-        id: gym.id,
-        name: gym.name,
-        slug_name: gym.slug_name,
-        banner: gym.banner.attached? ? gym.banner_large_url : nil
+    data = Rails.cache.fetch("#{cache_key_with_version}/summary_gym_space", expires_in: 1.month) do
+      {
+        id: id,
+        gym_grade_id: gym_grade_id,
+        name: name,
+        slug_name: slug_name,
+        description: description,
+        order: order,
+        climbing_type: climbing_type,
+        banner_color: banner_color,
+        banner_bg_color: banner_bg_color,
+        banner_opacity: banner_opacity,
+        scheme_bg_color: scheme_bg_color,
+        scheme_height: scheme_height,
+        scheme_width: scheme_width,
+        latitude: latitude,
+        longitude: longitude,
+        published_at: published_at,
+        banner: banner.attached? ? banner_large_url : nil,
+        plan: plan.attached? ? plan_large_url : nil,
+        plan_thumbnail_url: plan.attached? ? plan_thumbnail_url : nil,
+        gym: {
+          id: gym.id,
+          name: gym.name,
+          slug_name: gym.slug_name,
+          banner: gym.banner.attached? ? gym.banner_large_url : nil
+        }
       }
-    }
+    end
     if with_figures
       routes_figures = gym_routes.mounted.select('MAX(opened_at) AS max_opened_at, COUNT(*) AS routes_count').first
       data[:figures] = {

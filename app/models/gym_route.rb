@@ -118,53 +118,54 @@ class GymRoute < ApplicationRecord
   end
 
   def summary_to_json
-    {
-      id: id,
-      name: name,
-      height: height,
-      description: description,
-      openers: gym_openers.map(&:summary_to_json),
-      gym_opener_ids: gym_openers.map(&:id),
-      opened_at: opened_at,
-      dismounted_at: dismounted_at,
-      polyline: polyline,
-      hold_colors: hold_colors,
-      tag_colors: tag_colors,
-      sections: sections,
-      grade_value_appreciation: grade_value_appreciation,
-      note: note,
-      note_count: note_count,
-      ascents_count: ascents_count,
-      sections_count: sections_count,
-      gym_sector_id: gym_sector_id,
-      gym_grade_line_id: gym_grade_line_id,
-      points: points,
-      dismounted: dismounted?,
-      points_to_s: points_to_s,
-      grade_to_s: grade_to_s,
-      thumbnail: thumbnail.attached? ? thumbnail_url : nil,
-      gym_sector_name: gym_sector.name,
-      grade_gap: {
-        max_grade_value: max_grade_value,
-        min_grade_value: min_grade_value,
-        max_grade_text: max_grade_text,
-        min_grade_text: min_grade_text
-      },
-      gym_space: {
-        id: gym_space.id,
-        slug_name: gym_space.slug_name,
-        name: gym_space.name
-      },
-      gym_sector: {
-        id: gym_sector_id,
-        name: gym_sector&.name
-      },
-      gym: {
-        id: gym.id,
-        slug_name: gym.slug_name,
-        banner_thumbnail_url: gym.banner_thumbnail_url
+    Rails.cache.fetch("#{cache_key_with_version}/summary_gym_route", expires_in: 1.month) do
+      {
+        id: id,
+        name: name,
+        height: height,
+        description: description,
+        openers: gym_openers.map(&:summary_to_json),
+        gym_opener_ids: gym_openers.map(&:id),
+        opened_at: opened_at,
+        dismounted_at: dismounted_at,
+        polyline: polyline,
+        hold_colors: hold_colors,
+        tag_colors: tag_colors,
+        sections: sections,
+        grade_value_appreciation: grade_value_appreciation,
+        note: note,
+        note_count: note_count,
+        ascents_count: ascents_count,
+        sections_count: sections_count,
+        gym_sector_id: gym_sector_id,
+        gym_grade_line_id: gym_grade_line_id,
+        points: points,
+        dismounted: dismounted?,
+        points_to_s: points_to_s,
+        grade_to_s: grade_to_s,
+        thumbnail: thumbnail.attached? ? thumbnail_url : nil,
+        gym_sector_name: gym_sector.name,
+        grade_gap: {
+          max_grade_value: max_grade_value,
+          min_grade_value: min_grade_value,
+          max_grade_text: max_grade_text,
+          min_grade_text: min_grade_text
+        },
+        gym_space: {
+          id: gym_space.id,
+          slug_name: gym_space.slug_name,
+          name: gym_space.name
+        },
+        gym_sector: {
+          id: gym_sector_id,
+          name: gym_sector&.name
+        },
+        gym: {
+          id: gym.id,
+          slug_name: gym.slug_name
+        }
       }
-    }
+    end
   end
 
   def detail_to_json
