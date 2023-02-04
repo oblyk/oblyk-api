@@ -86,6 +86,13 @@ module LogBook
       end
 
       def years
+        if @user.ascent_crag_routes.made.count.zero?
+          return {
+            datasets: [{ data: [] }],
+            labels: []
+          }
+        end
+
         min_year = @user.ascent_crag_routes.made.minimum(:released_at).year
         max_year = @user.ascent_crag_routes.made.maximum(:released_at).year
         years = {}
@@ -113,6 +120,13 @@ module LogBook
       end
 
       def months
+        if @user.ascent_crag_routes.made.count.zero?
+          return {
+            datasets: [{ data: [] }],
+            labels: []
+          }
+        end
+
         min_date = @user.ascent_crag_routes.made.minimum(:released_at)
         max_date = @user.ascent_crag_routes.made.maximum(:released_at)
         dates = {}
@@ -140,6 +154,13 @@ module LogBook
       end
 
       def evolution_by_year
+        if @user.ascent_crag_routes.made.count.zero?
+          return {
+            datasets: [{ data: [] }],
+            labels: []
+          }
+        end
+
         min_year = @user.ascent_crag_routes.made.minimum(:released_at).year
         max_year = @user.ascent_crag_routes.made.maximum(:released_at).year
         years = {}
