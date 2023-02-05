@@ -54,7 +54,7 @@ module Api
       end
 
       def crags_figures
-        crag_statics = Statistics::CragStatistic.new
+        crag_statics = ::Statistics::CragStatistic.new
         crag_statics.crags = @guide_book_paper.crags
 
         crag_with_levels = {}

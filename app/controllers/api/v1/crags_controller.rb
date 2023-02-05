@@ -104,7 +104,7 @@ module Api
         end
 
         crags = crag_object
-        crag_statics = Statistics::CragStatistic.new
+        crag_statics = ::Statistics::CragStatistic.new
         crag_statics.crags = crags
 
         crag_with_levels = {}
