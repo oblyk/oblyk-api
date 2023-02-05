@@ -1,0 +1,69 @@
+### Routes figures
+POST {{api_url}}/gyms/212/statistics/gym_route_statistics/figures.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "filters": {
+    "date": "2023-02-04",
+    "space_ids": [],
+    "opener_ids": [1]
+  }
+}
+
+### Routes by grades
+POST {{api_url}}/gyms/212/statistics/gym_route_statistics/routes_by_grades.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "filters": {
+    "date": "2023-02-04",
+    "space_ids": [],
+    "opener_ids": []
+  }
+}
+
+### Routes by levels
+POST {{api_url}}/gyms/212/statistics/gym_route_statistics/routes_by_levels.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "filters": {
+    "date": "2023-02-04",
+    "space_ids": [],
+    "opener_ids": []
+  }
+}
+
+### Notes
+POST {{api_url}}/gyms/212/statistics/gym_route_statistics/notes.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "filters": {
+    "date": "2023-02-04",
+    "space_ids": [],
+    "opener_ids": []
+  }
+}
+
+### Opening Frequencies
+POST {{api_url}}/gyms/212/statistics/gym_route_statistics/opening_frequencies.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "filters": {
+    "date": "2023-02-04",
+    "space_ids": [],
+    "opener_ids": []
+  }
+}

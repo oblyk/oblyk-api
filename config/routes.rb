@@ -214,6 +214,15 @@ Rails.application.routes.draw do
           put :dismount_collection, on: :collection
           put :mount_collection, on: :collection
         end
+        namespace :statistics do
+          resources :gym_route_statistics, only: [] do
+            post :figures, on: :collection
+            post :routes_by_grades, on: :collection
+            post :routes_by_levels, on: :collection
+            post :notes, on: :collection
+            post :opening_frequencies, on: :collection
+          end
+        end
       end
       resources :color_systems, only: %i[index show create]
       resources :reports, only: %i[create]

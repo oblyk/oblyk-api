@@ -1,0 +1,488 @@
+                                                 Prefix Verb   URI Pattern                                                                                       Controller#Action
+                                                apitome        /documentation                                                                                    Apitome::Engine
+                                            sidekiq_web        /sidekiq                                                                                          Sidekiq::Web
+                                                               /cable                                                                                            #<ActionCable::Server::Base:0x0000555d2863e838 @config=#<ActionCable::Server::Configuration:0x0000555d2d3e5910 @log_tags=[], @connection_class=#<Proc:0x00007f80d0015470@/home/lucien/.rbenv/versions/2.6.5/lib/ruby/gems/2.6.0/gems/actioncable-6.0.3.6/lib/action_cable/engine.rb:37 (lambda)>, @worker_pool_size=4, @disable_request_forgery_protection=true, @allow_same_origin_as_host=true, @logger=#<ActiveSupport::Logger:0x0000555d2bd5af60 @level=0, @progname=nil, @default_formatter=#<Logger::Formatter:0x0000555d2bd4dbd0 @datetime_format=nil>, @formatter=#<ActiveSupport::Logger::SimpleFormatter:0x0000555d2bd5af38 @datetime_format=nil, @thread_key="activesupport_tagged_logging_tags:46929327871900">, @logdev=#<Logger::LogDevice:0x0000555d2bd4db80 @shift_period_suffix=nil, @shift_size=nil, @shift_age=nil, @filename=nil, @dev=#<File:/home/lucien/www/oblyk-api/log/development.log>, @mon_mutex=#<Thread::Mutex:0x0000555d2bd4db08>, @mon_mutex_owner_object_id=46929327844800, @mon_owner=nil, @mon_count=0>>, @cable={"adapter"=>"async"}, @mount_path="/cable", @url="ws://localhost:3000/cable", @allowed_request_origins=/https?:\/\/localhost:\d+/>, @mutex=#<Monitor:0x0000555d2863e810 @mon_mutex=#<Thread::Mutex:0x0000555d2863e770>, @mon_mutex_owner_object_id=46929298977800, @mon_owner=nil, @mon_count=0>, @pubsub=nil, @worker_pool=nil, @event_loop=nil, @remote_connections=nil>
+                                 api_v1_sessions_tokens POST   /api/v1/sessions/tokens(.:format)                                                                 api/v1/sessions/token#refresh
+                                api_v1_sessions_sign_in POST   /api/v1/sessions/sign_in(.:format)                                                                api/v1/sessions/signin#create
+                                api_v1_sessions_sign_up POST   /api/v1/sessions/sign_up(.:format)                                                                api/v1/sessions/signup#create
+                         api_v1_sessions_reset_password POST   /api/v1/sessions/reset_password(.:format)                                                         api/v1/sessions/password#create
+                           api_v1_sessions_new_password PUT    /api/v1/sessions/new_password(.:format)                                                           api/v1/sessions/password#update
+                                                        DELETE /api/v1/sessions/sign_in(.:format)                                                                api/v1/sessions/signin#destroy
+                                          api_v1_search GET    /api/v1/search(.:format)                                                                          api/v1/searches#index
+                                         api_v1_figures GET    /api/v1/figures(.:format)                                                                         api/v1/commons#figures
+                              api_v1_last_activity_feed GET    /api/v1/last_activity_feed(.:format)                                                              api/v1/commons#last_activity_feed
+                                      api_v1_last_added GET    /api/v1/last_added(.:format)                                                                      api/v1/commons#last_added
+                                api_v1_partners_figures GET    /api/v1/partners/figures(.:format)                                                                api/v1/partners#figures
+                               api_v1_partners_geo_json GET    /api/v1/partners/geo_json(.:format)                                                               api/v1/partners#geo_json {:actions=>:geo_json}
+                        api_v1_partners_partners_around GET    /api/v1/partners/partners_around(.:format)                                                        api/v1/partners#partners_around {:actions=>:partners_around}
+                   api_access_token_api_v1_organization GET    /api/v1/organizations/:id/api_access_token(.:format)                                              api/v1/organizations#api_access_token
+           refresh_api_access_token_api_v1_organization PUT    /api/v1/organizations/:id/refresh_api_access_token(.:format)                                      api/v1/organizations#refresh_api_access_token
+                                   api_v1_organizations GET    /api/v1/organizations(.:format)                                                                   api/v1/organizations#index
+                                                        POST   /api/v1/organizations(.:format)                                                                   api/v1/organizations#create
+                                    api_v1_organization GET    /api/v1/organizations/:id(.:format)                                                               api/v1/organizations#show
+                                                        PATCH  /api/v1/organizations/:id(.:format)                                                               api/v1/organizations#update
+                                                        PUT    /api/v1/organizations/:id(.:format)                                                               api/v1/organizations#update
+                                                        DELETE /api/v1/organizations/:id(.:format)                                                               api/v1/organizations#destroy
+                                add_cover_api_v1_author POST   /api/v1/authors/:id/add_cover(.:format)                                                           api/v1/authors#add_cover
+                                          api_v1_author GET    /api/v1/authors/:id(.:format)                                                                     api/v1/authors#show
+                                                        PATCH  /api/v1/authors/:id(.:format)                                                                     api/v1/authors#update
+                                                        PUT    /api/v1/authors/:id(.:format)                                                                     api/v1/authors#update
+                                   feed_api_v1_articles GET    /api/v1/articles/feed(.:format)                                                                   api/v1/articles#feed
+                                   last_api_v1_articles GET    /api/v1/articles/last(.:format)                                                                   api/v1/articles#last
+                                  photos_api_v1_article GET    /api/v1/articles/:id/photos(.:format)                                                             api/v1/articles#photos
+                                   crags_api_v1_article GET    /api/v1/articles/:id/crags(.:format)                                                              api/v1/articles#crags
+                       guide_book_papers_api_v1_article GET    /api/v1/articles/:id/guide_book_papers(.:format)                                                  api/v1/articles#guide_book_papers
+                                 publish_api_v1_article PUT    /api/v1/articles/:id/publish(.:format)                                                            api/v1/articles#publish
+                              un_publish_api_v1_article PUT    /api/v1/articles/:id/un_publish(.:format)                                                         api/v1/articles#un_publish
+                                    view_api_v1_article POST   /api/v1/articles/:id/view(.:format)                                                               api/v1/articles#view
+                               add_cover_api_v1_article POST   /api/v1/articles/:id/add_cover(.:format)                                                          api/v1/articles#add_cover
+                                add_crag_api_v1_article POST   /api/v1/articles/:id/add_crag(.:format)                                                           api/v1/articles#add_crag
+                    add_guide_book_paper_api_v1_article POST   /api/v1/articles/:id/add_guide_book_paper(.:format)                                               api/v1/articles#add_guide_book_paper
+                                        api_v1_articles GET    /api/v1/articles(.:format)                                                                        api/v1/articles#index
+                                                        POST   /api/v1/articles(.:format)                                                                        api/v1/articles#create
+                                         api_v1_article GET    /api/v1/articles/:id(.:format)                                                                    api/v1/articles#show
+                                                        PATCH  /api/v1/articles/:id(.:format)                                                                    api/v1/articles#update
+                                                        PUT    /api/v1/articles/:id(.:format)                                                                    api/v1/articles#update
+                                                        DELETE /api/v1/articles/:id(.:format)                                                                    api/v1/articles#destroy
+                                    search_api_v1_users GET    /api/v1/users/search(.:format)                                                                    api/v1/users#search
+                                     photos_api_v1_user GET    /api/v1/users/:id/photos(.:format)                                                                api/v1/users#photos
+                                     videos_api_v1_user GET    /api/v1/users/:id/videos(.:format)                                                                api/v1/users#videos
+                                 subscribes_api_v1_user GET    /api/v1/users/:id/subscribes(.:format)                                                            api/v1/users#subscribes
+                                  followers_api_v1_user GET    /api/v1/users/:id/followers(.:format)                                                             api/v1/users#followers
+                               contribution_api_v1_user GET    /api/v1/users/:id/contribution(.:format)                                                          api/v1/users#contribution
+                      partner_user_geo_json_api_v1_user GET    /api/v1/users/:id/partner_user_geo_json(.:format)                                                 api/v1/users#partner_user_geo_json
+                            outdoor_figures_api_v1_user GET    /api/v1/users/:id/outdoor_figures(.:format)                                                       api/v1/users#outdoor_figures
+                  outdoor_climb_types_chart_api_v1_user GET    /api/v1/users/:id/outdoor_climb_types_chart(.:format)                                             api/v1/users#outdoor_climb_types_chart
+                       ascended_crag_routes_api_v1_user GET    /api/v1/users/:id/ascended_crag_routes(.:format)                                                  api/v1/users#ascended_crag_routes
+                       outdoor_grades_chart_api_v1_user GET    /api/v1/users/:id/outdoor_grades_chart(.:format)                                                  api/v1/users#outdoor_grades_chart
+                             indoor_figures_api_v1_user GET    /api/v1/users/:id/indoor_figures(.:format)                                                        api/v1/users#indoor_figures
+                   indoor_climb_types_chart_api_v1_user GET    /api/v1/users/:id/indoor_climb_types_chart(.:format)                                              api/v1/users#indoor_climb_types_chart
+                         indoor_grade_chart_api_v1_user GET    /api/v1/users/:id/indoor_grade_chart(.:format)                                                    api/v1/users#indoor_grade_chart
+                      indoor_by_level_chart_api_v1_user GET    /api/v1/users/:id/indoor_by_level_chart(.:format)                                                 api/v1/users#indoor_by_level_chart
+                                            api_v1_user GET    /api/v1/users/:id(.:format)                                                                       api/v1/users#show
+                                                        GET    /api/v1/current_users(.:format)                                                                   api/v1/current_users#show
+                                                        PUT    /api/v1/current_users(.:format)                                                                   api/v1/current_users#update
+                                                        DELETE /api/v1/current_users(.:format)                                                                   api/v1/current_users#destroy
+                              feed_api_v1_current_users GET    /api/v1/current_users/feed(.:format)                                                              api/v1/current_users#feed
+                           library_api_v1_current_users GET    /api/v1/current_users/library(.:format)                                                           api/v1/current_users#library
+                   library_figures_api_v1_current_users GET    /api/v1/current_users/library_figures(.:format)                                                   api/v1/current_users#library_figures
+            ascents_without_guides_api_v1_current_users GET    /api/v1/current_users/ascents_without_guides(.:format)                                            api/v1/current_users#ascents_without_guides
+           new_guide_books_version_api_v1_current_users GET    /api/v1/current_users/new_guide_books_version(.:format)                                           api/v1/current_users#new_guide_books_version
+                        subscribes_api_v1_current_users GET    /api/v1/current_users/subscribes(.:format)                                                        api/v1/current_users#subscribes
+                subscribes_ascents_api_v1_current_users GET    /api/v1/current_users/subscribes_ascents(.:format)                                                api/v1/current_users#subscribes_ascents
+                         followers_api_v1_current_users GET    /api/v1/current_users/followers(.:format)                                                         api/v1/current_users#followers
+                 waiting_followers_api_v1_current_users GET    /api/v1/current_users/waiting_followers(.:format)                                                 api/v1/current_users#waiting_followers
+                    favorite_crags_api_v1_current_users GET    /api/v1/current_users/favorite_crags(.:format)                                                    api/v1/current_users#favorite_crags
+                     favorite_gyms_api_v1_current_users GET    /api/v1/current_users/favorite_gyms(.:format)                                                     api/v1/current_users#favorite_gyms
+                ascent_crag_routes_api_v1_current_users GET    /api/v1/current_users/ascent_crag_routes(.:format)                                                api/v1/current_users#ascent_crag_routes
+              ascended_crag_routes_api_v1_current_users GET    /api/v1/current_users/ascended_crag_routes(.:format)                                              api/v1/current_users#ascended_crag_routes
+           ascended_crags_geo_json_api_v1_current_users GET    /api/v1/current_users/ascended_crags_geo_json(.:format)                                           api/v1/current_users#ascended_crags_geo_json
+                        tick_lists_api_v1_current_users GET    /api/v1/current_users/tick_lists(.:format)                                                        api/v1/current_users#tick_lists
+                          projects_api_v1_current_users GET    /api/v1/current_users/projects(.:format)                                                          api/v1/current_users#projects
+                            photos_api_v1_current_users GET    /api/v1/current_users/photos(.:format)                                                            api/v1/current_users#photos
+                            videos_api_v1_current_users GET    /api/v1/current_users/videos(.:format)                                                            api/v1/current_users#videos
+                            avatar_api_v1_current_users POST   /api/v1/current_users/avatar(.:format)                                                            api/v1/current_users#avatar
+                            banner_api_v1_current_users POST   /api/v1/current_users/banner(.:format)                                                            api/v1/current_users#banner
+                   update_password_api_v1_current_users PUT    /api/v1/current_users/update_password(.:format)                                                   api/v1/current_users#update_password
+           subscribe_to_newsletter_api_v1_current_users GET    /api/v1/current_users/subscribe_to_newsletter(.:format)                                           api/v1/current_users#subscribe_to_newsletter
+                     organizations_api_v1_current_users GET    /api/v1/current_users/organizations(.:format)                                                     api/v1/current_users#organizations
+                  accept_followers_api_v1_current_users POST   /api/v1/current_users/accept_followers(.:format)                                                  api/v1/current_users#accept_followers
+                  reject_followers_api_v1_current_users DELETE /api/v1/current_users/reject_followers(.:format)                                                  api/v1/current_users#reject_followers
+                      figures_api_v1_log_books_outdoors GET    /api/v1/current_users/log_books/outdoors/figures(.:format)                                        api/v1/log_books/outdoors#figures
+            climb_types_chart_api_v1_log_books_outdoors GET    /api/v1/current_users/log_books/outdoors/climb_types_chart(.:format)                              api/v1/log_books/outdoors#climb_types_chart
+                 grades_chart_api_v1_log_books_outdoors GET    /api/v1/current_users/log_books/outdoors/grades_chart(.:format)                                   api/v1/log_books/outdoors#grades_chart
+                  years_chart_api_v1_log_books_outdoors GET    /api/v1/current_users/log_books/outdoors/years_chart(.:format)                                    api/v1/log_books/outdoors#years_chart
+                 months_chart_api_v1_log_books_outdoors GET    /api/v1/current_users/log_books/outdoors/months_chart(.:format)                                   api/v1/log_books/outdoors#months_chart
+             evolutions_chart_api_v1_log_books_outdoors GET    /api/v1/current_users/log_books/outdoors/evolutions_chart(.:format)                               api/v1/log_books/outdoors#evolutions_chart
+                daily_ascents_api_v1_log_books_outdoors GET    /api/v1/current_users/log_books/outdoors/daily_ascents(.:format)                                  api/v1/log_books/outdoors#daily_ascents
+              ascents_of_crag_api_v1_log_books_outdoors GET    /api/v1/current_users/log_books/outdoors/ascents_of_crag(.:format)                                api/v1/log_books/outdoors#ascents_of_crag
+                       figures_api_v1_log_books_indoors GET    /api/v1/current_users/log_books/indoors/figures(.:format)                                         api/v1/log_books/indoors#figures
+             climb_types_chart_api_v1_log_books_indoors GET    /api/v1/current_users/log_books/indoors/climb_types_chart(.:format)                               api/v1/log_books/indoors#climb_types_chart
+                   years_chart_api_v1_log_books_indoors GET    /api/v1/current_users/log_books/indoors/years_chart(.:format)                                     api/v1/log_books/indoors#years_chart
+                  months_chart_api_v1_log_books_indoors GET    /api/v1/current_users/log_books/indoors/months_chart(.:format)                                    api/v1/log_books/indoors#months_chart
+                  grades_chart_api_v1_log_books_indoors GET    /api/v1/current_users/log_books/indoors/grades_chart(.:format)                                    api/v1/log_books/indoors#grades_chart
+               by_levels_chart_api_v1_log_books_indoors GET    /api/v1/current_users/log_books/indoors/by_levels_chart(.:format)                                 api/v1/log_books/indoors#by_levels_chart
+          simple_stats_by_gyms_api_v1_log_books_indoors GET    /api/v1/current_users/log_books/indoors/simple_stats_by_gyms(.:format)                            api/v1/log_books/indoors#simple_stats_by_gyms
+                               api_v1_climbing_sessions GET    /api/v1/current_users/climbing_sessions(.:format)                                                 api/v1/climbing_sessions#index
+                                api_v1_climbing_session GET    /api/v1/current_users/climbing_sessions/:id(.:format)                                             api/v1/climbing_sessions#show
+                                                        PATCH  /api/v1/current_users/climbing_sessions/:id(.:format)                                             api/v1/climbing_sessions#update
+                                                        PUT    /api/v1/current_users/climbing_sessions/:id(.:format)                                             api/v1/climbing_sessions#update
+                      unread_count_api_v1_notifications GET    /api/v1/notifications/unread_count(.:format)                                                      api/v1/notifications#unread_count
+                               read_api_v1_notification PUT    /api/v1/notifications/:id/read(.:format)                                                          api/v1/notifications#read
+                          read_all_api_v1_notifications PUT    /api/v1/notifications/read_all(.:format)                                                          api/v1/notifications#read_all
+                                   api_v1_notifications GET    /api/v1/notifications(.:format)                                                                   api/v1/notifications#index
+               add_ascent_user_api_v1_ascent_crag_route POST   /api/v1/ascent_crag_routes/:id/add_ascent_user(.:format)                                          api/v1/ascent_crag_routes#add_ascent_user
+            remove_ascent_user_api_v1_ascent_crag_route DELETE /api/v1/ascent_crag_routes/:id/remove_ascent_user(.:format)                                       api/v1/ascent_crag_routes#remove_ascent_user
+                       export_api_v1_ascent_crag_routes GET    /api/v1/ascent_crag_routes/export(.:format)                                                       api/v1/ascent_crag_routes#export
+                              api_v1_ascent_crag_routes GET    /api/v1/ascent_crag_routes(.:format)                                                              api/v1/ascent_crag_routes#index
+                                                        POST   /api/v1/ascent_crag_routes(.:format)                                                              api/v1/ascent_crag_routes#create
+                               api_v1_ascent_crag_route GET    /api/v1/ascent_crag_routes/:id(.:format)                                                          api/v1/ascent_crag_routes#show
+                                                        PATCH  /api/v1/ascent_crag_routes/:id(.:format)                                                          api/v1/ascent_crag_routes#update
+                                                        PUT    /api/v1/ascent_crag_routes/:id(.:format)                                                          api/v1/ascent_crag_routes#update
+                                                        DELETE /api/v1/ascent_crag_routes/:id(.:format)                                                          api/v1/ascent_crag_routes#destroy
+                   create_bulk_api_v1_ascent_gym_routes POST   /api/v1/ascent_gym_routes/create_bulk(.:format)                                                   api/v1/ascent_gym_routes#create_bulk
+                               api_v1_ascent_gym_routes GET    /api/v1/ascent_gym_routes(.:format)                                                               api/v1/ascent_gym_routes#index
+                                                        POST   /api/v1/ascent_gym_routes(.:format)                                                               api/v1/ascent_gym_routes#create
+                                api_v1_ascent_gym_route GET    /api/v1/ascent_gym_routes/:id(.:format)                                                           api/v1/ascent_gym_routes#show
+                                                        PATCH  /api/v1/ascent_gym_routes/:id(.:format)                                                           api/v1/ascent_gym_routes#update
+                                                        PUT    /api/v1/ascent_gym_routes/:id(.:format)                                                           api/v1/ascent_gym_routes#update
+                                                        DELETE /api/v1/ascent_gym_routes/:id(.:format)                                                           api/v1/ascent_gym_routes#destroy
+                                        api_v1_comments GET    /api/v1/comments(.:format)                                                                        api/v1/comments#index
+                                                        POST   /api/v1/comments(.:format)                                                                        api/v1/comments#create
+                                         api_v1_comment GET    /api/v1/comments/:id(.:format)                                                                    api/v1/comments#show
+                                                        PATCH  /api/v1/comments/:id(.:format)                                                                    api/v1/comments#update
+                                                        PUT    /api/v1/comments/:id(.:format)                                                                    api/v1/comments#update
+                                                        DELETE /api/v1/comments/:id(.:format)                                                                    api/v1/comments#destroy
+                                           api_v1_links GET    /api/v1/links(.:format)                                                                           api/v1/links#index
+                                                        POST   /api/v1/links(.:format)                                                                           api/v1/links#create
+                                            api_v1_link GET    /api/v1/links/:id(.:format)                                                                       api/v1/links#show
+                                                        PATCH  /api/v1/links/:id(.:format)                                                                       api/v1/links#update
+                                                        PUT    /api/v1/links/:id(.:format)                                                                       api/v1/links#update
+                                                        DELETE /api/v1/links/:id(.:format)                                                                       api/v1/links#destroy
+                               increment_api_v1_follows PUT    /api/v1/follows/increment(.:format)                                                               api/v1/follows#increment
+                                         api_v1_follows GET    /api/v1/follows(.:format)                                                                         api/v1/follows#index
+                                                        POST   /api/v1/follows(.:format)                                                                         api/v1/follows#create
+                                                        DELETE /api/v1/follows(.:format)                                                                         api/v1/follows#destroy
+                                          api_v1_alerts GET    /api/v1/alerts(.:format)                                                                          api/v1/alerts#index
+                                                        POST   /api/v1/alerts(.:format)                                                                          api/v1/alerts#create
+                                           api_v1_alert GET    /api/v1/alerts/:id(.:format)                                                                      api/v1/alerts#show
+                                                        PATCH  /api/v1/alerts/:id(.:format)                                                                      api/v1/alerts#update
+                                                        PUT    /api/v1/alerts/:id(.:format)                                                                      api/v1/alerts#update
+                                                        DELETE /api/v1/alerts/:id(.:format)                                                                      api/v1/alerts#destroy
+                               read_api_v1_conversation POST   /api/v1/conversations/:id/read(.:format)                                                          api/v1/conversations#read
+last_messages_api_v1_conversation_conversation_messages GET    /api/v1/conversations/:conversation_id/conversation_messages/last_messages(.:format)              api/v1/conversation_messages#last_messages
+              api_v1_conversation_conversation_messages GET    /api/v1/conversations/:conversation_id/conversation_messages(.:format)                            api/v1/conversation_messages#index
+                                                        POST   /api/v1/conversations/:conversation_id/conversation_messages(.:format)                            api/v1/conversation_messages#create
+               api_v1_conversation_conversation_message GET    /api/v1/conversations/:conversation_id/conversation_messages/:id(.:format)                        api/v1/conversation_messages#show
+                                                        PATCH  /api/v1/conversations/:conversation_id/conversation_messages/:id(.:format)                        api/v1/conversation_messages#update
+                                                        PUT    /api/v1/conversations/:conversation_id/conversation_messages/:id(.:format)                        api/v1/conversation_messages#update
+                                                        DELETE /api/v1/conversations/:conversation_id/conversation_messages/:id(.:format)                        api/v1/conversation_messages#destroy
+                                   api_v1_conversations GET    /api/v1/conversations(.:format)                                                                   api/v1/conversations#index
+                                                        POST   /api/v1/conversations(.:format)                                                                   api/v1/conversations#create
+                                    api_v1_conversation GET    /api/v1/conversations/:id(.:format)                                                               api/v1/conversations#show
+                                          api_v1_videos GET    /api/v1/videos(.:format)                                                                          api/v1/videos#index
+                                                        POST   /api/v1/videos(.:format)                                                                          api/v1/videos#create
+                                           api_v1_video GET    /api/v1/videos/:id(.:format)                                                                      api/v1/videos#show
+                                                        PATCH  /api/v1/videos/:id(.:format)                                                                      api/v1/videos#update
+                                                        PUT    /api/v1/videos/:id(.:format)                                                                      api/v1/videos#update
+                                                        DELETE /api/v1/videos/:id(.:format)                                                                      api/v1/videos#destroy
+                                          api_v1_photos GET    /api/v1/photos(.:format)                                                                          api/v1/photos#index
+                                                        POST   /api/v1/photos(.:format)                                                                          api/v1/photos#create
+                                           api_v1_photo GET    /api/v1/photos/:id(.:format)                                                                      api/v1/photos#show
+                                                        PATCH  /api/v1/photos/:id(.:format)                                                                      api/v1/photos#update
+                                                        PUT    /api/v1/photos/:id(.:format)                                                                      api/v1/photos#update
+                                                        DELETE /api/v1/photos/:id(.:format)                                                                      api/v1/photos#destroy
+                                      api_v1_subscribes DELETE /api/v1/subscribes(.:format)                                                                      api/v1/subscribes#destroy
+                                                        GET    /api/v1/subscribes(.:format)                                                                      api/v1/subscribes#index
+                                                        POST   /api/v1/subscribes(.:format)                                                                      api/v1/subscribes#create
+                               photos_api_v1_newsletter GET    /api/v1/newsletters/:id/photos(.:format)                                                          api/v1/newsletters#photos
+                      send_newsletter_api_v1_newsletter POST   /api/v1/newsletters/:id/send_newsletter(.:format)                                                 api/v1/newsletters#send_newsletter
+                                     api_v1_newsletters GET    /api/v1/newsletters(.:format)                                                                     api/v1/newsletters#index
+                                                        POST   /api/v1/newsletters(.:format)                                                                     api/v1/newsletters#create
+                                      api_v1_newsletter GET    /api/v1/newsletters/:id(.:format)                                                                 api/v1/newsletters#show
+                                                        PATCH  /api/v1/newsletters/:id(.:format)                                                                 api/v1/newsletters#update
+                                                        PUT    /api/v1/newsletters/:id(.:format)                                                                 api/v1/newsletters#update
+                                                        DELETE /api/v1/newsletters/:id(.:format)                                                                 api/v1/newsletters#destroy
+                                      api_v1_tick_lists DELETE /api/v1/tick_lists(.:format)                                                                      api/v1/tick_lists#destroy
+                                                        GET    /api/v1/tick_lists(.:format)                                                                      api/v1/tick_lists#index
+                                                        POST   /api/v1/tick_lists(.:format)                                                                      api/v1/tick_lists#create
+                                    versions_api_v1_gym GET    /api/v1/gyms/:id/versions(.:format)                                                               api/v1/gyms#versions
+                                     search_api_v1_gyms GET    /api/v1/gyms/search(.:format)                                                                     api/v1/gyms#search
+                                   geo_json_api_v1_gyms GET    /api/v1/gyms/geo_json(.:format)                                                                   api/v1/gyms#geo_json
+                                gyms_around_api_v1_gyms GET    /api/v1/gyms/gyms_around(.:format)                                                                api/v1/gyms#gyms_around
+                                  add_banner_api_v1_gym POST   /api/v1/gyms/:id/add_banner(.:format)                                                             api/v1/gyms#add_banner
+                                    add_logo_api_v1_gym POST   /api/v1/gyms/:id/add_logo(.:format)                                                               api/v1/gyms#add_logo
+                                routes_count_api_v1_gym GET    /api/v1/gyms/:id/routes_count(.:format)                                                           api/v1/gyms#routes_count
+                                      routes_api_v1_gym GET    /api/v1/gyms/:id/routes(.:format)                                                                 api/v1/gyms#routes
+                               api_v1_gym_color_systems GET    /api/v1/gyms/:gym_id/color_systems(.:format)                                                      api/v1/color_systems#index
+                                                        POST   /api/v1/gyms/:gym_id/color_systems(.:format)                                                      api/v1/color_systems#create
+                                api_v1_gym_color_system GET    /api/v1/gyms/:gym_id/color_systems/:id(.:format)                                                  api/v1/color_systems#show
+                          api_v1_gym_gym_administrators GET    /api/v1/gyms/:gym_id/gym_administrators(.:format)                                                 api/v1/gym_administrators#index
+                                                        POST   /api/v1/gyms/:gym_id/gym_administrators(.:format)                                                 api/v1/gym_administrators#create
+                           api_v1_gym_gym_administrator GET    /api/v1/gyms/:gym_id/gym_administrators/:id(.:format)                                             api/v1/gym_administrators#show
+                                                        PATCH  /api/v1/gyms/:gym_id/gym_administrators/:id(.:format)                                             api/v1/gym_administrators#update
+                                                        PUT    /api/v1/gyms/:gym_id/gym_administrators/:id(.:format)                                             api/v1/gym_administrators#update
+                                                        DELETE /api/v1/gyms/:gym_id/gym_administrators/:id(.:format)                                             api/v1/gym_administrators#destroy
+                 api_v1_gym_gym_administration_requests POST   /api/v1/gyms/:gym_id/gym_administration_requests(.:format)                                        api/v1/gym_administration_requests#create
+                       deactivate_api_v1_gym_gym_opener PUT    /api/v1/gyms/:gym_id/gym_openers/:id/deactivate(.:format)                                         api/v1/gym_openers#deactivate
+                         activate_api_v1_gym_gym_opener PUT    /api/v1/gyms/:gym_id/gym_openers/:id/activate(.:format)                                           api/v1/gym_openers#activate
+                                 api_v1_gym_gym_openers GET    /api/v1/gyms/:gym_id/gym_openers(.:format)                                                        api/v1/gym_openers#index
+                                                        POST   /api/v1/gyms/:gym_id/gym_openers(.:format)                                                        api/v1/gym_openers#create
+                                  api_v1_gym_gym_opener GET    /api/v1/gyms/:gym_id/gym_openers/:id(.:format)                                                    api/v1/gym_openers#show
+                                                        PATCH  /api/v1/gyms/:gym_id/gym_openers/:id(.:format)                                                    api/v1/gym_openers#update
+                                                        PUT    /api/v1/gyms/:gym_id/gym_openers/:id(.:format)                                                    api/v1/gym_openers#update
+                                                        DELETE /api/v1/gyms/:gym_id/gym_openers/:id(.:format)                                                    api/v1/gym_openers#destroy
+                   api_v1_gym_gym_grade_gym_grade_lines GET    /api/v1/gyms/:gym_id/gym_grades/:gym_grade_id/gym_grade_lines(.:format)                           api/v1/gym_grade_lines#index
+                                                        POST   /api/v1/gyms/:gym_id/gym_grades/:gym_grade_id/gym_grade_lines(.:format)                           api/v1/gym_grade_lines#create
+                    api_v1_gym_gym_grade_gym_grade_line GET    /api/v1/gyms/:gym_id/gym_grades/:gym_grade_id/gym_grade_lines/:id(.:format)                       api/v1/gym_grade_lines#show
+                                                        PATCH  /api/v1/gyms/:gym_id/gym_grades/:gym_grade_id/gym_grade_lines/:id(.:format)                       api/v1/gym_grade_lines#update
+                                                        PUT    /api/v1/gyms/:gym_id/gym_grades/:gym_grade_id/gym_grade_lines/:id(.:format)                       api/v1/gym_grade_lines#update
+                                                        DELETE /api/v1/gyms/:gym_id/gym_grades/:gym_grade_id/gym_grade_lines/:id(.:format)                       api/v1/gym_grade_lines#destroy
+                                  api_v1_gym_gym_grades GET    /api/v1/gyms/:gym_id/gym_grades(.:format)                                                         api/v1/gym_grades#index
+                                                        POST   /api/v1/gyms/:gym_id/gym_grades(.:format)                                                         api/v1/gym_grades#create
+                                   api_v1_gym_gym_grade GET    /api/v1/gyms/:gym_id/gym_grades/:id(.:format)                                                     api/v1/gym_grades#show
+                                                        PATCH  /api/v1/gyms/:gym_id/gym_grades/:id(.:format)                                                     api/v1/gym_grades#update
+                                                        PUT    /api/v1/gyms/:gym_id/gym_grades/:id(.:format)                                                     api/v1/gym_grades#update
+                                                        DELETE /api/v1/gyms/:gym_id/gym_grades/:id(.:format)                                                     api/v1/gym_grades#destroy
+                           publish_api_v1_gym_gym_space PUT    /api/v1/gyms/:gym_id/gym_spaces/:id/publish(.:format)                                             api/v1/gym_spaces#publish
+                         unpublish_api_v1_gym_gym_space PUT    /api/v1/gyms/:gym_id/gym_spaces/:id/unpublish(.:format)                                           api/v1/gym_spaces#unpublish
+                        add_banner_api_v1_gym_gym_space POST   /api/v1/gyms/:gym_id/gym_spaces/:id/add_banner(.:format)                                          api/v1/gym_spaces#add_banner
+                          add_plan_api_v1_gym_gym_space POST   /api/v1/gyms/:gym_id/gym_spaces/:id/add_plan(.:format)                                            api/v1/gym_spaces#add_plan
+        dismount_routes_api_v1_gym_gym_space_gym_sector DELETE /api/v1/gyms/:gym_id/gym_spaces/:gym_space_id/gym_sectors/:id/dismount_routes(.:format)           api/v1/gym_sectors#dismount_routes
+             api_v1_gym_gym_space_gym_sector_gym_routes GET    /api/v1/gyms/:gym_id/gym_spaces/:gym_space_id/gym_sectors/:gym_sector_id/gym_routes(.:format)     api/v1/gym_routes#index
+                                                        POST   /api/v1/gyms/:gym_id/gym_spaces/:gym_space_id/gym_sectors/:gym_sector_id/gym_routes(.:format)     api/v1/gym_routes#create
+              api_v1_gym_gym_space_gym_sector_gym_route GET    /api/v1/gyms/:gym_id/gym_spaces/:gym_space_id/gym_sectors/:gym_sector_id/gym_routes/:id(.:format) api/v1/gym_routes#show
+                                                        PATCH  /api/v1/gyms/:gym_id/gym_spaces/:gym_space_id/gym_sectors/:gym_sector_id/gym_routes/:id(.:format) api/v1/gym_routes#update
+                                                        PUT    /api/v1/gyms/:gym_id/gym_spaces/:gym_space_id/gym_sectors/:gym_sector_id/gym_routes/:id(.:format) api/v1/gym_routes#update
+                                                        DELETE /api/v1/gyms/:gym_id/gym_spaces/:gym_space_id/gym_sectors/:gym_sector_id/gym_routes/:id(.:format) api/v1/gym_routes#destroy
+                       api_v1_gym_gym_space_gym_sectors GET    /api/v1/gyms/:gym_id/gym_spaces/:gym_space_id/gym_sectors(.:format)                               api/v1/gym_sectors#index
+                                                        POST   /api/v1/gyms/:gym_id/gym_spaces/:gym_space_id/gym_sectors(.:format)                               api/v1/gym_sectors#create
+                        api_v1_gym_gym_space_gym_sector GET    /api/v1/gyms/:gym_id/gym_spaces/:gym_space_id/gym_sectors/:id(.:format)                           api/v1/gym_sectors#show
+                                                        PATCH  /api/v1/gyms/:gym_id/gym_spaces/:gym_space_id/gym_sectors/:id(.:format)                           api/v1/gym_sectors#update
+                                                        PUT    /api/v1/gyms/:gym_id/gym_spaces/:gym_space_id/gym_sectors/:id(.:format)                           api/v1/gym_sectors#update
+                                                        DELETE /api/v1/gyms/:gym_id/gym_spaces/:gym_space_id/gym_sectors/:id(.:format)                           api/v1/gym_sectors#destroy
+                        api_v1_gym_gym_space_gym_routes GET    /api/v1/gyms/:gym_id/gym_spaces/:gym_space_id/gym_routes(.:format)                                api/v1/gym_routes#index
+                                                        POST   /api/v1/gyms/:gym_id/gym_spaces/:gym_space_id/gym_routes(.:format)                                api/v1/gym_routes#create
+                         api_v1_gym_gym_space_gym_route GET    /api/v1/gyms/:gym_id/gym_spaces/:gym_space_id/gym_routes/:id(.:format)                            api/v1/gym_routes#show
+                                                        PATCH  /api/v1/gyms/:gym_id/gym_spaces/:gym_space_id/gym_routes/:id(.:format)                            api/v1/gym_routes#update
+                                                        PUT    /api/v1/gyms/:gym_id/gym_spaces/:gym_space_id/gym_routes/:id(.:format)                            api/v1/gym_routes#update
+                                                        DELETE /api/v1/gyms/:gym_id/gym_spaces/:gym_space_id/gym_routes/:id(.:format)                            api/v1/gym_routes#destroy
+                                  api_v1_gym_gym_spaces GET    /api/v1/gyms/:gym_id/gym_spaces(.:format)                                                         api/v1/gym_spaces#index
+                                                        POST   /api/v1/gyms/:gym_id/gym_spaces(.:format)                                                         api/v1/gym_spaces#create
+                                   api_v1_gym_gym_space GET    /api/v1/gyms/:gym_id/gym_spaces/:id(.:format)                                                     api/v1/gym_spaces#show
+                                                        PATCH  /api/v1/gyms/:gym_id/gym_spaces/:id(.:format)                                                     api/v1/gym_spaces#update
+                                                        PUT    /api/v1/gyms/:gym_id/gym_spaces/:id(.:format)                                                     api/v1/gym_spaces#update
+                                                        DELETE /api/v1/gyms/:gym_id/gym_spaces/:id(.:format)                                                     api/v1/gym_spaces#destroy
+                           ascents_api_v1_gym_gym_route GET    /api/v1/gyms/:gym_id/gym_routes/:id/ascents(.:format)                                             api/v1/gym_routes#ascents
+                       add_picture_api_v1_gym_gym_route POST   /api/v1/gyms/:gym_id/gym_routes/:id/add_picture(.:format)                                         api/v1/gym_routes#add_picture
+                     add_thumbnail_api_v1_gym_gym_route POST   /api/v1/gyms/:gym_id/gym_routes/:id/add_thumbnail(.:format)                                       api/v1/gym_routes#add_thumbnail
+                          dismount_api_v1_gym_gym_route PUT    /api/v1/gyms/:gym_id/gym_routes/:id/dismount(.:format)                                            api/v1/gym_routes#dismount
+                             mount_api_v1_gym_gym_route PUT    /api/v1/gyms/:gym_id/gym_routes/:id/mount(.:format)                                               api/v1/gym_routes#mount
+              dismount_collection_api_v1_gym_gym_routes PUT    /api/v1/gyms/:gym_id/gym_routes/dismount_collection(.:format)                                     api/v1/gym_routes#dismount_collection
+                 mount_collection_api_v1_gym_gym_routes PUT    /api/v1/gyms/:gym_id/gym_routes/mount_collection(.:format)                                        api/v1/gym_routes#mount_collection
+                                  api_v1_gym_gym_routes GET    /api/v1/gyms/:gym_id/gym_routes(.:format)                                                         api/v1/gym_routes#index
+                                                        POST   /api/v1/gyms/:gym_id/gym_routes(.:format)                                                         api/v1/gym_routes#create
+                                   api_v1_gym_gym_route GET    /api/v1/gyms/:gym_id/gym_routes/:id(.:format)                                                     api/v1/gym_routes#show
+                                                        PATCH  /api/v1/gyms/:gym_id/gym_routes/:id(.:format)                                                     api/v1/gym_routes#update
+                                                        PUT    /api/v1/gyms/:gym_id/gym_routes/:id(.:format)                                                     api/v1/gym_routes#update
+                                                        DELETE /api/v1/gyms/:gym_id/gym_routes/:id(.:format)                                                     api/v1/gym_routes#destroy
+           figures_api_v1_gym_statistics_gym_statistics POST   /api/v1/gyms/:gym_id/statistics/gym_statistics/figures(.:format)                                  api/v1/statistics/gym_statistics#figures
+                                            api_v1_gyms GET    /api/v1/gyms(.:format)                                                                            api/v1/gyms#index
+                                                        POST   /api/v1/gyms(.:format)                                                                            api/v1/gyms#create
+                                             api_v1_gym GET    /api/v1/gyms/:id(.:format)                                                                        api/v1/gyms#show
+                                                        PATCH  /api/v1/gyms/:id(.:format)                                                                        api/v1/gyms#update
+                                                        PUT    /api/v1/gyms/:id(.:format)                                                                        api/v1/gyms#update
+                                                        DELETE /api/v1/gyms/:id(.:format)                                                                        api/v1/gyms#destroy
+                                   api_v1_color_systems GET    /api/v1/color_systems(.:format)                                                                   api/v1/color_systems#index
+                                                        POST   /api/v1/color_systems(.:format)                                                                   api/v1/color_systems#create
+                                    api_v1_color_system GET    /api/v1/color_systems/:id(.:format)                                                               api/v1/color_systems#show
+                                         api_v1_reports POST   /api/v1/reports(.:format)                                                                         api/v1/reports#create
+                                           api_v1_rocks GET    /api/v1/public/rocks(.:format)                                                                    api/v1/rocks#index
+                                            api_v1_suns GET    /api/v1/public/suns(.:format)                                                                     api/v1/suns#index
+                                           api_v1_rains GET    /api/v1/public/rains(.:format)                                                                    api/v1/rains#index
+                                        api_v1_inclines GET    /api/v1/public/inclines(.:format)                                                                 api/v1/inclines#index
+                                          api_v1_climbs GET    /api/v1/public/climbs(.:format)                                                                   api/v1/climbs#index
+                                      api_v1_receptions GET    /api/v1/public/receptions(.:format)                                                               api/v1/receptions#index
+                                          api_v1_starts GET    /api/v1/public/starts(.:format)                                                                   api/v1/starts#index
+                                           api_v1_bolts GET    /api/v1/public/bolts(.:format)                                                                    api/v1/bolts#index
+                                         api_v1_anchors GET    /api/v1/public/anchors(.:format)                                                                  api/v1/anchors#index
+                                  api_v1_approach_types GET    /api/v1/public/approach-types(.:format)                                                           api/v1/approach_types#index
+                                     api_v1_alert_types GET    /api/v1/public/alert-types(.:format)                                                              api/v1/alert_types#index
+                                           api_v1_grade GET    /api/v1/public/grade(.:format)                                                                    api/v1/grades#grade
+                                     api_v1_grade_types GET    /api/v1/public/grade-types(.:format)                                                              api/v1/grades#types
+                                      api_v1_area_crags GET    /api/v1/public/area_crags(.:format)                                                               api/v1/area_crags#index
+                                                        POST   /api/v1/public/area_crags(.:format)                                                               api/v1/area_crags#create
+                                       api_v1_area_crag GET    /api/v1/public/area_crags/:id(.:format)                                                           api/v1/area_crags#show
+                                                        PATCH  /api/v1/public/area_crags/:id(.:format)                                                           api/v1/area_crags#update
+                                                        PUT    /api/v1/public/area_crags/:id(.:format)                                                           api/v1/area_crags#update
+                                                        DELETE /api/v1/public/area_crags/:id(.:format)                                                           api/v1/area_crags#destroy
+                                      crags_api_v1_area GET    /api/v1/public/areas/:id/crags(.:format)                                                          api/v1/areas#crags
+                              crags_figures_api_v1_area GET    /api/v1/public/areas/:id/crags_figures(.:format)                                                  api/v1/areas#crags_figures
+                          guide_book_papers_api_v1_area GET    /api/v1/public/areas/:id/guide_book_papers(.:format)                                              api/v1/areas#guide_book_papers
+                                     photos_api_v1_area GET    /api/v1/public/areas/:id/photos(.:format)                                                         api/v1/areas#photos
+                                    search_api_v1_areas GET    /api/v1/public/areas/search(.:format)                                                             api/v1/areas#search
+                                   add_crag_api_v1_area POST   /api/v1/public/areas/:id/add_crag(.:format)                                                       api/v1/areas#add_crag
+                                   geo_json_api_v1_area GET    /api/v1/public/areas/:id/geo_json(.:format)                                                       api/v1/areas#geo_json
+                                remove_crag_api_v1_area DELETE /api/v1/public/areas/:id/remove_crag(.:format)                                                    api/v1/areas#remove_crag
+               search_by_grades_api_v1_area_crag_routes GET    /api/v1/public/areas/:area_id/crag_routes/search_by_grades(.:format)                              api/v1/crag_routes#search_by_grades
+                                api_v1_area_crag_routes GET    /api/v1/public/areas/:area_id/crag_routes(.:format)                                               api/v1/crag_routes#index
+                                           api_v1_areas GET    /api/v1/public/areas(.:format)                                                                    api/v1/areas#index
+                                                        POST   /api/v1/public/areas(.:format)                                                                    api/v1/areas#create
+                                            api_v1_area GET    /api/v1/public/areas/:id(.:format)                                                                api/v1/areas#show
+                                                        PATCH  /api/v1/public/areas/:id(.:format)                                                                api/v1/areas#update
+                                                        PUT    /api/v1/public/areas/:id(.:format)                                                                api/v1/areas#update
+                                                        DELETE /api/v1/public/areas/:id(.:format)                                                                api/v1/areas#destroy
+                                    search_api_v1_towns GET    /api/v1/public/towns/search(.:format)                                                             api/v1/towns#search
+                                geo_search_api_v1_towns GET    /api/v1/public/towns/geo_search(.:format)                                                         api/v1/towns#geo_search
+                                   geo_json_api_v1_town GET    /api/v1/public/towns/:id/geo_json(.:format)                                                       api/v1/towns#geo_json
+                                            api_v1_town GET    /api/v1/public/towns/:id(.:format)                                                                api/v1/towns#show
+                           route_figures_api_v1_country GET    /api/v1/public/countries/:id/route_figures(.:format)                                              api/v1/countries#route_figures
+                                geo_json_api_v1_country GET    /api/v1/public/countries/:id/geo_json(.:format)                                                   api/v1/countries#geo_json
+                route_figures_api_v1_country_department GET    /api/v1/public/countries/:country_id/departments/:id/route_figures(.:format)                      api/v1/departments#route_figures
+                     geo_json_api_v1_country_department GET    /api/v1/public/countries/:country_id/departments/:id/geo_json(.:format)                           api/v1/departments#geo_json
+                             api_v1_country_departments GET    /api/v1/public/countries/:country_id/departments(.:format)                                        api/v1/departments#index
+                              api_v1_country_department GET    /api/v1/public/countries/:country_id/departments/:id(.:format)                                    api/v1/departments#show
+                                       api_v1_countries GET    /api/v1/public/countries(.:format)                                                                api/v1/countries#index
+                                         api_v1_country GET    /api/v1/public/countries/:id(.:format)                                                            api/v1/countries#show
+                        route_figures_api_v1_department GET    /api/v1/public/departments/:id/route_figures(.:format)                                            api/v1/departments#route_figures
+                                     api_v1_departments GET    /api/v1/public/departments(.:format)                                                              api/v1/departments#index
+                                      api_v1_department GET    /api/v1/public/departments/:id(.:format)                                                          api/v1/departments#show
+                                    search_api_v1_crags GET    /api/v1/public/crags/search(.:format)                                                             api/v1/crags#search
+                           advanced_search_api_v1_crags POST   /api/v1/public/crags/advanced_search(.:format)                                                    api/v1/crags#advanced_search
+                                    random_api_v1_crags GET    /api/v1/public/crags/random(.:format)                                                             api/v1/crags#random
+                                     guides_api_v1_crag GET    /api/v1/public/crags/:id/guides(.:format)                                                         api/v1/crags#guides
+                                     photos_api_v1_crag GET    /api/v1/public/crags/:id/photos(.:format)                                                         api/v1/crags#photos
+                                     videos_api_v1_crag GET    /api/v1/public/crags/:id/videos(.:format)                                                         api/v1/crags#videos
+                                   articles_api_v1_crag GET    /api/v1/public/crags/:id/articles(.:format)                                                       api/v1/crags#articles
+                                   versions_api_v1_crag GET    /api/v1/public/crags/:id/versions(.:format)                                                       api/v1/crags#versions
+                              route_figures_api_v1_crag GET    /api/v1/public/crags/:id/route_figures(.:format)                                                  api/v1/crags#route_figures
+                         guide_books_around_api_v1_crag GET    /api/v1/public/crags/:id/guide_books_around(.:format)                                             api/v1/crags#guide_books_around
+                               areas_around_api_v1_crag GET    /api/v1/public/crags/:id/areas_around(.:format)                                                   api/v1/crags#areas_around
+                            geo_json_around_api_v1_crag GET    /api/v1/public/crags/:id/geo_json_around(.:format)                                                api/v1/crags#geo_json_around
+                                  geo_json_api_v1_crags GET    /api/v1/public/crags/geo_json(.:format)                                                           api/v1/crags#geo_json
+                                geo_search_api_v1_crags GET    /api/v1/public/crags/geo_search(.:format)                                                         api/v1/crags#geo_search
+                              crags_around_api_v1_crags GET    /api/v1/public/crags/crags_around(.:format)                                                       api/v1/crags#crags_around
+                         search_api_v1_crag_crag_routes GET    /api/v1/public/crags/:crag_id/crag_routes/search(.:format)                                        api/v1/crag_routes#search
+               search_by_grades_api_v1_crag_crag_routes GET    /api/v1/public/crags/:crag_id/crag_routes/search_by_grades(.:format)                              api/v1/crag_routes#search_by_grades
+                                api_v1_crag_crag_routes GET    /api/v1/public/crags/:crag_id/crag_routes(.:format)                                               api/v1/crag_routes#index
+                                                        POST   /api/v1/public/crags/:crag_id/crag_routes(.:format)                                               api/v1/crag_routes#create
+                                 api_v1_crag_crag_route GET    /api/v1/public/crags/:crag_id/crag_routes/:id(.:format)                                           api/v1/crag_routes#show
+                                                        PATCH  /api/v1/public/crags/:crag_id/crag_routes/:id(.:format)                                           api/v1/crag_routes#update
+                                                        PUT    /api/v1/public/crags/:crag_id/crag_routes/:id(.:format)                                           api/v1/crag_routes#update
+                                                        DELETE /api/v1/public/crags/:crag_id/crag_routes/:id(.:format)                                           api/v1/crag_routes#destroy
+                      geo_json_around_api_v1_crag_parks GET    /api/v1/public/crags/:crag_id/parks/geo_json_around(.:format)                                     api/v1/parks#geo_json_around
+                                      api_v1_crag_parks GET    /api/v1/public/crags/:crag_id/parks(.:format)                                                     api/v1/parks#index
+                                                        POST   /api/v1/public/crags/:crag_id/parks(.:format)                                                     api/v1/parks#create
+                                       api_v1_crag_park GET    /api/v1/public/crags/:crag_id/parks/:id(.:format)                                                 api/v1/parks#show
+                                                        PATCH  /api/v1/public/crags/:crag_id/parks/:id(.:format)                                                 api/v1/parks#update
+                                                        PUT    /api/v1/public/crags/:crag_id/parks/:id(.:format)                                                 api/v1/parks#update
+                                                        DELETE /api/v1/public/crags/:crag_id/parks/:id(.:format)                                                 api/v1/parks#destroy
+               geo_json_around_api_v1_crag_crag_sectors GET    /api/v1/public/crags/:crag_id/crag_sectors/geo_json_around(.:format)                              api/v1/crag_sectors#geo_json_around
+   search_by_grades_api_v1_crag_crag_sector_crag_routes GET    /api/v1/public/crags/:crag_id/crag_sectors/:crag_sector_id/crag_routes/search_by_grades(.:format) api/v1/crag_routes#search_by_grades
+                               api_v1_crag_crag_sectors GET    /api/v1/public/crags/:crag_id/crag_sectors(.:format)                                              api/v1/crag_sectors#index
+                                                        POST   /api/v1/public/crags/:crag_id/crag_sectors(.:format)                                              api/v1/crag_sectors#create
+                                api_v1_crag_crag_sector GET    /api/v1/public/crags/:crag_id/crag_sectors/:id(.:format)                                          api/v1/crag_sectors#show
+                                                        PATCH  /api/v1/public/crags/:crag_id/crag_sectors/:id(.:format)                                          api/v1/crag_sectors#update
+                                                        PUT    /api/v1/public/crags/:crag_id/crag_sectors/:id(.:format)                                          api/v1/crag_sectors#update
+                                                        DELETE /api/v1/public/crags/:crag_id/crag_sectors/:id(.:format)                                          api/v1/crag_sectors#destroy
+                 geo_json_around_api_v1_crag_approaches GET    /api/v1/public/crags/:crag_id/approaches/geo_json_around(.:format)                                api/v1/approaches#geo_json_around
+                                 api_v1_crag_approaches GET    /api/v1/public/crags/:crag_id/approaches(.:format)                                                api/v1/approaches#index
+                                                        POST   /api/v1/public/crags/:crag_id/approaches(.:format)                                                api/v1/approaches#create
+                                   api_v1_crag_approach GET    /api/v1/public/crags/:crag_id/approaches/:id(.:format)                                            api/v1/approaches#show
+                                                        PATCH  /api/v1/public/crags/:crag_id/approaches/:id(.:format)                                            api/v1/approaches#update
+                                                        PUT    /api/v1/public/crags/:crag_id/approaches/:id(.:format)                                            api/v1/approaches#update
+                                                        DELETE /api/v1/public/crags/:crag_id/approaches/:id(.:format)                                            api/v1/approaches#destroy
+                                           api_v1_crags GET    /api/v1/public/crags(.:format)                                                                    api/v1/crags#index
+                                                        POST   /api/v1/public/crags(.:format)                                                                    api/v1/crags#create
+                                            api_v1_crag GET    /api/v1/public/crags/:id(.:format)                                                                api/v1/crags#show
+                                                        PATCH  /api/v1/public/crags/:id(.:format)                                                                api/v1/crags#update
+                                                        PUT    /api/v1/public/crags/:id(.:format)                                                                api/v1/crags#update
+                                                        DELETE /api/v1/public/crags/:id(.:format)                                                                api/v1/crags#destroy
+                            versions_api_v1_crag_sector GET    /api/v1/public/crag_sectors/:id/versions(.:format)                                                api/v1/crag_sectors#versions
+                              photos_api_v1_crag_sector GET    /api/v1/public/crag_sectors/:id/photos(.:format)                                                  api/v1/crag_sectors#photos
+                              videos_api_v1_crag_sector GET    /api/v1/public/crag_sectors/:id/videos(.:format)                                                  api/v1/crag_sectors#videos
+                       route_figures_api_v1_crag_sector GET    /api/v1/public/crag_sectors/:id/route_figures(.:format)                                           api/v1/crag_sectors#route_figures
+                  search_api_v1_crag_sector_crag_routes GET    /api/v1/public/crag_sectors/:crag_sector_id/crag_routes/search(.:format)                          api/v1/crag_routes#search
+        search_by_grades_api_v1_crag_sector_crag_routes GET    /api/v1/public/crag_sectors/:crag_sector_id/crag_routes/search_by_grades(.:format)                api/v1/crag_routes#search_by_grades
+                         api_v1_crag_sector_crag_routes GET    /api/v1/public/crag_sectors/:crag_sector_id/crag_routes(.:format)                                 api/v1/crag_routes#index
+                                                        POST   /api/v1/public/crag_sectors/:crag_sector_id/crag_routes(.:format)                                 api/v1/crag_routes#create
+                          api_v1_crag_sector_crag_route GET    /api/v1/public/crag_sectors/:crag_sector_id/crag_routes/:id(.:format)                             api/v1/crag_routes#show
+                                                        PATCH  /api/v1/public/crag_sectors/:crag_sector_id/crag_routes/:id(.:format)                             api/v1/crag_routes#update
+                                                        PUT    /api/v1/public/crag_sectors/:crag_sector_id/crag_routes/:id(.:format)                             api/v1/crag_routes#update
+                                                        DELETE /api/v1/public/crag_sectors/:crag_sector_id/crag_routes/:id(.:format)                             api/v1/crag_routes#destroy
+                                    api_v1_crag_sectors GET    /api/v1/public/crag_sectors(.:format)                                                             api/v1/crag_sectors#index
+                                                        POST   /api/v1/public/crag_sectors(.:format)                                                             api/v1/crag_sectors#create
+                                     api_v1_crag_sector GET    /api/v1/public/crag_sectors/:id(.:format)                                                         api/v1/crag_sectors#show
+                                                        PATCH  /api/v1/public/crag_sectors/:id(.:format)                                                         api/v1/crag_sectors#update
+                                                        PUT    /api/v1/public/crag_sectors/:id(.:format)                                                         api/v1/crag_sectors#update
+                                                        DELETE /api/v1/public/crag_sectors/:id(.:format)                                                         api/v1/crag_sectors#destroy
+                             versions_api_v1_crag_route GET    /api/v1/public/crag_routes/:id/versions(.:format)                                                 api/v1/crag_routes#versions
+                               photos_api_v1_crag_route GET    /api/v1/public/crag_routes/:id/photos(.:format)                                                   api/v1/crag_routes#photos
+                               videos_api_v1_crag_route GET    /api/v1/public/crag_routes/:id/videos(.:format)                                                   api/v1/crag_routes#videos
+                              random_api_v1_crag_routes GET    /api/v1/public/crag_routes/random(.:format)                                                       api/v1/crag_routes#random
+                                     api_v1_crag_routes GET    /api/v1/public/crag_routes(.:format)                                                              api/v1/crag_routes#index
+                                                        POST   /api/v1/public/crag_routes(.:format)                                                              api/v1/crag_routes#create
+                                      api_v1_crag_route GET    /api/v1/public/crag_routes/:id(.:format)                                                          api/v1/crag_routes#show
+                                                        PATCH  /api/v1/public/crag_routes/:id(.:format)                                                          api/v1/crag_routes#update
+                                                        PUT    /api/v1/public/crag_routes/:id(.:format)                                                          api/v1/crag_routes#update
+                                                        DELETE /api/v1/public/crag_routes/:id(.:format)                                                          api/v1/crag_routes#destroy
+                                           api_v1_parks GET    /api/v1/public/parks(.:format)                                                                    api/v1/parks#index
+                                                        POST   /api/v1/public/parks(.:format)                                                                    api/v1/parks#create
+                                            api_v1_park GET    /api/v1/public/parks/:id(.:format)                                                                api/v1/parks#show
+                                                        PATCH  /api/v1/public/parks/:id(.:format)                                                                api/v1/parks#update
+                                                        PUT    /api/v1/public/parks/:id(.:format)                                                                api/v1/parks#update
+                                                        DELETE /api/v1/public/parks/:id(.:format)                                                                api/v1/parks#destroy
+                                      api_v1_approaches GET    /api/v1/public/approaches(.:format)                                                               api/v1/approaches#index
+                                                        POST   /api/v1/public/approaches(.:format)                                                               api/v1/approaches#create
+                                        api_v1_approach GET    /api/v1/public/approaches/:id(.:format)                                                           api/v1/approaches#show
+                                                        PATCH  /api/v1/public/approaches/:id(.:format)                                                           api/v1/approaches#update
+                                                        PUT    /api/v1/public/approaches/:id(.:format)                                                           api/v1/approaches#update
+                                                        DELETE /api/v1/public/approaches/:id(.:format)                                                           api/v1/approaches#destroy
+                                 api_v1_guide_book_webs GET    /api/v1/public/guide_book_webs(.:format)                                                          api/v1/guide_book_webs#index
+                                                        POST   /api/v1/public/guide_book_webs(.:format)                                                          api/v1/guide_book_webs#create
+                                  api_v1_guide_book_web GET    /api/v1/public/guide_book_webs/:id(.:format)                                                      api/v1/guide_book_webs#show
+                                                        PATCH  /api/v1/public/guide_book_webs/:id(.:format)                                                      api/v1/guide_book_webs#update
+                                                        PUT    /api/v1/public/guide_book_webs/:id(.:format)                                                      api/v1/guide_book_webs#update
+                                                        DELETE /api/v1/public/guide_book_webs/:id(.:format)                                                      api/v1/guide_book_webs#destroy
+                                 api_v1_guide_book_pdfs GET    /api/v1/public/guide_book_pdfs(.:format)                                                          api/v1/guide_book_pdfs#index
+                                                        POST   /api/v1/public/guide_book_pdfs(.:format)                                                          api/v1/guide_book_pdfs#create
+                                  api_v1_guide_book_pdf GET    /api/v1/public/guide_book_pdfs/:id(.:format)                                                      api/v1/guide_book_pdfs#show
+                                                        PATCH  /api/v1/public/guide_book_pdfs/:id(.:format)                                                      api/v1/guide_book_pdfs#update
+                                                        PUT    /api/v1/public/guide_book_pdfs/:id(.:format)                                                      api/v1/guide_book_pdfs#update
+                                                        DELETE /api/v1/public/guide_book_pdfs/:id(.:format)                                                      api/v1/guide_book_pdfs#destroy
+                       grouped_api_v1_guide_book_papers GET    /api/v1/public/guide_book_papers/grouped(.:format)                                                api/v1/guide_book_papers#grouped
+                          crags_api_v1_guide_book_paper GET    /api/v1/public/guide_book_papers/:id/crags(.:format)                                              api/v1/guide_book_papers#crags
+                  crags_figures_api_v1_guide_book_paper GET    /api/v1/public/guide_book_papers/:id/crags_figures(.:format)                                      api/v1/guide_book_papers#crags_figures
+                       geo_json_api_v1_guide_book_paper GET    /api/v1/public/guide_book_papers/:id/geo_json(.:format)                                           api/v1/guide_book_papers#geo_json
+                         photos_api_v1_guide_book_paper GET    /api/v1/public/guide_book_papers/:id/photos(.:format)                                             api/v1/guide_book_papers#photos
+                          links_api_v1_guide_book_paper GET    /api/v1/public/guide_book_papers/:id/links(.:format)                                              api/v1/guide_book_papers#links
+                       articles_api_v1_guide_book_paper GET    /api/v1/public/guide_book_papers/:id/articles(.:format)                                           api/v1/guide_book_papers#articles
+                       versions_api_v1_guide_book_paper GET    /api/v1/public/guide_book_papers/:id/versions(.:format)                                           api/v1/guide_book_papers#versions
+                   alternatives_api_v1_guide_book_paper GET    /api/v1/public/guide_book_papers/:id/alternatives(.:format)                                       api/v1/guide_book_papers#alternatives
+                        search_api_v1_guide_book_papers GET    /api/v1/public/guide_book_papers/search(.:format)                                                 api/v1/guide_book_papers#search
+                        around_api_v1_guide_book_papers GET    /api/v1/public/guide_book_papers/around(.:format)                                                 api/v1/guide_book_papers#around
+                       add_crag_api_v1_guide_book_paper POST   /api/v1/public/guide_book_papers/:id/add_crag(.:format)                                           api/v1/guide_book_papers#add_crag
+                      add_cover_api_v1_guide_book_paper POST   /api/v1/public/guide_book_papers/:id/add_cover(.:format)                                          api/v1/guide_book_papers#add_cover
+                    remove_crag_api_v1_guide_book_paper DELETE /api/v1/public/guide_book_papers/:id/remove_crag(.:format)                                        api/v1/guide_book_papers#remove_crag
+                   remove_cover_api_v1_guide_book_paper DELETE /api/v1/public/guide_book_papers/:id/remove_cover(.:format)                                       api/v1/guide_book_papers#remove_cover
+                 api_v1_guide_book_paper_place_of_sales GET    /api/v1/public/guide_book_papers/:guide_book_paper_id/place_of_sales(.:format)                    api/v1/place_of_sales#index
+                                                        POST   /api/v1/public/guide_book_papers/:guide_book_paper_id/place_of_sales(.:format)                    api/v1/place_of_sales#create
+                  api_v1_guide_book_paper_place_of_sale GET    /api/v1/public/guide_book_papers/:guide_book_paper_id/place_of_sales/:id(.:format)                api/v1/place_of_sales#show
+                                                        PATCH  /api/v1/public/guide_book_papers/:guide_book_paper_id/place_of_sales/:id(.:format)                api/v1/place_of_sales#update
+                                                        PUT    /api/v1/public/guide_book_papers/:guide_book_paper_id/place_of_sales/:id(.:format)                api/v1/place_of_sales#update
+                                                        DELETE /api/v1/public/guide_book_papers/:guide_book_paper_id/place_of_sales/:id(.:format)                api/v1/place_of_sales#destroy
+                               api_v1_guide_book_papers GET    /api/v1/public/guide_book_papers(.:format)                                                        api/v1/guide_book_papers#index
+                                                        POST   /api/v1/public/guide_book_papers(.:format)                                                        api/v1/guide_book_papers#create
+                                api_v1_guide_book_paper GET    /api/v1/public/guide_book_papers/:id(.:format)                                                    api/v1/guide_book_papers#show
+                                                        PATCH  /api/v1/public/guide_book_papers/:id(.:format)                                                    api/v1/guide_book_papers#update
+                                                        PUT    /api/v1/public/guide_book_papers/:id(.:format)                                                    api/v1/guide_book_papers#update
+                                                        DELETE /api/v1/public/guide_book_papers/:id(.:format)                                                    api/v1/guide_book_papers#destroy
+                                    search_api_v1_words GET    /api/v1/public/words/search(.:format)                                                             api/v1/words#search
+                                   versions_api_v1_word GET    /api/v1/public/words/:id/versions(.:format)                                                       api/v1/words#versions
+                                           api_v1_words GET    /api/v1/public/words(.:format)                                                                    api/v1/words#index
+                                                        POST   /api/v1/public/words(.:format)                                                                    api/v1/words#create
+                                            api_v1_word GET    /api/v1/public/words/:id(.:format)                                                                api/v1/words#show
+                                                        PATCH  /api/v1/public/words/:id(.:format)                                                                api/v1/words#update
+                                                        PUT    /api/v1/public/words/:id(.:format)                                                                api/v1/words#update
+                                                        DELETE /api/v1/public/words/:id(.:format)                                                                api/v1/words#destroy
+                          rails_postmark_inbound_emails POST   /rails/action_mailbox/postmark/inbound_emails(.:format)                                           action_mailbox/ingresses/postmark/inbound_emails#create
+                             rails_relay_inbound_emails POST   /rails/action_mailbox/relay/inbound_emails(.:format)                                              action_mailbox/ingresses/relay/inbound_emails#create
+                          rails_sendgrid_inbound_emails POST   /rails/action_mailbox/sendgrid/inbound_emails(.:format)                                           action_mailbox/ingresses/sendgrid/inbound_emails#create
+                    rails_mandrill_inbound_health_check GET    /rails/action_mailbox/mandrill/inbound_emails(.:format)                                           action_mailbox/ingresses/mandrill/inbound_emails#health_check
+                          rails_mandrill_inbound_emails POST   /rails/action_mailbox/mandrill/inbound_emails(.:format)                                           action_mailbox/ingresses/mandrill/inbound_emails#create
+                           rails_mailgun_inbound_emails POST   /rails/action_mailbox/mailgun/inbound_emails/mime(.:format)                                       action_mailbox/ingresses/mailgun/inbound_emails#create
+                         rails_conductor_inbound_emails GET    /rails/conductor/action_mailbox/inbound_emails(.:format)                                          rails/conductor/action_mailbox/inbound_emails#index
+                                                        POST   /rails/conductor/action_mailbox/inbound_emails(.:format)                                          rails/conductor/action_mailbox/inbound_emails#create
+                          rails_conductor_inbound_email GET    /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                                      rails/conductor/action_mailbox/inbound_emails#show
+                                                        PATCH  /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                                      rails/conductor/action_mailbox/inbound_emails#update
+                                                        PUT    /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                                      rails/conductor/action_mailbox/inbound_emails#update
+                                                        DELETE /rails/conductor/action_mailbox/inbound_emails/:id(.:format)                                      rails/conductor/action_mailbox/inbound_emails#destroy
+                  rails_conductor_inbound_email_reroute POST   /rails/conductor/action_mailbox/:inbound_email_id/reroute(.:format)                               rails/conductor/action_mailbox/reroutes#create
+                                     rails_service_blob GET    /rails/active_storage/blobs/:signed_id/*filename(.:format)                                        active_storage/blobs#show
+                              rails_blob_representation GET    /rails/active_storage/representations/:signed_blob_id/:variation_key/*filename(.:format)          active_storage/representations#show
+                                     rails_disk_service GET    /rails/active_storage/disk/:encoded_key/*filename(.:format)                                       active_storage/disk#show
+                              update_rails_disk_service PUT    /rails/active_storage/disk/:encoded_token(.:format)                                               active_storage/disk#update
+                                   rails_direct_uploads POST   /rails/active_storage/direct_uploads(.:format)                                                    active_storage/direct_uploads#create
+
+Routes for Apitome::Engine:
+  root GET  /           apitome/docs#index
