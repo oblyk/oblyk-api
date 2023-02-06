@@ -6,9 +6,9 @@ module Api
       include Gymable
       skip_before_action :protected_by_session, only: %i[show index ascents]
       skip_before_action :protected_by_gym_administrator, only: %i[show index ascents]
-      before_action :set_gym_space, except: %i[add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents]
-      before_action :set_gym_sector, except: %i[index show add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents]
-      before_action :set_gym_route, only: %i[show update destroy add_picture add_thumbnail dismount mount ascents]
+      before_action :set_gym_space, except: %i[add_picture similar_sectors add_thumbnail dismount mount dismount_collection mount_collection ascents]
+      before_action :set_gym_sector, except: %i[index show similar_sectors add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents]
+      before_action :set_gym_route, only: %i[show similar_sectors update destroy add_picture add_thumbnail dismount mount ascents]
 
       def index
         group_by = params.fetch(:group_by, nil)
@@ -69,6 +69,11 @@ module Api
 
       def show
         render json: @gym_route.detail_to_json, status: :ok
+      end
+
+      def similar_sectors
+        sectors = @gym_route.gym.gym_sectors.where(gym_space_id: @gym_route.gym_sector.gym_space_id, gym_grade_id: @gym_route.gym_sector.gym_grade_id)
+        render json: sectors.map(&:summary_to_json), status: :ok
       end
 
       def ascents
@@ -222,6 +227,7 @@ module Api
           :gym_grade_line_id,
           :points,
           :opened_at,
+          :gym_sector_id,
           gym_opener_ids: [],
           sections: [:climbing_type, :description, :grade, :height, { tags: [] }],
           hold_colors: %i[],

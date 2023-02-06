@@ -79,3 +79,8 @@ Accept: application/json
 DELETE {{api_url}}/gyms/1/gym_routes/1.json
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
+
+### Get similar sectors of route
+GET {{api_url}}/gyms/1/gym_routes/15/similar_sectors.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
