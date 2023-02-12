@@ -9,7 +9,7 @@ module Api
       before_action :protected_by_administrator, only: %i[update add_banner add_logo routes_count routes]
 
       def index
-        gyms = Gym.all
+        gyms = params[:ids].present? ? Gym.where(id: params[:ids]) : Gym.all
         render json: gyms.map(&:summary_to_json), status: :ok
       end
 

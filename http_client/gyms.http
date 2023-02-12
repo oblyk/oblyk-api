@@ -92,7 +92,7 @@ Accept: application/json
 ### GET all gyms
 GET {{api_url}}/gyms.json
 HttpApiAccessToken: {{api_access_token}}
-Accept: application/json
+Content-Type: application/json
 
 ### GET search gym like mroc
 GET {{api_url}}/gyms/search.json?query=mroc
