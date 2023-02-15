@@ -168,6 +168,7 @@ class Gym < ApplicationRecord
         versions_count: versions.count,
         gym_spaces: gym_spaces.map(&:summary_to_json),
         creator: user&.summary_to_json,
+        sorts_available: sorts_available,
         history: {
           created_at: created_at,
           updated_at: updated_at
@@ -177,6 +178,20 @@ class Gym < ApplicationRecord
   end
 
   private
+
+  def sorts_available
+    sorts = GymGrade.select("SUM(difficulty_by_level) AS sortable_by_level, SUM(difficulty_by_grade) AS sortable_by_grade, SUM(IF(point_system_type != 'none', 1, 0)) AS sortable_by_point")
+                    .joins(gym_sectors: :gym_routes)
+                    .joins(gym_sectors: :gym_space)
+                    .where(gym_sectors: { gym_spaces: { gym: self } })
+                    .where(gym_routes: { dismounted_at: nil })
+    sorts = sorts.first
+    {
+      difficulty_by_level: sorts[:sortable_by_level]&.positive?,
+      difficulty_by_grade: sorts[:sortable_by_grade]&.positive?,
+      difficulty_by_point: sorts[:sortable_by_point]&.positive?
+    }
+  end
 
   def search_indexes
     [

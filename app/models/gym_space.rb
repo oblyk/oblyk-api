@@ -101,8 +101,24 @@ class GymSpace < ApplicationRecord
   def detail_to_json
     summary_to_json.merge(
       {
-        gym_sectors: gym_sectors.map(&:summary_to_json)
+        gym_sectors: gym_sectors.map(&:summary_to_json),
+        sorts_available: sorts_available
       }
     )
+  end
+
+  private
+
+  def sorts_available
+    sorts = GymGrade.select("SUM(difficulty_by_level) AS sortable_by_level, SUM(difficulty_by_grade) AS sortable_by_grade, SUM(IF(point_system_type != 'none', 1, 0)) AS sortable_by_point")
+                    .joins(gym_sectors: :gym_routes)
+                    .where(gym_sectors: { gym_space: self })
+                    .where(gym_routes: { dismounted_at: nil })
+    sorts = sorts.first
+    {
+      difficulty_by_level: sorts[:sortable_by_level]&.positive?,
+      difficulty_by_grade: sorts[:sortable_by_grade]&.positive?,
+      difficulty_by_point: sorts[:sortable_by_point]&.positive?
+    }
   end
 end
