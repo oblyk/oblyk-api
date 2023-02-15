@@ -40,13 +40,18 @@ class GymRoute < ApplicationRecord
     gym_grade_line&.gym_grade || gym_sector.gym_grade
   end
 
+  def calculated_point
+    return 0 if gym_grade.point_system_type == 'none'
+
+    ascents_count = self.ascents_count&.positive? ? self.ascents_count : 1
+    points if gym_grade.point_system_type == 'fix'
+    1000 / ascents_count if gym_grade.point_system_type == 'divisible'
+  end
+
   def points_to_s
     return '' if gym_grade.point_system_type == 'none'
 
-    ascents_count = self.ascents_count&.positive? ? self.ascents_count : 1
-    points = self.points if gym_grade.point_system_type == 'fix'
-    points = 1000 / ascents_count if gym_grade.point_system_type == 'divisible'
-    "#{points}pts"
+    "#{calculated_point}pts"
   end
 
   def grade_to_s

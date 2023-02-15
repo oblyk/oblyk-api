@@ -61,6 +61,8 @@ module Api
           when 'level'
             level_routes = group_by_level(routes)
             render json: { level: level_routes.map { |level_route| { name: level_route[1][:name], colors: level_route[1][:colors], tag_color: level_route[1][:tag_color], hold_color: level_route[1][:hold_color], routes: level_route[1][:routes].map(&:summary_to_json) } } }, status: :ok
+          when 'point'
+            render json: routes.sort_by { |route| -route.calculated_point }.map(&:summary_to_json), status: :ok
           else
             render json: routes.map(&:summary_to_json), status: :ok
           end
