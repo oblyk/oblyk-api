@@ -204,7 +204,7 @@
               >
                 <div class="qr-code-box">
                   <%
-                    qr = RQRCode::QRCode.new(route.short_app_path)
+                    qr = RQRCode::QRCode.new("URL:#{route.short_app_path}")
                     svg = qr.as_svg(viewbox: true)
                   %>
                   <%= svg.html_safe %>
