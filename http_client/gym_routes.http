@@ -84,3 +84,18 @@ Authorization: Bearer {{auth_token}}
 GET {{api_url}}/gyms/1/gym_routes/15/similar_sectors.json
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
+
+### Print PDF gym routes sheet
+GET {{api_url}}/gyms/1/gym_routes/print.pdf
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "ids": [14, 4, 16, 11, 17]
+}
+
+### Get route whitout nested space and gyms
+GET {{api_url}}/gyms/212/gym_routes/14
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}

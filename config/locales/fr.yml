@@ -45,6 +45,57 @@ fr:
     organization:
       new_organization:
         title: "[admin] Nouvelle organisation %{organization_id}"
+  tags:
+    crimps: 'Réglettes'
+    slopers: 'Plats'
+    prow: 'Proue'
+    arete: 'Arête'
+    slab: 'Dalle'
+    vertical_wall: 'Mur vertical'
+    overhang: 'Dévers'
+    slight_overhang: 'Léger dévers'
+    roof: 'Toit'
+    pockets: 'Trous'
+    dyno: 'Jeté'
+    traverse: 'Traversée'
+    l_r_traverse: 'Traversée g->d'
+    r_l_traverse: 'Traversée d->g'
+    jugs: 'Bacs'
+    pinches: 'Pinces'
+    dihedral: 'Dièdre'
+    chimney: 'Cheminée'
+    mantle: 'Réta'
+    balancy: 'Équilibre'
+    physical: 'Physique'
+    endurance: 'Conti'
+    resistance: 'Rési'
+    runout: 'Engagé'
+    compression: 'Compression'
+    crack: 'Fissure'
+    underclings: 'Inversées'
+    high: 'Haut'
+    exposed: 'Expo'
+    pillar: 'Pilier'
+    ledge: 'Vire'
+    technical: 'Technique'
+    tiny_crimps: 'Grattons'
+    mono: 'Monodoigts'
+    jamming: 'Renfougne'
+    kneebar: 'Genou'
+    polished: 'Patiné'
+    dropknee: 'Lolotte'
+    heel_hook: 'Talon'
+    toe_hook: 'Contre-pointe'
+    smearing: 'Adhérence'
+    tufas: 'Colonnettes'
+    yaniro: 'Yaniro'
+    flake: 'Écaille'
+    layback: 'Dülfer'
+    sidepull: 'Prise verticale'
+    slots: 'Boîtes aux lettres'
+    morpho: 'Morpho'
+    bouldery_move: 'Pas de bloc'
+    bulge: 'Surplomb'
   activerecord:
     attributes:
       crag:
@@ -123,3 +174,9 @@ fr:
         content_type: "is_not_in_the_right_format"
         confirmation: "confirm"
         record_invalid: "Enregistrement non valide"
+  date:
+    month_names: [~, Janvier, Février, Mars, Avril, Mai, Juin, Juillet, Août, Septembre, Octobre, Novembre, Décembre]
+    formats:
+      default: "%d/%m/%Y"
+      iso: "%Y-%m-%d"
+      long_month: "%d %B %Y"

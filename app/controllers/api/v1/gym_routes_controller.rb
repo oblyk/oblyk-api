@@ -4,6 +4,7 @@ module Api
   module V1
     class GymRoutesController < ApiController
       include Gymable
+
       skip_before_action :protected_by_session, only: %i[show index ascents]
       skip_before_action :protected_by_gym_administrator, only: %i[show index ascents]
       before_action :set_gym_space, except: %i[add_picture similar_sectors add_thumbnail dismount mount dismount_collection mount_collection ascents]
@@ -67,6 +68,18 @@ module Api
             render json: routes.map(&:summary_to_json), status: :ok
           end
         end
+      end
+
+      def print
+        gym_routes = GymRoute.where(id: params[:ids])
+                             .order(:min_grade_value)
+
+        pdf_html = ActionController::Base.new.render_to_string(
+          template: 'api/v1/gym_routes/print.pdf.erb',
+          locals: { gym_routes: gym_routes }
+        )
+        pdf = WickedPdf.new.pdf_from_string(pdf_html)
+        send_data pdf, filename: "Fiche de voie - #{I18n.l(Date.current, format: :iso)} - #{@gym.name}.pdf"
       end
 
       def show

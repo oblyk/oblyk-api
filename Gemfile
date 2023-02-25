@@ -82,6 +82,13 @@ gem 'levenshtein-ffi', require: 'levenshtein'
 # Sendinblue email sdk
 gem 'sib-api-v3-sdk'
 
+# Generate PDF from html
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
+
+# Generate QrCode
+gem "rqrcode", "~> 2.0"
+
 group :development, :test do
   gem 'bullet'
   # Ruby static code analyzer

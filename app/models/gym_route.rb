@@ -68,6 +68,14 @@ class GymRoute < ApplicationRecord
     end
   end
 
+  def tags
+    tags = []
+    sections.each do |section|
+      tags += section['tags']
+    end
+    tags
+  end
+
   def mounted?
     dismounted_at.blank?
   end
@@ -92,6 +100,22 @@ class GymRoute < ApplicationRecord
 
   def thumbnail_url
     resize_attachment thumbnail, '300x300'
+  end
+
+  def app_path
+    "#{ENV['OBLYK_APP_URL']}/gyms/#{gym.id}/#{gym.slug_name}/spaces/#{gym_space.id}/#{gym_space.slug_name}?route=#{id}"
+  end
+
+  def short_app_path
+    "#{ENV['OBLYK_APP_URL']}/gr/#{gym.id}-#{id}"
+  end
+
+  def hold_gradiant
+    gradiant(hold_colors, fluid: true)
+  end
+
+  def tag_gradiant
+    gradiant(tag_colors, fluid: false)
   end
 
   def update_form_ascents!
@@ -243,5 +267,26 @@ class GymRoute < ApplicationRecord
       # Valid numerics
       errors.add(:height, I18n.t('activerecord.errors.messages.greater_than')) if section['height'].present? && Integer(section['height']).negative?
     end
+  end
+
+  def gradiant(colors, fluid: true)
+    number_of_color = colors.size
+    gradiant = []
+    if number_of_color == 1
+      gradiant << {  color: colors[0], offset: 0 }
+      gradiant << { color: colors[0], offset: 100 }
+    else
+      index = 0
+      colors.each do |color|
+        if fluid
+          gradiant << { color: color, offset: 100 / (number_of_color - 1) * index }
+        else
+          gradiant << { color: color, offset: 100 / number_of_color * index }
+          gradiant << { color: color, offset: 100 / number_of_color * (index + 1) }
+          index += 1
+        end
+      end
+    end
+    gradiant
   end
 end

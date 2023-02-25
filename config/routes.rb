@@ -206,6 +206,7 @@ Rails.application.routes.draw do
           resources :gym_routes
         end
         resources :gym_routes do
+          get :print, on: :collection
           get :ascents, on: :member
           get :similar_sectors, on: :member
           post :add_picture, on: :member

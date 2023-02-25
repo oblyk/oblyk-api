@@ -1,0 +1,222 @@
+<%
+  renderer = Redcarpet::Render::HTML.new(
+    no_links: true,
+    no_images: true
+  )
+  markdown = Redcarpet::Markdown.new(renderer)
+%>
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset='utf-8' />
+    <style>
+      body {
+          font-size: 15pt;
+          font-family: Sans-Serif, serif;
+      }
+      .route-box {
+          border-color: grey;
+          border-style: solid;
+          border-width: 2px;
+          margin-bottom: 1em;
+          border-radius: 8px;
+      }
+      .route-table {
+          border-collapse: collapse;
+      }
+      .route-table {
+          width: 100%;
+      }
+      .grade-hold-tags-col {
+          width: 4cm;
+          padding-left: 0.4em;
+          padding-right: 0.4em;
+      }
+      .hold-or-tag-box {
+          box-sizing: border-box;
+          height: 1cm;
+          border-radius: 0.5cm;
+          resize: both;
+          overflow: hidden;
+          padding: 5px;
+          margin-bottom: 5px;
+      }
+      .hold-or-tag-box svg {
+          margin-right: 0.25em;
+          height: 0.7cm;
+          width: 0.7cm;
+      }
+      .hold-or-tag-box .label-name {
+          vertical-align: top;
+          display: inline-block;
+          padding-top: 4px;
+          color: white;
+      }
+      .grade-box {
+          text-align: center;
+          font-size: 25pt;
+          padding-top: 0.3cm;
+          padding-bottom: 0.3cm;
+          font-weight: bold;
+      }
+      .name-and-information-col {
+          border-left-style: solid;
+          border-right-style: solid;
+          border-width: 1px;
+          border-color: grey;
+          vertical-align: top;
+      }
+      .name-box {
+          padding: 0.4em;
+          font-size: 18pt;
+          margin-bottom: 0.4em;
+          border-color: grey;
+          border-bottom-style: solid;
+          border-width: 2px;
+      }
+      .information-box {
+          padding-right: 0.5em;
+          padding-left: 0.5em;
+      }
+      .description-box {
+          margin-bottom: 0.4em;
+      }
+      .description-box p, h1, h2, h3, h4, h5, h6 {
+          font-size: 1em;
+          margin-bottom: 0;
+          margin-top: 0;
+      }
+      .openers-box {}
+      .qr-code-col {
+          width: 4cm;
+          height: 4cm;
+          padding: 5px;
+          text-align: center;
+      }
+      .qr-code-box {
+          width: 4cm;
+          height: 4cm;
+          resize: both;
+          overflow: hidden;
+          text-align: center;
+      }
+      .qr-code-box svg {
+          width: 100%;
+          height: 100%;
+      }
+      .powered-by-oblyk {
+          font-size: 10pt;
+          color: grey;
+          text-align: right;
+          padding-right: 1em;
+      }
+      .grey-text { color: #616161; }
+      div.nobreak:before { clear: both; }
+      div.nobreak { page-break-inside: avoid; }
+    </style>
+  </head>
+  <body>
+    <div id="content">
+      <% gym_routes.each do |route| %>
+        <div class="route-box nobreak">
+          <table class="route-table">
+            <tr>
+              <td class="grade-hold-tags-col">
+                <% if route.grade_to_s.present? || route.points.present? %>
+                  <div class="grade-box">
+                    <%= route.grade_to_s if route.grade_to_s.present? %>
+                    <%= "#{route.points}pt" if route.points.present? %>
+                  </div>
+                <% end %>
+
+                <% if route.hold_colors && route.hold_colors&.size > 0 %>
+                  <div
+                    class="hold-or-tag-box"
+                    style="background: -webkit-linear-gradient(180deg, <%= route.hold_gradiant.map { |color | color[:color] }.join(', ') %>);"
+                  >
+                    <svg
+                      viewBox="0 0 5.3354982 6.3499994"
+                      xmlns="http://www.w3.org/2000/svg"
+                      xmlns:svg="http://www.w3.org/2000/svg">
+                      <g transform="translate(-48.6382,-80.609839)">
+                        <path
+                          style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.0118919px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+                          d="m 52.546325,80.609859 c -0.659998,-0.0033 -1.36448,0.40211 -1.936338,0.468041 -0.74194,0.08551 -1.373679,0.314928 -1.566946,0.778819 -0.501621,1.204022 -0.473133,2.807845 -0.257906,3.1712 0.364935,0.616101 0.598088,0.911383 1.107969,1.253085 0.393175,0.263489 1.054227,0.640498 1.954269,0.677948 0.803087,0.03347 1.432386,-0.88819 1.731504,-1.563193 0.271219,-0.612018 0.572309,-2.255901 0.265806,-3.345465 -0.13519,-0.480591 -0.146794,-1.039831 -0.758321,-1.325508 -0.173936,-0.08122 -0.355237,-0.11409 -0.540037,-0.114927 z m -1.138813,2.366845 c 0.320176,0 0.579732,0.259573 0.579731,0.579755 10e-7,0.320183 -0.259555,0.579722 -0.579731,0.579722 -0.320169,-3.3e-5 -0.57971,-0.259573 -0.579708,-0.579722 -2e-6,-0.320182 0.259539,-0.579755 0.579708,-0.579755 z" />
+                      </g>
+                    </svg>
+                    <span class="label-name">
+                      Prise
+                    </span>
+                  </div>
+                <% end %>
+
+                <% if route.tag_colors && route.tag_colors.size > 0 %>
+                  <div
+                    class="hold-or-tag-box"
+                    style="background: -webkit-linear-gradient(180deg, <%= route.tag_gradiant.map { |color | "#{color[:color]} #{color[:offset]}%" }.join(', ') %>);"
+                  >
+                    <svg
+                      viewBox="0 0 4.9400125 6.3502302"
+                      xmlns="http://www.w3.org/2000/svg"
+                      xmlns:svg="http://www.w3.org/2000/svg">
+                      <g
+                        transform="translate(-65.98291,-115.5337)">
+                        <path
+                          d="m 70.212778,115.5337 -3.525356,0.004 a 0.70507267,0.70507267 0 0 0 -0.704512,0.70566 l 0.0045,5.64057 2.466903,-1.05958 2.468609,1.05564 -0.0045,-5.64058 c -2.48e-4,-0.39131 -0.31785,-0.70483 -0.705643,-0.70453 z"
+                          style="fill:#ffffff;stroke:none;stroke-width:0.665277;stroke-miterlimit:4;stroke-dasharray:none" />
+                      </g>
+                    </svg>
+                    <span class="label-name">
+                      Étiquette
+                    </span>
+                  </div>
+                <% end %>
+              </td>
+              <td class="name-and-information-col">
+                <div class="name-box">
+                  <b><%= route.name %></b>
+                  <% if route.tags.count.positive? %>
+                    <small class="grey-text">
+                      <%= route.tags.map { |tag| "##{t("tags.#{tag}").downcase}" }.join(' ') %>
+                    </small>
+                  <% end %>
+                </div>
+
+                <div class="information-box">
+                  <% if route.description %>
+                    <div class="description-box">
+                      <%= markdown.render(route.description).html_safe %>
+                    </div>
+                  <% end %>
+                  <% if route.gym_openers.count.positive? %>
+                    <div class="openers-box">
+                      <b>Ourveurs/euses :</b>
+                      <%= route.gym_openers.map(&:name).join(', ') %>
+                    </div>
+                  <% end %>
+                  <div class="opened-at-box">
+                    <b>Ouvert le </b>: <%= l(route.opened_at, format: :long_month) %>
+                  </div>
+                </div>
+              </td>
+              <td
+                class="qr-code-col"
+              >
+                <div class="qr-code-box">
+                  <%
+                    qr = RQRCode::QRCode.new(route.short_app_path)
+                    svg = qr.as_svg(viewbox: true)
+                  %>
+                  <%= svg.html_safe %>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      <% end %>
+      <div class="powered-by-oblyk">
+        Généré par Oblyk.org
+      </div>
+    </div>
+  </body>
+</html>
