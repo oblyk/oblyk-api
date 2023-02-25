@@ -87,7 +87,7 @@ gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
 
 # Generate QrCode
-gem "rqrcode", "~> 2.0"
+gem 'rqrcode', '~> 2.0'
 
 group :development, :test do
   gem 'bullet'
