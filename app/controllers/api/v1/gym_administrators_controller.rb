@@ -7,6 +7,7 @@ module Api
 
       before_action :set_gym_administrator, only: %i[update show destroy]
       before_action -> { can? GymRole::MANAGE_TEAM_MEMBER }, except: %i[index show]
+      after_action :broadcast_new_roles, only: %i[create update]
 
       def index
         gym_administrators = @gym.gym_administrators
@@ -58,6 +59,12 @@ module Api
           :requested_email,
           roles: []
         )
+      end
+
+      def broadcast_new_roles
+        return unless @gym_administrator.user
+
+        ActionCable.server.broadcast "fetch_user_#{@gym_administrator.user.id}", true
       end
     end
   end
