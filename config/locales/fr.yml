@@ -39,6 +39,8 @@ fr:
     gym:
       administration_request:
         title: "[admin] Nouvelle demande d'administation : %{gym_name}"
+      new_administrator:
+        title: "Vous avez été ajouté à l'équipe de %{gym_name}"
     report:
       new_report:
         title: "[admin] Nouveau probleme %{report_id}"

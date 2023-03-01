@@ -5,6 +5,7 @@ module Api
     class GymGradesController < ApiController
       include Gymable
       before_action :set_gym_grade, only: %i[show update destroy]
+      before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[index show]
 
       def index
         gym_grades = @gym.gym_grades

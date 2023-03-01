@@ -1,0 +1,37 @@
+<% if @user %>
+  <p>
+    Bonjour <%= @user.first_name %>,
+  </p>
+<% else %>
+  <p>
+    Bonjour,
+  </p>
+<% end %>
+
+<p>
+  <%= @host.full_name %> vous a ajouté à l'équipe de la salle <b><%= @gym.name %></b> sur Oblyk.
+</p>
+
+<% if @user %>
+  <p>
+    Rendez-vous sur le tableau de bord de <b><%= @gym.name %></b> pour commencer à gérer l'espace de grimpe.
+  </p>
+  <p>
+    👉 <a href="<%= @app_url %>/gyms/<%= @gym.id %>/<%= @gym.slug_name %>/admins">Le tableau de bord</a>
+  </p>
+<% else %>
+  <p>
+    Créez-vous un compte sur Oblyk pour commencer à gérer l'espace de grimpe de <b><%= @gym.name %></b>.
+  </p>
+  <p>
+    👉 <a href="<%= @app_url %>/sign-up?email=<%= @email %>&redirect_to=/gyms/<%= @gym.id %>/<%= @gym.slug_name %>/admins">Créer mon compte</a>
+  </p>
+<% end %>
+
+<p>
+  Si vous avez des questions sur la gestion des espaces indoor sur Oblyk, vous pouvez consulter la documentation : <a href="https://oblyk.github.io/app-user-doc/docs/indoor">https://oblyk.github.io/app-user-doc/docs/indoor</a> ou nous écrire à l'adresse suivante : <a href="mailto:ekip@oblyk.org">ekip@oblyk.org</a>
+</p>
+
+<p>
+  Cordialement.
+</p>

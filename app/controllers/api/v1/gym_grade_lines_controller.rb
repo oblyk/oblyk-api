@@ -6,6 +6,7 @@ module Api
       include Gymable
       before_action :set_gym_grade
       before_action :set_gym_grade_line, only: %i[show update destroy]
+      before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[show]
 
       def show
         render json: @gym_grade_line.detail_to_json, status: :ok

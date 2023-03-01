@@ -2,6 +2,7 @@
 
 module Gymable
   extend ActiveSupport::Concern
+  include GymRolesVerification
 
   included do
     before_action :protected_by_session

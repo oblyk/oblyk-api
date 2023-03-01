@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_28_114328) do
+ActiveRecord::Schema.define(version: 2023_02_25_161021) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -523,7 +523,8 @@ ActiveRecord::Schema.define(version: 2023_01_28_114328) do
   create_table "gym_administrators", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "gym_id"
-    t.string "level"
+    t.json "roles"
+    t.string "requested_email"
     t.index ["gym_id"], name: "index_gym_administrators_on_gym_id"
     t.index ["user_id"], name: "index_gym_administrators_on_user_id"
   end

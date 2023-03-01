@@ -7,6 +7,7 @@ module Api
       skip_before_action :protected_by_session, only: %i[show index]
       skip_before_action :protected_by_gym_administrator, only: %i[show index]
       before_action :set_gym_space, except: %i[index create]
+      before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[index show]
 
       def index
         gym_spaces = @gym.gym_spaces

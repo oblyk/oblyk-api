@@ -1,0 +1,3 @@
+### Get gym roles list
+GET {{api_url}}/gym_roles.json
+HttpApiAccessToken: {{api_access_token}}

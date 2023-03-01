@@ -10,6 +10,7 @@ module Api
       before_action :set_gym_space, except: %i[add_picture similar_sectors add_thumbnail dismount mount dismount_collection mount_collection ascents]
       before_action :set_gym_sector, except: %i[index show similar_sectors add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents]
       before_action :set_gym_route, only: %i[show similar_sectors update destroy add_picture add_thumbnail dismount mount ascents]
+      before_action -> { can? GymRole::MANAGE_OPENING }, except: %i[index show similar_sectors ascents]
 
       def index
         group_by = params.fetch(:group_by, nil)

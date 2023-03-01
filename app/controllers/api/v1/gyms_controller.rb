@@ -3,10 +3,13 @@
 module Api
   module V1
     class GymsController < ApiController
+      include GymRolesVerification
+
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes]
       before_action :set_gym, only: %i[show versions update destroy add_banner add_logo routes_count routes]
       before_action :protected_by_administrator, only: %i[update add_banner add_logo routes_count routes]
+      before_action :user_can_manage_gym, except: %i[index search geo_json show gyms_around versions routes_count routes]
 
       def index
         gyms = params[:ids].present? ? Gym.where(id: params[:ids]) : Gym.all
@@ -160,6 +163,10 @@ module Api
         params.require(:gym).permit(
           :logo
         )
+      end
+
+      def user_can_manage_gym
+        can? GymRole::MANAGE_GYM if @gym.administered?
       end
     end
   end

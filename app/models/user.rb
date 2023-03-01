@@ -70,6 +70,7 @@ class User < ApplicationRecord
   before_validation :init_last_activity_at
   before_create :init_email_notifiable_list
   before_validation :init_partner_search_activated_at
+  after_create :link_gym_administrators
 
   validates :first_name, :email, :uuid, :ws_token, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, if: proc { |obj| obj.deleted_at.blank? }
@@ -295,6 +296,8 @@ class User < ApplicationRecord
         organization_users.destroy_all
         notifications.destroy_all
         refresh_tokens.destroy_all
+        climbing_sessions.destroy_all
+        gym_openers.update_all(user_id: nil)
 
         # Purge feed in relation
         Feed.where(parent_id: id, parent_type: 'User').destroy_all
@@ -366,6 +369,7 @@ class User < ApplicationRecord
           date_of_birth: date_of_birth,
           language: language,
           administered_gyms: administered_gyms.map(&:summary_to_json),
+          gym_roles: gym_administrators.map(&:summary_to_json),
           organizations: organizations.map(&:summary_to_json),
           subscribes: subscribes_to_a,
           ascent_crag_routes: ascent_crag_routes_to_a,
@@ -410,6 +414,13 @@ class User < ApplicationRecord
 
     email_notifiable_list.each do |email_notifiable|
       errors.add(:email_notifiable, I18n.t('activerecord.errors.messages.inclusion')) if Notification::EMAILABLE_NOTIFICATION_LIST.exclude? email_notifiable
+    end
+  end
+
+  def link_gym_administrators
+    GymAdministrator.where(requested_email: email).where(user: nil).find_each do |gym_administrator|
+      gym_administrator.user = self
+      gym_administrator.save
     end
   end
 end

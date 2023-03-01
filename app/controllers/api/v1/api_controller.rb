@@ -77,7 +77,10 @@ module Api
       end
 
       def forbidden
-        render json: { error: 'Forbidden' }, status: :forbidden
+        render json: {
+          error: 'You are not allowed to do this operation',
+          code_error: 'not_allowed'
+        }, status: :forbidden
       end
 
       # response for bot spammer

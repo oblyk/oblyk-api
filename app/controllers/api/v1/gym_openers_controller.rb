@@ -3,10 +3,10 @@
 module Api
   module V1
     class GymOpenersController < ApiController
-      before_action :protected_by_session
-      before_action :set_gym
+      include Gymable
+
       before_action :set_gym_opener, only: %i[show update deactivate activate]
-      before_action :protected_by_administrator
+      before_action -> { can? GymRole::MANAGE_OPENER }, except: %i[index show]
 
       def index
         gym_openers = case params.fetch(:activate, nil)
@@ -67,18 +67,8 @@ module Api
 
       private
 
-      def set_gym
-        @gym = Gym.find params[:gym_id]
-      end
-
       def set_gym_opener
         @gym_opener = GymOpener.find params[:id]
-      end
-
-      def protected_by_administrator
-        return if @current_user.super_admin
-
-        not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).count.zero?
       end
 
       def gym_opener_params

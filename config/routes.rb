@@ -226,6 +226,7 @@ Rails.application.routes.draw do
           end
         end
       end
+      resources :gym_roles, only: %i[index]
       resources :color_systems, only: %i[index show create]
       resources :reports, only: %i[create]
 
