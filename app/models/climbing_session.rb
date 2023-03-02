@@ -9,13 +9,15 @@ class ClimbingSession < ApplicationRecord
 
   def summary_to_json
     crag_ascents = ascents.select { |ascent| ascent.type == 'AscentCragRoute' }.sort_by { |ascent| -(ascent.max_grade_value || 0) }
-    gym_ascents = ascents.select { |ascent| ascent.type == 'AscentGymRoute' }.sort_by { |ascent| -(ascent.max_grade_value || 0) }
+    gym_ascents = ascents.made.select { |ascent| ascent.type == 'AscentGymRoute' }.sort_by { |ascent| -(ascent.max_grade_value || 0) }
 
     crag_ids = []
     gym_ids = []
 
     by_colors = {}
     by_grade = {}
+    project_by_grade = {}
+
     gym_ascents.each do |gym_ascent|
       gym_ids << gym_ascent.gym_id unless gym_ids.include? gym_ascent.gym_id
 
@@ -40,12 +42,21 @@ class ClimbingSession < ApplicationRecord
     crag_ascents.each do |crag_ascent|
       crag_ids << crag_ascent.crag_route.crag_id unless crag_ids.include? crag_ascent.crag_route.crag_id
 
-      by_grade[crag_ascent.max_grade_text] ||= {
-        grade_text: crag_ascent.max_grade_text,
-        grade_value: crag_ascent.max_grade_value,
-        count: 0
-      }
-      by_grade[crag_ascent.max_grade_text][:count] += 1
+      if crag_ascent.ascent_status == 'project'
+        project_by_grade[crag_ascent.max_grade_text] ||= {
+          grade_text: crag_ascent.max_grade_text,
+          grade_value: crag_ascent.max_grade_value,
+          count: 0
+        }
+        project_by_grade[crag_ascent.max_grade_text][:count] += 1
+      else
+        by_grade[crag_ascent.max_grade_text] ||= {
+          grade_text: crag_ascent.max_grade_text,
+          grade_value: crag_ascent.max_grade_value,
+          count: 0
+        }
+        by_grade[crag_ascent.max_grade_text][:count] += 1
+      end
     end
 
     {
@@ -58,7 +69,8 @@ class ClimbingSession < ApplicationRecord
       stats: {
         count: ascents.size,
         by_grades: by_grade.map { |grade| grade[1] },
-        by_colors: by_colors.map { |color| color[1] }
+        by_colors: by_colors.map { |color| color[1] },
+        project_by_grades: project_by_grade.map { |grade| grade[1] },
       },
       user: {
         uuid: user.uuid,
