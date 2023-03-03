@@ -37,8 +37,6 @@ class Climb
     PAN => '#ff5656',
   }.freeze
 
-  GYM_LIST = [SPORT_CLIMBING, BOULDERING, MULTI_PITCH, PAN].freeze
-
   def self.single_pitch?(climbing_type)
     [SPORT_CLIMBING, BOULDERING, DEEP_WATER, PAN].include? climbing_type
   end
