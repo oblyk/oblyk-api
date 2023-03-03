@@ -9,6 +9,16 @@ class GymAdministrationRequest < ApplicationRecord
 
   after_create :send_email_notification
 
+  def accept!
+    gym_administrator = GymAdministrator.new(
+      user: user,
+      gym: gym,
+      roles: GymRole::LIST,
+      requested_email: user.email
+    )
+    gym_administrator.save
+  end
+
   private
 
   def send_email_notification

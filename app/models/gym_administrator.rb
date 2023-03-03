@@ -42,7 +42,7 @@ class GymAdministrator < ApplicationRecord
   private
 
   def set_gym_is_administered
-    gym.administered!
+    gym.administered! unless gym.administered?
   end
 
   def validate_roles
