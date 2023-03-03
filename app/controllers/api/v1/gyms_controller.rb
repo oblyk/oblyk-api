@@ -9,7 +9,7 @@ module Api
       before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes]
       before_action :set_gym, only: %i[show versions update destroy add_banner add_logo routes_count routes]
       before_action :protected_by_administrator, only: %i[update add_banner add_logo routes_count routes]
-      before_action :user_can_manage_gym, except: %i[index search geo_json show gyms_around versions routes_count routes]
+      before_action :user_can_manage_gym, except: %i[index search geo_json show create gyms_around versions routes_count routes]
 
       def index
         gyms = params[:ids].present? ? Gym.where(id: params[:ids]) : Gym.all
