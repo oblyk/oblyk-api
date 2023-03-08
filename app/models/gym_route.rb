@@ -10,7 +10,6 @@ class GymRoute < ApplicationRecord
   belongs_to :gym_grade_line, optional: true
   has_one :gym_space, through: :gym_sector
   has_one :gym, through: :gym_sector
-  has_one :gym_grade, through: :gym_grade_line
   has_many :videos, as: :viewable
   has_many :ascent_gym_routes
   has_many :gym_route_openers
@@ -41,9 +40,7 @@ class GymRoute < ApplicationRecord
   end
 
   def calculated_point
-    grade = gym_grade || gym_sector.gym_grade
-
-    case grade.point_system_type
+    case gym_grade.point_system_type
     when 'fix'
       points
     when 'divisible'
