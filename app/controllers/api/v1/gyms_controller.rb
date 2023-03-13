@@ -7,9 +7,9 @@ module Api
 
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes]
-      before_action :set_gym, only: %i[show versions update destroy add_banner add_logo routes_count routes]
+      before_action :set_gym, only: %i[show versions ascent_scores update destroy add_banner add_logo routes_count routes]
       before_action :protected_by_administrator, only: %i[update add_banner add_logo routes_count routes]
-      before_action :user_can_manage_gym, except: %i[index search geo_json show create gyms_around versions routes_count routes]
+      before_action :user_can_manage_gym, except: %i[index search geo_json show create gyms_around versions ascent_scores routes_count routes]
 
       def index
         gyms = params[:ids].present? ? Gym.where(id: params[:ids]) : Gym.all
@@ -49,6 +49,42 @@ module Api
       def versions
         versions = @gym.versions
         render json: OblykVersion.index(versions), status: :ok
+      end
+
+      def ascent_scores
+        start_date = params.fetch(:start_date, nil)
+        end_date = params.fetch(:end_date, nil)
+        start_date = Date.parse(start_date) if start_date
+        end_date = Date.parse(end_date) if end_date
+
+        ascents = AscentGymRoute.includes(:user)
+                                .includes(gym_route: [:gym_grade_line, { gym_sector: :gym_grade }])
+                                .where(gym: @gym)
+                                .where.not(gym_route_id: nil)
+        if start_date || end_date
+          ascents = ascents.where(released_at: [start_date..end_date])
+                           .where('created_at >= ?', start_date.beginning_of_day)
+                           .where('created_at <= ?', (end_date + 1.day).end_of_day)
+        end
+
+        scores = {}
+        ascents.find_each do |ascent|
+          user_key = "user-#{ascent.user_id}"
+          scores[user_key] ||= {
+            points: 0,
+            rank: nil,
+            user: ascent.user.summary_to_json
+          }
+          scores[user_key][:points] += ascent.gym_route.calculated_point || 0
+        end
+        scores = scores.map(&:last)
+        scores.sort_by { |score| score[:points] }
+        ranked_score = []
+        scores.each_with_index do |score, index|
+          score[:rank] = index + 1
+          ranked_score << score
+        end
+        render json: ranked_score, status: :ok
       end
 
       def create

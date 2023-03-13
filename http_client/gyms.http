@@ -107,3 +107,13 @@ Content-Type: application/json
 {
   "minimalistic": true
 }
+
+### GET gym ascent scores aka ranking
+GET {{api_url}}/gyms/122/ascent_scores.json
+HttpApiAccessToken: {{api_access_token}}
+Content-Type: application/json
+
+{
+  "start_date": "2022-01-01",
+  "end_date": "2023-03-31"
+}
