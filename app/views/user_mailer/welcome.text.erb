@@ -8,7 +8,7 @@
 
 <%= t('mailer.welcome.for_partner', explain_url: "#{@app_url}/partner-search/how-it-works", map_url: "#{@app_url}/maps/climbers").html_safe.gsub(/(<a href=')/, '').gsub(/('>)/, ' ').gsub(/(<\/a>)/, '').gsub(/(<br>)/, '') %>
 
-<%= t('mailer.welcome.for_ascents_log', cuvier_url: "#{@app_url}/crags/1/crags/infos", buoux_url: "#{@app_url}/crags/1/crags/infos", cimai_url: "#{@app_url}/crags/1/crags/infos", chart_url: "#{@app_url}/me/#{@user.slug_name}/ascents/analyze").html_safe.gsub(/(<a href=')/, '').gsub(/('>)/, ' ').gsub(/(<\/a>)/, '').gsub(/(<br>)/, '') %>
+<%= t('mailer.welcome.for_ascents_log', cuvier_url: "#{@app_url}/crags/1/crags/infos", buoux_url: "#{@app_url}/crags/1/crags/infos", cimai_url: "#{@app_url}/crags/1/crags/infos", chart_url: "#{@app_url}/home/ascents/analyze").html_safe.gsub(/(<a href=')/, '').gsub(/('>)/, ' ').gsub(/(<\/a>)/, '').gsub(/(<br>)/, '') %>
 
 <%= t('mailer.welcome.discover_the_rest') %>
 
