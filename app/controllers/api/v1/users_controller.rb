@@ -193,7 +193,11 @@ module Api
       end
 
       def set_user
-        @user = User.find_by uuid: params[:id]
+        @user = if /^[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}$/.match? params[:id].to_s
+                  User.find_by uuid: params[:id]
+                else
+                  User.find_by slug_name: params[:id]
+                end
       end
 
       def set_indoor_ascents

@@ -3,7 +3,6 @@
 class User < ApplicationRecord
   include Searchable
   include Geolocable
-  include Slugable
   include ParentFeedable
   include AttachmentResizable
   include StripTagable
@@ -65,6 +64,7 @@ class User < ApplicationRecord
   has_many :climbing_sessions
   has_many :gym_openers
 
+  before_validation :init_slug_name
   before_validation :set_uuid
   before_validation :set_ws_token
   before_validation :init_last_activity_at
@@ -381,10 +381,43 @@ class User < ApplicationRecord
     user_data
   end
 
+  def find_slug_name(potential_slug)
+    # return potential slug if is free
+    return potential_slug if User.where.not(id: id).where(slug_name: potential_slug).blank?
+
+    # find user with slug_name an -[digit] at the end
+    same_slug_users = User.where.not(id: id).where("slug_name RLIKE '^#{potential_slug}-[0-9]$'")
+
+    if same_slug_users.blank?
+      # Return potential_slug with -1 if is the first duplicate slug
+      "#{potential_slug}-1"
+    else
+      slug_indexes = []
+      same_slug_users.find_each do |user|
+        slug_indexes << user.slug_name.split('-').last.to_i
+      end
+      slug_indexes.sort!
+      slug_indexes.each_with_index do |slug_index, index|
+        # Use missing digit if existe like : slug-1, slug-3, slug-4 => use slug-2
+        return "#{potential_slug}-#{index + 1}" if slug_index != index + 1
+      end
+
+      # Use last slug digit + 1
+      "#{potential_slug}-#{slug_indexes.last + 1}"
+    end
+  end
+
   private
 
   def search_indexes
     [{ value: full_name, column_names: %i[first_name last_name] }]
+  end
+
+  def init_slug_name
+    return if slug_name.present?
+
+    slug_proposition = "#{first_name} #{last_name}".parameterize
+    self.slug_name = find_slug_name slug_proposition
   end
 
   def set_uuid
