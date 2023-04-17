@@ -117,3 +117,15 @@ GET {{api_url}}/current_users/subscribes_ascents.json
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json
+
+### GET partner arround current user localities
+GET {{api_url}}/current_users/partner_around_localities.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET partner figures
+GET {{api_url}}/current_users/partner_figures.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json

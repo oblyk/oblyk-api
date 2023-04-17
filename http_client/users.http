@@ -13,8 +13,8 @@ GET {{api_url}}/users/8b229ae9-aea0-4ea1-b7be-8af6fa6971f0/followers.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
-### GET user partner geo json
-GET {{api_url}}/users/8b229ae9-aea0-4ea1-b7be-8af6fa6971f0/partner_user_geo_json.json
+### GET user localities
+GET {{api_url}}/users/moi/localities.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 

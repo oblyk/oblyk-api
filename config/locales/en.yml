@@ -96,6 +96,19 @@ en:
     morpho: 'Morpho'
     bouldery_move: 'Bouldery move'
     bulge: 'Bulge'
+  code_country:
+    be: 'Belgium'
+    br: 'Brazil'
+    ch: 'Switzerland'
+    de: 'Germany'
+    dz: 'Algeria'
+    es: 'Spain'
+    fr: 'France'
+    gb: 'United Kingdom'
+    it: 'Italy'
+    lu: 'Luxembourg'
+    pe: 'Peru'
+    pt: 'Portugal'
   activerecord:
     attributes:
       crag:
@@ -164,11 +177,13 @@ en:
         required: "is_required"
         blank: "is_mandatory"
         taken: 'is_already_taken'
+        exist: 'is_already_exist'
         too_short: 'is_too_short'
         greater_than: 'must_be_positive'
         invalid: 'is_invalid'
         email: 'is_invalid'
         inclusion: 'is_not_a_permitted_value'
+        cannot_be_changed: 'cannot_be_changed'
         difficulty_system: "you_must_choose_at_least_one_difficulty_system"
         identification_system: "you_must_choose_at_least_one_identification_system"
         content_type: "is_not_in_the_right_format"

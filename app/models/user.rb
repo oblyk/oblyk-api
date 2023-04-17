@@ -2,7 +2,6 @@
 
 class User < ApplicationRecord
   include Searchable
-  include Geolocable
   include ParentFeedable
   include AttachmentResizable
   include StripTagable
@@ -63,14 +62,18 @@ class User < ApplicationRecord
   has_many :words
   has_many :climbing_sessions
   has_many :gym_openers
+  has_many :locality_users
+  has_many :localities, through: :locality_users
 
   before_validation :init_slug_name
   before_validation :set_uuid
   before_validation :set_ws_token
   before_validation :init_last_activity_at
+  before_validation :uncheck_partner_if_minor
   before_create :init_email_notifiable_list
   before_validation :init_partner_search_activated_at
   after_create :link_gym_administrators
+  after_update :update_user_localities
 
   validates :first_name, :email, :uuid, :ws_token, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, if: proc { |obj| obj.deleted_at.blank? }
@@ -91,7 +94,8 @@ class User < ApplicationRecord
 
   validate :validate_email_notifiable_list
 
-  scope :partner_geolocable, -> { where(partner_search: true).where.not(partner_latitude: nil).where.not(partner_longitude: nil) }
+  validate :can_change_date_of_birth
+
   scope :deleted, -> { where(deleted_at: nil) }
   scope :undeleted, -> { where.not(deleted_at: nil) }
 
@@ -161,6 +165,13 @@ class User < ApplicationRecord
     update_column(:last_activity_at, DateTime.current)
   end
 
+  def partner_check!
+    update_columns(
+      last_partner_check_at: DateTime.current,
+      partner_notified_at: nil
+    )
+  end
+
   def age
     date_of_birth.present? ? ((Time.zone.now - Time.zone.parse(date_of_birth.to_s)) / 1.year.seconds).floor : nil
   end
@@ -205,6 +216,34 @@ class User < ApplicationRecord
         )
       end
       features
+    end
+  end
+
+  def local_climber_to_json
+    Rails.cache.fetch("#{cache_key_with_version}/local_climber_to_json", expires_in: 1.month) do
+      {
+        uuid: uuid,
+        avatar_thumbnail_url: avatar_thumbnail_url,
+        first_name: first_name,
+        full_name: full_name,
+        slug_name: slug_name,
+        description: description ? Markdown.new(description, :hard_wrap).to_html.html_safe : '',
+        age: age,
+        genre: genre,
+        partner_search: partner_search,
+        sport_climbing: sport_climbing,
+        bouldering: bouldering,
+        multi_pitch: multi_pitch,
+        trad_climbing: trad_climbing,
+        aid_climbing: aid_climbing,
+        deep_water: deep_water,
+        via_ferrata: via_ferrata,
+        pan: pan,
+        banner_thumbnail_url: banner_thumbnail_url,
+        grade_min: grade_min,
+        grade_max: grade_max,
+        last_activity_at: last_activity_at
+      }
     end
   end
 
@@ -297,6 +336,7 @@ class User < ApplicationRecord
         notifications.destroy_all
         refresh_tokens.destroy_all
         climbing_sessions.destroy_all
+        locality_users.destroy_all
         gym_openers.update_all(user_id: nil)
 
         # Purge feed in relation
@@ -329,10 +369,7 @@ class User < ApplicationRecord
       slug_name: slug_name,
       genre: genre,
       description: description,
-      localization: localization,
       partner_search: partner_search,
-      partner_latitude: partner_latitude,
-      partner_longitude: partner_longitude,
       bouldering: bouldering,
       sport_climbing: sport_climbing,
       multi_pitch: multi_pitch,
@@ -367,6 +404,7 @@ class User < ApplicationRecord
           email: email,
           ws_token: ws_token,
           date_of_birth: date_of_birth,
+          last_partner_check_at: last_partner_check_at,
           language: language,
           administered_gyms: administered_gyms.map(&:summary_to_json),
           gym_roles: gym_administrators.map(&:summary_to_json),
@@ -374,7 +412,8 @@ class User < ApplicationRecord
           subscribes: subscribes_to_a,
           ascent_crag_routes: ascent_crag_routes_to_a,
           ascent_gym_routes: ascent_gym_routes_to_a,
-          tick_list: tick_list_to_a
+          tick_list: tick_list_to_a,
+          minor: minor?
         }
       )
     end
@@ -405,6 +444,10 @@ class User < ApplicationRecord
       # Use last slug digit + 1
       "#{potential_slug}-#{slug_indexes.last + 1}"
     end
+  end
+
+  def minor?
+    date_of_birth.present? && date_of_birth > Date.current - 18.years
   end
 
   private
@@ -450,10 +493,30 @@ class User < ApplicationRecord
     end
   end
 
+  def update_user_localities
+    # return unless partner_search_changed?
+
+    localities.each(&:update_climber_counts!)
+  end
+
   def link_gym_administrators
     GymAdministrator.where(requested_email: email).where(user: nil).find_each do |gym_administrator|
       gym_administrator.user = self
       gym_administrator.save
     end
+  end
+
+  def uncheck_partner_if_minor
+    return unless date_of_birth
+
+    self.partner_search = nil if date_of_birth >= Date.current - 18.years
+  end
+
+  def can_change_date_of_birth
+    return if new_record?
+    return unless date_of_birth_was
+    return unless date_of_birth_changed?
+
+    errors.add(:date_of_birth, 'cannot_be_changed') if date_of_birth_was >= Date.current - 18.years
   end
 end

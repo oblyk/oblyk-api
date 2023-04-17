@@ -3,27 +3,6 @@
 module Api
   module V1
     class PartnersController < ApiController
-      def geo_json
-        minimalistic = params.fetch(:minimalistic, false) != false
-        features = []
-
-        users = minimalistic ? User.partner_geolocable : User.with_attached_avatar.with_attached_banner.partner_geolocable
-        users.each do |user|
-          features << user.to_partner_geo_json(minimalistic: minimalistic)
-        end
-
-        render json: {
-          type: 'FeatureCollection',
-          crs: {
-            type: 'name',
-            properties: {
-              name: 'urn'
-            }
-          },
-          features: features
-        }, status: :ok
-      end
-
       def figures
         climbers = User.where(partner_search: true)
         render json: {
@@ -33,8 +12,15 @@ module Api
       end
 
       def partners_around
-        distance = params.fetch(:distance, 20)
-        users = User.includes(avatar_attachment: :blob).partner_geo_search(params[:latitude], params[:longitude], distance)
+        locality_user = LocalityUser.joins(:user, :locality)
+                                    .where(users: { partner_search: true })
+                                    .where(
+                                      'getRange(localities.latitude, localities.longitude, :lat, :lng) < (locality_users.radius * 1000)',
+                                      lat: params[:latitude].to_f,
+                                      lng: params[:longitude].to_f
+                                    )
+        users = User.includes(avatar_attachment: :blob)
+                    .where(id: locality_user.pluck(:user_id))
         render json: users.map(&:summary_to_json), status: :ok
       end
     end

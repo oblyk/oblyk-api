@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_25_161021) do
+ActiveRecord::Schema.define(version: 2023_03_26_133703) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -721,6 +721,35 @@ ActiveRecord::Schema.define(version: 2023_02_25_161021) do
     t.index ["user_id"], name: "index_links_on_user_id"
   end
 
+  create_table "localities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.string "code_country"
+    t.string "region"
+    t.integer "partner_search_users_count"
+    t.integer "local_sharing_users_count"
+    t.integer "distinct_users_count"
+    t.decimal "latitude", precision: 10, scale: 6
+    t.decimal "longitude", precision: 10, scale: 6
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["latitude"], name: "index_localities_on_latitude"
+    t.index ["longitude"], name: "index_localities_on_longitude"
+  end
+
+  create_table "locality_users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "locality_id"
+    t.boolean "partner_search"
+    t.boolean "local_sharing"
+    t.text "description"
+    t.integer "radius"
+    t.datetime "deactivated_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["locality_id"], name: "index_locality_users_on_locality_id"
+    t.index ["user_id"], name: "index_locality_users_on_user_id"
+  end
+
   create_table "newsletters", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.string "slug_name"
@@ -954,6 +983,8 @@ ActiveRecord::Schema.define(version: 2023_02_25_161021) do
     t.decimal "partner_longitude", precision: 10, scale: 6
     t.datetime "last_activity_at"
     t.datetime "partner_search_activated_at"
+    t.datetime "last_partner_check_at"
+    t.datetime "partner_notified_at"
     t.json "email_notifiable_list"
     t.string "ws_token"
     t.index ["email"], name: "index_users_on_email", unique: true

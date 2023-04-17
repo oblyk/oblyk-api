@@ -1,15 +1,10 @@
 ###
-GET {{api_url}}/partners/geo_json.json
-HttpApiAccessToken: {{api_access_token}}
-Accept: application/json
-
-###
 GET {{api_url}}/partners/figures.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
-GET {{api_url}}/partners/partners_around.json?latitude=44.469592&longitude=5.058089&distance=20km
+GET {{api_url}}/partners/partners_around.json?latitude=44.469592&longitude=5.058089
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json

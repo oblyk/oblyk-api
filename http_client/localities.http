@@ -1,0 +1,13 @@
+### GET localities geo json
+GET {{api_url}}/localities/geo_json.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
+### GET climbers in localities
+GET {{api_url}}/localities/51/climbers.json
+HttpApiAccessToken: {{api_access_token}}
+Content-Type: application/json
+
+{
+  "climbing_type": "sport_climbing"
+}

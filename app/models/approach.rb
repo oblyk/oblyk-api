@@ -59,7 +59,7 @@ class Approach < ApplicationRecord
       }
     end
 
-    GoogleMapElevationApi.elevations coordinates
+    GoogleMapApi.elevations coordinates
   end
 
   def elevation_start

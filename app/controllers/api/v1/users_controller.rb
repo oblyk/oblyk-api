@@ -127,20 +127,8 @@ module Api
         render json: LogBook::Indoor::Chart.by_levels(@ascents), status: :ok
       end
 
-      def partner_user_geo_json
-        minimalistic = params.fetch(:minimalistic, false) != false
-        render json: {
-          type: 'FeatureCollection',
-          crs: {
-            type: 'name',
-            properties: {
-              name: 'urn'
-            }
-          },
-          features: [
-            @user.to_partner_geo_json(minimalistic: minimalistic)
-          ]
-        }, status: :ok
+      def localities
+        render json: @user.locality_users.activated.map(&:summary_to_json), status: :ok
       end
 
       private

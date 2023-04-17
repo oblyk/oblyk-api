@@ -32,7 +32,6 @@ Rails.application.routes.draw do
       get 'last_activity_feed', controller: :commons, action: :last_activity_feed
       get 'last_added', controller: :commons, action: :last_added
       get 'partners/figures', controller: :partners, action: :figures
-      get 'partners/geo_json', controller: :partners, actions: :geo_json
       get 'partners/partners_around', controller: :partners, actions: :partners_around
 
       resources :organizations do
@@ -64,7 +63,7 @@ Rails.application.routes.draw do
         get :subscribes, on: :member
         get :followers, on: :member
         get :contribution, on: :member
-        get :partner_user_geo_json, on: :member
+        get :localities, on: :member
         get :outdoor_figures, on: :member
         get :outdoor_climb_types_chart, on: :member
         get :ascended_crag_routes, on: :member
@@ -73,6 +72,14 @@ Rails.application.routes.draw do
         get :indoor_climb_types_chart, on: :member
         get :indoor_grade_chart, on: :member
         get :indoor_by_level_chart, on: :member
+      end
+      resources :locality_users do
+        put :deactivate, on: :member
+        put :activate, on: :member
+      end
+      resources :localities, only: %i[index show] do
+        get :geo_json, on: :collection
+        get :climbers, on: :member
       end
 
       resources :current_users, only: %i[] do
@@ -103,6 +110,9 @@ Rails.application.routes.draw do
           put :update_password
           get :subscribe_to_newsletter
           get :organizations
+          get :partner_around_localities
+          get :partner_figures
+          put :partner_checked
           post :accept_followers
           delete :reject_followers
           namespace :log_books do

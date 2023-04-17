@@ -343,6 +343,93 @@ module Api
         head :no_content
       end
 
+      def partner_around_localities
+        new_since = params.fetch(:new_since, nil) ? Date.parse(params[:new_since].to_s) : nil
+
+        around_localities = []
+        current_user_localities = @current_user.locality_users
+                                               .activated
+                                               .includes(:locality)
+        current_user_localities.each do |current_user_locality|
+          locality_users = LocalityUser
+                           .activated
+                           .joins(:user, :locality)
+                           .where(users: { partner_search: true })
+                           .where.not(user: @current_user)
+                           .where(
+                             'getRange(localities.latitude, localities.longitude, :lat, :lng) < :dist',
+                             lat: current_user_locality.locality.latitude.to_f,
+                             lng: current_user_locality.locality.longitude.to_f,
+                             dist: current_user_locality.radius * 1000
+                           )
+
+          level = params.fetch(:level, nil)
+          if level
+            locality_users = locality_users.where(
+              '(users.grade_min IS NULL OR users.grade_min <= :level) AND (users.grade_max IS NULL OR users.grade_max >= :level)',
+              level: level
+            )
+          end
+
+          climbing_type = params.fetch(:climbing_type, nil)
+          locality_users = locality_users.where(users: { climbing_type => true }) if climbing_type
+
+          around_localities.concat(locality_users.pluck(:id))
+        end
+
+        user_localities = LocalityUser.joins(:user)
+                                      .includes(:user, :locality)
+                                      .where(id: around_localities)
+                                      .order('users.last_activity_at DESC, user_id')
+                                      .page(params.fetch(:page, 1))
+
+        json_user_localities = user_localities.map do |user_locality|
+          data = user_locality.local_to_json
+          data[:new] = new_since && data[:locality_user][:created_at] > new_since ? true : false
+          data
+        end
+
+        render json: json_user_localities, status: :ok
+      end
+
+      def partner_figures
+        locality_users = []
+        user_ids = []
+        new_partner = 0
+
+        @current_user.locality_users.includes(:locality).each do |current_user_locality|
+          LocalityUser
+            .joins(:user, :locality)
+            .where(users: { partner_search: true })
+            .where.not(user: @current_user)
+            .where(
+              'getRange(localities.latitude, localities.longitude, :lat, :lng) < :dist',
+              lat: current_user_locality.locality.latitude.to_f,
+              lng: current_user_locality.locality.longitude.to_f,
+              dist: current_user_locality.radius * 1000
+            ).each do |locality_user|
+            locality_users << locality_user
+            new_partner += 1 if @current_user.last_partner_check_at && locality_user.created_at > @current_user.last_partner_check_at
+            user_ids << locality_user.user_id
+          end
+        end
+
+        last_partners = User.where(id: user_ids)
+                            .order(last_partner_check_at: :desc)
+                            .limit(5)
+
+        render json: {
+          count: locality_users.count,
+          new_partners: new_partner,
+          last_partners: last_partners.map(&:local_climber_to_json)
+        }, status: :ok
+      end
+
+      def partner_checked
+        @current_user.partner_check!
+        head :no_content
+      end
+
       private
 
       def set_user

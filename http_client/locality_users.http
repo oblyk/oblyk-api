@@ -1,0 +1,38 @@
+### GET locality user
+GET {{api_url}}/locality_users.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+### GET one locality
+GET {{api_url}}/locality_users/1.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### Update locality for add description and options
+PUT {{api_url}}/locality_users/1.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "locality_user": {
+    "description": "Ajout d'une description sur la localité",
+    "partner_search": false,
+    "local_sharing": true,
+    "radius": 25
+  }
+}
+
+### Deactivate locality
+PUT {{api_url}}/locality_users/1/deactivate.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+### Activate locality
+PUT {{api_url}}/locality_users/1/activate.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
