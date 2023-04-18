@@ -355,6 +355,7 @@ module Api
                            .activated
                            .joins(:user, :locality)
                            .where(users: { partner_search: true })
+                           .where('users.last_activity_at > ?', Date.current - 3.years)
                            .where.not(user: @current_user)
                            .where(
                              'getRange(localities.latitude, localities.longitude, :lat, :lng) < :dist',
@@ -400,6 +401,7 @@ module Api
         @current_user.locality_users.includes(:locality).each do |current_user_locality|
           LocalityUser
             .joins(:user, :locality)
+            .where('users.last_activity_at > ?', Date.current - 3.years)
             .where(users: { partner_search: true })
             .where.not(user: @current_user)
             .where(

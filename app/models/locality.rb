@@ -56,6 +56,7 @@ class Locality < ApplicationRecord
                                                   .activated
                                                   .where(locality_id: id)
                                                   .where(partner_search: true)
+                                                  .where('users.last_activity_at > ?', Date.current - 3.years)
                                                   .where(users: { partner_search: true })
                                                   .count
     self.local_sharing_users_count = LocalityUser.activated

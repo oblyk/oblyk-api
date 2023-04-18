@@ -35,6 +35,7 @@ module Api
         localities = @locality.locality_users
                               .joins(:user)
                               .activated
+                              .where('users.last_activity_at > ?', Date.current - 3.years)
 
         level = params.fetch(:level, nil)
         if level

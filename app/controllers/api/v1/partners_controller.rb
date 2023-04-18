@@ -5,6 +5,8 @@ module Api
     class PartnersController < ApiController
       def figures
         climbers = User.where(partner_search: true)
+                       .where('EXISTS(SELECT * FROM locality_users WHERE deactivated_at IS NULL AND user_id = users.id)')
+                       .where('users.last_activity_at > ?', Date.current - 3.years)
         render json: {
           count_global: climbers.count,
           count_last_week: climbers.where('partner_search_activated_at > ?', DateTime.current - 1.week).count
@@ -14,6 +16,8 @@ module Api
       def partners_around
         locality_user = LocalityUser.joins(:user, :locality)
                                     .where(users: { partner_search: true })
+                                    .where('EXISTS(SELECT * FROM locality_users WHERE deactivated_at IS NULL AND user_id = users.id)')
+                                    .where('users.last_activity_at > ?', Date.current - 3.years)
                                     .where(
                                       'getRange(localities.latitude, localities.longitude, :lat, :lng) < (locality_users.radius * 1000)',
                                       lat: params[:latitude].to_f,
