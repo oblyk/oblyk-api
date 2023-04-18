@@ -78,7 +78,7 @@ module Api
           scores[user_key][:points] += ascent.gym_route.calculated_point || 0
         end
         scores = scores.map(&:last)
-        scores.sort_by { |score| score[:points] }
+        scores.sort_by! { |score| -score[:points] }
         ranked_score = []
         scores.each_with_index do |score, index|
           score[:rank] = index + 1
