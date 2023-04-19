@@ -64,6 +64,7 @@ module Api
       def gym_sector_params
         params.require(:gym_sector).permit(
           :name,
+          :order,
           :description,
           :group_sector_name,
           :climbing_type,

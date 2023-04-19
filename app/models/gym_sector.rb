@@ -14,13 +14,14 @@ class GymSector < ApplicationRecord
 
   after_save :remove_routes_cache
 
-  default_scope { order(:name) }
+  default_scope { order(:order) }
 
   def summary_to_json
     Rails.cache.fetch("#{cache_key_with_version}/summary_gym_sector", expires_in: 1.month) do
       {
         id: id,
         name: name,
+        order: order,
         description: description,
         group_sector_name: group_sector_name,
         climbing_type: climbing_type,
@@ -48,7 +49,6 @@ class GymSector < ApplicationRecord
         gym_routes: gym_routes.map(&:summary_to_json)
       }
     )
-
   end
 
   private

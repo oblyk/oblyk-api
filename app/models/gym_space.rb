@@ -104,7 +104,8 @@ class GymSpace < ApplicationRecord
     summary_to_json.merge(
       {
         gym_sectors: gym_sectors.map(&:summary_to_json),
-        sorts_available: sorts_available
+        sorts_available: sorts_available,
+        last_sector_order: gym_sectors.order(:order).last&.order
       }
     )
   end
