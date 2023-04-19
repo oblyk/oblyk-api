@@ -28,6 +28,8 @@ class GymSpace < ApplicationRecord
   validates :banner, blob: { content_type: :image }, allow_nil: true
   validates :plan, blob: { content_type: :image }, allow_nil: true
 
+  after_save :remove_routes_cache
+
   def location
     [latitude, longitude]
   end
@@ -120,5 +122,13 @@ class GymSpace < ApplicationRecord
       difficulty_by_grade: sorts[:sortable_by_grade]&.positive?,
       difficulty_by_point: sorts[:sortable_by_point]&.positive?
     }
+  end
+
+  def remove_routes_cache
+    return unless saved_change_to_name?
+
+    gym_routes.find_each do |gym_route|
+      Rails.cache.delete("#{gym_route.cache_key_with_version}/summary_gym_route")
+    end
   end
 end

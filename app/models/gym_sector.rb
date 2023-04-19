@@ -12,6 +12,8 @@ class GymSector < ApplicationRecord
   validates :name, :height, presence: true
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }
 
+  after_save :remove_routes_cache
+
   default_scope { order(:name) }
 
   def summary_to_json
@@ -47,5 +49,15 @@ class GymSector < ApplicationRecord
       }
     )
 
+  end
+
+  private
+
+  def remove_routes_cache
+    return unless saved_change_to_name?
+
+    gym_routes.find_each do |gym_route|
+      Rails.cache.delete("#{gym_route.cache_key_with_version}/summary_gym_route")
+    end
   end
 end
