@@ -51,6 +51,15 @@ class GymSector < ApplicationRecord
     )
   end
 
+  def destroy
+    return if deleted?
+
+    ActiveRecord::Base.transaction do
+      gym_routes.mounted.find_each(&:dismount!)
+      delete
+    end
+  end
+
   private
 
   def remove_routes_cache

@@ -110,6 +110,15 @@ class GymSpace < ApplicationRecord
     )
   end
 
+  def destroy
+    return if deleted?
+
+    ActiveRecord::Base.transaction do
+      gym_sectors.find_each(&:destroy)
+      delete
+    end
+  end
+
   private
 
   def sorts_available

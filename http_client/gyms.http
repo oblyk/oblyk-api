@@ -117,3 +117,9 @@ Content-Type: application/json
   "start_date": "2022-01-01",
   "end_date": "2023-03-31"
 }
+
+### GET space and sectors tree structure
+GET {{api_url}}/gyms/212/tree_structures.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json

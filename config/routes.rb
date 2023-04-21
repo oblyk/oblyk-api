@@ -194,6 +194,7 @@ Rails.application.routes.draw do
         post :add_logo, on: :member
         get :routes_count, on: :member
         get :routes, on: :member
+        get :tree_structures, on: :member
         get :ascent_scores, on: :member
         resources :color_systems, only: %i[index create show]
         resources :gym_administrators

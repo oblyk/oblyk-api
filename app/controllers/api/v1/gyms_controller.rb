@@ -6,9 +6,9 @@ module Api
       include GymRolesVerification
 
       before_action :protected_by_super_admin, only: %i[destroy]
-      before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes]
-      before_action :set_gym, only: %i[show versions ascent_scores update destroy add_banner add_logo routes_count routes]
-      before_action :protected_by_administrator, only: %i[update add_banner add_logo routes_count routes]
+      before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes tree_structures]
+      before_action :set_gym, only: %i[show versions ascent_scores update destroy add_banner add_logo routes_count routes tree_structures]
+      before_action :protected_by_administrator, only: %i[update add_banner add_logo routes_count routes tree_structures]
       before_action :user_can_manage_gym, except: %i[index search geo_json show create gyms_around versions ascent_scores routes_count routes]
 
       def index
@@ -140,6 +140,27 @@ module Api
                        @gym.gym_routes.mounted
                      end
         render json: gym_routes.map(&:summary_to_json), status: :ok
+      end
+
+      def tree_structures
+        tree = {
+          gym: {
+            name: @gym.name,
+            slug_name: @gym.name,
+            id: @gym.id,
+            gym_spaces: []
+          }
+        }
+        @gym.gym_spaces.each do |gym_space|
+          sectors = []
+          gym_space.gym_sectors.each do |gym_sector|
+            sectors << gym_sector.summary_to_json
+          end
+          space = gym_space.summary_to_json.merge({ gym_sectors: sectors })
+          tree[:gym][:gym_spaces] << space
+        end
+
+        render json: tree, status: :ok
       end
 
       private
