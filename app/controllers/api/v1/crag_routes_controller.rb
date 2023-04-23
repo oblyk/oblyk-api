@@ -34,7 +34,8 @@ module Api
                       end
 
         crag_routes = crag_routes.page(params.fetch(:page, 1)).per(params.fetch(:page_limit, 25)) if params[:page] != 'all'
-        render json: crag_routes.map { |crag_route| crag_route.summary_to_json(with_crag_in_sector: false) }, status: :ok
+
+        render json: routes_summary(crag_routes), status: :ok
       end
 
       def search
@@ -46,7 +47,7 @@ module Api
                       else
                         CragRoute.search(query)
                       end
-        render json: crag_routes.map(&:summary_to_json), status: :ok
+        render json: routes_summary(crag_routes), status: :ok
       end
 
       def search_by_grades
@@ -76,7 +77,7 @@ module Api
                                  .order(:min_grade_value)
                       end
 
-        render json: crag_routes.map { |crag_route| crag_route.summary_to_json(with_crag_in_sector: false) }, status: :ok
+        render json: routes_summary(crag_routes), status: :ok
       end
 
       def versions
@@ -133,6 +134,15 @@ module Api
       end
 
       private
+
+      def routes_summary(routes)
+        user_is_login = login?
+        routes.map do |crag_route|
+          summary = crag_route.summary_to_json(with_crag_in_sector: false)
+          summary[:name] = summary[:name].gsub(/\S/, '•') unless user_is_login
+          summary
+        end
+      end
 
       def set_crag_sector
         @crag_sector = CragSector.find_by id: params[:crag_sector_id]
