@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-server 'api.oblyk.org', user: 'lucien', roles: %w[app web db], port: 1622
+server 'server-ip', user: 'user', roles: %w[app web db], port: 1622
 
-set :deploy_to, '/var/www/oblyk/api'
+set :deploy_to, '/path/to/app'
 set :rails_env, 'production'
 
 # Deploy with master branch

@@ -42,3 +42,7 @@
 
 # Ignore http
 /http_client/ignore/*
+
+# Deployment
+config/deploy/staging.rb
+config/deploy/production.rb
