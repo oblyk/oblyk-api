@@ -65,8 +65,6 @@ class GymSector < ApplicationRecord
   def remove_routes_cache
     return unless saved_change_to_name?
 
-    gym_routes.find_each do |gym_route|
-      Rails.cache.delete("#{gym_route.cache_key_with_version}/summary_gym_route")
-    end
+    gym_routes.find_each(&:remove_cache!)
   end
 end
