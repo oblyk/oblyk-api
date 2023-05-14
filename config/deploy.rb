@@ -27,6 +27,7 @@ set :linked_files, fetch(:linked_files, []).push(
   'config/master.key',
   'config/credentials.yml.enc',
   'config/local_env.yml',
+  'config/gsc.keyfile.json',
   'public/sitemap.xml',
   'public/sitemap1.xml'
 )

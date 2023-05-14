@@ -89,6 +89,9 @@ gem 'wkhtmltopdf-binary'
 # Generate QrCode
 gem 'rqrcode', '~> 2.0'
 
+# Google cloud storage
+gem 'google-cloud-storage', '~> 1.11', require: false
+
 group :development, :test do
   gem 'bullet'
   # Ruby static code analyzer

@@ -49,3 +49,7 @@ ROR_WS_WILD_API_KEY: 'your-ws-wild-api-token'
 
 # Active N+1 query analyzer
 ENABLE_BULLET: 'false'
+
+# Google storage
+GCS_PROJECT: 'my-google-cloud-storage'
+GCS_BUCKET: 'my-google-cloud-bucket'
