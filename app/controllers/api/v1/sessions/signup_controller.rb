@@ -39,7 +39,10 @@ module Api
             :password_confirmation,
             :date_of_birth,
             :genre,
-            :description
+            :description,
+            :public_profile,
+            :public_outdoor_ascents,
+            :public_indoor_ascents
           )
         end
       end
