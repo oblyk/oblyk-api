@@ -36,10 +36,10 @@ class Video < ApplicationRecord
 
     case url
     when /(youtube\.com|youtu\.be)/
-      video_query = if url.match? /embed/
-                      Addressable::URI.parse(url).path.split('/').last
-                    else
+      video_query = if Addressable::URI.parse(url).query_values.try(:[], 'v')
                       Addressable::URI.parse(url).query_values['v']
+                    else
+                      Addressable::URI.parse(url).path.split('/').last
                     end
       iframe_url = "https://www.youtube.com/embed/#{video_query}"
     when /epictv\.com/
