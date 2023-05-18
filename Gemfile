@@ -92,6 +92,9 @@ gem 'rqrcode', '~> 2.0'
 # Google cloud storage
 gem 'google-cloud-storage', '~> 1.11', require: false
 
+# A fast JSON parser and Object marshaller as a Ruby gem.
+gem 'oj'
+
 group :development, :test do
   gem 'bullet'
   # Ruby static code analyzer

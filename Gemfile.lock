@@ -255,6 +255,7 @@ GEM
     nokogiri (1.11.3)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
+    oj (3.14.2)
     os (1.1.4)
     paper_trail (11.1.0)
       activerecord (>= 5.2)
@@ -488,6 +489,7 @@ DEPENDENCIES
   listen (~> 3.2)
   mini_magick
   mysql2 (>= 0.4.4, < 0.6.0)
+  oj
   paper_trail (~> 11.1)
   pry-doc
   pry-rails
