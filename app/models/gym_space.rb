@@ -17,6 +17,7 @@ class GymSpace < ApplicationRecord
   has_one_attached :plan
   belongs_to :gym
   belongs_to :gym_grade
+  belongs_to :gym_space_group, optional: true
   has_many :gym_sectors
   has_many :gym_routes, through: :gym_sectors
 
@@ -82,6 +83,7 @@ class GymSpace < ApplicationRecord
         banner: banner.attached? ? banner_large_url : nil,
         plan: plan.attached? ? plan_large_url : nil,
         plan_thumbnail_url: plan.attached? ? plan_thumbnail_url : nil,
+        gym_space_group_id: gym_space_group_id,
         gym: {
           id: gym.id,
           name: gym.name,

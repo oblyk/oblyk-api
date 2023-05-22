@@ -72,6 +72,11 @@ GET {{api_url}}/gyms/1/gym_spaces.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
+### GET all gym_spaces
+GET {{api_url}}/gyms/212/gym_spaces/groups.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
 ### Delete space
 DELETE {{api_url}}/gyms/1/gym_spaces/{{gym_space_id}}.json
 HttpApiAccessToken: {{api_access_token}}

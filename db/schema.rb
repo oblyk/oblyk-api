@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_19_185545) do
+ActiveRecord::Schema.define(version: 2023_05_18_104523) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -634,6 +634,15 @@ ActiveRecord::Schema.define(version: 2023_04_19_185545) do
     t.index ["gym_space_id"], name: "index_gym_sectors_on_gym_space_id"
   end
 
+  create_table "gym_space_groups", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "gym_id"
+    t.string "name"
+    t.integer "order"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gym_id"], name: "index_gym_space_groups_on_gym_id"
+  end
+
   create_table "gym_spaces", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -655,8 +664,10 @@ ActiveRecord::Schema.define(version: 2023_04_19_185545) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "slug_name"
+    t.bigint "gym_space_group_id"
     t.index ["gym_grade_id"], name: "index_gym_spaces_on_gym_grade_id"
     t.index ["gym_id"], name: "index_gym_spaces_on_gym_id"
+    t.index ["gym_space_group_id"], name: "index_gym_spaces_on_gym_space_group_id"
   end
 
   create_table "gyms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

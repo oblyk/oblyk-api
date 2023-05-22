@@ -207,6 +207,7 @@ Rails.application.routes.draw do
           resources :gym_grade_lines
         end
         resources :gym_spaces do
+          get :groups, on: :collection
           put :publish, on: :member
           put :unpublish, on: :member
           post :add_banner, on: :member
@@ -217,6 +218,7 @@ Rails.application.routes.draw do
           end
           resources :gym_routes
         end
+        resources :gym_space_groups
         resources :gym_routes do
           get :print, on: :collection
           get :ascents, on: :member

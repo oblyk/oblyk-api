@@ -43,6 +43,7 @@ class Gym < ApplicationRecord
   has_many :gym_administrators
   has_many :gym_grades
   has_many :gym_spaces
+  has_many :gym_space_groups
   has_many :reports, as: :reportable
   has_many :gym_sectors, through: :gym_spaces
   has_many :gym_routes, through: :gym_sectors
@@ -167,6 +168,7 @@ class Gym < ApplicationRecord
         gym_grades_count: gym_grades.count,
         versions_count: versions.count,
         gym_spaces: gym_spaces.map(&:summary_to_json),
+        gym_space_groups: gym_space_groups.map(&:summary_to_json),
         creator: user&.summary_to_json,
         sorts_available: sorts_available,
         history: {

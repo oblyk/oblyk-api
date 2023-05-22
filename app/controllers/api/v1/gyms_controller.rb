@@ -148,10 +148,32 @@ module Api
             name: @gym.name,
             slug_name: @gym.name,
             id: @gym.id,
-            gym_spaces: []
+            gym_spaces: [],
+            gym_space_groups: []
           }
         }
-        @gym.gym_spaces.each do |gym_space|
+        @gym.gym_space_groups.each do |gym_space_group|
+          space_group = {
+            id: gym_space_group.id,
+            name: gym_space_group.name,
+            order: gym_space_group.order,
+            gym: {
+              id: gym_space_group.gym_id,
+              slug_name: gym_space_group.gym.id
+            },
+            gym_spaces: []
+          }
+          gym_space_group.gym_spaces.each do |gym_space|
+            sectors = []
+            gym_space.gym_sectors.each do |gym_sector|
+              sectors << gym_sector.summary_to_json
+            end
+            space = gym_space.summary_to_json.merge({ gym_sectors: sectors })
+            space_group[:gym_spaces] << space
+          end
+          tree[:gym][:gym_space_groups] << space_group
+        end
+        @gym.gym_spaces.where(gym_space_group_id: nil).each do |gym_space|
           sectors = []
           gym_space.gym_sectors.each do |gym_sector|
             sectors << gym_sector.summary_to_json
