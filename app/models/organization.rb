@@ -24,7 +24,7 @@ class Organization < ApplicationRecord
   end
 
   def summary_to_json
-    Rails.cache.fetch("#{cache_key_with_version}/summary_organization", expires_in: 1.month) do
+    Rails.cache.fetch("#{cache_key_with_version}/summary_organization", expires_in: 28.days) do
       {
         id: id,
         name: name,

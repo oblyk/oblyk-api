@@ -60,7 +60,7 @@ class Gym < ApplicationRecord
   end
 
   def to_geo_json(minimalistic: false)
-    Rails.cache.fetch("#{cache_key_with_version}/#{'minimalistic_' if minimalistic}geo_json_gym", expires_in: 1.month) do
+    Rails.cache.fetch("#{cache_key_with_version}/#{'minimalistic_' if minimalistic}geo_json_gym", expires_in: 28.days) do
       features = {
         type: 'Feature',
         properties: {
@@ -129,7 +129,7 @@ class Gym < ApplicationRecord
   end
 
   def summary_to_json
-    Rails.cache.fetch("#{cache_key_with_version}/summary_gym", expires_in: 1.month) do
+    Rails.cache.fetch("#{cache_key_with_version}/summary_gym", expires_in: 28.days) do
       {
         id: id,
         name: name,

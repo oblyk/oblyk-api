@@ -62,7 +62,7 @@ class GymSpace < ApplicationRecord
   end
 
   def summary_to_json(with_figures: false)
-    data = Rails.cache.fetch("#{cache_key_with_version}/summary_gym_space", expires_in: 1.month) do
+    data = Rails.cache.fetch("#{cache_key_with_version}/summary_gym_space", expires_in: 28.days) do
       {
         id: id,
         gym_grade_id: gym_grade_id,

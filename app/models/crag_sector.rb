@@ -99,7 +99,7 @@ class CragSector < ApplicationRecord
   end
 
   def summary_to_json(with_crag: true)
-    Rails.cache.fetch("#{cache_key_with_version}/summary_crag_sector#{'_without_crag' unless with_crag}", expires_in: 1.month) do
+    Rails.cache.fetch("#{cache_key_with_version}/summary_crag_sector#{'_without_crag' unless with_crag}", expires_in: 28.days) do
       json = {
         id: id,
         crag_id: crag_id,

@@ -12,7 +12,7 @@ class GymOpener < ApplicationRecord
   validates :name, presence: true
 
   def summary_to_json
-    Rails.cache.fetch("#{cache_key_with_version}/summary_gym_opener", expires_in: 1.month) do
+    Rails.cache.fetch("#{cache_key_with_version}/summary_gym_opener", expires_in: 28.days) do
       data = {
         id: id,
         name: name,

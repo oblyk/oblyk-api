@@ -181,7 +181,7 @@ class User < ApplicationRecord
   end
 
   def to_partner_geo_json(minimalistic: false)
-    Rails.cache.fetch("#{cache_key_with_version}/#{'minimalistic_' if minimalistic}partner_geo_json", expires_in: 1.month) do
+    Rails.cache.fetch("#{cache_key_with_version}/#{'minimalistic_' if minimalistic}partner_geo_json", expires_in: 28.days) do
       features = {
         type: 'Feature',
         properties: {
@@ -220,7 +220,7 @@ class User < ApplicationRecord
   end
 
   def local_climber_to_json
-    Rails.cache.fetch("#{cache_key_with_version}/local_climber_to_json", expires_in: 1.month) do
+    Rails.cache.fetch("#{cache_key_with_version}/local_climber_to_json", expires_in: 28.days) do
       {
         uuid: uuid,
         avatar_thumbnail_url: avatar_thumbnail_url,
@@ -347,7 +347,7 @@ class User < ApplicationRecord
   end
 
   def summary_to_json(with_avatar: true)
-    Rails.cache.fetch("#{cache_key_with_version}/summary_user#{'_with_avatar' if with_avatar}", expires_in: 1.month) do
+    Rails.cache.fetch("#{cache_key_with_version}/summary_user#{'_with_avatar' if with_avatar}", expires_in: 28.days) do
       json = {
         id: id,
         uuid: uuid,
