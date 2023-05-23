@@ -10,7 +10,7 @@ class Department < ApplicationRecord
   has_many :crag_routes, through: :crags
 
   def summary_to_json
-    Rails.cache.fetch("#{cache_key_with_version}/summary_department", expires_in: 1.month) do
+    Rails.cache.fetch("#{cache_key_with_version}/summary_department", expires_in: 28.days) do
       {
         id: id,
         name: name,
