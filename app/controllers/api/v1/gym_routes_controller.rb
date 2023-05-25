@@ -83,6 +83,42 @@ module Api
         send_data pdf, filename: "Fiche de voie - #{I18n.l(Date.current, format: :iso)} - #{@gym.name}.pdf"
       end
 
+      def export
+        gym_routes = GymRoute.includes(gym_sector: :gym_space)
+                             .where(id: params[:ids])
+                             .order(:opened_at)
+
+        csv_data = CSV.generate(
+          headers: true,
+          col_sep: "\t"
+        ) do |csv|
+          csv << %w[hold_colors tag_colors grade points height name description openers opened_at sector space ascents_count url short_url]
+          gym_routes.each do |gym_route|
+            csv << [
+              gym_route.hold_colors&.join(', '),
+              gym_route.tag_colors&.join(', '),
+              gym_route.grade_to_s,
+              gym_route.points_to_s,
+              gym_route.height,
+              gym_route.name,
+              gym_route.description,
+              gym_route.gym_openers&.map(&:name).join(', '),
+              gym_route.opened_at,
+              gym_route.gym_sector.name,
+              gym_route.gym_sector.gym_space.name,
+              gym_route.ascents_count,
+              gym_route.app_path,
+              gym_route.short_app_path
+            ]
+          end
+        end
+        send_data(
+          csv_data,
+          filename: "oblyk-export-#{DateTime.now.strftime('%Y-%m-%d %H:%M')}.csv",
+          type: :csv
+        )
+      end
+
       def show
         render json: @gym_route.detail_to_json, status: :ok
       end

@@ -221,6 +221,7 @@ Rails.application.routes.draw do
         resources :gym_space_groups
         resources :gym_routes do
           get :print, on: :collection
+          get :export, on: :collection
           get :ascents, on: :member
           get :similar_sectors, on: :member
           post :add_picture, on: :member
