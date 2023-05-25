@@ -168,7 +168,7 @@ module Api
             gym_space.gym_sectors.each do |gym_sector|
               sectors << gym_sector.summary_to_json
             end
-            space = gym_space.summary_to_json.merge({ gym_sectors: sectors })
+            space = tree_structure_space_json gym_space, sectors
             space_group[:gym_spaces] << space
           end
           tree[:gym][:gym_space_groups] << space_group
@@ -178,7 +178,7 @@ module Api
           gym_space.gym_sectors.each do |gym_sector|
             sectors << gym_sector.summary_to_json
           end
-          space = gym_space.summary_to_json.merge({ gym_sectors: sectors })
+          space = tree_structure_space_json gym_space, sectors
           tree[:gym][:gym_spaces] << space
         end
 
@@ -194,6 +194,18 @@ module Api
           features << gym.to_geo_json(minimalistic: minimalistic)
         end
         features
+      end
+
+      def tree_structure_space_json(gym_space, sectors)
+        gym_space.summary_to_json.merge(
+          {
+            gym_sectors: sectors,
+            gym_grade: {
+              id: gym_space.gym_grade.id,
+              name: gym_space.gym_grade.name
+            }
+          }
+        )
       end
 
       def set_gym
