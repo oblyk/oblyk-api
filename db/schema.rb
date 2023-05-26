@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_18_104523) do
+ActiveRecord::Schema.define(version: 2023_05_26_124310) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -648,12 +648,9 @@ ActiveRecord::Schema.define(version: 2023_05_18_104523) do
     t.text "description"
     t.integer "order"
     t.string "climbing_type"
-    t.string "banner_color"
-    t.string "banner_bg_color"
-    t.integer "banner_opacity"
-    t.string "scheme_bg_color"
     t.integer "scheme_height"
     t.integer "scheme_width"
+    t.string "sectors_color"
     t.decimal "latitude", precision: 10, scale: 6
     t.decimal "longitude", precision: 10, scale: 6
     t.bigint "gym_id"

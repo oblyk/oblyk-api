@@ -1,17 +1,11 @@
 # frozen_string_literal: true
 
 class GymSpace < ApplicationRecord
-  include Geolocable
   include SoftDeletable
   include Publishable
   include Slugable
   include AttachmentResizable
   include StripTagable
-
-  attribute :banner_color, :string, default: '#ffffff'
-  attribute :banner_bg_color, :string, default: '#f44336'
-  attribute :banner_opacity, :integer, default: 1
-  attribute :scheme_bg_color, :string, default: '#fafafa'
 
   has_one_attached :banner
   has_one_attached :plan
@@ -30,10 +24,6 @@ class GymSpace < ApplicationRecord
   validates :plan, blob: { content_type: :image }, allow_nil: true
 
   after_save :remove_routes_cache
-
-  def location
-    [latitude, longitude]
-  end
 
   def set_plan_dimension!
     return unless plan.attached?
@@ -71,15 +61,9 @@ class GymSpace < ApplicationRecord
         description: description,
         order: order,
         climbing_type: climbing_type,
-        banner_color: banner_color,
-        banner_bg_color: banner_bg_color,
-        banner_opacity: banner_opacity,
-        scheme_bg_color: scheme_bg_color,
         scheme_height: scheme_height,
         scheme_width: scheme_width,
-        latitude: latitude,
-        longitude: longitude,
-        published_at: published_at,
+        sectors_color: sectors_color,
         banner: banner.attached? ? banner_large_url : nil,
         plan: plan.attached? ? plan_large_url : nil,
         plan_thumbnail_url: plan.attached? ? plan_thumbnail_url : nil,

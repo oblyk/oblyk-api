@@ -116,14 +116,7 @@ module Api
           :description,
           :order,
           :climbing_type,
-          :banner_color,
-          :banner_bg_color,
-          :banner_opacity,
-          :scheme_bg_color,
-          :scheme_height,
-          :scheme_width,
-          :latitude,
-          :longitude,
+          :sectors_color,
           :gym_grade_id,
           :gym_space_group_id
         )
