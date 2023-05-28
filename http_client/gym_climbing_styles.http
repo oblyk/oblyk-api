@@ -1,0 +1,32 @@
+### Update / create climbing style
+POST {{api_url}}/gyms/212/gym_climbing_styles.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym_climbing_style": {
+    "style": "resistance",
+    "climbing_type": "sport_climbing",
+    "color": "rgb(0,255,255)"
+  }
+}
+
+### GET gym climbing styles
+GET {{api_url}}/gyms/212/gym_climbing_styles.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### Deactivate gym style
+PUT {{api_url}}/gyms/212/gym_climbing_styles/deactivate.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "gym_climbing_style": {
+    "style": "resistance",
+    "climbing_type": "pan"
+  }
+}

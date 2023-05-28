@@ -4,6 +4,11 @@ HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ###
+GET {{api_url}}/public/climbing_styles.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
+###
 GET {{api_url}}/public/inclines.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json

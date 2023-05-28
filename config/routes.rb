@@ -199,6 +199,9 @@ Rails.application.routes.draw do
         resources :color_systems, only: %i[index create show]
         resources :gym_administrators
         resources :gym_administration_requests, only: %i[create]
+        resources :gym_climbing_styles, only: %i[index create] do
+          put :deactivate, on: :collection
+        end
         resources :gym_openers do
           put :deactivate, on: :member
           put :activate, on: :member
@@ -251,6 +254,7 @@ Rails.application.routes.draw do
         get 'rains', controller: :rains, action: :index
         get 'inclines', controller: :inclines, action: :index
         get 'climbs', controller: :climbs, action: :index
+        get 'climbing_styles', controller: :climbing_styles, action: :index
         get 'receptions', controller: :receptions, action: :index
         get 'starts', controller: :starts, action: :index
         get 'bolts', controller: :bolts, action: :index
