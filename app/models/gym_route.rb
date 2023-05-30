@@ -77,6 +77,14 @@ class GymRoute < ApplicationRecord
     tags
   end
 
+  def styles
+    styles = []
+    sections.each do |section|
+      styles += section['styles']
+    end
+    styles
+  end
+
   def mounted?
     dismounted_at.blank?
   end
@@ -154,6 +162,7 @@ class GymRoute < ApplicationRecord
         name: name,
         height: height,
         description: description,
+        climbing_type: climbing_type,
         openers: gym_openers.map(&:summary_to_json),
         gym_opener_ids: gym_openers.map(&:id),
         opened_at: opened_at,
@@ -231,7 +240,7 @@ class GymRoute < ApplicationRecord
         grade_value: Grade.to_value(section['grade']),
         height: single_pitch ? height : section_height,
         points: single_pitch ? points : section['points'],
-        tags: section['tags']
+        styles: section['styles']
       }
     end
     self.sections = new_sections
@@ -277,7 +286,7 @@ class GymRoute < ApplicationRecord
     number_of_color = colors.size
     gradiant = []
     if number_of_color == 1
-      gradiant << {  color: colors[0], offset: 0 }
+      gradiant << { color: colors[0], offset: 0 }
       gradiant << { color: colors[0], offset: 100 }
     else
       index = 0

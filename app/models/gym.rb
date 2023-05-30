@@ -172,6 +172,7 @@ class Gym < ApplicationRecord
         gym_space_groups: gym_space_groups.map(&:summary_to_json),
         creator: user&.summary_to_json,
         sorts_available: sorts_available,
+        gym_climbing_styles: gym_climbing_styles.activated.map { |style| { style: style.style, climbing_type: style.climbing_type, color: style.color } },
         history: {
           created_at: created_at,
           updated_at: updated_at

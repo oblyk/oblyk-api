@@ -282,7 +282,7 @@ module Api
           :opened_at,
           :gym_sector_id,
           gym_opener_ids: [],
-          sections: [:climbing_type, :description, :grade, :height, { tags: [] }],
+          sections: [:climbing_type, :description, :grade, :height, { styles: [] }],
           hold_colors: %i[],
           tag_colors: %i[]
         )
