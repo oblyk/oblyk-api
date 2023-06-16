@@ -221,6 +221,11 @@ module Api
           features << approach.to_geo_json(minimalistic: minimalistic)
         end
 
+        # Rock Bars
+        @crag.rock_bars.each do |rock_bar|
+          features << rock_bar.to_geo_json
+        end
+
         render json: {
           type: 'FeatureCollection',
           crs: {

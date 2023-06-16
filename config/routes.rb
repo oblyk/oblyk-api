@@ -315,6 +315,7 @@ Rails.application.routes.draw do
           get :geo_json, on: :collection
           get :geo_search, on: :collection
           get :crags_around, on: :collection
+          resources :rock_bars, only: %i[index show create update destroy]
           resources :crag_routes do
             get :search, on: :collection
             get :search_by_grades, on: :collection

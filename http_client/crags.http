@@ -110,7 +110,7 @@ HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
 ### Guide book arrounds
-GET {{api_url}}/public/crags/1/geo_json_around.json
+GET {{api_url}}/public/crags/536/geo_json_around.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 

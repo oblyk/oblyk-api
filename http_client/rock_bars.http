@@ -1,0 +1,22 @@
+### Add crag in area
+POST {{api_url}}/public/crags/536/rock_bars.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "rock_bar": {
+    "crag_sector_id": 6096,
+    "crag_id": 536,
+    "polyline": [
+      [
+        44.408065726168715,
+        5.237862273819603
+      ],
+      [
+        44.407391528159096,
+        5.2384202832390345
+      ]
+    ]
+  }
+}

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_27_141433) do
+ActiveRecord::Schema.define(version: 2023_06_11_101307) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -898,6 +898,16 @@ ActiveRecord::Schema.define(version: 2023_05_27_141433) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["reportable_type", "reportable_id"], name: "index_reports_on_reportable_type_and_reportable_id"
     t.index ["user_id"], name: "index_reports_on_user_id"
+  end
+
+  create_table "rock_bars", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.json "polyline"
+    t.bigint "crag_id"
+    t.bigint "crag_sector_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["crag_id"], name: "index_rock_bars_on_crag_id"
+    t.index ["crag_sector_id"], name: "index_rock_bars_on_crag_sector_id"
   end
 
   create_table "searches", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

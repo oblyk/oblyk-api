@@ -35,6 +35,7 @@ class CragSector < ApplicationRecord
   has_many :photos, as: :illustrable
   has_many :crag_routes
   has_many :reports, as: :reportable
+  has_many :rock_bars
 
   delegate :feed_parent_id, to: :crag
   delegate :feed_parent_type, to: :crag

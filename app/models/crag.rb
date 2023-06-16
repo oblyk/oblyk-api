@@ -67,6 +67,7 @@ class Crag < ApplicationRecord
   has_many :approaches
   has_many :article_crags
   has_many :articles, through: :article_crags
+  has_many :rock_bars
 
   validates :name, :latitude, :longitude, :city, presence: true
   validates :rain, inclusion: { in: Rain::LIST }, allow_nil: true
