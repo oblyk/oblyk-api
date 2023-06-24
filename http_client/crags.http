@@ -104,6 +104,17 @@ Content-Type: application/json
   "minimalistic": true
 }
 
+### GET pracks, approach, bar rocks of crags
+GET {{api_url}}/public/crags/additional_geo_json_features.json
+HttpApiAccessToken: {{api_access_token}}
+Content-Type: application/json
+
+{
+  "ids": [
+    18
+  ]
+}
+
 ### GET crag versions
 GET {{api_url}}/public/crags/1/versions.json
 HttpApiAccessToken: {{api_access_token}}

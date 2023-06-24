@@ -43,6 +43,8 @@ class Crag < ApplicationRecord
     north_west
   ], if: proc { |_obj| ENV['PAPER_TRAIL'] == 'true' }
 
+  has_one_attached :static_map
+  has_one_attached :static_map_banner
   belongs_to :user, optional: true
   belongs_to :photo, optional: true
   belongs_to :department, optional: true
@@ -76,6 +78,7 @@ class Crag < ApplicationRecord
 
   after_update :update_routes_location
   after_save :historize_around_towns
+  after_save :historize_static_map
 
   def location
     [latitude, longitude]
@@ -170,6 +173,10 @@ class Crag < ApplicationRecord
           url: photo ? photo.large_url : nil,
           cropped_url: photo ? photo.cropped_medium_url : nil,
           thumbnail_url: photo ? photo.thumbnail_url : nil
+        },
+        static_map: {
+          url: static_map.attached? ? Rails.application.routes.url_helpers.polymorphic_url(static_map, only_path: true) : nil,
+          banner_url: static_map_banner.attached? ? Rails.application.routes.url_helpers.polymorphic_url(static_map_banner, only_path: true) : nil
         },
         approaches: {
           min_time: min_approach_time,
@@ -298,5 +305,11 @@ class Crag < ApplicationRecord
 
   def historize_around_towns
     HistorizeTownsAroundWorker.perform_in(1.hour, latitude, longitude, Time.current)
+  end
+
+  def historize_static_map
+    return unless saved_change_to_latitude? || saved_change_to_longitude?
+
+    HistorizeCragStaticMapWorker.perform_async id
   end
 end

@@ -53,3 +53,7 @@ ENABLE_BULLET: 'false'
 # Google storage
 GCS_PROJECT: 'my-google-cloud-storage'
 GCS_BUCKET: 'my-google-cloud-bucket'
+
+# Mapbox
+MAPBOX_TOKEN: 'mapbox-token'
+MAPBOX_STATIC_MAP_STYLE: 'mapbox-style-for-static-image'

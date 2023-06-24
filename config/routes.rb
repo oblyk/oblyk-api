@@ -312,6 +312,7 @@ Rails.application.routes.draw do
           get :guide_books_around, on: :member
           get :areas_around, on: :member
           get :geo_json_around, on: :member
+          get :additional_geo_json_features, on: :collection
           get :geo_json, on: :collection
           get :geo_search, on: :collection
           get :crags_around, on: :collection

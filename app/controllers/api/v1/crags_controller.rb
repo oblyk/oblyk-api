@@ -238,6 +238,47 @@ module Api
         }, status: :ok
       end
 
+      def additional_geo_json_features
+        crags = Crag.includes(:crag_sectors, :parks, :approaches, :rock_bars).where(id: params[:ids])
+        features = []
+
+        crags.find_each do |crag|
+          rock_bar_sector_ids = []
+          # Rock Bars
+          crag.rock_bars.each do |rock_bar|
+            rock_bar_sector_ids << rock_bar.crag_sector_id
+            features << rock_bar.to_geo_json
+          end
+
+          crag.crag_sectors.each do |sector|
+            next unless sector.latitude
+            next if rock_bar_sector_ids.include? sector.id
+
+            features << sector.to_geo_json(minimalistic: true)
+          end
+
+          crag.parks.each do |park|
+            features << park.to_geo_json(minimalistic: true)
+          end
+
+          # Crag approaches
+          crag.approaches.each do |approach|
+            features << approach.to_geo_json(minimalistic: true)
+          end
+        end
+
+        render json: {
+          type: 'FeatureCollection',
+          crs: {
+            type: 'name',
+            properties: {
+              name: 'urn'
+            }
+          },
+          features: features
+        }, status: :ok
+      end
+
       def show
         render json: @crag.detail_to_json, status: :ok
       end
