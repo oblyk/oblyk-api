@@ -44,7 +44,10 @@ class RockBar < ApplicationRecord
   end
 
   def detail_to_json
-    summary_to_json.merge(
+    data = summary_to_json
+    data[:crag] = crag.summary_to_json
+    data[:crag_sector] = crag_sector.summary_to_json if crag_sector
+    data.merge(
       {
         history: {
           created_at: created_at,

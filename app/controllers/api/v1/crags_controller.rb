@@ -250,6 +250,7 @@ module Api
             features << rock_bar.to_geo_json
           end
 
+          # Sectors
           crag.crag_sectors.each do |sector|
             next unless sector.latitude
             next if rock_bar_sector_ids.include? sector.id
@@ -257,6 +258,7 @@ module Api
             features << sector.to_geo_json(minimalistic: true)
           end
 
+          # Parks
           crag.parks.each do |park|
             features << park.to_geo_json(minimalistic: true)
           end
