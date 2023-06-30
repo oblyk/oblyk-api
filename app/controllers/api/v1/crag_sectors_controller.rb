@@ -9,7 +9,7 @@ module Api
       before_action :set_crag, only: %i[index geo_json_around create update]
 
       def index
-        crag_sectors = @crag.crag_sectors.includes(photo: { picture_attachment: :blob })
+        crag_sectors = @crag.crag_sectors.includes(photo: { picture_attachment: :blob }).order(:name)
         render json: crag_sectors.map(&:summary_to_json), status: :ok
       end
 
