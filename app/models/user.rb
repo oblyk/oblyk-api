@@ -51,6 +51,7 @@ class User < ApplicationRecord
   has_many :crag_routes
   has_many :crag_sectors
   has_many :crags
+  has_many :rock_bars
   has_many :guide_book_papers
   has_many :guide_book_pdfs
   has_many :guide_book_webs

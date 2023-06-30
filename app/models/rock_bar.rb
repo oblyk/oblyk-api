@@ -2,6 +2,7 @@
 
 class RockBar < ApplicationRecord
   belongs_to :crag, optional: true
+  belongs_to :user, optional: true
   belongs_to :crag_sector, optional: true
 
   validates :polyline, presence: true

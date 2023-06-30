@@ -20,6 +20,7 @@ module Api
         @rock_bar = RockBar.new(bar_rock_params)
         @rock_bar.polyline = params[:rock_bar][:polyline]
         @rock_bar.crag = @crag
+        @rock_bar.user = @current_user
         if @rock_bar.save
           render json: @rock_bar.detail_to_json, status: :ok
         else
