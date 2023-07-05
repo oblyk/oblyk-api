@@ -153,7 +153,15 @@ module Api
       end
 
       def add_picture
-        if @gym_route.update(picture_params)
+        picture_from_gym_route = params[:gym_route][:picture_from_gym_route_id]
+        if picture_from_gym_route
+          gym_route = GymRoute.find picture_from_gym_route
+          @gym_route.duplicate_picture = true
+          @gym_route.picture.attach(gym_route.picture.blob)
+        else
+          @gym_route.duplicate_picture = false
+        end
+        if picture_from_gym_route || @gym_route.update(picture_params)
           render json: @gym_route.detail_to_json, status: :ok
         else
           render json: { error: @gym_route.errors }, status: :unprocessable_entity
@@ -290,7 +298,8 @@ module Api
 
       def picture_params
         params.require(:gym_route).permit(
-          :picture
+          :picture,
+          :picture_from_gym_route_id
         )
       end
 

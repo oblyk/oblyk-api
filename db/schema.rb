@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_30_181933) do
+ActiveRecord::Schema.define(version: 2023_07_05_173820) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -622,6 +622,7 @@ ActiveRecord::Schema.define(version: 2023_06_30_181933) do
     t.integer "comments_count"
     t.integer "videos_count"
     t.text "description"
+    t.boolean "duplicate_picture"
     t.index ["gym_grade_line_id"], name: "index_gym_routes_on_gym_grade_line_id"
     t.index ["gym_sector_id"], name: "index_gym_routes_on_gym_sector_id"
   end

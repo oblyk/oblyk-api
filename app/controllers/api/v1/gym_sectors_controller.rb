@@ -7,7 +7,7 @@ module Api
       skip_before_action :protected_by_session, only: %i[show index]
       skip_before_action :protected_by_gym_administrator, only: %i[show index]
       before_action :set_gym_space
-      before_action :set_gym_sector, only: %i[show update destroy dismount_routes]
+      before_action :set_gym_sector, only: %i[show update destroy dismount_routes last_routes_with_pictures]
       before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[index show]
 
       def index
@@ -49,6 +49,25 @@ module Api
         routes = GymRoute.mounted.where(gym_sector: @gym_sector)
         routes.each(&:dismount!)
         render json: @gym_sector.detail_to_json, status: :ok
+      end
+
+      def last_routes_with_pictures
+        json_data = []
+        @gym_sector.gym_routes
+                   .joins(:picture_attachment)
+                   .where(duplicate_picture: false)
+                   .order(created_at: :desc)
+                   .limit(params.fetch(:limit, 5))
+                   .each do |gym_route|
+          summary = gym_route.summary_to_json
+          summary[:picture] = gym_route.picture_large_url
+          summary[:history] = {
+            created_at: gym_route.created_at,
+            updated_at: gym_route.updated_at
+          }
+          json_data << summary
+        end
+        render json: json_data, status: :ok
       end
 
       private

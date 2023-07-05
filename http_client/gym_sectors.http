@@ -40,6 +40,12 @@ GET {{api_url}}/gyms/1/gym_spaces/1/gym_sectors.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
+### GET last routes with pictures
+GET {{api_url}}/gyms/219/gym_spaces/19/gym_sectors/43/last_routes_with_pictures.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
 ### Dismounte routes in gym_sector
 DELETE {{api_url}}/gyms/1/gym_spaces/1/gym_sectors/6/dismount_routes.json
 HttpApiAccessToken: {{api_access_token}}
