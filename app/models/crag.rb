@@ -304,7 +304,34 @@ class Crag < ApplicationRecord
   end
 
   def historize_around_towns
-    HistorizeTownsAroundWorker.perform_in(1.hour, latitude, longitude, Time.current)
+    if saved_change_to_latitude? ||
+       saved_change_to_longitude? ||
+       saved_change_to_name? ||
+       saved_change_to_crag_routes_count? ||
+       saved_change_to_sport_climbing? ||
+       saved_change_to_bouldering? ||
+       saved_change_to_multi_pitch? ||
+       saved_change_to_trad_climbing? ||
+       saved_change_to_aid_climbing? ||
+       saved_change_to_deep_water? ||
+       saved_change_to_via_ferrata? ||
+       saved_change_to_summer? ||
+       saved_change_to_autumn? ||
+       saved_change_to_winter? ||
+       saved_change_to_spring? ||
+       saved_change_to_north? ||
+       saved_change_to_north_east? ||
+       saved_change_to_east? ||
+       saved_change_to_south_east? ||
+       saved_change_to_south? ||
+       saved_change_to_south_west? ||
+       saved_change_to_west? ||
+       saved_change_to_north_west? ||
+       saved_change_to_crag_routes_count? ||
+       saved_change_to_min_approach_time? ||
+       saved_change_to_max_approach_time?
+      HistorizeTownsAroundWorker.perform_in(1.hour, latitude, longitude, Time.current)
+    end
   end
 
   def historize_static_map

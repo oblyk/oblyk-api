@@ -206,6 +206,15 @@ class Gym < ApplicationRecord
   end
 
   def historize_around_towns
-    HistorizeTownsAroundWorker.perform_in(1.hour, latitude, longitude, Time.current)
+    logo_change = logo.attached? && logo.attachment.created_at > (Time.current - 5.minutes)
+
+    if saved_change_to_name? ||
+       saved_change_to_latitude? ||
+       saved_change_to_longitude? ||
+       saved_change_to_code_country? ||
+       saved_change_to_city? ||
+       logo_change
+      HistorizeTownsAroundWorker.perform_in(1.hour, latitude, longitude, Time.current)
+    end
   end
 end

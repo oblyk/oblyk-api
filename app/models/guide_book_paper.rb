@@ -131,11 +131,18 @@ class GuideBookPaper < ApplicationRecord
   end
 
   def historize_around_towns
-    index = 0
-    crags.find_each do |crag|
-      interval = 1.hour + index.minute
-      HistorizeTownsAroundWorker.perform_in(interval, crag.latitude, crag.longitude, Time.current)
-      index += 1
+    cover_change = cover.attached? && cover.attachment.created_at > (Time.current - 5.minutes)
+
+    if saved_change_to_name? ||
+       saved_change_to_author? ||
+       saved_change_to_editor? ||
+       cover_change
+      index = 0
+      crags.find_each do |crag|
+        interval = 1.hour + index.minute
+        HistorizeTownsAroundWorker.perform_in(interval, crag.latitude, crag.longitude, Time.current)
+        index += 1
+      end
     end
   end
 end
