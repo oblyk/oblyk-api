@@ -213,6 +213,8 @@ class GymRoute < ApplicationRecord
         picture: picture.attached? ? picture_large_url : nil,
         video_count: videos.count,
         gym_sector: gym_sector.summary_to_json,
+        thumbnail_position: thumbnail_position,
+        calculated_thumbnail_position: calculated_thumbnail_position,
         history: {
           created_at: created_at,
           updated_at: updated_at
@@ -301,5 +303,19 @@ class GymRoute < ApplicationRecord
       end
     end
     gradiant
+  end
+
+  def calculated_thumbnail_position
+    return nil unless thumbnail_position
+
+    tp = thumbnail_position.symbolize_keys
+    {
+      img_h: tp[:img_h].to_d,
+      img_w: tp[:img_w].to_d,
+      h: tp[:thb_h].to_d / tp[:img_h].to_d * 100,
+      w: tp[:thb_w].to_d / tp[:img_w].to_d * 100,
+      delta_y: (tp[:img_h].to_d / 2 - tp[:thb_y].to_d) / tp[:img_h].to_d * 100,
+      delta_x: (tp[:img_w].to_d / 2 - tp[:thb_x].to_d) / tp[:img_w].to_d * 100
+    }
   end
 end

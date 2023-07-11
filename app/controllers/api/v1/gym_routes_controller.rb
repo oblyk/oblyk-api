@@ -169,6 +169,10 @@ module Api
       end
 
       def add_thumbnail
+        if params[:gym_route][:thumbnail_position]
+          thumbnail_position = JSON.parse params[:gym_route][:thumbnail_position]
+          @gym_route.thumbnail_position = thumbnail_position
+        end
         if @gym_route.update(thumbnail_params)
           render json: @gym_route.detail_to_json, status: :ok
         else
