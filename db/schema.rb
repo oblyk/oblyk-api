@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_10_204813) do
+ActiveRecord::Schema.define(version: 2023_07_11_111052) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -583,6 +583,11 @@ ActiveRecord::Schema.define(version: 2023_07_10_204813) do
     t.index ["user_id"], name: "index_gym_openers_on_user_id"
   end
 
+  create_table "gym_route_covers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "gym_route_openers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "gym_opener_id"
     t.bigint "gym_route_id"
@@ -602,6 +607,7 @@ ActiveRecord::Schema.define(version: 2023_07_10_204813) do
     t.json "tag_colors"
     t.json "sections"
     t.bigint "gym_sector_id"
+    t.bigint "gym_route_cover_id"
     t.bigint "gym_grade_line_id"
     t.integer "grade_value_appreciation"
     t.integer "note"
@@ -622,9 +628,9 @@ ActiveRecord::Schema.define(version: 2023_07_10_204813) do
     t.integer "comments_count"
     t.integer "videos_count"
     t.text "description"
-    t.boolean "duplicate_picture"
     t.json "thumbnail_position"
     t.index ["gym_grade_line_id"], name: "index_gym_routes_on_gym_grade_line_id"
+    t.index ["gym_route_cover_id"], name: "index_gym_routes_on_gym_route_cover_id"
     t.index ["gym_sector_id"], name: "index_gym_routes_on_gym_sector_id"
   end
 

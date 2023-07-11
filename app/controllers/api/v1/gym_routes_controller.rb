@@ -153,15 +153,32 @@ module Api
       end
 
       def add_picture
-        picture_from_gym_route = params[:gym_route][:picture_from_gym_route_id]
-        if picture_from_gym_route
-          gym_route = GymRoute.find picture_from_gym_route
-          @gym_route.duplicate_picture = true
-          @gym_route.picture.attach(gym_route.picture.blob)
-        else
-          @gym_route.duplicate_picture = false
+        new_gym_route_cover_id = picture_params.fetch(:gym_route_cover_id, nil)
+
+        # If change picture or used other picture already saved
+        if new_gym_route_cover_id
+          route_with_same_covers = GymRoute.where(gym_route_cover_id: new_gym_route_cover_id)
+          # if route already has a picture
+          if @gym_route.gym_route_cover_id && route_with_same_covers.count == 1 && @gym_route.gym_route_cover_id != new_gym_route_cover_id.to_i
+            @gym_route.gym_route_cover.picture.purge # delete attachment
+            @gym_route.gym_route_cover.destroy
+          end
+          @gym_route.gym_route_cover_id = new_gym_route_cover_id
+
+        else # if use new picture freshly downloaded
+          # if route already has a picture
+          if @gym_route.gym_route_cover_id
+            route_with_same_covers = GymRoute.where(gym_route_cover_id: @gym_route.gym_route_cover_id)
+            if route_with_same_covers.count == 1 # if the route is the only one to use this picture
+              @gym_route.gym_route_cover.picture.purge # delete attachment
+              @gym_route.gym_route_cover.destroy
+            end
+          end
+          @gym_route.gym_route_cover = GymRouteCover.new(picture: picture_params[:gym_route_cover][:picture])
         end
-        if picture_from_gym_route || @gym_route.update(picture_params)
+
+        # Render success or errors
+        if @gym_route.save
           render json: @gym_route.detail_to_json, status: :ok
         else
           render json: { error: @gym_route.errors }, status: :unprocessable_entity
@@ -302,8 +319,8 @@ module Api
 
       def picture_params
         params.require(:gym_route).permit(
-          :picture,
-          :picture_from_gym_route_id
+          :gym_route_cover_id,
+          gym_route_cover: %i[picture]
         )
       end
 

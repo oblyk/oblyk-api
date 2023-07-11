@@ -53,19 +53,12 @@ module Api
 
       def last_routes_with_pictures
         json_data = []
-        @gym_sector.gym_routes
-                   .joins(:picture_attachment)
-                   .where(duplicate_picture: false)
-                   .order(created_at: :desc)
-                   .limit(params.fetch(:limit, 5))
-                   .each do |gym_route|
-          summary = gym_route.summary_to_json
-          summary[:picture] = gym_route.picture_large_url
-          summary[:history] = {
-            created_at: gym_route.created_at,
-            updated_at: gym_route.updated_at
-          }
-          json_data << summary
+        gym_route_cover_ids = GymRoute.distinct.select(:gym_route_cover_id).mounted.where(gym_sector_id: @gym_sector.id).map(&:gym_route_cover_id)
+        GymRouteCover.where(id: gym_route_cover_ids)
+                     .order(created_at: :desc)
+                     .limit(params.fetch(:limit, 5))
+                     .each do |gym_route_cover|
+          json_data << gym_route_cover.detail_to_json
         end
         render json: json_data, status: :ok
       end

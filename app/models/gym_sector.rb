@@ -8,6 +8,7 @@ class GymSector < ApplicationRecord
   has_one :gym, through: :gym_space
   belongs_to :gym_grade
   has_many :gym_routes
+  has_many :gym_route_covers, through: :gym_routes
 
   validates :name, :height, presence: true
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }

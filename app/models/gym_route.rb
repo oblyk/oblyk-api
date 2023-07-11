@@ -4,8 +4,8 @@ class GymRoute < ApplicationRecord
   include AttachmentResizable
   include StripTagable
 
-  has_one_attached :picture
   has_one_attached :thumbnail
+  belongs_to :gym_route_cover, optional: true
   belongs_to :gym_sector, optional: true
   belongs_to :gym_grade_line, optional: true
   has_one :gym_space, through: :gym_sector
@@ -25,7 +25,6 @@ class GymRoute < ApplicationRecord
   validates :height, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
   validate :validate_sections
 
-  validates :picture, blob: { content_type: :image }, allow_nil: true
   validates :thumbnail, blob: { content_type: :image }, allow_nil: true
 
   before_validation :format_route_section
@@ -34,6 +33,8 @@ class GymRoute < ApplicationRecord
 
   scope :dismounted, -> { where.not(dismounted_at: nil) }
   scope :mounted, -> { where(dismounted_at: nil) }
+
+  accepts_nested_attributes_for :gym_route_cover
 
   def gym_grade
     gym_grade_line&.gym_grade || gym_sector.gym_grade
@@ -104,7 +105,7 @@ class GymRoute < ApplicationRecord
   end
 
   def picture_large_url
-    resize_attachment picture, '700x700'
+    resize_attachment gym_route_cover.picture, '700x700'
   end
 
   def thumbnail_url
@@ -183,6 +184,7 @@ class GymRoute < ApplicationRecord
         points_to_s: points_to_s,
         grade_to_s: grade_to_s,
         thumbnail: thumbnail.attached? ? thumbnail_url : nil,
+        gym_route_cover_id: gym_route_cover_id,
         gym_sector_name: gym_sector.name,
         grade_gap: {
           max_grade_value: max_grade_value,
@@ -210,7 +212,7 @@ class GymRoute < ApplicationRecord
   def detail_to_json
     summary_to_json.merge(
       {
-        picture: picture.attached? ? picture_large_url : nil,
+        picture: gym_route_cover ? picture_large_url : nil,
         video_count: videos.count,
         gym_sector: gym_sector.summary_to_json,
         thumbnail_position: thumbnail_position,
