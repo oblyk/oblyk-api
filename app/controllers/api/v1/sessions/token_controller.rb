@@ -13,7 +13,7 @@ module Api
             return
           end
 
-          user = User.find_by id: user_id
+          user = User.where(deleted_at: nil).find_by id: user_id
           unless user
             render json: {}, status: :forbidden
             return
