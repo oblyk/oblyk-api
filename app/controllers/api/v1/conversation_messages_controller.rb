@@ -68,11 +68,11 @@ module Api
       private
 
       def protected_by_conversation_owner
-        render json: {}, status: :unauthorized if @conversation.conversation_users.where(user: @current_user).count.zero?
+        render json: {}, status: :forbidden if @conversation.conversation_users.where(user: @current_user).count.zero?
       end
 
       def protected_by_message_owner
-        render json: {}, status: :unauthorized if @conversation_message.user != @current_user
+        render json: {}, status: :forbidden if @conversation_message.user != @current_user
       end
 
       def set_conversation

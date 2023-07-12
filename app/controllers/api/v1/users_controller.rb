@@ -137,7 +137,7 @@ module Api
         return if @user.public_profile
         return if login?
 
-        render json: {}, status: :unauthorized
+        render json: {}, status: :forbidden
       end
 
       def protected_outdoor_log_book
@@ -150,7 +150,7 @@ module Api
         # Ok if current user is subscribe to user
         return if current_user_is_subscribed?
 
-        render json: {}, status: :unauthorized
+        render json: {}, status: :forbidden
       end
 
       def protected_indoor_log_book
@@ -163,7 +163,7 @@ module Api
         # Ok if current user is subscribe to user
         return if current_user_is_subscribed?
 
-        render json: {}, status: :unauthorized
+        render json: {}, status: :forbidden
       end
 
       def protected_media
@@ -173,7 +173,7 @@ module Api
         # Ok if current user is subscribe to user
         return if current_user_is_subscribed?
 
-        render json: {}, status: :unauthorized
+        render json: {}, status: :forbidden
       end
 
       def current_user_is_subscribed?
