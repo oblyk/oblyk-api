@@ -65,6 +65,7 @@ class User < ApplicationRecord
   has_many :gym_openers
   has_many :locality_users
   has_many :localities, through: :locality_users
+  has_many :likes
 
   before_validation :init_slug_name
   before_validation :set_uuid
@@ -339,6 +340,7 @@ class User < ApplicationRecord
         climbing_sessions.destroy_all
         locality_users.destroy_all
         gym_openers.update_all(user_id: nil)
+        likes.destroy_all
 
         # Purge feed in relation
         Feed.where(parent_id: id, parent_type: 'User').destroy_all

@@ -55,7 +55,7 @@ module Api
       end
 
       def protected_by_owner
-        not_authorized unless @organization.users.include?(User.current)
+        forbidden unless @organization.users.include?(User.current)
       end
 
       def organization_params

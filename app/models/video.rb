@@ -7,6 +7,7 @@ class Video < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :viewable, polymorphic: true, counter_cache: :videos_count, touch: true
   has_many :reports, as: :reportable
+  has_many :likes, as: :likeable
 
   delegate :latitude, to: :viewable
   delegate :longitude, to: :viewable
@@ -64,6 +65,7 @@ class Video < ApplicationRecord
       id: id,
       url: url,
       description: description,
+      likes_count: likes_count,
       viewable_type: viewable_type,
       viewable_id: viewable_id,
       iframe: iframe,

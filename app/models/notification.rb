@@ -3,13 +3,14 @@
 class Notification < ApplicationRecord
   include Readable
 
-  NOTIFIABLE_TYPE_LIST = %w[User Article ConversationMessage].freeze
+  NOTIFIABLE_TYPE_LIST = %w[User Article ConversationMessage Like].freeze
   NOTIFICATION_TYPE_LIST = %w[
     new_message
     new_follower
     subscribe_accepted
     request_for_follow_up
     new_article
+    new_like
   ].freeze
 
   EMAILABLE_NOTIFICATION_LIST = %w[
@@ -36,6 +37,7 @@ class Notification < ApplicationRecord
   end
 
   def detail_to_json
+    parent_object = %w[ConversationMessage Like].include?(notifiable_type) ? notifiable.user.summary_to_json : nil
     {
       id: id,
       notification_type: notification_type,
@@ -44,7 +46,7 @@ class Notification < ApplicationRecord
       posted_at: posted_at,
       read_at: read_at,
       notifiable_object: notifiable.summary_to_json,
-      parent_object: notifiable_type == 'ConversationMessage' ? notifiable.user.summary_to_json : nil,
+      parent_object: parent_object,
       history: {
         created_at: created_at,
         updated_at: updated_at

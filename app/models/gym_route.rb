@@ -14,6 +14,7 @@ class GymRoute < ApplicationRecord
   has_many :ascent_gym_routes
   has_many :gym_route_openers
   has_many :gym_openers, through: :gym_route_openers
+  has_many :likes, as: :likeable
 
   delegate :feed_parent_id, to: :gym
   delegate :feed_parent_type, to: :gym
@@ -177,6 +178,7 @@ class GymRoute < ApplicationRecord
         note_count: note_count,
         ascents_count: ascents_count,
         sections_count: sections_count,
+        likes_count: likes_count&.positive? ? likes_count : nil,
         gym_sector_id: gym_sector_id,
         gym_grade_line_id: gym_grade_line_id,
         points: points,

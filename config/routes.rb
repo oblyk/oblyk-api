@@ -95,6 +95,7 @@ Rails.application.routes.draw do
           get :subscribes
           get :subscribes_ascents
           get :followers
+          get :likes
           get :waiting_followers
           get :favorite_crags
           get :favorite_gyms
@@ -161,6 +162,9 @@ Rails.application.routes.draw do
       end
 
       resources :comments
+      resources :likes, only: %i[index create] do
+        delete '/:likeable_type/:likeable_id', action: :destroy, on: :collection
+      end
       resources :links
       resources :follows, only: %i[index create] do
         put :increment, on: :collection
@@ -241,6 +245,7 @@ Rails.application.routes.draw do
             post :routes_by_grades, on: :collection
             post :routes_by_levels, on: :collection
             post :notes, on: :collection
+            post :like_figures, on: :collection
             post :opening_frequencies, on: :collection
           end
         end

@@ -11,6 +11,7 @@ class Article < ApplicationRecord
 
   belongs_to :author
   has_many :comments, as: :commentable
+  has_many :likes, as: :likeable
   has_many :article_crags
   has_many :crags, through: :article_crags
   has_many :article_guide_book_papers
@@ -54,6 +55,7 @@ class Article < ApplicationRecord
         description: description,
         views: views,
         comments_count: comments_count,
+        likes_count: likes_count,
         published_at: published_at,
         published: published?,
         cover_url: cover.attached? ? cover_large_url : nil,

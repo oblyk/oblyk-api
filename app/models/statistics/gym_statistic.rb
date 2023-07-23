@@ -128,6 +128,27 @@ module Statistics
       notes
     end
 
+    def like_figures
+      likes_count = 0
+      likes_max = nil
+      liked_routes = 0
+      route_count = gym_routes.count
+      gym_routes.each do |gym_route|
+        gym_route_likes = gym_route.likes_count.presence || 0
+        likes_count += gym_route_likes || 0
+        likes_max = gym_route_likes if likes_max.nil? || gym_route_likes > likes_max
+        liked_routes += 1 if gym_route_likes.positive?
+      end
+      {
+        likes_count: likes_count,
+        likes_max: likes_max,
+        liked_routes: liked_routes,
+        route_count: route_count,
+        liked_ratio: liked_routes.to_d / route_count.to_d,
+        average_like: liked_routes.to_d / likes_count.to_d
+      }
+    end
+
     def opening_frequencies
       self.routes ||= gym_routes
 

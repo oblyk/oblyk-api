@@ -55,7 +55,7 @@ module Api
       end
 
       def protected_by_owner
-        not_authorized if @current_user.id != @follow.user_id
+        forbidden if @current_user.id != @follow.user_id
       end
     end
   end

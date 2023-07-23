@@ -24,6 +24,10 @@ module Api
           render json: @stat.notes, status: :ok
         end
 
+        def like_figures
+          render json: @stat.like_figures, status: :ok
+        end
+
         def opening_frequencies
           render json: @stat.opening_frequencies, status: :ok
         end

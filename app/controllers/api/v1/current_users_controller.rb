@@ -93,6 +93,15 @@ module Api
         render json: subscribes.map(&:summary_to_json), status: :ok
       end
 
+      def likes
+        json_data = {}
+        likes = @user.likes
+                     .select(:likeable_type, :likeable_id)
+                     .group_by { |like| like[:likeable_type] }
+        likes.each { |k, v| json_data[k] = v.pluck(:likeable_id) }
+        render json: json_data.to_json, status: :ok
+      end
+
       def ascents_without_guides
         crag_ids = @user.ascended_crags.pluck(:id)
         library_guides = @user.subscribes.where(followable_type: 'GuideBookPaper').pluck(:followable_id)

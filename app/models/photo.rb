@@ -15,6 +15,7 @@ class Photo < ApplicationRecord
   has_many :crags
   has_many :crag_routes
   has_many :areas
+  has_many :likes, as: :likeable
 
   before_validation :init_posted_at
 
@@ -87,6 +88,7 @@ class Photo < ApplicationRecord
       copyright_nd: copyright_nd,
       photo_height: photo_height,
       photo_width: photo_width,
+      likes_count: likes_count,
       picture: large_url,
       thumbnail: thumbnail_url,
       illustrable: illustrable_json,

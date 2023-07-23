@@ -129,3 +129,8 @@ GET {{api_url}}/current_users/partner_figures.json
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json
+
+### GET Likes
+GET {{api_url}}/current_users/likes.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}

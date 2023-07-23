@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_11_111052) do
+ActiveRecord::Schema.define(version: 2023_07_18_173923) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -118,6 +118,7 @@ ActiveRecord::Schema.define(version: 2023_07_11_111052) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "photos_count"
+    t.integer "likes_count"
     t.index ["author_id"], name: "index_articles_on_author_id"
   end
 
@@ -211,6 +212,7 @@ ActiveRecord::Schema.define(version: 2023_07_11_111052) do
     t.string "commentable_type"
     t.bigint "commentable_id"
     t.bigint "user_id"
+    t.integer "likes_count"
     t.bigint "legacy_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -626,6 +628,7 @@ ActiveRecord::Schema.define(version: 2023_07_11_111052) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "points"
     t.integer "comments_count"
+    t.integer "likes_count"
     t.integer "videos_count"
     t.text "description"
     t.json "thumbnail_position"
@@ -733,6 +736,16 @@ ActiveRecord::Schema.define(version: 2023_07_11_111052) do
     t.datetime "block_expired_at"
     t.index ["block_expired_at"], name: "index_ip_black_lists_on_block_expired_at"
     t.index ["ip"], name: "index_ip_black_lists_on_ip"
+  end
+
+  create_table "likes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "likeable_type"
+    t.bigint "likeable_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["likeable_type", "likeable_id"], name: "index_likes_on_likeable_type_and_likeable_id"
+    t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
   create_table "links", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
@@ -856,6 +869,7 @@ ActiveRecord::Schema.define(version: 2023_07_11_111052) do
     t.bigint "user_id"
     t.string "illustrable_type"
     t.bigint "illustrable_id"
+    t.integer "likes_count"
     t.bigint "legacy_id"
     t.datetime "posted_at"
     t.datetime "created_at", precision: 6, null: false
@@ -1049,6 +1063,7 @@ ActiveRecord::Schema.define(version: 2023_07_11_111052) do
     t.bigint "user_id"
     t.string "viewable_type"
     t.bigint "viewable_id"
+    t.integer "likes_count"
     t.bigint "legacy_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -1069,4 +1084,5 @@ ActiveRecord::Schema.define(version: 2023_07_11_111052) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "likes", "users"
 end
