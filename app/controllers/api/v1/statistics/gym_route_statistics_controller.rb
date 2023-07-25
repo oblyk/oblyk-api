@@ -28,6 +28,17 @@ module Api
           render json: @stat.like_figures, status: :ok
         end
 
+        def difficulty_figures
+          render json: @stat.difficulty_appreciation, status: :ok
+        end
+
+        def appreciation_figures
+          render json: {
+            like: @stat.like_figures,
+            difficulty: @stat.difficulty_appreciation
+          }, status: :ok
+        end
+
         def opening_frequencies
           render json: @stat.opening_frequencies, status: :ok
         end

@@ -246,6 +246,8 @@ Rails.application.routes.draw do
             post :routes_by_levels, on: :collection
             post :notes, on: :collection
             post :like_figures, on: :collection
+            post :difficulty_figures, on: :collection
+            post :appreciation_figures, on: :collection
             post :opening_frequencies, on: :collection
           end
         end

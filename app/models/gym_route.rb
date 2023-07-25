@@ -131,8 +131,9 @@ class GymRoute < ApplicationRecord
 
   def update_form_ascents!
     ascent_count = 0
-    note_count = nil
-    sum_note = nil
+    hardness_count = nil
+    hardness_value = nil
+    hardness_votes = nil
 
     ascent_gym_routes.each do |ascent|
       if ascent.ascent_status != 'project'
@@ -140,20 +141,24 @@ class GymRoute < ApplicationRecord
         ascent_count += 1
       end
 
-      next unless ascent.note.present?
+      next if ascent.hardness_status.blank?
 
-      note_count ||= 0
-      sum_note ||= 0
-      note_votes ||= {}
-      note_votes[ascent.note] ||= { count: 0 }
-      note_count += 1
-      note_votes[ascent.note][:count] += 1
-      sum_note += ascent.note
+      hardness_count ||= 0
+      hardness_value ||= 0
+      hardness_votes ||= {}
+      hardness_votes[ascent.hardness_status] ||= { count: 0 }
+
+      hardness_count += 1
+      hardness_value += ascent.hardness_value
+      hardness_votes[ascent.hardness_status][:count] += 1
     end
 
-    self.note = note_count ? sum_note / note_count : nil
     self.note_count = note_count
     self.ascents_count = ascent_count
+    self.difficulty_appreciation = hardness_value ? hardness_value.to_d / hardness_count : nil
+    self.votes = {
+      difficulty_appreciations: hardness_votes
+    }
     save
   end
 
@@ -173,7 +178,7 @@ class GymRoute < ApplicationRecord
         hold_colors: hold_colors,
         tag_colors: tag_colors,
         sections: sections,
-        grade_value_appreciation: grade_value_appreciation,
+        difficulty_appreciation: difficulty_appreciation,
         note: note,
         note_count: note_count,
         ascents_count: ascents_count,
@@ -219,6 +224,7 @@ class GymRoute < ApplicationRecord
         gym_sector: gym_sector.summary_to_json,
         thumbnail_position: thumbnail_position,
         calculated_thumbnail_position: calculated_thumbnail_position,
+        votes: votes,
         history: {
           created_at: created_at,
           updated_at: updated_at

@@ -137,7 +137,7 @@ module Api
       def ascent_gym_route_params
         params.require(:ascent_gym_route).permit(
           :ascent_status,
-          :roping_status,
+          :hardness_status,
           :gym_route_id,
           :gym_id,
           :gym_grade_id,

@@ -149,6 +149,27 @@ module Statistics
       }
     end
 
+    def difficulty_appreciation
+      harness_status = {
+        easy_for_the_grade: 0,
+        this_grade_is_accurate: 0,
+        sandbagged: 0,
+        difficulty_average: 0
+      }
+      gym_routes.each do |gym_route|
+        next if gym_route.votes.blank? || gym_route.votes['difficulty_appreciations'].blank?
+
+        difficulty_appreciations = gym_route.votes['difficulty_appreciations']
+        harness_status[:easy_for_the_grade] += difficulty_appreciations['easy_for_the_grade'].try(:[], 'count') || 0
+        harness_status[:this_grade_is_accurate] += difficulty_appreciations['this_grade_is_accurate'].try(:[], 'count') || 0
+        harness_status[:sandbagged] += difficulty_appreciations['sandbagged'].try(:[], 'count') || 0
+      end
+      appreciation_count = harness_status[:easy_for_the_grade] + harness_status[:this_grade_is_accurate] + harness_status[:sandbagged]
+      difficulty_average = harness_status[:easy_for_the_grade] * -1 + harness_status[:sandbagged]
+      harness_status[:difficulty_average] = appreciation_count.positive? ? difficulty_average.to_d / appreciation_count.to_d : 0
+      harness_status
+    end
+
     def opening_frequencies
       self.routes ||= gym_routes
 
