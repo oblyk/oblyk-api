@@ -4,7 +4,7 @@ module Api
   module V1
     class CommentsController < ApiController
       before_action :protected_by_session, only: %i[create update destroy]
-      before_action :set_comment, only: %i[show update destroy]
+      before_action :set_comment, only: %i[show comments update destroy]
       before_action :protected_by_owner, only: %i[update destroy]
 
       def index
@@ -12,6 +12,15 @@ module Api
           commentable_type: params[:commentable_type],
           commentable_id: params[:commentable_id]
         )
+        render json: comments.map(&:summary_to_json), status: :ok
+      end
+
+      def comments
+        page = params.fetch(:page, 1)
+        comments = Comment.where(commentable_type: 'Comment', commentable_id: @comment.id)
+                          .order(created_at: :asc)
+                          .page(page)
+                          .per(5)
         render json: comments.map(&:summary_to_json), status: :ok
       end
 
@@ -55,6 +64,7 @@ module Api
         params.require(:comment).permit(
           :commentable_type,
           :commentable_id,
+          :reply_to_comment_id,
           :body
         )
       end

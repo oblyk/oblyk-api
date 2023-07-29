@@ -161,7 +161,9 @@ Rails.application.routes.draw do
         post :create_bulk, on: :collection
       end
 
-      resources :comments
+      resources :comments do
+        get :comments, on: :member
+      end
       resources :likes, only: %i[index create] do
         delete '/:likeable_type/:likeable_id', action: :destroy, on: :collection
       end

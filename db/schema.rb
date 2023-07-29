@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_23_172318) do
+ActiveRecord::Schema.define(version: 2023_07_26_191634) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -212,11 +212,14 @@ ActiveRecord::Schema.define(version: 2023_07_23_172318) do
     t.string "commentable_type"
     t.bigint "commentable_id"
     t.bigint "user_id"
+    t.bigint "reply_to_comment_id"
     t.integer "likes_count"
+    t.integer "comments_count"
     t.bigint "legacy_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id"
+    t.index ["reply_to_comment_id"], name: "index_comments_on_reply_to_comment_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
