@@ -118,7 +118,8 @@ module Api
           :climbing_type,
           :sectors_color,
           :gym_grade_id,
-          :gym_space_group_id
+          :gym_space_group_id,
+          :anchor
         )
       end
 

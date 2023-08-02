@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_26_191634) do
+ActiveRecord::Schema.define(version: 2023_08_01_165031) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -636,6 +636,7 @@ ActiveRecord::Schema.define(version: 2023_07_26_191634) do
     t.json "thumbnail_position"
     t.float "difficulty_appreciation"
     t.json "votes"
+    t.integer "anchor_number"
     t.index ["gym_grade_line_id"], name: "index_gym_routes_on_gym_grade_line_id"
     t.index ["gym_route_cover_id"], name: "index_gym_routes_on_gym_route_cover_id"
     t.index ["gym_sector_id"], name: "index_gym_routes_on_gym_sector_id"
@@ -688,6 +689,7 @@ ActiveRecord::Schema.define(version: 2023_07_26_191634) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "slug_name"
     t.bigint "gym_space_group_id"
+    t.boolean "anchor"
     t.index ["gym_grade_id"], name: "index_gym_spaces_on_gym_grade_id"
     t.index ["gym_id"], name: "index_gym_spaces_on_gym_id"
     t.index ["gym_space_group_id"], name: "index_gym_spaces_on_gym_space_group_id"

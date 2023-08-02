@@ -310,6 +310,7 @@ module Api
           :points,
           :opened_at,
           :gym_sector_id,
+          :anchor_number,
           gym_opener_ids: [],
           sections: [:climbing_type, :description, :grade, :height, { styles: [] }],
           hold_colors: %i[],

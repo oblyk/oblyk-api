@@ -24,11 +24,13 @@ class GymRoute < ApplicationRecord
   validates :gym_grade_line, presence: true, if: proc { |obj| obj.gym_sector.gym_grade.need_grade_line? }
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }
   validates :height, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
+  validates :anchor_number, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
   validate :validate_sections
 
   validates :thumbnail, blob: { content_type: :image }, allow_nil: true
 
   before_validation :format_route_section
+  before_validation :normalize_blank_values
   before_save :historize_grade_gap
   before_save :historize_sections_count
 
@@ -193,6 +195,7 @@ class GymRoute < ApplicationRecord
         thumbnail: thumbnail.attached? ? thumbnail_url : nil,
         gym_route_cover_id: gym_route_cover_id,
         gym_sector_name: gym_sector.name,
+        anchor_number: anchor_number,
         grade_gap: {
           max_grade_value: max_grade_value,
           min_grade_value: min_grade_value,
@@ -238,6 +241,10 @@ class GymRoute < ApplicationRecord
   end
 
   private
+
+  def normalize_blank_values
+    self.name = nil if name.blank?
+  end
 
   def format_route_section
     new_sections = []

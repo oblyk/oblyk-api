@@ -68,6 +68,7 @@ class GymSpace < ApplicationRecord
         plan: plan.attached? ? plan_large_url : nil,
         plan_thumbnail_url: plan.attached? ? plan_thumbnail_url : nil,
         gym_space_group_id: gym_space_group_id,
+        anchor: anchor,
         gym: {
           id: gym.id,
           name: gym.name,

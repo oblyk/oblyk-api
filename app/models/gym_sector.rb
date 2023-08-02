@@ -13,6 +13,8 @@ class GymSector < ApplicationRecord
   validates :name, :height, presence: true
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }
 
+  delegate :anchor, to: :gym_space
+
   after_save :remove_routes_cache
 
   default_scope { order(:order) }
@@ -31,6 +33,7 @@ class GymSector < ApplicationRecord
         gym_space_id: gym_space_id,
         gym_grade_id: gym_grade_id,
         can_be_more_than_one_pitch: can_be_more_than_one_pitch,
+        anchor: anchor,
         gym: {
           id: gym.id,
           slug_name: gym.slug_name
