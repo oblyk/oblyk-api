@@ -11,6 +11,8 @@ class Ascent < ApplicationRecord
 
   attr_accessor :selected_sections
 
+  before_validation :normalize_blank_values
+
   validates :released_at, presence: true
   validates :hardness_status, inclusion: { in: Hardness::LIST }, allow_blank: true
   validates :ascent_status, inclusion: { in: AscentStatus::LIST }
@@ -33,6 +35,11 @@ class Ascent < ApplicationRecord
   end
 
   private
+
+  def normalize_blank_values
+    self.comment = comment.strip
+    self.comment = nil if comment.blank?
+  end
 
   def attache_to_climbing_session
     climbing_session_found = ClimbingSession.find_or_initialize_by session_date: released_at, user_id: user_id

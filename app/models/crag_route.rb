@@ -94,6 +94,7 @@ class CragRoute < ApplicationRecord
     hardness_value = nil
     hardness_votes = nil
     note_votes = nil
+    ascents_comment_count = 0
 
     ascent_crag_routes.each do |ascent|
       if ascent.note.present?
@@ -121,6 +122,8 @@ class CragRoute < ApplicationRecord
         ascent_count ||= 0
         ascent_count += 1
       end
+
+      ascents_comment_count += 1 if ascent.comment.present? && !ascent.private_comment
     end
 
     self.note = note_count ? sum_note / note_count : nil
@@ -131,6 +134,7 @@ class CragRoute < ApplicationRecord
       difficulty_appreciations: hardness_votes,
       notes: note_votes
     }
+    self.comments_count = comments.count + ascents_comment_count
     save
   end
 

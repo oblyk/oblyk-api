@@ -10,6 +10,8 @@ class Comment < ApplicationRecord
   has_many :likes, as: :likeable
   has_many :reply_to_comments, class_name: 'Comment'
 
+  before_validation :normalize_blank_values
+
   validates :body, presence: true
   validates :commentable_type, inclusion: { in: %w[Crag CragSector CragRoute GuideBookPaper Area Gym GymRoute Article Comment].freeze }
 
@@ -42,6 +44,11 @@ class Comment < ApplicationRecord
   end
 
   private
+
+  def normalize_blank_values
+    self.body = body.strip
+    self.body = nil if body.blank?
+  end
 
   def create_notification!
     return unless commentable_type == 'Comment'
