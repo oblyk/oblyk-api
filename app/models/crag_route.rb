@@ -139,7 +139,18 @@ class CragRoute < ApplicationRecord
   end
 
   def public_ascents
-    ascent_crag_routes.where.not(private_comment: true)
+    ascents = []
+    last_ascents_by_user = {}
+    ascent_crag_routes.where.not(private_comment: true).where('ascents.comment IS NOT NULL OR ascents.note IS NOT NULL').each do |ascent|
+      if ascent.comment.present?
+        ascents << ascent
+      else
+        previous_ascent = last_ascents_by_user[ascent.user_id]
+        last_ascents_by_user[ascent.user_id] = ascent if previous_ascent.blank? || ascent.released_at > previous_ascent.released_at
+      end
+    end
+    ascents += last_ascents_by_user.map(&:last)
+    ascents.sort_by!(&:released_at)
   end
 
   def latitude
