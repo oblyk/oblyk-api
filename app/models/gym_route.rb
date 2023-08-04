@@ -76,7 +76,7 @@ class GymRoute < ApplicationRecord
   def tags
     tags = []
     sections.each do |section|
-      tags += section['tags']
+      tags += section.try(:[], 'tags') || []
     end
     tags
   end
@@ -84,7 +84,7 @@ class GymRoute < ApplicationRecord
   def styles
     styles = []
     sections.each do |section|
-      styles += section['styles']
+      styles += section.try(:[], 'styles') || []
     end
     styles
   end
