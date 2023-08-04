@@ -37,7 +37,7 @@ class Ascent < ApplicationRecord
   private
 
   def normalize_blank_values
-    self.comment = comment.strip
+    self.comment = comment&.strip
     self.comment = nil if comment.blank?
   end
 
