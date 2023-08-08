@@ -189,6 +189,14 @@ module Api
         @guide_book_paper = GuideBookPaper.new(guide_book_params)
         @guide_book_paper.user = @current_user
         if @guide_book_paper.save
+          crag_id = params[:guide_book_paper].fetch(:add_crag_id, nil)
+          if crag_id
+            GuideBookPaperCrag.create(
+              crag_id: crag_id,
+              guide_book_paper_id: @guide_book_paper.id,
+              user: @current_user
+            )
+          end
           render json: @guide_book_paper.detail_to_json, status: :ok
         else
           render json: { error: @guide_book_paper.errors }, status: :unprocessable_entity
