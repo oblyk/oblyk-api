@@ -166,8 +166,55 @@ module Api
         minimalistic = params.fetch(:minimalistic, false) != false
         last_updated_crag = Crag.order(updated_at: :desc).first
 
-        json_features = Rails.cache.fetch("#{last_updated_crag.cache_key_with_version}/#{'minimalistic_' if minimalistic}crags_geo_json", expires_in: 1.day) do
-          geo_json_features(minimalistic)
+        climbing_style = params.fetch(:climbing_style, nil)
+        altitude = params.fetch(:altitude, nil)
+        altitude_switch = params.fetch(:altitudeSwitch, nil)
+        grade_range = params.fetch(:gradeRange, nil)
+        orientations = params.fetch(:orientations, nil)
+        have_filter = climbing_style.present? || (altitude.present? && altitude_switch.present?) || grade_range.present? || orientations.present?
+
+        json_features = []
+        if !have_filter
+          json_features = Rails.cache.fetch("#{last_updated_crag.cache_key_with_version}/#{'minimalistic_' if minimalistic}crags_geo_json", expires_in: 1.day) do
+            geo_json_features(minimalistic)
+          end
+        else
+          crags = Crag.all
+
+          # Climbing Type filter
+          climbing_style = %w[sport_climbing bouldering multi_pitch trad_climbing aid_climbing deep_water via_ferrata].include?(climbing_style) ? climbing_style : nil
+          crags = crags.where(climbing_style => true) if climbing_style.present?
+
+          if altitude.present? && altitude_switch.present?
+            crags = crags.where('crags.elevation >= ?', altitude.to_i) if altitude_switch == 'above'
+            crags = crags.where('crags.elevation <= ?', altitude.to_i) if altitude_switch == 'below'
+          end
+
+          if grade_range.present?
+            min = grade_range[0].to_i
+            max = grade_range[1].to_i
+            if min.positive? && max == 52 # starting from
+              crags = crags.where('`crags`.`id` IN (SELECT DISTINCT c.id FROM crags c INNER JOIN crag_routes cr ON c.id = cr.crag_id WHERE cr.min_grade_value >= :min)', min: min + 1)
+            elsif min.zero? && max < 52
+              crags = crags.where('`crags`.`id` IN (SELECT DISTINCT c.id FROM crags c INNER JOIN crag_routes cr ON c.id = cr.crag_id WHERE cr.min_grade_value <= :max OR cr.max_grade_value <= :max + 1)', max: max + 1)
+            elsif min.positive? && max < 52
+              crags = crags.where('`crags`.`id` IN (SELECT DISTINCT c.id FROM crags c INNER JOIN crag_routes cr ON c.id = cr.crag_id WHERE cr.min_grade_value BETWEEN :min - 3 AND :min + 3)', min: min + 1)
+              crags = crags.where('`crags`.`id` IN (SELECT DISTINCT c.id FROM crags c INNER JOIN crag_routes cr ON c.id = cr.crag_id WHERE cr.min_grade_value BETWEEN :max - 2 AND :max + 2)', max: max + 1)
+            end
+          end
+
+          if orientations.present?
+            orientations_filter = []
+            orientations_filter << 'north OR north_east OR north_west' if orientations.include?('north')
+            orientations_filter << 'south OR south_east OR south_west' if orientations.include?('south')
+            orientations_filter << 'east OR south_east OR south_east' if orientations.include?('east')
+            orientations_filter << 'west OR north_west OR south_west' if orientations.include?('west')
+            crags = crags.where(orientations_filter.join(' OR '))
+          end
+          # Create geo json
+          crags.each do |crag|
+            json_features << crag.to_geo_json(minimalistic: true)
+          end
         end
 
         json = {
