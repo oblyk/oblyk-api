@@ -49,6 +49,7 @@ class Gym < ApplicationRecord
   has_many :gym_routes, through: :gym_sectors
   has_many :gym_openers
   has_many :gym_climbing_styles
+  has_many :contests
 
   validates :logo, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true

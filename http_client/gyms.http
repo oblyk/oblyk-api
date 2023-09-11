@@ -123,3 +123,9 @@ GET {{api_url}}/gyms/212/tree_structures.json
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
+
+### GET routes tree view
+GET {{api_url}}/gyms/229/tree_routes.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json

@@ -6,9 +6,9 @@ module Api
       include GymRolesVerification
 
       before_action :protected_by_super_admin, only: %i[destroy]
-      before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes tree_structures]
-      before_action :set_gym, only: %i[show versions ascent_scores update destroy add_banner add_logo routes_count routes tree_structures]
-      before_action :protected_by_administrator, only: %i[update add_banner add_logo routes_count routes tree_structures]
+      before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes tree_structures tree_routes ]
+      before_action :set_gym, only: %i[show versions ascent_scores update destroy add_banner add_logo routes_count routes tree_structures tree_routes]
+      before_action :protected_by_administrator, only: %i[update add_banner add_logo routes_count routes tree_structures tree_routes]
       before_action :user_can_manage_gym, except: %i[index search geo_json show create gyms_around versions ascent_scores routes_count routes]
 
       def index
@@ -140,6 +140,38 @@ module Api
                        @gym.gym_routes.mounted
                      end
         render json: gym_routes.map(&:summary_to_json), status: :ok
+      end
+
+      def tree_routes
+        tree = []
+        @gym.gym_spaces.includes(:gym_sectors).each do |gym_space|
+          space = {
+            id: gym_space.id,
+            name: gym_space.name,
+            type: 'GymSpace',
+            children: []
+          }
+          gym_space.gym_sectors.each do |gym_sector|
+            sector = {
+              id: gym_sector.id,
+              name: gym_sector.name,
+              type: 'GymSector',
+              children: []
+            }
+            gym_sector.gym_routes.mounted.each do |gym_route|
+              route = {
+                id: gym_route.id,
+                name: "#{gym_route.grade_to_s} #{gym_route.name}",
+                route: gym_route.tree_summary,
+                type: 'GymRoute'
+              }
+              sector[:children] << route
+            end
+            space[:children] << sector
+          end
+          tree << space
+        end
+        render json: tree, status: :ok
       end
 
       def tree_structures

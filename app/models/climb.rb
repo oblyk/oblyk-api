@@ -9,6 +9,7 @@ class Climb
   DEEP_WATER = 'deep_water'
   VIA_FERRATA = 'via_ferrata'
   PAN = 'pan'
+  SPEED_CLIMBING = 'speed_climbing'
 
   CRAG_LIST = [
     SPORT_CLIMBING,
@@ -35,6 +36,7 @@ class Climb
     DEEP_WATER => '#86ccdd',
     VIA_FERRATA => '#3cc770',
     PAN => '#ff5656',
+    SPEED_CLIMBING => '#d84315'
   }.freeze
 
   def self.single_pitch?(climbing_type)

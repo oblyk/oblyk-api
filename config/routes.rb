@@ -191,6 +191,9 @@ Rails.application.routes.draw do
       resources :tick_lists, only: %i[index create] do
         delete :destroy, on: :collection
       end
+      resources :contests, only: %i[] do
+        get :opens, on: :collection
+      end
       resources :gyms do
         get :versions, on: :member
         get :search, on: :collection
@@ -201,6 +204,7 @@ Rails.application.routes.draw do
         get :routes_count, on: :member
         get :routes, on: :member
         get :tree_structures, on: :member
+        get :tree_routes, on: :member
         get :ascent_scores, on: :member
         resources :color_systems, only: %i[index create show]
         resources :gym_administrators
@@ -251,6 +255,32 @@ Rails.application.routes.draw do
             post :difficulty_figures, on: :collection
             post :appreciation_figures, on: :collection
             post :opening_frequencies, on: :collection
+          end
+        end
+        resources :contests do
+          get :time_line, on: :member
+          get :results, on: :member
+          put :archived, on: :member
+          put :unarchived, on: :member
+          post :add_banner, on: :member
+          resources :contest_categories
+          resources :contest_waves
+          resources :contest_participants do
+            get :export, on: :collection
+            get :participant, on: :member
+            post :subscribe, on: :collection
+            resources :contest_participant_ascents
+          end
+          resources :contest_stages do
+            resources :contest_stage_steps do
+              resources :contest_route_groups
+            end
+          end
+          resources :contest_routes do
+            put :linked, on: :member
+            put :unlinked, on: :member
+            put :disable, on: :member
+            put :enable, on: :member
           end
         end
       end

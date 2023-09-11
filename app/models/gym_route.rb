@@ -15,6 +15,7 @@ class GymRoute < ApplicationRecord
   has_many :gym_route_openers
   has_many :gym_openers, through: :gym_route_openers
   has_many :likes, as: :likeable
+  has_many :contest_routes
 
   delegate :feed_parent_id, to: :gym
   delegate :feed_parent_type, to: :gym
@@ -162,6 +163,32 @@ class GymRoute < ApplicationRecord
       difficulty_appreciations: hardness_votes
     }
     save
+  end
+
+  def tree_summary
+    Rails.cache.fetch("#{cache_key_with_version}/tree_summary_gym_route", expires_in: 28.days) do
+      {
+        id: id,
+        name: name,
+        hold_colors: hold_colors,
+        tag_colors: tag_colors,
+        sections: sections,
+        sections_count: sections_count,
+        points: points,
+        points_to_s: points_to_s,
+        grade_to_s: grade_to_s,
+        thumbnail: thumbnail.attached? ? thumbnail_url : nil,
+        anchor_number: anchor_number,
+        gym_id: gym.id,
+        gym_space_id: gym_space.id,
+        grade_gap: {
+          max_grade_value: max_grade_value,
+          min_grade_value: min_grade_value,
+          max_grade_text: max_grade_text,
+          min_grade_text: min_grade_text
+        }
+      }
+    end
   end
 
   def summary_to_json
