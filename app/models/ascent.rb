@@ -17,9 +17,8 @@ class Ascent < ApplicationRecord
   validates :hardness_status, inclusion: { in: Hardness::LIST }, allow_blank: true
   validates :ascent_status, inclusion: { in: AscentStatus::LIST }
 
-  scope :made, -> { where.not(ascent_status: :project) }
+  scope :made, -> { where.not(ascent_status: :project).where(roping_status: :lead_climb) }
   scope :project, -> { where(ascent_status: :project) }
-  scope :lead, -> { where(roping_status: :lead_climb) }
 
   after_save :attache_to_climbing_session
   after_destroy :purge_climbing_session

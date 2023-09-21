@@ -47,3 +47,4 @@
 config/deploy/staging.rb
 config/deploy/production.rb
 config/gsc.keyfile.json
+/doc/
