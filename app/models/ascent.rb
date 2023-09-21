@@ -19,6 +19,7 @@ class Ascent < ApplicationRecord
 
   scope :made, -> { where.not(ascent_status: :project) }
   scope :project, -> { where(ascent_status: :project) }
+  scope :lead, -> { where(roping_status: :lead_climb) }
 
   after_save :attache_to_climbing_session
   after_destroy :purge_climbing_session
