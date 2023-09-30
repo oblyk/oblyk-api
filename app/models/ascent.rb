@@ -18,7 +18,7 @@ class Ascent < ApplicationRecord
   validates :ascent_status, inclusion: { in: AscentStatus::LIST }
 
   scope :made, -> { where.not(ascent_status: :project) }
-  scope :lead, -> { where(roping_status: :lead_climb) }
+  scope :lead, -> { where(roping_status: [:lead_climb, :multi_pitch_leader, :multi_pitch_alternate_lead]) }
   scope :project, -> { where(ascent_status: :project) }
 
   after_save :attache_to_climbing_session
