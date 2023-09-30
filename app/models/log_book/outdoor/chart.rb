@@ -77,7 +77,7 @@ module LogBook
         ascent_crag_routes.each do |ascent|
           next if ascent.min_grade_value.blank? || ascent.min_grade_value.zero?
 
-          grade_value = ascent.min_grade_value
+          grade_value = ascent.sections.map { |section| section['grade_value'] }.max
           grade_value -= 1 if grade_value.even?
 
           grades[grade_value][:count] += 1
