@@ -8,7 +8,8 @@ module Api
         before_action :set_user
 
         def figures
-          render json: LogBook::Outdoor::Figure.new(@user).figures, status: :ok
+          only_lead_climbs = params.fetch(:only_lead_climbs)
+          render json: LogBook::Outdoor::Figure.new(@user).figures(only_lead_climbs), status: :ok
         end
 
         def climb_types_chart
@@ -16,7 +17,8 @@ module Api
         end
 
         def grades_chart
-          render json: LogBook::Outdoor::Chart.new(@user).grade, status: :ok
+          only_lead_climbs = params.fetch(:only_lead_climbs)
+          render json: LogBook::Outdoor::Chart.new(@user).grade(only_lead_climbs), status: :ok
         end
 
         def years_chart

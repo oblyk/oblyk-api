@@ -201,7 +201,13 @@ module Api
       end
 
       def ascended_crag_routes
-        crag_route_ids = @user.ascent_crag_routes.made.pluck(:crag_route_id)
+        only_lead_climbs = params.fetch(:only_lead_climbs)
+        if only_lead_climbs == "true"
+          crag_route_ids = @user.ascent_crag_routes.made.lead.pluck(:crag_route_id)
+        else
+          crag_route_ids = @user.ascent_crag_routes.made.pluck(:crag_route_id)
+        end
+
         page = params.fetch(:page, 1)
 
         climbing_type_filter = params.fetch(:climbing_type, 'all')

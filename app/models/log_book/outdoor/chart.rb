@@ -56,7 +56,7 @@ module LogBook
         }
       end
 
-      def grade
+      def grade(only_lead_climbs=false)
         grades = {}
         54.times do |grade_value|
           next unless grade_value.even?
@@ -64,7 +64,12 @@ module LogBook
           grades[grade_value + 1] = { count: 0 }
         end
 
-        @user.ascent_crag_routes.made.each do |ascent|
+        if only_lead_climbs == "true"
+          crag_routes = @user.ascent_crag_routes.made.lead
+        else
+          crag_routes = @user.ascent_crag_routes.made
+        end
+        crag_routes.each do |ascent|
           next if ascent.min_grade_value.blank? || ascent.min_grade_value.zero?
 
           grade_value = ascent.min_grade_value
