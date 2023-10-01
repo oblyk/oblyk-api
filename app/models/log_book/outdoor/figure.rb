@@ -35,7 +35,16 @@ module LogBook
       end
 
       def sum_meters(only_lead_climbs=false)
-        uniq_ascent_crag_routes(only_lead_climbs).map(&:height).compact.sum
+        height_climbed = 0
+        uniq_ascent_crag_routes(only_lead_climbs).each do |ascent|
+          sections_heights = ascent.sections.map {|section| section['height']}.compact
+          if sections_heights.size > 0   # si les hauteurs des sections d'une GV ne sont pas renseignées
+            height_climbed += sections_heights.sum
+          else
+            height_climbed += ascent.height # on prend la hauteur totale de la GV
+          end
+        end
+        height_climbed
       end
 
       def max_grad_value(only_lead_climbs=false)
