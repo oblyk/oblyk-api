@@ -13,7 +13,7 @@ module LogBook
         {
           countries: countries_count,
           regions: regions_count,
-          crags: crags_count(only_lead_climbs),
+          crags: crags_count,
           ascents: ascents_count(only_lead_climbs),
           meters: sum_meters(only_lead_climbs),
           max_grade_value: max_grad_value(only_lead_climbs)
@@ -22,36 +22,36 @@ module LogBook
 
       private
 
-      def ascent_crag_routes(only_lead_climbs=false)
-        if only_lead_climbs =="true"
-          @user.ascent_crag_routes.made.lead
+      def uniq_ascent_crag_routes(only_lead_climbs=false)
+        if only_lead_climbs == "true"
+          @user.ascent_crag_routes.made.lead.uniq(&:crag_route_id)
         else
-          @user.ascent_crag_routes.made
+          @user.ascent_crag_routes.made.uniq(&:crag_route_id)
         end
       end
 
       def ascents_count(only_lead_climbs=false)
-        ascent_crag_routes(only_lead_climbs).count
+        uniq_ascent_crag_routes(only_lead_climbs).count
       end
 
       def sum_meters(only_lead_climbs=false)
-        ascent_crag_routes(only_lead_climbs).sum(:height)
+        uniq_ascent_crag_routes(only_lead_climbs).map(&:height).compact.sum
       end
 
       def max_grad_value(only_lead_climbs=false)
-        ascent_crag_routes(only_lead_climbs).maximum(:max_grade_value)
+        uniq_ascent_crag_routes(only_lead_climbs).map(&:max_grade_value).max
       end
 
       def countries_count
-        @user.ascended_crags.distinct.count(:code_country)
+        @user.ascended_crags.distinct.count(:country)
       end
 
       def regions_count
         @user.ascended_crags.distinct.count(:region)
       end
 
-      def crags_count(only_lead_climbs=false)
-        ascent_crag_routes(only_lead_climbs).distinct.count
+      def crags_count
+        @user.ascended_crags.distinct.count(:name)
       end
     end
   end
