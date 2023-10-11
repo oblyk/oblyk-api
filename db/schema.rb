@@ -745,6 +745,18 @@ ActiveRecord::Schema.define(version: 2023_08_04_105457) do
     t.index ["user_id"], name: "index_gym_openers_on_user_id"
   end
 
+  create_table "gym_options", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.bigint "gym_id"
+    t.string "option_type"
+    t.date "start_date"
+    t.date "end_date"
+    t.boolean "unlimited_unit"
+    t.integer "remaining_unit"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gym_id"], name: "index_gym_options_on_gym_id"
+  end
+
   create_table "gym_route_covers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -1266,5 +1278,6 @@ ActiveRecord::Schema.define(version: 2023_08_04_105457) do
   add_foreign_key "contest_time_blocks", "contest_waves"
   add_foreign_key "contest_waves", "contests"
   add_foreign_key "contests", "gyms"
+  add_foreign_key "gym_options", "gyms"
   add_foreign_key "likes", "users"
 end

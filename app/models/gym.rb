@@ -50,6 +50,7 @@ class Gym < ApplicationRecord
   has_many :gym_openers
   has_many :gym_climbing_styles
   has_many :contests
+  has_many :gym_options
 
   validates :logo, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true
@@ -159,6 +160,7 @@ class Gym < ApplicationRecord
         fun_climbing: fun_climbing,
         training_space: training_space,
         administered: administered?,
+        gym_options: gym_options.map(&:summary_to_json),
         banner: banner.attached? ? banner_large_url : nil,
         banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil,
         banner_cropped_url: banner ? banner_cropped_medium_url : nil,
@@ -185,6 +187,10 @@ class Gym < ApplicationRecord
         }
       }
     )
+  end
+
+  def delete_summary_cache
+    Rails.cache.delete("#{cache_key_with_version}/summary_gym")
   end
 
   private

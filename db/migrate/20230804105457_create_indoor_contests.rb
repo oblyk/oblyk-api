@@ -1,5 +1,15 @@
 class CreateIndoorContests < ActiveRecord::Migration[6.0]
   def change
+    create_table :gym_options do |t|
+      t.references :gym, foreign_key: true
+      t.string :option_type
+      t.date :start_date
+      t.date :end_date
+      t.boolean :unlimited_unit
+      t.integer :remaining_unit
+      t.timestamps
+    end
+
     # Global contest parameters
     create_table :contests do |t|
       t.references :gym, foreign_key: true
