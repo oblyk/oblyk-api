@@ -12,6 +12,7 @@ class ContestRouteGroup < ApplicationRecord
   has_many :contest_waves, through: :contest_time_blocks
 
   before_validation :normalize_attributes
+  after_validation :validate_categories
 
   validates :genre_type, inclusion: { in: %w[unisex male female] }
   validates :contest_categories, length: { minimum: 1, message: 'you_must_choose_one' }
@@ -71,5 +72,13 @@ class ContestRouteGroup < ApplicationRecord
 
     self.start_date = contest.start_date
     self.end_date = contest.end_date
+  end
+
+  def validate_categories
+    contest_categories.each do |category|
+      contest_stage_step.contest_route_groups.where.not(id: id).each do |contest_route_group|
+        errors.add(:base, 'category_is_taken_in_this_step') if ContestRouteGroupCategory.exists?(contest_category_id: category.id, contest_route_group_id: contest_route_group.id)
+      end
+    end
   end
 end
