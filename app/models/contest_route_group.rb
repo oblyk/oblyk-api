@@ -14,6 +14,7 @@ class ContestRouteGroup < ApplicationRecord
   before_validation :normalize_attributes
 
   validates :genre_type, inclusion: { in: %w[unisex male female] }
+  validates :contest_categories, length: { minimum: 1, message: 'you_must_choose_one' }
 
   accepts_nested_attributes_for :contest_time_blocks, reject_if: proc { |attrs| attrs.all? { |_k, v| v.blank? } }
 
