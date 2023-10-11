@@ -44,7 +44,6 @@ class ContestParticipantAscent < ApplicationRecord
   def normalize_attributes
     self.zone_1_attempt = nil if zone_1_attempt.blank?
     self.zone_2_attempt = nil if zone_2_attempt.blank?
-    self.zone_3_attempt = nil if zone_3_attempt.blank?
     self.top_attempt = nil if top_attempt.blank?
     self.hold_number = nil if hold_number.blank?
     self.hold_number_plus = nil if hold_number_plus.blank?

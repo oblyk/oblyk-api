@@ -16,7 +16,6 @@ module Api
         contest_ascent.realised = contest_participant_params[:realised]
         contest_ascent.zone_1_attempt = contest_participant_params[:zone_1_attempt]
         contest_ascent.zone_2_attempt = contest_participant_params[:zone_2_attempt]
-        contest_ascent.zone_3_attempt = contest_participant_params[:zone_3_attempt]
         contest_ascent.top_attempt = contest_participant_params[:top_attempt]
         contest_ascent.hold_number = contest_participant_params[:hold_number]
         contest_ascent.hold_number_plus = contest_participant_params[:hold_number_plus]
@@ -48,7 +47,6 @@ module Api
           :realised,
           :zone_1_attempt,
           :zone_2_attempt,
-          :zone_3_attempt,
           :top_attempt,
           :hold_number,
           :hold_number_plus
