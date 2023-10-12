@@ -181,6 +181,7 @@ class Gym < ApplicationRecord
         sorts_available: sorts_available,
         gym_climbing_styles: gym_climbing_styles.activated.map { |style| { style: style.style, climbing_type: style.climbing_type, color: style.color } },
         gym_spaces_with_anchor: gym_spaces_with_anchor?,
+        upcoming_contests: contests.upcoming.map(&:summary_to_json),
         history: {
           created_at: created_at,
           updated_at: updated_at
