@@ -77,7 +77,11 @@ class ContestRouteGroup < ApplicationRecord
   def validate_categories
     contest_categories.each do |category|
       contest_stage_step.contest_route_groups.where.not(id: id).each do |contest_route_group|
-        errors.add(:base, 'category_is_taken_in_this_step') if ContestRouteGroupCategory.exists?(contest_category_id: category.id, contest_route_group_id: contest_route_group.id)
+        route_group_category = ContestRouteGroupCategory.find_by contest_category_id: category.id, contest_route_group_id: contest_route_group.id
+
+        next if route_group_category.blank? || route_group_category.contest_route_group.genre_type != genre_type
+
+        errors.add(:base, 'category_is_taken_in_this_step')
       end
     end
   end

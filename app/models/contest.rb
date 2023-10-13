@@ -119,9 +119,10 @@ class Contest < ApplicationRecord
             scores = rankers["#{cat_key}-#{step.id}"].participant_scores(participant.id)
             results[cat_key][:participants][participant_key][:stages][stage_key][:steps] << {
               step_id: step.id,
+              step_order: step.step_order,
               name: step.name,
               participant_for_next_step: step.default_participants_for_next_step,
-              subscribe: participant_by_steps[step.id].include?(participant.id),
+              subscribe: participant_by_steps[step.id]&.include?(participant.id),
               rank: nil,
               index: nil,
               points: scores[:value],
@@ -267,6 +268,30 @@ class Contest < ApplicationRecord
 
   def time_line
     times = {}
+    # Open subscription event
+    times[subscription_start_date.to_s] = {
+      start_date: subscription_start_date,
+      events: [
+        {
+          event_type: 'SubscriptionOpen',
+          start_date: subscription_start_date,
+          end_date: subscription_end_date
+        }
+      ]
+    }
+
+    # Open contest
+    times[start_date.to_s] = {
+      start_date: start_date,
+      events: [
+        {
+          event_type: 'ContestStart',
+          start_date: start_date
+        }
+      ]
+    }
+
+    # Steps
     groups = contest_route_groups.includes(
       :contest_time_blocks,
       contest_stage_step: :contest_stage,
@@ -283,7 +308,8 @@ class Contest < ApplicationRecord
       }
       stage_step = {
         id: contest_stage_step.id,
-        name: contest_stage_step.name
+        name: contest_stage_step.name,
+        step_order: contest_stage_step.step_order
       }
       categories = contest_categories.map do |category|
         {
@@ -308,6 +334,7 @@ class Contest < ApplicationRecord
             events: []
           }
           times[time_key][:events] << {
+            event_type: 'ContestStep',
             end_date: contest_time_block.end_date,
             end_time: contest_time_block.end_time,
             stage: stage,
@@ -325,6 +352,7 @@ class Contest < ApplicationRecord
           events: []
         }
         times[time_key][:events] << {
+          event_type: 'ContestStep',
           end_date: route_group.end_date,
           end_time: route_group.end_time,
           stage: stage,
@@ -335,6 +363,17 @@ class Contest < ApplicationRecord
         }
       end
     end
+
+    # Contest end
+    times["#{end_date}-23:59"] = {
+      start_date: end_date,
+      events: [
+        {
+          event_type: 'ContestEnd',
+          end_date: end_date
+        }
+      ]
+    }
     times = times.sort
     times.map(&:last)
   end
