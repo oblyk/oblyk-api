@@ -34,6 +34,7 @@ class GymRoute < ApplicationRecord
   before_validation :normalize_blank_values
   before_save :historize_grade_gap
   before_save :historize_sections_count
+  after_update :delete_contest_route_cache
 
   scope :dismounted, -> { where.not(dismounted_at: nil) }
   scope :mounted, -> { where(dismounted_at: nil) }
@@ -361,5 +362,9 @@ class GymRoute < ApplicationRecord
       delta_y: (tp[:img_h].to_d / 2 - tp[:thb_y].to_d) / tp[:img_h].to_d * 100,
       delta_x: (tp[:img_w].to_d / 2 - tp[:thb_x].to_d) / tp[:img_w].to_d * 100
     }
+  end
+
+  def delete_contest_route_cache
+    contest_routes.each(&:delete_summary_cache)
   end
 end

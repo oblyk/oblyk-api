@@ -8,8 +8,8 @@ module Api
       before_action :protected_by_session, except: %i[index show]
       before_action :set_gym
       before_action :set_contest
-      before_action :set_contest_route, only: %i[show update destroy disable enable linked unlinked]
-      before_action :protected_by_administrator, only: %i[create update destroy disable enable linked unlinked]
+      before_action :set_contest_route, only: %i[show update destroy disable enable add_picture linked unlinked]
+      before_action :protected_by_administrator, only: %i[create update destroy disable enable add_picture linked unlinked]
       before_action :user_can_manage_contest, except: %i[index show]
 
       def index
@@ -62,6 +62,11 @@ module Api
         head :no_content
       end
 
+      def add_picture
+        @contest_route.update picture_params
+        head :no_content
+      end
+
       def destroy
         if @contest_route.contest_participant_ascents.count.positive?
           render json: { error: { base: ['La ligne a des réalisations, elle ne peut pas être supprimée'] } }, status: :unprocessable_entity
@@ -97,12 +102,6 @@ module Api
         not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).count.zero?
       end
 
-      def contest_mass_route_params
-        params.require(:contest_route).permit(
-          :number_to_create
-        )
-      end
-
       def contest_route_params
         params.require(:contest_route).permit(
           :number
@@ -112,6 +111,12 @@ module Api
       def contest_route_link_params
         params.require(:contest_route).permit(
           :gym_route_id
+        )
+      end
+
+      def picture_params
+        params.require(:contest_route).permit(
+          :picture
         )
       end
 

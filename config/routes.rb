@@ -284,6 +284,7 @@ Rails.application.routes.draw do
             put :unlinked, on: :member
             put :disable, on: :member
             put :enable, on: :member
+            post :add_picture, on: :member
           end
         end
       end
