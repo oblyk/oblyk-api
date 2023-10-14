@@ -8,8 +8,8 @@ module Api
       before_action :protected_by_session, except: %i[index show]
       before_action :set_gym
       before_action :set_contest
-      before_action :set_contest_route, only: %i[show update destroy disable enable add_picture linked unlinked]
-      before_action :protected_by_administrator, only: %i[create update destroy disable enable add_picture linked unlinked]
+      before_action :set_contest_route, only: %i[show update destroy disable enable add_picture linked unlinked delete_picture]
+      before_action :protected_by_administrator, only: %i[create update destroy disable enable add_picture linked unlinked delete_picture]
       before_action :user_can_manage_contest, except: %i[index show]
 
       def index
@@ -78,6 +78,12 @@ module Api
         else
           render json: { error: @contest_route.errors }, status: :unprocessable_entity
         end
+      end
+
+      def delete_picture
+        @contest_route.picture = nil
+        @contest_route.save
+        head :no_content
       end
 
       private

@@ -285,6 +285,7 @@ Rails.application.routes.draw do
             put :disable, on: :member
             put :enable, on: :member
             post :add_picture, on: :member
+            delete :delete_picture, on: :member
           end
         end
       end
