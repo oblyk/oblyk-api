@@ -309,7 +309,8 @@ class Contest < ApplicationRecord
       stage_step = {
         id: contest_stage_step.id,
         name: contest_stage_step.name,
-        step_order: contest_stage_step.step_order
+        step_order: contest_stage_step.step_order,
+        self_reporting: contest_stage_step.self_reporting
       }
       categories = contest_categories.map do |category|
         {
