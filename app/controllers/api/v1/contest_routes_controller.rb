@@ -110,7 +110,8 @@ module Api
 
       def contest_route_params
         params.require(:contest_route).permit(
-          :number
+          :number,
+          :number_of_holds
         )
       end
 

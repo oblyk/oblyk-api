@@ -20,7 +20,8 @@ class ContestRanking
   RANKING_UNITS = {
     DIVISION => %w[pts],
     ATTEMPTS_TO_TOP => %w[pts],
-    ZONE_AND_TOP_REALISED => %w[top zone]
+    ZONE_AND_TOP_REALISED => %w[top zone],
+    HIGHEST_HOLD => %w[prise(s) +]
   }.freeze
 
   attr_accessor :ascents, :step, :category, :genre
@@ -68,6 +69,14 @@ class ContestRanking
         value: value,
         details: [top, zone]
       }
+    when HIGHEST_HOLD
+      point = current_ascent.hold_number
+      point += 0.5 if current_ascent.hold_number_plus
+      plus = current_ascent.hold_number_plus ? 1 : 0
+      {
+        value: point,
+        details: [current_ascent.hold_number, plus]
+      }
     else
       no_score
     end
@@ -91,11 +100,17 @@ class ContestRanking
       if [DIVISION, ATTEMPTS_TO_TOP].include? step.ranking_type
         details ||= [0]
         details[0] += ascent_value if ascent_value.present?
-      elsif step.ranking_type == ZONE_AND_TOP_REALISED
+      elsif [ZONE_AND_TOP_REALISED].include? step.ranking_type
         details ||= [0, 0]
         if ascent_value.present?
           details[0] += 1 if ascent_scores[:details].first
           details[1] += 1 if ascent_scores[:details].second
+        end
+      elsif [HIGHEST_HOLD].include? step.ranking_type
+        details ||= [0, 0]
+        if ascent_value.present?
+          details[0] += ascent_scores[:details].first
+          details[1] += ascent_scores[:details].second
         end
       end
     end

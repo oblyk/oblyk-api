@@ -46,6 +46,7 @@ class ContestRoute < ApplicationRecord
         contest_route_group_id: contest_route_group_id,
         gym_route_id: gym_route_id,
         gym_route: gym_route&.tree_summary,
+        ranking_type: contest_stage_step.ranking_type,
         thumbnail: thumbnail,
         picture: picture.attached? ? picture_url : nil,
         picture_large: picture.attached? ? picture_large_url : nil
