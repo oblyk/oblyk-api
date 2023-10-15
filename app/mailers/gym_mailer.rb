@@ -30,4 +30,18 @@ class GymMailer < ApplicationMailer
       mail(to: @email, subject: subject)
     end
   end
+
+  def accept_administrator
+    @user = params[:user]
+    @gym = params[:gym]
+    @email = params[:email]
+
+    subject = "#{@gym.name} & Oblyk"
+
+    if use_send_in_blue?
+      send_with_send_in_blue(@email, subject, 'gym_mailer/accept_administrator')
+    else
+      mail(to: @email, subject: subject)
+    end
+  end
 end

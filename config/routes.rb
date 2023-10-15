@@ -292,6 +292,14 @@ Rails.application.routes.draw do
       end
       resources :gym_roles, only: %i[index]
       resources :color_systems, only: %i[index show create]
+      resources :gym_administrations, only: %i[] do
+        get :assigned, on: :collection
+        get :requested, on: :collection
+        put :accept_request, on: :collection
+        delete :delete_request, on: :collection
+        post :add_option, on: :collection
+        delete :delete_option, on: :collection
+      end
       resources :reports, only: %i[create]
 
       scope :public do

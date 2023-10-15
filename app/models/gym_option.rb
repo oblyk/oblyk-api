@@ -22,6 +22,7 @@ class GymOption < ApplicationRecord
   validates :start_date, presence: true
 
   after_save :delete_gym_cache
+  after_destroy :delete_gym_cache
 
   def activated?
     start_date <= Date.current && (end_date.nil? || end_date >= Date.current)

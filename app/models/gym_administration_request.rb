@@ -19,6 +19,29 @@ class GymAdministrationRequest < ApplicationRecord
     gym_administrator.save
   end
 
+  def deal
+    gym.administered?
+  end
+
+  def summary_to_json
+    {
+      id: id,
+      gym_id: gym_id,
+      user_id: user_id,
+      justification: justification,
+      email: email,
+      first_name: first_name,
+      last_name: last_name,
+      gym: gym.summary_to_json,
+      user: user&.summary_to_json,
+      deal: deal,
+      history: {
+        created_at: created_at,
+        updated_at: updated_at
+      }
+    }
+  end
+
   private
 
   def send_email_notification
