@@ -54,8 +54,8 @@ module Api
         user = nil
 
         # Is user want create an account but email is not free
-        if create_account && User.find_by(email: participant.email).exists?
-          render json: { error: { base: ["le compte #{participant.email} existe déjà, connectez-vous pour vous inscrire"] }}, status: :unprocessable_entity
+        if create_account && User.exists?(email: participant.email)
+          render json: { error: { base: ["le compte #{participant.email} existe déjà, connectez-vous pour vous inscrire"] } }, status: :unprocessable_entity
           return
         end
 
@@ -75,6 +75,7 @@ module Api
             exp = Time.now.to_i + Rails.application.config.jwt_session_lifetime
             session_token = JwtToken::Token.generate(user_data, exp)
             session_refresh_token = JwtToken::Token.generate(user_data, exp + 3.months)
+            UserMailer.with(user: user).welcome.deliver_later
           else
             render json: { error: user.errors }, status: :unprocessable_entity
             return
