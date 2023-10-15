@@ -31,6 +31,7 @@ class ContestParticipant < ApplicationRecord
   after_create :create_participant_step
   after_create :send_subscription_mail
   after_destroy :update_contest
+  after_destroy :update_category_count
 
   def age
     date_of_birth.present? ? ((Time.zone.now - Time.zone.parse(date_of_birth.to_s)) / 1.year.seconds).floor : nil
@@ -207,6 +208,11 @@ class ContestParticipant < ApplicationRecord
   def update_contest_category
     return unless saved_change_to_contest_category_id?
 
+    contest_category.contest_participants_count = contest.contest_participants.where(contest_category_id: contest_category_id).count
+    contest_category.save
+  end
+
+  def update_category_count
     contest_category.contest_participants_count = contest.contest_participants.where(contest_category_id: contest_category_id).count
     contest_category.save
   end

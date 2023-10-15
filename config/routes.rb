@@ -99,6 +99,7 @@ Rails.application.routes.draw do
           get :waiting_followers
           get :favorite_crags
           get :favorite_gyms
+          get :upcoming_contests
           get :ascent_crag_routes
           get :ascended_crag_routes
           get :ascended_crags_geo_json
