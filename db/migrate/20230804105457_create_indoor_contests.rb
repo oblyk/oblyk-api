@@ -132,6 +132,8 @@ class CreateIndoorContests < ActiveRecord::Migration[6.0]
     create_table :contest_routes do |t|
       t.integer :number
       t.integer :number_of_holds
+      t.integer :fixed_points
+      t.boolean :additional_zone # Addition of a zone on a certain route to break ties
       t.datetime :disabled_at # Admin can remove a route (for any reason)
       t.references :contest_route_group, foreign_key: true
       t.references :gym_route, foreign_key: true # To link the contest route to a topo route

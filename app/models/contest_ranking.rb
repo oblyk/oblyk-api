@@ -2,25 +2,31 @@
 
 class ContestRanking
   DIVISION = 'division'
+  DIVISION_AND_ZONE = 'division_and_zone'
   ATTEMPTS_TO_TOP = 'attempts_to_top'
   ZONE_AND_TOP_REALISED = 'zone_and_top_realised'
   ATTEMPTS_TO_ONE_ZONE_AND_TOP = 'attempts_to_one_zone_and_top'
   ATTEMPTS_TO_TWO_ZONES_AND_TOP = 'attempts_to_two_zones_and_top'
+  FIXED_POINTS = 'fixed_points'
   HIGHEST_HOLD = 'highest_hold'
 
   RANKING_TYPE_LIST = [
     DIVISION,
+    DIVISION_AND_ZONE,
     ATTEMPTS_TO_TOP,
     ZONE_AND_TOP_REALISED,
     ATTEMPTS_TO_ONE_ZONE_AND_TOP,
     ATTEMPTS_TO_TWO_ZONES_AND_TOP,
-    HIGHEST_HOLD
+    HIGHEST_HOLD,
+    FIXED_POINTS
   ].freeze
 
   RANKING_UNITS = {
     DIVISION => %w[pts],
+    DIVISION_AND_ZONE => %w[pts zone(s)],
     ATTEMPTS_TO_TOP => %w[pts],
-    ZONE_AND_TOP_REALISED => %w[top zone],
+    FIXED_POINTS => %w[pts],
+    ZONE_AND_TOP_REALISED => %w[top zone(s)],
     HIGHEST_HOLD => %w[prise(s) +]
   }.freeze
 
@@ -37,7 +43,7 @@ class ContestRanking
                                            .where(contest_route_groups: { contest_stage_step_id: step.id })
 
     self.ascents = ascents.where(contest_participants: { genre: genre }) unless category.unisex
-    self.ascents = ascents.where(realised: true) if step.ranking_type == DIVISION
+    self.ascents = ascents.where(realised: true) if [DIVISION, FIXED_POINTS].include?(step.ranking_type)
   end
 
   def scores(ascent_id)
@@ -49,6 +55,25 @@ class ContestRanking
     case step.ranking_type
     when DIVISION
       point = 1000 / ascents.count { |ascent| ascent.contest_route_id == current_ascent.contest_route_id }
+      {
+        value: point,
+        details: [point]
+      }
+    when DIVISION_AND_ZONE
+      point = if current_ascent.top_attempt&.positive?
+                1000 / ascents.count { |ascent| ascent.contest_route_id == current_ascent.contest_route_id && ascent.top_attempt&.positive? }
+              else
+                0
+              end
+      zone = !current_ascent.top_attempt&.positive? && current_ascent.zone_1_attempt&.positive? || false
+      point_with_zone = point
+      point_with_zone += 0.5 if zone
+      {
+        value: point_with_zone,
+        details: [point, zone]
+      }
+    when FIXED_POINTS
+      point = current_ascent.contest_route.fixed_points || 0
       {
         value: point,
         details: [point]
@@ -97,9 +122,15 @@ class ContestRanking
       value ||= 0
       value += ascent_value
 
-      if [DIVISION, ATTEMPTS_TO_TOP].include? step.ranking_type
+      if [DIVISION, ATTEMPTS_TO_TOP, FIXED_POINTS].include? step.ranking_type
         details ||= [0]
         details[0] += ascent_value if ascent_value.present?
+      elsif [DIVISION_AND_ZONE].include? step.ranking_type
+        details ||= [0, 0]
+        if ascent_value.present?
+          details[0] += ascent_scores[:details].first
+          details[1] += 1 if ascent_scores[:details].second
+        end
       elsif [ZONE_AND_TOP_REALISED].include? step.ranking_type
         details ||= [0, 0]
         if ascent_value.present?

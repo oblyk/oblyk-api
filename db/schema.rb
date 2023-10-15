@@ -308,6 +308,8 @@ ActiveRecord::Schema.define(version: 2023_08_04_105457) do
   create_table "contest_routes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
     t.integer "number"
     t.integer "number_of_holds"
+    t.integer "fixed_points"
+    t.boolean "additional_zone"
     t.datetime "disabled_at"
     t.bigint "contest_route_group_id"
     t.bigint "gym_route_id"

@@ -42,6 +42,8 @@ class ContestRoute < ApplicationRecord
         id: id,
         number: number,
         number_of_holds: number_of_holds,
+        fixed_points: fixed_points,
+        additional_zone: additional_zone,
         disabled_at: disabled_at,
         contest_route_group_id: contest_route_group_id,
         gym_route_id: gym_route_id,
