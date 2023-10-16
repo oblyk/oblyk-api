@@ -122,12 +122,12 @@ class ContestParticipant < ApplicationRecord
           time_block = route_group.contest_time_blocks.find_by contest_wave_id: contest_wave_id
           start_time = time_block.start_time
           end_time = time_block.end_time
-          start_date = time_block.start_date
+          start_date = time_block.start_date || contest.start_date
           end_date = time_block.end_date
         else
           start_time = route_group.start_time
           end_time = route_group.end_time
-          start_date = route_group.start_date
+          start_date = route_group.start_date || contest.start_date
           end_date = route_group.end_date
         end
 
