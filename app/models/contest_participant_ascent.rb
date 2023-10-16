@@ -8,20 +8,18 @@ class ContestParticipantAscent < ApplicationRecord
   before_validation :normalize_attributes
 
   def summary_to_json
-    Rails.cache.fetch("#{cache_key_with_version}/summary_contest_participant_ascent", expires_in: 28.days) do
-      {
-        id: id,
-        contest_participant_id: contest_participant_id,
-        contest_route_id: contest_route_id,
-        registered_at: registered_at,
-        realised: realised,
-        zone_1_attempt: zone_1_attempt,
-        zone_2_attempt: zone_2_attempt,
-        top_attempt: top_attempt,
-        hold_number: hold_number,
-        hold_number_plus: hold_number_plus
-      }
-    end
+    {
+      id: id,
+      contest_participant_id: contest_participant_id,
+      contest_route_id: contest_route_id,
+      registered_at: registered_at,
+      realised: realised,
+      zone_1_attempt: zone_1_attempt,
+      zone_2_attempt: zone_2_attempt,
+      top_attempt: top_attempt,
+      hold_number: hold_number,
+      hold_number_plus: hold_number_plus
+    }
   end
 
   def detail_to_json

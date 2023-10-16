@@ -32,6 +32,8 @@ class ContestCategory < ApplicationRecord
 
   before_validation :set_order
   before_validation :normalize_attributes
+  after_save :delete_caches
+  after_destroy :delete_caches
 
   validates :name, presence: true
   validates :registration_obligation, inclusion: { in: OBLIGATION_LIST }, allow_nil: true
@@ -144,7 +146,16 @@ class ContestCategory < ApplicationRecord
     )
   end
 
+  def delete_summary_cache
+    Rails.cache.delete("#{cache_key_with_version}/summary_contest_category")
+  end
+
   private
+
+  def delete_caches
+    contest.contest_stage_steps.each(&:delete_summary_cache)
+    contest_participants.each(&:delete_summary_cache)
+  end
 
   def set_order
     return unless new_record?

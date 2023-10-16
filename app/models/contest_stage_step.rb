@@ -12,7 +12,8 @@ class ContestStageStep < ApplicationRecord
   has_many :contest_participants, through: :contest_participant_steps
 
   before_validation :set_order
-  after_update :delete_routes_cache
+  after_save :delete_caches
+  after_destroy :delete_caches
 
   validates :name,
             :step_order,
@@ -90,6 +91,10 @@ class ContestStageStep < ApplicationRecord
     end
   end
 
+  def delete_summary_cache
+    Rails.cache.delete("#{cache_key_with_version}/summary_contest_stage_step")
+  end
+
   private
 
   def set_order
@@ -98,7 +103,7 @@ class ContestStageStep < ApplicationRecord
     self.step_order ||= (contest_stage.contest_stage_steps.order(:step_order).last&.step_order || 0) + 1
   end
 
-  def delete_routes_cache
+  def delete_caches
     contest_routes.each(&:delete_summary_cache)
   end
 end

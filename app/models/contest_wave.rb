@@ -8,6 +8,9 @@ class ContestWave < ApplicationRecord
 
   validates :name, presence: true
 
+  after_save :delete_caches
+  after_destroy :delete_caches
+
   default_scope { order(:name) }
 
   def summary_to_json
@@ -28,5 +31,10 @@ class ContestWave < ApplicationRecord
         }
       }
     )
+  end
+
+  def delete_caches
+    contest.contest_categories.each(&:delete_summary_cache)
+    contest_participants.each(&:delete_summary_cache)
   end
 end

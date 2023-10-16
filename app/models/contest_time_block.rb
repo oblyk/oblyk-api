@@ -6,6 +6,8 @@ class ContestTimeBlock < ApplicationRecord
   has_one :contest, through: :contest_wave
 
   before_validation :normalize_attributes
+  after_save :delete_caches
+  after_destroy :delete_caches
 
   delegate :name, to: :contest_wave
 
@@ -28,6 +30,10 @@ class ContestTimeBlock < ApplicationRecord
 
   def detail_to_json
     summary_to_json
+  end
+
+  def delete_caches
+    contest.contest_categories.each(&:delete_summary_cache)
   end
 
   private

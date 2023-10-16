@@ -12,7 +12,10 @@ class ContestRouteGroup < ApplicationRecord
   has_many :contest_waves, through: :contest_time_blocks
 
   before_validation :normalize_attributes
-  # after_validation :validate_categories
+  after_validation :validate_categories
+
+  after_save :delete_caches
+  after_destroy :delete_caches
 
   validates :genre_type, inclusion: { in: %w[unisex male female] }
   validates :contest_categories, length: { minimum: 1, message: 'you_must_choose_one' }
@@ -59,6 +62,10 @@ class ContestRouteGroup < ApplicationRecord
   end
 
   private
+
+  def delete_caches
+    contest_stage_step.delete_summary_cache
+  end
 
   def normalize_attributes
     if waveable

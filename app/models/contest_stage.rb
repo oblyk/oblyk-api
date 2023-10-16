@@ -7,6 +7,8 @@ class ContestStage < ApplicationRecord
 
   before_validation :set_order
   before_validation :normalize_attributes
+  after_save :delete_caches
+  after_destroy :delete_caches
 
   validates :climbing_type,
             :stage_order,
@@ -55,6 +57,10 @@ class ContestStage < ApplicationRecord
   end
 
   private
+
+  def delete_caches
+    contest_stage_steps.each(&:delete_summary_cache)
+  end
 
   def set_order
     return unless new_record?

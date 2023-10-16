@@ -167,6 +167,10 @@ class ContestParticipant < ApplicationRecord
     steps
   end
 
+  def delete_summary_cache
+    Rails.cache.delete("#{cache_key_with_version}/summary_contest_participant")
+  end
+
   private
 
   def normalize_values
