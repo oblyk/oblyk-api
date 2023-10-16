@@ -103,6 +103,10 @@ class Gym < ApplicationRecord
     save
   end
 
+  def admin_app_path
+    "#{ENV['OBLYK_APP_URL']}/gyms/#{id}/#{slug_name}/admins"
+  end
+
   def climbing_key
     key = ''
     key += bouldering || pan ? '1' : '0'
