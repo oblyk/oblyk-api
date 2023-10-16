@@ -12,7 +12,7 @@ class ContestRouteGroup < ApplicationRecord
   has_many :contest_waves, through: :contest_time_blocks
 
   before_validation :normalize_attributes
-  after_validation :validate_categories
+  # after_validation :validate_categories
 
   validates :genre_type, inclusion: { in: %w[unisex male female] }
   validates :contest_categories, length: { minimum: 1, message: 'you_must_choose_one' }
