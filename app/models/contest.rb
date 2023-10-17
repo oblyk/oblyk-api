@@ -203,6 +203,10 @@ class Contest < ApplicationRecord
     Date.current > end_date
   end
 
+  def beginning_is_in_past?
+    Date.current >= start_date
+  end
+
   def ongoing?
     start_date <= Date.current && Date.current <= end_date
   end
@@ -229,6 +233,7 @@ class Contest < ApplicationRecord
         finished: finished?,
         ongoing: ongoing?,
         coming: coming?,
+        beginning_is_in_past: beginning_is_in_past?,
         total_capacity: total_capacity,
         categorization_type: categorization_type,
         contest_participants_count: contest_participants_count,
