@@ -95,14 +95,16 @@ class ContestCategory < ApplicationRecord
     waves = []
     waves_count = contest.contest_waves.size
     contest.contest_waves.each do |wave|
-      capacity_by_wave = capacity / waves_count
-      participants_count = contest_participants.where(contest_wave_id: wave.id).count
+      wave_capacity = capacity || contest.total_capacity
+      participants_count = contest.contest_participants.where(contest_wave_id: wave.id).count
+      capacity_by_wave = wave_capacity ? wave_capacity / waves_count : nil
+      remaining_places = capacity_by_wave ? capacity_by_wave - participants_count : nil
       waves << {
         id: wave.id,
         name: wave.name,
         participants_count: participants_count,
         capacity: capacity_by_wave,
-        remaining_places: capacity_by_wave - participants_count,
+        remaining_places: remaining_places,
         time_blocks: wave.contest_time_blocks.order(:start_date, :start_time).map(&:summary_to_json)
       }
     end

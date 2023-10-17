@@ -384,6 +384,11 @@ class Contest < ApplicationRecord
     times.map(&:last)
   end
 
+  def delete_summary_cache
+    Rails.cache.delete("#{cache_key_with_version}/summary_contest")
+    contest_categories.each(&:delete_summary_cache)
+  end
+
   private
 
   def normalize_attributes

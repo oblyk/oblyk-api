@@ -27,11 +27,14 @@ class ContestParticipant < ApplicationRecord
   before_create :auto_distribute
 
   after_save :update_contest_category
-  after_create :update_contest
+  after_save :delete_caches
+  after_save :update_contest
+  after_save :update_category_count
   after_create :create_participant_step
   after_create :send_subscription_mail
   after_destroy :update_contest
   after_destroy :update_category_count
+  after_destroy :delete_caches
 
   def age
     date_of_birth.present? ? ((Time.zone.now - Time.zone.parse(date_of_birth.to_s)) / 1.year.seconds).floor : nil
@@ -172,6 +175,11 @@ class ContestParticipant < ApplicationRecord
   end
 
   private
+
+  def delete_caches
+    contest.contest_categories.each(&:delete_summary_cache)
+    contest.delete_summary_cache
+  end
 
   def normalize_values
     self.first_name = first_name&.strip
