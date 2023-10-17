@@ -18,7 +18,7 @@ class ContestParticipant < ApplicationRecord
 
   validates :first_name, :last_name, :genre, presence: true
   validates :genre, inclusion: { in: %w[male female] }
-  validates :token, uniqueness: { scope: :contest }
+  validates :token, uniqueness: { scope: :contest }, on: :create
   validate :unique_participant
   validate :validate_age
   validate :validate_category_obligations
@@ -287,12 +287,12 @@ class ContestParticipant < ApplicationRecord
   end
 
   def validate_capacity
-    errors.add(:base, 'Le contest est complet') if new_record? && contest.total_capacity.present? && (contest.contest_participants_count || 0) >= contest.total_capacity
-    errors.add(:base, 'La catégorie est complete') if contest_category_id_changed? && contest_category.capacity.present? && (contest_category.contest_participants_count || 0) >= contest_category.capacity
+    errors.add(:base, 'contest_is_complete') if new_record? && contest.total_capacity.present? && (contest.contest_participants_count || 0) >= contest.total_capacity
+    errors.add(:base, 'category_is_complete') if contest_category_id_changed? && contest_category.capacity.present? && (contest_category.contest_participants_count || 0) >= contest_category.capacity
   end
 
   def unique_participant
-    errors.add(:base, 'Un participant est déjà inscrit à ce nom') if contest.contest_participants.exists?(first_name: first_name, last_name: last_name, date_of_birth: date_of_birth)
+    errors.add(:base, 'participant_is_already_registered') if contest.contest_participants.where.not(id: id).exists?(first_name: first_name, last_name: last_name, date_of_birth: date_of_birth)
   end
 
   def send_subscription_mail
