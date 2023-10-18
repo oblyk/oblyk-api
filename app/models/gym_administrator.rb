@@ -4,6 +4,7 @@ class GymAdministrator < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :gym
 
+  validates :requested_email, format: { with: URI::MailTo::EMAIL_REGEXP }
   validate :validate_roles
 
   after_create :set_gym_is_administered
