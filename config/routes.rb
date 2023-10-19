@@ -261,6 +261,7 @@ Rails.application.routes.draw do
         resources :contests do
           get :time_line, on: :member
           get :results, on: :member
+          put :draft, on: :member
           put :archived, on: :member
           put :unarchived, on: :member
           post :add_banner, on: :member

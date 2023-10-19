@@ -5,14 +5,14 @@ module Api
     class ContestsController < ApiController
       include GymRolesVerification
 
-      before_action :protected_by_session, only: %i[create update add_banner archived unarchived time_line]
+      before_action :protected_by_session, only: %i[create update add_banner draft archived unarchived time_line]
       before_action :set_gym, except: %i[opens]
-      before_action :set_contest, only: %i[show update destroy archived unarchived add_banner time_line results]
-      before_action :protected_by_administrator, only: %i[create update destroy archived unarchived add_banner time_line]
+      before_action :set_contest, only: %i[show update destroy draft archived unarchived add_banner time_line results]
+      before_action :protected_by_administrator, only: %i[create update destroy draft archived unarchived add_banner time_line]
       before_action :user_can_manage_contest, except: %i[opens index show results]
 
       def opens
-        contests = Contest.all.order(start_date: :desc)
+        contests = Contest.where(draft: false).order(start_date: :desc)
         contest_by_dates = {
           is_coming: [],
           ongoing: [],
@@ -85,6 +85,11 @@ module Api
         else
           render json: { error: @contest.errors }, status: :unprocessable_entity
         end
+      end
+
+      def draft
+        @contest.draft = params[:contest][:draft]
+        @contest.save
       end
 
       def archived

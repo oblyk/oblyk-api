@@ -20,6 +20,7 @@ class Contest < ApplicationRecord
   has_many :contest_routes, through: :contest_route_groups
 
   before_validation :normalize_attributes
+  before_create :set_draft_mode
   after_create :create_u_age
 
   validates :banner, blob: { content_type: :image }, allow_nil: true
@@ -33,7 +34,7 @@ class Contest < ApplicationRecord
             presence: true
   validate :validate_dates
 
-  scope :upcoming, -> { where('contests.end_date >= ?', Date.current).where('contests.subscription_start_date <= ?', Date.current) }
+  scope :upcoming, -> { where(draft: false).where('contests.end_date >= ?', Date.current).where('contests.subscription_start_date <= ?', Date.current) }
 
   def banner_large_url
     resize_attachment banner, '1920x1920'
@@ -233,6 +234,7 @@ class Contest < ApplicationRecord
         finished: finished?,
         ongoing: ongoing?,
         coming: coming?,
+        draft: draft,
         beginning_is_in_past: beginning_is_in_past?,
         total_capacity: total_capacity,
         categorization_type: categorization_type,
@@ -390,6 +392,10 @@ class Contest < ApplicationRecord
   end
 
   private
+
+  def set_draft_mode
+    self.draft = true
+  end
 
   def normalize_attributes
     self.description = description&.strip
