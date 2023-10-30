@@ -38,7 +38,7 @@ module Api
       end
 
       def set_contest_participant
-        token = params[:contest_participant_ascent][:contest_participant_token].sub(/(.*)-/, '\1.')
+        token = params[:contest_participant_ascent][:contest_participant_token]
         @contest_participant = @contest.contest_participants.find_by token: token
       end
 
