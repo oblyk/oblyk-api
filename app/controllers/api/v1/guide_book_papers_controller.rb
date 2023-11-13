@@ -124,7 +124,7 @@ module Api
         end
 
         place_of_sales = minimalistic ? @guide_book_paper.place_of_sales : @guide_book_paper.place_of_sales.includes(:user)
-        place_of_sales.each do |place_of_sale|
+        place_of_sales.where.not(latitude: nil, longitude: nil).each do |place_of_sale|
           features << place_of_sale.to_geo_json(minimalistic: minimalistic)
         end
 
