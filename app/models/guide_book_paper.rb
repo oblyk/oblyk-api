@@ -96,6 +96,7 @@ class GuideBookPaper < ApplicationRecord
         links_count: links.count,
         versions_count: versions.count,
         articles_count: articles_count,
+        place_of_sales_count: place_of_sales.count,
         next_guide_book_paper: next_guide_book_paper&.summary_to_json,
         crags: crags.map { |crag| { id: crag.id, name: crag.name } },
         creator: user&.summary_to_json(with_avatar: false),
