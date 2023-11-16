@@ -15,15 +15,16 @@ module Api
       def index
         group_by = params.fetch(:group_by, nil)
         order_by = params.fetch(:order_by, nil)
+        direction = params.fetch(:direction, 'asc') == 'asc' ? 'ASC' : 'DESC'
         dismounted = params.fetch(:dismounted, false)
 
         if group_by == 'sector'
           sectors = if @gym_sector.present?
                       @gym_sector
                     elsif @gym_space.present?
-                      GymSector.where(gym_space: @gym_space)
+                      GymSector.where(gym_space: @gym_space).reorder("`order` #{direction}")
                     else
-                      GymSector.joins(:gym_space).where(gym_spaces: { gym_id: @gym.id })
+                      GymSector.joins(:gym_space).where(gym_spaces: { gym_id: @gym.id }).reorder("`order` #{direction}")
                     end
           routes_json = { sectors: [] }
           sectors.each do |sector|
@@ -47,10 +48,10 @@ module Api
           routes = dismounted ? routes.dismounted : routes.mounted
 
           # Order
-          routes = routes.order(opened_at: :desc) if order_by == 'opened_at'
-          routes = routes.order('max_grade_value DESC') if order_by == 'grade'
-          routes = routes.includes(gym_grade_line: :gym_grade).order('gym_grade_lines.order DESC, gym_grades.name ASC') if order_by == 'level'
-          routes = routes.includes(:sector).order('sectors.name ASC') if order_by == 'sector'
+          routes = routes.order("opened_at #{direction}") if order_by == 'opened_at'
+          routes = routes.order("max_grade_value #{direction}") if order_by == 'grade'
+          routes = routes.includes(gym_grade_line: :gym_grade).order("gym_grade_lines.order #{direction}, gym_grades.name ASC") if order_by == 'level'
+          routes = routes.includes(:sector).order("sectors.name #{direction}") if order_by == 'sector'
 
           # group by
           case group_by
@@ -64,7 +65,11 @@ module Api
             level_routes = group_by_level(routes)
             render json: { level: level_routes.map { |level_route| { name: level_route[1][:name], colors: level_route[1][:colors], tag_color: level_route[1][:tag_color], hold_color: level_route[1][:hold_color], routes: level_route[1][:routes].map(&:summary_to_json) } } }, status: :ok
           when 'point'
-            render json: routes.sort_by { |route| -(route.calculated_point || 0) }.map(&:summary_to_json), status: :ok
+            if direction == 'DESC'
+              render json: routes.sort_by { |route| -(route.calculated_point || 0) }.map(&:summary_to_json), status: :ok
+            else
+              render json: routes.sort_by { |route| route.calculated_point || 0 }.map(&:summary_to_json), status: :ok
+            end
           else
             render json: routes.map(&:summary_to_json), status: :ok
           end
