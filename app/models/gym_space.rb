@@ -43,6 +43,10 @@ class GymSpace < ApplicationRecord
     resize_attachment plan, '500x500'
   end
 
+  def plan_tiny_thumbnail_url
+    resize_attachment plan, '100x100'
+  end
+
   def banner_large_url
     resize_attachment banner, '1920x1920'
   end
@@ -67,6 +71,7 @@ class GymSpace < ApplicationRecord
         banner: banner.attached? ? banner_large_url : nil,
         plan: plan.attached? ? plan_large_url : nil,
         plan_thumbnail_url: plan.attached? ? plan_thumbnail_url : nil,
+        plan_tiny_thumbnail_url: plan.attached? ? plan_tiny_thumbnail_url : nil,
         gym_space_group_id: gym_space_group_id,
         anchor: anchor,
         gym: {
