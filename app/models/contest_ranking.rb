@@ -27,6 +27,7 @@ class ContestRanking
     ATTEMPTS_TO_TOP => %w[pts],
     FIXED_POINTS => %w[pts],
     ZONE_AND_TOP_REALISED => %w[top zone(s)],
+    ATTEMPTS_TO_ONE_ZONE_AND_TOP => 'zone_and_top_blocks',
     HIGHEST_HOLD => %w[prise(s) +]
   }.freeze
 
@@ -94,6 +95,18 @@ class ContestRanking
         value: value,
         details: [top, zone]
       }
+    when ATTEMPTS_TO_ONE_ZONE_AND_TOP
+      top = current_ascent.top_attempt || 0
+      zone = current_ascent.zone_1_attempt || 0
+      value = 0
+      value = 1000.0 if top.positive?
+      value -= top * 10
+      value += 1.0 if zone.positive?
+      value -= zone / 100.0
+      {
+        value: value,
+        details: [top, zone]
+      }
     when HIGHEST_HOLD
       point = current_ascent.hold_number
       point += 0.5 if current_ascent.hold_number_plus
@@ -131,6 +144,9 @@ class ContestRanking
           details[0] += ascent_scores[:details].first
           details[1] += 1 if ascent_scores[:details].second
         end
+      elsif [ATTEMPTS_TO_ONE_ZONE_AND_TOP].include? step.ranking_type
+        details ||= []
+        details << { top: ascent_scores[:details].first, zone: ascent_scores[:details].second }
       elsif [ZONE_AND_TOP_REALISED].include? step.ranking_type
         details ||= [0, 0]
         if ascent_value.present?
