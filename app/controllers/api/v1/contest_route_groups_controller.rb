@@ -94,10 +94,11 @@ module Api
           :end_time,
           :start_date,
           :end_date,
+          :additional_time,
           :genre_type,
           :number_participants_for_next_step,
           contest_category_ids: [],
-          contest_time_blocks_attributes: %i[id start_time end_time start_date end_date contest_wave_id]
+          contest_time_blocks_attributes: %i[id start_time end_time start_date end_date additional_time contest_wave_id]
         )
       end
 

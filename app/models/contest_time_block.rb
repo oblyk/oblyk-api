@@ -23,6 +23,7 @@ class ContestTimeBlock < ApplicationRecord
       end_time: end_time,
       start_date: start_date,
       end_date: end_date,
+      additional_time: additional_time,
       contest_wave_id: contest_wave_id,
       contest_route_group_id: contest_route_group_id
     }

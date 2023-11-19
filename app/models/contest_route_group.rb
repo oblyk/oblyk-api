@@ -33,6 +33,7 @@ class ContestRouteGroup < ApplicationRecord
       end_time: end_time,
       start_date: start_date,
       end_date: end_date,
+      additional_time: additional_time,
       number_participants_for_next_step: number_participants_for_next_step,
       contest_stage_step_id: contest_stage_step_id,
       contest_stage_step: {

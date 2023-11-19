@@ -116,6 +116,7 @@ class ContestParticipant < ApplicationRecord
       end_time = nil
       start_date = nil
       end_date = nil
+      additional_time = Contest::REGISTRATION_TOLERANCE
       routes = nil
       step.contest_route_groups.each do |route_group|
         wave = route_group.waveable ? route_group.contest_time_blocks.find_by(contest_wave_id: contest_wave_id) : nil
@@ -127,11 +128,13 @@ class ContestParticipant < ApplicationRecord
           end_time = time_block.end_time
           start_date = time_block.start_date || contest.start_date
           end_date = time_block.end_date
+          additional_time = time_block.additional_time if time_block.additional_time
         else
           start_time = route_group.start_time
           end_time = route_group.end_time
           start_date = route_group.start_date || contest.start_date
           end_date = route_group.end_date
+          additional_time = route_group.additional_time if route_group.additional_time
         end
 
         routes = []
@@ -148,7 +151,7 @@ class ContestParticipant < ApplicationRecord
 
       start_datetime = start_time.change({ year: start_date.year, day: start_date.day, month: start_date.month })
       end_datetime = end_time.change({ year: end_date.year, day: end_date.day, month: end_date.month })
-      registration_end_at = end_datetime + Contest::REGISTRATION_TOLERANCE.minutes
+      registration_end_at = end_datetime + additional_time.minutes
 
       steps << {
         id: step.id,

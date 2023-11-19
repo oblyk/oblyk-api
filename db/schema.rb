@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_18_065731) do
+ActiveRecord::Schema.define(version: 2023_11_19_145007) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -297,6 +297,7 @@ ActiveRecord::Schema.define(version: 2023_10_18_065731) do
     t.time "end_time"
     t.date "start_date"
     t.date "end_date"
+    t.integer "additional_time", default: 20
     t.string "genre_type"
     t.integer "number_participants_for_next_step"
     t.bigint "contest_stage_step_id"
@@ -349,6 +350,7 @@ ActiveRecord::Schema.define(version: 2023_10_18_065731) do
     t.time "end_time"
     t.date "start_date"
     t.date "end_date"
+    t.integer "additional_time", default: 20
     t.bigint "contest_wave_id"
     t.bigint "contest_route_group_id"
     t.index ["contest_route_group_id"], name: "index_contest_time_blocks_on_contest_route_group_id"
