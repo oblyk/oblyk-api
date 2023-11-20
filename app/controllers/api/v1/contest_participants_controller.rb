@@ -5,11 +5,11 @@ module Api
     class ContestParticipantsController < ApiController
       include GymRolesVerification
 
-      before_action :protected_by_session, only: %i[index export create update destroy]
+      before_action :protected_by_session, only: %i[index export import create update destroy]
       before_action :set_gym
       before_action :set_contest
       before_action :set_contest_participant, only: %i[show update destroy]
-      before_action :protected_by_administrator, only: %i[export create update destroy]
+      before_action :protected_by_administrator, only: %i[export import create update destroy]
       before_action :user_can_manage_contest, except: %i[index show participant subscribe]
 
       def index
@@ -18,6 +18,117 @@ module Api
 
       def export
         send_data @contest.contest_participants.to_csv, filename: "export-participant-#{@contest.name.parameterize}-#{Date.current}.csv"
+      end
+
+      def import
+        first_row = true
+        errors = []
+        file_row_count = 0
+        created_count = 0
+        already_imported_count = 0
+
+        send_email = params[:contest_participant][:send_email] === 'true'
+
+        CSV.foreach(params[:contest_participant][:file].path, col_sep: ';') do |row|
+          if first_row
+            first_row = false
+            next
+          end
+          file_row_count += 1
+
+          first_name = row[0]&.strip
+          last_name = row[1]&.strip
+          date_of_birth = row[2]&.strip || ''
+          if date_of_birth.match /^\d{1,2}\s[a-zéû]+\s\d{4}$/
+            dates = date_of_birth.split ' '
+            months = %w[janvier février mars avril mai juin juillet août septembre octobre novembre decembre]
+            month = months.find_index(dates[1]) + 1
+            date_of_birth = Date.new(dates[2].to_i, month, dates[0].to_i)
+          elsif date_of_birth.match(/^\d{2,4}-\d{2}-\d{2,4}$/)
+            date_of_birth = Date.parse(date_of_birth)
+          else
+            date_of_birth = nil
+          end
+          email = row[3]&.strip
+          genre = row[4]&.strip
+          genre = 'male' if genre == 'homme'
+          genre = 'female' if genre == 'femme'
+          category_name = row[5]&.strip
+          wave_name = row[6]&.strip
+
+          if date_of_birth.blank?
+            errors << "#{first_name} #{last_name} doit avoir une date de naissance"
+            next
+          end
+
+          if first_name.blank? || last_name.blank?
+            errors << "#{email} doit avoir un nom est un prénom"
+            next
+          end
+
+          unless date_of_birth
+            errors << "#{first_name} #{last_name} doit avoir une date de naissance"
+            next
+          end
+
+          unless genre
+            errors << "#{first_name} #{last_name} doit avoir un genre : homme ou femme"
+            next
+          end
+
+          unless email
+            errors << "#{first_name} #{last_name} doit avoir un email"
+            next
+          end
+
+          category = @contest.contest_categories.find_by name: category_name
+
+          unless category
+            errors << "#{first_name} #{last_name} doit être inscrit(e) dans l'une des catégories suivantes : #{@contest.contest_categories.pluck(:name).join(', ')}"
+            next
+          end
+
+          wave = nil
+          if category.waveable
+            wave = @contest.contest_waves.find_by name: wave_name
+            unless wave
+              errors << "#{first_name} #{last_name} doit être inscrit(e) dans l'une des vagues suivantes : #{@contest.contest_waves.pluck(:name).join(', ')}"
+              next
+            end
+          end
+
+          if @contest.contest_participants.exists?(first_name: first_name, last_name: last_name, date_of_birth: date_of_birth)
+            already_imported_count += 1
+            next
+          end
+
+          user = User.find_by email: email
+
+          participant = @contest.contest_participants.new(
+            first_name: first_name,
+            last_name: last_name,
+            date_of_birth: date_of_birth,
+            genre: genre,
+            email: email,
+            contest_category: category,
+            user: user
+          )
+          participant.skip_subscription_mail = true unless send_email
+          participant.contest_wave = wave if wave
+          if participant.save
+            created_count += 1
+          else
+            errors << participant.errors.full_messages
+          end
+        end
+
+        render json: {
+          file_row_count: file_row_count,
+          created_count: created_count,
+          already_imported_count: already_imported_count,
+          errors_count: errors.count,
+          errors: errors
+        }, status: :ok
       end
 
       def show

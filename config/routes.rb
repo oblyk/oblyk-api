@@ -272,6 +272,7 @@ Rails.application.routes.draw do
           end
           resources :contest_participants do
             get :export, on: :collection
+            post :import, on: :collection
             get :participant, on: :member
             post :subscribe, on: :collection
             resources :contest_participant_ascents

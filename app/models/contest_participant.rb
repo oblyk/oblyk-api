@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ContestParticipant < ApplicationRecord
-  attr_accessor :skip_capacity_validation
+  attr_accessor :skip_capacity_validation, :skip_subscription_mail
 
   belongs_to :contest_category
   belongs_to :contest_wave, optional: true
@@ -31,7 +31,7 @@ class ContestParticipant < ApplicationRecord
   after_save :update_contest
   after_save :update_category_count
   after_create :create_participant_step
-  after_create :send_subscription_mail
+  after_create :send_subscription_mail, unless: :skip_subscription_mail
   after_destroy :update_contest
   after_destroy :update_category_count
   after_destroy :delete_caches
