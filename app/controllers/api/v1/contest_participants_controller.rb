@@ -5,11 +5,11 @@ module Api
     class ContestParticipantsController < ApiController
       include GymRolesVerification
 
-      before_action :protected_by_session, only: %i[index export import create update destroy]
+      before_action :protected_by_session, only: %i[index export import import_template create update destroy]
       before_action :set_gym
       before_action :set_contest
       before_action :set_contest_participant, only: %i[show update destroy]
-      before_action :protected_by_administrator, only: %i[export import create update destroy]
+      before_action :protected_by_administrator, only: %i[export import import_template create update destroy]
       before_action :user_can_manage_contest, except: %i[index show participant subscribe]
 
       def index
@@ -129,6 +129,24 @@ module Api
           errors_count: errors.count,
           errors: errors
         }, status: :ok
+      end
+
+      def import_template
+        header = CSV.generate(headers: true, encoding: 'utf-8', col_sep: ";") do |csv|
+          head = [
+            'Prénom',
+            'Nom de famille',
+            'Date de naissance',
+            'Email',
+            'Genre (homme, femme)'
+          ]
+          head << "Catégorie (#{@contest.contest_categories.pluck(:name).join(', ')})"
+          if @contest.contest_waves.count > 0
+            head << "Vague (#{@contest.contest_waves.pluck(:name).join(', ')})"
+          end
+          csv << head
+        end
+        send_data header, filename: "template-import-participant-#{@contest.slug_name}.csv"
       end
 
       def show
