@@ -12,7 +12,7 @@ module Api
       before_action :user_can_manage_contest, except: %i[opens index show results]
 
       def opens
-        contests = Contest.where(draft: false).order(start_date: :desc)
+        contests = Contest.where(draft: false, private: false).order(start_date: :desc)
         contest_by_dates = {
           is_coming: [],
           ongoing: [],
@@ -135,7 +135,9 @@ module Api
           :subscription_start_date,
           :subscription_end_date,
           :total_capacity,
-          :categorization_type
+          :categorization_type,
+          :authorise_public_subscription,
+          :private
         )
       end
 
