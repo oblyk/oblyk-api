@@ -41,10 +41,12 @@ class Gym < ApplicationRecord
   has_many :comments, as: :commentable
   has_many :feeds, as: :feedable
   has_many :gym_administrators
+  has_many :gym_administration_requests
   has_many :gym_grades
   has_many :gym_spaces
   has_many :gym_space_groups
   has_many :reports, as: :reportable
+  has_many :ascents
   has_many :gym_sectors, through: :gym_spaces
   has_many :gym_routes, through: :gym_sectors
   has_many :gym_openers
