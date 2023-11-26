@@ -80,6 +80,11 @@ GET {{api_url}}/public/guide_book_papers.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
+### GET map guide book
+GET {{api_url}}/public/guide_book_papers/geo_index.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
 ### GET guide_book_paper
 GET {{api_url}}/public/guide_book_papers/1.json
 HttpApiAccessToken: {{api_access_token}}

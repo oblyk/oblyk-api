@@ -420,6 +420,7 @@ Rails.application.routes.draw do
           get :crags, on: :member
           get :crags_figures, on: :member
           get :geo_json, on: :member
+          get :geo_index, on: :collection
           get :photos, on: :member
           get :links, on: :member
           get :articles, on: :member

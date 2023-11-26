@@ -140,6 +140,23 @@ module Api
         }, status: :ok
       end
 
+      def geo_index
+        features = []
+        GuideBookPaper.where(next_guide_book_paper_id: nil).includes(:crags).all.each do |guide_book|
+          features << guide_book.to_geo_json
+        end
+        render json: {
+          type: 'FeatureCollection',
+          crs: {
+            type: 'name',
+            properties: {
+              name: 'urn'
+            }
+          },
+          features: features
+        }, status: :ok
+      end
+
       def photos
         page = params.fetch(:page, 1)
         photos = Photo.includes(:illustrable, :user, picture_attachment: :blob).where(
