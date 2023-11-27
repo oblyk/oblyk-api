@@ -3,15 +3,13 @@
 module Api
   module V1
     class ContestParticipantAscentsController < ApiController
-      before_action :set_gym
       before_action :set_contest
       before_action :set_contest_participant
 
       def create
-        contest_route = @contest.contest_routes.find params[:contest_participant_ascent][:contest_route_id]
         contest_ascent = ContestParticipantAscent.find_or_initialize_by(
           contest_participant_id: @contest_participant.id,
-          contest_route_id: contest_route.id
+          contest_route_id: params[:contest_participant_ascent][:contest_route_id]
         )
         contest_ascent.realised = contest_participant_params[:realised]
         contest_ascent.zone_1_attempt = contest_participant_params[:zone_1_attempt]
@@ -29,12 +27,8 @@ module Api
 
       private
 
-      def set_gym
-        @gym = Gym.find params[:gym_id]
-      end
-
       def set_contest
-        @contest = @gym.contests.find params[:contest_id]
+        @contest = Contest.where(gym_id: params[:gym_id]).find params[:contest_id]
       end
 
       def set_contest_participant
