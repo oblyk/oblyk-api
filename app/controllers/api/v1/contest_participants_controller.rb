@@ -27,7 +27,17 @@ module Api
         created_count = 0
         already_imported_count = 0
 
-        send_email = params[:contest_participant][:send_email] === 'true'
+        send_email = params[:contest_participant][:send_email] == 'true'
+        file = params[:contest_participant][:file]
+        errors = []
+
+        errors << 'no_file' if file.class&.name != 'ActionDispatch::Http::UploadedFile'
+        errors << 'file_wrong_format' if !defined?(file.content_type) || file.content_type != 'text/csv'
+
+        if errors.size.positive?
+          render json: { error: { base: errors } }, status: :unprocessable_entity
+          return
+        end
 
         CSV.foreach(params[:contest_participant][:file].path, col_sep: ';') do |row|
           if first_row
@@ -39,12 +49,13 @@ module Api
           first_name = row[0]&.strip
           last_name = row[1]&.strip
           date_of_birth = row[2]&.strip || ''
-          if date_of_birth.match /^\d{1,2}\s[a-zéû]+\s\d{4}$/
+          case date_of_birth
+          when /^\d{1,2}\s[a-zéû]+\s\d{4}$/
             dates = date_of_birth.split ' '
             months = %w[janvier février mars avril mai juin juillet août septembre octobre novembre decembre]
             month = months.find_index(dates[1]) + 1
             date_of_birth = Date.new(dates[2].to_i, month, dates[0].to_i)
-          elsif date_of_birth.match(/^\d{2,4}-\d{2}-\d{2,4}$/)
+          when /^\d{2,4}-\d{2}-\d{2,4}$/
             date_of_birth = Date.parse(date_of_birth)
           else
             date_of_birth = nil
@@ -141,7 +152,7 @@ module Api
             'Genre (homme, femme)'
           ]
           head << "Catégorie (#{@contest.contest_categories.pluck(:name).join(', ')})"
-          if @contest.contest_waves.count > 0
+          if @contest.contest_waves.count.positive?
             head << "Vague (#{@contest.contest_waves.pluck(:name).join(', ')})"
           end
           csv << head
