@@ -38,6 +38,7 @@ namespace :contest_faker do
         contest_category: category,
         contest_wave: wave
       )
+      participant.skip_subscription_mail = true
       participant_message = "#{first_name} #{last_name} cat : #{category.name}, age : #{participant.age}"
       if dry_run
         if participant.valid?
