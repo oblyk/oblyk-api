@@ -34,7 +34,7 @@ class ContestRanking
     HIGHEST_HOLD => %w[prise(s) +]
   }.freeze
 
-  attr_accessor :ascents, :step, :category, :genre
+  attr_accessor :ascents, :step, :category, :genre, :score_by_routes
 
   def initialize(step, category, genre)
     self.step = step
@@ -48,6 +48,7 @@ class ContestRanking
 
     self.ascents = ascents.where(contest_participants: { genre: genre }) unless category.unisex
     self.ascents = ascents.where(realised: true) if [DIVISION, DIVISION_AND_ATTEMPT, FIXED_POINTS].include?(step.ranking_type)
+    self.score_by_routes = {}
   end
 
   def scores(ascent_id)
@@ -58,14 +59,15 @@ class ContestRanking
 
     case step.ranking_type
     when DIVISION
-      point = 1000 / ascents.count { |ascent| ascent.contest_route_id == current_ascent.contest_route_id }
+      score_by_routes[current_ascent.contest_route_id] ||= (1000 / ascents.count { |ascent| ascent.contest_route_id == current_ascent.contest_route_id })
+      point = score_by_routes[current_ascent.contest_route_id]
       {
         value: point,
         details: [point]
       }
     when DIVISION_AND_ZONE
       point = if current_ascent.top_attempt&.positive?
-                1000 / ascents.count { |ascent| ascent.contest_route_id == current_ascent.contest_route_id && ascent.top_attempt&.positive? }
+                score_by_routes[current_ascent.contest_route_id] ||= (1000 / ascents.count { |ascent| ascent.contest_route_id == current_ascent.contest_route_id && ascent.top_attempt&.positive? })
               else
                 0
               end
@@ -78,7 +80,7 @@ class ContestRanking
       }
     when DIVISION_AND_ATTEMPT
       point = if current_ascent.realised?
-                1000 / ascents.count { |ascent| ascent.contest_route_id == current_ascent.contest_route_id && ascent.realised? }
+                score_by_routes[current_ascent.contest_route_id] ||= (1000 / ascents.count { |ascent| ascent.contest_route_id == current_ascent.contest_route_id && ascent.realised? })
               else
                 0
               end
