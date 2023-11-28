@@ -3,6 +3,7 @@
 module Api
   module V1
     class ContestsController < ApiController
+      include UploadVerification
       include GymRolesVerification
 
       before_action :protected_by_session, only: %i[create update add_banner draft archived unarchived time_line]
@@ -67,6 +68,8 @@ module Api
       end
 
       def add_banner
+        return unless verify_file banner_params[:banner], :image
+
         if @contest.update(banner_params)
           render json: @contest.detail_to_json, status: :ok
         else

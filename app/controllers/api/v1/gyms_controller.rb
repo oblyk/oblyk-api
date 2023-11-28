@@ -4,6 +4,7 @@ module Api
   module V1
     class GymsController < ApiController
       include GymRolesVerification
+      include UploadVerification
 
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes tree_structures tree_routes ]
@@ -106,6 +107,8 @@ module Api
       end
 
       def add_banner
+        return unless verify_file banner_params[:banner], :image
+
         if @gym.update(banner_params)
           render json: @gym.detail_to_json, status: :ok
         else
@@ -114,6 +117,8 @@ module Api
       end
 
       def add_logo
+        return unless verify_file logo_params[:logo], :image
+
         if @gym.update(logo_params)
           render json: @gym.detail_to_json, status: :ok
         else

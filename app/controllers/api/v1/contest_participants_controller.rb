@@ -3,6 +3,7 @@
 module Api
   module V1
     class ContestParticipantsController < ApiController
+      include UploadVerification
       include GymRolesVerification
 
       before_action :protected_by_session, only: %i[index export import import_template create update destroy]
@@ -21,23 +22,14 @@ module Api
       end
 
       def import
+        return unless verify_file params[:contest_participant][:file], :csv
+
         first_row = true
-        errors = []
         file_row_count = 0
         created_count = 0
         already_imported_count = 0
-
-        send_email = params[:contest_participant][:send_email] == 'true'
-        file = params[:contest_participant][:file]
         errors = []
-
-        errors << 'no_file' if file.class&.name != 'ActionDispatch::Http::UploadedFile'
-        errors << 'file_wrong_format' if !defined?(file.content_type) || file.content_type != 'text/csv'
-
-        if errors.size.positive?
-          render json: { error: { base: errors } }, status: :unprocessable_entity
-          return
-        end
+        send_email = params[:contest_participant][:send_email] == 'true'
 
         CSV.foreach(params[:contest_participant][:file].path, col_sep: ';') do |row|
           if first_row

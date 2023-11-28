@@ -3,6 +3,8 @@
 module Api
   module V1
     class GuideBookPapersController < ApiController
+      include UploadVerification
+
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update add_crag remove_crag add_cover remove_cover]
       before_action :set_guide_book_paper, only: %i[crags crags_figures photos links versions geo_json alternatives show update destroy add_crag remove_crag add_cover remove_cover articles]
@@ -260,6 +262,8 @@ module Api
       end
 
       def add_cover
+        return unless verify_file cover_params[:cover], :image
+
         if @guide_book_paper.update(cover_params)
           render json: @guide_book_paper.detail_to_json, status: :ok
         else
