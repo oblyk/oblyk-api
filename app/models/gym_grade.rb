@@ -53,6 +53,10 @@ class GymGrade < ApplicationRecord
     gym_grade_lines.map { |gym_grade_line| gym_grade_line.colors.first }.join
   end
 
+  def delete_summary_cache
+    Rails.cache.delete("#{cache_key_with_version}/summary_gym_grade")
+  end
+
   private
 
   def validate_grading_system
