@@ -13,6 +13,9 @@ class ContestRoute < ApplicationRecord
   validates :number, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :number_of_holds, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_blank: true
 
+  after_save :delete_caches
+  after_destroy :delete_caches
+
   def disable!
     update_column :disabled_at, DateTime.current
   end
@@ -69,5 +72,11 @@ class ContestRoute < ApplicationRecord
 
   def delete_summary_cache
     Rails.cache.delete("#{cache_key_with_version}/summary_contest_route")
+  end
+
+  private
+
+  def delete_caches
+    contest_stage_step.delete_summary_cache
   end
 end
