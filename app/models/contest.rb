@@ -423,7 +423,7 @@ class Contest < ApplicationRecord
   end
 
   def validate_dates
-    errors.add(:subscription_end_date, 'before_start_date') if subscription_end_date < subscription_start_date
+    errors.add(:subscription_end_date, 'before_start_date') if subscription_start_date && subscription_end_date < subscription_start_date
     errors.add(:subscription_end_date, 'before_end_date') if end_date < subscription_end_date
     errors.add(:end_date, 'before_start_date') if end_date < start_date
   end
