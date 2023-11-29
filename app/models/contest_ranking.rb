@@ -121,9 +121,9 @@ class ContestRanking
       zone = current_ascent.zone_1_attempt || 0
       value = 0
       value = 1000.0 if top.positive?
-      value -= top * 10
+      value -= top / 10.0
       value += 1.0 if zone.positive?
-      value -= zone / 100.0
+      value -= zone / 1000.0
       {
         value: value,
         details: [top, zone]
