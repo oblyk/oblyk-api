@@ -7,6 +7,8 @@ class ContestRoute < ApplicationRecord
   belongs_to :gym_route, optional: true
   belongs_to :contest_route_group
   has_one :contest_stage_step, through: :contest_route_group
+  has_one :contest_stage, through: :contest_stage_step
+  has_one :contest, through: :contest_stage
   has_many :contest_participant_ascents, dependent: :destroy
   has_many :contest_participant_ascents, dependent: :destroy
 
@@ -78,5 +80,6 @@ class ContestRoute < ApplicationRecord
 
   def delete_caches
     contest_stage_step.delete_summary_cache
+    contest.delete_results_cache
   end
 end

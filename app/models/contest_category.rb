@@ -157,6 +157,7 @@ class ContestCategory < ApplicationRecord
   def delete_caches
     contest.contest_stage_steps.each(&:delete_summary_cache)
     contest_participants.each(&:delete_summary_cache)
+    contest.delete_results_cache
   end
 
   def set_order

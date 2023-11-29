@@ -66,6 +66,7 @@ class ContestRouteGroup < ApplicationRecord
 
   def delete_caches
     contest_stage_step.delete_summary_cache
+    contest.delete_results_cache
   end
 
   def normalize_attributes

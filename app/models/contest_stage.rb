@@ -60,6 +60,7 @@ class ContestStage < ApplicationRecord
 
   def delete_caches
     contest_stage_steps.each(&:delete_summary_cache)
+    contest.delete_results_cache
   end
 
   def set_order

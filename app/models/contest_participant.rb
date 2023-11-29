@@ -182,6 +182,7 @@ class ContestParticipant < ApplicationRecord
   def delete_caches
     contest.contest_categories.each(&:delete_summary_cache)
     contest.delete_summary_cache
+    contest.delete_results_cache
   end
 
   def normalize_values

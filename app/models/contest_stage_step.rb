@@ -105,5 +105,6 @@ class ContestStageStep < ApplicationRecord
 
   def delete_caches
     contest_routes.each(&:delete_summary_cache)
+    contest.delete_results_cache
   end
 end

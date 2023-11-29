@@ -3,9 +3,14 @@
 class ContestParticipantAscent < ApplicationRecord
   belongs_to :contest_participant
   belongs_to :contest_route
+  has_one :contest_category, through: :contest_participant
+  has_one :contest, through: :contest_category
 
   before_validation :set_registered_at
   before_validation :normalize_attributes
+
+  after_destroy :delete_caches
+  after_update :delete_caches
 
   def summary_to_json
     {
@@ -34,6 +39,10 @@ class ContestParticipantAscent < ApplicationRecord
   end
 
   private
+
+  def delete_caches
+    contest.delete_results_cache
+  end
 
   def set_registered_at
     self.registered_at ||= DateTime.current
