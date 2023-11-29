@@ -114,7 +114,7 @@ class Contest < ApplicationRecord
           }
           stage_steps[stage.id] ||= stage.contest_stage_steps.order(:step_order)
           stage_steps[stage.id].each do |step|
-            next unless category_by_steps[step.id].include? category.id
+            next unless category_by_steps[step.id]&.include? category.id
 
             rankers["#{cat_key}-#{step.id}"] ||= ContestRanking.new step, category, participant.genre
             scores = rankers["#{cat_key}-#{step.id}"].participant_scores(participant.id)
