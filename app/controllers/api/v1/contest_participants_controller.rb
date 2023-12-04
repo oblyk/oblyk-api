@@ -231,7 +231,6 @@ module Api
 
       def create
         @contest_participant = ContestParticipant.new(contest_participant_params)
-        @contest_participant.contest = @contest
         if @contest_participant.save
           render json: @contest_participant.detail_to_json, status: :ok
         else

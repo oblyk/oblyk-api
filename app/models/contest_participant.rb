@@ -197,6 +197,7 @@ class ContestParticipant < ApplicationRecord
 
   def set_token
     return if token.present?
+    return nil unless contest
 
     first_part = first_name.downcase.parameterize
     find = false
@@ -262,6 +263,7 @@ class ContestParticipant < ApplicationRecord
   end
 
   def validate_category_obligations
+    return unless contest
     return unless contest_category_id_changed?
 
     between_age = contest_category.registration_obligation == ContestCategory::BETWEEN_AGE
@@ -299,11 +301,15 @@ class ContestParticipant < ApplicationRecord
   end
 
   def validate_capacity
+    return unless contest
+
     errors.add(:base, 'contest_is_complete') if new_record? && contest.total_capacity.present? && (contest.contest_participants_count || 0) >= contest.total_capacity
     errors.add(:base, 'category_is_complete') if contest_category_id_changed? && contest_category.capacity.present? && (contest_category.contest_participants_count || 0) >= contest_category.capacity
   end
 
   def unique_participant
+    return unless contest
+
     errors.add(:base, 'participant_is_already_registered') if contest.contest_participants.where.not(id: id).exists?(first_name: first_name, last_name: last_name, date_of_birth: date_of_birth)
   end
 
