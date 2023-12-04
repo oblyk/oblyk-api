@@ -276,7 +276,9 @@ Rails.application.routes.draw do
             get :import_template, on: :collection
             get :participant, on: :member
             post :subscribe, on: :collection
-            resources :contest_participant_ascents
+            resources :contest_participant_ascents, only: %i[create] do
+              post :bulk, on: :collection
+            end
           end
           resources :contest_stages do
             resources :contest_stage_steps do
