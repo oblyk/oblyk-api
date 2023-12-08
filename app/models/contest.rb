@@ -46,7 +46,7 @@ class Contest < ApplicationRecord
   end
 
   def remaining_places
-    total_capacity ? total_capacity - (contest_participants_count || 0) : nil
+    total_capacity ? total_capacity - (contest_participants.count || 0) : nil
   end
 
   def one_day_event?
@@ -249,7 +249,7 @@ class Contest < ApplicationRecord
         beginning_is_in_past: beginning_is_in_past?,
         total_capacity: total_capacity,
         categorization_type: categorization_type,
-        contest_participants_count: contest_participants_count,
+        contest_participants_count: contest_participants.count,
         archived_at: archived_at,
         banner: banner.attached? ? banner_large_url : nil,
         banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil,
@@ -277,11 +277,6 @@ class Contest < ApplicationRecord
         }
       }
     )
-  end
-
-  def update_from_participant!
-    self.contest_participants_count = contest_participants.count
-    save
   end
 
   def time_line

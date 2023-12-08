@@ -72,7 +72,7 @@ class ContestCategory < ApplicationRecord
         under_age: under_age,
         auto_distribute: auto_distribute,
         waveable: waveable,
-        contest_participants_count: contest_participants_count,
+        contest_participants_count: contest_participants.count,
         contest_id: contest_id,
         waves: waves,
         gym: {

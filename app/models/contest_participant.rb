@@ -26,14 +26,9 @@ class ContestParticipant < ApplicationRecord
 
   before_create :auto_distribute
 
-  after_save :update_contest_category
   after_save :delete_caches
-  after_save :update_contest
-  after_save :update_category_count
   after_create :create_participant_step
   after_create :send_subscription_mail, unless: :skip_subscription_mail
-  after_destroy :update_contest
-  after_destroy :update_category_count
   after_destroy :delete_caches
 
   def age
@@ -218,22 +213,6 @@ class ContestParticipant < ApplicationRecord
     self.token = token_suggestion
   end
 
-  def update_contest
-    contest.update_from_participant!
-  end
-
-  def update_contest_category
-    return unless saved_change_to_contest_category_id?
-
-    contest_category.contest_participants_count = contest.contest_participants.where(contest_category_id: contest_category_id).count
-    contest_category.save
-  end
-
-  def update_category_count
-    contest_category.contest_participants_count = contest.contest_participants.where(contest_category_id: contest_category_id).count
-    contest_category.save
-  end
-
   def auto_distribute
     return unless contest_category.auto_distribute && contest_category.waveable && contest.contest_waves.count.positive?
 
@@ -303,8 +282,8 @@ class ContestParticipant < ApplicationRecord
   def validate_capacity
     return unless contest
 
-    errors.add(:base, 'contest_is_complete') if new_record? && contest.total_capacity.present? && (contest.contest_participants_count || 0) >= contest.total_capacity
-    errors.add(:base, 'category_is_complete') if contest_category_id_changed? && contest_category.capacity.present? && (contest_category.contest_participants_count || 0) >= contest_category.capacity
+    errors.add(:base, 'contest_is_complete') if new_record? && contest.total_capacity.present? && (contest.contest_participants.count || 0) >= contest.total_capacity
+    errors.add(:base, 'category_is_complete') if contest_category_id_changed? && contest_category.capacity.present? && (contest_category.contest_participants.count || 0) >= contest_category.capacity
   end
 
   def unique_participant

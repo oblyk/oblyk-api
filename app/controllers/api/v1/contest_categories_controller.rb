@@ -39,7 +39,7 @@ module Api
       end
 
       def destroy
-        if @contest_category.contest_participants_count&.positive?
+        if @contest_category.contest_participants.count.positive?
           render json: { error: { base: ['La categorie a des participants, elle ne peut pas être supprimée'] } }, status: :unprocessable_entity
           return
         end
