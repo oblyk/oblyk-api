@@ -16,7 +16,7 @@ class ContestParticipant < ApplicationRecord
   before_validation :normalize_values
   before_validation :set_token
 
-  validates :first_name, :last_name, :genre, presence: true
+  validates :first_name, :last_name, :genre, :date_of_birth, presence: true
   validates :genre, inclusion: { in: %w[male female] }
   validates :token, uniqueness: { scope: :contest }, on: :create
   validate :unique_participant
@@ -237,6 +237,8 @@ class ContestParticipant < ApplicationRecord
   end
 
   def validate_age
+    return unless age
+
     errors.add(:base, "Le participant doit avoir 3 ans ou plus pour s'inscrire") if age < 3
     errors.add(:base, "Le participant semble trop vieux pour s'inscrire ...") if age >= 100
   end
@@ -251,7 +253,7 @@ class ContestParticipant < ApplicationRecord
     max_age = contest_category.max_age
 
     # Validate category when 'between_age'
-    if between_age
+    if between_age && age
       errors.add(:base, "Le participant doit avoir plus de #{min_age} ans pour s'inscrire") if min_age.present? && max_age.blank? && age < min_age
       errors.add(:base, "Le participant doit avoir moins de #{max_age} ans pour s'inscrire") if min_age.blank? && max_age.present? && age > max_age
       errors.add(:base, "Le participant doit avoir entre #{min_age} et #{max_age} ans pour s'inscrire") if min_age.present? && max_age.present? && (age > max_age || age < min_age)
