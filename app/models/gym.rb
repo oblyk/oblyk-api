@@ -170,7 +170,8 @@ class Gym < ApplicationRecord
         banner: banner.attached? ? banner_large_url : nil,
         banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil,
         banner_cropped_url: banner ? banner_cropped_medium_url : nil,
-        logo: logo.attached? ? logo_large_url : nil
+        logo: logo.attached? ? logo_large_url : nil,
+        logo_thumbnail_url: logo.attached? ? logo_thumbnail_url : nil
       }
     end
   end
