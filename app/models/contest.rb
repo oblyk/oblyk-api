@@ -238,15 +238,9 @@ class Contest < ApplicationRecord
         subscription_start_date: subscription_start_date,
         subscription_end_date: subscription_end_date,
         subscription_closed_at: subscription_closed_at,
-        subscription_opened: subscription_opened?,
-        authentification_opened: authentification_opened?,
-        finished: finished?,
-        ongoing: ongoing?,
-        coming: coming?,
         draft: draft,
         authorise_public_subscription: authorise_public_subscription,
         private: private,
-        beginning_is_in_past: beginning_is_in_past?,
         total_capacity: total_capacity,
         categorization_type: categorization_type,
         contest_participants_count: contest_participants.count,
@@ -262,6 +256,12 @@ class Contest < ApplicationRecord
       }
     end
     data[:remaining_places] = remaining_places
+    data[:finished] = finished?
+    data[:ongoing] = ongoing?
+    data[:coming] = coming?
+    data[:beginning_is_in_past] = beginning_is_in_past?
+    data[:subscription_opened] = subscription_opened?
+    data[:authentification_opened] = authentification_opened?
     data
   end
 
