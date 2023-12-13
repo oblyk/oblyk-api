@@ -230,16 +230,17 @@ module Api
       end
 
       def create
-        @contest_participant = ContestParticipant.new(contest_participant_params)
-        if @contest_participant.save
-          render json: @contest_participant.detail_to_json, status: :ok
+        contest_participant = ContestParticipant.new(contest_participant_params)
+        if contest_participant.save
+          render json: contest_participant.detail_to_json, status: :ok
         else
-          render json: { error: @contest_participant.errors }, status: :unprocessable_entity
+          render json: { error: contest_participant.errors }, status: :unprocessable_entity
         end
       end
 
       def update
         if @contest_participant.update(contest_participant_params)
+          broadcast_contest @contest_participant, 'UpdateParticipant'
           render json: @contest_participant.detail_to_json, status: :ok
         else
           render json: { error: @contest_participant.errors }, status: :unprocessable_entity
@@ -274,6 +275,16 @@ module Api
         return unless @gym.administered?
 
         not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).count.zero?
+      end
+
+      def broadcast_contest(participant, type = 'NewParticipant')
+        return if ENV['ACTIVE_CONTEST_BROADCAST'] == 'false'
+
+        ActionCable.server.broadcast "contest_rankers_#{@contest.id}", {
+          type: type,
+          first_name: participant.first_name,
+          last_name: participant.last_name
+        }
       end
 
       def contest_participant_params

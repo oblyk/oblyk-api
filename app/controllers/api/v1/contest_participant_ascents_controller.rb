@@ -19,6 +19,7 @@ module Api
         contest_ascent.hold_number_plus = contest_participant_params[:hold_number_plus]
 
         if contest_ascent.save
+          broadcast_ascents
           head :no_content
         else
           render json: { error: contest_ascent.errors }, status: :unprocessable_entity
@@ -42,6 +43,8 @@ module Api
           errors << contest_ascent.errors.full_messages unless contest_ascent.save
         end
 
+        broadcast_ascents
+
         if errors.size.zero?
           head :no_content
         else
@@ -50,6 +53,16 @@ module Api
       end
 
       private
+
+      def broadcast_ascents
+        return if ENV['ACTIVE_CONTEST_BROADCAST'] == 'false'
+
+        ActionCable.server.broadcast "contest_rankers_#{@contest.id}", {
+          type: 'AscentsUpdate',
+          first_name: @contest_participant.first_name,
+          last_name: @contest_participant.last_name
+        }
+      end
 
       def set_contest
         @contest = Contest.where(gym_id: params[:gym_id]).find params[:contest_id]

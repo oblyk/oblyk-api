@@ -106,6 +106,7 @@ class Contest < ApplicationRecord
             participant_id: participant.id,
             first_name: participant.first_name,
             last_name: participant.last_name,
+            affiliation: participant.affiliation,
             stages: {}
           }
           stages.each do |stage|

@@ -57,3 +57,6 @@ GCS_BUCKET: 'my-google-cloud-bucket'
 # Mapbox
 MAPBOX_TOKEN: 'mapbox-token'
 MAPBOX_STATIC_MAP_STYLE: 'mapbox-style-for-static-image'
+
+# GYM
+ACTIVE_CONTEST_BROADCAST: 'true'
