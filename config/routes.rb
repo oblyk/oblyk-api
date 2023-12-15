@@ -33,6 +33,9 @@ Rails.application.routes.draw do
       get 'last_added', controller: :commons, action: :last_added
       get 'partners/figures', controller: :partners, action: :figures
       get 'partners/partners_around', controller: :partners, actions: :partners_around
+      resources :tools, only: %i[] do
+        get :qr_coder, on: :collection
+      end
 
       resources :organizations do
         get :api_access_token, on: :member

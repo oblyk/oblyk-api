@@ -19,3 +19,9 @@ Accept: application/json
 GET {{api_url}}/gyms/229/contests/4/results.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
+
+### Export participant
+GET {{api_url}}/gyms/229/contests/4/contest_participants/export.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
