@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_11_21_080415) do
+ActiveRecord::Schema.define(version: 2023_12_17_180024) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -737,6 +737,31 @@ ActiveRecord::Schema.define(version: 2023_11_21_080415) do
     t.index ["gym_id"], name: "index_gym_grades_on_gym_id"
   end
 
+  create_table "gym_label_templates", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.string "name"
+    t.string "label_direction"
+    t.json "layout_options"
+    t.json "border_style"
+    t.string "font_family"
+    t.string "qr_code_position"
+    t.string "label_arrangement"
+    t.string "grade_style"
+    t.boolean "display_points"
+    t.boolean "display_openers"
+    t.boolean "display_opened_at"
+    t.boolean "display_name"
+    t.boolean "display_description"
+    t.boolean "display_anchor"
+    t.boolean "display_climbing_style"
+    t.string "page_format"
+    t.string "page_direction"
+    t.bigint "gym_id"
+    t.datetime "archived_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gym_id"], name: "index_gym_label_templates_on_gym_id"
+  end
+
   create_table "gym_openers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.string "first_name"
@@ -1285,6 +1310,7 @@ ActiveRecord::Schema.define(version: 2023_11_21_080415) do
   add_foreign_key "contest_time_blocks", "contest_waves"
   add_foreign_key "contest_waves", "contests"
   add_foreign_key "contests", "gyms"
+  add_foreign_key "gym_label_templates", "gyms"
   add_foreign_key "gym_options", "gyms"
   add_foreign_key "likes", "users"
 end

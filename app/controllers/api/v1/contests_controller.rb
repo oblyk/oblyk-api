@@ -33,7 +33,7 @@ module Api
       end
 
       def index
-        contests = params.fetch(:archived, false) ? @gym.contests.unarchived : @gym.contests.archived
+        contests = params.fetch(:archived, false) ? @gym.contests.archived : @gym.contests.unarchived
         render json: contests.order(start_date: :desc).map(&:summary_to_json), status: :ok
       end
 

@@ -40,6 +40,7 @@ class GymRoute < ApplicationRecord
   scope :mounted, -> { where(dismounted_at: nil) }
 
   accepts_nested_attributes_for :gym_route_cover
+  attr_accessor :qrcode
 
   def gym_grade
     gym_grade_line&.gym_grade || gym_sector.gym_grade
@@ -224,6 +225,7 @@ class GymRoute < ApplicationRecord
         gym_route_cover_id: gym_route_cover_id,
         gym_sector_name: gym_sector.name,
         anchor_number: anchor_number,
+        short_app_path: short_app_path,
         grade_gap: {
           max_grade_value: max_grade_value,
           min_grade_value: min_grade_value,

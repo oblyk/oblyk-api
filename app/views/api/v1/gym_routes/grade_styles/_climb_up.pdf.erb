@@ -1,0 +1,39 @@
+<div class="climb-up">
+  <div
+    class="color-tag"
+  >
+    <svg
+      viewBox="0 0 56.480572 56.480572"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:svg="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient
+          id="route-gradiant-<%= route.id %>">
+          <% route.hold_gradiant.each_with_index do |color, index| %>
+            <stop
+              style="stop-color:<%= color[:color] %>;stop-opacity:1;"
+              offset="<%= index %>"
+              id="stop<%= index %>" />
+          <% end %>
+        </linearGradient>
+        <linearGradient
+          xlink:href="#route-gradiant-<%= route.id %>"
+          id="route-gradiant-<%= route.id %>"
+          x1="-43.233685"
+          y1="207.94342"
+          x2="12.551144"
+          y2="207.94342"
+          gradientUnits="userSpaceOnUse" />
+      </defs>
+      <g transform="translate(-107.95,-129.64583)">
+        <path
+          style="fill:#0d1117;stroke-width:0.345001"
+          transform="rotate(-45)"
+          d="M -43.233685,195.89804 H 12.551144 V 219.9888 H -43.233685 Z" />
+      </g>
+    </svg>
+  </div>
+  <b>
+    <%= route.grade_to_s %>
+  </b>
+</div>

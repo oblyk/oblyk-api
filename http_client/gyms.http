@@ -129,3 +129,8 @@ GET {{api_url}}/gyms/229/tree_routes.json
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
+
+### GET avaible font for gym labels
+GET {{api_url}}/gym_label_fonts.json
+HttpApiAccessToken: {{api_access_token}}
+Content-Type: application/json

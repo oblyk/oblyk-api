@@ -4,8 +4,8 @@ module Archivable
   extend ActiveSupport::Concern
 
   included do
-    scope :archived, -> { where('`archived_at` IS NULL OR `archived_at` > ?', Time.current) }
-    scope :unarchived, -> { where.not(archived_at: nil) }
+    scope :unarchived, -> { where('`archived_at` IS NULL OR `archived_at` > ?', Time.current) }
+    scope :archived, -> { where.not(archived_at: nil) }
   end
 
   def archive!

@@ -220,6 +220,11 @@ Rails.application.routes.draw do
           put :deactivate, on: :member
           put :activate, on: :member
         end
+        resources :gym_label_templates do
+          get :print, on: :member
+          put :deactivate, on: :member
+          put :activate, on: :member
+        end
         resources :gym_grades do
           resources :gym_grade_lines
         end
@@ -298,6 +303,7 @@ Rails.application.routes.draw do
           end
         end
       end
+      resources :gym_label_fonts, only: %i[index]
       resources :gym_roles, only: %i[index]
       resources :color_systems, only: %i[index show create]
       resources :gym_administrations, only: %i[] do
