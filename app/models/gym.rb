@@ -103,7 +103,6 @@ class Gym < ApplicationRecord
 
   def administered!
     self.assigned_at ||= Time.current
-    build_default_gym_label_template
     save
   end
 
@@ -202,34 +201,6 @@ class Gym < ApplicationRecord
 
   def delete_summary_cache
     Rails.cache.delete("#{cache_key_with_version}/summary_gym")
-  end
-
-  def build_default_gym_label_template
-    gym_label_templates << GymLabelTemplate.new(
-      name: 'Defaut',
-      label_direction: 'one_by_row',
-      border_style: {
-        'border-color' => '#000000',
-        'border-width' => '1px',
-        'border-style' => 'solid',
-        'border-radius' => '5px'
-      },
-      font_family: 'lato',
-      qr_code_position: 'in_label',
-      label_arrangement: 'rectangular_horizontal',
-      grade_style: 'tag_and_hold',
-      display_points: false,
-      display_openers: true,
-      display_opened_at: true,
-      display_name: true,
-      display_description: true,
-      display_anchor: false,
-      display_climbing_style: true,
-      display_grade: true,
-      display_tag_and_hold: true,
-      page_format: 'A4',
-      page_direction: 'portrait'
-    )
   end
 
   private

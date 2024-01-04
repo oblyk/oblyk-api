@@ -150,6 +150,7 @@ module Api
             sets: %w[simple multi_pitch],
             id: 'a',
             name: 'Nom voie 1',
+            climbing_type: 'sport_climbing',
             description: 'Une description sur la voie',
             short_app_path: preview_short_path('a'),
             openers: [
@@ -167,6 +168,7 @@ module Api
             sets: %w[simple],
             id: 'b',
             name: 'Cotation complex',
+            climbing_type: 'sport_climbing',
             description: nil,
             short_app_path: preview_short_path('b'),
             openers: [
@@ -184,6 +186,7 @@ module Api
             sets: ['multi_pitch'],
             id: 'c',
             name: 'Deux longueurs',
+            climbing_type: 'sport_climbing',
             description: 'Voie de deux longeurs',
             short_app_path: preview_short_path('c'),
             openers: [
@@ -201,6 +204,7 @@ module Api
             sets: %w[simple multi_pitch],
             id: 'd',
             name: 'Cotation complex',
+            climbing_type: 'sport_climbing',
             description: nil,
             short_app_path: preview_short_path('d'),
             openers: [
@@ -218,6 +222,7 @@ module Api
             sets: %w[simple multi_pitch],
             id: 'e',
             name: 'Voie avec 3 ouvreurs',
+            climbing_type: 'sport_climbing',
             description: nil,
             short_app_path: preview_short_path('e'),
             openers: [
