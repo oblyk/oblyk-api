@@ -225,6 +225,8 @@ class Gym < ApplicationRecord
       display_description: true,
       display_anchor: false,
       display_climbing_style: true,
+      display_grade: true,
+      display_tag_and_hold: true,
       page_format: 'A4',
       page_direction: 'portrait'
     )

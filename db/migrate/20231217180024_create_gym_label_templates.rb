@@ -18,6 +18,8 @@ class CreateGymLabelTemplates < ActiveRecord::Migration[6.0]
       t.boolean :display_description
       t.boolean :display_anchor
       t.boolean :display_climbing_style
+      t.boolean :display_grade
+      t.boolean :display_tag_and_hold
 
       t.string :page_format # A4, A5, etc.
       t.string :page_direction # portrait or landscape

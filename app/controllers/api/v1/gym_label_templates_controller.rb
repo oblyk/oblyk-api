@@ -5,17 +5,17 @@ module Api
     class GymLabelTemplatesController < ApiController
       include Gymable
 
-      before_action :set_gym_label_template, only: %i[show print update archived unarchived]
+      before_action :set_gym_label_template, only: %i[show print update destroy archived unarchived]
       before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[index show]
 
       def index
-        gym_label_templates = case params.fetch(:archived, 'false')
+        gym_label_templates = case params.fetch(:with_archived, 'false')
                               when 'true'
-                                @gym.gym_label_templates.archived
+                                @gym.gym_label_templates
                               else
                                 @gym.gym_label_templates.unarchived
                               end
-        render json: gym_label_templates.order(:name).map(&:summary_to_json), status: :ok
+        render json: gym_label_templates.order(:archived_at, :name).map(&:summary_to_json), status: :ok
       end
 
       def show
@@ -41,7 +41,7 @@ module Api
         footer_qrcode = nil
         if @gym_label_template.qr_code_position == 'footer'
           routes_query = gym_routes.map { |route| "r[]=#{route[:id]}" }.join('&')
-          uri = "#{ENV['OBLYK_APP_URL']}/grs?#{routes_query}"
+          uri = "#{ENV['OBLYK_APP_URL']}/grs/#{@gym.id}?#{routes_query}"
           footer_qrcode = RQRCode::QRCode.new(
             uri,
             level: :l
@@ -93,9 +93,14 @@ module Api
         end
       end
 
+      def destroy
+        @gym_label_template.destroy
+        head :no_content
+      end
+
       def archived
         if @gym_label_template.archive!
-          render json: {}, status: :ok
+          render json: @gym_label_template.detail_to_json, status: :ok
         else
           render json: { error: @gym_label_template.errors }, status: :unprocessable_entity
         end
@@ -103,7 +108,7 @@ module Api
 
       def unarchived
         if @gym_label_template.unarchive!
-          render json: {}, status: :ok
+          render json: @gym_label_template.detail_to_json, status: :ok
         else
           render json: { error: @gym_label_template.errors }, status: :unprocessable_entity
         end
@@ -131,6 +136,8 @@ module Api
           :display_description,
           :display_anchor,
           :display_climbing_style,
+          :display_grade,
+          :display_tag_and_hold,
           :page_format,
           :page_direction,
           border_style: %i[border-style border-color border-width border-radius]
@@ -141,9 +148,10 @@ module Api
         routes = [
           {
             sets: %w[simple multi_pitch],
-            id: 0,
+            id: 'a',
             name: 'Nom voie 1',
             description: 'Une description sur la voie',
+            short_app_path: preview_short_path('a'),
             openers: [
               { name: 'Simon' }, { name: 'Léa' }
             ],
@@ -157,9 +165,10 @@ module Api
           },
           {
             sets: %w[simple],
-            id: -1,
+            id: 'b',
             name: 'Cotation complex',
             description: nil,
+            short_app_path: preview_short_path('b'),
             openers: [
               { name: 'Simon' }
             ],
@@ -173,9 +182,10 @@ module Api
           },
           {
             sets: ['multi_pitch'],
-            id: -2,
+            id: 'c',
             name: 'Deux longueurs',
             description: 'Voie de deux longeurs',
+            short_app_path: preview_short_path('c'),
             openers: [
               { name: 'Simon' }
             ],
@@ -189,9 +199,10 @@ module Api
           },
           {
             sets: %w[simple multi_pitch],
-            id: -3,
+            id: 'd',
             name: 'Cotation complex',
             description: nil,
+            short_app_path: preview_short_path('d'),
             openers: [
               { name: 'Simon' }
             ],
@@ -205,9 +216,10 @@ module Api
           },
           {
             sets: %w[simple multi_pitch],
-            id: -4,
+            id: 'e',
             name: 'Voie avec 3 ouvreurs',
             description: nil,
+            short_app_path: preview_short_path('e'),
             openers: [
               { name: 'Simon' }, { name: 'Léa' }, { name: 'Pierre' }
             ],
@@ -221,6 +233,10 @@ module Api
           }
         ]
         routes.filter { |route| route[:sets].include?(set) }
+      end
+
+      def preview_short_path(id)
+        "#{ENV['OBLYK_APP_URL']}/gr/#{@gym.id}-#{id}"
       end
     end
   end

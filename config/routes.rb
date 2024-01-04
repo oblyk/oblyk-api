@@ -222,8 +222,8 @@ Rails.application.routes.draw do
         end
         resources :gym_label_templates do
           get :print, on: :member
-          put :deactivate, on: :member
-          put :activate, on: :member
+          put :archived, on: :member
+          put :unarchived, on: :member
         end
         resources :gym_grades do
           resources :gym_grade_lines

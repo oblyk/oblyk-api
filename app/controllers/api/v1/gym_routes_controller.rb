@@ -17,6 +17,7 @@ module Api
         order_by = params.fetch(:order_by, nil)
         direction = params.fetch(:direction, 'asc') == 'asc' ? 'ASC' : 'DESC'
         dismounted = params.fetch(:dismounted, false)
+        route_ids = params.fetch(:route_ids, nil)
 
         if group_by == 'sector'
           sectors = if @gym_sector.present?
@@ -40,6 +41,8 @@ module Api
                      GymRoute.where(gym_sector: @gym_sector)
                    elsif @gym_space.present?
                      GymRoute.joins(:gym_sector).where(gym_sectors: { gym_space: @gym_space })
+                   elsif route_ids
+                     GymRoute.where(id: route_ids)
                    else
                      GymRoute.joins(:gym_space).where(gym_spaces: { gym: @gym })
                    end

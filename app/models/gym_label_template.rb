@@ -40,8 +40,11 @@ class GymLabelTemplate < ApplicationRecord
       display_description: display_description,
       display_anchor: display_anchor,
       display_climbing_style: display_climbing_style,
+      display_grade: display_grade,
+      display_tag_and_hold: display_tag_and_hold,
       page_format: page_format,
       page_direction: page_direction,
+      archived_at: archived_at,
       gym: {
         id: gym.id,
         slug_name: gym.slug_name
@@ -54,8 +57,7 @@ class GymLabelTemplate < ApplicationRecord
       {
         history: {
           created_at: created_at,
-          updated_at: updated_at,
-          archived_at: archived_at
+          updated_at: updated_at
         }
       }
     )

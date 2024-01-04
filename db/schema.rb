@@ -753,6 +753,8 @@ ActiveRecord::Schema.define(version: 2023_12_17_180024) do
     t.boolean "display_description"
     t.boolean "display_anchor"
     t.boolean "display_climbing_style"
+    t.boolean "display_grade"
+    t.boolean "display_tag_and_hold"
     t.string "page_format"
     t.string "page_direction"
     t.bigint "gym_id"
