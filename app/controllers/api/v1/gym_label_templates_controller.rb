@@ -124,7 +124,6 @@ module Api
         params.require(:gym_label_template).permit(
           :name,
           :label_direction,
-          :layout_options,
           :font_family,
           :qr_code_position,
           :label_arrangement,
@@ -140,6 +139,7 @@ module Api
           :display_tag_and_hold,
           :page_format,
           :page_direction,
+          layout_options: %i[page-margin],
           border_style: %i[border-style border-color border-width border-radius]
         )
       end
