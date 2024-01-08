@@ -5,8 +5,8 @@ class GymLabelTemplate < ApplicationRecord
 
   LABEL_DIRECTION_LIST = %w[one_by_row two_by_row three_by_row four_by_row circular].freeze
   QR_CODE_POSITION_LIST = %w[in_label footer none].freeze
-  PAGE_FORMAT_LIST = %w[A1 A2 A3 A4 A5 A6].freeze
-  PAGE_DIRECTION_LIST = %w[portrait landscape].freeze
+  PAGE_FORMAT_LIST = %w[A1 A2 A3 A4 A5 A6 free].freeze
+  PAGE_DIRECTION_LIST = %w[portrait landscape free].freeze
   LABEL_ARRANGEMENT_LIST = %w[rectangular_horizontal rectangular_vertical].freeze
   GRADE_STYLE_LIST = %w[none tag_and_hold diagonal_label].freeze
 
