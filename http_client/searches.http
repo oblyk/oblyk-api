@@ -15,3 +15,15 @@ Content-Type: application/json
 {
   "query": "rocher des a"
 }
+
+
+### Search "Rocher des a"
+GET {{api_url}}/search_all.json
+HttpApiAccessToken: {{api_access_token}}
+Content-Type: application/json
+
+{
+  "query": "Lyon gerland",
+  "page": 1,
+  "collections": ["Crag", "Gym"]
+}

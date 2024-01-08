@@ -45,6 +45,28 @@ class Search < ApplicationRecord
     limited_results.uniq
   end
 
+  def self.infinite_search(query, collections = nil, page = 1)
+    return [] if query.blank?
+
+    parameterize_query = Search.normalize_index_name query
+
+    query = Search.ngram_splitter(parameterize_query, 4).map { |word| "`index_name` LIKE '%#{word}%'" }.join(' OR ')
+
+    results = Search.distinct.select(:index_id, :index_name, :collection).where(query)
+    results = results.where("CHAR_LENGTH(index_name) <= #{parameterize_query.size}") if parameterize_query.size <= 2
+    results = results.where(collection: collections) if collections
+
+    levenshtein_results = []
+    results.each do |result|
+      levenshtein_score = Levenshtein.distance(result.index_name, parameterize_query)
+      levenshtein_results << { index_id: result.index_id, levenshtein_score: levenshtein_score, collection: result.collection.to_sym }
+    end
+    levenshtein_results.sort_by! { |levenshtein_result| levenshtein_result[:levenshtein_score] }
+    limit_start = (page - 1) * 25
+    limit_end = (page * 25) - 1
+    levenshtein_results[limit_start..limit_end]
+  end
+
   def self.push(name, id, collection, bucket = nil, secondary_bucket = nil)
     parameterize_name = Search.normalize_index_name name
     new_index = Search.find_or_initialize_by index_name: parameterize_name,

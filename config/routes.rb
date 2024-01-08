@@ -27,6 +27,7 @@ Rails.application.routes.draw do
         delete 'sign_in', controller: :signin, action: :destroy
       end
       get 'search', controller: :searches, action: :index
+      get 'search_all', controller: :searches, action: :search_all
 
       get 'figures', controller: :commons, action: :figures
       get 'last_activity_feed', controller: :commons, action: :last_activity_feed
