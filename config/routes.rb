@@ -28,6 +28,7 @@ Rails.application.routes.draw do
       end
       get 'search', controller: :searches, action: :index
       get 'search_all', controller: :searches, action: :search_all
+      get 'search_around', controller: :searches, action: :search_around
 
       get 'figures', controller: :commons, action: :figures
       get 'last_activity_feed', controller: :commons, action: :last_activity_feed

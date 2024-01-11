@@ -27,3 +27,14 @@ Content-Type: application/json
   "page": 1,
   "collections": ["Crag", "Gym"]
 }
+
+### Search gyms and crags arround location
+GET {{api_url}}/search_around.json
+HttpApiAccessToken: {{api_access_token}}
+Content-Type: application/json
+
+{
+  "latitude": 45.7576657,
+  "longitude": 4.8590331,
+  "page": 1
+}

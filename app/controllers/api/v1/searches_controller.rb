@@ -60,6 +60,59 @@ module Api
           results: remap_results
         }, status: :ok
       end
+
+      def search_around
+        latitude = params.fetch(:latitude, nil)
+        longitude = params.fetch(:longitude, nil)
+        page = params.fetch(:page, 1).to_i
+        query = ActiveRecord::Base.sanitize_sql(
+          [
+            "SELECT id,
+                    type,
+                    getrange(latitude, longitude, :latitude, :longitude)
+             FROM (SELECT id, 'Crag' AS type, name, latitude, longitude
+                   FROM crags
+                   WHERE deleted_at IS NULL
+                   UNION ALL
+                   SELECT id, 'Gym' AS type, name, latitude, longitude
+                   FROM gyms
+                   WHERE deleted_at IS NULL) AS crag_and_gyms
+             ORDER BY getrange(latitude, longitude, :latitude, :longitude)
+             LIMIT 25 OFFSET :page",
+            {
+              latitude: latitude,
+              longitude: longitude,
+              page: (page - 1) * 25
+            }
+          ]
+        )
+        crag_and_gyms = ActiveRecord::Base.connection.execute(query)
+        results = crag_and_gyms.to_a.map do |crag_and_gym|
+          {
+            id: crag_and_gym[0],
+            type: crag_and_gym[1],
+            distance: crag_and_gym[2]
+          }
+        end
+        crags = Crag.where(id: results.filter { |el| el[:type] == 'Crag' }.map { |el| el[:id] }).map(&:summary_to_json)
+        gyms = Gym.where(id: results.filter { |el| el[:type] == 'Gym' }.map { |el| el[:id] }).map(&:summary_to_json)
+        data = []
+        results.each do |result|
+          if result[:type] == 'Crag'
+            data << {
+              type: :Crag,
+              data: crags.find { |crag| crag[:id] == result[:id] }
+            }
+          end
+          next unless result[:type] == 'Gym'
+
+          data << {
+            type: :Gym,
+            data: gyms.find { |gym| gym[:id] == result[:id] }
+          }
+        end
+        render json: data, status: :ok
+      end
     end
   end
 end
