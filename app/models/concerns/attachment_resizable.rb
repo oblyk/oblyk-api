@@ -11,6 +11,14 @@ module AttachmentResizable
     nil
   end
 
+  def resize_to_limit_attachment(attachment, size)
+    return unless attachment.attached?
+
+    Rails.application.routes.url_helpers.rails_representation_url(attachment.variant(resize_to_limit: size).processed, only_path: true)
+  rescue StandardError
+    nil
+  end
+
   def crop_attachment(attachment, size)
     return unless attachment.attached?
 

@@ -36,7 +36,7 @@ class GymSpace < ApplicationRecord
   end
 
   def plan_large_url
-    resize_attachment plan, '4000x4000'
+    resize_to_limit_attachment plan, [4000, 4000]
   end
 
   def plan_thumbnail_url
