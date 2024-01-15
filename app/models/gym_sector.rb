@@ -64,6 +64,10 @@ class GymSector < ApplicationRecord
     end
   end
 
+  def remove_cache!
+    Rails.cache.delete("#{cache_key_with_version}/summary_gym_sector")
+  end
+
   private
 
   def remove_routes_cache

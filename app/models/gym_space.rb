@@ -25,6 +25,7 @@ class GymSpace < ApplicationRecord
 
   after_create :delete_gym_cache
   after_save :remove_routes_cache
+  after_update :remove_sectors_cache
   after_destroy :delete_gym_cache
 
   def set_plan_dimension!
@@ -134,6 +135,10 @@ class GymSpace < ApplicationRecord
     gym_routes.find_each do |gym_route|
       Rails.cache.delete("#{gym_route.cache_key_with_version}/summary_gym_route")
     end
+  end
+
+  def remove_sectors_cache
+    gym_sectors.find_each(&:remove_cache!)
   end
 
   def delete_gym_cache
