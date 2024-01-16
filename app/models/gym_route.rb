@@ -266,7 +266,7 @@ class GymRoute < ApplicationRecord
     )
   end
 
-  def remove_cache!
+  def delete_summary_cache
     Rails.cache.delete("#{cache_key_with_version}/summary_gym_route")
   end
 

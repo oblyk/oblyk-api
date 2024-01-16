@@ -114,6 +114,10 @@ class GymSpace < ApplicationRecord
     end
   end
 
+  def delete_summary_cache
+    Rails.cache.delete("#{cache_key_with_version}/summary_gym_space")
+  end
+
   private
 
   def sorts_available
@@ -132,13 +136,11 @@ class GymSpace < ApplicationRecord
   def remove_routes_cache
     return unless saved_change_to_name?
 
-    gym_routes.find_each do |gym_route|
-      Rails.cache.delete("#{gym_route.cache_key_with_version}/summary_gym_route")
-    end
+    gym_routes.find_each(&:delete_summary_cache)
   end
 
   def remove_sectors_cache
-    gym_sectors.find_each(&:remove_cache!)
+    gym_sectors.find_each(&:delete_summary_cache)
   end
 
   def delete_gym_cache

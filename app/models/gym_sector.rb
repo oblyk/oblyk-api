@@ -64,7 +64,7 @@ class GymSector < ApplicationRecord
     end
   end
 
-  def remove_cache!
+  def delete_summary_cache
     Rails.cache.delete("#{cache_key_with_version}/summary_gym_sector")
   end
 
@@ -73,6 +73,6 @@ class GymSector < ApplicationRecord
   def remove_routes_cache
     return unless saved_change_to_name?
 
-    gym_routes.find_each(&:remove_cache!)
+    gym_routes.find_each(&:delete_summary_cache)
   end
 end

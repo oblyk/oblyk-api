@@ -153,7 +153,7 @@ module Api
 
       def update
         if @gym_route.update(gym_route_params)
-          @gym_route.remove_cache!
+          @gym_route.delete_summary_cache
           render json: @gym_route.detail_to_json, status: :ok
         else
           render json: { error: @gym_route.errors }, status: :unprocessable_entity
