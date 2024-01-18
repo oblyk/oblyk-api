@@ -26,6 +26,9 @@ module Api
         sector = params.fetch(:sector_id, nil)
         route_ids = params.fetch(:route_ids, nil)
         preview_routes_set = params.fetch(:preview_routes_set, nil)
+        group_by = params.fetch(:group_by, nil)
+        reference = params.fetch(:reference, nil)
+        pages = []
 
         gym_routes = if route_ids
                        GymRoute.where(id: route_ids)
@@ -36,20 +39,6 @@ module Api
                      elsif preview_routes_set
                        build_preview_routes preview_routes_set
                      end
-
-        # Qrcode in footer
-        footer_qrcode = nil
-        if @gym_label_template.qr_code_position == 'footer'
-          routes_query = gym_routes.map { |route| "r[]=#{route[:id]}" }.join('&')
-          uri = "#{ENV['OBLYK_APP_URL']}/grs/#{@gym.id}?#{routes_query}"
-          footer_qrcode = RQRCode::QRCode.new(
-            uri,
-            level: :l
-          ).as_svg(
-            viewbox: true,
-            use_path: true
-          )
-        end
 
         gym_routes = gym_routes.map(&:summary_to_json) unless preview_routes_set
 
@@ -66,11 +55,53 @@ module Api
           end
         end
 
+        case group_by
+        when 'anchor'
+          groups = gym_routes.group_by { |gym_route| gym_route[:anchor_number] }
+          groups.each do |k, routes|
+            pages << {
+              order: k,
+              reference: "Relais n°#{k}",
+              routes: routes
+            }
+          end
+        when 'sector'
+          groups = gym_routes.group_by { |gym_route| gym_route[:gym_sector_id] }
+          groups.each do |k, routes|
+            group_sector = GymSector.find k
+            pages << {
+              order: group_sector.order,
+              reference: group_sector.name,
+              routes: routes
+            }
+          end
+        else
+          pages << {
+            order: 0,
+            reference: reference,
+            routes: gym_routes
+          }
+        end
+
+        # Qrcode in footer
+        if @gym_label_template.qr_code_position == 'footer'
+          pages.each_with_index do |page, index|
+            routes_query = page[:routes].map { |route| "r[]=#{route[:id]}" }.join('&')
+            uri = "#{ENV['OBLYK_APP_URL']}/grs/#{@gym.id}?#{routes_query}"
+            pages[index][:footer_qrcode] = RQRCode::QRCode.new(
+              uri,
+              level: :l
+            ).as_svg(
+              viewbox: true,
+              use_path: true
+            )
+          end
+        end
+
         render json: {
           gym_label_template: @gym_label_template.detail_to_json,
-          gym_routes: gym_routes,
-          gym: @gym.detail_to_json,
-          footer_qrcode: footer_qrcode
+          pages: pages,
+          gym: @gym.detail_to_json
         }, status: :ok
       end
 
