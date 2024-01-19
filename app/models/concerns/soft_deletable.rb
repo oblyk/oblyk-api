@@ -16,4 +16,7 @@ module SoftDeletable
     update_attribute :deleted_at, Time.current
   end
 
+  def destroy
+    update_attribute :deleted_at, Time.current
+  end
 end
