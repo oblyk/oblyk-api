@@ -16,6 +16,10 @@ class GymGradeLine < ApplicationRecord
   after_save :delete_caches
   after_destroy :delete_caches
 
+  def gym_grade
+    GymGrade.unscoped { super }
+  end
+
   def summary_to_json
     Rails.cache.fetch("#{cache_key_with_version}/summary_gym_grade_line", expires_in: 28.days) do
       detail_to_json

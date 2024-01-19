@@ -42,6 +42,10 @@ class GymRoute < ApplicationRecord
   accepts_nested_attributes_for :gym_route_cover
   attr_accessor :qrcode
 
+  def gym_grade_line
+    GymGradeLine.unscoped { super }
+  end
+
   def gym_grade
     gym_grade_line&.gym_grade || gym_sector.gym_grade
   end

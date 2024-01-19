@@ -28,6 +28,10 @@ class GymSpace < ApplicationRecord
   after_update :remove_sectors_cache
   after_destroy :delete_gym_cache
 
+  def gym_grade
+    GymGrade.unscoped { super }
+  end
+
   def set_plan_dimension!
     return unless plan.attached?
 
