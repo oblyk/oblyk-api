@@ -54,11 +54,10 @@ class GymGradeLine < ApplicationRecord
   private
 
   def init_grade_value
-    self.grade_value = Grade.to_value grade_text if grade_text
+    self.grade_value = Grade.to_value grade_text if grade_text.present?
   end
 
   def grading_value
-    errors.add(:grade_text, I18n.t('activerecord.errors.messages.blank')) if gym_grade.difficulty_by_grade? && grade_text.blank?
     errors.add(:points, I18n.t('activerecord.errors.messages.blank')) if gym_grade.point_system_type == 'fix' && points.blank?
   end
 
