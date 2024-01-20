@@ -92,6 +92,9 @@ gem 'rqrcode', '~> 2.0'
 # Google cloud storage
 gem 'google-cloud-storage', '~> 1.11', require: false
 
+# Aws sdk s3 for Cloudflare R2 object storage
+gem 'aws-sdk-s3', '~> 1.142'
+
 # A fast JSON parser and Object marshaller as a Ruby gem.
 gem 'oj'
 

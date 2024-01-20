@@ -54,6 +54,13 @@ ENABLE_BULLET: 'false'
 GCS_PROJECT: 'my-google-cloud-storage'
 GCS_BUCKET: 'my-google-cloud-bucket'
 
+# Cloudflare R2 storage
+CLOUDFLARE_R2_END_POINT: 'https://<account_id>.r2.cloudflarestorage.com'
+CLOUDFLARE_R2_ACCOUNT_ID: 'account_id'
+CLOUDFLARE_R2_ACCESS_KEY_ID: 'access_key_id'
+CLOUDFLARE_R2_SECRET_ACCESS_KEY: 'secret_access_key'
+CLOUDFLARE_R2_BUCKET: 'bucket'
+
 # Mapbox
 MAPBOX_TOKEN: 'mapbox-token'
 MAPBOX_STATIC_MAP_STYLE: 'mapbox-style-for-static-image'

@@ -28,7 +28,16 @@ google:
 #   storage_access_key: <%= Rails.application.credentials.dig(:azure_storage, :storage_access_key) %>
 #   container: your_container_name
 
+# Cloudflare R2 storage
+cloudflare:
+  service: S3
+  endpoint: <%= ENV['CLOUDFLARE_R2_END_POINT'] %>
+  access_key_id: <%= ENV['CLOUDFLARE_R2_ACCESS_KEY_ID'] %>
+  secret_access_key: <%= ENV['CLOUDFLARE_R2_SECRET_ACCESS_KEY'] %>
+  region: auto
+  bucket: <%= ENV['CLOUDFLARE_R2_BUCKET'] %>
+
 mirror:
   service: Mirror
   primary: local
-  mirrors: [ google ]
+  mirrors: [ google, cloudflare ]
