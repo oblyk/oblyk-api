@@ -261,6 +261,7 @@ class GymRoute < ApplicationRecord
         gym_sector: gym_sector.summary_to_json,
         thumbnail_position: thumbnail_position,
         calculated_thumbnail_position: calculated_thumbnail_position,
+        cover_metadata: gym_route_cover&.picture ? gym_route_cover.picture.metadata : nil,
         votes: votes,
         history: {
           created_at: created_at,
