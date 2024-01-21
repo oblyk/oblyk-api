@@ -39,5 +39,5 @@ cloudflare:
 
 mirror:
   service: Mirror
-  primary: local
-  mirrors: [ google, cloudflare ]
+  primary: cloudflare
+  mirrors: [ local, google ]
