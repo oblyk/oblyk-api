@@ -37,6 +37,9 @@ class GymSector < ApplicationRecord
         gym_space_id: gym_space_id,
         gym_grade_id: gym_grade_id,
         can_be_more_than_one_pitch: can_be_more_than_one_pitch,
+        min_anchor_number: min_anchor_number,
+        max_anchor_number: max_anchor_number,
+        anchor_ranges: anchor_ranges,
         anchor: anchor,
         gym: {
           id: gym.id,
@@ -70,6 +73,16 @@ class GymSector < ApplicationRecord
 
   def delete_summary_cache
     Rails.cache.delete("#{cache_key_with_version}/summary_gym_sector")
+  end
+
+  def anchor_ranges
+    return [] if max_anchor_number.blank? || min_anchor_number.blank?
+
+    if max_anchor_number >= min_anchor_number
+      (min_anchor_number..max_anchor_number).to_a
+    else
+      (max_anchor_number..min_anchor_number).to_a
+    end
   end
 
   private

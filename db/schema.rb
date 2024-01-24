@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_01_19_090355) do
+ActiveRecord::Schema.define(version: 2024_01_24_080616) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -861,6 +861,8 @@ ActiveRecord::Schema.define(version: 2024_01_19_090355) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "can_be_more_than_one_pitch", default: false
     t.integer "order", default: 0
+    t.integer "min_anchor_number"
+    t.integer "max_anchor_number"
     t.index ["gym_grade_id"], name: "index_gym_sectors_on_gym_grade_id"
     t.index ["gym_space_id"], name: "index_gym_sectors_on_gym_space_id"
   end

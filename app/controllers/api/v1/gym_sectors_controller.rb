@@ -77,6 +77,8 @@ module Api
         params.require(:gym_sector).permit(
           :name,
           :order,
+          :min_anchor_number,
+          :max_anchor_number,
           :description,
           :group_sector_name,
           :climbing_type,

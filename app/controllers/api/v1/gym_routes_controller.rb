@@ -30,6 +30,7 @@ module Api
           routes_json = { sectors: [] }
           sectors.each do |sector|
             routes = dismounted ? sector.gym_routes.dismounted : sector.gym_routes.mounted
+            routes = routes.order('anchor_number, min_grade_value')
             routes_json[:sectors] << {
               sector: sector.summary_to_json,
               routes: routes.map(&:summary_to_json)
