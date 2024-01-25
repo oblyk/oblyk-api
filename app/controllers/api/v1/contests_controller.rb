@@ -6,10 +6,10 @@ module Api
       include UploadVerification
       include GymRolesVerification
 
-      before_action :protected_by_session, only: %i[create update add_banner draft archived unarchived time_line]
+      before_action :protected_by_session, only: %i[create update add_banner draft archived unarchived time_line export_results]
       before_action :set_gym, except: %i[opens]
-      before_action :set_contest, only: %i[show update destroy draft archived unarchived add_banner time_line results]
-      before_action :protected_by_administrator, only: %i[create update destroy draft archived unarchived add_banner time_line]
+      before_action :set_contest, only: %i[show update destroy draft archived unarchived add_banner time_line results export_results]
+      before_action :protected_by_administrator, only: %i[create update destroy draft archived unarchived add_banner time_line export_results]
       before_action :user_can_manage_contest, except: %i[opens index show results]
 
       def opens
@@ -47,6 +47,10 @@ module Api
 
       def results
         render json: @contest.results, status: :ok
+      end
+
+      def export_results
+        send_data @contest.results_to_csv, filename: "export-results-#{@contest.name.parameterize}-#{Date.current}.csv"
       end
 
       def create

@@ -57,7 +57,7 @@ class Contest < ApplicationRecord
     "#{ENV['OBLYK_APP_URL']}/gyms/#{gym.id}/#{gym.slug_name}/contests/#{id}/#{slug_name}"
   end
 
-  def results(category_id = nil)
+  def results(category_id = nil, rich_data = false)
     cache_key = category_id.present? ? "#{results_cache_key}-cat-#{category_id}" : results_cache_key
     Rails.cache.fetch(cache_key, expires_in: 5.minutes) do
       results = {}
@@ -109,6 +109,10 @@ class Contest < ApplicationRecord
             affiliation: participant.affiliation,
             stages: {}
           }
+          if rich_data
+            results[cat_key][:participants][participant_key][:email] ||= participant.email
+            results[cat_key][:participants][participant_key][:date_of_birth] ||= participant.date_of_birth
+          end
           stages.each do |stage|
             stage_key = "stage-#{stage.id}"
             results[cat_key][:participants][participant_key][:stages][stage_key] ||= {
@@ -402,6 +406,54 @@ class Contest < ApplicationRecord
 
   def delete_results_cache
     Rails.cache.delete(results_cache_key)
+  end
+
+  def results_to_csv
+    results = self.results nil, true
+    CSV.generate(headers: true, encoding: 'utf-8', col_sep: "\t") do |csv|
+      header = []
+      header << 'Classement général'
+      header << 'Catégorie'
+      header << 'Genre'
+      header << 'Nom'
+      header << 'Prénom'
+      header << 'Date de naissance'
+      header << 'Email'
+      header << 'Affiliation'
+      category_header = results[0]
+      first_participant = category_header[:participants][0]
+      first_participant[:stages].each do |stage|
+        stage[:steps].each do |step|
+          climbing_type = stage[:climbing_type] == 'bouldering' ? 'Bloc' : 'Voie'
+          step_name = "#{climbing_type} - #{step[:name]}"
+          header << "#{step_name} - Classement"
+          header << "#{step_name} - Point"
+        end
+      end
+      csv << header
+
+      results.each do |category|
+        category[:participants].each do |participant|
+          participant_row = [
+            participant[:global_rank],
+            category[:category_name],
+            category[:genre],
+            participant[:last_name],
+            participant[:first_name],
+            participant[:date_of_birth],
+            participant[:email],
+            participant[:affiliation]
+          ]
+          participant[:stages].each do |stage|
+            stage[:steps].each do |step|
+              participant_row << step[:rank]
+              participant_row << step[:points]&.round(5)
+            end
+          end
+          csv << participant_row
+        end
+      end
+    end
   end
 
   private
