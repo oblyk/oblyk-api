@@ -28,6 +28,8 @@ module Api
         collections = params.fetch(:collections, nil)
         results = Search.infinite_search query, collections, page
 
+        return unless results
+
         # Create groupe by collection
         result_by_objects = {}
         results.map { |result| result[:collection] }.each do |result_collection|
