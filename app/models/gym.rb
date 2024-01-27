@@ -9,6 +9,7 @@ class Gym < ApplicationRecord
   include ActivityFeedable
   include AttachmentResizable
   include StripTagable
+  include Emailable
 
   has_paper_trail only: %i[
     name

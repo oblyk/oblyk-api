@@ -5,6 +5,7 @@ class User < ApplicationRecord
   include ParentFeedable
   include AttachmentResizable
   include StripTagable
+  include Emailable
 
   PASSWORD_FORMAT = /\A
       (?=.{8,128}) # Must contain 8 or more characters

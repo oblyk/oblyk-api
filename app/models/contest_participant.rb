@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ContestParticipant < ApplicationRecord
+  include Emailable
+
   attr_accessor :skip_capacity_validation, :skip_subscription_mail
 
   belongs_to :contest_category

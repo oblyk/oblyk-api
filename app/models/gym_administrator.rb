@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class GymAdministrator < ApplicationRecord
+  include Emailable
+
   belongs_to :user, optional: true
   belongs_to :gym
 
