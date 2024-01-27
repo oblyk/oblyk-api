@@ -40,7 +40,7 @@ module Api
         @ascent_gym_route = AscentGymRoute.new(ascent_gym_route_params)
         @ascent_gym_route.user = @current_user
 
-        if @ascent_gym_route.gym_route&.gym_grade && @ascent_gym_route.gym_route.gym_grade.difficulty_by_level
+        if @ascent_gym_route.gym_route&.gym_grade && @ascent_gym_route.gym_route&.gym_grade_line && @ascent_gym_route.gym_route.gym_grade.difficulty_by_level
           gym_grade = @ascent_gym_route.gym_route.gym_grade
           color_system = ColorSystem.create_form_grade gym_grade
           @ascent_gym_route.color_system_line = color_system.color_system_lines.where(order: @ascent_gym_route.gym_route.gym_grade_line.order).first if color_system
