@@ -34,6 +34,48 @@ class ContestRanking
     HIGHEST_HOLD => %w[prise(s) +]
   }.freeze
 
+  COMBINED_RANKING_ADDITION = 'addition'
+  COMBINED_RANKING_MULTIPLICATION = 'multiplication'
+  COMBINED_RANKING_DECREMENT_POINTS = 'decrement_points'
+  COMBINED_RANKING_TYPE_LIST = [
+    COMBINED_RANKING_ADDITION,
+    COMBINED_RANKING_MULTIPLICATION,
+    COMBINED_RANKING_DECREMENT_POINTS
+  ].freeze
+
+  COMBINED_RANKING_POINT_MATRIX = [
+    100,
+    80,
+    65,
+    55,
+    51,
+    47,
+    43,
+    40,
+    37,
+    34,
+    31,
+    28,
+    26,
+    24,
+    22,
+    20,
+    18,
+    16,
+    14,
+    12,
+    10,
+    9,
+    8,
+    7,
+    6,
+    5,
+    4,
+    3,
+    2,
+    1
+  ].freeze
+
   attr_accessor :ascents, :step, :category, :genre, :score_by_routes
 
   def initialize(step, category, genre)

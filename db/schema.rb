@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_01_24_080616) do
+ActiveRecord::Schema.define(version: 2024_01_28_150025) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -384,6 +384,7 @@ ActiveRecord::Schema.define(version: 2024_01_24_080616) do
     t.boolean "draft"
     t.boolean "authorise_public_subscription", default: true
     t.boolean "private", default: false
+    t.string "combined_ranking_type"
     t.index ["gym_id"], name: "index_contests_on_gym_id"
   end
 

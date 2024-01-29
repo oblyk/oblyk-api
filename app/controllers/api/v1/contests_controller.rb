@@ -144,6 +144,7 @@ module Api
           :total_capacity,
           :categorization_type,
           :authorise_public_subscription,
+          :combined_ranking_type,
           :private
         )
       end
