@@ -5,12 +5,12 @@ module Api
     class GymRoutesController < ApiController
       include Gymable
 
-      skip_before_action :protected_by_session, only: %i[show index ascents]
-      skip_before_action :protected_by_gym_administrator, only: %i[show index ascents]
+      skip_before_action :protected_by_session, only: %i[show index paginated ascents]
+      skip_before_action :protected_by_gym_administrator, only: %i[show index paginated ascents]
       before_action :set_gym_space, except: %i[add_picture similar_sectors add_thumbnail dismount mount dismount_collection mount_collection ascents]
       before_action :set_gym_sector, except: %i[index show similar_sectors add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents]
       before_action :set_gym_route, only: %i[show similar_sectors update destroy add_picture add_thumbnail dismount mount ascents]
-      before_action -> { can? GymRole::MANAGE_OPENING }, except: %i[index show similar_sectors ascents]
+      before_action -> { can? GymRole::MANAGE_OPENING }, except: %i[index paginated show similar_sectors ascents]
 
       def index
         group_by = params.fetch(:group_by, nil)
@@ -78,6 +78,43 @@ module Api
             render json: routes.map(&:summary_to_json), status: :ok
           end
         end
+      end
+
+      def paginated
+        order_by = params.fetch(:order_by, nil)
+        route_ids = params.fetch(:route_ids, nil)
+        direction = params.fetch(:direction, 'asc') == 'asc' ? 'ASC' : 'DESC'
+        dismounted = params.fetch(:dismounted, false)
+
+        routes = if @gym_sector.present?
+                   @gym_sector.gym_routes
+                 elsif @gym_space.present?
+                   @gym_space.gym_routes
+                 elsif route_ids.present?
+                   @gym.gym_routes.where(ids: route_ids)
+                 else
+                   @gym.gym_routes
+                 end
+
+        routes = dismounted ? routes.dismounted : routes.mounted
+
+        routes = case order_by
+                 when 'sector'
+                   routes.joins(:gym_sector).reorder("gym_sectors.order #{direction}, gym_sectors.name, gym_sectors.id, gym_routes.id")
+                 when 'opened_at'
+                   routes.reorder("gym_routes.opened_at #{direction}, gym_routes.id")
+                 when 'grade'
+                   routes.reorder("gym_routes.min_grade_value #{direction}, gym_routes.id")
+                 when 'level'
+                   routes.joins(gym_grade_line: :gym_grade).reorder("gym_grades.name, gym_grade_lines.order #{direction}, gym_routes.id")
+                 when 'point'
+                   routes.reorder("gym_routes.points #{direction}, gym_routes.id")
+                 else
+                   routes
+                 end
+
+        routes = routes.page(params.fetch(:page, 1))
+        render json: routes.map(&:summary_to_json), status: :ok
       end
 
       def print
@@ -296,7 +333,7 @@ module Api
       end
 
       def set_gym_space
-        @gym_space = GymSpace.find_by id: params[:gym_space_id]
+        @gym_space = GymSpace.find_by(id: params[:gym_space_id]) if params[:gym_space_id].present?
       end
 
       def set_gym_sector

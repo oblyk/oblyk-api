@@ -239,12 +239,17 @@ Rails.application.routes.draw do
           resources :gym_sectors do
             get :last_routes_with_pictures, on: :member
             delete :dismount_routes, on: :member
-            resources :gym_routes
+            resources :gym_routes do
+              get :paginated, on: :collection
+            end
           end
-          resources :gym_routes
+          resources :gym_routes do
+            get :paginated, on: :collection
+          end
         end
         resources :gym_space_groups
         resources :gym_routes do
+          get :paginated, on: :collection
           get :print, on: :collection
           get :export, on: :collection
           get :ascents, on: :member
