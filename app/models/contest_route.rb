@@ -46,6 +46,7 @@ class ContestRoute < ApplicationRecord
       {
         id: id,
         number: number,
+        name: name,
         number_of_holds: number_of_holds,
         fixed_points: fixed_points,
         additional_zone: additional_zone,

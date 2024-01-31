@@ -114,6 +114,7 @@ module Api
       def contest_route_params
         params.require(:contest_route).permit(
           :number,
+          :name,
           :number_of_holds,
           :fixed_points,
           :additional_zone
