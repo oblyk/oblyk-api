@@ -5,13 +5,13 @@ module Api
     class ContestRouteGroupsController < ApiController
       include GymRolesVerification
 
-      before_action :protected_by_session, only: %i[create update destroy]
+      before_action :protected_by_session, only: %i[create update destroy add_route]
       before_action :set_gym
       before_action :set_contest
       before_action :set_contest_stage
       before_action :set_contest_stage_step
-      before_action :set_contest_route_group, only: %i[show update destroy]
-      before_action :protected_by_administrator, only: %i[create update destroy]
+      before_action :set_contest_route_group, only: %i[show update destroy add_route]
+      before_action :protected_by_administrator, only: %i[create update destroy add_route]
       before_action :user_can_manage_contest, except: %i[index show]
 
       def index
@@ -45,6 +45,13 @@ module Api
         else
           render json: { error: @contest_route_group.errors }, status: :unprocessable_entity
         end
+      end
+
+      def add_route
+        last_route_number = @contest_route_group.contest_routes.maximum(:number) || 0
+        @contest_route_group.contest_routes << ContestRoute.new(number: last_route_number + 1)
+        @contest_route_group.save
+        head :no_content
       end
 
       def destroy

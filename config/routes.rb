@@ -298,7 +298,9 @@ Rails.application.routes.draw do
           end
           resources :contest_stages do
             resources :contest_stage_steps do
-              resources :contest_route_groups
+              resources :contest_route_groups do
+                post :add_route, on: :member
+              end
             end
           end
           resources :contest_routes do
