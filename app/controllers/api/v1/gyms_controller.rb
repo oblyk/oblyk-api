@@ -139,10 +139,16 @@ module Api
       end
 
       def routes
-        gym_routes = if params.fetch(:dismounted, 'false') == 'true'
-                       @gym.gym_routes.dismounted
+        space_id = params.fetch(:gym_space_id, nil)
+        gym_routes = if space_id.present?
+                       @gym.gym_routes.joins(:gym_sector).where(gym_sectors: { gym_space_id: space_id })
                      else
-                       @gym.gym_routes.mounted
+                       @gym.gym_routes
+                     end
+        gym_routes = if params.fetch(:dismounted, 'false') == 'true'
+                       gym_routes.dismounted
+                     else
+                       gym_routes.mounted
                      end
         render json: gym_routes.map(&:summary_to_json), status: :ok
       end
