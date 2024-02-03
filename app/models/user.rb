@@ -30,6 +30,8 @@ class User < ApplicationRecord
   has_many :videos
   has_many :gym_administrators
   has_many :administered_gyms, through: :gym_administrators, source: :gym
+  has_many :gym_chain_administrators
+  has_many :gym_chains, through: :gym_chain_administrators
   has_many :gyms
   has_many :reports, as: :reportable
   has_many :ascent_crag_routes
@@ -412,6 +414,7 @@ class User < ApplicationRecord
           last_partner_check_at: last_partner_check_at,
           language: language,
           administered_gyms: administered_gyms.map(&:summary_to_json),
+          gym_chains: gym_chains.map(&:summary_to_json),
           gym_roles: gym_administrators.map(&:summary_to_json),
           organizations: organizations.map(&:summary_to_json),
           subscribes: subscribes_to_a,

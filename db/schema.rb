@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_01_31_225158) do
+ActiveRecord::Schema.define(version: 2024_02_03_123939) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -700,6 +700,36 @@ ActiveRecord::Schema.define(version: 2024_01_31_225158) do
     t.index ["user_id"], name: "index_gym_administrators_on_user_id"
   end
 
+  create_table "gym_chain_administrators", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.bigint "gym_chain_id"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gym_chain_id"], name: "index_gym_chain_administrators_on_gym_chain_id"
+    t.index ["user_id"], name: "index_gym_chain_administrators_on_user_id"
+  end
+
+  create_table "gym_chain_gyms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.bigint "gym_chain_id"
+    t.bigint "gym_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gym_chain_id"], name: "index_gym_chain_gyms_on_gym_chain_id"
+    t.index ["gym_id"], name: "index_gym_chain_gyms_on_gym_id"
+  end
+
+  create_table "gym_chains", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.string "name"
+    t.string "slug_name"
+    t.text "description"
+    t.boolean "public_chain"
+    t.string "api_access_token"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["api_access_token"], name: "index_gym_chains_on_api_access_token", unique: true
+    t.index ["slug_name"], name: "index_gym_chains_on_slug_name", unique: true
+  end
+
   create_table "gym_climbing_styles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "style"
     t.string "climbing_type"
@@ -1317,6 +1347,10 @@ ActiveRecord::Schema.define(version: 2024_01_31_225158) do
   add_foreign_key "contest_time_blocks", "contest_waves"
   add_foreign_key "contest_waves", "contests"
   add_foreign_key "contests", "gyms"
+  add_foreign_key "gym_chain_administrators", "gym_chains"
+  add_foreign_key "gym_chain_administrators", "users"
+  add_foreign_key "gym_chain_gyms", "gym_chains"
+  add_foreign_key "gym_chain_gyms", "gyms"
   add_foreign_key "gym_label_templates", "gyms"
   add_foreign_key "gym_options", "gyms"
   add_foreign_key "likes", "users"

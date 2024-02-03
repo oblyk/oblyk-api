@@ -55,6 +55,8 @@ class Gym < ApplicationRecord
   has_many :contests
   has_many :gym_options
   has_many :gym_label_templates
+  has_many :gym_chain_gyms
+  has_many :gym_chains, through: :gym_chain_gyms
 
   validates :logo, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true
@@ -185,6 +187,7 @@ class Gym < ApplicationRecord
         follow_count: follows.count,
         gym_grades_count: gym_grades.count,
         versions_count: versions.count,
+        gym_chains: gym_chains.map(&:summary_to_json),
         gym_spaces: gym_spaces.map(&:summary_to_json),
         gym_space_groups: gym_space_groups.map(&:summary_to_json),
         creator: user&.summary_to_json,

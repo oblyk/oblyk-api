@@ -324,6 +324,11 @@ Rails.application.routes.draw do
         post :add_option, on: :collection
         delete :delete_option, on: :collection
       end
+      resources :gym_chains, only: %i[show update] do
+        post :add_banner, on: :member
+        post :add_logo, on: :member
+        get :gyms_geo_json, on: :member
+      end
       resources :reports, only: %i[create]
 
       scope :public do
