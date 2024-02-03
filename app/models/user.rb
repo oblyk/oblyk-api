@@ -413,7 +413,7 @@ class User < ApplicationRecord
           date_of_birth: date_of_birth,
           last_partner_check_at: last_partner_check_at,
           language: language,
-          administered_gyms: administered_gyms.map(&:summary_to_json),
+          administered_gyms: administered_gyms.order(:name).map(&:summary_to_json),
           gym_chains: gym_chains.map(&:summary_to_json),
           gym_roles: gym_administrators.map(&:summary_to_json),
           organizations: organizations.map(&:summary_to_json),
