@@ -64,6 +64,10 @@ class Gym < ApplicationRecord
 
   after_save :historize_around_towns
 
+  def all_championships
+    Championship.where('gym_id = :gym_id OR id IN (SELECT championship_id FROM championship_contests INNER JOIN contests ON championship_contests.contest_id = contests.id WHERE gym_id = :gym_id)', gym_id: id)
+  end
+
   def location
     [latitude, longitude]
   end

@@ -212,6 +212,7 @@ Rails.application.routes.draw do
         get :tree_structures, on: :member
         get :tree_routes, on: :member
         get :ascent_scores, on: :member
+        get :figures, on: :member
         resources :color_systems, only: %i[index create show]
         resources :gym_administrators
         resources :gym_administration_requests, only: %i[create]
@@ -310,6 +311,19 @@ Rails.application.routes.draw do
             put :enable, on: :member
             post :add_picture, on: :member
             delete :delete_picture, on: :member
+          end
+        end
+        resources :championships do
+          get :results, on: :member
+          get :contests, on: :member
+          get :available_contests, on: :member
+          post :add_banner, on: :member
+          post :add_contest, on: :member
+          resources :championship_contests, only: %i[create] do
+            delete :delete, on: :collection
+          end
+          resources :championship_categories do
+            get :contest_categories, on: :collection
           end
         end
       end

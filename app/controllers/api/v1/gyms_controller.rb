@@ -7,9 +7,9 @@ module Api
       include UploadVerification
 
       before_action :protected_by_super_admin, only: %i[destroy]
-      before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes tree_structures tree_routes ]
-      before_action :set_gym, only: %i[show versions ascent_scores update destroy add_banner add_logo routes_count routes tree_structures tree_routes]
-      before_action :protected_by_administrator, only: %i[update add_banner add_logo routes_count routes tree_structures tree_routes]
+      before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes tree_structures tree_routes figures]
+      before_action :set_gym, only: %i[show versions ascent_scores update destroy add_banner add_logo routes_count routes tree_structures tree_routes figures]
+      before_action :protected_by_administrator, only: %i[update add_banner add_logo routes_count routes tree_structures tree_routes figures]
       before_action :user_can_manage_gym, except: %i[index search geo_json show create gyms_around versions ascent_scores routes_count routes]
 
       def index
@@ -226,6 +226,18 @@ module Api
         end
 
         render json: tree, status: :ok
+      end
+
+      def figures
+        figures = params.fetch(:figures, [])
+        data = {}
+        data[:contests_count] = @gym.contests.count if figures.include? 'contests_count'
+        data[:championships_count] = @gym.all_championships.count if figures.include? 'championships_count'
+        data[:gym_spaces_count] = @gym.gym_spaces.count if figures.include? 'gym_spaces_count'
+        data[:mounted_gym_routes_count] = @gym.gym_routes.mounted.count if figures.include? 'mounted_gym_routes_count'
+        data[:gym_administrators_count] = @gym.gym_administrators.count if figures.include? 'gym_administrators_count'
+        data[:gym_openers_count] = @gym.gym_openers.count if figures.include? 'gym_openers_count'
+        render json: data, status: :ok
       end
 
       private

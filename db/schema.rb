@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_02_03_123939) do
+ActiveRecord::Schema.define(version: 2024_02_04_121047) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -179,6 +179,44 @@ ActiveRecord::Schema.define(version: 2024_02_03_123939) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_authors_on_user_id"
+  end
+
+  create_table "championship_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.string "name"
+    t.string "slug_name"
+    t.bigint "championship_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["championship_id"], name: "index_championship_categories_on_championship_id"
+  end
+
+  create_table "championship_category_matches", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.bigint "championship_category_id"
+    t.bigint "contest_category_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["championship_category_id"], name: "index_championship_category_matches_on_championship_category_id"
+    t.index ["contest_category_id"], name: "index_championship_category_matches_on_contest_category_id"
+  end
+
+  create_table "championship_contests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.bigint "contest_id"
+    t.bigint "championship_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["championship_id"], name: "index_championship_contests_on_championship_id"
+    t.index ["contest_id"], name: "index_championship_contests_on_contest_id"
+  end
+
+  create_table "championships", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.string "name"
+    t.string "slug_name"
+    t.text "description"
+    t.string "combined_ranking_type"
+    t.bigint "gym_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gym_id"], name: "index_championships_on_gym_id"
   end
 
   create_table "climbing_sessions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1328,6 +1366,12 @@ ActiveRecord::Schema.define(version: 2024_02_03_123939) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "championship_categories", "championships"
+  add_foreign_key "championship_category_matches", "championship_categories"
+  add_foreign_key "championship_category_matches", "contest_categories"
+  add_foreign_key "championship_contests", "championships"
+  add_foreign_key "championship_contests", "contests"
+  add_foreign_key "championships", "gyms"
   add_foreign_key "contest_categories", "contests"
   add_foreign_key "contest_participant_ascents", "contest_participants"
   add_foreign_key "contest_participant_ascents", "contest_routes"

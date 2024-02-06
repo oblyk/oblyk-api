@@ -19,6 +19,8 @@ class Contest < ApplicationRecord
   has_many :contest_stage_steps, through: :contest_stages
   has_many :contest_route_groups, through: :contest_stage_steps
   has_many :contest_routes, through: :contest_route_groups
+  has_many :championship_contests
+  has_many :championships, through: :championship_contests
 
   before_validation :normalize_attributes
   before_create :set_draft_mode
@@ -60,7 +62,7 @@ class Contest < ApplicationRecord
 
   def results(category_id = nil, rich_data = false)
     cache_key = category_id.present? ? "#{results_cache_key}-cat-#{category_id}" : results_cache_key
-    Rails.cache.fetch(cache_key, expires_in: 5.minutes) do
+    Rails.cache.fetch(cache_key, expires_in: 10.minutes) do
       results = {}
       points_by_steps = {}
       stage_steps = {}
@@ -212,7 +214,7 @@ class Contest < ApplicationRecord
             ranks.each do |rank|
               if rank <= 30
                 rank_decimal = 1 - (rank - rank.to_i)
-                rank_point += ContestRanking::COMBINED_RANKING_POINT_MATRIX[rank.to_i].to_f + rank_decimal
+                rank_point += ContestRanking::COMBINED_RANKING_POINT_MATRIX[rank.to_i - 1].to_f + rank_decimal
               else
                 rank_point = 1.0 - (1.0 / (number_of_participants - 29)) * (rank - 29)
               end
@@ -323,6 +325,7 @@ class Contest < ApplicationRecord
         gym: gym.summary_to_json,
         contest_categories: contest_categories.map(&:summary_to_json),
         contest_stages: contest_stages.map(&:summary_to_json),
+        championships: championships.map(&:summary_to_json),
         history: {
           created_at: created_at,
           updated_at: updated_at

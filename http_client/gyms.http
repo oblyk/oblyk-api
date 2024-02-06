@@ -146,3 +146,20 @@ Content-Type: application/json
   "page": 1,
   "order_by": "sector"
 }
+
+### Get small figrues
+GET {{api_url}}/gyms/229/figures.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "figures": [
+    "contests_count",
+    "championships_count",
+    "gym_spaces_count",
+    "mounted_gym_routes_count",
+    "gym_administrators_count",
+    "gym_openers_count"
+  ]
+}
