@@ -77,7 +77,7 @@ class Championship < ApplicationRecord
         end
 
         category[:participants].each do |participant|
-          participant_key = "#{participant[:first_name]}-#{participant[:last_name]}-#{participant[:date_of_birth]}"
+          participant_key = "#{participant[:first_name]&.parameterize}-#{participant[:last_name].&.parameterize}-#{participant[:date_of_birth]}"
           unless championship_results[results_key][:participants][participant_key]
             filtered_contests = last_ranks.filter do |last_rank|
               last_rank[:championship_category_id] == championship_results[results_key][:category_id] && last_rank[:genre] == category[:genre]
