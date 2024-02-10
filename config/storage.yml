@@ -40,4 +40,4 @@ cloudflare:
 mirror:
   service: Mirror
   primary: cloudflare
-  mirrors: [ local, google ]
+  mirrors: [ google ]
