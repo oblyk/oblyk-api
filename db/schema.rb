@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_02_04_121047) do
+ActiveRecord::Schema.define(version: 2024_02_11_154821) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -313,6 +313,7 @@ ActiveRecord::Schema.define(version: 2024_02_04_121047) do
     t.bigint "contest_category_id"
     t.bigint "user_id"
     t.bigint "contest_wave_id"
+    t.boolean "tombola_winner", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["contest_category_id"], name: "index_contest_participants_on_contest_category_id"

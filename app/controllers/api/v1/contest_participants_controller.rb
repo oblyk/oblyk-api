@@ -6,12 +6,12 @@ module Api
       include UploadVerification
       include GymRolesVerification
 
-      before_action :protected_by_session, only: %i[index export import import_template create update destroy]
+      before_action :protected_by_session, only: %i[index export import import_template create update destroy tombola tombola_winners]
       before_action :set_gym
       before_action :set_contest
       before_action :set_contest_participant, only: %i[show update destroy]
-      before_action :protected_by_administrator, only: %i[export import import_template create update destroy]
-      before_action :user_can_manage_contest, except: %i[index show participant subscribe]
+      before_action :protected_by_administrator, only: %i[export import import_template create update destroy tombola tombola_winners]
+      before_action :user_can_manage_contest, except: %i[index show participant subscribe tombola tombola_winners]
 
       def index
         render json: @contest.contest_participants.includes(:contest_category, :contest_wave).map(&:summary_to_json), status: :ok
@@ -255,6 +255,38 @@ module Api
         end
       end
 
+      def tombola
+        types = {
+          open: 'OpenTombolaModal',
+          close: 'CloseTombolaModal',
+          launch: 'LaunchTombola'
+        }
+        broadcast_type = types[params[:type].to_sym]
+        participant = nil
+
+        if broadcast_type == 'LaunchTombola'
+          participant = @contest.contest_participants.where(tombola_winner: false).order('RAND()').first
+          if participant
+            participant.update_column :tombola_winner, true
+            ActionCable.server.broadcast "contest_rankers_#{@contest.id}", {
+              type: broadcast_type,
+              winner: "#{participant.first_name} #{participant.last_name}"
+            }
+          end
+        else
+          ActionCable.server.broadcast "contest_rankers_#{@contest.id}", { type: broadcast_type }
+        end
+        if participant
+          render json: participant.summary_to_json, status: :ok
+        else
+          head :no_content
+        end
+      end
+
+      def tombola_winners
+        render json: @contest.contest_participants.where(tombola_winner: true).map(&:summary_to_json), status: :ok
+      end
+
       private
 
       def set_gym
@@ -296,7 +328,8 @@ module Api
           :email,
           :affiliation,
           :contest_category_id,
-          :contest_wave_id
+          :contest_wave_id,
+          :tombola_winner
         )
       end
 

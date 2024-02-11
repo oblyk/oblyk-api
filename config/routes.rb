@@ -290,6 +290,8 @@ Rails.application.routes.draw do
           resources :contest_participants do
             get :export, on: :collection
             post :import, on: :collection
+            get :tombola, on: :collection
+            get :tombola_winners, on: :collection
             get :import_template, on: :collection
             get :participant, on: :member
             post :subscribe, on: :collection
