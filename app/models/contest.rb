@@ -61,7 +61,8 @@ class Contest < ApplicationRecord
   end
 
   def results(category_id = nil, rich_data = false)
-    cache_key = category_id.present? ? "#{results_cache_key}-cat-#{category_id}" : results_cache_key
+    rich_key = rich_data ? 'rich' : ''
+    cache_key = category_id.present? ? "#{results_cache_key}-cat-#{category_id}-#{rich_key}" : "#{results_cache_key}-#{rich_key}"
     Rails.cache.fetch(cache_key, expires_in: 10.minutes) do
       results = {}
       points_by_steps = {}
