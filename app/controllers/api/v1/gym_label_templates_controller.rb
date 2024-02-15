@@ -170,7 +170,7 @@ module Api
           :display_tag_and_hold,
           :page_format,
           :page_direction,
-          layout_options: %i[page-margin],
+          layout_options: %i[page-margin align-items],
           border_style: %i[border-style border-color border-width border-radius]
         )
       end
