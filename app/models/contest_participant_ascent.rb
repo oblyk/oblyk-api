@@ -6,8 +6,11 @@ class ContestParticipantAscent < ApplicationRecord
   has_one :contest_category, through: :contest_participant
   has_one :contest, through: :contest_category
 
-  before_validation :set_registered_at
+  self.skip_time_zone_conversion_for_attributes = [:ascent_time]
+
   before_validation :normalize_attributes
+
+  before_save :set_registered_at
 
   after_destroy :delete_caches
   after_update :delete_caches
@@ -23,7 +26,8 @@ class ContestParticipantAscent < ApplicationRecord
       zone_2_attempt: zone_2_attempt,
       top_attempt: top_attempt,
       hold_number: hold_number,
-      hold_number_plus: hold_number_plus
+      hold_number_plus: hold_number_plus,
+      ascent_time: ascent_time
     }
   end
 
@@ -45,7 +49,7 @@ class ContestParticipantAscent < ApplicationRecord
   end
 
   def set_registered_at
-    self.registered_at ||= DateTime.current
+    self.registered_at = DateTime.current
   end
 
   def normalize_attributes

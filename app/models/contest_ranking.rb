@@ -10,6 +10,7 @@ class ContestRanking
   ATTEMPTS_TO_TWO_ZONES_AND_TOP = 'attempts_to_two_zones_and_top'
   FIXED_POINTS = 'fixed_points'
   HIGHEST_HOLD = 'highest_hold'
+  BEST_TIMES = 'best_times'
 
   RANKING_TYPE_LIST = [
     DIVISION,
@@ -20,7 +21,8 @@ class ContestRanking
     ATTEMPTS_TO_ONE_ZONE_AND_TOP,
     ATTEMPTS_TO_TWO_ZONES_AND_TOP,
     HIGHEST_HOLD,
-    FIXED_POINTS
+    FIXED_POINTS,
+    BEST_TIMES
   ].freeze
 
   RANKING_UNITS = {
@@ -31,7 +33,8 @@ class ContestRanking
     FIXED_POINTS => %w[pts],
     ZONE_AND_TOP_REALISED => %w[top zone(s)],
     ATTEMPTS_TO_ONE_ZONE_AND_TOP => 'zone_and_top_blocks',
-    HIGHEST_HOLD => %w[prise(s) +]
+    HIGHEST_HOLD => %w[prise(s) +],
+    BEST_TIMES => %w[]
   }.freeze
 
   COMBINED_RANKING_ADDITION = 'addition'
@@ -178,6 +181,20 @@ class ContestRanking
         value: point,
         details: [current_ascent.hold_number, plus]
       }
+    when BEST_TIMES
+      second = current_ascent.ascent_time.seconds_since_midnight
+      detail = if second.zero?
+                 '-'
+               else
+                 sec = current_ascent.ascent_time.sec
+                 min = current_ascent.ascent_time.min
+                 subsec = (current_ascent.ascent_time.subsec.to_f * 1000).to_i
+                 "#{"#{min}m " if min != 0}#{sec}s #{subsec}ms"
+               end
+      {
+        value: current_ascent.ascent_time.seconds_since_midnight * -1,
+        details: [detail]
+      }
     else
       no_score
     end
@@ -195,8 +212,12 @@ class ContestRanking
 
       next unless ascent_scores[:value]
 
-      value ||= 0
-      value += ascent_value
+      if step.ranking_type == BEST_TIMES
+        value ||= 60 * 60 * -1
+      else
+        value ||= 0
+        value += ascent_value
+      end
 
       if [DIVISION, ATTEMPTS_TO_TOP, FIXED_POINTS].include? step.ranking_type
         details ||= [0]
@@ -228,6 +249,10 @@ class ContestRanking
           details[0] += ascent_scores[:details].first
           details[1] += ascent_scores[:details].second
         end
+      elsif [BEST_TIMES].include? step.ranking_type
+        value = ascent_value if ascent_value.present? && ascent_value != 0 && value < ascent_value
+        details ||= []
+        details << ascent_scores[:details].first
       end
     end
     { value: value, details: details, units: RANKING_UNITS[step.ranking_type] }
