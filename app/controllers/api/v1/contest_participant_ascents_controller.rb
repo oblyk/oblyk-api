@@ -17,6 +17,7 @@ module Api
         contest_ascent.top_attempt = contest_participant_params[:top_attempt]
         contest_ascent.hold_number = contest_participant_params[:hold_number]
         contest_ascent.hold_number_plus = contest_participant_params[:hold_number_plus]
+        contest_ascent.ascent_time = contest_participant_params[:ascent_time]
 
         if contest_ascent.save
           broadcast_ascents
@@ -39,6 +40,7 @@ module Api
           contest_ascent.top_attempt = ascent[:top_attempt]
           contest_ascent.hold_number = ascent[:hold_number]
           contest_ascent.hold_number_plus = ascent[:hold_number_plus]
+          contest_ascent.ascent_time = ascent[:ascent_time]
 
           errors << contest_ascent.errors.full_messages unless contest_ascent.save
         end
@@ -80,7 +82,8 @@ module Api
           :zone_2_attempt,
           :top_attempt,
           :hold_number,
-          :hold_number_plus
+          :hold_number_plus,
+          :ascent_time
         )
       end
 
@@ -98,7 +101,8 @@ module Api
                       zone_2_attempt
                       top_attempt
                       hold_number
-                      hold_number_plus]
+                      hold_number_plus
+                      ascent_time]
         )
       end
     end
