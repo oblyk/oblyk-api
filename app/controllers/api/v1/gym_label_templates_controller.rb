@@ -28,6 +28,7 @@ module Api
         preview_routes_set = params.fetch(:preview_routes_set, nil)
         group_by = params.fetch(:group_by, nil)
         reference = params.fetch(:reference, nil)
+        routes_by_page = params.fetch(:routes_by_page, 7)&.to_i
         pages = []
 
         gym_routes = if route_ids
@@ -76,11 +77,21 @@ module Api
             }
           end
         else
-          pages << {
-            order: 0,
-            reference: reference,
-            routes: gym_routes
-          }
+          page_loop = 1
+          page_index = 0
+          gym_routes.each do |gym_route|
+            pages[page_index] ||= {
+              order: page_index,
+              reference: reference,
+              routes: []
+            }
+            pages[page_index][:routes] << gym_route
+            page_loop += 1
+            if page_loop == routes_by_page
+              page_loop = 0
+              page_index += 1
+            end
+          end
         end
 
         # Qrcode in footer
