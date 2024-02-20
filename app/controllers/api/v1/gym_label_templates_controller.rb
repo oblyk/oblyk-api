@@ -27,19 +27,26 @@ module Api
         route_ids = params.fetch(:route_ids, nil)
         preview_routes_set = params.fetch(:preview_routes_set, nil)
         group_by = params.fetch(:group_by, nil)
+        sort_by = params.fetch(:sort_by, 'grade')
+        sort_direction = params.fetch(:sort_direction, 'asc') == 'asc' ? 'asc' : 'desc'
         reference = params.fetch(:reference, nil)
         routes_by_page = params.fetch(:routes_by_page, 7)&.to_i
         pages = []
+        gym_routes = []
 
-        gym_routes = if route_ids
-                       GymRoute.where(id: route_ids)
-                               .order(:min_grade_value)
-                     elsif sector
-                       sector = @gym.gym_sectors.find(sector)
-                       sector.gym_routes.mounted.order(:min_grade_value)
-                     elsif preview_routes_set
-                       build_preview_routes preview_routes_set
-                     end
+        if preview_routes_set
+          gym_routes = build_preview_routes preview_routes_set
+        else
+          gym_routes = GymRoute.where(id: route_ids) if route_ids
+          if sector
+            sector = @gym.gym_sectors.find(sector)
+            gym_routes = sector.gym_routes.mounted
+          end
+          gym_routes = gym_routes.order(min_grade_value: sort_direction) if group_by == 'anchor' || sort_by == 'grade'
+          gym_routes = gym_routes.order("anchor_number #{sort_direction}, min_grade_value") if group_by == 'sector' || sort_by == 'anchor'
+          gym_routes = gym_routes.joins(:gym_sector).order("gym_sectors.order #{sort_direction}, gym_sectors.name, min_grade_value") if sort_by == 'sector'
+          gym_routes = gym_routes.order("opened_at #{sort_direction}") if sort_by == 'opened_at'
+        end
 
         gym_routes = gym_routes.map(&:summary_to_json) unless preview_routes_set
 
@@ -77,7 +84,7 @@ module Api
             }
           end
         else
-          page_loop = 1
+          page_loop = 0
           page_index = 0
           gym_routes.each do |gym_route|
             pages[page_index] ||= {
