@@ -100,7 +100,7 @@ module Api
 
         routes = case order_by
                  when 'sector'
-                   routes.joins(:gym_sector).reorder("gym_sectors.order #{direction}, gym_sectors.name, gym_sectors.id, gym_routes.id")
+                   routes.joins(:gym_sector).reorder("gym_sectors.order #{direction}, gym_sectors.name, gym_sectors.id, gym_routes.anchor_number, gym_routes.min_grade_value, gym_routes.id")
                  when 'opened_at'
                    routes.reorder("gym_routes.opened_at #{direction}, gym_routes.id")
                  when 'grade'
