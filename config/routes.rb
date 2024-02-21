@@ -261,6 +261,7 @@ Rails.application.routes.draw do
           put :mount, on: :member
           put :dismount_collection, on: :collection
           put :mount_collection, on: :collection
+          delete :delete_picture, on: :member
         end
         namespace :statistics do
           resources :gym_route_statistics, only: [] do

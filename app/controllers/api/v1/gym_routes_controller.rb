@@ -6,10 +6,10 @@ module Api
       include Gymable
 
       skip_before_action :protected_by_session, only: %i[show index paginated ascents]
-      skip_before_action :protected_by_gym_administrator, only: %i[show index paginated ascents]
-      before_action :set_gym_space, except: %i[add_picture similar_sectors add_thumbnail dismount mount dismount_collection mount_collection ascents]
-      before_action :set_gym_sector, except: %i[index show similar_sectors add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents]
-      before_action :set_gym_route, only: %i[show similar_sectors update destroy add_picture add_thumbnail dismount mount ascents]
+      skip_before_action :protected_by_gym_administrator, only: %i[show index paginated ascents delete_picture]
+      before_action :set_gym_space, except: %i[add_picture similar_sectors add_thumbnail dismount mount dismount_collection mount_collection ascents delete_picture]
+      before_action :set_gym_sector, except: %i[index show similar_sectors add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents delete_picture]
+      before_action :set_gym_route, only: %i[show similar_sectors update destroy add_picture add_thumbnail dismount mount ascents delete_picture]
       before_action -> { can? GymRole::MANAGE_OPENING }, except: %i[index paginated show similar_sectors ascents]
 
       def index
@@ -253,6 +253,17 @@ module Api
 
       def dismount
         if @gym_route.dismount!
+          render json: {}, status: :ok
+        else
+          render json: { error: @gym_route.errors }, status: :unprocessable_entity
+        end
+      end
+
+      def delete_picture
+        @gym_route.thumbnail = nil
+        @gym_route.gym_route_cover.destroy if @gym_route.gym_route_cover && @gym_route.gym_route_cover.gym_routes.count == 1
+        @gym_route.gym_route_cover = nil
+        if @gym_route.save
           render json: {}, status: :ok
         else
           render json: { error: @gym_route.errors }, status: :unprocessable_entity
