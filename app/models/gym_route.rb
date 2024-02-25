@@ -230,6 +230,12 @@ class GymRoute < ApplicationRecord
         gym_sector_name: gym_sector.name,
         anchor_number: anchor_number,
         short_app_path: short_app_path,
+        picture: gym_route_cover ? picture_large_url : nil,
+        thumbnail_position: thumbnail_position,
+        calculated_thumbnail_position: calculated_thumbnail_position,
+        cover_metadata: gym_route_cover&.picture ? gym_route_cover.picture.metadata : nil,
+        votes: votes,
+        updated_at: updated_at,
         grade_gap: {
           max_grade_value: max_grade_value,
           min_grade_value: min_grade_value,
@@ -256,13 +262,8 @@ class GymRoute < ApplicationRecord
   def detail_to_json
     summary_to_json.merge(
       {
-        picture: gym_route_cover ? picture_large_url : nil,
         video_count: videos.count,
         gym_sector: gym_sector.summary_to_json,
-        thumbnail_position: thumbnail_position,
-        calculated_thumbnail_position: calculated_thumbnail_position,
-        cover_metadata: gym_route_cover&.picture ? gym_route_cover.picture.metadata : nil,
-        votes: votes,
         history: {
           created_at: created_at,
           updated_at: updated_at
