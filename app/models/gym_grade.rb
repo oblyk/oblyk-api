@@ -11,8 +11,6 @@ class GymGrade < ApplicationRecord
   POINT_SYSTEM_TYPE_LIST = %w[fix divisible none].freeze
 
   validates :name, presence: true
-  validates :point_system_type, inclusion: { in: POINT_SYSTEM_TYPE_LIST }
-  validate :validate_grading_system
 
   after_update :delete_caches
 

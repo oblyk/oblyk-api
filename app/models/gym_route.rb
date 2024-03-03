@@ -51,15 +51,28 @@ class GymRoute < ApplicationRecord
   end
 
   def calculated_point
-    case gym_grade.point_system_type
-    when 'fix'
-      points
-    when 'divisible'
-      ascents_count = self.ascents_count&.positive? ? self.ascents_count : 1
-      1000 / ascents_count
+    if points
+      point = points
     else
-      nil
+      point_system = case climbing_type
+                     when 'sport_climbing'
+                       gym.sport_climbing_ranking
+                     when 'bouldering'
+                       gym.boulder_ranking
+                     else
+                       gym.pan_ranking
+                     end
+      point = case point_system
+              when 'division'
+                ascents_count = self.ascents_count&.positive? ? self.ascents_count : 1
+                1000 / ascents_count
+              when 'point_by_grade'
+                min_grade_value ? (2000 * 0.85**(49 - min_grade_value)).round : 0
+              else
+                points
+              end
     end
+    point
   end
 
   def points_to_s
@@ -143,12 +156,16 @@ class GymRoute < ApplicationRecord
     hardness_count = nil
     hardness_value = nil
     hardness_votes = nil
+    user_ids = []
 
-    ascent_gym_routes.each do |ascent|
-      if ascent.ascent_status != 'project'
-        ascent_count ||= 0
-        ascent_count += 1
-      end
+    ascent_gym_routes.select(:hardness_status, :ascent_status, :user_id).each do |ascent|
+      next if %w[project repetition].include? ascent.ascent_status
+      next if user_ids.include? ascent.user_id
+
+      user_ids << ascent.user_id
+
+      ascent_count ||= 0
+      ascent_count += 1
 
       next if ascent.hardness_status.blank?
 
@@ -162,7 +179,6 @@ class GymRoute < ApplicationRecord
       hardness_votes[ascent.hardness_status][:count] += 1
     end
 
-    self.note_count = note_count
     self.ascents_count = ascent_count
     self.difficulty_appreciation = hardness_value ? hardness_value.to_d / hardness_count : nil
     self.votes = {

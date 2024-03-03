@@ -57,15 +57,44 @@ module Api
         end_date = params.fetch(:end_date, nil)
         start_date = Date.parse(start_date) if start_date
         end_date = Date.parse(end_date) if end_date
+        gender = params.fetch(:gender, nil)
+        age = params.fetch(:age, nil)
+        climbing_type = params.fetch(:climbing_type, nil)
 
-        ascents = AscentGymRoute.includes(:user)
-                                .includes(gym_route: [:gym_grade_line, { gym_sector: :gym_grade }])
+        ascents = AscentGymRoute.includes(:user, gym_route: :gym)
                                 .where(gym: @gym)
                                 .where.not(gym_route_id: nil)
+
+        # Date filter
         if start_date || end_date
           ascents = ascents.where(released_at: [start_date..end_date])
-                           .where('created_at >= ?', start_date.beginning_of_day)
-                           .where('created_at <= ?', (end_date + 1.day).end_of_day)
+                           .where('ascents.created_at >= ?', start_date.beginning_of_day)
+                           .where('ascents.created_at <= ?', (end_date + 1.day).end_of_day)
+        end
+
+        # Gender filter
+        ascents = ascents.where(users: { genre: gender }) if gender != 'all' && gender.present?
+
+        # Climbing type filter
+        # binding.pry
+        ascents = ascents.joins(:gym_route).where(gym_routes: { climbing_type: climbing_type }) if climbing_type != 'all' && climbing_type.present?
+
+        # Age filter
+        if age.present?
+          date_of_birth = nil
+          date_of_birth = "users.date_of_birth > '#{Date.current - 6.years}'" if age == 'U6'
+          date_of_birth = "users.date_of_birth > '#{Date.current - 8.years}'" if age == 'U8'
+          date_of_birth = "users.date_of_birth > '#{Date.current - 10.years}'" if age == 'U10'
+          date_of_birth = "users.date_of_birth > '#{Date.current - 12.years}'" if age == 'U12'
+          date_of_birth = "users.date_of_birth > '#{Date.current - 14.years}'" if age == 'U14'
+          date_of_birth = "users.date_of_birth > '#{Date.current - 16.years}'" if age == 'U16'
+          date_of_birth = "users.date_of_birth > '#{Date.current - 18.years}'" if age == 'U18'
+          date_of_birth = "users.date_of_birth > '#{Date.current - 20.years}'" if age == 'U20'
+          date_of_birth = "users.date_of_birth BETWEEN '#{Date.current - 39.years}' AND '#{Date.current - 20.years}'" if age == 'senior'
+          date_of_birth = "users.date_of_birth <= '#{Date.current - 40.years}'" if age == 'A40'
+          date_of_birth = "users.date_of_birth <= '#{Date.current - 50.years}'" if age == 'A50'
+          date_of_birth = "users.date_of_birth <= '#{Date.current - 60.years}'" if age == 'A60'
+          ascents = ascents.joins(:user).where(date_of_birth) if date_of_birth
         end
 
         scores = {}
@@ -294,6 +323,9 @@ module Api
           :pan,
           :fun_climbing,
           :training_space,
+          :boulder_ranking,
+          :pan_ranking,
+          :sport_climbing_ranking,
           :latitude,
           :longitude
         )

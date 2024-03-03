@@ -33,6 +33,8 @@ class Gym < ApplicationRecord
     longitude
   ], if: proc { |_obj| ENV['PAPER_TRAIL'] == 'true' }
 
+  RANKING_TYPES = %w[division fixed_points point_by_grade].freeze
+
   has_one_attached :logo
   has_one_attached :banner
   belongs_to :user, optional: true
@@ -61,8 +63,10 @@ class Gym < ApplicationRecord
   validates :logo, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true
   validates :name, :latitude, :longitude, :address, :country, :city, :big_city, presence: true
+  validates :boulder_ranking, :sport_climbing_ranking, :pan_ranking, inclusion: { in: RANKING_TYPES }, allow_nil: true
 
   after_save :historize_around_towns
+  after_save :delete_routes_caches
 
   def all_championships
     Championship.where('gym_id = :gym_id OR id IN (SELECT championship_id FROM championship_contests INNER JOIN contests ON championship_contests.contest_id = contests.id WHERE gym_id = :gym_id)', gym_id: id)
@@ -173,6 +177,9 @@ class Gym < ApplicationRecord
         pan: pan,
         fun_climbing: fun_climbing,
         training_space: training_space,
+        boulder_ranking: boulder_ranking,
+        pan_ranking: pan_ranking,
+        sport_climbing_ranking: sport_climbing_ranking,
         administered: administered?,
         gym_options: gym_options.map(&:summary_to_json),
         banner: banner.attached? ? banner_large_url : nil,
@@ -247,5 +254,9 @@ class Gym < ApplicationRecord
        logo_change
       HistorizeTownsAroundWorker.perform_in(1.hour, latitude, longitude, Time.current)
     end
+  end
+
+  def delete_routes_caches
+    gym_routes.find_each(&:delete_summary_cache) if saved_change_to_boulder_ranking? || saved_change_to_sport_climbing_ranking? || saved_change_to_pan_ranking?
   end
 end

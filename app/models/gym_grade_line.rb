@@ -9,7 +9,6 @@ class GymGradeLine < ApplicationRecord
   before_validation :init_grade_value
 
   validates :name, :colors, :order, presence: true
-  validate :grading_value
 
   default_scope { order(:order) }
 
