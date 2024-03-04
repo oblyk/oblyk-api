@@ -153,6 +153,10 @@ class Gym < ApplicationRecord
     gym_spaces.where(anchor: true).count.positive?
   end
 
+  def ranking?
+    boulder_ranking.present? || sport_climbing_ranking.present? || pan_ranking.present?
+  end
+
   def summary_to_json
     Rails.cache.fetch("#{cache_key_with_version}/summary_gym", expires_in: 28.days) do
       {
@@ -202,6 +206,7 @@ class Gym < ApplicationRecord
         gym_spaces: gym_spaces.map(&:summary_to_json),
         gym_space_groups: gym_space_groups.map(&:summary_to_json),
         sorts_available: sorts_available,
+        display_ranking: ranking?,
         gym_climbing_styles: gym_climbing_styles.activated.map { |style| { style: style.style, climbing_type: style.climbing_type, color: style.color } },
         gym_spaces_with_anchor: gym_spaces_with_anchor?,
         upcoming_contests: contests.upcoming.map(&:summary_to_json),
