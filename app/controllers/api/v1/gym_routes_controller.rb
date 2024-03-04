@@ -84,7 +84,7 @@ module Api
         order_by = params.fetch(:order_by, nil)
         route_ids = params.fetch(:route_ids, nil)
         direction = params.fetch(:direction, 'asc') == 'asc' ? 'ASC' : 'DESC'
-        dismounted = params.fetch(:dismounted, false)
+        dismounted = params.fetch(:dismounted, 'false') == 'true'
 
         routes = if @gym_sector.present?
                    @gym_sector.gym_routes
