@@ -113,6 +113,9 @@ class Gym < ApplicationRecord
   end
 
   def administered!
+    self.boulder_ranking ||= 'division'
+    self.sport_climbing_ranking ||= 'point_by_grade'
+    self.pan_ranking ||= 'division'
     self.assigned_at ||= Time.current
     save
   end
