@@ -201,7 +201,6 @@ class Gym < ApplicationRecord
         gym_chains: gym_chains.map(&:summary_to_json),
         gym_spaces: gym_spaces.map(&:summary_to_json),
         gym_space_groups: gym_space_groups.map(&:summary_to_json),
-        creator: user&.summary_to_json,
         sorts_available: sorts_available,
         gym_climbing_styles: gym_climbing_styles.activated.map { |style| { style: style.style, climbing_type: style.climbing_type, color: style.color } },
         gym_spaces_with_anchor: gym_spaces_with_anchor?,
