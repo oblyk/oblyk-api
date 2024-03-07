@@ -63,6 +63,7 @@ module Api
 
         ascents = AscentGymRoute.includes(:user, gym_route: :gym)
                                 .where(gym: @gym)
+                                .where.not(ascent_status: %w[project repetition])
                                 .where.not(gym_route_id: nil)
 
         # Date filter
