@@ -18,6 +18,8 @@ class ContestRoute < ApplicationRecord
   after_save :delete_caches
   after_destroy :delete_caches
 
+  default_scope { order(:number) }
+
   def disable!
     update_column :disabled_at, DateTime.current
   end
