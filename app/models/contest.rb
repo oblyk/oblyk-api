@@ -38,7 +38,7 @@ class Contest < ApplicationRecord
             presence: true
   validate :validate_dates
 
-  scope :upcoming, -> { where(draft: false, private: false).where('contests.end_date >= ?', Date.current).where('contests.subscription_start_date <= ?', Date.current) }
+  scope :upcoming, -> { where(draft: false, private: false).where('contests.end_date >= ?', Date.current) }
 
   def banner_large_url
     resize_attachment banner, '1920x1920'
