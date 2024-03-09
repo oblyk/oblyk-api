@@ -213,11 +213,13 @@ class Contest < ApplicationRecord
           when ContestRanking::COMBINED_RANKING_DECREMENT_POINTS
             rank_point = 0
             ranks.each do |rank|
-              if rank <= 30
+              if rank.blank?
+                rank_point += 0
+              elsif rank <= 30
                 rank_decimal = 1 - (rank - rank.to_i)
                 rank_point += ContestRanking::COMBINED_RANKING_POINT_MATRIX[rank.to_i - 1].to_f + rank_decimal
               else
-                rank_point = 1.0 - (1.0 / (number_of_participants - 29)) * (rank - 29)
+                rank_point += 1.0 - (1.0 / (number_of_participants - 29)) * (rank - 29)
               end
             end
           else
