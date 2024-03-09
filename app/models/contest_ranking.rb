@@ -192,7 +192,7 @@ class ContestRanking
                  "#{"#{min}m " if min != 0}#{sec}s #{subsec}ms"
                end
       {
-        value: current_ascent.ascent_time.seconds_since_midnight * -1,
+        value: current_ascent.ascent_time ? current_ascent.ascent_time.seconds_since_midnight * -1 : nil,
         details: [detail]
       }
     else
