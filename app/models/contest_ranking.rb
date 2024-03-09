@@ -182,8 +182,8 @@ class ContestRanking
         details: [current_ascent.hold_number, plus]
       }
     when BEST_TIMES
-      second = current_ascent.ascent_time.seconds_since_midnight
-      detail = if second.zero?
+      second = current_ascent.ascent_time&.seconds_since_midnight
+      detail = if second.blank? || second.zero?
                  '-'
                else
                  sec = current_ascent.ascent_time.sec
