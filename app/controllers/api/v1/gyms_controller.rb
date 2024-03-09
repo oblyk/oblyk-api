@@ -261,8 +261,8 @@ module Api
       def figures
         figures = params.fetch(:figures, [])
         data = {}
-        data[:contests_count] = @gym.contests.count if figures.include? 'contests_count'
-        data[:championships_count] = @gym.all_championships.count if figures.include? 'championships_count'
+        data[:contests_count] = @gym.contests.unarchived.count if figures.include? 'contests_count'
+        data[:championships_count] = @gym.all_championships.unarchived.count if figures.include? 'championships_count'
         data[:gym_spaces_count] = @gym.gym_spaces.count if figures.include? 'gym_spaces_count'
         data[:mounted_gym_routes_count] = @gym.gym_routes.mounted.count if figures.include? 'mounted_gym_routes_count'
         data[:gym_administrators_count] = @gym.gym_administrators.count if figures.include? 'gym_administrators_count'

@@ -4,6 +4,7 @@ class Championship < ApplicationRecord
   include Slugable
   include AttachmentResizable
   include StripTagable
+  include Archivable
 
   has_one_attached :banner
   belongs_to :gym
@@ -178,6 +179,7 @@ class Championship < ApplicationRecord
         combined_ranking_type: combined_ranking_type,
         banner: banner.attached? ? banner_large_url : nil,
         banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil,
+        archived_at: archived_at,
         gym: {
           id: gym.id,
           name: gym.name,

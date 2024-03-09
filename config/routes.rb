@@ -323,6 +323,8 @@ Rails.application.routes.draw do
           get :available_contests, on: :member
           post :add_banner, on: :member
           post :add_contest, on: :member
+          put :archived, on: :member
+          put :unarchived, on: :member
           resources :championship_contests, only: %i[create] do
             delete :delete, on: :collection
           end

@@ -6,14 +6,14 @@ module Api
       include UploadVerification
       include GymRolesVerification
 
-      before_action :protected_by_session, only: %i[available_contests create update add_banner]
+      before_action :protected_by_session, only: %i[available_contests create update destroy add_banner archived unarchived]
       before_action :set_gym
-      before_action :set_championship, only: %i[available_contests show update add_banner results contests]
-      before_action :protected_by_administrator, only: %i[available_contests create update add_banner]
+      before_action :set_championship, only: %i[available_contests show update destroy add_banner archived unarchived results contests]
+      before_action :protected_by_administrator, only: %i[available_contests create update destroy archived unarchived add_banner]
       before_action :user_can_manage_championship, except: %i[index show results contests]
 
       def index
-        championships = @gym.all_championships.order(created_at: :desc)
+        championships = @gym.all_championships.order(:archived_at, created_at: :desc)
         render json: championships.map(&:summary_to_json), status: :ok
       end
 
@@ -69,11 +69,35 @@ module Api
         end
       end
 
+      def destroy
+        if @championship.destroy
+          render json: {}, status: :ok
+        else
+          render json: { error: @championship.errors }, status: :unprocessable_entity
+        end
+      end
+
       def add_banner
         return unless verify_file banner_params[:banner], :image
 
         if @championship.update(banner_params)
           render json: @championship.detail_to_json, status: :ok
+        else
+          render json: { error: @championship.errors }, status: :unprocessable_entity
+        end
+      end
+
+      def archived
+        if @championship.archive!
+          render json: {}, status: :ok
+        else
+          render json: { error: @championship.errors }, status: :unprocessable_entity
+        end
+      end
+
+      def unarchived
+        if @championship.unarchive!
+          render json: {}, status: :ok
         else
           render json: { error: @championship.errors }, status: :unprocessable_entity
         end

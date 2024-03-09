@@ -6,7 +6,7 @@ module Api
       include UploadVerification
       include GymRolesVerification
 
-      before_action :protected_by_session, only: %i[create update add_banner draft archived unarchived time_line export_results]
+      before_action :protected_by_session, only: %i[create update destroy add_banner draft archived unarchived time_line export_results]
       before_action :set_gym, except: %i[opens]
       before_action :set_contest, only: %i[show update destroy draft archived unarchived add_banner time_line results export_results]
       before_action :protected_by_administrator, only: %i[create update destroy draft archived unarchived add_banner time_line export_results]
@@ -33,8 +33,7 @@ module Api
       end
 
       def index
-        contests = params.fetch(:archived, false) ? @gym.contests.archived : @gym.contests.unarchived
-        render json: contests.order(start_date: :desc).map(&:summary_to_json), status: :ok
+        render json: @gym.contests.order(:archived_at, start_date: :desc).map(&:summary_to_json), status: :ok
       end
 
       def show
@@ -82,8 +81,8 @@ module Api
       end
 
       def destroy
-        if @contest.contest_participants.positive?
-          render json: { error: { base: ['Le contest a des participant, il ne peut pas être supprimé'] }}, status: :unprocessable_entity
+        unless @contest.draft?
+          render json: { error: { base: ['published_contest_cannot_be_deleted'] }}, status: :unprocessable_entity
           return
         end
 

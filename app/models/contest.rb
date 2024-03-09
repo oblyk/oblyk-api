@@ -5,6 +5,7 @@ class Contest < ApplicationRecord
   include AttachmentResizable
   include StripTagable
   include Archivable
+  include SoftDeletable
 
   REGISTRATION_TOLERANCE = 20
 
@@ -505,6 +506,13 @@ class Contest < ApplicationRecord
           csv << participant_row
         end
       end
+    end
+  end
+
+  def destroy_contest
+    transaction do
+      championship_contests.each(&:destroy)
+      destroy
     end
   end
 
