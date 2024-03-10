@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       get 'search_around', controller: :searches, action: :search_around
 
       get 'figures', controller: :commons, action: :figures
+      get 'micro_stats', controller: :commons, action: :micro_stats
       get 'last_activity_feed', controller: :commons, action: :last_activity_feed
       get 'last_added', controller: :commons, action: :last_added
       get 'partners/figures', controller: :partners, action: :figures

@@ -31,6 +31,13 @@ module Api
         }, status: :ok
       end
 
+      def micro_stats
+        figures = params.fetch(:figures, [])
+        data = {}
+        data[:climbers_count] = User.count if figures.include? 'climbers_count'
+        render json: data, status: :ok
+      end
+
       def last_activity_feed
         feeds = Feed.where(feedable_type: %w[Crag Gym GuideBookPaper])
                     .order(posted_at: :desc)
