@@ -60,6 +60,7 @@ CLOUDFLARE_R2_ACCOUNT_ID: 'account_id'
 CLOUDFLARE_R2_ACCESS_KEY_ID: 'access_key_id'
 CLOUDFLARE_R2_SECRET_ACCESS_KEY: 'secret_access_key'
 CLOUDFLARE_R2_BUCKET: 'bucket'
+CLOUDFLARE_R2_DOMAIN: 'https://storage.exemple.com'
 
 # Mapbox
 MAPBOX_TOKEN: 'mapbox-token'

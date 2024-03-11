@@ -41,3 +41,13 @@ mirror:
   service: Mirror
   primary: cloudflare
   mirrors: [ google ]
+
+mirror_cloudflare_local:
+  service: Mirror
+  primary: cloudflare
+  mirrors: [ local ]
+
+mirror_local_cloudflare:
+  service: Mirror
+  primary: local
+  mirrors: [ cloudflare ]

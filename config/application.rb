@@ -69,5 +69,8 @@ module OblykApi
 
     # JWT second before session expiration (24 * 3600 = 1 day)
     config.jwt_session_lifetime = 24 * 3600
+
+    # Storage services using a CDN
+    config.cdn_storage_services = %i[cloudflare mirror mirror_cloudflare_local]
   end
 end

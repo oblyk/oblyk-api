@@ -30,7 +30,7 @@ class GuideBookPdf < ApplicationRecord
       description: description,
       author: author,
       publication_year: publication_year,
-      pdf_file: Rails.application.routes.url_helpers.polymorphic_url(pdf_file, only_path: true),
+      pdf_file: pdf_url,
       crag: crag.summary_to_json,
       creator: user&.summary_to_json(with_avatar: false),
       history: {
@@ -38,5 +38,9 @@ class GuideBookPdf < ApplicationRecord
         updated_at: updated_at
       }
     }
+  end
+
+  def pdf_url
+    "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.polymorphic_url(pdf_file, only_path: true)}"
   end
 end

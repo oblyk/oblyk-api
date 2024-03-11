@@ -175,8 +175,8 @@ class Crag < ApplicationRecord
           thumbnail_url: photo ? photo.thumbnail_url : nil
         },
         static_map: {
-          url: static_map.attached? ? Rails.application.routes.url_helpers.polymorphic_url(static_map, only_path: true) : nil,
-          banner_url: static_map_banner.attached? ? Rails.application.routes.url_helpers.polymorphic_url(static_map_banner, only_path: true) : nil
+          url: static_map_url(:closer),
+          banner_url: static_map_url(:banner)
         },
         approaches: {
           min_time: min_approach_time,
@@ -277,6 +277,17 @@ class Crag < ApplicationRecord
       max_time = approach.walking_time if max_time.nil? || approach.walking_time > max_time
     end
     update min_approach_time: min_time, max_approach_time: max_time
+  end
+
+  def static_map_url(type)
+    attachement = type == :banner ? static_map_banner : static_map
+    return nil unless attachement
+
+    if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
+      "#{ENV['CLOUDFLARE_R2_DOMAIN']}/#{attachement.key}"
+    else
+      "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.polymorphic_url(attachement, only_path: true)}"
+    end
   end
 
   private
