@@ -459,6 +459,14 @@ class User < ApplicationRecord
     date_of_birth.present? && date_of_birth > Date.current - 18.years
   end
 
+  def delete_summary_cache
+    Rails.cache.delete("#{cache_key_with_version}/summary_user")
+    Rails.cache.delete("#{cache_key_with_version}/summary_user_with_avatar")
+    Rails.cache.delete("#{cache_key_with_version}/local_climber_to_json")
+    Rails.cache.delete("#{cache_key_with_version}/partner_geo_json")
+    Rails.cache.delete("#{cache_key_with_version}/minimalistic_partner_geo_json")
+  end
+
   private
 
   def search_indexes

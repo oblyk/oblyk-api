@@ -145,6 +145,11 @@ class GuideBookPaper < ApplicationRecord
     }
   end
 
+  def delete_summary_cache
+    Rails.cache.delete("#{cache_key_with_version}/summary_guide_book_paper")
+    Rails.cache.delete("#{cache_key_with_version}/geo_json_guide_book_paper")
+  end
+
   private
 
   def search_indexes
