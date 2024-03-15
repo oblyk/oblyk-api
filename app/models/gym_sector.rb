@@ -54,12 +54,7 @@ class GymSector < ApplicationRecord
   end
 
   def detail_to_json
-    summary_to_json.merge(
-      {
-        gym_route_count: gym_routes.count,
-        gym_routes: gym_routes.map(&:summary_to_json)
-      }
-    )
+    summary_to_json
   end
 
   def destroy
