@@ -176,6 +176,7 @@ Rails.application.routes.draw do
       end
       resources :links
       resources :follows, only: %i[index create] do
+        get :followers, on: :collection
         put :increment, on: :collection
       end
       delete 'follows', controller: :follows, action: :destroy
