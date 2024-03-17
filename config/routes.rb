@@ -257,6 +257,7 @@ Rails.application.routes.draw do
           get :export, on: :collection
           get :ascents, on: :member
           get :similar_sectors, on: :member
+          get :comments, on: :member
           post :add_picture, on: :member
           post :add_thumbnail, on: :member
           put :dismount, on: :member

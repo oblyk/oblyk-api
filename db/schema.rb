@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_09_140207) do
+ActiveRecord::Schema.define(version: 2024_03_16_182321) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -145,6 +145,7 @@ ActiveRecord::Schema.define(version: 2024_03_09_140207) do
     t.string "climbing_type"
     t.integer "note"
     t.text "comment"
+    t.integer "comments_count"
     t.integer "sections_count"
     t.integer "max_grade_value"
     t.integer "min_grade_value"

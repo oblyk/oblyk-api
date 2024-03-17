@@ -40,6 +40,11 @@ module Api
         @ascent_gym_route = AscentGymRoute.new(ascent_gym_route_params)
         @ascent_gym_route.user = @current_user
 
+        if ascent_comment_params.fetch(:ascent_comment, []).fetch(:body, nil).present?
+          @ascent_gym_route.ascent_comment = Comment.new ascent_comment_params[:ascent_comment]
+          @ascent_gym_route.ascent_comment.user = @current_user
+        end
+
         if @ascent_gym_route.gym_route&.gym_grade && @ascent_gym_route.gym_route&.gym_grade_line && @ascent_gym_route.gym_route.gym_grade.difficulty_by_level
           gym_grade = @ascent_gym_route.gym_route.gym_grade
           color_system = ColorSystem.create_form_grade gym_grade
@@ -113,7 +118,18 @@ module Api
       end
 
       def update
+        if ascent_comment_params.fetch(:ascent_comment, []).fetch(:body, nil).present?
+          if @ascent_gym_route.ascent_comment
+            @ascent_gym_route.ascent_comment.body = ascent_comment_params[:ascent_comment][:body]
+          else
+            @ascent_gym_route.ascent_comment = Comment.new(body: ascent_comment_params[:ascent_comment][:body])
+            @ascent_gym_route.ascent_comment.user = @current_user
+          end
+        elsif @ascent_gym_route.ascent_comment
+          @ascent_gym_route.ascent_comment = nil if @ascent_gym_route.ascent_comment.destroy
+        end
         if @ascent_gym_route.update(ascent_gym_route_params)
+          @ascent_gym_route.ascent_comment&.save
           render json: @current_user.ascent_gym_routes_to_a, status: :created
         else
           render json: { error: @ascent_gym_route.errors }, status: :unprocessable_entity
@@ -151,6 +167,12 @@ module Api
           :climbing_type,
           sections: %i[grade index height grade_value],
           selected_sections: %i[]
+        )
+      end
+
+      def ascent_comment_params
+        params.require(:ascent_gym_route).permit(
+          ascent_comment: %i[id body]
         )
       end
 

@@ -6,14 +6,14 @@ class Comment < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :reply_to_comment, class_name: 'Comment', optional: true
   belongs_to :commentable, polymorphic: true, counter_cache: :comments_count, touch: true
-  has_many :reports, as: :reportable
-  has_many :likes, as: :likeable
-  has_many :reply_to_comments, class_name: 'Comment'
+  has_many :reports, as: :reportable, dependent: :destroy
+  has_many :likes, as: :likeable, dependent: :destroy
+  has_many :reply_to_comments, class_name: 'Comment', foreign_key: :reply_to_comment_id, dependent: :destroy
 
   before_validation :normalize_blank_values
 
   validates :body, presence: true
-  validates :commentable_type, inclusion: { in: %w[Crag CragSector CragRoute GuideBookPaper Area Gym GymRoute Article Comment].freeze }
+  validates :commentable_type, inclusion: { in: %w[Crag CragSector CragRoute GuideBookPaper Area Gym GymRoute Article Comment Ascent].freeze }
 
   after_create :create_notification!
   after_destroy :destroy_notification!
@@ -46,7 +46,7 @@ class Comment < ApplicationRecord
   private
 
   def normalize_blank_values
-    self.body = body.strip
+    self.body = body&.strip
     self.body = nil if body.blank?
   end
 

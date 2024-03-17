@@ -7,10 +7,10 @@ module Api
 
       skip_before_action :protected_by_session, only: %i[show index paginated ascents]
       skip_before_action :protected_by_gym_administrator, only: %i[show index paginated ascents delete_picture]
-      before_action :set_gym_space, except: %i[add_picture similar_sectors add_thumbnail dismount mount dismount_collection mount_collection ascents delete_picture]
-      before_action :set_gym_sector, except: %i[index show similar_sectors add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents delete_picture]
-      before_action :set_gym_route, only: %i[show similar_sectors update destroy add_picture add_thumbnail dismount mount ascents delete_picture]
-      before_action -> { can? GymRole::MANAGE_OPENING }, except: %i[index paginated show similar_sectors ascents]
+      before_action :set_gym_space, except: %i[add_picture similar_sectors add_thumbnail dismount mount dismount_collection mount_collection ascents delete_picture comments]
+      before_action :set_gym_sector, except: %i[index show similar_sectors add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents delete_picture comments]
+      before_action :set_gym_route, only: %i[show similar_sectors update destroy add_picture add_thumbnail dismount mount ascents delete_picture comments]
+      before_action -> { can? GymRole::MANAGE_OPENING }, except: %i[index paginated show similar_sectors ascents comments]
 
       def index
         group_by = params.fetch(:group_by, nil)
@@ -286,6 +286,18 @@ module Api
       def mount_collection
         @gym.gym_routes.where(id: params[:route_ids]).each(&:mount!)
         head :no_content
+      end
+
+      def comments
+        comments = []
+        @gym_route.comments.each do |comment|
+          comments << comment
+        end
+        @gym_route.ascent_gym_routes.where('comments_count > 0').each do |ascent|
+          comments << ascent.ascent_comment
+        end
+        comments = comments.sort_by(&:created_at)
+        render json: comments.map(&:summary_to_json), status: :ok
       end
 
       private

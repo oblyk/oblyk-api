@@ -16,6 +16,7 @@ class GymRoute < ApplicationRecord
   has_many :gym_openers, through: :gym_route_openers
   has_many :likes, as: :likeable
   has_many :contest_routes
+  has_many :comments, as: :commentable
 
   delegate :feed_parent_id, to: :gym
   delegate :feed_parent_type, to: :gym
@@ -252,6 +253,7 @@ class GymRoute < ApplicationRecord
         cover_metadata: gym_route_cover&.picture ? gym_route_cover.picture.metadata : nil,
         votes: votes,
         updated_at: updated_at,
+        all_comments_count: all_comments_count,
         grade_gap: {
           max_grade_value: max_grade_value,
           min_grade_value: min_grade_value,
@@ -290,6 +292,10 @@ class GymRoute < ApplicationRecord
 
   def delete_summary_cache
     Rails.cache.delete("#{cache_key_with_version}/summary_gym_route")
+  end
+
+  def all_comments_count
+    (comments_count || 0) + ascent_gym_routes.sum { |ascent| ascent.comments_count || 0 }
   end
 
   private
