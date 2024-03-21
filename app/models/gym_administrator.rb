@@ -17,7 +17,13 @@ class GymAdministrator < ApplicationRecord
       user_id: user_id,
       gym_id: gym_id,
       roles: roles,
-      requested_email: requested_email
+      requested_email: requested_email,
+      subscribe_to_comment_feed: subscribe_to_comment_feed,
+      subscribe_to_video_feed: subscribe_to_video_feed,
+      subscribe_to_follower_feed: subscribe_to_follower_feed,
+      last_comment_feed_read_at: last_comment_feed_read_at,
+      last_video_feed_read_at: last_video_feed_read_at,
+      last_follower_feed_read_at: last_follower_feed_read_at
     }
     if user
       data[:user] = {

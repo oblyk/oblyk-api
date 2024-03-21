@@ -170,6 +170,7 @@ Rails.application.routes.draw do
 
       resources :comments do
         get :comments, on: :member
+        delete :moderate_by_gym_administrator, on: :member
       end
       resources :likes, only: %i[index create] do
         delete '/:likeable_type/:likeable_id', action: :destroy, on: :collection
@@ -215,8 +216,12 @@ Rails.application.routes.draw do
         get :tree_routes, on: :member
         get :ascent_scores, on: :member
         get :figures, on: :member
+        get :comments, on: :member
         resources :color_systems, only: %i[index create show]
-        resources :gym_administrators
+        resources :gym_administrators do
+          put :update_feed_last_read, on: :collection
+          get :new_in_feeds, on: :collection
+        end
         resources :gym_administration_requests, only: %i[create]
         resources :gym_climbing_styles, only: %i[index create] do
           put :deactivate, on: :collection

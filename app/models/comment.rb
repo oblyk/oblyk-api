@@ -8,6 +8,7 @@ class Comment < ApplicationRecord
   belongs_to :commentable, polymorphic: true, counter_cache: :comments_count, touch: true
   has_many :reports, as: :reportable, dependent: :destroy
   has_many :likes, as: :likeable, dependent: :destroy
+  has_many :comments, as: :commentable, dependent: :destroy
   has_many :reply_to_comments, class_name: 'Comment', foreign_key: :reply_to_comment_id, dependent: :destroy
 
   before_validation :normalize_blank_values
@@ -21,13 +22,15 @@ class Comment < ApplicationRecord
   def summary_to_json
     {
       id: id,
-      body: body,
+      body: moderated_at.blank? ? body : nil,
       creator: user&.summary_to_json(with_avatar: false),
       likes_count: likes_count,
       comments_count: comments_count,
       reply_to_comment_id: reply_to_comment_id,
       commentable_type: commentable_type,
       commentable_id: commentable_id,
+      moderated_at: moderated_at,
+      moderated: moderated_at.present?,
       history: {
         created_at: created_at,
         updated_at: updated_at

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_16_182321) do
+ActiveRecord::Schema.define(version: 2024_03_20_110147) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -258,6 +258,7 @@ ActiveRecord::Schema.define(version: 2024_03_16_182321) do
     t.bigint "legacy_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "moderated_at"
     t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id"
     t.index ["reply_to_comment_id"], name: "index_comments_on_reply_to_comment_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
@@ -739,6 +740,12 @@ ActiveRecord::Schema.define(version: 2024_03_16_182321) do
     t.bigint "gym_id"
     t.json "roles"
     t.string "requested_email"
+    t.boolean "subscribe_to_comment_feed"
+    t.boolean "subscribe_to_video_feed"
+    t.boolean "subscribe_to_follower_feed"
+    t.datetime "last_comment_feed_read_at"
+    t.datetime "last_video_feed_read_at"
+    t.datetime "last_follower_feed_read_at"
     t.index ["gym_id"], name: "index_gym_administrators_on_gym_id"
     t.index ["user_id"], name: "index_gym_administrators_on_user_id"
   end

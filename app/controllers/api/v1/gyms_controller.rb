@@ -7,10 +7,10 @@ module Api
       include UploadVerification
 
       before_action :protected_by_super_admin, only: %i[destroy]
-      before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes tree_structures tree_routes figures]
-      before_action :set_gym, only: %i[show versions ascent_scores update destroy add_banner add_logo routes_count routes tree_structures tree_routes figures]
-      before_action :protected_by_administrator, only: %i[update add_banner add_logo routes_count routes tree_structures tree_routes figures]
-      before_action :user_can_manage_gym, except: %i[index search geo_json show create gyms_around versions ascent_scores routes_count routes]
+      before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes tree_structures tree_routes figures comments]
+      before_action :set_gym, only: %i[show versions ascent_scores update destroy add_banner add_logo routes_count routes tree_structures tree_routes figures comments]
+      before_action :protected_by_administrator, only: %i[update add_banner add_logo routes_count routes tree_structures tree_routes figures comments]
+      before_action :user_can_manage_gym, except: %i[index search geo_json show create gyms_around versions ascent_scores routes_count routes comments]
 
       def index
         gyms = params[:ids].present? ? Gym.where(id: params[:ids]) : Gym.all
@@ -267,7 +267,50 @@ module Api
         data[:mounted_gym_routes_count] = @gym.gym_routes.mounted.count if figures.include? 'mounted_gym_routes_count'
         data[:gym_administrators_count] = @gym.gym_administrators.count if figures.include? 'gym_administrators_count'
         data[:gym_openers_count] = @gym.gym_openers.count if figures.include? 'gym_openers_count'
+        if figures.include? 'comments_count'
+          route_comments_count = Comment.joins('INNER JOIN gym_routes ON commentable_id = gym_routes.id')
+                                        .joins('INNER JOIN gym_sectors ON gym_routes.gym_sector_id = gym_sectors.id')
+                                        .joins('INNER JOIN gym_spaces ON gym_sectors.gym_space_id = gym_spaces.id')
+                                        .where(
+                                          gym_routes: { dismounted_at: nil },
+                                          commentable_type: 'GymRoute',
+                                          gym_spaces: { gym_id: @gym.id }
+                                        )
+                                        .count
+          ascent_comments_count = Comment.joins('INNER JOIN ascents ON commentable_id = ascents.id')
+                                         .joins('INNER JOIN gym_routes ON gym_route_id = gym_routes.id')
+                                         .where(
+                                           commentable_type: 'Ascent',
+                                           gym_routes: { dismounted_at: nil },
+                                           ascents: { gym_id: @gym.id }
+                                         )
+                                         .count
+          data[:comments_count] = route_comments_count + ascent_comments_count
+        end
+        data[:videos_count] = Video.where(viewable_type: 'GymRoute', viewable_id: @gym.gym_routes.mounted.pluck(:id)).count if figures.include? 'videos_count'
+        data[:followers_count] = Follow.where(followable_type: 'Gym', followable_id: @gym.id).count if figures.include? 'followers_count'
         render json: data, status: :ok
+      end
+
+      def comments
+        page = params.fetch(:page, 1)
+        route_comments_count = Comment.joins('INNER JOIN gym_routes ON commentable_id = gym_routes.id')
+                                      .joins('INNER JOIN gym_sectors ON gym_routes.gym_sector_id = gym_sectors.id')
+                                      .joins('INNER JOIN gym_spaces ON gym_sectors.gym_space_id = gym_spaces.id')
+                                      .where(
+                                        gym_routes: { dismounted_at: nil },
+                                        commentable_type: 'GymRoute',
+                                        gym_spaces: { gym_id: @gym.id }
+                                      )
+        ascent_comments_count = Comment.joins('INNER JOIN ascents ON commentable_id = ascents.id')
+                                       .joins('INNER JOIN gym_routes ON gym_route_id = gym_routes.id')
+                                       .where(
+                                         commentable_type: 'Ascent',
+                                         gym_routes: { dismounted_at: nil },
+                                         ascents: { gym_id: @gym.id }
+                                       )
+        comments = Comment.from("(#{route_comments_count.to_sql} UNION #{ascent_comments_count.to_sql}) AS comments").order(updated_at: :desc).page(page)
+        render json: comments.map(&:detail_to_json), status: :ok
       end
 
       private
