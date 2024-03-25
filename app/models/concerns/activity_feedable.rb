@@ -4,7 +4,8 @@ module ActivityFeedable
   extend ActiveSupport::Concern
 
   included do
-    after_save_commit :save_feed!
+    after_create_commit :save_feed!
+    after_update_commit :save_feed!
     after_destroy_commit :remove_feed
   end
 
