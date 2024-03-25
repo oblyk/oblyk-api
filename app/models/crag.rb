@@ -282,6 +282,7 @@ class Crag < ApplicationRecord
   def static_map_url(type)
     attachement = type == :banner ? static_map_banner : static_map
     return nil unless attachement
+    return nil unless attachement.attached?
 
     if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
       "#{ENV['CLOUDFLARE_R2_DOMAIN']}/#{attachement.key}"
