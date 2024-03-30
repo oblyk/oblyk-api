@@ -68,3 +68,6 @@ MAPBOX_STATIC_MAP_STYLE: 'mapbox-style-for-static-image'
 
 # GYM
 ACTIVE_CONTEST_BROADCAST: 'true'
+
+# Iframely api ket token for get embed code
+IFRAMELY_API_KEY: 'my-api-key'

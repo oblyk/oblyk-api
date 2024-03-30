@@ -254,6 +254,7 @@ class GymRoute < ApplicationRecord
         votes: votes,
         updated_at: updated_at,
         all_comments_count: all_comments_count,
+        videos_count: videos_count,
         grade_gap: {
           max_grade_value: max_grade_value,
           min_grade_value: min_grade_value,
@@ -280,7 +281,6 @@ class GymRoute < ApplicationRecord
   def detail_to_json
     summary_to_json.merge(
       {
-        video_count: videos.count,
         gym_sector: gym_sector.summary_to_json,
         history: {
           created_at: created_at,

@@ -188,7 +188,9 @@ Rails.application.routes.draw do
           get :last_messages, on: :collection
         end
       end
-      resources :videos
+      resources :videos do
+        delete :moderate_by_gym_administrator, on: :member
+      end
       resources :photos
       resources :subscribes, only: %i[index create] do
         delete :destroy, on: :collection
@@ -217,6 +219,7 @@ Rails.application.routes.draw do
         get :ascent_scores, on: :member
         get :figures, on: :member
         get :comments, on: :member
+        get :videos, on: :member
         resources :color_systems, only: %i[index create show]
         resources :gym_administrators do
           put :update_feed_last_read, on: :collection

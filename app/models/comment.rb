@@ -23,7 +23,7 @@ class Comment < ApplicationRecord
     {
       id: id,
       body: moderated_at.blank? ? body : nil,
-      creator: user&.summary_to_json(with_avatar: false),
+      creator: user&.summary_to_json(with_avatar: true),
       likes_count: likes_count,
       comments_count: comments_count,
       reply_to_comment_id: reply_to_comment_id,

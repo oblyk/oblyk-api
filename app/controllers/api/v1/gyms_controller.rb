@@ -7,10 +7,10 @@ module Api
       include UploadVerification
 
       before_action :protected_by_super_admin, only: %i[destroy]
-      before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes tree_structures tree_routes figures comments]
-      before_action :set_gym, only: %i[show versions ascent_scores update destroy add_banner add_logo routes_count routes tree_structures tree_routes figures comments]
-      before_action :protected_by_administrator, only: %i[update add_banner add_logo routes_count routes tree_structures tree_routes figures comments]
-      before_action :user_can_manage_gym, except: %i[index search geo_json show create gyms_around versions ascent_scores routes_count routes comments]
+      before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes tree_structures tree_routes figures comments videos]
+      before_action :set_gym, only: %i[show versions ascent_scores update destroy add_banner add_logo routes_count routes tree_structures tree_routes figures comments videos]
+      before_action :protected_by_administrator, only: %i[update add_banner add_logo routes_count routes tree_structures tree_routes figures comments videos]
+      before_action :user_can_manage_gym, except: %i[index search geo_json show create gyms_around versions ascent_scores routes_count routes comments videos]
 
       def index
         gyms = params[:ids].present? ? Gym.where(id: params[:ids]) : Gym.all
@@ -311,6 +311,14 @@ module Api
                                        )
         comments = Comment.from("(#{route_comments_count.to_sql} UNION #{ascent_comments_count.to_sql}) AS comments").order(updated_at: :desc).page(page)
         render json: comments.map(&:detail_to_json), status: :ok
+      end
+
+      def videos
+        page = params.fetch(:page, 1)
+        videos = Video.where(viewable_type: 'GymRoute', viewable_id: @gym.gym_routes.pluck(:id))
+                      .order(created_at: :desc)
+                      .page(page)
+        render json: videos.map(&:detail_to_json), status: :ok
       end
 
       private

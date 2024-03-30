@@ -5,8 +5,8 @@ module Api
     class GymRoutesController < ApiController
       include Gymable
 
-      skip_before_action :protected_by_session, only: %i[show index paginated ascents]
-      skip_before_action :protected_by_gym_administrator, only: %i[show index paginated ascents delete_picture]
+      skip_before_action :protected_by_session, only: %i[show index paginated ascents comments]
+      skip_before_action :protected_by_gym_administrator, only: %i[show index paginated ascents comments]
       before_action :set_gym_space, except: %i[add_picture similar_sectors add_thumbnail dismount mount dismount_collection mount_collection ascents delete_picture comments]
       before_action :set_gym_sector, except: %i[index show similar_sectors add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents delete_picture comments]
       before_action :set_gym_route, only: %i[show similar_sectors update destroy add_picture add_thumbnail dismount mount ascents delete_picture comments]

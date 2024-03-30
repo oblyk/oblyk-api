@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_20_110147) do
+ActiveRecord::Schema.define(version: 2024_03_22_121440) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -1356,7 +1356,9 @@ ActiveRecord::Schema.define(version: 2024_03_20_110147) do
 
   create_table "videos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.text "description"
+    t.string "video_service"
     t.string "url"
+    t.text "embedded_code"
     t.bigint "user_id"
     t.string "viewable_type"
     t.bigint "viewable_id"
