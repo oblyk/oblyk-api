@@ -62,6 +62,20 @@ class AscentGymRoute < Ascent
     }
   end
 
+  def commentary_public!
+    return if comment.blank?
+    return if ascent_comment.present?
+
+    self.ascent_comment = Comment.new(
+      body: comment,
+      user: user,
+      created_at: created_at,
+      updated_at: updated_at
+    )
+    update_column :comment, nil
+    gym_route.delete_summary_cache
+  end
+
   private
 
   def update_gym_route!
