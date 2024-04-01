@@ -34,6 +34,7 @@ Rails.application.routes.draw do
       get 'micro_stats', controller: :commons, action: :micro_stats
       get 'last_activity_feed', controller: :commons, action: :last_activity_feed
       get 'last_added', controller: :commons, action: :last_added
+      get 'active_gyms', controller: :commons, action: :active_gyms
       get 'partners/figures', controller: :partners, action: :figures
       get 'partners/partners_around', controller: :partners, actions: :partners_around
       resources :tools, only: %i[] do

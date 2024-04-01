@@ -12,3 +12,8 @@ Accept: application/json
 GET {{api_url}}/last_added.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
+
+### Active gyms for indoor presentation
+GET {{api_url}}/active_gyms.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
