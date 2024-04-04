@@ -6,7 +6,7 @@ module Api
       include Gymable
 
       before_action :set_gym_administrator, only: %i[update show destroy]
-      before_action -> { can? GymRole::MANAGE_TEAM_MEMBER }, except: %i[index show]
+      before_action -> { can? GymRole::MANAGE_TEAM_MEMBER }, except: %i[index show new_in_feeds update_feed_last_read]
       after_action :broadcast_new_roles, only: %i[create update]
 
       def index
