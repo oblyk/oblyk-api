@@ -5,7 +5,7 @@ module Api
     class GymLabelTemplatesController < ApiController
       include Gymable
 
-      before_action :set_gym_label_template, only: %i[show print update destroy archived unarchived]
+      before_action :set_gym_label_template, only: %i[show copy print update destroy archived unarchived]
       before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[index show]
 
       def index
@@ -51,6 +51,13 @@ module Api
           page_format: 'A4',
           page_direction: 'portrait'
         }, status: :ok
+      end
+
+      def copy
+        gym_label_template = GymLabelTemplate.new(@gym_label_template.attributes.except('id', 'created_at', 'updated_at', 'archived_at'))
+        gym_label_template.name = "#{@gym_label_template.name} - copie"
+        gym_label_template.save
+        render json: gym_label_template.detail_to_json, status: :ok
       end
 
       def print

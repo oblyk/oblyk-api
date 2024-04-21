@@ -239,6 +239,7 @@ Rails.application.routes.draw do
           get :print, on: :member
           put :archived, on: :member
           put :unarchived, on: :member
+          post :copy, on: :member
         end
         resources :gym_grades do
           resources :gym_grade_lines
