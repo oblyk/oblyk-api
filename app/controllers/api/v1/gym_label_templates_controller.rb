@@ -106,6 +106,11 @@ module Api
         footer_body = footer_body&.gsub('%salle%', @gym.name)
         footer_body = markdown.render footer_body
 
+        # Header to markdown
+        header_body = @gym_label_template.header_options['center']['body']
+        header_body = header_body&.gsub('%salle%', @gym.name)
+        header_body = markdown.render header_body
+
         # Convert description to markdown
         if @gym_label_template.display_description
           gym_routes.each_with_index do |gym_route, index|
@@ -123,6 +128,7 @@ module Api
             pages << {
               order: k,
               footer_body: footer_body,
+              header_body: header_body,
               reference: reference,
               routes: routes
             }
@@ -137,6 +143,7 @@ module Api
             pages << {
               order: group_sector.order,
               footer_body: footer_body,
+              header_body: header_body,
               reference: reference.presence,
               routes: routes
             }
@@ -153,6 +160,7 @@ module Api
             pages[page_index] ||= {
               order: page_index,
               footer_body: footer_body,
+              header_body: header_body,
               reference: footer_reference,
               routes: []
             }
