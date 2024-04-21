@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_22_121440) do
+ActiveRecord::Schema.define(version: 2024_04_15_184336) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -824,6 +824,9 @@ ActiveRecord::Schema.define(version: 2024_03_22_121440) do
     t.string "name"
     t.string "label_direction"
     t.json "layout_options"
+    t.json "label_options"
+    t.json "header_options"
+    t.json "footer_options"
     t.json "border_style"
     t.string "font_family"
     t.string "qr_code_position"

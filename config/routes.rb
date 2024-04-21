@@ -235,6 +235,7 @@ Rails.application.routes.draw do
           put :activate, on: :member
         end
         resources :gym_label_templates do
+          get :model, on: :collection
           get :print, on: :member
           put :archived, on: :member
           put :unarchived, on: :member

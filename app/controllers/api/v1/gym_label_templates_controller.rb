@@ -22,6 +22,37 @@ module Api
         render json: @gym_label_template.detail_to_json, status: :ok
       end
 
+      def model
+        render json: {
+          label_direction: 'one_by_row',
+          layout_options: GymLabelTemplate.default_layout_options,
+          footer_options: GymLabelTemplate.default_footer_options,
+          header_options: GymLabelTemplate.default_header_options,
+          label_options: GymLabelTemplate.default_label_options,
+          border_style: {
+            'border-color': '#000000',
+            'border-width': '0.3mm',
+            'border-style': 'solid',
+            'border-radius': '3mm'
+          },
+          font_family: 'lato',
+          qr_code_position: 'in_label',
+          label_arrangement: 'rectangular_horizontal',
+          grade_style: 'tag_and_hold',
+          display_points: false,
+          display_openers: true,
+          display_opened_at: true,
+          display_name: true,
+          display_description: false,
+          display_anchor: false,
+          display_climbing_style: true,
+          display_grade: true,
+          display_tag_and_hold: true,
+          page_format: 'A4',
+          page_direction: 'portrait'
+        }, status: :ok
+      end
+
       def print
         sector = params.fetch(:sector_id, nil)
         route_ids = params.fetch(:route_ids, nil)
@@ -63,13 +94,36 @@ module Api
           end
         end
 
+        renderer = Redcarpet::Render::HTML.new(
+          no_links: true,
+          no_images: true,
+          hard_wrap: true
+        )
+        markdown = Redcarpet::Markdown.new(renderer)
+
+        # Footer to markdown
+        footer_body = @gym_label_template.footer_options['center_top']['body']
+        footer_body = footer_body&.gsub('%salle%', @gym.name)
+        footer_body = markdown.render footer_body
+
+        # Convert description to markdown
+        if @gym_label_template.display_description
+          gym_routes.each_with_index do |gym_route, index|
+            gym_routes[index][:description] = markdown.render(gym_route[:description]) if gym_route[:description].present?
+          end
+        end
+
         case group_by
         when 'anchor'
           groups = gym_routes.group_by { |gym_route| gym_route[:anchor_number] }
           groups.each do |k, routes|
+            reference = @gym_label_template.footer_options['center_bottom']['body']
+            reference = reference&.gsub('%type_de_groupe%', 'Relais')
+            reference = reference&.gsub('%reference%', k&.to_s)
             pages << {
               order: k,
-              reference: "Relais n°#{k}",
+              footer_body: footer_body,
+              reference: reference,
               routes: routes
             }
           end
@@ -77,9 +131,13 @@ module Api
           groups = gym_routes.group_by { |gym_route| gym_route[:gym_sector_id] }
           groups.each do |k, routes|
             group_sector = GymSector.find k
+            reference = @gym_label_template.footer_options['center_bottom']['body']
+            reference = reference&.gsub('%type_de_groupe%', 'Secteur')
+            reference = reference&.gsub('%reference%', group_sector.name)
             pages << {
               order: group_sector.order,
-              reference: group_sector.name,
+              footer_body: footer_body,
+              reference: reference.presence,
               routes: routes
             }
           end
@@ -87,9 +145,15 @@ module Api
           page_loop = 0
           page_index = 0
           gym_routes.each do |gym_route|
+            footer_reference = @gym_label_template.footer_options['center_bottom']['body']
+            footer_reference = footer_reference&.gsub('%type_de_groupe%', '')
+            footer_reference = footer_reference&.gsub('%reference%', reference)
+            footer_reference = markdown.render footer_reference
+
             pages[page_index] ||= {
               order: page_index,
-              reference: reference,
+              footer_body: footer_body,
+              reference: footer_reference,
               routes: []
             }
             pages[page_index][:routes] << gym_route
@@ -102,7 +166,7 @@ module Api
         end
 
         # Qrcode in footer
-        if @gym_label_template.qr_code_position == 'footer'
+        if @gym_label_template.footer_options['display']
           pages.each_with_index do |page, index|
             routes_query = page[:routes].map { |route| "r[]=#{route[:id]}" }.join('&')
             uri = "#{ENV['OBLYK_APP_URL']}/grs/#{@gym.id}?#{routes_query}"
@@ -188,7 +252,37 @@ module Api
           :display_tag_and_hold,
           :page_format,
           :page_direction,
-          layout_options: %i[page-margin align-items],
+          footer_options: [
+            :display,
+            :height,
+            :border,
+            {
+              left: %i[display type],
+              right: %i[display type],
+              center_top: %i[body text_align color font_size],
+              center_bottom: %i[body text_align color font_size]
+            }
+          ],
+          label_options: [
+            grade: %i[width font_size font_family text_transform],
+            visual: %i[width],
+            information: %i[font_size font_family],
+            rectangular_horizontal: %i[height],
+            rectangular_vertical: [
+              top: %i[height vertical_align],
+              bottom: %i[height]
+            ]
+          ],
+          header_options: [
+            :display,
+            :height,
+            {
+              left: %i[display type],
+              right: %i[display type],
+              center: %i[body text_align color font_size]
+            }
+          ],
+          layout_options: %i[page_margin align_items row_gap column_gap],
           border_style: %i[border-style border-color border-width border-radius]
         )
       end

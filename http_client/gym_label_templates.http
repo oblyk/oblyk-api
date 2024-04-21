@@ -1,0 +1,5 @@
+### GET gmy label template model
+GET {{api_url}}/gyms/229/gym_label_templates/model.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json

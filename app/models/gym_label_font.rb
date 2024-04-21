@@ -5,6 +5,7 @@ class GymLabelFont
     lato: {
       name: 'Lato',
       query: 'Lato',
+      ref: 'lato',
       size: '12pt',
       line_height: 'inherit',
       svg_preview: '<svg viewBox="0 0 39.6629 15.99996">
@@ -19,6 +20,7 @@ class GymLabelFont
     roboto_serif: {
       name: 'Roboto Serif',
       query: 'Roboto+Serif',
+      ref: 'roboto_serif',
       size: '12pt',
       line_height: 'inherit',
       svg_preview: '<svg viewBox="0 0 127.34893 16.000019" >
@@ -33,6 +35,7 @@ class GymLabelFont
     yeseva_one: {
       name: 'Yeseva One',
       query: 'Yeseva+One',
+      ref: 'yeseva_one',
       size: '12pt',
       line_height: 'inherit',
       svg_preview: '<svg viewBox="0 0 122.73949 15.999993">
@@ -47,6 +50,7 @@ class GymLabelFont
     shadows_into_light: {
       name: 'Shadows Into Light',
       query: 'Shadows+Into+Light',
+      ref: 'shadows_into_light',
       size: '16pt',
       line_height: '1.2',
       svg_preview: '<svg viewBox="0 0 83.617195 15.999996" >
@@ -62,6 +66,7 @@ class GymLabelFont
     sue_ellen_francisco: {
       name: 'Sue Ellen Francisco',
       query: 'Sue+Ellen+Francisco',
+      ref: 'sue_ellen_francisco',
       size: '15pt',
       line_height: '1.3',
       svg_preview: '<svg viewBox="0 0 87.235993 15.99997">
@@ -76,6 +81,7 @@ class GymLabelFont
     unbounded: {
       name: 'Unbounded',
       query: 'Unbounded',
+      ref: 'unbounded',
       size: '12pt',
       line_height: 'inherit',
       svg_preview: '<svg viewBox="0 0 138.77046 16">
@@ -90,6 +96,7 @@ class GymLabelFont
     black_ops_one: {
       name: 'Black Ops One',
       query: 'Black+Ops+One',
+      ref: 'black_ops_one',
       size: '12pt',
       line_height: 'inherit',
       svg_preview: '<svg viewBox="0 0 134.74786 15.999986">
