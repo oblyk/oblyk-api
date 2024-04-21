@@ -86,7 +86,7 @@ class GymLabelTemplate < ApplicationRecord
       height: '20mm',
       border: 'none',
       left: {
-        display: false,
+        display: true,
         type: 'logo'
       },
       right: {
@@ -95,13 +95,13 @@ class GymLabelTemplate < ApplicationRecord
       },
       center_top: {
         body: "Découvre le topo de **%salle%**\net suis ta progression sur Oblyk.org !",
-        text_align: 'right',
+        text_align: 'center',
         color: '#000000',
         font_size: '14pt'
       },
       center_bottom: {
         body: '%type_de_groupe% **%reference%**',
-        text_align: 'right',
+        text_align: 'center',
         color: '#000000',
         font_size: '12pt'
       }
@@ -110,18 +110,18 @@ class GymLabelTemplate < ApplicationRecord
 
   def self.default_header_options
     {
-      display: false,
+      display: true,
       height: '20mm',
       left: {
         display: true,
-        type: 'logo'
+        type: 'logo_oblyk'
       },
       right: {
         display: false,
         type: 'QrCode'
       },
       center: {
-        body: 'Fiche de voie',
+        body: '**%salle%**',
         text_align: 'center',
         color: '#000000',
         font_size: '14pt'

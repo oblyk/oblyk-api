@@ -30,13 +30,13 @@ module Api
           header_options: GymLabelTemplate.default_header_options,
           label_options: GymLabelTemplate.default_label_options,
           border_style: {
-            'border-color': '#000000',
+            'border-color': '#BEBEBE',
             'border-width': '0.3mm',
             'border-style': 'solid',
             'border-radius': '3mm'
           },
           font_family: 'lato',
-          qr_code_position: 'in_label',
+          qr_code_position: 'none',
           label_arrangement: 'rectangular_horizontal',
           grade_style: 'tag_and_hold',
           display_points: false,
