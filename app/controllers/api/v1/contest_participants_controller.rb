@@ -265,7 +265,12 @@ module Api
         participant = nil
 
         if broadcast_type == 'LaunchTombola'
-          participant = @contest.contest_participants.where(tombola_winner: false).order('RAND()').first
+          contest_waves = params[:filters].fetch(:contest_wave_ids, [])
+          contest_categories = params[:filters].fetch(:contest_category_ids, [])
+          participant = @contest.contest_participants.where(tombola_winner: false)
+          participant = participant.where(contest_wave_id: contest_waves) if contest_waves.present?
+          participant = participant.where(contest_category_id: contest_categories) if contest_categories.present?
+          participant = participant.order('RAND()').first
           if participant
             participant.update_column :tombola_winner, true
             ActionCable.server.broadcast "contest_rankers_#{@contest.id}", {

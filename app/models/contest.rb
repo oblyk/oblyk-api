@@ -329,6 +329,7 @@ class Contest < ApplicationRecord
         contest_categories: contest_categories.map(&:summary_to_json),
         contest_stages: contest_stages.map(&:summary_to_json),
         championships: championships.map(&:summary_to_json),
+        contest_waves: contest_waves.map { |wave| { id: wave.id, name: wave.name }},
         history: {
           created_at: created_at,
           updated_at: updated_at
