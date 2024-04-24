@@ -161,7 +161,8 @@ module Api
           gym_routes.each do |gym_route|
             footer_reference = @gym_label_template.footer_options['center_bottom']['body']
             footer_reference = footer_reference&.gsub('%type_de_groupe%', '')
-            footer_reference = footer_reference&.gsub('%reference%', reference)
+            footer_reference = footer_reference&.gsub('%reference%', reference || '')
+            footer_reference = footer_reference&.gsub('****', '')
             footer_reference = markdown.render footer_reference
 
             pages[page_index] ||= {
