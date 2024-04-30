@@ -47,39 +47,13 @@ class ContestRanking
   ].freeze
 
   COMBINED_RANKING_POINT_MATRIX = [
-    100,
-    80,
-    65,
-    55,
-    51,
-    47,
-    43,
-    40,
-    37,
-    34,
-    31,
-    28,
-    26,
-    24,
-    22,
-    20,
-    18,
-    16,
-    14,
-    12,
-    10,
-    9,
-    8,
-    7,
-    6,
-    5,
-    4,
-    3,
-    2,
-    1
+    100, 80, 65, 55, 51, 47, 43, 40,
+    37, 34, 31, 28, 26, 24, 22, 20,
+    18, 16, 14, 12, 10, 9, 8, 7, 6,
+    5, 4, 3, 2, 1
   ].freeze
 
-  attr_accessor :ascents, :step, :category, :genre, :score_by_routes
+  attr_accessor :ascents, :step, :category, :genre, :score_by_routes, :ascents_by_participants, :count_by_routes
 
   def initialize(step, category, genre)
     self.step = step
@@ -93,26 +67,41 @@ class ContestRanking
 
     self.ascents = ascents.where(contest_participants: { genre: genre }) unless category.unisex
     self.ascents = ascents.where(realised: true) if [DIVISION, DIVISION_AND_ATTEMPT, FIXED_POINTS].include?(step.ranking_type)
+    self.ascents = ascents.select(:id, :contest_participant_id, :contest_route_id) if [DIVISION].include?(step.ranking_type)
+    self.ascents = ascents.select(:id, :contest_participant_id, :contest_route_id, :top_attempt, :zone_1_attempt) if [DIVISION_AND_ZONE].include?(step.ranking_type)
+    self.ascents_by_participants = {}
+    ascents.each do |ascent|
+      ascents_by_participants[ascent.contest_participant_id] ||= []
+      ascents_by_participants[ascent.contest_participant_id] << ascent
+    end
+    if [DIVISION, DIVISION_AND_ATTEMPT, DIVISION_AND_ZONE].include?(step.ranking_type)
+      self.count_by_routes = ContestParticipantAscent.joins(:contest_participant, contest_route: :contest_route_group)
+                                                     .where(contest_participants: { contest_category_id: category.id })
+                                                     .where(contest_routes: { disabled_at: nil })
+                                                     .where(contest_route_groups: { contest_stage_step_id: step.id })
+      self.count_by_routes = count_by_routes.where(realised: true) if [DIVISION, DIVISION_AND_ATTEMPT].include?(step.ranking_type)
+      self.count_by_routes = count_by_routes.where('contest_participant_ascents.top_attempt > 0') if [DIVISION_AND_ZONE].include?(step.ranking_type)
+      self.count_by_routes = count_by_routes.where(contest_participants: { genre: genre }) unless category.unisex
+      self.count_by_routes = count_by_routes.group('contest_participant_ascents.contest_route_id').count
+    end
     self.score_by_routes = {}
   end
 
-  def scores(ascent_id)
-    current_ascent = ascents.find { |ascent| ascent.id == ascent_id }
+  def scores(current_ascent)
     no_score = { value: nil, details: ['NR'] }
 
     return no_score if current_ascent.blank?
 
     case step.ranking_type
     when DIVISION
-      score_by_routes[current_ascent.contest_route_id] ||= (1000 / ascents.count { |ascent| ascent.contest_route_id == current_ascent.contest_route_id })
-      point = score_by_routes[current_ascent.contest_route_id]
+      point = 1000 / count_by_routes[current_ascent.contest_route_id]
       {
         value: point,
         details: [point]
       }
     when DIVISION_AND_ZONE
       point = if current_ascent.top_attempt&.positive?
-                score_by_routes[current_ascent.contest_route_id] ||= (1000 / ascents.count { |ascent| ascent.contest_route_id == current_ascent.contest_route_id && ascent.top_attempt&.positive? })
+                1000 / count_by_routes[current_ascent.contest_route_id]
               else
                 0
               end
@@ -125,7 +114,7 @@ class ContestRanking
       }
     when DIVISION_AND_ATTEMPT
       point = if current_ascent.realised?
-                score_by_routes[current_ascent.contest_route_id] ||= (1000 / ascents.count { |ascent| ascent.contest_route_id == current_ascent.contest_route_id && ascent.realised? })
+                1000 / count_by_routes[current_ascent.contest_route_id]
               else
                 0
               end
@@ -204,10 +193,8 @@ class ContestRanking
     value = nil
     details = nil
 
-    ascents.each do |ascent|
-      next if ascent.contest_participant_id != participant_id
-
-      ascent_scores = scores(ascent.id)
+    ascents_by_participants[participant_id]&.each do |ascent|
+      ascent_scores = scores ascent
       ascent_value = ascent_scores[:value]
 
       next unless ascent_scores[:value]
