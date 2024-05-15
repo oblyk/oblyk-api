@@ -132,6 +132,7 @@ module Api
             reference = @gym_label_template.footer_options['center_bottom']['body']
             reference = reference&.gsub('%type_de_groupe%', 'Relais')
             reference = reference&.gsub('%reference%', k&.to_s)
+            reference = markdown.render(reference) if reference.present?
             pages << {
               order: k,
               footer_body: footer_body,
@@ -147,11 +148,12 @@ module Api
             reference = @gym_label_template.footer_options['center_bottom']['body']
             reference = reference&.gsub('%type_de_groupe%', 'Secteur')
             reference = reference&.gsub('%reference%', group_sector.name)
+            reference = markdown.render(reference) if reference.present?
             pages << {
               order: group_sector.order,
               footer_body: footer_body,
               header_body: header_body,
-              reference: reference.presence,
+              reference: reference,
               routes: routes
             }
           end
@@ -163,7 +165,7 @@ module Api
             footer_reference = footer_reference&.gsub('%type_de_groupe%', '')
             footer_reference = footer_reference&.gsub('%reference%', reference || '')
             footer_reference = footer_reference&.gsub('****', '')
-            footer_reference = markdown.render footer_reference
+            footer_reference = markdown.render(footer_reference) if reference.present?
 
             pages[page_index] ||= {
               order: page_index,
