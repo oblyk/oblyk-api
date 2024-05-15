@@ -85,6 +85,7 @@ class GymLabelTemplate < ApplicationRecord
       display: true,
       height: '20mm',
       border: 'none',
+      margin_x: '0mm',
       left: {
         display: true,
         type: 'logo'
@@ -112,6 +113,7 @@ class GymLabelTemplate < ApplicationRecord
     {
       display: true,
       height: '20mm',
+      margin_x: '0mm',
       left: {
         display: true,
         type: 'logo_oblyk'

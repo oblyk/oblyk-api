@@ -274,6 +274,7 @@ module Api
             :display,
             :height,
             :border,
+            :margin_x,
             {
               left: %i[display type],
               right: %i[display type],
@@ -294,6 +295,7 @@ module Api
           header_options: [
             :display,
             :height,
+            :margin_x,
             {
               left: %i[display type],
               right: %i[display type],
