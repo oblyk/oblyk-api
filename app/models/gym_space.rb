@@ -9,11 +9,14 @@ class GymSpace < ApplicationRecord
 
   has_one_attached :banner
   has_one_attached :plan
+  has_one_attached :three_d_picture
+  has_one_attached :three_d_gltf
   belongs_to :gym
   belongs_to :gym_grade
   belongs_to :gym_space_group, optional: true
   has_many :gym_sectors
   has_many :gym_routes, through: :gym_sectors
+  has_many :gym_three_d_elements
 
   default_scope { order(:order) }
 
@@ -22,6 +25,9 @@ class GymSpace < ApplicationRecord
 
   validates :banner, blob: { content_type: :image }, allow_nil: true
   validates :plan, blob: { content_type: :image }, allow_nil: true
+  validates :three_d_picture, blob: { content_type: :image }, allow_nil: true
+
+  validates :three_d_gltf, blob: { content_type: 'model/gltf+json' }, allow_nil: true
 
   after_create :delete_gym_cache
   after_save :remove_routes_cache
@@ -54,6 +60,18 @@ class GymSpace < ApplicationRecord
     resize_attachment plan, '100x100'
   end
 
+  def three_d_picture_url
+    resize_to_limit_attachment three_d_picture, [1000, 1000]
+  end
+
+  def three_d_picture_thumbnail_url
+    resize_to_limit_attachment three_d_picture, [500, 500]
+  end
+
+  def three_d_picture_tiny_thumbnail_url
+    resize_to_limit_attachment three_d_picture, [100, 100]
+  end
+
   def banner_large_url
     resize_attachment banner, '1920x1920'
   end
@@ -79,8 +97,13 @@ class GymSpace < ApplicationRecord
         plan: plan.attached? ? plan_large_url : nil,
         plan_thumbnail_url: plan.attached? ? plan_thumbnail_url : nil,
         plan_tiny_thumbnail_url: plan.attached? ? plan_tiny_thumbnail_url : nil,
+        three_d_picture_url: three_d_picture_url,
+        three_d_picture_thumbnail_url: three_d_picture_thumbnail_url,
+        three_d_picture_tiny_thumbnail_url: three_d_picture_tiny_thumbnail_url,
         gym_space_group_id: gym_space_group_id,
         anchor: anchor,
+        have_three_d: three_d?,
+        representation_type: representation_type,
         gym: {
           id: gym.id,
           name: gym.name,
@@ -104,9 +127,19 @@ class GymSpace < ApplicationRecord
       {
         gym_sectors: gym_sectors.map(&:summary_to_json),
         sorts_available: sorts_available,
-        last_sector_order: gym_sectors.order(:order).last&.order
+        last_sector_order: gym_sectors.order(:order).last&.order,
+        three_d_gltf_url: three_d_gltf_url,
+        three_d_parameters: three_d_parameters,
+        three_d_position: three_d_position,
+        three_d_rotation: three_d_rotation,
+        three_d_scale: three_d_scale,
+        three_d_camera_position: three_d_camera_position
       }
     )
+  end
+
+  def three_d?
+    three_d_gltf.attached?
   end
 
   def destroy
@@ -120,6 +153,16 @@ class GymSpace < ApplicationRecord
 
   def delete_summary_cache
     Rails.cache.delete("#{cache_key_with_version}/summary_gym_space")
+  end
+
+  def three_d_gltf_url
+    return nil unless three_d_gltf.attached?
+
+    if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
+      "#{ENV['CLOUDFLARE_R2_DOMAIN']}/#{three_d_gltf.attachment.key}"
+    else
+      "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.polymorphic_url(three_d_gltf.attachment, only_path: true)}"
+    end
   end
 
   private

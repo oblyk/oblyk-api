@@ -8,9 +8,9 @@ module Api
 
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes tree_structures tree_routes figures comments videos]
-      before_action :set_gym, only: %i[show versions ascent_scores update destroy add_banner add_logo routes_count routes tree_structures tree_routes figures comments videos]
+      before_action :set_gym, only: %i[show versions ascent_scores update destroy add_banner add_logo routes_count routes tree_structures tree_routes figures comments videos three_d]
       before_action :protected_by_administrator, only: %i[update add_banner add_logo routes_count routes tree_structures tree_routes figures comments videos]
-      before_action :user_can_manage_gym, except: %i[index search geo_json show create gyms_around versions ascent_scores routes_count routes comments videos]
+      before_action :user_can_manage_gym, except: %i[index search geo_json show create gyms_around versions ascent_scores routes_count routes comments videos three_d]
 
       def index
         gyms = params[:ids].present? ? Gym.where(id: params[:ids]) : Gym.all
@@ -321,6 +321,43 @@ module Api
         render json: videos.map(&:detail_to_json), status: :ok
       end
 
+      def three_d
+        spaces = []
+        assets = []
+
+        # Space
+        @gym.gym_spaces.each do |space|
+          next unless space.three_d?
+
+          spaces << {
+            id: space.id,
+            name: space.name,
+            slug_name: space.slug_name,
+            color: space.sectors_color,
+            three_d_gltf_url: space.three_d_gltf_url,
+            three_d_parameters: space.three_d_parameters,
+            three_d_position: space.three_d_position,
+            three_d_scale: space.three_d_scale,
+            gym: {
+              id: space.gym.id,
+              name: space.gym.name,
+              slug_name: space.gym.slug_name
+            }
+          }
+        end
+
+        # Additional Assets
+        @gym.gym_three_d_elements.each do |element|
+          element_json = element.summary_to_json
+          element_json[:gym_three_d_asset] = element.gym_three_d_asset.summary_to_json
+          assets << element_json
+        end
+        render json: {
+          spaces: spaces,
+          assets: assets
+        }, status: :ok
+      end
+
       private
 
       def geo_json_features(minimalistic)
@@ -378,21 +415,18 @@ module Api
           :boulder_ranking,
           :pan_ranking,
           :sport_climbing_ranking,
+          :representation_type,
           :latitude,
           :longitude
         )
       end
 
       def banner_params
-        params.require(:gym).permit(
-          :banner
-        )
+        params.require(:gym).permit(:banner)
       end
 
       def logo_params
-        params.require(:gym).permit(
-          :logo
-        )
+        params.require(:gym).permit(:logo)
       end
 
       def user_can_manage_gym

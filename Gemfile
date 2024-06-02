@@ -98,6 +98,9 @@ gem 'aws-sdk-s3', '~> 1.142'
 # A fast JSON parser and Object marshaller as a Ruby gem.
 gem 'oj'
 
+# Zip gen
+gem 'rubyzip', '~> 2.3', '>= 2.3.2'
+
 group :development, :test do
   gem 'bullet'
   # Ruby static code analyzer

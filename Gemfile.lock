@@ -419,6 +419,7 @@ GEM
     ruby-vips (2.1.0)
       ffi (~> 1.12)
     ruby2_keywords (0.0.5)
+    rubyzip (2.3.2)
     sib-api-v3-sdk (9.1.0)
       addressable (~> 2.3, >= 2.3.0)
       json (~> 2.1, >= 2.1.0)
@@ -527,6 +528,7 @@ DEPENDENCIES
   rubocop-faker
   rubocop-performance
   rubocop-rails
+  rubyzip (~> 2.3, >= 2.3.2)
   sib-api-v3-sdk
   sidekiq
   sitemap_generator

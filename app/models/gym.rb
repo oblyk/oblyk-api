@@ -59,6 +59,7 @@ class Gym < ApplicationRecord
   has_many :gym_label_templates
   has_many :gym_chain_gyms
   has_many :gym_chains, through: :gym_chain_gyms
+  has_many :gym_three_d_elements
 
   validates :logo, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true
@@ -194,7 +195,9 @@ class Gym < ApplicationRecord
         banner_cropped_url: banner ? banner_cropped_medium_url : nil,
         logo: logo.attached? ? logo_large_url : nil,
         logo_thumbnail_url: logo.attached? ? logo_thumbnail_url : nil,
-        gym_spaces_count: gym_spaces.count
+        gym_spaces_count: gym_spaces.count,
+        three_d_camera_position: three_d_camera_position,
+        representation_type: representation_type
       }
     end
   end

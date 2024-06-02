@@ -221,6 +221,12 @@ Rails.application.routes.draw do
         get :figures, on: :member
         get :comments, on: :member
         get :videos, on: :member
+        get :three_d, on: :member
+        resources :gym_three_d_elements
+        resources :gym_three_d_assets do
+          put :change_three_d_file, on: :member
+          post :add_picture, on: :member
+        end
         resources :color_systems, only: %i[index create show]
         resources :gym_administrators do
           put :update_feed_last_read, on: :collection
@@ -246,13 +252,17 @@ Rails.application.routes.draw do
         end
         resources :gym_spaces do
           get :groups, on: :collection
+          get :three_d_elements, on: :member
           put :publish, on: :member
           put :unpublish, on: :member
           post :add_banner, on: :member
           post :add_plan, on: :member
+          post :add_three_d_file, on: :member
+          post :add_three_d_capture, on: :member
           resources :gym_sectors do
             get :last_routes_with_pictures, on: :member
             delete :dismount_routes, on: :member
+            delete :delete_three_d_path, on: :member
             resources :gym_routes do
               get :paginated, on: :collection
             end

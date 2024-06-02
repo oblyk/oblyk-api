@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_04_15_184336) do
+ActiveRecord::Schema.define(version: 2024_05_29_130109) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -948,6 +948,8 @@ ActiveRecord::Schema.define(version: 2024_04_15_184336) do
     t.integer "order", default: 0
     t.integer "min_anchor_number"
     t.integer "max_anchor_number"
+    t.json "three_d_path"
+    t.decimal "three_d_height", precision: 10, scale: 6
     t.index ["gym_grade_id"], name: "index_gym_sectors_on_gym_grade_id"
     t.index ["gym_space_id"], name: "index_gym_sectors_on_gym_space_id"
   end
@@ -981,9 +983,42 @@ ActiveRecord::Schema.define(version: 2024_04_15_184336) do
     t.string "slug_name"
     t.bigint "gym_space_group_id"
     t.boolean "anchor"
+    t.json "three_d_parameters"
+    t.json "three_d_position"
+    t.decimal "three_d_scale", precision: 10, scale: 6, default: "1.0"
+    t.json "three_d_rotation"
+    t.json "three_d_camera_position"
+    t.string "representation_type", default: "2d_picture"
     t.index ["gym_grade_id"], name: "index_gym_spaces_on_gym_grade_id"
     t.index ["gym_id"], name: "index_gym_spaces_on_gym_id"
     t.index ["gym_space_group_id"], name: "index_gym_spaces_on_gym_space_group_id"
+  end
+
+  create_table "gym_three_d_assets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.string "name"
+    t.string "slug_name"
+    t.text "description"
+    t.json "three_d_parameters"
+    t.bigint "gym_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gym_id"], name: "index_gym_three_d_assets_on_gym_id"
+  end
+
+  create_table "gym_three_d_elements", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.json "three_d_position"
+    t.json "three_d_rotation"
+    t.text "message"
+    t.string "url"
+    t.decimal "three_d_scale", precision: 10, scale: 6, default: "1.0"
+    t.bigint "gym_three_d_asset_id"
+    t.bigint "gym_id"
+    t.bigint "gym_space_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gym_id"], name: "index_gym_three_d_elements_on_gym_id"
+    t.index ["gym_space_id"], name: "index_gym_three_d_elements_on_gym_space_id"
+    t.index ["gym_three_d_asset_id"], name: "index_gym_three_d_elements_on_gym_three_d_asset_id"
   end
 
   create_table "gyms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1023,6 +1058,8 @@ ActiveRecord::Schema.define(version: 2024_04_15_184336) do
     t.integer "comments_count"
     t.integer "videos_count"
     t.bigint "department_id"
+    t.json "three_d_camera_position"
+    t.string "representation_type", default: "2d_picture"
     t.index ["department_id"], name: "index_gyms_on_department_id"
     t.index ["name"], name: "index_gyms_on_name"
     t.index ["user_id"], name: "index_gyms_on_user_id"
@@ -1417,5 +1454,9 @@ ActiveRecord::Schema.define(version: 2024_04_15_184336) do
   add_foreign_key "gym_chain_gyms", "gyms"
   add_foreign_key "gym_label_templates", "gyms"
   add_foreign_key "gym_options", "gyms"
+  add_foreign_key "gym_three_d_assets", "gyms"
+  add_foreign_key "gym_three_d_elements", "gym_spaces"
+  add_foreign_key "gym_three_d_elements", "gym_three_d_assets"
+  add_foreign_key "gym_three_d_elements", "gyms"
   add_foreign_key "likes", "users"
 end

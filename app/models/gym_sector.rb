@@ -34,6 +34,8 @@ class GymSector < ApplicationRecord
         climbing_type: climbing_type,
         height: height,
         polygon: polygon,
+        three_d_path: three_d_path,
+        three_d_height: three_d_height,
         gym_space_id: gym_space_id,
         gym_grade_id: gym_grade_id,
         can_be_more_than_one_pitch: can_be_more_than_one_pitch,
@@ -41,6 +43,7 @@ class GymSector < ApplicationRecord
         max_anchor_number: max_anchor_number,
         anchor_ranges: anchor_ranges,
         anchor: anchor,
+        have_three_d_path: three_d_path?,
         gym: {
           id: gym.id,
           slug_name: gym.slug_name
@@ -64,6 +67,10 @@ class GymSector < ApplicationRecord
       gym_routes.mounted.find_each(&:dismount!)
       delete
     end
+  end
+
+  def three_d_path?
+    three_d_path.present?
   end
 
   def delete_summary_cache
