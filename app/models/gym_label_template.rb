@@ -67,6 +67,20 @@ class GymLabelTemplate < ApplicationRecord
     )
   end
 
+  def page_qr_code?
+    return true if footer_options['display'] && (
+      (footer_options['left']['display'] && footer_options['left']['type']['QrCode']) ||
+      (footer_options['right']['display'] && footer_options['right']['type']['QrCode'])
+    )
+
+    return true if header_options['display'] && (
+      (header_options['left']['display'] && header_options['left']['type']['QrCode']) ||
+      (header_options['right']['display'] && header_options['right']['type']['QrCode'])
+    )
+
+    false
+  end
+
   def fonts
     font_families = []
     font_families << font_family.to_sym

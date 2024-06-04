@@ -184,7 +184,7 @@ module Api
         end
 
         # Qrcode in footer
-        if @gym_label_template.footer_options['display']
+        if @gym_label_template.page_qr_code?
           pages.each_with_index do |page, index|
             routes_query = page[:routes].map { |route| "r[]=#{route[:id]}" }.join('&')
             uri = "#{ENV['OBLYK_APP_URL']}/grs/#{@gym.id}?#{routes_query}"
