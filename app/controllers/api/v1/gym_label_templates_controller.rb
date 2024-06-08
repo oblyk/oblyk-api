@@ -67,7 +67,7 @@ module Api
         group_by = params.fetch(:group_by, nil)
         sort_by = params.fetch(:sort_by, 'grade')
         sort_direction = params.fetch(:sort_direction, 'asc') == 'asc' ? 'asc' : 'desc'
-        reference = params.fetch(:reference, nil)
+        param_reference = params.fetch(:reference, nil)
         routes_by_page = params.fetch(:routes_by_page, 7)&.to_i
         pages = []
         gym_routes = []
@@ -101,25 +101,19 @@ module Api
           end
         end
 
-        renderer = Redcarpet::Render::HTML.new(
-          no_links: true,
-          no_images: true,
-          hard_wrap: true
-        )
-        markdown = Redcarpet::Markdown.new(renderer)
-
-        # Footer to markdown
+        reference_body = @gym_label_template.footer_options['center_bottom']['body']
         footer_body = @gym_label_template.footer_options['center_top']['body']
-        footer_body = footer_body&.gsub('%salle%', @gym.name)
-        footer_body = markdown.render footer_body
-
-        # Header to markdown
         header_body = @gym_label_template.header_options['center']['body']
-        header_body = header_body&.gsub('%salle%', @gym.name)
-        header_body = markdown.render header_body
 
         # Convert description to markdown
         if @gym_label_template.display_description
+          renderer = Redcarpet::Render::HTML.new(
+            no_links: true,
+            no_images: true,
+            hard_wrap: true
+          )
+          markdown = Redcarpet::Markdown.new(renderer)
+
           gym_routes.each_with_index do |gym_route, index|
             gym_routes[index][:description] = markdown.render(gym_route[:description]) if gym_route[:description].present?
           end
@@ -129,14 +123,14 @@ module Api
         when 'anchor'
           groups = gym_routes.group_by { |gym_route| gym_route[:anchor_number] }
           groups.each do |k, routes|
-            reference = @gym_label_template.footer_options['center_bottom']['body']
-            reference = reference&.gsub('%type_de_groupe%', 'Relais')
-            reference = reference&.gsub('%reference%', k&.to_s)
-            reference = markdown.render(reference) if reference.present?
+            type = 'Relais'
+            reference = replace_tags reference_body, type, k
+            footer = replace_tags footer_body, type, k
+            header = replace_tags header_body, type, k
             pages << {
               order: k,
-              footer_body: footer_body,
-              header_body: header_body,
+              footer_body: footer,
+              header_body: header,
               reference: reference,
               routes: routes
             }
@@ -145,14 +139,14 @@ module Api
           groups = gym_routes.group_by { |gym_route| gym_route[:gym_sector_id] }
           groups.each do |k, routes|
             group_sector = GymSector.find k
-            reference = @gym_label_template.footer_options['center_bottom']['body']
-            reference = reference&.gsub('%type_de_groupe%', 'Secteur')
-            reference = reference&.gsub('%reference%', group_sector.name)
-            reference = markdown.render(reference) if reference.present?
+            type = 'Secteur'
+            reference = replace_tags reference_body, type, group_sector&.name
+            footer = replace_tags footer_body, type, group_sector&.name
+            header = replace_tags header_body, type, group_sector&.name
             pages << {
               order: group_sector.order,
-              footer_body: footer_body,
-              header_body: header_body,
+              footer_body: footer,
+              header_body: header,
               reference: reference,
               routes: routes
             }
@@ -161,17 +155,16 @@ module Api
           page_loop = 0
           page_index = 0
           gym_routes.each do |gym_route|
-            footer_reference = @gym_label_template.footer_options['center_bottom']['body']
-            footer_reference = footer_reference&.gsub('%type_de_groupe%', '')
-            footer_reference = footer_reference&.gsub('%reference%', reference || '')
-            footer_reference = footer_reference&.gsub('****', '')
-            footer_reference = markdown.render(footer_reference) if reference.present?
+            type = ''
+            reference = replace_tags reference_body, type, param_reference
+            footer = replace_tags footer_body, type, param_reference
+            header = replace_tags header_body, type, param_reference
 
             pages[page_index] ||= {
               order: page_index,
-              footer_body: footer_body,
-              header_body: header_body,
-              reference: footer_reference,
+              footer_body: footer,
+              header_body: header,
+              reference: reference,
               routes: []
             }
             pages[page_index][:routes] << gym_route
@@ -405,6 +398,25 @@ module Api
 
       def preview_short_path(id)
         "#{ENV['OBLYK_APP_URL']}/gr/#{@gym.id}-#{id}"
+      end
+
+      def replace_tags(body, group_type, group_value)
+        body = body&.gsub('%type_de_groupe%', group_type || '')
+        body = body&.gsub('%reference%', group_value&.to_s || '')
+        body = body&.gsub('%salle%', @gym&.name || '')
+        body = body&.gsub('****', '')
+        body = body&.gsub('__', '')
+        if body.present?
+          renderer = Redcarpet::Render::HTML.new(
+            no_links: true,
+            no_images: true,
+            hard_wrap: true
+          )
+          markdown = Redcarpet::Markdown.new(renderer)
+          markdown.render body
+        else
+          ''
+        end
       end
     end
   end
