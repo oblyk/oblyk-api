@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'zip'
+
 module Api
   module V1
     class GymSpacesController < ApiController
@@ -155,7 +157,8 @@ module Api
           end
 
           if obj_name
-            `obj2gltf -i #{folder.first}/#{obj_name}` # Run obj2gltf shell command
+            # Run obj2gltf shell command
+            Open3.capture3("obj2gltf -i #{folder.first}/#{obj_name}")
             gltf_file_name = "#{obj_name.split('.').first}.gltf"
             file = File.open("#{folder.first}/#{gltf_file_name}", 'r')
             @gym_space.three_d_gltf.attach(
