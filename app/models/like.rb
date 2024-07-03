@@ -45,6 +45,6 @@ class Like < ApplicationRecord
       notifiable_id: id,
       user: likeable.user
     )
-    notification.destroy
+    notification&.destroy
   end
 end
