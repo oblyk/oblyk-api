@@ -48,7 +48,7 @@ module Api
       end
 
       def contests
-        render json: @championship.contests.map(&:summary_to_json), status: :ok
+        render json: @championship.contests.order(:start_date).map(&:summary_to_json), status: :ok
       end
 
       def create
