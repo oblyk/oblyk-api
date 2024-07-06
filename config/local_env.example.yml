@@ -71,3 +71,6 @@ ACTIVE_CONTEST_BROADCAST: 'true'
 
 # Iframely api ket token for get embed code
 IFRAMELY_API_KEY: 'my-api-key'
+
+# NPM EXECUTABLE PATH
+NPM_BIN_PATH: '/usr/local/bin'
