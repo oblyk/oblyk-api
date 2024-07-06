@@ -158,7 +158,8 @@ module Api
 
           if obj_name
             # Run obj2gltf shell command
-            Open3.capture3("#{ENV['NPM_BIN_PATH']}/obj2gltf -i #{folder.first}/#{obj_name}")
+            commande = "#{ENV['NPM_BIN_PATH']}/obj2gltf -i #{folder.first}/#{obj_name}"
+            system(commande)
             gltf_file_name = "#{obj_name.split('.').first}.gltf"
             file = File.open("#{folder.first}/#{gltf_file_name}", 'r')
             @gym_space.three_d_gltf.attach(
