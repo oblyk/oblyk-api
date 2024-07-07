@@ -334,7 +334,7 @@ module Api
             name: space.name,
             slug_name: space.slug_name,
             color: space.sectors_color,
-            text_contrast_color: Color.black_or_white_rgb(space.sectors_color || 'rgb(98,0,234)'),
+            text_contrast_color: Color.black_or_white_rgb(space.sectors_color || 'rgb(49,153,78)'),
             three_d_gltf_url: space.three_d_gltf_url,
             three_d_parameters: space.three_d_parameters,
             three_d_position: space.three_d_position,

@@ -93,7 +93,7 @@ class GymSpace < ApplicationRecord
         scheme_height: scheme_height,
         scheme_width: scheme_width,
         sectors_color: sectors_color,
-        text_contrast_color: Color.black_or_white_rgb(sectors_color || 'rgb(98,0,234)'),
+        text_contrast_color: Color.black_or_white_rgb(sectors_color || 'rgb(49,153,78)'),
         banner: banner.attached? ? banner_large_url : nil,
         plan: plan.attached? ? plan_large_url : nil,
         plan_thumbnail_url: plan.attached? ? plan_thumbnail_url : nil,
