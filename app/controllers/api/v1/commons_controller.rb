@@ -80,7 +80,12 @@ module Api
       end
 
       def paths
-        render json: ENV['PATH'].split(':'), status: :ok
+        which_commande = "which #{ENV['NPM_BIN_PATH']}/obj2gltf"
+        render json: {
+          paths: ENV['PATH'].split(':'),
+          which: `which obj2gltf`,
+          which_absolut: `#{which_commande}`
+        }, status: :ok
       end
     end
   end
