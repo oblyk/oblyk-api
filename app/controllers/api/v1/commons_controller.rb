@@ -78,6 +78,10 @@ module Api
         end
         render json: data, status: :ok
       end
+
+      def paths
+        render json: ENV['PATH'].split(':'), status: :ok
+      end
     end
   end
 end

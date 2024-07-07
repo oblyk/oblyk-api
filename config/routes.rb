@@ -30,6 +30,7 @@ Rails.application.routes.draw do
       get 'search_all', controller: :searches, action: :search_all
       get 'search_around', controller: :searches, action: :search_around
 
+      get 'paths', controller: :commons, action: :paths
       get 'figures', controller: :commons, action: :figures
       get 'micro_stats', controller: :commons, action: :micro_stats
       get 'last_activity_feed', controller: :commons, action: :last_activity_feed
