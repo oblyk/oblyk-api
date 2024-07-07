@@ -159,16 +159,23 @@ module Api
           if obj_name
             # Run obj2gltf shell command
             commande = "#{ENV['NPM_BIN_PATH']}/obj2gltf -i #{folder.first}/#{obj_name}"
-            system(commande)
-            gltf_file_name = "#{obj_name.split('.').first}.gltf"
-            file = File.open("#{folder.first}/#{gltf_file_name}", 'r')
-            @gym_space.three_d_gltf.attach(
-              io: file,
-              filename: gltf_file_name,
-              content_type: 'model/gltf+json'
-            )
+            stdout, stderr, status = Open3.capture3(commande)
+            Rails.logger.error "obj2gltf info out : #{stdout}"
+            Rails.logger.error "obj2gltf info err: #{stderr}"
+            if status.success?
+              gltf_file_name = "#{obj_name.split('.').first}.gltf"
+              file = File.open("#{folder.first}/#{gltf_file_name}", 'r')
+              @gym_space.three_d_gltf.attach(
+                io: file,
+                filename: gltf_file_name,
+                content_type: 'model/gltf+json'
+              )
+            else
+              Rails.logger.error "obj2gltf conversion error out : #{stdout}"
+              Rails.logger.error "obj2gltf conversion error err: #{stderr}"
+            end
+            # FileUtils.remove_dir folder.first
           end
-          FileUtils.remove_dir folder.first
         elsif file && file.content_type == 'model/gltf+json'
           @gym_space.three_d_gltf = file
         end
