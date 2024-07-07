@@ -78,17 +78,6 @@ module Api
         end
         render json: data, status: :ok
       end
-
-      def paths
-        which_commande = "which #{ENV['NPM_BIN_PATH']}/obj2gltf"
-        render json: {
-          paths: ENV['PATH'].split(':'),
-          which: `which obj2gltf`,
-          which_absolut: `#{which_commande}`,
-          npm_version: `npm --version`,
-          node_version: `node --version`
-        }, status: :ok
-      end
     end
   end
 end
