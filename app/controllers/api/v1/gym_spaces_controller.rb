@@ -129,7 +129,11 @@ module Api
       end
 
       def add_three_d_file
-        attach_three_d_file
+        unless attach_three_d_file
+          render json: { error: { base: ['three_d_import_error'] } }, status: :unprocessable_entity
+          return
+        end
+
         if @gym_space.save
           render json: @gym_space.detail_to_json, status: :ok
         else
@@ -145,6 +149,8 @@ module Api
           random_file_name = SecureRandom.uuid
           folder = FileUtils.mkdir_p "tmp/obj2gltf_folder/#{random_file_name}"
           obj_name = nil
+
+          # Unzip .obj.zip
           Zip::File.open(file) do |zip_file|
             zip_file.each do |f|
               file_extension = f.name.split('.').last
@@ -157,11 +163,8 @@ module Api
           end
 
           if obj_name
-            # Run obj2gltf shell command
             commande = "#{ENV['NPM_BIN_PATH']}/obj2gltf -i #{folder.first}/#{obj_name}"
-            stdout, stderr, status = Open3.capture3(commande)
-            Rails.logger.error "obj2gltf info out : #{stdout}"
-            Rails.logger.error "obj2gltf info err: #{stderr}"
+            _stdout, stderr, status = Open3.capture3(commande) # Run obj2gltf shell command
             if status.success?
               gltf_file_name = "#{obj_name.split('.').first}.gltf"
               file = File.open("#{folder.first}/#{gltf_file_name}", 'r')
@@ -171,14 +174,17 @@ module Api
                 content_type: 'model/gltf+json'
               )
             else
-              Rails.logger.error "obj2gltf conversion error out : #{stdout}"
-              Rails.logger.error "obj2gltf conversion error err: #{stderr}"
+              RorVsWild.record_error(stderr)
+              return false
             end
-            # FileUtils.remove_dir folder.first
           end
+
+          # Delete unzip file
+          FileUtils.remove_dir folder.first
         elsif file && file.content_type == 'model/gltf+json'
           @gym_space.three_d_gltf = file
         end
+        true
       end
 
       def set_gym_space

@@ -23,7 +23,12 @@ module Api
 
       def create
         @gym_three_d_asset = GymThreeDAsset.new gym_three_d_asset_params
-        attach_three_d_file
+
+        unless attach_three_d_file
+          render json: { error: { base: ['3d_import_error'] } }, status: :unprocessable_entity
+          return
+        end
+
         @gym_three_d_asset.gym = @gym
         if @gym_three_d_asset.save
           render json: @gym_three_d_asset.detail_to_json, status: :ok
@@ -33,7 +38,11 @@ module Api
       end
 
       def update
-        attach_three_d_file
+        unless attach_three_d_file
+          render json: { error: { base: ['three_d_import_error'] } }, status: :unprocessable_entity
+          return
+        end
+
         if @gym_three_d_asset.update gym_three_d_asset_params
           render json: @gym_three_d_asset.detail_to_json, status: :ok
         else
@@ -89,19 +98,27 @@ module Api
           end
 
           if obj_name
-            `obj2gltf -i #{folder.first}/#{obj_name}` # Run obj2gltf shell command
-            gltf_file_name = "#{obj_name.split('.').first}.gltf"
-            file = File.open("#{folder.first}/#{gltf_file_name}", 'r')
-            @gym_three_d_asset.three_d_gltf.attach(
-              io: file,
-              filename: gltf_file_name,
-              content_type: 'model/gltf+json'
-            )
+            commande = "#{ENV['NPM_BIN_PATH']}/obj2gltf -i #{folder.first}/#{obj_name}"
+            _stdout, stderr, status = Open3.capture3(commande) # Run obj2gltf shell command
+
+            if status.success?
+              gltf_file_name = "#{obj_name.split('.').first}.gltf"
+              file = File.open("#{folder.first}/#{gltf_file_name}", 'r')
+              @gym_three_d_asset.three_d_gltf.attach(
+                io: file,
+                filename: gltf_file_name,
+                content_type: 'model/gltf+json'
+              )
+            else
+              RorVsWild.record_error(stderr)
+              return false
+            end
           end
           FileUtils.remove_dir folder.first
         elsif file && file.content_type == 'model/gltf+json'
           @gym_three_d_asset.three_d_gltf = file
         end
+        true
       end
 
       def gym_three_d_asset_params
