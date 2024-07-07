@@ -84,7 +84,9 @@ module Api
         render json: {
           paths: ENV['PATH'].split(':'),
           which: `which obj2gltf`,
-          which_absolut: `#{which_commande}`
+          which_absolut: `#{which_commande}`,
+          npm_version: `npm --version`,
+          node_version: `node --version`
         }, status: :ok
       end
     end
