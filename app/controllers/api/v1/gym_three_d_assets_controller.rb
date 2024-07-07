@@ -122,10 +122,14 @@ module Api
       end
 
       def gym_three_d_asset_params
+        if params[:gym_three_d_asset][:three_d_parameters].present?
+          params[:gym_three_d_asset][:three_d_parameters][:color_correction_sketchup_exports] = params[:gym_three_d_asset][:three_d_parameters][:color_correction_sketchup_exports] == 'true'
+          params[:gym_three_d_asset][:three_d_parameters][:highlight_edges] = params[:gym_three_d_asset][:three_d_parameters][:highlight_edges] == 'true'
+        end
         params.require(:gym_three_d_asset).permit(
           :name,
           :description,
-          :three_d_parameters
+          three_d_parameters: %i[color_correction_sketchup_exports highlight_edges]
         )
       end
 
