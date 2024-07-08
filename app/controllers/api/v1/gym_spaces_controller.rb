@@ -201,9 +201,9 @@ module Api
           :gym_grade_id,
           :gym_space_group_id,
           :anchor,
-          :three_d_parameters,
           :three_d_scale,
           :representation_type,
+          three_d_parameters: %i[color_correction_sketchup_exports highlight_edges],
           three_d_position: %i[x y z],
           three_d_rotation: %i[x y z]
         )

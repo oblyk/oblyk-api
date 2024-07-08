@@ -105,6 +105,7 @@ class GymSpace < ApplicationRecord
         anchor: anchor,
         have_three_d: three_d?,
         representation_type: representation_type,
+        three_d_parameters: three_d_parameters,
         gym: {
           id: gym.id,
           name: gym.name,
