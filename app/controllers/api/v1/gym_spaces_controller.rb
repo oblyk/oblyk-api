@@ -134,6 +134,7 @@ module Api
           return
         end
 
+        @gym_space.three_d_parameters ||= { highlight_edges: true, color_correction_sketchup_exports: true }
         if @gym_space.save
           render json: @gym_space.detail_to_json, status: :ok
         else
