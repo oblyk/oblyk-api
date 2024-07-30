@@ -185,6 +185,8 @@ module Api
         elsif file && file.content_type == 'model/gltf+json'
           @gym_space.three_d_gltf = file
         end
+        @gym_space.gym.delete_summary_cache
+        @gym_space.delete_summary_cache
         true
       end
 
