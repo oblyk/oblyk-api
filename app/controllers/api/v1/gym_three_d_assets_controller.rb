@@ -38,7 +38,8 @@ module Api
       end
 
       def update
-        unless attach_three_d_file
+        import_type = params[:gym_three_d_asset].fetch(:import_type, '').to_s
+        if !attach_three_d_file && import_type.present?
           render json: { error: { base: ['three_d_import_error'] } }, status: :unprocessable_entity
           return
         end
@@ -81,26 +82,60 @@ module Api
       end
 
       def attach_three_d_file
-        file = params[:gym_three_d_asset].fetch(:three_d_file, nil)
-        if file && file.content_type == 'application/zip'
+        import_type = params[:gym_three_d_asset].fetch(:import_type, '').to_s
+
+        return false if import_type.blank?
+
+        if %w[obj_zip obj_mtl].include? import_type
           random_file_name = SecureRandom.uuid
           folder = FileUtils.mkdir_p "tmp/obj2gltf_folder/#{random_file_name}"
           obj_name = nil
-          Zip::File.open(file) do |zip_file|
-            zip_file.each do |f|
-              file_extension = f.name.split('.').last
-              next unless %w[obj mtl].include? file_extension
 
-              f_path = File.join(folder, f.name)
-              zip_file.extract(f, f_path) unless File.exist?(f_path)
-              obj_name = f.name if file_extension == 'obj'
+          # Save file on folder for conversion to .gltf
+          case import_type
+          when 'obj_zip'
+            zip_file_params = params[:gym_three_d_asset].fetch(:three_d_file, nil)
+
+            # Unzip .obj.zip
+            Zip::File.open(zip_file_params) do |zip_file|
+              zip_file.each do |f|
+                file_extension = f.name.split('.').last
+                next unless %w[obj mtl].include? file_extension
+
+                f_path = File.join(folder, f.name)
+                zip_file.extract(f, f_path) unless File.exist?(f_path)
+                obj_name = f.name if file_extension == 'obj'
+              end
             end
+          when 'obj_mtl'
+            mtl_file_params = params[:gym_three_d_asset].fetch(:three_d_file_mtl, nil)
+            obj_file_params = params[:gym_three_d_asset].fetch(:three_d_file_obj, nil)
+
+            if mtl_file_params.content_type != 'model/mtl' || obj_file_params.content_type != 'application/x-tgif'
+              errors.add(:base, 'wrong_file_format')
+              FileUtils.remove_dir folder.first
+              return false
+            end
+
+            # write obj file
+            obj_name = obj_file_params.original_filename
+            f_path_obj = File.join(folder, obj_name)
+            File.open(f_path_obj, 'wb') { |f| f.write obj_file_params.read }
+
+            # write mtl file
+            mtl_name = mtl_file_params.original_filename
+            f_path_mtl = File.join(folder, mtl_name)
+            File.open(f_path_mtl, 'wb') { |f| f.write mtl_file_params.read }
+          else
+            errors.add(:base, 'wrong_file_format')
+            FileUtils.remove_dir folder.first
+            return false
           end
 
+          # Convert .mtl + .obj to .gltf
           if obj_name
             commande = "#{ENV['NPM_BIN_PATH']}/obj2gltf -i #{folder.first}/#{obj_name}"
             _stdout, stderr, status = Open3.capture3(commande) # Run obj2gltf shell command
-
             if status.success?
               gltf_file_name = "#{obj_name.split('.').first}.gltf"
               file = File.open("#{folder.first}/#{gltf_file_name}", 'r')
@@ -114,9 +149,20 @@ module Api
               return false
             end
           end
+
+          # Delete unzip file
           FileUtils.remove_dir folder.first
-        elsif file && file.content_type == 'model/gltf+json'
-          @gym_three_d_asset.three_d_gltf = file
+        elsif import_type == 'gltf'
+          file = params[:gym_three_d_asset].fetch(:three_d_file, nil)
+          if file && file.content_type == 'model/gltf+json'
+            @gym_three_d_asset.three_d_gltf = file
+          else
+            errors.add(:base, 'wrong_file_format')
+            return false
+          end
+        else
+          errors.add(:base, 'wrong_file_format')
+          return false
         end
         true
       end
