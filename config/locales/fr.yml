@@ -5,15 +5,18 @@ fr:
     welcome:
       subject: "Bienvenue %{name}"
       title: "Bienvenue %{name} !"
-      happy_to_see_you: "Nous sommes heureux de te compter parmi nous :)"
-      take_a_tour: "Ton inscription a pu être motivée par différentes raisons, que cherches-tu à faire sur Oblyk :"
-      for_crag: "Tu es ici pour trouver des <strong>infos sur les falaises</strong> de France et du monde ? Alors la <a href='%{url}'>carte des falaises</a> est un bon point de départ."
-      for_partner: "Tu cherches un·e <strong>partenaire de grimpe</strong> ? On t'explique comment on a pensé ça <a href='%{explain_url}'>ici</a>, ensuite c'est sur <a href='%{map_url}'>la carte des grimpeurs</a> que ça se passe."
-      for_ascents_log: "Tu veux <strong>tenir un carnet de croix</strong> et suivre ta progression ?<br>
-                        Alors rends-toi sur les falaises où tu as grimpé (<a href='%{cuvier_url}'>Bas Cuvier</a> ? <a href='%{buoux_url}'>Buoux</a> ? <a href='%{cimai_url}'>Cimaï</a> ?) et coche tes croix.<br>
-                        Tu trouveras ensuite quelques <a href='%{chart_url}'>graphiques</a> sympas sur ton dashboard."
+      happy_to_see_you: "Nous sommes heureux de te compter parmi nous 🤗"
+      take_a_tour: "Ton inscription a pu être motivée par différentes raisons, que cherches-tu à faire sur Oblyk ?"
+      for_crag: "⛰ Tu es ici pour trouver des <strong>informations sur les falaises</strong> de France et du monde ? Alors la <a href='%{url}'>carte des falaises</a> est un bon point de départ."
+      for_partner: "🧗 Tu cherches un·e <strong>partenaire de grimpe</strong> ? Nous t'expliquons comment nous avons pensé ça <a href='%{explain_url}'>ici</a>, ensuite c'est sur <a href='%{map_url}'>la carte des grimpeurs</a> que ça se passe."
+      for_ascents_log: "✅ Tu veux <strong>tenir un carnet de croix</strong> et suivre ta progression ?<br>
+                        Rends-toi sur les falaises où tu as grimpé (<a href='%{cuvier_url}'>Bas Cuvier</a> ? <a href='%{buoux_url}'>Buoux</a> ? <a href='%{cimai_url}'>Cimaï</a> ?) et coche tes croix.<br>
+                        Tu trouveras ensuite quelques <a href='%{chart_url}'>graphiques</a> sympas sur ton tableau de bord 😏"
+      indoor: "🔩 Tu es ouvreur, ouvreuse, ou gestionnaire d'un club ou salle d'escalade ?<br>
+               Oblyk c'est aussi une incroyable <strong>boîte à outils pour ta salle</strong> : crée le <strong>topo interactif</strong> de ta salle, <strong>analyse</strong> tes ouvertures, <strong>anime</strong> ta communauté, crée des <strong>contests</strong> comme un pro, imprime en un clic les <strong>étiquettes de pied</strong> de voie, et bien plus encore !<br>
+               Fais un tour sur la page de présentation <a href='%{indoor_url}'>d'Oblyk Indoor.</a>"
       discover_the_rest: "On te laisse découvrir le reste !"
-      help: "Si tu cherches de l'aide, tu en trouveras <a href='%{help_url}'>ici</a>, tu peux aussi nous contacter à cette adresse : <a href='mailto:ekip@oblyk.org'>ekip@oblyk.org</a>"
+      help: "Si tu cherches de l'aide, tu en trouveras <a href='%{help_url}'>ici</a>. Tu peux aussi nous contacter à cette adresse : <a href='mailto:ekip@oblyk.org'>ekip@oblyk.org</a>"
       see_you_later: "À bientôt et bonne grimpe !"
     reset_password:
       subject: "Mot de passe oublié"
