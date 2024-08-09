@@ -172,8 +172,8 @@ module Api
             mtl_file_params = params[:gym_space].fetch(:three_d_file_mtl, nil)
             obj_file_params = params[:gym_space].fetch(:three_d_file_obj, nil)
 
-            if mtl_file_params.content_type != 'model/mtl' || obj_file_params.content_type != 'application/x-tgif'
-              errors.add(:base, 'wrong_file_format')
+            if !%w[model/mtl text/plain].include?(mtl_file_params.content_type) || obj_file_params.content_type != 'application/x-tgif'
+              @gym_space.errors.add(:base, 'wrong_file_format')
               FileUtils.remove_dir folder.first
               return false
             end
@@ -188,7 +188,7 @@ module Api
             f_path_mtl = File.join(folder, mtl_name)
             File.open(f_path_mtl, 'wb') { |f| f.write mtl_file_params.read }
           else
-            errors.add(:base, 'wrong_file_format')
+            @gym_space.errors.add(:base, 'wrong_file_format')
             FileUtils.remove_dir folder.first
             return false
           end
@@ -215,14 +215,14 @@ module Api
           FileUtils.remove_dir folder.first
         elsif import_type == 'gltf'
           file = params[:gym_space].fetch(:three_d_file, nil)
-          if file && file.content_type == 'model/gltf+json'
+          if file && %w[model/gltf+json text/plain].include?(file.content_type)
             @gym_space.three_d_gltf = file
           else
-            errors.add(:base, 'wrong_file_format')
+            @gym_space.errors.add(:base, 'wrong_file_format')
             return false
           end
         else
-          errors.add(:base, 'wrong_file_format')
+          @gym_space.errors.add(:base, 'wrong_file_format')
           return false
         end
 
