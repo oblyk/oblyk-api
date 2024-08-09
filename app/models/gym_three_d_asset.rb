@@ -6,16 +6,12 @@ class GymThreeDAsset < ApplicationRecord
 
   has_one_attached :picture
   has_one_attached :three_d_gltf
-  has_one_attached :three_d_mtl
-  has_one_attached :three_d_obj
   belongs_to :gym, optional: true
   has_many :gym_three_d_elements, dependent: :destroy
 
   validates :name, presence: true
   validates :picture, blob: { content_type: :image }, allow_nil: true
   validates :three_d_gltf, blob: { content_type: 'model/gltf+json' }, allow_nil: true
-  validates :three_d_mtl, blob: { content_type: 'model/mtl' }, allow_nil: true
-  validates :three_d_obj, blob: { content_type: 'application/x-tgif' }, allow_nil: true
 
   def summary_to_json
     Rails.cache.fetch("#{cache_key_with_version}/summary_gym_three_d_asset", expires_in: 28.days) do

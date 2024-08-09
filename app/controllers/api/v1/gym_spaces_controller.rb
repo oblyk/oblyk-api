@@ -178,14 +178,6 @@ module Api
               return false
             end
 
-            @gym_space.three_d_mtl = mtl_file_params
-            @gym_space.three_d_obj = obj_file_params
-            unless @gym_space.valid?
-              @gym_space.errors.add(:base, 'wrong_file_format')
-              FileUtils.remove_dir folder.first
-              return false
-            end
-
             # write obj file
             obj_name = obj_file_params.original_filename
             f_path_obj = File.join(folder, obj_name)
@@ -228,7 +220,11 @@ module Api
         elsif import_type == 'gltf'
           file = params[:gym_space].fetch(:three_d_file, nil)
           if file && File.extname(file) == '.gltf'
-            @gym_space.three_d_gltf = file
+            @gym_space.three_d_gltf.attach(
+              io: file,
+              filename: file.original_filename,
+              content_type: 'model/gltf+json'
+            )
             unless @gym_space.valid?
               @gym_space.errors.add(:base, 'wrong_file_format')
               return false
