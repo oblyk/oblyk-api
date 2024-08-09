@@ -11,6 +11,8 @@ class GymSpace < ApplicationRecord
   has_one_attached :plan
   has_one_attached :three_d_picture
   has_one_attached :three_d_gltf
+  has_one_attached :three_d_mtl
+  has_one_attached :three_d_obj
   belongs_to :gym
   belongs_to :gym_grade
   belongs_to :gym_space_group, optional: true
@@ -28,6 +30,8 @@ class GymSpace < ApplicationRecord
   validates :three_d_picture, blob: { content_type: :image }, allow_nil: true
 
   validates :three_d_gltf, blob: { content_type: 'model/gltf+json' }, allow_nil: true
+  validates :three_d_mtl, blob: { content_type: 'model/mtl' }, allow_nil: true
+  validates :three_d_obj, blob: { content_type: 'application/x-tgif' }, allow_nil: true
 
   after_create :delete_gym_cache
   after_save :remove_routes_cache

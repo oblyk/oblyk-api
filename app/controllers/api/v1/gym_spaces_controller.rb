@@ -172,7 +172,15 @@ module Api
             mtl_file_params = params[:gym_space].fetch(:three_d_file_mtl, nil)
             obj_file_params = params[:gym_space].fetch(:three_d_file_obj, nil)
 
-            if !%w[model/mtl text/plain].include?(mtl_file_params.content_type) || obj_file_params.content_type != 'application/x-tgif'
+            if File.extname(mtl_file_params) != '.mtl' || File.extname(obj_file_params) != '.obj'
+              @gym_space.errors.add(:base, 'wrong_file_format')
+              FileUtils.remove_dir folder.first
+              return false
+            end
+
+            @gym_space.three_d_mtl = mtl_file_params
+            @gym_space.three_d_obj = obj_file_params
+            unless @gym_space.valid?
               @gym_space.errors.add(:base, 'wrong_file_format')
               FileUtils.remove_dir folder.first
               return false
@@ -195,8 +203,12 @@ module Api
 
           # Convert .mtl + .obj to .gltf
           if obj_name
-            commande = "#{ENV['NPM_BIN_PATH']}/obj2gltf -i #{folder.first}/#{obj_name}"
-            _stdout, stderr, status = Open3.capture3(commande) # Run obj2gltf shell command
+            # Run obj2gltf shell command
+            _stdout, stderr, status = Open3.capture3(
+              "#{ENV['NPM_BIN_PATH']}/obj2gltf",
+              '-i',
+              "#{folder.first}/#{obj_name}"
+            )
             if status.success?
               gltf_file_name = "#{obj_name.split('.').first}.gltf"
               file = File.open("#{folder.first}/#{gltf_file_name}", 'r')
@@ -215,8 +227,12 @@ module Api
           FileUtils.remove_dir folder.first
         elsif import_type == 'gltf'
           file = params[:gym_space].fetch(:three_d_file, nil)
-          if file && %w[model/gltf+json text/plain].include?(file.content_type)
+          if file && File.extname(file) == '.gltf'
             @gym_space.three_d_gltf = file
+            unless @gym_space.valid?
+              @gym_space.errors.add(:base, 'wrong_file_format')
+              return false
+            end
           else
             @gym_space.errors.add(:base, 'wrong_file_format')
             return false

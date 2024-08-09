@@ -111,8 +111,16 @@ module Api
             mtl_file_params = params[:gym_three_d_asset].fetch(:three_d_file_mtl, nil)
             obj_file_params = params[:gym_three_d_asset].fetch(:three_d_file_obj, nil)
 
-            if mtl_file_params.content_type != 'model/mtl' || obj_file_params.content_type != 'application/x-tgif'
-              errors.add(:base, 'wrong_file_format')
+            if File.extname(mtl_file_params) != '.mtl' || File.extname(obj_file_params) != '.obj'
+              @gym_three_d_asset.errors.add(:base, 'wrong_file_format')
+              FileUtils.remove_dir folder.first
+              return false
+            end
+
+            @gym_three_d_asset.three_d_mtl = mtl_file_params
+            @gym_three_d_asset.three_d_obj = obj_file_params
+            unless @gym_three_d_asset.valid?
+              @gym_three_d_asset.errors.add(:base, 'wrong_file_format')
               FileUtils.remove_dir folder.first
               return false
             end
@@ -127,15 +135,19 @@ module Api
             f_path_mtl = File.join(folder, mtl_name)
             File.open(f_path_mtl, 'wb') { |f| f.write mtl_file_params.read }
           else
-            errors.add(:base, 'wrong_file_format')
+            @gym_three_d_asset.errors.add(:base, 'wrong_file_format')
             FileUtils.remove_dir folder.first
             return false
           end
 
           # Convert .mtl + .obj to .gltf
           if obj_name
-            commande = "#{ENV['NPM_BIN_PATH']}/obj2gltf -i #{folder.first}/#{obj_name}"
-            _stdout, stderr, status = Open3.capture3(commande) # Run obj2gltf shell command
+            # Run obj2gltf shell command
+            _stdout, stderr, status = Open3.capture3(
+              "#{ENV['NPM_BIN_PATH']}/obj2gltf",
+              '-i',
+              "#{folder.first}/#{obj_name}"
+            )
             if status.success?
               gltf_file_name = "#{obj_name.split('.').first}.gltf"
               file = File.open("#{folder.first}/#{gltf_file_name}", 'r')
@@ -154,14 +166,18 @@ module Api
           FileUtils.remove_dir folder.first
         elsif import_type == 'gltf'
           file = params[:gym_three_d_asset].fetch(:three_d_file, nil)
-          if file && file.content_type == 'model/gltf+json'
+          if file && File.extname(file) == '.gltf'
             @gym_three_d_asset.three_d_gltf = file
+            unless @gym_three_d_asset.valid?
+              @gym_three_d_asset.errors.add(:base, 'wrong_file_format')
+              return false
+            end
           else
-            errors.add(:base, 'wrong_file_format')
+            @gym_three_d_asset.errors.add(:base, 'wrong_file_format')
             return false
           end
         else
-          errors.add(:base, 'wrong_file_format')
+          @gym_three_d_asset.errors.add(:base, 'wrong_file_format')
           return false
         end
         true
