@@ -159,11 +159,20 @@ module Api
         elsif import_type == 'gltf'
           file = params[:gym_three_d_asset].fetch(:three_d_file, nil)
           if file && File.extname(file) == '.gltf'
+            random_file_name = SecureRandom.uuid
+            folder = FileUtils.mkdir_p "tmp/obj2gltf_folder/#{random_file_name}"
+            file_name = file.original_filename
+            f_path = File.join(folder, file_name)
+            File.open(f_path, 'wb') { |f| f.write file.read }
+
+            gltf_file = File.open("#{folder.first}/#{file_name}", 'r')
+
             @gym_three_d_asset.three_d_gltf.attach(
-              io: file,
-              filename: file.original_filename,
+              io: gltf_file,
+              filename: file_name,
               content_type: 'model/gltf+json'
             )
+            FileUtils.remove_dir folder.first
             unless @gym_three_d_asset.valid?
               @gym_three_d_asset.errors.add(:base, 'wrong_file_format')
               return false
