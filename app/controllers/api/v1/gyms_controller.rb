@@ -338,6 +338,7 @@ module Api
             three_d_gltf_url: space.three_d_gltf_url,
             three_d_parameters: space.three_d_parameters,
             three_d_position: space.three_d_position,
+            three_d_rotation: space.three_d_rotation,
             three_d_scale: space.three_d_scale,
             gym: {
               id: space.gym.id,

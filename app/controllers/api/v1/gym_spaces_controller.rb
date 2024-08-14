@@ -290,7 +290,8 @@ module Api
       def three_d_capture_params
         params.require(:gym_space).permit(
           :three_d_picture,
-          three_d_camera_position: %i[x y z]
+          three_d_camera_position: %i[x y z],
+          three_d_rotation: %i[x y z]
         )
       end
     end
