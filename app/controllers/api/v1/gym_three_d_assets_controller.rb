@@ -23,6 +23,12 @@ module Api
 
       def create
         @gym_three_d_asset = GymThreeDAsset.new gym_three_d_asset_params
+        import_type = params[:gym_three_d_asset].fetch(:import_type, '').to_s
+        @gym_three_d_asset.three_d_parameters = if %w[obj_zip obj_mtl].include? import_type
+                                                  { highlight_edges: false, color_correction_sketchup_exports: true }
+                                                else
+                                                  { highlight_edges: false, color_correction_sketchup_exports: false }
+                                                end
 
         unless attach_three_d_file
           render json: { error: { base: ['3d_import_error'] } }, status: :unprocessable_entity

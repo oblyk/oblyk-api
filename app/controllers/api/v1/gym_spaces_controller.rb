@@ -134,7 +134,6 @@ module Api
           return
         end
 
-        @gym_space.three_d_parameters ||= { highlight_edges: false, color_correction_sketchup_exports: true }
         if @gym_space.save
           render json: @gym_space.detail_to_json, status: :ok
         else
@@ -148,6 +147,7 @@ module Api
         import_type = params[:gym_space].fetch(:import_type, '').to_s
 
         if %w[obj_zip obj_mtl].include? import_type
+          @gym_space.three_d_parameters ||= { highlight_edges: false, color_correction_sketchup_exports: true }
           random_file_name = SecureRandom.uuid
           folder = FileUtils.mkdir_p "tmp/obj2gltf_folder/#{random_file_name}"
           obj_name = nil
@@ -218,6 +218,7 @@ module Api
           # Delete unzip file
           FileUtils.remove_dir folder.first
         elsif import_type == 'gltf'
+          @gym_space.three_d_parameters ||= { highlight_edges: false, color_correction_sketchup_exports: false }
           file = params[:gym_space].fetch(:three_d_file, nil)
           if file && File.extname(file) == '.gltf'
             random_file_name = SecureRandom.uuid
