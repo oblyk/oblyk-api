@@ -19,6 +19,6 @@ module Gymable
   def protected_by_gym_administrator
     return if @current_user.super_admin
 
-    not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).count.zero?
+    not_authorized unless gym_team_user
   end
 end

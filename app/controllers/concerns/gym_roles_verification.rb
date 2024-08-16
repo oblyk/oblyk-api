@@ -5,6 +5,14 @@ module GymRolesVerification
 
   private
 
+  def gym_team_user?
+    login? unless @current_user
+    return false unless @current_user
+    return false unless @gym
+
+    @gym.gym_administrators.exists?(user_id: @current_user.id)
+  end
+
   def can?(role)
     roles = @current_user.gym_administrators.find_by(gym: @gym)&.roles || []
     return if roles.include?(role)

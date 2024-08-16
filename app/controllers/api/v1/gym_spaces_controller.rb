@@ -25,6 +25,8 @@ module Api
         in_group = {}
         out_group = []
         gym_spaces.each do |gym_space|
+          next if gym_space.draft && !gym_team_user?
+
           if gym_space.gym_space_group_id.present?
             in_group["group-#{gym_space.gym_space_group_id}"] ||= {
               id: gym_space.gym_space_group_id,
@@ -57,6 +59,10 @@ module Api
       end
 
       def show
+        if @gym_space.draft && !gym_team_user?
+          forbidden
+          return
+        end
         render json: @gym_space.detail_to_json, status: :ok
       end
 
@@ -270,6 +276,7 @@ module Api
           :anchor,
           :three_d_scale,
           :representation_type,
+          :draft,
           three_d_parameters: %i[color_correction_sketchup_exports highlight_edges],
           three_d_position: %i[x y z],
           three_d_rotation: %i[x y z]

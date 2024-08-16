@@ -328,6 +328,7 @@ module Api
         # Space
         @gym.gym_spaces.each do |space|
           next unless space.three_d?
+          next if space.draft && !gym_team_user?
 
           spaces << {
             id: space.id,
@@ -340,6 +341,7 @@ module Api
             three_d_position: space.three_d_position,
             three_d_rotation: space.three_d_rotation,
             three_d_scale: space.three_d_scale,
+            draft: space.draft,
             gym: {
               id: space.gym.id,
               name: space.gym.name,

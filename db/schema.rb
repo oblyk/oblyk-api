@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_29_130109) do
+ActiveRecord::Schema.define(version: 2024_08_16_164739) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -977,7 +977,8 @@ ActiveRecord::Schema.define(version: 2024_05_29_130109) do
     t.bigint "gym_grade_id"
     t.bigint "legacy_id"
     t.datetime "deleted_at"
-    t.datetime "published_at"
+    t.datetime "archived_at"
+    t.boolean "draft", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "slug_name"

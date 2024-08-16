@@ -6,6 +6,7 @@ class GymSpace < ApplicationRecord
   include Slugable
   include AttachmentResizable
   include StripTagable
+  include Archivable
 
   has_one_attached :banner
   has_one_attached :plan
@@ -103,6 +104,7 @@ class GymSpace < ApplicationRecord
         three_d_picture_tiny_thumbnail_url: three_d_picture_tiny_thumbnail_url,
         gym_space_group_id: gym_space_group_id,
         anchor: anchor,
+        draft: draft,
         have_three_d: three_d?,
         representation_type: representation_type,
         three_d_parameters: three_d_parameters,
