@@ -13,6 +13,7 @@ module Api
 
       def index
         gym_spaces = @gym.gym_spaces
+                         .unarchived
                          .joins('LEFT JOIN gym_space_groups ON gym_space_groups.id = gym_spaces.gym_space_group_id')
                          .reorder('gym_space_groups.order IS NULL ASC, gym_space_groups.order, gym_spaces.order')
         render json: gym_spaces.map { |gym_space| gym_space.summary_to_json(with_figures: true) }, status: :ok
@@ -20,6 +21,7 @@ module Api
 
       def groups
         gym_spaces = @gym.gym_spaces
+                         .unarchived
                          .joins('LEFT JOIN gym_space_groups ON gym_space_groups.id = gym_spaces.gym_space_group_id')
                          .reorder('gym_space_groups.order IS NULL ASC, gym_space_groups.order, gym_spaces.order')
         in_group = {}
@@ -93,16 +95,16 @@ module Api
         end
       end
 
-      def publish
-        if @gym_space.publish!
+      def archived
+        if @gym_space.archive!
           render json: @gym_space.detail_to_json, status: :ok
         else
           render json: { error: @gym_space.errors }, status: :unprocessable_entity
         end
       end
 
-      def unpublish
-        if @gym_space.unpublish!
+      def unarchived
+        if @gym_space.unarchive!
           render json: @gym_space.detail_to_json, status: :ok
         else
           render json: { error: @gym_space.errors }, status: :unprocessable_entity

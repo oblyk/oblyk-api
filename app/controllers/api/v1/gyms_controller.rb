@@ -173,7 +173,7 @@ module Api
         gym_routes = if space_id.present?
                        @gym.gym_routes.joins(:gym_sector).where(gym_sectors: { gym_space_id: space_id })
                      else
-                       @gym.gym_routes
+                       @gym.gym_routes.joins(gym_sector: :gym_space).where(gym_spaces: { archived_at: nil })
                      end
         gym_routes = if params.fetch(:dismounted, 'false') == 'true'
                        gym_routes.dismounted
@@ -185,7 +185,7 @@ module Api
 
       def tree_routes
         tree = []
-        @gym.gym_spaces.includes(:gym_sectors).each do |gym_space|
+        @gym.gym_spaces.unarchived.includes(:gym_sectors).each do |gym_space|
           space = {
             id: gym_space.id,
             name: gym_space.name,
@@ -222,7 +222,8 @@ module Api
             slug_name: @gym.name,
             id: @gym.id,
             gym_spaces: [],
-            gym_space_groups: []
+            gym_space_groups: [],
+            archived_gym_spaces: []
           }
         }
         @gym.gym_space_groups.each do |gym_space_group|
@@ -236,7 +237,7 @@ module Api
             },
             gym_spaces: []
           }
-          gym_space_group.gym_spaces.each do |gym_space|
+          gym_space_group.gym_spaces.unarchived.each do |gym_space|
             sectors = []
             gym_space.gym_sectors.each do |gym_sector|
               sectors << gym_sector.summary_to_json
@@ -246,13 +247,23 @@ module Api
           end
           tree[:gym][:gym_space_groups] << space_group
         end
-        @gym.gym_spaces.where(gym_space_group_id: nil).each do |gym_space|
+        @gym.gym_spaces.unarchived.where(gym_space_group_id: nil).each do |gym_space|
           sectors = []
           gym_space.gym_sectors.each do |gym_sector|
             sectors << gym_sector.summary_to_json
           end
           space = tree_structure_space_json gym_space, sectors
           tree[:gym][:gym_spaces] << space
+        end
+
+        # Archived spaces
+        @gym.gym_spaces.archived.each do |gym_space|
+          sectors = []
+          gym_space.gym_sectors.each do |gym_sector|
+            sectors << gym_sector.summary_to_json
+          end
+          space = tree_structure_space_json gym_space, sectors
+          tree[:gym][:archived_gym_spaces] << space
         end
 
         render json: tree, status: :ok
@@ -326,7 +337,7 @@ module Api
         assets = []
 
         # Space
-        @gym.gym_spaces.each do |space|
+        @gym.gym_spaces.unarchived.each do |space|
           next unless space.three_d?
           next if space.draft && !gym_team_user?
 

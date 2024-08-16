@@ -253,8 +253,8 @@ Rails.application.routes.draw do
         resources :gym_spaces do
           get :groups, on: :collection
           get :three_d_elements, on: :member
-          put :publish, on: :member
-          put :unpublish, on: :member
+          put :archived, on: :member
+          put :unarchived, on: :member
           post :add_banner, on: :member
           post :add_plan, on: :member
           post :add_three_d_file, on: :member

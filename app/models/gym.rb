@@ -209,7 +209,7 @@ class Gym < ApplicationRecord
         gym_grades_count: gym_grades.count,
         versions_count: versions.count,
         gym_chains: gym_chains.map(&:summary_to_json),
-        gym_spaces: gym_spaces.map(&:summary_to_json),
+        gym_spaces: gym_spaces.unarchived.map(&:summary_to_json),
         gym_space_groups: gym_space_groups.map(&:summary_to_json),
         sorts_available: sorts_available,
         display_ranking: ranking?,

@@ -2,7 +2,6 @@
 
 class GymSpace < ApplicationRecord
   include SoftDeletable
-  include Publishable
   include Slugable
   include AttachmentResizable
   include StripTagable
@@ -105,6 +104,7 @@ class GymSpace < ApplicationRecord
         gym_space_group_id: gym_space_group_id,
         anchor: anchor,
         draft: draft,
+        archived_at: archived_at,
         have_three_d: three_d?,
         representation_type: representation_type,
         three_d_parameters: three_d_parameters,
