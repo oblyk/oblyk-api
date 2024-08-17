@@ -9,33 +9,50 @@ module LogBook
         @user = user
       end
 
-      def figures
+      def figures(only_lead_climbs=false)
         {
           countries: countries_count,
           regions: regions_count,
           crags: crags_count,
-          ascents: ascents_count,
-          meters: sum_meters,
-          max_grade_value: max_grad_value
+          ascents: ascents_count(only_lead_climbs),
+          meters: sum_meters(only_lead_climbs),
+          max_grade_value: max_grad_value(only_lead_climbs)
         }
       end
 
       private
 
-      def ascents_count
-        @user.ascent_crag_routes.made.count
+      def uniq_ascent_crag_routes(only_lead_climbs=false)
+        if only_lead_climbs == "true"
+          @user.ascent_crag_routes.made.lead.uniq(&:crag_route_id)
+        else
+          @user.ascent_crag_routes.made.uniq(&:crag_route_id)
+        end
       end
 
-      def sum_meters
-        @user.ascent_crag_routes.made.sum(:height)
+      def ascents_count(only_lead_climbs=false)
+        uniq_ascent_crag_routes(only_lead_climbs).count
       end
 
-      def max_grad_value
-        @user.ascent_crag_routes.made.maximum(:max_grade_value)
+      def sum_meters(only_lead_climbs=false)
+        height_climbed = 0
+        uniq_ascent_crag_routes(only_lead_climbs).each do |ascent|
+          sections_heights = ascent.sections.map {|section| section['height']}.compact
+          if sections_heights.size > 0   # si les hauteurs des sections d'une GV ne sont pas renseignées
+            height_climbed += sections_heights.sum
+          else
+            height_climbed += ascent.height # on prend la hauteur totale de la GV
+          end
+        end
+        height_climbed
+      end
+
+      def max_grad_value(only_lead_climbs=false)
+        uniq_ascent_crag_routes(only_lead_climbs).map(&:max_grade_value).max
       end
 
       def countries_count
-        @user.ascended_crags.distinct.count(:code_country)
+        @user.ascended_crags.distinct.count(:country)
       end
 
       def regions_count
@@ -43,7 +60,7 @@ module LogBook
       end
 
       def crags_count
-        @user.ascended_crags.distinct.count
+        @user.ascended_crags.distinct.count(:name)
       end
     end
   end
