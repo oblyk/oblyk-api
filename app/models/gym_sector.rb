@@ -44,6 +44,7 @@ class GymSector < ApplicationRecord
         anchor_ranges: anchor_ranges,
         anchor: anchor,
         have_three_d_path: three_d_path?,
+        three_d_label_options: three_d_label_options,
         gym: {
           id: gym.id,
           slug_name: gym.slug_name

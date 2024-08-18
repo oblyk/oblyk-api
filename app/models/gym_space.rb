@@ -108,6 +108,7 @@ class GymSpace < ApplicationRecord
         have_three_d: three_d?,
         representation_type: representation_type,
         three_d_parameters: three_d_parameters,
+        three_d_label_options: three_d_label_options,
         gym: {
           id: gym.id,
           name: gym.name,

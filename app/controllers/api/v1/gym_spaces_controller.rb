@@ -54,7 +54,8 @@ module Api
             id: gym_sector.id,
             name: gym_sector.name,
             three_d_path: gym_sector.three_d_path,
-            three_d_height: gym_sector.three_d_height
+            three_d_height: gym_sector.three_d_height,
+            three_d_label_options: gym_sector.three_d_label_options
           }
         end
         render json: { gym_sectors: sector }, status: :ok
@@ -281,7 +282,8 @@ module Api
           :draft,
           three_d_parameters: %i[color_correction_sketchup_exports highlight_edges],
           three_d_position: %i[x y z],
-          three_d_rotation: %i[x y z]
+          three_d_rotation: %i[x y z],
+          three_d_label_options: %i[x y z]
         )
       end
 

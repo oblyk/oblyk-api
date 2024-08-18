@@ -352,6 +352,7 @@ module Api
             three_d_position: space.three_d_position,
             three_d_rotation: space.three_d_rotation,
             three_d_scale: space.three_d_scale,
+            three_d_label_options: space.three_d_label_options,
             draft: space.draft,
             gym: {
               id: space.gym.id,
