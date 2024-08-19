@@ -93,7 +93,7 @@ module Api
                  elsif route_ids.present?
                    @gym.gym_routes.where(ids: route_ids)
                  else
-                   @gym.gym_routes
+                   @gym.gym_routes.joins(gym_sector: :gym_space).where(gym_spaces: { draft: false, archived_at: nil })
                  end
 
         routes = dismounted ? routes.dismounted : routes.mounted
