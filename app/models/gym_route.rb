@@ -310,11 +310,12 @@ class GymRoute < ApplicationRecord
 
     sections.each do |section|
       section_height = section['height'].present? ? Integer(section['height']) : nil
+      grade = Grade.clean_grade(section['grade'])
       new_sections << {
         climbing_type: single_pitch ? climbing_type : section['climbing_type'] || climbing_type,
         description: !single_pitch ? section['description'] : nil,
-        grade: Grade.clean_grade(section['grade']),
-        grade_value: Grade.to_value(section['grade']),
+        grade: grade,
+        grade_value: grade.present? ? Grade.to_value(grade) : nil,
         height: single_pitch ? height : section_height,
         points: single_pitch ? points : section['points'],
         styles: section['styles']
