@@ -307,9 +307,22 @@ module Api
       def subscribes_ascents
         page = params.fetch(:page, 1)
         subscribe_ids = @user.subscribes.accepted.where(followable_type: 'User').pluck(:followable_id)
-        ascents = AscentCragRoute.made.where(user_id: subscribe_ids).order(created_at: :desc, user_id: :asc).page(page)
+        ascents = AscentCragRoute.made
+                                 .where(user_id: subscribe_ids)
+                                 .order(created_at: :desc, user_id: :asc)
+                                 .page(page)
 
-        render json: ascents.map { |ascent| ascent.summary_to_json(with_user: true) }, status: :ok
+        ascent_crag_routes = []
+        ascents.each do |ascent|
+          ascent_route = ascent.summary_to_json(with_user: true)
+          ascent_route[:crag_route][:grade_gap][:max_grade_value] = ascent.max_grade_value
+          ascent_route[:crag_route][:grade_gap][:min_grade_value] = ascent.min_grade_value
+          ascent_route[:crag_route][:grade_gap][:max_grade_text] = ascent.max_grade_text
+          ascent_route[:crag_route][:grade_gap][:min_grade_text] = ascent.min_grade_text
+          ascent_crag_routes << ascent_route
+        end
+
+        render json: ascent_crag_routes, status: :ok
       end
 
       def photos
