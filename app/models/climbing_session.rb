@@ -97,7 +97,15 @@ class ClimbingSession < ApplicationRecord
     summary[:crags] = Crag.where(id: summary[:crags]).map(&:summary_to_json)
     summary[:gyms] = Gym.where(id: summary[:gyms]).map(&:summary_to_json)
     summary[:gym_ascents] = ascent_gym_routes.map(&:summary_to_json)
-    summary[:crag_ascents] = ascent_crag_routes.map(&:summary_to_json)
+    summary[:crag_ascents] = []
+    ascent_crag_routes.each do |ascent_crag_route|
+      ascent_route = ascent_crag_route.summary_to_json
+      ascent_route[:crag_route][:grade_gap][:max_grade_value] = ascent_crag_route.max_grade_value
+      ascent_route[:crag_route][:grade_gap][:min_grade_value] = ascent_crag_route.min_grade_value
+      ascent_route[:crag_route][:grade_gap][:max_grade_text] = ascent_crag_route.max_grade_text
+      ascent_route[:crag_route][:grade_gap][:min_grade_text] = ascent_crag_route.min_grade_text
+      summary[:crag_ascents] << ascent_route
+    end
     summary[:previous_climbing_session] = previous_climbing_session
     summary[:next_climbing_session] = next_climbing_session
     summary[:users] = User.where(id: user_ids).map(&:summary_to_json)
