@@ -65,8 +65,21 @@ module Api
         end
 
         def ascents_of_crag
-          ascents = @user.ascent_crag_routes.joins(:crag_route).where(crag_routes: { crag_id: params[:crag_id] }).order(min_grade_value: :desc)
-          render json: ascents.map(&:summary_to_json), status: :ok
+          ascents = @user.ascent_crag_routes
+                         .joins(:crag_route)
+                         .where(crag_routes: { crag_id: params[:crag_id] })
+                         .order(min_grade_value: :desc)
+
+          ascent_routes = []
+          ascents.each do |ascent|
+            ascent_route = ascent.summary_to_json
+            ascent_route[:crag_route][:grade_gap][:max_grade_value] = ascent.max_grade_value
+            ascent_route[:crag_route][:grade_gap][:min_grade_value] = ascent.min_grade_value
+            ascent_route[:crag_route][:grade_gap][:max_grade_text] = ascent.max_grade_text
+            ascent_route[:crag_route][:grade_gap][:min_grade_text] = ascent.min_grade_text
+            ascent_routes << ascent_route
+          end
+          render json: ascent_routes, status: :ok
         end
 
         private
