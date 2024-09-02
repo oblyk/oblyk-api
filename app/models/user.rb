@@ -434,7 +434,7 @@ class User < ApplicationRecord
     return potential_slug if User.where.not(id: id).where(slug_name: potential_slug).blank?
 
     # find user with slug_name an -[digit] at the end
-    same_slug_users = User.where.not(id: id).where("slug_name RLIKE '^#{potential_slug}-[0-9]$'")
+    same_slug_users = User.where.not(id: id).where("slug_name RLIKE '^#{potential_slug}-[0-9]+$'")
 
     if same_slug_users.blank?
       # Return potential_slug with -1 if is the first duplicate slug
