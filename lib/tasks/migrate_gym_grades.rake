@@ -21,7 +21,7 @@ namespace :migrate_gym_grades do
       gym_loop += 1
       out.puts "#{gym_loop} / #{gym_count} #{gym.name} #{gym.id}"
 
-      gym_grades = GymGrade.where(gym_id: gym.id)
+      gym_grades = GymGrade.where(gym_id: gym.id).where.not(id: [150, 99, 98, 126, 59])
       gym_grade_count = gym_grades.count
       grade_loop = 0
 
