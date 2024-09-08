@@ -45,7 +45,7 @@ class Gym < ApplicationRecord
   has_many :feeds, as: :feedable
   has_many :gym_administrators
   has_many :gym_administration_requests
-  has_many :gym_grades
+  has_many :gym_grades # TODO : DELETE AFTER MIGRATION
   has_many :gym_spaces
   has_many :gym_space_groups
   has_many :reports, as: :reportable
@@ -60,6 +60,7 @@ class Gym < ApplicationRecord
   has_many :gym_chain_gyms
   has_many :gym_chains, through: :gym_chain_gyms
   has_many :gym_three_d_elements
+  has_many :gym_levels
 
   validates :logo, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true
@@ -118,6 +119,7 @@ class Gym < ApplicationRecord
     self.sport_climbing_ranking ||= 'point_by_grade'
     self.pan_ranking ||= 'division'
     self.assigned_at ||= Time.current
+    init_gym_levels
     save
   end
 
@@ -206,7 +208,6 @@ class Gym < ApplicationRecord
     summary_to_json.merge(
       {
         follow_count: follows.count,
-        gym_grades_count: gym_grades.count,
         versions_count: versions.count,
         gym_chains: gym_chains.map(&:summary_to_json),
         gym_spaces: gym_spaces.unarchived.map(&:summary_to_json),
@@ -229,19 +230,39 @@ class Gym < ApplicationRecord
     Rails.cache.delete("#{cache_key_with_version}/summary_gym")
   end
 
+  def init_gym_levels
+    gym_levels << GymLevel.new(climbing_type: Climb::BOULDERING, grade_system: nil, level_representation: GymLevel::TAG_AND_HOLD_REPRESENTATION) unless GymLevel.exists?(gym_id: id, climbing_type: Climb::BOULDERING)
+    gym_levels << GymLevel.new(climbing_type: Climb::SPORT_CLIMBING, grade_system: 'french', level_representation: GymLevel::HOLD_REPRESENTATION) unless GymLevel.exists?(gym_id: id, climbing_type: Climb::SPORT_CLIMBING)
+    gym_levels << GymLevel.new(climbing_type: Climb::PAN, grade_system: 'french', level_representation: GymLevel::TAG_REPRESENTATION) unless GymLevel.exists?(gym_id: id, climbing_type: Climb::PAN)
+  end
+
   private
 
   def sorts_available
-    sorts = GymGrade.select("SUM(difficulty_by_level) AS sortable_by_level, SUM(difficulty_by_grade) AS sortable_by_grade, SUM(IF(point_system_type != 'none', 1, 0)) AS sortable_by_point")
-                    .joins(gym_sectors: :gym_routes)
-                    .joins(gym_sectors: :gym_space)
-                    .where(gym_sectors: { gym_spaces: { gym: self } })
-                    .where(gym_routes: { dismounted_at: nil })
-    sorts = sorts.first
+    sorts_by = GymRoute.mounted
+                       .select(
+                         "SUM(coalesce(level_index, 0)) AS 'has_level',
+                         SUM(COALESCE(min_grade_value, 0)) AS 'has_grade',
+                         SUM(COALESCE(points, 0)) AS 'has_fixed_point',
+                         GROUP_CONCAT(DISTINCT gym_routes.climbing_type) AS 'climbing_types'"
+                       )
+                       .joins(gym_sector: :gym_space)
+                       .where(gym_sectors: { gym_spaces: { gym_id: id } })
+    calculated_point_system = false
+    sorts_by = sorts_by&.first
+    if sorts_by['has_fixed_point']&.zero?
+      climbing_types = sorts_by['climbing_types'].split(',')
+      climbing_types.each do |climbing_type|
+        calculated_point_system = true if %w[division point_by_grade].include?(sport_climbing_ranking) && climbing_type == 'sport_climbing'
+        calculated_point_system = true if %w[division point_by_grade].include?(pan_ranking) && climbing_type == 'pan'
+        calculated_point_system = true if %w[division point_by_grade].include?(boulder_ranking) && climbing_type == 'boulder'
+      end
+    end
+
     {
-      difficulty_by_level: sorts[:sortable_by_level]&.positive?,
-      difficulty_by_grade: sorts[:sortable_by_grade]&.positive?,
-      difficulty_by_point: sorts[:sortable_by_point]&.positive?
+      difficulty_by_level: sorts_by['has_level']&.positive?,
+      difficulty_by_grade: sorts_by['has_grade']&.positive?,
+      difficulty_by_point: sorts_by['has_fixed_point']&.positive? || calculated_point_system
     }
   end
 

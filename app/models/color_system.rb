@@ -27,12 +27,32 @@ class ColorSystem < ApplicationRecord
     end
   end
 
+  def init_line_from_gym_level(gym_level)
+    gym_level.levels.each do |level|
+      color_system_line = ColorSystemLine.new(
+        hex_color: level[:color],
+        order: level[:order]
+      )
+      color_system_lines << color_system_line
+    end
+  end
+
   def self.create_form_grade(gym_grade)
     colors_mark = gym_grade.colors_system_mark
     return unless colors_mark
 
     color_system = ColorSystem.find_or_initialize_by colors_mark: colors_mark
     color_system.init_line_form_grade_line(gym_grade) if color_system.new_record?
+    color_system.save
+    color_system
+  end
+
+  def self.create_from_level(gym_level)
+    colors_mark = gym_level.colors_system_mark
+    return unless colors_mark
+
+    color_system = ColorSystem.find_or_initialize_by colors_mark: colors_mark
+    color_system.init_line_from_gym_level(gym_level) if color_system.new_record?
     color_system.save
     color_system
   end

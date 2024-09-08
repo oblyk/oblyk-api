@@ -228,6 +228,9 @@ Rails.application.routes.draw do
           post :add_picture, on: :member
         end
         resources :color_systems, only: %i[index create show]
+        resources :gym_levels, only: %i[index] do
+          put :update_all, on: :collection
+        end
         resources :gym_administrators do
           put :update_feed_last_read, on: :collection
           get :new_in_feeds, on: :collection

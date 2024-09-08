@@ -850,6 +850,16 @@ ActiveRecord::Schema.define(version: 2024_08_17_185552) do
     t.index ["gym_id"], name: "index_gym_label_templates_on_gym_id"
   end
 
+  create_table "gym_levels", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.bigint "gym_id"
+    t.string "climbing_type"
+    t.string "grade_system"
+    t.string "level_representation"
+    t.json "levels"
+    t.index ["gym_id", "climbing_type"], name: "index_gym_levels_on_gym_id_and_climbing_type", unique: true
+    t.index ["gym_id"], name: "index_gym_levels_on_gym_id"
+  end
+
   create_table "gym_openers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.string "first_name"
@@ -911,6 +921,9 @@ ActiveRecord::Schema.define(version: 2024_08_17_185552) do
     t.integer "min_grade_value"
     t.text "max_grade_text"
     t.text "min_grade_text"
+    t.integer "level_index"
+    t.integer "level_length"
+    t.string "level_color"
     t.bigint "legacy_id"
     t.datetime "archived_at"
     t.date "opened_at"
@@ -1456,6 +1469,7 @@ ActiveRecord::Schema.define(version: 2024_08_17_185552) do
   add_foreign_key "gym_chain_gyms", "gym_chains"
   add_foreign_key "gym_chain_gyms", "gyms"
   add_foreign_key "gym_label_templates", "gyms"
+  add_foreign_key "gym_levels", "gyms"
   add_foreign_key "gym_options", "gyms"
   add_foreign_key "gym_three_d_assets", "gyms"
   add_foreign_key "gym_three_d_elements", "gym_spaces"

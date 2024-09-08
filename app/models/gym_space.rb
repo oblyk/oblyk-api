@@ -12,7 +12,7 @@ class GymSpace < ApplicationRecord
   has_one_attached :three_d_picture
   has_one_attached :three_d_gltf
   belongs_to :gym
-  belongs_to :gym_grade
+  belongs_to :gym_grade, optional: true # TODO: DELETE AFTER MIGRATION
   belongs_to :gym_space_group, optional: true
   has_many :gym_sectors
   has_many :gym_routes, through: :gym_sectors
@@ -34,6 +34,7 @@ class GymSpace < ApplicationRecord
   after_update :remove_sectors_cache
   after_destroy :delete_gym_cache
 
+  # TODO: DELETE AFTER MIGRATION
   def gym_grade
     GymGrade.unscoped { super }
   end
@@ -84,7 +85,6 @@ class GymSpace < ApplicationRecord
     data = Rails.cache.fetch("#{cache_key_with_version}/summary_gym_space", expires_in: 28.days) do
       {
         id: id,
-        gym_grade_id: gym_grade_id,
         name: name,
         slug_name: slug_name,
         description: description,
@@ -173,15 +173,30 @@ class GymSpace < ApplicationRecord
   private
 
   def sorts_available
-    sorts = GymGrade.select("SUM(difficulty_by_level) AS sortable_by_level, SUM(difficulty_by_grade) AS sortable_by_grade, SUM(IF(point_system_type != 'none', 1, 0)) AS sortable_by_point")
-                    .joins(gym_sectors: :gym_routes)
-                    .where(gym_sectors: { gym_space: self })
-                    .where(gym_routes: { dismounted_at: nil })
-    sorts = sorts.first
+    sorts_by = GymRoute.mounted
+                       .select(
+                         "SUM(coalesce(level_index, 0)) AS 'has_level',
+                         SUM(COALESCE(min_grade_value, 0)) AS 'has_grade',
+                         SUM(COALESCE(points, 0)) AS 'has_fixed_point',
+                         GROUP_CONCAT(DISTINCT gym_routes.climbing_type) AS 'climbing_types'"
+                       )
+                       .joins(:gym_sector)
+                       .where(gym_sectors: { gym_space_id: id })
+    calculated_point_system = false
+    sorts_by = sorts_by&.first
+    if sorts_by['has_fixed_point']&.zero?
+      climbing_types = sorts_by['climbing_types'].split(',')
+      climbing_types.each do |climbing_type|
+        calculated_point_system = true if %w[division point_by_grade].include?(gym.sport_climbing_ranking) && climbing_type == 'sport_climbing'
+        calculated_point_system = true if %w[division point_by_grade].include?(gym.pan_ranking) && climbing_type == 'pan'
+        calculated_point_system = true if %w[division point_by_grade].include?(gym.boulder_ranking) && climbing_type == 'boulder'
+      end
+    end
+
     {
-      difficulty_by_level: sorts[:sortable_by_level]&.positive?,
-      difficulty_by_grade: sorts[:sortable_by_grade]&.positive?,
-      difficulty_by_point: sorts[:sortable_by_point]&.positive?
+      difficulty_by_level: sorts_by['has_level']&.positive?,
+      difficulty_by_grade: sorts_by['has_grade']&.positive?,
+      difficulty_by_point: sorts_by['has_fixed_point']&.positive? || calculated_point_system
     }
   end
 

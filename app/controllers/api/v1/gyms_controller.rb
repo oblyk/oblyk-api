@@ -388,11 +388,7 @@ module Api
       def tree_structure_space_json(gym_space, sectors)
         gym_space.summary_to_json.merge(
           {
-            gym_sectors: sectors,
-            gym_grade: {
-              id: gym_space.gym_grade.id,
-              name: gym_space.gym_grade.name
-            }
+            gym_sectors: sectors
           }
         )
       end

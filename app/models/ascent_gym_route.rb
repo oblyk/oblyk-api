@@ -3,7 +3,7 @@
 class AscentGymRoute < Ascent
   belongs_to :gym_route, optional: true
   belongs_to :gym
-  belongs_to :gym_grade, optional: true
+  belongs_to :gym_grade, optional: true # TODO : DELETE AFTER MIGRATION
   belongs_to :color_system_line, optional: true
   has_one :ascent_comment, class_name: 'Comment', as: :commentable, dependent: :destroy
 
@@ -33,7 +33,6 @@ class AscentGymRoute < Ascent
       ascent_status: ascent_status,
       hardness_status: hardness_status,
       gym_route_id: gym_route_id,
-      gym_grade_id: gym_grade_id,
       gym_grade_level: gym_grade_level,
       sections: sections,
       height: height,
@@ -88,8 +87,7 @@ class AscentGymRoute < Ascent
     return unless gym_route
 
     self.gym = gym_route.gym
-    self.gym_grade = gym_route.gym_grade_line.gym_grade if gym_route.gym_grade_line
-    self.gym_grade_level = gym_route.gym_grade_line.order if gym_route.gym_grade_line
+    self.gym_grade_level = gym_route.level_index
   end
 
   def historize_ascents

@@ -54,7 +54,7 @@ module Api
           # Order
           routes = routes.order("opened_at #{direction}") if order_by == 'opened_at'
           routes = routes.order("max_grade_value #{direction}") if order_by == 'grade'
-          routes = routes.includes(gym_grade_line: :gym_grade).order("gym_grade_lines.order #{direction}, gym_grades.name ASC") if order_by == 'level'
+          routes = routes.order("level_index #{direction}") if order_by == 'level'
           routes = routes.includes(:sector).order("sectors.name #{direction}") if order_by == 'sector'
 
           # group by
@@ -106,7 +106,7 @@ module Api
                  when 'grade'
                    routes.reorder("gym_routes.min_grade_value #{direction}, gym_routes.id")
                  when 'level'
-                   routes.joins(gym_grade_line: :gym_grade).reorder("gym_grades.name, gym_grade_lines.order #{direction}, gym_routes.id")
+                   routes.reorder("gym_routes.level_index #{direction}, gym_routes.id")
                  when 'point'
                    routes.reorder("gym_routes.points #{direction}, gym_routes.id")
                  else
@@ -170,7 +170,7 @@ module Api
       end
 
       def similar_sectors
-        sectors = @gym_route.gym.gym_sectors.where(gym_space_id: @gym_route.gym_sector.gym_space_id, gym_grade_id: @gym_route.gym_sector.gym_grade_id)
+        sectors = @gym_route.gym_sector.gym_space.gym_sectors
         render json: sectors.map(&:summary_to_json), status: :ok
       end
 
@@ -327,7 +327,7 @@ module Api
       def group_by_grade(routes)
         grades = {}
         routes.each do |route|
-          next unless route.gym_grade.difficulty_by_grade?
+          next if route.max_grade_value.blank?
 
           grade = route.max_grade_value
           grades[grade] = grades[grade] || { grade: grade, routes: [] }
@@ -339,15 +339,13 @@ module Api
       def group_by_level(routes)
         levels = {}
         routes.each do |route|
-          next unless route.gym_grade.difficulty_by_level?
-          next unless route.gym_grade_line
+          next unless route.level_index
 
-          level = "#{route.gym_grade.id}-#{route.gym_grade_line.order}"
-          levels[level] = levels[level] || {
-            name: route.gym_grade_line.name,
-            colors: route.gym_grade_line.colors,
-            tag_color: route.gym_grade.tag_color?,
-            hold_color: route.gym_grade.hold_color?,
+          levels[route.level_index] = levels[route.level_index] || {
+            name: route.level_index,
+            colors: [route.level_color],
+            tag_color: true,
+            hold_color: false,
             routes: []
           }
           levels[level][:routes] << route
@@ -375,11 +373,13 @@ module Api
           :climbing_type,
           :openers,
           :polyline,
-          :gym_grade_line_id,
           :points,
           :opened_at,
           :gym_sector_id,
           :anchor_number,
+          :level_index,
+          :level_length,
+          :level_color,
           gym_opener_ids: [],
           sections: [:climbing_type, :description, :grade, :height, { styles: [] }],
           hold_colors: %i[],

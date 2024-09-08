@@ -274,7 +274,6 @@ module Api
           :order,
           :climbing_type,
           :sectors_color,
-          :gym_grade_id,
           :gym_space_group_id,
           :anchor,
           :three_d_scale,

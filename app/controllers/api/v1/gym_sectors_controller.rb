@@ -91,7 +91,6 @@ module Api
           :height,
           :banner_bg_color,
           :polygon,
-          :gym_grade_id,
           :can_be_more_than_one_pitch,
           :three_d_height,
           three_d_path: %i[x y z],

@@ -7,7 +7,7 @@ class GymRoute < ApplicationRecord
   has_one_attached :thumbnail
   belongs_to :gym_route_cover, optional: true
   belongs_to :gym_sector, optional: true
-  belongs_to :gym_grade_line, optional: true
+  belongs_to :gym_grade_line, optional: true # TODO : DELETE AFTER MIGRATION
   has_one :gym_space, through: :gym_sector
   has_one :gym, through: :gym_sector
   has_many :videos, as: :viewable
@@ -23,7 +23,6 @@ class GymRoute < ApplicationRecord
   delegate :feed_parent_object, to: :gym
 
   validates :opened_at, presence: true
-  validates :gym_grade_line, presence: true, if: proc { |obj| obj.gym_sector.gym_grade.need_grade_line? }
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }
   validates :height, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
   validates :anchor_number, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
@@ -33,6 +32,7 @@ class GymRoute < ApplicationRecord
 
   before_validation :format_route_section
   before_validation :normalize_blank_values
+  before_validation :historize_level_information
   before_save :historize_grade_gap
   before_save :historize_sections_count
   after_update :delete_contest_route_cache
@@ -43,10 +43,12 @@ class GymRoute < ApplicationRecord
   accepts_nested_attributes_for :gym_route_cover
   attr_accessor :qrcode
 
+  # TODO: DELETE AFTER MIGRATION
   def gym_grade_line
     GymGradeLine.unscoped { super }
   end
 
+  # TODO: DELETE AFTER MIGRATION
   def gym_grade
     gym_grade_line&.gym_grade || gym_sector.gym_grade
   end
@@ -81,7 +83,7 @@ class GymRoute < ApplicationRecord
   end
 
   def grade_to_s
-    return '' unless gym_grade.difficulty_by_grade?
+    return '' unless grade_system
 
     if sections_count > 1
       sections_array = []
@@ -108,6 +110,10 @@ class GymRoute < ApplicationRecord
       styles += section.try(:[], 'styles') || []
     end
     styles
+  end
+
+  def grade_system
+    gym.gym_levels.find_by(climbing_type: climbing_type)&.grade_system
   end
 
   def mounted?
@@ -237,8 +243,10 @@ class GymRoute < ApplicationRecord
         sections_count: sections_count,
         likes_count: likes_count&.positive? ? likes_count : nil,
         gym_sector_id: gym_sector_id,
-        gym_grade_line_id: gym_grade_line_id,
         points: points,
+        level_index: level_index,
+        level_length: level_length,
+        level_color: level_color,
         dismounted: dismounted?,
         points_to_s: points_to_s,
         grade_to_s: grade_to_s,
@@ -357,6 +365,20 @@ class GymRoute < ApplicationRecord
 
       # Valid numerics
       errors.add(:height, I18n.t('activerecord.errors.messages.greater_than')) if section['height'].present? && Integer(section['height']).negative?
+    end
+  end
+
+  def historize_level_information
+    return unless level_index_changed?
+
+    if level_index
+      gym_level = gym.gym_levels.find_by(climbing_type: climbing_type)
+      level = gym_level.levels[level_index]
+      self.level_length = gym_level.levels.count
+      self.level_color = level['color']
+    else
+      self.level_length = nil
+      self.level_color = nil
     end
   end
 

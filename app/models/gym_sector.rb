@@ -6,7 +6,7 @@ class GymSector < ApplicationRecord
 
   belongs_to :gym_space
   has_one :gym, through: :gym_space
-  belongs_to :gym_grade
+  belongs_to :gym_grade, optional: true # TODO: DELETE AFTER MIGRATION
   has_many :gym_routes
   has_many :gym_route_covers, through: :gym_routes
 
@@ -19,6 +19,7 @@ class GymSector < ApplicationRecord
 
   default_scope { order(:order) }
 
+  # TODO: DELETE AFTER MIGRATION
   def gym_grade
     GymGrade.unscoped { super }
   end
@@ -37,7 +38,6 @@ class GymSector < ApplicationRecord
         three_d_path: three_d_path,
         three_d_height: three_d_height,
         gym_space_id: gym_space_id,
-        gym_grade_id: gym_grade_id,
         can_be_more_than_one_pitch: can_be_more_than_one_pitch,
         min_anchor_number: min_anchor_number,
         max_anchor_number: max_anchor_number,

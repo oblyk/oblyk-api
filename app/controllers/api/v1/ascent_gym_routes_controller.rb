@@ -45,10 +45,12 @@ module Api
           @ascent_gym_route.ascent_comment.user = @current_user
         end
 
-        if @ascent_gym_route.gym_route&.gym_grade && @ascent_gym_route.gym_route&.gym_grade_line && @ascent_gym_route.gym_route.gym_grade.difficulty_by_level
-          gym_grade = @ascent_gym_route.gym_route.gym_grade
-          color_system = ColorSystem.create_form_grade gym_grade
-          @ascent_gym_route.color_system_line = color_system.color_system_lines.where(order: @ascent_gym_route.gym_route.gym_grade_line.order).first if color_system
+        if @ascent_gym_route.gym_route
+          gym_level = @ascent_gym_route.gym_route.gym.gym_levels.find_by(climbing_type: @ascent_gym_route.gym_route.climbing_type)
+          if gym_level && gym_level.levels.count.positive?
+            color_system = ColorSystem.create_from_level gym_level
+            @ascent_gym_route.color_system_line = color_system.color_system_lines.where(order: @ascent_gym_route.gym_route.level_index).first if color_system
+          end
         end
 
         if @ascent_gym_route.save
@@ -156,7 +158,6 @@ module Api
           :hardness_status,
           :gym_route_id,
           :gym_id,
-          :gym_grade_id,
           :level,
           :note,
           :comment,
