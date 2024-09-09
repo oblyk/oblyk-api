@@ -43,6 +43,10 @@ class GymRoute < ApplicationRecord
   accepts_nested_attributes_for :gym_route_cover
   attr_accessor :qrcode
 
+  def gym_sector
+    GymSector.unscoped { super }
+  end
+
   # TODO: DELETE AFTER MIGRATION
   def gym_grade_line
     GymGradeLine.unscoped { super }
