@@ -86,7 +86,7 @@ module Statistics
         data = []
         gym_level = gym.gym_levels.find_by climbing_type: climbing_type
 
-        gym_level.levels.each do |level|
+        gym_level.levels&.each do |level|
           background << level['color']
           labels << level['color']
           data << routes_in_climbing_type.sum { |route| route.level_color == level['color'] ? 1 : 0 }
