@@ -43,10 +43,6 @@ class GymRoute < ApplicationRecord
   accepts_nested_attributes_for :gym_route_cover
   attr_accessor :qrcode
 
-  def gym_sector
-    GymSector.unscoped { super }
-  end
-
   # TODO: DELETE AFTER MIGRATION
   def gym_grade_line
     GymGradeLine.unscoped { super }
@@ -57,14 +53,16 @@ class GymRoute < ApplicationRecord
     gym_grade_line&.gym_grade || gym_sector.gym_grade
   end
 
-  def calculated_point
+  def calculated_point(for_gym = nil)
     if points
       point = points
     else
+      gym = for_gym.presence || self.gym
       point_system = case climbing_type
                      when 'sport_climbing'
                        gym.sport_climbing_ranking
                      when 'bouldering'
+                       # binding.pry if gym_sector.blank?
                        gym.boulder_ranking
                      else
                        gym.pan_ranking
