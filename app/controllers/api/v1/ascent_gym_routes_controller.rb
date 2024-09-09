@@ -47,7 +47,7 @@ module Api
 
         if @ascent_gym_route.gym_route
           gym_level = @ascent_gym_route.gym_route.gym.gym_levels.find_by(climbing_type: @ascent_gym_route.gym_route.climbing_type)
-          if gym_level && gym_level.levels.count.positive?
+          if gym_level&.levels&.count&.positive?
             color_system = ColorSystem.create_from_level gym_level
             @ascent_gym_route.color_system_line = color_system.color_system_lines.where(order: @ascent_gym_route.gym_route.level_index).first if color_system
           end
