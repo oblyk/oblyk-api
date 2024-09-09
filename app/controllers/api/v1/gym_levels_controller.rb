@@ -20,7 +20,7 @@ module Api
             json_level = gym_level.summary_to_json
             levels_for_climb = by_climbs[gym_level.climbing_type]
             if levels_for_climb
-              json_level[:levels].each_with_index do |level, index|
+              json_level[:levels]&.each_with_index do |level, index|
                 levels_for_climb.each do |level_for_climb|
                   json_level[:levels][index]['average_grade'] = level_for_climb[:average_grade] if level_for_climb[:level_index] == level['order']
                 end
