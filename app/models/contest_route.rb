@@ -55,7 +55,12 @@ class ContestRoute < ApplicationRecord
         disabled_at: disabled_at,
         contest_route_group_id: contest_route_group_id,
         gym_route_id: gym_route_id,
-        gym_route: gym_route&.tree_summary,
+        gym_route: gym_route&.tree_summary&.merge(
+          {
+            gym_space_name: gym_route&.gym_sector&.gym_space&.name,
+            gym_sector_name: gym_route&.gym_sector&.name
+          }
+        ),
         ranking_type: contest_stage_step.ranking_type,
         thumbnail: thumbnail,
         picture: picture.attached? ? picture_url : nil,

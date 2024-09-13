@@ -203,7 +203,7 @@ module Api
               route = {
                 id: gym_route.id,
                 name: "#{gym_route.grade_to_s} #{gym_route.name}",
-                route: gym_route.tree_summary,
+                route: gym_route.tree_summary.merge({ gym_space_name: gym_space.name, gym_sector_name: gym_sector.name }),
                 type: 'GymRoute'
               }
               sector[:children] << route

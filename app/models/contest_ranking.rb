@@ -69,6 +69,7 @@ class ContestRanking
     self.ascents = ascents.where(realised: true) if [DIVISION, DIVISION_AND_ATTEMPT, FIXED_POINTS].include?(step.ranking_type)
     self.ascents = ascents.select(:id, :contest_participant_id, :contest_route_id) if [DIVISION].include?(step.ranking_type)
     self.ascents = ascents.select(:id, :contest_participant_id, :contest_route_id, :top_attempt, :zone_1_attempt) if [DIVISION_AND_ZONE].include?(step.ranking_type)
+    self.ascents = ascents.joins(contest_route: { contest_route_group: :contest_stage_step }).order('contest_routes.fixed_points DESC').limit(step.ascents_limit) if [FIXED_POINTS].include?(step.ranking_type) && step.ascents_limit.present?
     self.ascents_by_participants = {}
     ascents.each do |ascent|
       ascents_by_participants[ascent.contest_participant_id] ||= []

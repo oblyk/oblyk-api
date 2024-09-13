@@ -21,6 +21,7 @@ class ContestStageStep < ApplicationRecord
             presence: true
 
   validates :ranking_type, inclusion: { in: ContestRanking::RANKING_TYPE_LIST.freeze }
+  validates :ascents_limit, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
 
   def summary_to_json(with_routes: false)
     data = Rails.cache.fetch("#{cache_key_with_version}/summary_contest_stage_step", expires_in: 28.days) do
@@ -30,6 +31,7 @@ class ContestStageStep < ApplicationRecord
         slug_name: slug_name,
         step_order: step_order,
         ranking_type: ranking_type,
+        ascents_limit: ascents_limit,
         self_reporting: self_reporting,
         default_participants_for_next_step: default_participants_for_next_step,
         contest_stage_id: contest_stage_id,

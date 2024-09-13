@@ -81,6 +81,7 @@ module Api
           :name,
           :step_order,
           :ranking_type,
+          :ascents_limit,
           :self_reporting,
           :default_participants_for_next_step
         )
