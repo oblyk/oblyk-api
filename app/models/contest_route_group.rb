@@ -62,6 +62,22 @@ class ContestRouteGroup < ApplicationRecord
     "#{contest_stage_step.name} #{contest_categories.map(&:name).join(', ')} #{genre_type}"
   end
 
+  def import_from_spaces(space_ids)
+    gym_routes = GymRoute.joins(:gym_sector)
+                         .where(gym_sectors: { gym_space_id: space_ids })
+                         .mounted
+                         .order(:min_grade_value)
+    gym_routes.each_with_index do |gym_route, index|
+      points = (2000 * (0.85**(49 - gym_route.min_grade_value))).round if gym_route.min_grade_value&.positive?
+
+      contest_routes << ContestRoute.new(
+        number: index + 1,
+        fixed_points: points,
+        gym_route: gym_route
+      )
+    end
+  end
+
   private
 
   def delete_caches
