@@ -235,7 +235,10 @@ class ContestParticipant < ApplicationRecord
     contest.contest_stages.each do |contest_stage|
       contest_stage.contest_stage_steps.order(:step_order).limit(1).each do |contest_stage_step|
         contest_stage_step.contest_route_groups.each do |contest_route_group|
-          ContestParticipantStep.create(contest_participant_id: id, contest_stage_step_id: contest_stage_step.id) if contest_route_group.contest_route_group_categories.pluck(:contest_category_id).include? contest_category_id
+          next unless genre == contest_route_group.genre_type || contest_route_group.genre_type == 'unisex'
+          next unless contest_route_group.contest_route_group_categories.pluck(:contest_category_id).include?(contest_category_id)
+
+          ContestParticipantStep.create(contest_participant_id: id, contest_stage_step_id: contest_stage_step.id)
         end
       end
     end
