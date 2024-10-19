@@ -34,13 +34,13 @@ module Api
         minimalistic = params.fetch(:minimalistic, false) != false
         features = []
 
-        climbing_filter = '1 = 1'
-        climbing_filter = "#{params[:climbing_type]} IS TRUE" unless params.fetch(:climbing_type, 'all') == 'all'
-
         # Crags
         if params.fetch(:crags, 'true') == 'true'
           crags = minimalistic ? @department.crags : @department.crags.includes(photo: { picture_attachment: :blob })
-          crags.where(climbing_filter).find_each do |crag|
+          Climb::CRAG_LIST.each do |climbing_type|
+            crags = crags.where(climbing_type => true) if climbing_type == params[:climbing_type]
+          end
+          crags.find_each do |crag|
             features << crag.to_geo_json(minimalistic: minimalistic)
           end
         end
