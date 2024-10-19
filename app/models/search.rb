@@ -6,30 +6,20 @@ class Search < ApplicationRecord
 
     parameterize_query = Search.normalize_index_name query
 
-    query = if exact_name
-              "`index_name` LIKE '%#{parameterize_query}%'"
-            else
-              Search.ngram_splitter(parameterize_query, 4).map { |word| "`index_name` LIKE '%#{word}%'" }.join(' OR ')
-            end
+    results = Search
+    if exact_name
+      results = results.where('index_name LIKE ?', "%#{parameterize_query}%")
+    else
+      Search.ngram_splitter(parameterize_query, 4).each_with_index do |ngram, index|
+        results = results.where('index_name LIKE ?', "%#{ngram}%") if index.zero?
+        results = results.or(Search.where('index_name LIKE ?', "%#{ngram}%")) if index.positive?
+      end
+    end
 
-    limit_length = if parameterize_query.size <= 2
-                     "CHAR_LENGTH(index_name) <= #{parameterize_query.size}"
-                   else
-                     '1 = 1'
-                   end
+    results = results.where('CHAR_LENGTH(index_name) <= ?', parameterize_query.size) if parameterize_query.size <= 2
+    results = results.where('bucket = :bucket OR secondary_bucket = :bucket', bucket: bucket) if bucket
+    results = results.select(:index_id, :index_name).where(collection: collection)
 
-    results = if bucket
-                Search.select(:index_id, :index_name)
-                      .where(collection: collection)
-                      .where('bucket = :bucket OR secondary_bucket = :bucket', bucket: bucket)
-                      .where(query)
-                      .where(limit_length)
-              else
-                Search.select(:index_id, :index_name)
-                      .where(collection: collection)
-                      .where(query)
-                      .where(limit_length)
-              end
     levenshtein_results = []
     results.each do |result|
       levenshtein_score = Levenshtein.distance(result.index_name, parameterize_query)
@@ -50,11 +40,15 @@ class Search < ApplicationRecord
 
     parameterize_query = Search.normalize_index_name query
 
-    query = Search.ngram_splitter(parameterize_query, 4).map { |word| "`index_name` LIKE '%#{word}%'" }.join(' OR ')
+    results = Search
+    Search.ngram_splitter(parameterize_query, 4).each_with_index do |ngram, index|
+      results = results.where('index_name LIKE ?', "%#{ngram}%") if index.zero?
+      results = results.or(Search.where('index_name LIKE ?', "%#{ngram}%")) if index.positive?
+    end
 
-    results = Search.distinct.select(:index_id, :index_name, :collection).where(query)
-    results = results.where("CHAR_LENGTH(index_name) <= #{parameterize_query.size}") if parameterize_query.size <= 2
+    results = results.where('CHAR_LENGTH(index_name) <= ?', parameterize_query.size) if parameterize_query.size <= 2
     results = results.where(collection: collections) if collections
+    results = results.distinct.select(:index_id, :index_name, :collection)
 
     levenshtein_results = []
     results.each do |result|
