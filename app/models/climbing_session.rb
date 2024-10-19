@@ -8,7 +8,7 @@ class ClimbingSession < ApplicationRecord
   has_many :ascent_crag_routes
 
   def summary_to_json
-    crag_ascents = ascents.select { |ascent| ascent.type == 'AscentCragRoute' }.sort_by { |ascent| -(ascent.max_grade_value || 0) }
+    crag_ascents = ascents.joins(crag_route: :crag).select { |ascent| ascent.type == 'AscentCragRoute' }.sort_by { |ascent| -(ascent.max_grade_value || 0) }
     gym_ascents = ascents.made.select { |ascent| ascent.type == 'AscentGymRoute' }.sort_by { |ascent| -(ascent.max_grade_value || 0) }
 
     crag_ids = []
