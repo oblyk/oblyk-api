@@ -2,6 +2,7 @@
 
 class GymOpeningSheet < ApplicationRecord
   include Archivable
+  include StripTagable
 
   belongs_to :gym
 
