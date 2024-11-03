@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_09_12_184026) do
+ActiveRecord::Schema.define(version: 2024_10_24_175708) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -876,6 +876,18 @@ ActiveRecord::Schema.define(version: 2024_09_12_184026) do
     t.index ["user_id"], name: "index_gym_openers_on_user_id"
   end
 
+  create_table "gym_opening_sheets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.json "row_json"
+    t.integer "number_of_columns"
+    t.datetime "archived_at"
+    t.bigint "gym_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["gym_id"], name: "index_gym_opening_sheets_on_gym_id"
+  end
+
   create_table "gym_options", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "gym_id"
     t.string "option_type"
@@ -1471,6 +1483,7 @@ ActiveRecord::Schema.define(version: 2024_09_12_184026) do
   add_foreign_key "gym_chain_gyms", "gyms"
   add_foreign_key "gym_label_templates", "gyms"
   add_foreign_key "gym_levels", "gyms"
+  add_foreign_key "gym_opening_sheets", "gyms"
   add_foreign_key "gym_options", "gyms"
   add_foreign_key "gym_three_d_assets", "gyms"
   add_foreign_key "gym_three_d_elements", "gym_spaces"

@@ -1,0 +1,4 @@
+### Get route whitout nested space and gyms
+GET {{api_url}}/gyms/229/gym_opening_sheets
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
