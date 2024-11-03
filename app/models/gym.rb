@@ -61,6 +61,7 @@ class Gym < ApplicationRecord
   has_many :gym_chains, through: :gym_chain_gyms
   has_many :gym_three_d_elements
   has_many :gym_levels
+  has_many :gym_opening_sheets
 
   validates :logo, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true

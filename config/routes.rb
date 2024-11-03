@@ -288,7 +288,14 @@ Rails.application.routes.draw do
           put :mount, on: :member
           put :dismount_collection, on: :collection
           put :mount_collection, on: :collection
+          post :opening_sheet_collection, on: :collection
           delete :delete_picture, on: :member
+        end
+        resources :gym_opening_sheets do
+          get :print, on: :member
+          put :update_cells, on: :member
+          put :archived, on: :member
+          put :unarchived, on: :member
         end
         namespace :statistics do
           resources :gym_route_statistics, only: [] do

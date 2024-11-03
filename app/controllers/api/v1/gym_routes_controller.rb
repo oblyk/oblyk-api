@@ -7,8 +7,8 @@ module Api
 
       skip_before_action :protected_by_session, only: %i[show index paginated ascents comments]
       skip_before_action :protected_by_gym_administrator, only: %i[show index paginated ascents comments]
-      before_action :set_gym_space, except: %i[add_picture similar_sectors add_thumbnail dismount mount dismount_collection mount_collection ascents delete_picture comments]
-      before_action :set_gym_sector, except: %i[index show similar_sectors add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents delete_picture comments]
+      before_action :set_gym_space, except: %i[add_picture similar_sectors add_thumbnail dismount mount dismount_collection mount_collection ascents delete_picture comments opening_sheet_collection]
+      before_action :set_gym_sector, except: %i[index show similar_sectors add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents delete_picture comments opening_sheet_collection]
       before_action :set_gym_route, only: %i[show similar_sectors update destroy add_picture add_thumbnail dismount mount ascents delete_picture comments]
       before_action -> { can? GymRole::MANAGE_OPENING }, except: %i[index paginated show similar_sectors ascents comments]
 
@@ -288,6 +288,18 @@ module Api
         head :no_content
       end
 
+      def opening_sheet_collection
+        gym_opening_sheet = GymOpeningSheet.new opening_sheet_params
+        gym_opening_sheet.gym = @gym
+        gym_opening_sheet.build_row_json
+
+        if gym_opening_sheet.save
+          render json: gym_opening_sheet.summary_to_json, status: :ok
+        else
+          render json: { error: gym_opening_sheet.errors }, status: :unprocessable_entity
+        end
+      end
+
       def comments
         comments = []
         @gym_route.comments.each do |comment|
@@ -397,6 +409,15 @@ module Api
       def thumbnail_params
         params.require(:gym_route).permit(
           :thumbnail
+        )
+      end
+
+      def opening_sheet_params
+        params.require(:gym_opening_sheet).permit(
+          :title,
+          :description,
+          :number_of_columns,
+          gym_route_ids: %i[]
         )
       end
     end
