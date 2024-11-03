@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Approach < ApplicationRecord
+  include StripTagable
+
   belongs_to :user, optional: true
   belongs_to :crag
   has_many :reports, as: :reportable

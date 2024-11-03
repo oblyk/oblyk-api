@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ClimbingSession < ApplicationRecord
+  include StripTagable
+
   belongs_to :user
 
   has_many :ascents

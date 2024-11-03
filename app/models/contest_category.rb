@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ContestCategory < ApplicationRecord
+  include StripTagable
+
   U10 = 'u10'
   U12 = 'u12'
   U14 = 'u14'

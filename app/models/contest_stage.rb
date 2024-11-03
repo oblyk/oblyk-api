@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ContestStage < ApplicationRecord
+  include StripTagable
+
   belongs_to :contest
   has_one :gym, through: :contest
   has_many :contest_stage_steps

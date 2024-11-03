@@ -3,6 +3,7 @@
 class GymThreeDAsset < ApplicationRecord
   include Slugable
   include AttachmentResizable
+  include StripTagable
 
   has_one_attached :picture
   has_one_attached :three_d_gltf

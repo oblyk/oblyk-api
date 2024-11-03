@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class GymThreeDElement < ApplicationRecord
+  include StripTagable
+
   belongs_to :gym, optional: true
   belongs_to :gym_space, optional: true
   belongs_to :gym_three_d_asset
