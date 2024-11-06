@@ -46,12 +46,13 @@ module Api
         end
 
         partner_search = params.fetch(:partner_search, nil)
-        if [true, 'true'].include? partner_search
+        if partner_search.to_s == 'true'
           localities = localities.where(users: { partner_search: true })
                                  .where(partner_search: true)
         end
 
         climbing_type = params.fetch(:climbing_type, nil)
+        climbing_type = Climb::ALL_LIST.include?(climbing_type.to_s) ? climbing_type : nil
         localities = localities.where(users: { climbing_type => true }) if climbing_type
 
         localities.page(page)

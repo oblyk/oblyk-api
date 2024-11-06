@@ -11,6 +11,18 @@ class Climb
   PAN = 'pan'
   SPEED_CLIMBING = 'speed_climbing'
 
+  ALL_LIST = [
+    SPORT_CLIMBING,
+    BOULDERING,
+    MULTI_PITCH,
+    TRAD_CLIMBING,
+    AID_CLIMBING,
+    DEEP_WATER,
+    VIA_FERRATA,
+    PAN,
+    SPEED_CLIMBING
+  ].freeze
+
   CRAG_LIST = [
     SPORT_CLIMBING,
     BOULDERING,
