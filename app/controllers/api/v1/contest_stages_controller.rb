@@ -71,6 +71,7 @@ module Api
       def contest_stage_params
         params.require(:contest_stage).permit(
           :climbing_type,
+          :name,
           :description,
           :stage_order,
           :default_ranking_type

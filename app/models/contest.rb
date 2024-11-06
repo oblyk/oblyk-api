@@ -124,6 +124,7 @@ class Contest < ApplicationRecord
             results[cat_key][:participants][participant_key][:stages][stage_key] ||= {
               stage_id: stage.id,
               climbing_type: stage.climbing_type,
+              stage_name: stage.name,
               stage_rank: nil,
               steps: []
             }

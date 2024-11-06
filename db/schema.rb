@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_10_24_175708) do
+ActiveRecord::Schema.define(version: 2024_11_06_195710) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -380,6 +380,7 @@ ActiveRecord::Schema.define(version: 2024_10_24_175708) do
 
   create_table "contest_stages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "climbing_type"
+    t.string "name"
     t.text "description"
     t.integer "stage_order"
     t.string "default_ranking_type"

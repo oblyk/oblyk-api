@@ -26,6 +26,7 @@ class ContestStage < ApplicationRecord
       {
         id: id,
         climbing_type: climbing_type,
+        name: name,
         description: description,
         stage_order: stage_order,
         default_ranking_type: default_ranking_type,

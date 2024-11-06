@@ -156,6 +156,7 @@ class ContestParticipant < ApplicationRecord
       steps << {
         id: step.id,
         name: step.name,
+        stage_name: step.contest_stage.name,
         self_reporting: step.self_reporting,
         climbing_type: step.contest_stage.climbing_type,
         step_order: step.step_order,
