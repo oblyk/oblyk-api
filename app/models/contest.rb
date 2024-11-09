@@ -377,7 +377,8 @@ class Contest < ApplicationRecord
 
       stage = {
         id: contest_stage.id,
-        climbing_type: contest_stage.climbing_type
+        climbing_type: contest_stage.climbing_type,
+        name: contest_stage.name
       }
       stage_step = {
         id: contest_stage_step.id,
