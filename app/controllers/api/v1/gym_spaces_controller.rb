@@ -8,8 +8,8 @@ module Api
       include Gymable
       skip_before_action :protected_by_session, only: %i[show index groups three_d_elements]
       skip_before_action :protected_by_gym_administrator, only: %i[show index groups three_d_elements]
-      before_action :set_gym_space, except: %i[index create groups]
-      before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[index show groups three_d_elements]
+      before_action :set_gym_space, except: %i[index create groups tree_sectors]
+      before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[index show groups three_d_elements tree_sectors]
 
       def index
         gym_spaces = @gym.gym_spaces
@@ -148,6 +148,30 @@ module Api
         else
           render json: { error: @gym_space.errors }, status: :unprocessable_entity
         end
+      end
+
+      def tree_sectors
+        tree = []
+        @gym.gym_spaces.unarchived.includes(:gym_sectors).each do |gym_space|
+          space = {
+            id: gym_space.id,
+            name: gym_space.name,
+            type: 'GymSpace',
+            children: []
+          }
+          gym_space.gym_sectors.each do |gym_sector|
+            routes_last_mounted = gym_sector.gym_routes.mounted.maximum(:created_at)
+            sector = {
+              id: gym_sector.id,
+              name: gym_sector.name,
+              type: 'GymSector',
+              last_opening_date: routes_last_mounted
+            }
+            space[:children] << sector
+          end
+          tree << space
+        end
+        render json: tree, status: :ok
       end
 
       private

@@ -255,6 +255,7 @@ Rails.application.routes.draw do
         end
         resources :gym_spaces do
           get :groups, on: :collection
+          get :tree_sectors, on: :collection
           get :three_d_elements, on: :member
           put :archived, on: :member
           put :unarchived, on: :member

@@ -8,7 +8,7 @@ class GymOpeningSheet < ApplicationRecord
 
   validates :title, :number_of_columns, presence: true
 
-  attr_accessor :gym_space_id, :gym_route_ids
+  attr_accessor :gym_space_id, :gym_route_ids, :gym_sector_ids
 
   def summary_to_json
     {
@@ -46,6 +46,7 @@ class GymOpeningSheet < ApplicationRecord
                          .order(:min_grade_value)
     gym_routes = gym_routes.where(gym_spaces: { id: gym_space_id }) if gym_space_id
     gym_routes = gym_routes.where(id: gym_route_ids) if gym_route_ids
+    gym_routes = gym_routes.where(gym_sector_id: gym_sector_ids) if gym_sector_ids
 
     gym_sectors = if gym_space_id
                     GymSector.joins(:gym_space).where(gym_spaces: { gym_id: gym_id, id: gym_space_id })
@@ -54,6 +55,8 @@ class GymOpeningSheet < ApplicationRecord
                       gym_spaces: { gym_id: gym_id },
                       gym_routes: { id: gym_route_ids }
                     )
+                  elsif gym_sector_ids
+                    GymSector.where(id: gym_sector_ids)
                   else
                     GymSector.joins(:gym_space, :gym_routes).where(gym_spaces: { gym_id: gym_id })
                   end

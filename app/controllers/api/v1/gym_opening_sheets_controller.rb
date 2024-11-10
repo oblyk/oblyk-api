@@ -39,7 +39,7 @@ module Api
       def create
         gym_opening_sheet = GymOpeningSheet.new(gym_opening_sheet_params)
         gym_opening_sheet.gym_id = @gym.id
-        gym_opening_sheet.gym_space_id = params[:gym_opening_sheet].fetch(:gym_space_id, nil)
+        gym_opening_sheet.gym_sector_ids = params[:gym_opening_sheet].fetch(:gym_sector_ids, nil)
         gym_opening_sheet.build_row_json
 
         if gym_opening_sheet.save
