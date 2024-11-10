@@ -61,6 +61,7 @@ module Api
         gym_opening_sheet_cells_params[:cells].each do |cell|
           @gym_opening_sheet.row_json[cell[:rowIndex]]['routes'][cell[:cellIndex]]['grade'] = cell[:grade]
           @gym_opening_sheet.row_json[cell[:rowIndex]]['routes'][cell[:cellIndex]]['hold_color'] = cell[:hold_color]
+          @gym_opening_sheet.row_json[cell[:rowIndex]]['routes'][cell[:cellIndex]]['climbing_styles'] = cell[:climbing_styles] || []
         end
         @gym_opening_sheet.save
         head :no_content
@@ -102,7 +103,13 @@ module Api
 
       def gym_opening_sheet_cells_params
         params.require(:gym_opening_sheet).permit(
-          cells: %i[rowIndex cellIndex grade hold_color]
+          cells: [
+            :rowIndex,
+            :cellIndex,
+            :grade,
+            :hold_color,
+            climbing_styles: []
+          ]
         )
       end
 

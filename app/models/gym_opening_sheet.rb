@@ -74,7 +74,7 @@ class GymOpeningSheet < ApplicationRecord
       number_of_columns.times do
         data[gym_sector.id][:build_routes] << {
           open: { grade: nil, hold_color: nil, text_hold_color: 'inherit', type: 'open' },
-          to_open: { grade: nil, hold_color: nil, text_hold_color: 'inherit', type: 'to_open' },
+          to_open: { grade: nil, hold_color: nil, text_hold_color: 'inherit', type: 'to_open', climbing_styles: [] },
           opened: { grade: nil, hold_color: nil, text_hold_color: 'inherit', type: 'opened' }
         }
       end
