@@ -27,7 +27,7 @@ bundle
 cp config/local_env.example.yml config/local_env.yml
 
 # Up docker
-docker-compose up -d
+docker compose up -d
 
 # Create oblyk_development database
 bundle exec rails db:setup
