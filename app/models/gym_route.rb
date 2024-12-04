@@ -304,8 +304,9 @@ class GymRoute < ApplicationRecord
     Rails.cache.delete("#{cache_key_with_version}/summary_gym_route")
   end
 
-  def all_comments_count
-    (comments_count || 0) + ascent_gym_routes.sum { |ascent| ascent.comments_count || 0 }
+  def refresh_all_comments_count!
+    self.all_comments_count = (comments_count || 0) + AscentGymRoute.where(gym_route_id: id).sum(:comments_count)
+    save
   end
 
   private

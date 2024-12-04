@@ -114,7 +114,7 @@ module Api
                  when 'likes_count'
                    routes.reorder("gym_routes.likes_count #{direction}, gym_routes.id")
                  when 'comments_count'
-                   routes.reorder("gym_routes.comments_count #{direction}, gym_routes.id")
+                   routes.reorder("gym_routes.all_comments_count #{direction}, gym_routes.id")
                  else
                    routes
                  end

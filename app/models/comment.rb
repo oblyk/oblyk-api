@@ -17,7 +17,9 @@ class Comment < ApplicationRecord
   validates :commentable_type, inclusion: { in: %w[Crag CragSector CragRoute GuideBookPaper Area Gym GymRoute Article Comment Ascent].freeze }
 
   after_create :create_notification!
+  after_create :refresh_comments_count!
   after_destroy :destroy_notification!
+  after_destroy :refresh_comments_count!
 
   def summary_to_json
     {
@@ -74,5 +76,11 @@ class Comment < ApplicationRecord
       user: commentable.user
     )
     notification&.destroy
+  end
+
+  def refresh_comments_count!
+    return unless commentable_type == 'GymRoute'
+
+    commentable.refresh_all_comments_count!
   end
 end

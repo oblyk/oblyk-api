@@ -81,6 +81,7 @@ class AscentGymRoute < Ascent
     return unless gym_route
 
     gym_route.update_form_ascents!
+    gym_route.refresh_all_comments_count! if comments_count&.positive?
   end
 
   def set_gym_and_system
