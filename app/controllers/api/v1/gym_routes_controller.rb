@@ -110,11 +110,11 @@ module Api
                  when 'point'
                    routes.reorder("gym_routes.points #{direction}, gym_routes.id")
                  when 'ascents_count'
-                    routes.reorder("gym_routes.ascents_count #{direction}, gym_routes.id")
+                   routes.reorder("gym_routes.ascents_count #{direction}, gym_routes.id")
                  when 'likes_count'
-                    routes.reorder("gym_routes.likes_count #{direction}, gym_routes.id")
+                   routes.reorder("gym_routes.likes_count #{direction}, gym_routes.id")
                  when 'comments_count'
-                    routes.reorder("gym_routes.comments_count #{direction}, gym_routes.id")
+                   routes.reorder("gym_routes.comments_count #{direction}, gym_routes.id")
                  else
                    routes
                  end
