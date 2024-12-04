@@ -245,7 +245,10 @@ class Gym < ApplicationRecord
                          "SUM(coalesce(level_index, 0)) AS 'has_level',
                          SUM(COALESCE(min_grade_value, 0)) AS 'has_grade',
                          SUM(COALESCE(points, 0)) AS 'has_fixed_point',
-                         GROUP_CONCAT(DISTINCT gym_routes.climbing_type) AS 'climbing_types'"
+                         GROUP_CONCAT(DISTINCT gym_routes.climbing_type) AS 'climbing_types',
+                         SUM(COALESCE(ascents_count, 0)) AS 'has_ascents',
+                         SUM(COALESCE(likes_count, 0)) AS 'has_likes',
+                         SUM(COALESCE(comments_count, 0)) AS 'has_comments'"
                        )
                        .joins(gym_sector: :gym_space)
                        .where(gym_sectors: { gym_spaces: { gym_id: id } })
@@ -263,7 +266,10 @@ class Gym < ApplicationRecord
     {
       difficulty_by_level: sorts_by['has_level']&.positive?,
       difficulty_by_grade: sorts_by['has_grade']&.positive?,
-      difficulty_by_point: sorts_by['has_fixed_point']&.positive? || calculated_point_system
+      difficulty_by_point: sorts_by['has_fixed_point']&.positive? || calculated_point_system,
+      ascents_count: sorts_by['has_ascents']&.positive?,
+      likes_count: sorts_by['has_likes']&.positive?,
+      comments_count: sorts_by['has_comments']&.positive?
     }
   end
 
