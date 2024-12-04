@@ -154,7 +154,7 @@ module Api
               gym_route.height,
               gym_route.name,
               gym_route.description,
-              gym_route.gym_openers&.map(&:name).join(', '),
+              gym_route.gym_openers&.map(&:name)&.join(', '),
               gym_route.opened_at,
               gym_route.gym_sector.name,
               gym_route.gym_sector.gym_space.name,
