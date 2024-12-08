@@ -8,32 +8,38 @@ module Api
         before_action :set_user
 
         def figures
-          only_lead_climbs = params.fetch(:only_lead_climbs)
+          only_lead_climbs_param = params.fetch(:only_lead_climbs, 'false')
+          only_lead_climbs = ActiveModel::Type::Boolean.new.cast(only_lead_climbs_param)
           render json: LogBook::Outdoor::Figure.new(@user).figures(only_lead_climbs), status: :ok
         end
-
+        #TODO-now change all param to boolean like au dessus
         def climb_types_chart
-          only_lead_climbs = params.fetch(:only_lead_climbs)
+          only_lead_climbs_param = params.fetch(:only_lead_climbs, 'false')
+          only_lead_climbs = ActiveModel::Type::Boolean.new.cast(only_lead_climbs_param)
           render json: LogBook::Outdoor::Chart.new(@user).climb_type(only_lead_climbs), status: :ok
         end
 
         def grades_chart
-          only_lead_climbs = params.fetch(:only_lead_climbs)
+          only_lead_climbs_param = params.fetch(:only_lead_climbs, 'false')
+          only_lead_climbs = ActiveModel::Type::Boolean.new.cast(only_lead_climbs_param)
           render json: LogBook::Outdoor::Chart.new(@user).grade(only_lead_climbs), status: :ok
         end
 
         def years_chart
-          only_lead_climbs = params.fetch(:only_lead_climbs)
+          only_lead_climbs_param = params.fetch(:only_lead_climbs, 'false')
+          only_lead_climbs = ActiveModel::Type::Boolean.new.cast(only_lead_climbs_param)
           render json: LogBook::Outdoor::Chart.new(@user).years(only_lead_climbs), status: :ok
         end
 
         def months_chart
-          only_lead_climbs = params.fetch(:only_lead_climbs)
+          only_lead_climbs_param = params.fetch(:only_lead_climbs, 'false')
+          only_lead_climbs = ActiveModel::Type::Boolean.new.cast(only_lead_climbs_param)
           render json: LogBook::Outdoor::Chart.new(@user).months(only_lead_climbs), status: :ok
         end
 
         def evolutions_chart
-          only_lead_climbs = params.fetch(:only_lead_climbs)
+          only_lead_climbs_param = params.fetch(:only_lead_climbs, 'false')
+          only_lead_climbs = ActiveModel::Type::Boolean.new.cast(only_lead_climbs_param)
           render json: LogBook::Outdoor::Chart.new(@user).evolution_by_year(only_lead_climbs), status: :ok
         end
 

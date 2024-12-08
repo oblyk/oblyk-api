@@ -10,7 +10,7 @@ module LogBook
       end
 
       def uniq_ascent_crag_routes(only_lead_climbs=false)
-        if only_lead_climbs == "true"
+        if only_lead_climbs
           @user.ascent_crag_routes.made.lead.uniq(&:crag_route_id)
         else
           @user.ascent_crag_routes.made.uniq(&:crag_route_id)

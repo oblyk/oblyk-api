@@ -229,6 +229,9 @@ module Api
         climbing_filters << 'deep_water' if %w[deep_water all].include?(climbing_type_filter)
         climbing_filters << 'via_ferrata' if %w[via_ferrata all].include?(climbing_type_filter)
 
+        only_lead_climbs_param = params.fetch(:only_lead_climbs, 'false')
+        only_lead_climbs = ActiveModel::Type::Boolean.new.cast(only_lead_climbs_param)
+
         ascents = AscentCragRoute.joins(crag_route: :crag)
                                  .includes(
                                    crag_route: {
@@ -239,6 +242,10 @@ module Api
                                  )
                                  .where(user_id: @user.id)
                                  .where(crag_routes: { climbing_type: climbing_filters })
+
+        if only_lead_climbs
+          ascents = ascents.where(roping_status: [:lead_climb, :multi_pitch_leader, :multi_pitch_alternate_lead])
+        end
 
         ascents = case params[:order]
                   when 'crags'

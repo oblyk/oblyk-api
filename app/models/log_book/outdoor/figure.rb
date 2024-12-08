@@ -15,7 +15,8 @@ module LogBook
           regions: regions_count,
           crags: crags_count,
           ascents: ascents_count(only_lead_climbs),
-          meters: sum_meters(only_lead_climbs),
+          meters: 0,      # TODO-now debug et reactiver sum_meters(only_lead_climbs),
+          # TODO-now also debug analytiks avec year mont et evolution
           max_grade_value: max_grad_value(only_lead_climbs)
         }
       end
@@ -23,7 +24,7 @@ module LogBook
       private
 
       def uniq_ascent_crag_routes(only_lead_climbs=false)
-        if only_lead_climbs == "true"
+        if only_lead_climbs
           @user.ascent_crag_routes.made.lead.uniq(&:crag_route_id)
         else
           @user.ascent_crag_routes.made.uniq(&:crag_route_id)
@@ -36,8 +37,14 @@ module LogBook
 
       def sum_meters(only_lead_climbs=false)
         height_climbed = 0
+        # trace for debug
+        #Rails.logger.debug("uniq_ascent_crag_routes(only_lead_climbs): #{uniq_ascent_crag_routes(only_lead_climbs)}")
+        Rails.logger.debug("uniq_ascent_crag_routes(only_lead_climbs).size: #{uniq_ascent_crag_routes(only_lead_climbs).size}")
         uniq_ascent_crag_routes(only_lead_climbs).each do |ascent|
+          Rails.logger.debug("ascent: #{ascent}")
           sections_heights = ascent.sections.map {|section| section['height']}.compact
+          Rails.logger.debug("sections_heights: #{sections_heights}")
+          Rails.logger.debug("ascent.height: #{ascent.height}")
           if sections_heights.size > 0   # si les hauteurs des sections d'une GV ne sont pas renseignées
             height_climbed += sections_heights.sum
           else
