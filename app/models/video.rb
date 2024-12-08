@@ -9,6 +9,8 @@ class Video < ApplicationRecord
   has_many :reports, as: :reportable, dependent: :destroy
   has_many :likes, as: :likeable, dependent: :destroy
 
+  has_one_attached :video_file
+
   delegate :latitude, to: :viewable
   delegate :longitude, to: :viewable
 
@@ -17,44 +19,32 @@ class Video < ApplicationRecord
   delegate :feed_parent_object, to: :viewable
 
   URL_REGEXP = /(youtu\.be|youtube\.com|vimeo\.com|dai\.ly|dailymotion\.com|instagram\.com|tiktok.com)/.freeze
-  VIDEO_SERVICES = %w[youtube vimeo dailymotion instagram tiktok].freeze
+  VIDEO_SERVICES = %w[youtube vimeo dailymotion instagram tiktok oblyk_video].freeze
 
   before_validation :init_embedded_code
 
-  validates :url, :video_service, presence: true
+  validates :video_service, presence: true
   validates :viewable_type, inclusion: { in: %w[Crag CragRoute Gym GymRoute].freeze }
   validates :video_service, inclusion: { in: VIDEO_SERVICES }
-  validates :url, format: { with: URL_REGEXP }
+  validates :url, format: { with: URL_REGEXP }, if: proc { |obj| obj.video_service != 'oblyk_video' }
+
+  validates :video_file, blob: { content_type: :video }, allow_blank: true
 
   def valid_url?
     url.match? URL_REGEXP
   end
 
-  def iframe
-    return unless url_for_iframe
+  def video_file_path
+    return nil unless video_service == 'oblyk_video'
 
-    "<iframe src='#{url_for_iframe}' width='100%' height='250px' frameborder='0' />"
-  end
+    if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
+      # Use CLOUDFLARE R2 CDN
+      "#{ENV['CLOUDFLARE_R2_DOMAIN']}/#{video_file.attachment.key}"
 
-  def url_for_iframe
-    iframe_url = nil
-
-    case url
-    when /(youtube\.com|youtu\.be)/
-      video_query = if Addressable::URI.parse(url).query_values.try(:[], 'v')
-                      Addressable::URI.parse(url).query_values['v']
-                    else
-                      Addressable::URI.parse(url).path.split('/').last
-                    end
-      iframe_url = "https://www.youtube.com/embed/#{video_query}"
-    when /vimeo\.com/
-      video_query = Addressable::URI.parse(url).path.split('/').last
-      iframe_url = "https://player.vimeo.com/video/#{video_query}"
-    when /(dai\.ly|dailymotion\.com)/
-      video_query = Addressable::URI.parse(url).path.split('/').last
-      iframe_url = "https://www.dailymotion.com/embed/video//#{video_query}"
+    else
+      # Use local active storage
+      "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.rails_blob_path(video_file, only_path: true)}"
     end
-    iframe_url
   end
 
   def summary_to_json
@@ -73,6 +63,10 @@ class Video < ApplicationRecord
       embedded_code: embedded_code,
       video_service: video_service,
       creator: user&.summary_to_json(with_avatar: true),
+      oblyk_video: {
+        path: video_file_path,
+        content_type: video_service == 'oblyk_video' ? video_file.content_type : nil
+      },
       history: {
         created_at: created_at,
         updated_at: updated_at
@@ -81,8 +75,6 @@ class Video < ApplicationRecord
   end
 
   def init_embedded_code
-    return unless url_changed?
-
     embedded_code_service
   end
 
@@ -94,6 +86,11 @@ class Video < ApplicationRecord
   private
 
   def embedded_code_service
+    if url.blank?
+      self.video_service = 'oblyk_video'
+      return true
+    end
+
     self.video_service = case url
                          when /(youtube\.com|youtu\.be)/
                            'youtube'

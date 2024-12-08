@@ -70,6 +70,7 @@ module Api
         params.require(:video).permit(
           :viewable_type,
           :viewable_id,
+          :video_file,
           :name,
           :url,
           :description
