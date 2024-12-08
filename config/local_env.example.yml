@@ -54,6 +54,23 @@ ENABLE_BULLET: 'false'
 GCS_PROJECT: 'my-google-cloud-storage'
 GCS_BUCKET: 'my-google-cloud-bucket'
 
+# Cloudflare R2 storage
+CLOUDFLARE_R2_END_POINT: 'https://<account_id>.r2.cloudflarestorage.com'
+CLOUDFLARE_R2_ACCOUNT_ID: 'account_id'
+CLOUDFLARE_R2_ACCESS_KEY_ID: 'access_key_id'
+CLOUDFLARE_R2_SECRET_ACCESS_KEY: 'secret_access_key'
+CLOUDFLARE_R2_BUCKET: 'bucket'
+CLOUDFLARE_R2_DOMAIN: 'https://storage.exemple.com'
+
 # Mapbox
 MAPBOX_TOKEN: 'mapbox-token'
 MAPBOX_STATIC_MAP_STYLE: 'mapbox-style-for-static-image'
+
+# GYM
+ACTIVE_CONTEST_BROADCAST: 'true'
+
+# Iframely api ket token for get embed code
+IFRAMELY_API_KEY: 'my-api-key'
+
+# NPM EXECUTABLE PATH
+NPM_BIN_PATH: '/usr/local/bin'

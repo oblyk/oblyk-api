@@ -7,7 +7,7 @@ class GymRoute < ApplicationRecord
   has_one_attached :thumbnail
   belongs_to :gym_route_cover, optional: true
   belongs_to :gym_sector, optional: true
-  belongs_to :gym_grade_line, optional: true
+  belongs_to :gym_grade_line, optional: true # TODO : DELETE AFTER MIGRATION
   has_one :gym_space, through: :gym_sector
   has_one :gym, through: :gym_sector
   has_many :videos, as: :viewable
@@ -15,13 +15,14 @@ class GymRoute < ApplicationRecord
   has_many :gym_route_openers
   has_many :gym_openers, through: :gym_route_openers
   has_many :likes, as: :likeable
+  has_many :contest_routes
+  has_many :comments, as: :commentable
 
   delegate :feed_parent_id, to: :gym
   delegate :feed_parent_type, to: :gym
   delegate :feed_parent_object, to: :gym
 
   validates :opened_at, presence: true
-  validates :gym_grade_line, presence: true, if: proc { |obj| obj.gym_sector.gym_grade.need_grade_line? }
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }
   validates :height, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
   validates :anchor_number, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
@@ -31,28 +32,52 @@ class GymRoute < ApplicationRecord
 
   before_validation :format_route_section
   before_validation :normalize_blank_values
+  before_validation :historize_level_information
   before_save :historize_grade_gap
   before_save :historize_sections_count
+  after_update :delete_contest_route_cache
 
   scope :dismounted, -> { where.not(dismounted_at: nil) }
   scope :mounted, -> { where(dismounted_at: nil) }
 
   accepts_nested_attributes_for :gym_route_cover
+  attr_accessor :qrcode
 
+  # TODO: DELETE AFTER MIGRATION
+  def gym_grade_line
+    GymGradeLine.unscoped { super }
+  end
+
+  # TODO: DELETE AFTER MIGRATION
   def gym_grade
     gym_grade_line&.gym_grade || gym_sector.gym_grade
   end
 
-  def calculated_point
-    case gym_grade.point_system_type
-    when 'fix'
-      points
-    when 'divisible'
-      ascents_count = self.ascents_count&.positive? ? self.ascents_count : 1
-      1000 / ascents_count
+  def calculated_point(for_gym = nil)
+    if points
+      point = points
     else
-      nil
+      gym = for_gym.presence || self.gym
+      point_system = case climbing_type
+                     when 'sport_climbing'
+                       gym.sport_climbing_ranking
+                     when 'bouldering'
+                       # binding.pry if gym_sector.blank?
+                       gym.boulder_ranking
+                     else
+                       gym.pan_ranking
+                     end
+      point = case point_system
+              when 'division'
+                ascents_count = self.ascents_count&.positive? ? self.ascents_count : 1
+                1000 / ascents_count
+              when 'point_by_grade'
+                min_grade_value ? (2000 * 0.85**(49 - min_grade_value)).round : 0
+              else
+                points
+              end
     end
+    point
   end
 
   def points_to_s
@@ -60,7 +85,7 @@ class GymRoute < ApplicationRecord
   end
 
   def grade_to_s
-    return '' unless gym_grade.difficulty_by_grade?
+    return '' unless grade_system
 
     if sections_count > 1
       sections_array = []
@@ -87,6 +112,10 @@ class GymRoute < ApplicationRecord
       styles += section.try(:[], 'styles') || []
     end
     styles
+  end
+
+  def grade_system
+    gym.gym_levels.find_by(climbing_type: climbing_type)&.grade_system
   end
 
   def mounted?
@@ -136,12 +165,16 @@ class GymRoute < ApplicationRecord
     hardness_count = nil
     hardness_value = nil
     hardness_votes = nil
+    user_ids = []
 
-    ascent_gym_routes.each do |ascent|
-      if ascent.ascent_status != 'project'
-        ascent_count ||= 0
-        ascent_count += 1
-      end
+    ascent_gym_routes.select(:hardness_status, :ascent_status, :user_id).each do |ascent|
+      next if %w[project repetition].include? ascent.ascent_status
+      next if user_ids.include? ascent.user_id
+
+      user_ids << ascent.user_id
+
+      ascent_count ||= 0
+      ascent_count += 1
 
       next if ascent.hardness_status.blank?
 
@@ -155,13 +188,38 @@ class GymRoute < ApplicationRecord
       hardness_votes[ascent.hardness_status][:count] += 1
     end
 
-    self.note_count = note_count
     self.ascents_count = ascent_count
     self.difficulty_appreciation = hardness_value ? hardness_value.to_d / hardness_count : nil
     self.votes = {
       difficulty_appreciations: hardness_votes
     }
     save
+  end
+
+  def tree_summary
+    Rails.cache.fetch("#{cache_key_with_version}/tree_summary_gym_route", expires_in: 28.days) do
+      {
+        id: id,
+        name: name,
+        hold_colors: hold_colors,
+        tag_colors: tag_colors,
+        sections: sections,
+        sections_count: sections_count,
+        points: points,
+        points_to_s: points_to_s,
+        grade_to_s: grade_to_s,
+        thumbnail: thumbnail.attached? ? thumbnail_url : nil,
+        anchor_number: anchor_number,
+        gym_id: gym.id,
+        gym_space_id: gym_space.id,
+        grade_gap: {
+          max_grade_value: max_grade_value,
+          min_grade_value: min_grade_value,
+          max_grade_text: max_grade_text,
+          min_grade_text: min_grade_text
+        }
+      }
+    end
   end
 
   def summary_to_json
@@ -187,8 +245,10 @@ class GymRoute < ApplicationRecord
         sections_count: sections_count,
         likes_count: likes_count&.positive? ? likes_count : nil,
         gym_sector_id: gym_sector_id,
-        gym_grade_line_id: gym_grade_line_id,
         points: points,
+        level_index: level_index,
+        level_length: level_length,
+        level_color: level_color,
         dismounted: dismounted?,
         points_to_s: points_to_s,
         grade_to_s: grade_to_s,
@@ -196,6 +256,15 @@ class GymRoute < ApplicationRecord
         gym_route_cover_id: gym_route_cover_id,
         gym_sector_name: gym_sector.name,
         anchor_number: anchor_number,
+        short_app_path: short_app_path,
+        picture: gym_route_cover ? picture_large_url : nil,
+        thumbnail_position: thumbnail_position,
+        calculated_thumbnail_position: calculated_thumbnail_position,
+        cover_metadata: gym_route_cover&.picture ? gym_route_cover.picture.metadata : nil,
+        votes: votes,
+        updated_at: updated_at,
+        all_comments_count: all_comments_count,
+        videos_count: videos_count,
         grade_gap: {
           max_grade_value: max_grade_value,
           min_grade_value: min_grade_value,
@@ -222,12 +291,7 @@ class GymRoute < ApplicationRecord
   def detail_to_json
     summary_to_json.merge(
       {
-        picture: gym_route_cover ? picture_large_url : nil,
-        video_count: videos.count,
         gym_sector: gym_sector.summary_to_json,
-        thumbnail_position: thumbnail_position,
-        calculated_thumbnail_position: calculated_thumbnail_position,
-        votes: votes,
         history: {
           created_at: created_at,
           updated_at: updated_at
@@ -236,8 +300,13 @@ class GymRoute < ApplicationRecord
     )
   end
 
-  def remove_cache!
+  def delete_summary_cache
     Rails.cache.delete("#{cache_key_with_version}/summary_gym_route")
+  end
+
+  def refresh_all_comments_count!
+    self.all_comments_count = (comments_count || 0) + AscentGymRoute.where(gym_route_id: id).sum(:comments_count)
+    save
   end
 
   private
@@ -252,11 +321,12 @@ class GymRoute < ApplicationRecord
 
     sections.each do |section|
       section_height = section['height'].present? ? Integer(section['height']) : nil
+      grade = Grade.clean_grade(section['grade'])
       new_sections << {
         climbing_type: single_pitch ? climbing_type : section['climbing_type'] || climbing_type,
         description: !single_pitch ? section['description'] : nil,
-        grade: Grade.clean_grade(section['grade']),
-        grade_value: Grade.to_value(section['grade']),
+        grade: grade,
+        grade_value: grade.present? ? Grade.to_value(grade) : nil,
         height: single_pitch ? height : section_height,
         points: single_pitch ? points : section['points'],
         styles: section['styles']
@@ -301,6 +371,20 @@ class GymRoute < ApplicationRecord
     end
   end
 
+  def historize_level_information
+    return unless level_index_changed?
+
+    if level_index
+      gym_level = gym.gym_levels.find_by(climbing_type: climbing_type)
+      level = gym_level.levels[level_index]
+      self.level_length = gym_level.levels.count
+      self.level_color = level['color']
+    else
+      self.level_length = nil
+      self.level_color = nil
+    end
+  end
+
   def gradiant(colors, fluid: true)
     number_of_color = colors.size
     gradiant = []
@@ -334,5 +418,9 @@ class GymRoute < ApplicationRecord
       delta_y: (tp[:img_h].to_d / 2 - tp[:thb_y].to_d) / tp[:img_h].to_d * 100,
       delta_x: (tp[:img_w].to_d / 2 - tp[:thb_x].to_d) / tp[:img_w].to_d * 100
     }
+  end
+
+  def delete_contest_route_cache
+    contest_routes.each(&:delete_summary_cache)
   end
 end

@@ -1,0 +1,27 @@
+### Get all contests
+GET {{api_url}}/contests/opens.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
+### Get contest time line
+GET {{api_url}}/gyms/229/contests/1/time_line.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### Get participant by token
+GET {{api_url}}/gyms/229/contests/1/contest_participants/lucien-iyv/participant.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### Get results
+GET {{api_url}}/gyms/229/contests/4/results.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
+### Export participant
+GET {{api_url}}/gyms/229/contests/4/contest_participants/export.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json

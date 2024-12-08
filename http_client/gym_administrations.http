@@ -1,0 +1,11 @@
+### GET assigned gyms
+GET {{api_url}}/gym_administrations/assigned.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET requested gyms
+GET {{api_url}}/gym_administrations/requested.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json

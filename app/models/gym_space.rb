@@ -2,18 +2,21 @@
 
 class GymSpace < ApplicationRecord
   include SoftDeletable
-  include Publishable
   include Slugable
   include AttachmentResizable
   include StripTagable
+  include Archivable
 
   has_one_attached :banner
   has_one_attached :plan
+  has_one_attached :three_d_picture
+  has_one_attached :three_d_gltf
   belongs_to :gym
-  belongs_to :gym_grade
+  belongs_to :gym_grade, optional: true # TODO: DELETE AFTER MIGRATION
   belongs_to :gym_space_group, optional: true
   has_many :gym_sectors
   has_many :gym_routes, through: :gym_sectors
+  has_many :gym_three_d_elements
 
   default_scope { order(:order) }
 
@@ -22,8 +25,19 @@ class GymSpace < ApplicationRecord
 
   validates :banner, blob: { content_type: :image }, allow_nil: true
   validates :plan, blob: { content_type: :image }, allow_nil: true
+  validates :three_d_picture, blob: { content_type: :image }, allow_nil: true
 
+  validates :three_d_gltf, blob: { content_type: 'model/gltf+json' }, allow_nil: true
+
+  after_create :delete_gym_cache
   after_save :remove_routes_cache
+  after_update :remove_sectors_cache
+  after_destroy :delete_gym_cache
+
+  # TODO: DELETE AFTER MIGRATION
+  def gym_grade
+    GymGrade.unscoped { super }
+  end
 
   def set_plan_dimension!
     return unless plan.attached?
@@ -36,11 +50,27 @@ class GymSpace < ApplicationRecord
   end
 
   def plan_large_url
-    resize_attachment plan, '4000x4000'
+    resize_to_limit_attachment plan, [4000, 4000]
   end
 
   def plan_thumbnail_url
     resize_attachment plan, '500x500'
+  end
+
+  def plan_tiny_thumbnail_url
+    resize_attachment plan, '100x100'
+  end
+
+  def three_d_picture_url
+    resize_to_limit_attachment three_d_picture, [1000, 1000]
+  end
+
+  def three_d_picture_thumbnail_url
+    resize_to_limit_attachment three_d_picture, [500, 500]
+  end
+
+  def three_d_picture_tiny_thumbnail_url
+    resize_to_limit_attachment three_d_picture, [100, 100]
   end
 
   def banner_large_url
@@ -55,7 +85,6 @@ class GymSpace < ApplicationRecord
     data = Rails.cache.fetch("#{cache_key_with_version}/summary_gym_space", expires_in: 28.days) do
       {
         id: id,
-        gym_grade_id: gym_grade_id,
         name: name,
         slug_name: slug_name,
         description: description,
@@ -64,11 +93,22 @@ class GymSpace < ApplicationRecord
         scheme_height: scheme_height,
         scheme_width: scheme_width,
         sectors_color: sectors_color,
+        text_contrast_color: Color.black_or_white_rgb(sectors_color || 'rgb(49,153,78)'),
         banner: banner.attached? ? banner_large_url : nil,
         plan: plan.attached? ? plan_large_url : nil,
         plan_thumbnail_url: plan.attached? ? plan_thumbnail_url : nil,
+        plan_tiny_thumbnail_url: plan.attached? ? plan_tiny_thumbnail_url : nil,
+        three_d_picture_url: three_d_picture_url,
+        three_d_picture_thumbnail_url: three_d_picture_thumbnail_url,
+        three_d_picture_tiny_thumbnail_url: three_d_picture_tiny_thumbnail_url,
         gym_space_group_id: gym_space_group_id,
         anchor: anchor,
+        draft: draft,
+        archived_at: archived_at,
+        have_three_d: three_d?,
+        representation_type: representation_type,
+        three_d_parameters: three_d_parameters,
+        three_d_label_options: three_d_label_options,
         gym: {
           id: gym.id,
           name: gym.name,
@@ -92,9 +132,19 @@ class GymSpace < ApplicationRecord
       {
         gym_sectors: gym_sectors.map(&:summary_to_json),
         sorts_available: sorts_available,
-        last_sector_order: gym_sectors.order(:order).last&.order
+        last_sector_order: gym_sectors.order(:order).last&.order,
+        three_d_gltf_url: three_d_gltf_url,
+        three_d_parameters: three_d_parameters,
+        three_d_position: three_d_position,
+        three_d_rotation: three_d_rotation,
+        three_d_scale: three_d_scale,
+        three_d_camera_position: three_d_camera_position
       }
     )
+  end
+
+  def three_d?
+    three_d_gltf.attached?
   end
 
   def destroy
@@ -106,26 +156,67 @@ class GymSpace < ApplicationRecord
     end
   end
 
+  def delete_summary_cache
+    Rails.cache.delete("#{cache_key_with_version}/summary_gym_space")
+  end
+
+  def three_d_gltf_url
+    return nil unless three_d_gltf.attached?
+
+    if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
+      "#{ENV['CLOUDFLARE_R2_DOMAIN']}/#{three_d_gltf.attachment.key}"
+    else
+      "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.polymorphic_url(three_d_gltf.attachment, only_path: true)}"
+    end
+  end
+
   private
 
   def sorts_available
-    sorts = GymGrade.select("SUM(difficulty_by_level) AS sortable_by_level, SUM(difficulty_by_grade) AS sortable_by_grade, SUM(IF(point_system_type != 'none', 1, 0)) AS sortable_by_point")
-                    .joins(gym_sectors: :gym_routes)
-                    .where(gym_sectors: { gym_space: self })
-                    .where(gym_routes: { dismounted_at: nil })
-    sorts = sorts.first
+    sorts_by = GymRoute.mounted
+                       .select(
+                         "SUM(coalesce(level_index, 0)) AS 'has_level',
+                         SUM(COALESCE(min_grade_value, 0)) AS 'has_grade',
+                         SUM(COALESCE(points, 0)) AS 'has_fixed_point',
+                         GROUP_CONCAT(DISTINCT gym_routes.climbing_type) AS 'climbing_types',
+                         SUM(COALESCE(ascents_count, 0)) AS 'has_ascents',
+                         SUM(COALESCE(likes_count, 0)) AS 'has_likes',
+                         SUM(COALESCE(comments_count, 0)) AS 'has_comments'"
+                       )
+                       .joins(:gym_sector)
+                       .where(gym_sectors: { gym_space_id: id })
+    calculated_point_system = false
+    sorts_by = sorts_by&.first
+    if sorts_by['has_fixed_point']&.zero?
+      climbing_types = sorts_by['climbing_types'].split(',')
+      climbing_types.each do |climbing_type|
+        calculated_point_system = true if %w[division point_by_grade].include?(gym.sport_climbing_ranking) && climbing_type == 'sport_climbing'
+        calculated_point_system = true if %w[division point_by_grade].include?(gym.pan_ranking) && climbing_type == 'pan'
+        calculated_point_system = true if %w[division point_by_grade].include?(gym.boulder_ranking) && climbing_type == 'boulder'
+      end
+    end
+
     {
-      difficulty_by_level: sorts[:sortable_by_level]&.positive?,
-      difficulty_by_grade: sorts[:sortable_by_grade]&.positive?,
-      difficulty_by_point: sorts[:sortable_by_point]&.positive?
+      difficulty_by_level: sorts_by['has_level']&.positive?,
+      difficulty_by_grade: sorts_by['has_grade']&.positive?,
+      difficulty_by_point: sorts_by['has_fixed_point']&.positive? || calculated_point_system,
+      ascents_count: sorts_by['has_ascents']&.positive?,
+      likes_count: sorts_by['has_likes']&.positive?,
+      comments_count: sorts_by['has_comments']&.positive?
     }
   end
 
   def remove_routes_cache
     return unless saved_change_to_name?
 
-    gym_routes.find_each do |gym_route|
-      Rails.cache.delete("#{gym_route.cache_key_with_version}/summary_gym_route")
-    end
+    gym_routes.find_each(&:delete_summary_cache)
+  end
+
+  def remove_sectors_cache
+    gym_sectors.find_each(&:delete_summary_cache)
+  end
+
+  def delete_gym_cache
+    gym.delete_summary_cache
   end
 end

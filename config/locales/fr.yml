@@ -5,35 +5,38 @@ fr:
     welcome:
       subject: "Bienvenue %{name}"
       title: "Bienvenue %{name} !"
-      happy_to_see_you: "Nous sommes heureux de te compter parmi nous :)"
-      take_a_tour: "Ton inscription a pu être motivée par différente raison, que cherche-tu à faire sur Oblyk :"
-      for_crag: "Tu es ici pour trouver des <strong>infos sur les falaises</strong> de France et du monde ? alors la <a href='%{url}'>carte des falaises</a> est un bon point de départ."
-      for_partner: "Tu cherches un <strong>partenaire de grimpe</strong> ? on t'explique comme on a pensé ça <a href='%{explain_url}'>ici</a>, ensuite c'est sûr <a href='%{map_url}'>la carte des grimpeurs</a> que ça se passe."
-      for_ascents_log: "Tu veux <strong>tenire un carnet de croix</strong> et suivre ta progression ?<br>
-                        Alors rends-toi sur les falaises où tu as grimpé (<a href='%{cuvier_url}'>Bas Cuvier</a> ? <a href='%{buoux_url}'>Buoux</a> ? <a href='%{cimai_url}'>Cimaï</a> ?) et coche tes croix<br>
-                        Tu trouvera ensuite quelques <a href='%{chart_url}'>graphiques</a> sympa sur ton dashboard."
+      happy_to_see_you: "Nous sommes heureux de te compter parmi nous 🤗"
+      take_a_tour: "Ton inscription a pu être motivée par différentes raisons, que cherches-tu à faire sur Oblyk ?"
+      for_crag: "⛰ Tu es ici pour trouver des <strong>informations sur les falaises</strong> de France et du monde ? Alors la <a href='%{url}'>carte des falaises</a> est un bon point de départ."
+      for_partner: "🧗 Tu cherches un·e <strong>partenaire de grimpe</strong> ? Nous t'expliquons comment nous avons pensé ça <a href='%{explain_url}'>ici</a>, ensuite c'est sur <a href='%{map_url}'>la carte des grimpeurs</a> que ça se passe."
+      for_ascents_log: "✅ Tu veux <strong>tenir un carnet de croix</strong> et suivre ta progression ?<br>
+                        Rends-toi sur les falaises où tu as grimpé (<a href='%{cuvier_url}'>Bas Cuvier</a> ? <a href='%{buoux_url}'>Buoux</a> ? <a href='%{cimai_url}'>Cimaï</a> ?) et coche tes croix.<br>
+                        Tu trouveras ensuite quelques <a href='%{chart_url}'>graphiques</a> sympas sur ton tableau de bord 😏"
+      indoor: "🔩 Tu es ouvreur, ouvreuse, ou gestionnaire d'un club ou salle d'escalade ?<br>
+               Oblyk c'est aussi une incroyable <strong>boîte à outils pour ta salle</strong> : crée le <strong>topo interactif</strong> de ta salle, <strong>analyse</strong> tes ouvertures, <strong>anime</strong> ta communauté, crée des <strong>contests</strong> comme un pro, imprime en un clic les <strong>étiquettes de pied</strong> de voie, et bien plus encore !<br>
+               Fais un tour sur la page de présentation <a href='%{indoor_url}'>d'Oblyk Indoor.</a>"
       discover_the_rest: "On te laisse découvrir le reste !"
-      help: "Si tu cherche de l'aide, tu en trouvera <a href='%{help_url}'>ici</a>, tu peux aussi nous contacter à cette adresse : <a href='mailto:ekip@oblyk.org'>ekip@oblyk.org</a>"
+      help: "Si tu cherches de l'aide, tu en trouveras <a href='%{help_url}'>ici</a>. Tu peux aussi nous contacter à cette adresse : <a href='mailto:ekip@oblyk.org'>ekip@oblyk.org</a>"
       see_you_later: "À bientôt et bonne grimpe !"
     reset_password:
       subject: "Mot de passe oublié"
       new_password_request: "Vous avez demandé un nouveau mot de passe."
       follow_link: "Merci de suivre ce lien et de renseigner votre nouveau mot de passe :"
-      link_expiry: "(Ce lien à une durée de vie limitée, s'il ne fonction plus, faite une nouvelle demande de mot de passe.)"
+      link_expiry: "(Ce lien a une durée de vie limitée, s'il ne fonctionne plus, merci de faire une nouvelle demande de mot de passe.)"
     notification:
       hello: "Bonjour %{name}"
       new_message:
         title: "Vous avez un nouveau message"
-        body: "Vous avez des nouveaux messages non lu sur votre messagerie oblyk"
+        body: "Vous avez des nouveaux messages non lus sur votre messagerie Oblyk"
         for_see_messenger: "Pour vous rendre sur votre messagerie, visitez ce lien :"
         check_my_message: "Voir ma messagerie"
       request_for_follow_up:
-        title: "%{name} souhaite à vous suivre"
+        title: "%{name} souhaite vous suivre"
         body: "%{name} souhaite vous suivre, rendez vous sur la page de vos abonné·e·s pour accepter ou refuser sa demande"
         for_see_subscribe_page: "Pour gérer vos abonné·e·s, rendez-vous ici :"
         subscribe_page: "Gérer mes abonné·e·s"
       new_article:
-        title: "Un nouvel article a était publié"
+        title: "Un nouvel article a été publié"
         for_read_more: "Pour lire la suite, rendez-vous ici :"
         read_more: "Lire la suite"
     gym:
@@ -153,17 +156,17 @@ fr:
         start_type: "Départ"
         difficulty_appreciation: ""
         note: "Note"
-        note_count: "Nombre de note"
-        ascents_count: "Nombre d'ascension"
-        sections_count: "Nombre de longueur"
+        note_count: "Nombre de notes"
+        ascents_count: "Nombre d'ascensions"
+        sections_count: "Nombre de longueurs"
         max_grade_value: "Cotation max"
         min_grade_value: "Cotation min"
         max_grade_text: "Cotation max"
         min_grade_text: "Cotation min"
-        max_bolt: "Nombre de degaine"
+        max_bolt: "Nombre de dégaines"
         crag_id: "Falaise"
         crag_sector_id: "Secteur"
-        user_id: "Créateur"
+        user_id: "Créateur·ice"
       user:
         first_name: "Prénom"
         last_name: "Nom"

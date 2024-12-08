@@ -7,8 +7,12 @@ module Api
 
       def search
         query = params[:query].parameterize
-        like_ngram = Search.ngram_splitter(query, 4).map { |word| "`slug_name` LIKE '%#{word}%'" }.join(' OR ')
-        towns = Town.includes(department: :country).where(like_ngram)
+        towns = Town
+        Search.ngram_splitter(query, 4).each_with_index do |word, index|
+          towns = towns.where('slug_name LIKE ?', "%#{word}%") if index.zero?
+          towns = towns.or(Town.where('slug_name LIKE ?', "%#{word}%")) if index.positive?
+        end
+        towns = towns.includes(department: :country)
 
         levenshtein_results = []
         towns.each do |town|

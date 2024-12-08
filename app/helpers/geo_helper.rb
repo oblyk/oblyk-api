@@ -59,4 +59,17 @@ module GeoHelper
       longitude_max: GeoHelper.rad2deg(lng_max)
     }
   end
+
+  def self.point_central(coordinates)
+    n = coordinates.length
+
+    sum_lat = coordinates.map { |coord| coord[0] }.sum
+    sum_long = coordinates.map { |coord| coord[1] }.sum
+
+    # Calcul des moyennes
+    avg_lat = sum_lat / n.to_f
+    avg_long = sum_long / n.to_f
+
+    [avg_lat, avg_long]
+  end
 end

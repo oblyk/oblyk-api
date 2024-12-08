@@ -1,0 +1,34 @@
+<%
+  contest = @contest_participant.contest
+  contest_path = "#{contest.public_app_path}?token=#{@contest_participant.token}"
+%>
+<h1 style="font-size: 16px">
+  Bonjour <%= @contest_participant.first_name %>,
+</h1>
+<p>
+  Votre inscription au contest : <strong><%= contest.name %></strong> a bien été prise en compte 🥳 !
+</p>
+<p>
+  Pour retrouver <strong>les informations</strong> et le <strong>programme du contest</strong>, mais aussi <strong>renseigner vos réalisations</strong> ou <strong>suivre votre classement</strong>, cliquez sur le lien ci-dessous :
+</p>
+<p style="text-align: center">
+  <a
+    href="<%= contest_path %>"
+    style="background-color: #31994e; color: white; padding: 7px 12px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold"
+  >
+    MON CONTEST
+  </a>
+</p>
+<p>
+  À bientôt !<br>
+  <%= contest.gym.name.titleize %>
+</p>
+
+<div style="font-size: 0.8em; opacity: 0.8; border-top-style: solid; border-top-color: rgb(220, 220, 220); border-top-width: 1px; padding-top: 5px; margin-top: 25px">
+  <p>
+    Si le lien ci-dessus de fonction pas, copier-coller ce lien : <a href="<%= contest_path %>"><%= contest_path %></a> dans un navigateur.
+  </p>
+  <p>
+    Ce contest a été créé sur <a href="<%= ENV['OBLYK_APP_URL'] %>">Oblyk.org</a> : site collaboratif open source dédié à l'escalade outdoor et indoor.
+  </p>
+</div>

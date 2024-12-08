@@ -9,6 +9,7 @@ class Gym < ApplicationRecord
   include ActivityFeedable
   include AttachmentResizable
   include StripTagable
+  include Emailable
 
   has_paper_trail only: %i[
     name
@@ -32,6 +33,8 @@ class Gym < ApplicationRecord
     longitude
   ], if: proc { |_obj| ENV['PAPER_TRAIL'] == 'true' }
 
+  RANKING_TYPES = %w[division fixed_points point_by_grade].freeze
+
   has_one_attached :logo
   has_one_attached :banner
   belongs_to :user, optional: true
@@ -41,20 +44,36 @@ class Gym < ApplicationRecord
   has_many :comments, as: :commentable
   has_many :feeds, as: :feedable
   has_many :gym_administrators
-  has_many :gym_grades
+  has_many :gym_administration_requests
+  has_many :gym_grades # TODO : DELETE AFTER MIGRATION
   has_many :gym_spaces
   has_many :gym_space_groups
   has_many :reports, as: :reportable
+  has_many :ascents
   has_many :gym_sectors, through: :gym_spaces
   has_many :gym_routes, through: :gym_sectors
   has_many :gym_openers
   has_many :gym_climbing_styles
+  has_many :contests
+  has_many :gym_options
+  has_many :gym_label_templates
+  has_many :gym_chain_gyms
+  has_many :gym_chains, through: :gym_chain_gyms
+  has_many :gym_three_d_elements
+  has_many :gym_levels
+  has_many :gym_opening_sheets
 
   validates :logo, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true
   validates :name, :latitude, :longitude, :address, :country, :city, :big_city, presence: true
+  validates :boulder_ranking, :sport_climbing_ranking, :pan_ranking, inclusion: { in: RANKING_TYPES }, allow_nil: true
 
   after_save :historize_around_towns
+  after_save :delete_routes_caches
+
+  def all_championships
+    Championship.where('gym_id = :gym_id OR id IN (SELECT championship_id FROM championship_contests INNER JOIN contests ON championship_contests.contest_id = contests.id WHERE gym_id = :gym_id)', gym_id: id)
+  end
 
   def location
     [latitude, longitude]
@@ -97,8 +116,16 @@ class Gym < ApplicationRecord
   end
 
   def administered!
+    self.boulder_ranking ||= 'division'
+    self.sport_climbing_ranking ||= 'point_by_grade'
+    self.pan_ranking ||= 'division'
     self.assigned_at ||= Time.current
+    init_gym_levels
     save
+  end
+
+  def admin_app_path
+    "#{ENV['OBLYK_APP_URL']}/gyms/#{id}/#{slug_name}/admins"
   end
 
   def climbing_key
@@ -133,6 +160,10 @@ class Gym < ApplicationRecord
     gym_spaces.where(anchor: true).count.positive?
   end
 
+  def ranking?
+    boulder_ranking.present? || sport_climbing_ranking.present? || pan_ranking.present?
+  end
+
   def summary_to_json
     Rails.cache.fetch("#{cache_key_with_version}/summary_gym", expires_in: 28.days) do
       {
@@ -157,11 +188,19 @@ class Gym < ApplicationRecord
         pan: pan,
         fun_climbing: fun_climbing,
         training_space: training_space,
+        boulder_ranking: boulder_ranking,
+        pan_ranking: pan_ranking,
+        sport_climbing_ranking: sport_climbing_ranking,
         administered: administered?,
+        gym_options: gym_options.map(&:summary_to_json),
         banner: banner.attached? ? banner_large_url : nil,
         banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil,
         banner_cropped_url: banner ? banner_cropped_medium_url : nil,
-        logo: logo.attached? ? logo_large_url : nil
+        logo: logo.attached? ? logo_large_url : nil,
+        logo_thumbnail_url: logo.attached? ? logo_thumbnail_url : nil,
+        gym_spaces_count: gym_spaces.count,
+        three_d_camera_position: three_d_camera_position,
+        representation_type: representation_type
       }
     end
   end
@@ -170,14 +209,16 @@ class Gym < ApplicationRecord
     summary_to_json.merge(
       {
         follow_count: follows.count,
-        gym_grades_count: gym_grades.count,
         versions_count: versions.count,
-        gym_spaces: gym_spaces.map(&:summary_to_json),
+        gym_chains: gym_chains.map(&:summary_to_json),
+        gym_spaces: gym_spaces.unarchived.map(&:summary_to_json),
         gym_space_groups: gym_space_groups.map(&:summary_to_json),
-        creator: user&.summary_to_json,
         sorts_available: sorts_available,
+        display_ranking: ranking?,
         gym_climbing_styles: gym_climbing_styles.activated.map { |style| { style: style.style, climbing_type: style.climbing_type, color: style.color } },
         gym_spaces_with_anchor: gym_spaces_with_anchor?,
+        upcoming_contests: contests.upcoming.map(&:summary_to_json),
+        gym_label_templates: gym_label_templates.unarchived.map { |label| { name: label.name, id: label.id } },
         history: {
           created_at: created_at,
           updated_at: updated_at
@@ -186,19 +227,49 @@ class Gym < ApplicationRecord
     )
   end
 
+  def delete_summary_cache
+    Rails.cache.delete("#{cache_key_with_version}/summary_gym")
+  end
+
+  def init_gym_levels
+    gym_levels << GymLevel.new(climbing_type: Climb::BOULDERING, grade_system: nil, level_representation: GymLevel::TAG_AND_HOLD_REPRESENTATION) unless GymLevel.exists?(gym_id: id, climbing_type: Climb::BOULDERING)
+    gym_levels << GymLevel.new(climbing_type: Climb::SPORT_CLIMBING, grade_system: 'french', level_representation: GymLevel::HOLD_REPRESENTATION) unless GymLevel.exists?(gym_id: id, climbing_type: Climb::SPORT_CLIMBING)
+    gym_levels << GymLevel.new(climbing_type: Climb::PAN, grade_system: 'french', level_representation: GymLevel::TAG_REPRESENTATION) unless GymLevel.exists?(gym_id: id, climbing_type: Climb::PAN)
+  end
+
   private
 
   def sorts_available
-    sorts = GymGrade.select("SUM(difficulty_by_level) AS sortable_by_level, SUM(difficulty_by_grade) AS sortable_by_grade, SUM(IF(point_system_type != 'none', 1, 0)) AS sortable_by_point")
-                    .joins(gym_sectors: :gym_routes)
-                    .joins(gym_sectors: :gym_space)
-                    .where(gym_sectors: { gym_spaces: { gym: self } })
-                    .where(gym_routes: { dismounted_at: nil })
-    sorts = sorts.first
+    sorts_by = GymRoute.mounted
+                       .select(
+                         "SUM(coalesce(level_index, 0)) AS 'has_level',
+                         SUM(COALESCE(min_grade_value, 0)) AS 'has_grade',
+                         SUM(COALESCE(points, 0)) AS 'has_fixed_point',
+                         GROUP_CONCAT(DISTINCT gym_routes.climbing_type) AS 'climbing_types',
+                         SUM(COALESCE(ascents_count, 0)) AS 'has_ascents',
+                         SUM(COALESCE(likes_count, 0)) AS 'has_likes',
+                         SUM(COALESCE(comments_count, 0)) AS 'has_comments'"
+                       )
+                       .joins(gym_sector: :gym_space)
+                       .where(gym_sectors: { gym_spaces: { gym_id: id } })
+    calculated_point_system = false
+    sorts_by = sorts_by&.first
+    if sorts_by['has_fixed_point']&.zero?
+      climbing_types = sorts_by['climbing_types'].split(',')
+      climbing_types.each do |climbing_type|
+        calculated_point_system = true if %w[division point_by_grade].include?(sport_climbing_ranking) && climbing_type == 'sport_climbing'
+        calculated_point_system = true if %w[division point_by_grade].include?(pan_ranking) && climbing_type == 'pan'
+        calculated_point_system = true if %w[division point_by_grade].include?(boulder_ranking) && climbing_type == 'boulder'
+      end
+    end
+
     {
-      difficulty_by_level: sorts[:sortable_by_level]&.positive?,
-      difficulty_by_grade: sorts[:sortable_by_grade]&.positive?,
-      difficulty_by_point: sorts[:sortable_by_point]&.positive?
+      difficulty_by_level: sorts_by['has_level']&.positive?,
+      difficulty_by_grade: sorts_by['has_grade']&.positive?,
+      difficulty_by_point: sorts_by['has_fixed_point']&.positive? || calculated_point_system,
+      ascents_count: sorts_by['has_ascents']&.positive?,
+      likes_count: sorts_by['has_likes']&.positive?,
+      comments_count: sorts_by['has_comments']&.positive?
     }
   end
 
@@ -221,5 +292,9 @@ class Gym < ApplicationRecord
        logo_change
       HistorizeTownsAroundWorker.perform_in(1.hour, latitude, longitude, Time.current)
     end
+  end
+
+  def delete_routes_caches
+    gym_routes.find_each(&:delete_summary_cache) if saved_change_to_boulder_ranking? || saved_change_to_sport_climbing_ranking? || saved_change_to_pan_ranking?
   end
 end

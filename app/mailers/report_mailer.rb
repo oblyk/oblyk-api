@@ -9,6 +9,7 @@ class ReportMailer < ApplicationMailer
     @report_from_url = params[:report_from_url]
     @user_full_name = params[:user_full_name]
     @user_id = params[:user_id]
+    @user_email = params[:user_email]
 
     subject = t('mailer.report.new_report.title', report_id: @report_id)
 

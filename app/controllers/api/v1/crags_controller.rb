@@ -333,7 +333,7 @@ module Api
       end
 
       def guides
-        papers = @crag.guide_book_papers.includes(cover_attachment: :blob)
+        papers = @crag.guide_book_papers.includes(cover_attachment: :blob).order(publication_year: :desc)
         pdfs = @crag.guide_book_pdfs.includes(:user, pdf_file_attachment: :blob)
         webs = @crag.guide_book_webs
         guides = []

@@ -3,15 +3,15 @@
 module Api
   module V1
     class VideosController < ApiController
-      before_action :protected_by_session, only: %i[create update destroy]
-      before_action :set_video, only: %i[show update destroy]
+      before_action :protected_by_session, only: %i[create update destroy moderate_by_gym_administrator]
+      before_action :set_video, only: %i[show update destroy moderate_by_gym_administrator]
       before_action :protected_by_owner, only: %i[update destroy]
 
       def index
         videos = Video.where(
           viewable_type: params[:viewable_type],
           viewable_id: params[:viewable_id]
-        )
+        ).order(created_at: :desc)
         render json: videos.map(&:summary_to_json), status: :ok
       end
 
@@ -42,6 +42,21 @@ module Api
           render json: {}, status: :ok
         else
           render json: { error: @video.errors }, status: :unprocessable_entity
+        end
+      end
+
+      def moderate_by_gym_administrator
+        gym_ids = @current_user.gym_administrators&.pluck(:gym_id)
+        unless gym_ids
+          render forbidden
+          return
+        end
+
+        if @video.viewable_type == 'GymRoute' && gym_ids.include?(@video.viewable.gym_sector.gym_space.gym_id)
+          @video.destroy
+          head :no_content
+        else
+          render forbidden
         end
       end
 

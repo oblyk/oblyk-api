@@ -5,13 +5,16 @@ en:
     welcome:
       subject: "Welcome %{name}"
       title: "Welcome %{name} !"
-      happy_to_see_you: "We are happy to have you with us :)"
+      happy_to_see_you: "We are happy to have you with us 🤗"
       take_a_tour: "Your registration may have been motivated by different reasons, what are you looking to do on Oblyk "
-      for_crag: "Maybe you're here to <srrong>find information about cliffs</strong> in France and around the world? then the <a href='%{url}'>crags map</a> is a good starting point."
-      for_partner: "Or are you looking for a <strong>climbing partner</strong>? we explain to you how we thought that <a href='%{explain_url}'>here<a/>, then it's for sure on the <a href='%{map_url}'>climbers map</a> that it happens."
-      for_ascents_log: "It's for a <strong>book of ascents</strong> ?<br>
+      for_crag: "⛰ Maybe you're here to <strong>find information about cliffs</strong> in France and around the world? then the <a href='%{url}'>crags map</a> is a good starting point."
+      for_partner: "🧗 Or are you looking for a <strong>climbing partner</strong>? we explain to you how we thought that <a href='%{explain_url}'>here<a/>, then it's for sure on the <a href='%{map_url}'>climbers map</a> that it happens."
+      for_ascents_log: "✅ It's for a <strong>book of ascents</strong> ?<br>
                         Then go to the crags where you climbed (<a href='%{cuvier_url}'>Bas Cuvier<a/> ? <a href='%{buoux_url}'>Buoux<a/> ? <a href='%{cimai_url}'>Cimaï<a/> ?) and tick your ascents<br>
-                        Then you'll find some nice <a href='%{chart_url}'>graphics<a/> on your dashboard."
+                        Then you'll find some nice <a href='%{chart_url}'>graphics<a/> on your dashboard 😏"
+      indoor: "🔩 Are you an opener or manager of a climbing club or gym?<br>
+               Oblyk is also an <strong>incredible toolbox for your gym</strong>: create your gym's <strong>interactive guidebook</strong>, <strong>analyse</strong> your openings, <strong>animate</strong> your community, create <strong>contests</strong> like a pro, <strong>print route footer labels</strong> in one click, and much more!
+               Take a look at the <a href='%{indoor_url}'>Oblyk Indoor presentation page</a>"
       discover_the_rest: "We'll let you discover the rest !"
       help: "If you are looking for help, you will find it <a href='%{help_url}'>here<a/>, you can also contact us at this address : <a href='mailto:ekip@oblyk.org'>ekip@oblyk.org</a>"
       see_you_later: "See you soon and happy climbing!"

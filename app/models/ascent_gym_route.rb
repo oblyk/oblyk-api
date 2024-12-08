@@ -3,8 +3,9 @@
 class AscentGymRoute < Ascent
   belongs_to :gym_route, optional: true
   belongs_to :gym
-  belongs_to :gym_grade, optional: true
+  belongs_to :gym_grade, optional: true # TODO : DELETE AFTER MIGRATION
   belongs_to :color_system_line, optional: true
+  has_one :ascent_comment, class_name: 'Comment', as: :commentable, dependent: :destroy
 
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }
 
@@ -20,17 +21,24 @@ class AscentGymRoute < Ascent
   end
 
   def detail_to_json
+    public_comment = nil
+    if ascent_comment
+      public_comment = {
+        id: ascent_comment.id,
+        body: ascent_comment.body
+      }
+    end
     {
       id: id,
       ascent_status: ascent_status,
       hardness_status: hardness_status,
       gym_route_id: gym_route_id,
-      gym_grade_id: gym_grade_id,
       gym_grade_level: gym_grade_level,
       sections: sections,
       height: height,
       note: note,
       comment: comment,
+      ascent_comment: public_comment,
       quantity: quantity,
       sections_count: sections_count,
       max_grade_value: max_grade_value,
@@ -53,20 +61,34 @@ class AscentGymRoute < Ascent
     }
   end
 
+  def commentary_public!
+    return if comment.blank?
+    return if ascent_comment.present?
+
+    self.ascent_comment = Comment.new(
+      body: comment,
+      user: user,
+      created_at: created_at,
+      updated_at: updated_at
+    )
+    update_column :comment, nil
+    gym_route.delete_summary_cache
+  end
+
   private
 
   def update_gym_route!
     return unless gym_route
 
     gym_route.update_form_ascents!
+    gym_route.refresh_all_comments_count! if comments_count&.positive?
   end
 
   def set_gym_and_system
     return unless gym_route
 
     self.gym = gym_route.gym
-    self.gym_grade = gym_route.gym_grade_line.gym_grade if gym_route.gym_grade_line
-    self.gym_grade_level = gym_route.gym_grade_line.order if gym_route.gym_grade_line
+    self.gym_grade_level = gym_route.level_index
   end
 
   def historize_ascents

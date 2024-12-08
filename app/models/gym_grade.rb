@@ -11,8 +11,8 @@ class GymGrade < ApplicationRecord
   POINT_SYSTEM_TYPE_LIST = %w[fix divisible none].freeze
 
   validates :name, presence: true
-  validates :point_system_type, inclusion: { in: POINT_SYSTEM_TYPE_LIST }
-  validate :validate_grading_system
+
+  after_update :delete_caches
 
   def next_grade_lines_order
     order = gym_grade_lines.last&.order || 0
@@ -53,7 +53,19 @@ class GymGrade < ApplicationRecord
     gym_grade_lines.map { |gym_grade_line| gym_grade_line.colors.first }.join
   end
 
+  def delete_summary_cache
+    Rails.cache.delete("#{cache_key_with_version}/summary_gym_grade")
+  end
+
   private
+
+  def delete_caches
+    gym_spaces.find_each(&:delete_summary_cache)
+    gym_sectors.find_each do |gym_sector|
+      gym_sector.gym_routes.find_each(&:delete_summary_cache)
+      gym_sector.delete_summary_cache
+    end
+  end
 
   def validate_grading_system
     errors.add(:base, I18n.t('activerecord.errors.messages.difficulty_system')) if !difficulty_by_grade && !difficulty_by_level

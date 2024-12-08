@@ -7,6 +7,8 @@ class GymRouteCover < ApplicationRecord
 
   has_many :gym_routes
 
+  after_save :delete_caches
+
   validates :picture, blob: { content_type: :image }, allow_nil: true
 
   def picture_large_url
@@ -33,7 +35,13 @@ class GymRouteCover < ApplicationRecord
     )
   end
 
-  def remove_cache!
+  def delete_summary_cache
     Rails.cache.delete("#{cache_key_with_version}/summary_gym_route_cover")
+  end
+
+  private
+
+  def delete_caches
+    gym_routes.each(&:delete_summary_cache)
   end
 end

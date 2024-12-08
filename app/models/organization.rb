@@ -2,6 +2,7 @@
 
 class Organization < ApplicationRecord
   include Slugable
+  include Emailable
 
   has_secure_token :api_access_token
 

@@ -1,0 +1,17 @@
+<%
+  contest = @contest_participant.contest
+  contest_path = "#{contest.public_app_path}?token=#{@contest_participant.token}"
+%>
+
+Bonjour <%= @contest_participant.first_name %>,
+
+Votre inscription au contest : <%= contest.name %> a bien été prise en compte 🥳 !
+
+Pour retrouver les informations et le programme du contest, mais aussi renseigner vos réalisations ou suivre votre classement, cliquez sur le lien ci-dessous :
+<%= contest_path %>
+
+À bientôt !
+<%= contest.gym.name.titleize %>
+
+Si le lien ci-dessus de fonction pas, copier-coller ce lien : <%= contest_path %> dans un navigateur.
+Ce contest a été créé sur https://oblyk.org : site collaboratif open source dédié à l'escalade outdoor et indoor.

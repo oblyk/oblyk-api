@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Subscribe < ApplicationRecord
+  include Emailable
+
   validates :email, presence: true
 
   before_validation :init_subscribed_at

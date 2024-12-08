@@ -88,6 +88,26 @@ class GuideBookPaper < ApplicationRecord
     end
   end
 
+  def to_geo_json
+    Rails.cache.fetch("#{cache_key_with_version}/geo_json_guide_book_paper", expires_in: 28.days) do
+      crags_coordinates = []
+      crags.each do |crag|
+        crags_coordinates << [crag.latitude, crag.longitude]
+      end
+      geo_center = GeoHelper.point_central crags_coordinates
+      {
+        type: 'Feature',
+        properties: {
+          type: 'GuideBookPaper',
+          id: id,
+          thumbnail_url: cover.attached? ? cover_thumbnail_url : nil,
+          icon: 'guide-book-paper'
+        },
+        geometry: { type: 'Point', coordinates: [Float(geo_center[1]), Float(geo_center[0]), 0.0] }
+      }
+    end
+  end
+
   def detail_to_json
     summary_to_json.merge(
       {
@@ -96,6 +116,7 @@ class GuideBookPaper < ApplicationRecord
         links_count: links.count,
         versions_count: versions.count,
         articles_count: articles_count,
+        place_of_sales_count: place_of_sales.count,
         next_guide_book_paper: next_guide_book_paper&.summary_to_json,
         crags: crags.map { |crag| { id: crag.id, name: crag.name } },
         creator: user&.summary_to_json(with_avatar: false),
@@ -122,6 +143,11 @@ class GuideBookPaper < ApplicationRecord
       },
       features: features
     }
+  end
+
+  def delete_summary_cache
+    Rails.cache.delete("#{cache_key_with_version}/summary_guide_book_paper")
+    Rails.cache.delete("#{cache_key_with_version}/geo_json_guide_book_paper")
   end
 
   private

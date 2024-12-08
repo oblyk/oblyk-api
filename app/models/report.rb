@@ -41,7 +41,8 @@ class Report < ApplicationRecord
       reportable_id: reportable_id,
       report_from_url: report_from_url,
       user_full_name: user&.full_name,
-      user_id: user&.id
+      user_id: user&.id,
+      user_email: user&.email
     ).new_report.deliver_later
   end
 end

@@ -3,9 +3,9 @@
 module Api
   module V1
     class CommentsController < ApiController
-      before_action :protected_by_session, only: %i[create update destroy]
-      before_action :set_comment, only: %i[show comments update destroy]
-      before_action :protected_by_owner, only: %i[update destroy]
+      before_action :protected_by_session, only: %i[create update destroy moderate_by_gym_administrator]
+      before_action :set_comment, only: %i[show comments update destroy moderate_by_gym_administrator]
+      before_action :protected_by_owner, only: %i[update destroy moderate_by_gym_administrator]
 
       def index
         comments = Comment.where(
@@ -49,6 +49,41 @@ module Api
       def destroy
         if @comment.destroy
           render json: {}, status: :ok
+        else
+          render json: { error: @comment.errors }, status: :unprocessable_entity
+        end
+      end
+
+      def moderate_by_gym_administrator
+        gym_ids = @current_user.gym_administrators&.pluck(:gym_id)
+
+        unless gym_ids
+          render forbidden
+          return
+        end
+
+        authorize = false
+        type = @comment.commentable_type
+        commentable = @comment.commentable
+
+        authorize = true if type == 'GymRoute' && gym_ids.include?(commentable.gym_sector.gym_space.gym_id)
+        authorize = true if type == 'Ascent' && gym_ids.include?(commentable.gym_id)
+
+        if type == 'Comment'
+          authorize = true if commentable.commentable_type == 'GymRoute' && gym_ids.include?(commentable.commentable.gym_sector.gym_space.gym_id)
+          authorize = true if commentable.commentable_type == 'Ascent' && gym_ids.include?(commentable.commentable.gym_id)
+          authorize = true if commentable.commentable_type == 'Comment' && commentable.commentable.commentable_type == 'Ascent' && gym_ids.include?(commentable.commentable.commentable.gym_id)
+          authorize = true if commentable.commentable_type == 'Comment' && commentable.commentable.commentable_type == 'GymRoute' && gym_ids.include?(commentable.commentable.commentable.gym_sector.gym_space.gym_id)
+        end
+
+        unless authorize
+          render forbidden
+          return
+        end
+
+        @comment.moderated_at = DateTime.now
+        if @comment.save
+          head :no_content
         else
           render json: { error: @comment.errors }, status: :unprocessable_entity
         end

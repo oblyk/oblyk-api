@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class LocalityUser < ApplicationRecord
+  include StripTagable
   include Deactivable
 
   belongs_to :locality

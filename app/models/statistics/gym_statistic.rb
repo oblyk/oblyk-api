@@ -80,22 +80,21 @@ module Statistics
       self.routes ||= gym_routes
 
       charts = []
-      gym_routes.group_by { |route| route.gym_grade_line&.gym_grade&.id }.each do |_key, routes_in_level|
-        next if routes_in_level.first.gym_grade_line.blank?
-
-        gym_grade = routes_in_level.first.gym_grade_line.gym_grade
+      gym_routes.group_by(&:climbing_type).each do |climbing_type, routes_in_climbing_type|
         background = []
         labels = []
         data = []
-        gym_grade.gym_grade_lines.each do |gym_grade_line|
-          background << gym_grade_line.colors.first
-          labels << gym_grade_line.name
-          data << routes_in_level.sum { |route| route.gym_grade_line_id == gym_grade_line.id ? 1 : 0 }
+        gym_level = gym.gym_levels.find_by climbing_type: climbing_type
+
+        gym_level.levels&.each do |level|
+          background << level['color']
+          labels << level['color']
+          data << routes_in_climbing_type.sum { |route| route.level_color == level['color'] ? 1 : 0 }
         end
 
         charts << {
           type: 'level_chart',
-          gym_grade: gym_grade.detail_to_json,
+          climbing_type: climbing_type,
           chart: {
             datasets: [
               {

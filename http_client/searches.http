@@ -15,3 +15,26 @@ Content-Type: application/json
 {
   "query": "rocher des a"
 }
+
+
+### Search "Rocher des a"
+GET {{api_url}}/search_all.json
+HttpApiAccessToken: {{api_access_token}}
+Content-Type: application/json
+
+{
+  "query": "Lyon gerland",
+  "page": 1,
+  "collections": ["Crag", "Gym"]
+}
+
+### Search gyms and crags arround location
+GET {{api_url}}/search_around.json
+HttpApiAccessToken: {{api_access_token}}
+Content-Type: application/json
+
+{
+  "latitude": 45.7576657,
+  "longitude": 4.8590331,
+  "page": 1
+}

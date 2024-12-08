@@ -15,6 +15,17 @@ module Api
         render json: follows.map(&:summary_to_json), status: :ok
       end
 
+      def followers
+        subscribers = Follow.joins(:user)
+                            .where(
+                              followable_type: params[:followable_type],
+                              followable_id: params[:followable_id]
+                            )
+                            .order('users.last_activity_at DESC, id')
+                            .page(params.fetch(:page, 1))
+        render json: subscribers.map { |follow| follow.user.summary_to_json }, status: :ok
+      end
+
       def create
         @follow = Follow.find_or_initialize_by(
           followable_type: follow_params[:followable_type],

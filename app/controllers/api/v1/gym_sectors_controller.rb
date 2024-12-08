@@ -7,7 +7,7 @@ module Api
       skip_before_action :protected_by_session, only: %i[show index]
       skip_before_action :protected_by_gym_administrator, only: %i[show index]
       before_action :set_gym_space
-      before_action :set_gym_sector, only: %i[show update destroy dismount_routes last_routes_with_pictures]
+      before_action :set_gym_sector, only: %i[show update destroy dismount_routes last_routes_with_pictures delete_three_d_path]
       before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[index show]
 
       def index
@@ -63,6 +63,12 @@ module Api
         render json: json_data, status: :ok
       end
 
+      def delete_three_d_path
+        @gym_sector.three_d_path = nil
+        @gym_sector.save
+        head :no_content
+      end
+
       private
 
       def set_gym_sector
@@ -77,14 +83,18 @@ module Api
         params.require(:gym_sector).permit(
           :name,
           :order,
+          :min_anchor_number,
+          :max_anchor_number,
           :description,
           :group_sector_name,
           :climbing_type,
           :height,
           :banner_bg_color,
           :polygon,
-          :gym_grade_id,
-          :can_be_more_than_one_pitch
+          :can_be_more_than_one_pitch,
+          :three_d_height,
+          three_d_path: %i[x y z],
+          three_d_label_options: %i[x y z]
         )
       end
     end

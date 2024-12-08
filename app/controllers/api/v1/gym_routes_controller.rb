@@ -5,29 +5,32 @@ module Api
     class GymRoutesController < ApiController
       include Gymable
 
-      skip_before_action :protected_by_session, only: %i[show index ascents]
-      skip_before_action :protected_by_gym_administrator, only: %i[show index ascents]
-      before_action :set_gym_space, except: %i[add_picture similar_sectors add_thumbnail dismount mount dismount_collection mount_collection ascents]
-      before_action :set_gym_sector, except: %i[index show similar_sectors add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents]
-      before_action :set_gym_route, only: %i[show similar_sectors update destroy add_picture add_thumbnail dismount mount ascents]
-      before_action -> { can? GymRole::MANAGE_OPENING }, except: %i[index show similar_sectors ascents]
+      skip_before_action :protected_by_session, only: %i[show index paginated ascents comments]
+      skip_before_action :protected_by_gym_administrator, only: %i[show index paginated ascents comments]
+      before_action :set_gym_space, except: %i[add_picture similar_sectors add_thumbnail dismount mount dismount_collection mount_collection ascents delete_picture comments opening_sheet_collection]
+      before_action :set_gym_sector, except: %i[index show similar_sectors add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents delete_picture comments opening_sheet_collection]
+      before_action :set_gym_route, only: %i[show similar_sectors update destroy add_picture add_thumbnail dismount mount ascents delete_picture comments]
+      before_action -> { can? GymRole::MANAGE_OPENING }, except: %i[index paginated show similar_sectors ascents comments]
 
       def index
         group_by = params.fetch(:group_by, nil)
         order_by = params.fetch(:order_by, nil)
+        direction = params.fetch(:direction, 'asc') == 'asc' ? 'ASC' : 'DESC'
         dismounted = params.fetch(:dismounted, false)
+        route_ids = params.fetch(:route_ids, nil)
 
         if group_by == 'sector'
           sectors = if @gym_sector.present?
                       @gym_sector
                     elsif @gym_space.present?
-                      GymSector.where(gym_space: @gym_space)
+                      GymSector.where(gym_space: @gym_space).reorder("`order` #{direction}")
                     else
-                      GymSector.joins(:gym_space).where(gym_spaces: { gym_id: @gym.id })
+                      GymSector.joins(:gym_space).where(gym_spaces: { gym_id: @gym.id }).reorder("`order` #{direction}")
                     end
           routes_json = { sectors: [] }
           sectors.each do |sector|
             routes = dismounted ? sector.gym_routes.dismounted : sector.gym_routes.mounted
+            routes = routes.order('anchor_number, min_grade_value')
             routes_json[:sectors] << {
               sector: sector.summary_to_json,
               routes: routes.map(&:summary_to_json)
@@ -39,6 +42,8 @@ module Api
                      GymRoute.where(gym_sector: @gym_sector)
                    elsif @gym_space.present?
                      GymRoute.joins(:gym_sector).where(gym_sectors: { gym_space: @gym_space })
+                   elsif route_ids
+                     GymRoute.where(id: route_ids)
                    else
                      GymRoute.joins(:gym_space).where(gym_spaces: { gym: @gym })
                    end
@@ -47,10 +52,10 @@ module Api
           routes = dismounted ? routes.dismounted : routes.mounted
 
           # Order
-          routes = routes.order(opened_at: :desc) if order_by == 'opened_at'
-          routes = routes.order('max_grade_value DESC') if order_by == 'grade'
-          routes = routes.includes(gym_grade_line: :gym_grade).order('gym_grade_lines.order DESC, gym_grades.name ASC') if order_by == 'level'
-          routes = routes.includes(:sector).order('sectors.name ASC') if order_by == 'sector'
+          routes = routes.order("opened_at #{direction}") if order_by == 'opened_at'
+          routes = routes.order("max_grade_value #{direction}") if order_by == 'grade'
+          routes = routes.order("level_index #{direction}") if order_by == 'level'
+          routes = routes.includes(:sector).order("sectors.name #{direction}") if order_by == 'sector'
 
           # group by
           case group_by
@@ -64,11 +69,58 @@ module Api
             level_routes = group_by_level(routes)
             render json: { level: level_routes.map { |level_route| { name: level_route[1][:name], colors: level_route[1][:colors], tag_color: level_route[1][:tag_color], hold_color: level_route[1][:hold_color], routes: level_route[1][:routes].map(&:summary_to_json) } } }, status: :ok
           when 'point'
-            render json: routes.sort_by { |route| -(route.calculated_point || 0) }.map(&:summary_to_json), status: :ok
+            if direction == 'DESC'
+              render json: routes.sort_by { |route| -(route.calculated_point || 0) }.map(&:summary_to_json), status: :ok
+            else
+              render json: routes.sort_by { |route| route.calculated_point || 0 }.map(&:summary_to_json), status: :ok
+            end
           else
             render json: routes.map(&:summary_to_json), status: :ok
           end
         end
+      end
+
+      def paginated
+        order_by = params.fetch(:order_by, nil)
+        route_ids = params.fetch(:route_ids, nil)
+        direction = params.fetch(:direction, 'asc') == 'asc' ? 'ASC' : 'DESC'
+        dismounted = params.fetch(:dismounted, 'false') == 'true'
+
+        routes = if @gym_sector.present?
+                   @gym_sector.gym_routes
+                 elsif @gym_space.present?
+                   @gym_space.gym_routes
+                 elsif route_ids.present?
+                   @gym.gym_routes.where(ids: route_ids)
+                 else
+                   @gym.gym_routes.joins(gym_sector: :gym_space).where(gym_spaces: { draft: false, archived_at: nil })
+                 end
+
+        routes = dismounted ? routes.dismounted : routes.mounted
+
+        routes = case order_by
+                 when 'sector'
+                   routes.joins(:gym_sector).reorder("gym_sectors.order #{direction}, gym_sectors.name, gym_sectors.id, gym_routes.anchor_number, gym_routes.min_grade_value, gym_routes.id")
+                 when 'opened_at'
+                   routes.reorder("gym_routes.opened_at #{direction}, gym_routes.id")
+                 when 'grade'
+                   routes.reorder("gym_routes.min_grade_value #{direction}, gym_routes.id")
+                 when 'level'
+                   routes.reorder("gym_routes.level_index #{direction}, gym_routes.id")
+                 when 'point'
+                   routes.reorder("gym_routes.points #{direction}, gym_routes.id")
+                 when 'ascents_count'
+                   routes.reorder("gym_routes.ascents_count #{direction}, gym_routes.id")
+                 when 'likes_count'
+                   routes.reorder("gym_routes.likes_count #{direction}, gym_routes.id")
+                 when 'comments_count'
+                   routes.reorder("gym_routes.all_comments_count #{direction}, gym_routes.id")
+                 else
+                   routes
+                 end
+
+        routes = routes.page(params.fetch(:page, 1))
+        render json: routes.map(&:summary_to_json), status: :ok
       end
 
       def print
@@ -102,7 +154,7 @@ module Api
               gym_route.height,
               gym_route.name,
               gym_route.description,
-              gym_route.gym_openers&.map(&:name).join(', '),
+              gym_route.gym_openers&.map(&:name)&.join(', '),
               gym_route.opened_at,
               gym_route.gym_sector.name,
               gym_route.gym_sector.gym_space.name,
@@ -124,7 +176,7 @@ module Api
       end
 
       def similar_sectors
-        sectors = @gym_route.gym.gym_sectors.where(gym_space_id: @gym_route.gym_sector.gym_space_id, gym_grade_id: @gym_route.gym_sector.gym_grade_id)
+        sectors = @gym_route.gym_sector.gym_space.gym_sectors
         render json: sectors.map(&:summary_to_json), status: :ok
       end
 
@@ -145,7 +197,7 @@ module Api
 
       def update
         if @gym_route.update(gym_route_params)
-          @gym_route.remove_cache!
+          @gym_route.delete_summary_cache
           render json: @gym_route.detail_to_json, status: :ok
         else
           render json: { error: @gym_route.errors }, status: :unprocessable_entity
@@ -213,6 +265,17 @@ module Api
         end
       end
 
+      def delete_picture
+        @gym_route.thumbnail = nil
+        @gym_route.gym_route_cover.destroy if @gym_route.gym_route_cover && @gym_route.gym_route_cover.gym_routes.count == 1
+        @gym_route.gym_route_cover = nil
+        if @gym_route.save
+          render json: {}, status: :ok
+        else
+          render json: { error: @gym_route.errors }, status: :unprocessable_entity
+        end
+      end
+
       def mount
         if @gym_route.mount!
           render json: {}, status: :ok
@@ -229,6 +292,30 @@ module Api
       def mount_collection
         @gym.gym_routes.where(id: params[:route_ids]).each(&:mount!)
         head :no_content
+      end
+
+      def opening_sheet_collection
+        gym_opening_sheet = GymOpeningSheet.new opening_sheet_params
+        gym_opening_sheet.gym = @gym
+        gym_opening_sheet.build_row_json
+
+        if gym_opening_sheet.save
+          render json: gym_opening_sheet.summary_to_json, status: :ok
+        else
+          render json: { error: gym_opening_sheet.errors }, status: :unprocessable_entity
+        end
+      end
+
+      def comments
+        comments = []
+        @gym_route.comments.each do |comment|
+          comments << comment
+        end
+        @gym_route.ascent_gym_routes.where('comments_count > 0').each do |ascent|
+          comments << ascent.ascent_comment
+        end
+        comments = comments.sort_by(&:created_at)
+        render json: comments.map(&:summary_to_json), status: :ok
       end
 
       private
@@ -258,7 +345,7 @@ module Api
       def group_by_grade(routes)
         grades = {}
         routes.each do |route|
-          next unless route.gym_grade.difficulty_by_grade?
+          next if route.max_grade_value.blank?
 
           grade = route.max_grade_value
           grades[grade] = grades[grade] || { grade: grade, routes: [] }
@@ -270,15 +357,13 @@ module Api
       def group_by_level(routes)
         levels = {}
         routes.each do |route|
-          next unless route.gym_grade.difficulty_by_level?
-          next unless route.gym_grade_line
+          next unless route.level_index
 
-          level = "#{route.gym_grade.id}-#{route.gym_grade_line.order}"
-          levels[level] = levels[level] || {
-            name: route.gym_grade_line.name,
-            colors: route.gym_grade_line.colors,
-            tag_color: route.gym_grade.tag_color?,
-            hold_color: route.gym_grade.hold_color?,
+          levels[route.level_index] = levels[route.level_index] || {
+            name: route.level_index,
+            colors: [route.level_color],
+            tag_color: true,
+            hold_color: false,
             routes: []
           }
           levels[level][:routes] << route
@@ -287,7 +372,7 @@ module Api
       end
 
       def set_gym_space
-        @gym_space = GymSpace.find_by id: params[:gym_space_id]
+        @gym_space = GymSpace.find_by(id: params[:gym_space_id]) if params[:gym_space_id].present?
       end
 
       def set_gym_sector
@@ -306,11 +391,13 @@ module Api
           :climbing_type,
           :openers,
           :polyline,
-          :gym_grade_line_id,
           :points,
           :opened_at,
           :gym_sector_id,
           :anchor_number,
+          :level_index,
+          :level_length,
+          :level_color,
           gym_opener_ids: [],
           sections: [:climbing_type, :description, :grade, :height, { styles: [] }],
           hold_colors: %i[],
@@ -328,6 +415,15 @@ module Api
       def thumbnail_params
         params.require(:gym_route).permit(
           :thumbnail
+        )
+      end
+
+      def opening_sheet_params
+        params.require(:gym_opening_sheet).permit(
+          :title,
+          :description,
+          :number_of_columns,
+          gym_route_ids: %i[]
         )
       end
     end

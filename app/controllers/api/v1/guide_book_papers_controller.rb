@@ -3,6 +3,8 @@
 module Api
   module V1
     class GuideBookPapersController < ApiController
+      include UploadVerification
+
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update add_crag remove_crag add_cover remove_cover]
       before_action :set_guide_book_paper, only: %i[crags crags_figures photos links versions geo_json alternatives show update destroy add_crag remove_crag add_cover remove_cover articles]
@@ -124,10 +126,27 @@ module Api
         end
 
         place_of_sales = minimalistic ? @guide_book_paper.place_of_sales : @guide_book_paper.place_of_sales.includes(:user)
-        place_of_sales.each do |place_of_sale|
+        place_of_sales.where.not(latitude: nil, longitude: nil).each do |place_of_sale|
           features << place_of_sale.to_geo_json(minimalistic: minimalistic)
         end
 
+        render json: {
+          type: 'FeatureCollection',
+          crs: {
+            type: 'name',
+            properties: {
+              name: 'urn'
+            }
+          },
+          features: features
+        }, status: :ok
+      end
+
+      def geo_index
+        features = []
+        GuideBookPaper.where(next_guide_book_paper_id: nil).includes(:crags).all.each do |guide_book|
+          features << guide_book.to_geo_json
+        end
         render json: {
           type: 'FeatureCollection',
           crs: {
@@ -243,6 +262,8 @@ module Api
       end
 
       def add_cover
+        return unless verify_file cover_params[:cover], :image
+
         if @guide_book_paper.update(cover_params)
           render json: @guide_book_paper.detail_to_json, status: :ok
         else

@@ -14,7 +14,7 @@ class Alert < ApplicationRecord
   delegate :feed_parent_type, to: :alertable
   delegate :feed_parent_object, to: :alertable
 
-  ALERT_TYPES_LIST = %w[good warning info bad].freeze
+  ALERT_TYPES_LIST = %w[good warning info bad omega_roc].freeze
 
   before_validation :init_alerted_at
 

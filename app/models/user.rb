@@ -5,6 +5,7 @@ class User < ApplicationRecord
   include ParentFeedable
   include AttachmentResizable
   include StripTagable
+  include Emailable
 
   PASSWORD_FORMAT = /\A
       (?=.{8,128}) # Must contain 8 or more characters
@@ -29,6 +30,8 @@ class User < ApplicationRecord
   has_many :videos
   has_many :gym_administrators
   has_many :administered_gyms, through: :gym_administrators, source: :gym
+  has_many :gym_chain_administrators
+  has_many :gym_chains, through: :gym_chain_administrators
   has_many :gyms
   has_many :reports, as: :reportable
   has_many :ascent_crag_routes
@@ -66,6 +69,7 @@ class User < ApplicationRecord
   has_many :locality_users
   has_many :localities, through: :locality_users
   has_many :likes
+  has_many :contest_participants
 
   before_validation :init_slug_name
   before_validation :set_uuid
@@ -141,6 +145,7 @@ class User < ApplicationRecord
       json_ascents << {
         crag_route_id: ascent.crag_route_id,
         ascent_status: ascent.ascent_status,
+        roping_status: ascent.roping_status,
         released_at: ascent.released_at
       }
     end
@@ -409,7 +414,8 @@ class User < ApplicationRecord
           date_of_birth: date_of_birth,
           last_partner_check_at: last_partner_check_at,
           language: language,
-          administered_gyms: administered_gyms.map(&:summary_to_json),
+          administered_gyms: administered_gyms.order(:name).map(&:summary_to_json),
+          gym_chains: gym_chains.map(&:summary_to_json),
           gym_roles: gym_administrators.map(&:summary_to_json),
           organizations: organizations.map(&:summary_to_json),
           subscribes: subscribes_to_a,
@@ -428,7 +434,7 @@ class User < ApplicationRecord
     return potential_slug if User.where.not(id: id).where(slug_name: potential_slug).blank?
 
     # find user with slug_name an -[digit] at the end
-    same_slug_users = User.where.not(id: id).where("slug_name RLIKE '^#{potential_slug}-[0-9]$'")
+    same_slug_users = User.where.not(id: id).where('slug_name RLIKE ?', "^#{potential_slug}-[0-9]+$")
 
     if same_slug_users.blank?
       # Return potential_slug with -1 if is the first duplicate slug
@@ -451,6 +457,14 @@ class User < ApplicationRecord
 
   def minor?
     date_of_birth.present? && date_of_birth > Date.current - 18.years
+  end
+
+  def delete_summary_cache
+    Rails.cache.delete("#{cache_key_with_version}/summary_user")
+    Rails.cache.delete("#{cache_key_with_version}/summary_user_with_avatar")
+    Rails.cache.delete("#{cache_key_with_version}/local_climber_to_json")
+    Rails.cache.delete("#{cache_key_with_version}/partner_geo_json")
+    Rails.cache.delete("#{cache_key_with_version}/minimalistic_partner_geo_json")
   end
 
   private

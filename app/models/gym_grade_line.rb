@@ -1,15 +1,23 @@
 # frozen_string_literal: true
 
 class GymGradeLine < ApplicationRecord
+  include SoftDeletable
+
   belongs_to :gym_grade
   has_one :gym, through: :gym_grade
 
   before_validation :init_grade_value
 
   validates :name, :colors, :order, presence: true
-  validate :grading_value
 
   default_scope { order(:order) }
+
+  after_save :delete_caches
+  after_destroy :delete_caches
+
+  def gym_grade
+    GymGrade.unscoped { super }
+  end
 
   def summary_to_json
     Rails.cache.fetch("#{cache_key_with_version}/summary_gym_grade_line", expires_in: 28.days) do
@@ -45,11 +53,14 @@ class GymGradeLine < ApplicationRecord
   private
 
   def init_grade_value
-    self.grade_value = Grade.to_value grade_text if grade_text
+    self.grade_value = Grade.to_value grade_text if grade_text.present?
   end
 
   def grading_value
-    errors.add(:grade_text, I18n.t('activerecord.errors.messages.blank')) if gym_grade.difficulty_by_grade? && grade_text.blank?
     errors.add(:points, I18n.t('activerecord.errors.messages.blank')) if gym_grade.point_system_type == 'fix' && points.blank?
+  end
+
+  def delete_caches
+    gym_grade.delete_summary_cache
   end
 end

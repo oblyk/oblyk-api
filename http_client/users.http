@@ -1,5 +1,5 @@
 ### GET public user profile
-GET {{api_url}}/users/8b229ae9-aea0-4ea1-b7be-8af6fa6971f0.json
+GET {{api_url}}/users/lucien.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 

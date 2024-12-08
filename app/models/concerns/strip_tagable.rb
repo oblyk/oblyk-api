@@ -5,6 +5,7 @@ module StripTagable
   extend ActiveSupport::Concern
 
   included do
+    before_validation :strip_tag_column if has_attribute?(:justification)
     before_validation :strip_tag_column if has_attribute?(:description)
     before_validation :strip_tag_column if has_attribute?(:definition)
     before_validation :strip_tag_column if has_attribute?(:comment)
@@ -14,6 +15,7 @@ module StripTagable
   private
 
   def strip_tag_column
+    self.justification = strip_tags(justification) if has_attribute?(:justification) && justification
     self.description = strip_tags(description) if has_attribute?(:description) && description
     self.definition = strip_tags(definition) if has_attribute?(:definition) && definition
     self.comment = strip_tags(comment) if has_attribute?(:comment) && comment

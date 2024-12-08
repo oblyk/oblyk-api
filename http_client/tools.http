@@ -1,0 +1,8 @@
+### Give message get qr_code
+GET {{api_url}}/tools/qr_coder.json
+HttpApiAccessToken: {{api_access_token}}
+Content-Type: application/json
+
+{
+  "message": "Hello !"
+}

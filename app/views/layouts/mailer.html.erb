@@ -19,32 +19,16 @@
   <body>
     <div
       style="
-        padding-top: 50px;
-        padding-bottom: 50px;
+        height: 220px;
         margin-bottom: 30px;
-        width: 100%;
-        background-image: url('https://oblyk.org/img/images/oblyk-home-baume-rousse.jpg');
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        background-image: url('<%= @app_url %>/images/oblyk-og-image.jpg');
+        background-size: cover;
+        border-radius: 10px;
       "
-    >
-      <h1
-        style="
-          color: white;
-          font-size: 16px;
-          text-align: center;
-          font-weight: normal;
-        "
-      >
-        <a
-          style="
-            color: inherit;
-            text-decoration: none;
-          "
-          href="<%= @app_url %>"
-        >
-          Oblyk - Outdoor &amp; Indoor Climbing Community
-        </a>
-      </h1>
-    </div>
+    ></div>
     <div
       style="
         max-width: 600px;
@@ -62,8 +46,23 @@
         <%= t('mailer.signature') %>
       </p>
       <p style="text-align: center; margin-top: 30px">
-        <small>Pensez à supprimer ce mail si vous ne comptez pas le relire</small>
+        <small>🌱 Pensez à supprimer ce mail si vous ne comptez pas le relire</small>
       </p>
+      <div>
+        <div style="text-align: center">
+          <p style="margin-bottom: 6px">
+            Découvrez l'application Oblyk
+          </p>
+          <a style="margin-left: 4px; margin-right: 4px" href="https://play.google.com/store/apps/details?id=org.oblyk.twa"><img height="55" src="<%= @app_url %>/svg/google-store-black.svg" alt="logo Google Play Store" ></a>
+          <a style="margin-left: 4px; margin-right: 4px" href="https://apps.apple.com/fr/app/oblyk/id6569245391"><img height="55" src="<%= @app_url %>/svg/apple-store-black.svg" alt="logo Apple App Store" ></a>
+          <p style="margin-bottom: 6px">
+            Suivez-nous sur les réseaux
+          </p>
+          <a style="color: black" href="https://www.facebook.com/pageoblyk">Facebook</a> ·
+          <a style="color: black" href="https://www.instagram.com/oblyk.climbing">Instagram</a> ·
+          <a style="color: black" href="https://github.com/oblyk">Github</a>
+        </div>
+      </div>
     </div>
   </body>
   <footer

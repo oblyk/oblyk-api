@@ -3,6 +3,8 @@
 module Api
   module V1
     class CurrentUsersController < ApiController
+      include UploadVerification
+
       before_action :protected_by_session
       before_action :set_user
 
@@ -196,18 +198,25 @@ module Api
         follower.reject!
       end
 
+      def upcoming_contests
+        contests = []
+        contest_participations = @user.contest_participants
+                                      .joins(contest_category: :contest)
+                                      .where('contests.end_date >= ?', Date.current)
+                                      .where('contests.subscription_start_date <= ?', Date.current)
+        contest_participations.each do |contest_participation|
+          contest = contest_participation.contest_category.contest.summary_to_json
+          contest[:participant_token] = contest_participation.token
+          contests << contest
+        end
+        render json: contests, status: :ok
+      end
+
       def ascents_crag_routes
         render json: @user.ascent_crag_routes_to_a, status: :ok
       end
 
       def ascended_crag_routes
-        only_lead_climbs = params.fetch(:only_lead_climbs)
-        if only_lead_climbs == "true"
-          crag_route_ids = @user.ascent_crag_routes.made.lead.pluck(:crag_route_id)
-        else
-          crag_route_ids = @user.ascent_crag_routes.made.pluck(:crag_route_id)
-        end
-
         page = params.fetch(:page, 1)
 
         climbing_type_filter = params.fetch(:climbing_type, 'all')
@@ -220,41 +229,39 @@ module Api
         climbing_filters << 'deep_water' if %w[deep_water all].include?(climbing_type_filter)
         climbing_filters << 'via_ferrata' if %w[via_ferrata all].include?(climbing_type_filter)
 
-        crag_routes = case params[:order]
-                      when 'crags'
-                        CragRoute.includes(
-                          crag_sector: { photo: { picture_attachment: :blob } },
-                          crag: { photo: { picture_attachment: :blob } },
-                          photo: { picture_attachment: :blob }
-                        )
-                                 .where(id: crag_route_ids)
-                                 .where(climbing_type: climbing_filters)
-                                 .joins(:crag)
-                                 .order('crags.name, crag_routes.name, crag_routes.id')
-                                 .page(page)
-                      when 'released_at'
-                        CragRoute.joins("INNER JOIN ascents ON ascents.crag_route_id = crag_routes.id AND ascents.type = 'AscentCragRoute' AND ascents.user_id = #{@user.id}")
+        ascents = AscentCragRoute.joins(crag_route: :crag)
                                  .includes(
-                                   crag_sector: { photo: { picture_attachment: :blob } },
-                                   crag: { photo: { picture_attachment: :blob } },
-                                   photo: { picture_attachment: :blob }
+                                   crag_route: {
+                                     crag_sector: { photo: { picture_attachment: :blob } },
+                                     crag: { photo: { picture_attachment: :blob } },
+                                     photo: { picture_attachment: :blob }
+                                   }
                                  )
-                                 .where(id: crag_route_ids)
-                                 .where(climbing_type: climbing_filters)
-                                 .order('ascents.released_at DESC, crag_routes.name, crag_routes.id')
-                                 .page(page)
-                      else
-                        CragRoute.includes(
-                          crag_sector: { photo: { picture_attachment: :blob } },
-                          crag: { photo: { picture_attachment: :blob } },
-                          photo: { picture_attachment: :blob }
-                        )
-                                 .where(id: crag_route_ids)
-                                 .where(climbing_type: climbing_filters)
-                                 .order('crag_routes.max_grade_value DESC, crag_routes.name, crag_routes.id')
-                                 .page(page)
-                      end
-        render json: crag_routes.map { |crag_route| crag_route.summary_to_json(with_crag_in_sector: false) }, status: :ok
+                                 .where(user_id: @user.id)
+                                 .where(crag_routes: { climbing_type: climbing_filters })
+
+        ascents = case params[:order]
+                  when 'crags'
+                    ascents.where(ascent_status: %i[sent red_point flash onsight]).order('crags.name, crag_routes.name, crag_routes.id')
+                  when 'released_at'
+                    ascents.made.order('ascents.released_at DESC, crag_routes.name, crag_routes.id')
+                  else
+                    ascents.where(ascent_status: %i[sent red_point flash onsight]).order('ascents.max_grade_value DESC, crag_routes.name, crag_routes.id')
+                  end
+
+        ascents = ascents.page(page)
+        ascent_routes = []
+        ascents.each do |ascent|
+          route = ascent.crag_route.summary_to_json(with_crag_in_sector: false)
+          route[:grade_gap][:max_grade_value] = ascent.max_grade_value
+          route[:grade_gap][:min_grade_value] = ascent.min_grade_value
+          route[:grade_gap][:max_grade_text] = ascent.max_grade_text
+          route[:grade_gap][:min_grade_text] = ascent.min_grade_text
+          route[:released_at] = ascent.released_at
+          ascent_routes << route
+        end
+
+        render json: ascent_routes, status: :ok
       end
 
       def projects
@@ -300,9 +307,22 @@ module Api
       def subscribes_ascents
         page = params.fetch(:page, 1)
         subscribe_ids = @user.subscribes.accepted.where(followable_type: 'User').pluck(:followable_id)
-        ascents = AscentCragRoute.made.where(user_id: subscribe_ids).order(created_at: :desc, user_id: :asc).page(page)
+        ascents = AscentCragRoute.made
+                                 .where(user_id: subscribe_ids)
+                                 .order(created_at: :desc, user_id: :asc)
+                                 .page(page)
 
-        render json: ascents.map { |ascent| ascent.summary_to_json(with_user: true) }, status: :ok
+        ascent_crag_routes = []
+        ascents.each do |ascent|
+          ascent_route = ascent.summary_to_json(with_user: true)
+          ascent_route[:crag_route][:grade_gap][:max_grade_value] = ascent.max_grade_value
+          ascent_route[:crag_route][:grade_gap][:min_grade_value] = ascent.min_grade_value
+          ascent_route[:crag_route][:grade_gap][:max_grade_text] = ascent.max_grade_text
+          ascent_route[:crag_route][:grade_gap][:min_grade_text] = ascent.min_grade_text
+          ascent_crag_routes << ascent_route
+        end
+
+        render json: ascent_crag_routes, status: :ok
       end
 
       def photos
@@ -334,6 +354,8 @@ module Api
       end
 
       def banner
+        return unless verify_file banner_params[:banner], :image
+
         if @user.update(banner_params)
           render json: @user.detail_to_json(current_user: true), status: :ok
         else
@@ -342,6 +364,8 @@ module Api
       end
 
       def avatar
+        return unless verify_file avatar_params[:avatar], :image
+
         if @user.update(avatar_params)
           render json: @user.detail_to_json(current_user: true), status: :ok
         else
