@@ -9,7 +9,15 @@ module LogBook
         @user = user
       end
 
-      def climb_type
+      def uniq_ascent_crag_routes(only_lead_climbs=false)
+        if only_lead_climbs
+          @user.ascent_crag_routes.made.lead.uniq(&:crag_route_id)
+        else
+          @user.ascent_crag_routes.made.uniq(&:crag_route_id)
+        end
+      end
+
+      def climb_type(only_lead_climbs=false)
         sport_climbing = 0
         bouldering = 0
         multi_pitch = 0
@@ -18,7 +26,7 @@ module LogBook
         deep_water = 0
         via_ferrata = 0
 
-        @user.ascent_crag_routes.made.each do |ascent|
+        uniq_ascent_crag_routes(only_lead_climbs).each do |ascent|
           sport_climbing += 1 if ascent.climbing_type == 'sport_climbing'
           bouldering += 1 if ascent.climbing_type == 'bouldering'
           multi_pitch += 1 if ascent.climbing_type == 'multi_pitch'
@@ -56,7 +64,7 @@ module LogBook
         }
       end
 
-      def grade
+      def grade(only_lead_climbs=false)
         grades = {}
         54.times do |grade_value|
           next unless grade_value.even?
@@ -64,10 +72,10 @@ module LogBook
           grades[grade_value + 1] = { count: 0 }
         end
 
-        @user.ascent_crag_routes.made.each do |ascent|
+        uniq_ascent_crag_routes(only_lead_climbs).each do |ascent|
           next if ascent.min_grade_value.blank? || ascent.min_grade_value.zero?
 
-          grade_value = ascent.min_grade_value
+          grade_value = ascent.sections.map { |section| section['grade_value'] }.max
           grade_value -= 1 if grade_value.even?
 
           grades[grade_value][:count] += 1
@@ -85,23 +93,23 @@ module LogBook
         }
       end
 
-      def years
-        if @user.ascent_crag_routes.made.count.zero?
+      def years(only_lead_climbs=false)
+            if uniq_ascent_crag_routes(only_lead_climbs).count.zero?
           return {
             datasets: [{ data: [] }],
             labels: []
           }
         end
 
-        min_year = @user.ascent_crag_routes.made.minimum(:released_at).year
-        max_year = @user.ascent_crag_routes.made.maximum(:released_at).year
+        min_year = uniq_ascent_crag_routes(only_lead_climbs).minimum(:released_at).year
+        max_year = uniq_ascent_crag_routes(only_lead_climbs).maximum(:released_at).year
         years = {}
 
         (min_year..max_year).each do |year|
           years[year] = { count: 0 }
         end
 
-        @user.ascent_crag_routes.made.order(:released_at).each do |ascent|
+        uniq_ascent_crag_routes(only_lead_climbs).order(:released_at).each do |ascent|
           next if ascent.released_at.blank?
 
           years[ascent.released_at.year][:count] += 1
@@ -119,23 +127,24 @@ module LogBook
         }
       end
 
-      def months
-        if @user.ascent_crag_routes.made.count.zero?
+      def months(only_lead_climbs=false)
+
+        if uniq_ascent_crag_routes(only_lead_climbs).count.zero?
           return {
             datasets: [{ data: [] }],
             labels: []
           }
         end
 
-        min_date = @user.ascent_crag_routes.made.minimum(:released_at)
-        max_date = @user.ascent_crag_routes.made.maximum(:released_at)
+        min_date = uniq_ascent_crag_routes(only_lead_climbs).minimum(:released_at)
+        max_date = uniq_ascent_crag_routes(only_lead_climbs).maximum(:released_at)
         dates = {}
 
         (min_date..max_date).each do |date|
           dates[date.strftime('%Y-%m')] ||= { count: 0 }
         end
 
-        @user.ascent_crag_routes.made.order(:released_at).each do |ascent|
+        uniq_ascent_crag_routes(only_lead_climbs).order(:released_at).each do |ascent|
           next if ascent.released_at.blank?
 
           dates[ascent.released_at.strftime('%Y-%m')][:count] += 1
@@ -153,16 +162,16 @@ module LogBook
         }
       end
 
-      def evolution_by_year
-        if @user.ascent_crag_routes.made.count.zero?
+      def evolution_by_year(only_lead_climbs=false)
+        if uniq_ascent_crag_routes(only_lead_climbs).count.zero?
           return {
             datasets: [{ data: [] }],
             labels: []
           }
         end
 
-        min_year = @user.ascent_crag_routes.made.minimum(:released_at).year
-        max_year = @user.ascent_crag_routes.made.maximum(:released_at).year
+        min_year = uniq_ascent_crag_routes(only_lead_climbs).minimum(:released_at).year
+        max_year = uniq_ascent_crag_routes(only_lead_climbs).maximum(:released_at).year
         years = {}
 
         (min_year..max_year).each do |year|
@@ -177,7 +186,7 @@ module LogBook
           }
         end
 
-        @user.ascent_crag_routes.made.each do |ascent|
+        uniq_ascent_crag_routes(only_lead_climbs).each do |ascent|
           next if ascent.max_grade_value.blank?
 
           grade_value = years[ascent.released_at.year][ascent.climbing_type.to_sym]
