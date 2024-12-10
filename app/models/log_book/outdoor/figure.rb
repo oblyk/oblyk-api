@@ -3,55 +3,45 @@
 module LogBook
   module Outdoor
     class Figure
-      attr_accessor :user
+      attr_accessor :user, :filters
 
-      def initialize(user)
+      def initialize(user, filters)
         @user = user
+        @filters = filters
+        @filtered_ascents =  @user.ascent_crag_routes.made.filtered(@filters)
       end
 
-      def figures(only_lead_climbs=false)
+      def figures
         {
           countries: countries_count,
           regions: regions_count,
           crags: crags_count,
-          ascents: ascents_count(only_lead_climbs),
-          meters: sum_meters(only_lead_climbs),
-          # TODO-now also debug analytiks avec year month et evolution
-          max_grade_value: max_grad_value(only_lead_climbs)
+          ascents: ascents_count,
+          meters: sum_meters,
+          max_grade_value: max_grad_value
         }
       end
 
       private
 
-      def uniq_ascent_crag_routes(only_lead_climbs=false)
-        if only_lead_climbs
-          @user.ascent_crag_routes.made.lead.uniq(&:crag_route_id)
-        else
-          @user.ascent_crag_routes.made.uniq(&:crag_route_id)
+      def ascents_count
+        @filtered_ascents.count
+      end
+
+      def sum_meters
+        @filtered_ascents.sum do |ascent|
+          # Extract the section heights, ignoring nil values
+          sections_heights = ascent.sections.map { |section| section['height'] }.compact
+          # If sections have heights, sum them, otherwise fallback to the ascent's height
+          sections_heights.any? ? sections_heights.sum : (ascent.height || 0)
         end
       end
 
-      def ascents_count(only_lead_climbs=false)
-        uniq_ascent_crag_routes(only_lead_climbs).count
+      def max_grad_value
+        @filtered_ascents.maximum(:max_grade_value)
       end
 
-      def sum_meters(only_lead_climbs=false)
-        height_climbed = 0
-        uniq_ascent_crag_routes(only_lead_climbs).each do |ascent|
-          sections_heights = ascent.sections.map {|section| section['height']}.compact
-          if sections_heights.size > 0   # si les hauteurs des sections d'une GV ne sont pas renseignées
-            height_climbed += (sections_heights.sum || 0) # 0 si les hauteurs sont null
-          else
-            height_climbed += (ascent.height || 0) # on prend la hauteur totale de la GV ou 0 si nulle
-          end
-        end
-        height_climbed
-      end
-
-      def max_grad_value(only_lead_climbs=false)
-        uniq_ascent_crag_routes(only_lead_climbs).map(&:max_grade_value).compact.max
-      end
-
+      # for countries, regions and crags we don't apply the filters (this choice can be discussed)
       def countries_count
         @user.ascended_crags.distinct.count(:country)
       end
@@ -61,7 +51,7 @@ module LogBook
       end
 
       def crags_count
-        @user.ascended_crags.distinct.count(:name)
+        @user.ascended_crags.distinct.count(:id)
       end
     end
   end
