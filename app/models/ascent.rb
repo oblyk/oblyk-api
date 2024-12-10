@@ -19,6 +19,7 @@ class Ascent < ApplicationRecord
 
   scope :made, -> { where.not(ascent_status: :project) }
   scope :lead, -> { where(roping_status: [:lead_climb, :multi_pitch_leader, :multi_pitch_alternate_lead]) }
+  scope :second, -> { where(roping_status: [:top_rope, :multi_pitch_second]) }
   scope :project, -> { where(ascent_status: :project) }
 
   after_save :attache_to_climbing_session
