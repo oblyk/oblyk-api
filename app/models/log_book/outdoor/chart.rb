@@ -9,14 +9,6 @@ module LogBook
         @user = user
       end
 
-      def uniq_ascent_crag_routes(only_lead_climbs=false)
-        if only_lead_climbs
-          @user.ascent_crag_routes.made.lead.uniq(&:crag_route_id)
-        else
-          @user.ascent_crag_routes.made.uniq(&:crag_route_id)
-        end
-      end
-
       def climb_type(only_lead_climbs=false)
         sport_climbing = 0
         bouldering = 0
@@ -73,9 +65,9 @@ module LogBook
         end
 
         uniq_ascent_crag_routes(only_lead_climbs).each do |ascent|
-          next if ascent.min_grade_value.blank? || ascent.min_grade_value.zero?
+          next if ascent.max_grade_value.blank? || ascent.max_grade_value.zero?
 
-          grade_value = ascent.sections.map { |section| section['grade_value'] }.max
+          grade_value = ascent.max_grade_value
           grade_value -= 1 if grade_value.even?
 
           grades[grade_value][:count] += 1
@@ -94,22 +86,23 @@ module LogBook
       end
 
       def years(only_lead_climbs=false)
-            if uniq_ascent_crag_routes(only_lead_climbs).count.zero?
+        if uniq_ascent_crag_routes(only_lead_climbs).count.zero?
           return {
             datasets: [{ data: [] }],
             labels: []
           }
         end
 
-        min_year = uniq_ascent_crag_routes(only_lead_climbs).minimum(:released_at).year
-        max_year = uniq_ascent_crag_routes(only_lead_climbs).maximum(:released_at).year
+
+        min_year = uniq_ascent_crag_routes(only_lead_climbs).map(&:released_at).compact.min.year
+        max_year = uniq_ascent_crag_routes(only_lead_climbs).map(&:released_at).compact.max.year
         years = {}
 
         (min_year..max_year).each do |year|
           years[year] = { count: 0 }
         end
 
-        uniq_ascent_crag_routes(only_lead_climbs).order(:released_at).each do |ascent|
+        uniq_ascent_crag_routes(only_lead_climbs).sort_by(&:released_at).each do |ascent|
           next if ascent.released_at.blank?
 
           years[ascent.released_at.year][:count] += 1
@@ -128,7 +121,6 @@ module LogBook
       end
 
       def months(only_lead_climbs=false)
-
         if uniq_ascent_crag_routes(only_lead_climbs).count.zero?
           return {
             datasets: [{ data: [] }],
@@ -136,15 +128,15 @@ module LogBook
           }
         end
 
-        min_date = uniq_ascent_crag_routes(only_lead_climbs).minimum(:released_at)
-        max_date = uniq_ascent_crag_routes(only_lead_climbs).maximum(:released_at)
+        min_date = uniq_ascent_crag_routes(only_lead_climbs).map(&:released_at).compact.min
+        max_date = uniq_ascent_crag_routes(only_lead_climbs).map(&:released_at).compact.max
         dates = {}
 
         (min_date..max_date).each do |date|
           dates[date.strftime('%Y-%m')] ||= { count: 0 }
         end
 
-        uniq_ascent_crag_routes(only_lead_climbs).order(:released_at).each do |ascent|
+        uniq_ascent_crag_routes(only_lead_climbs).sort_by(&:released_at).each do |ascent|
           next if ascent.released_at.blank?
 
           dates[ascent.released_at.strftime('%Y-%m')][:count] += 1
@@ -170,8 +162,8 @@ module LogBook
           }
         end
 
-        min_year = uniq_ascent_crag_routes(only_lead_climbs).minimum(:released_at).year
-        max_year = uniq_ascent_crag_routes(only_lead_climbs).maximum(:released_at).year
+        min_year = uniq_ascent_crag_routes(only_lead_climbs).map(&:released_at).compact.min.year
+        max_year = uniq_ascent_crag_routes(only_lead_climbs).map(&:released_at).compact.max.year
         years = {}
 
         (min_year..max_year).each do |year|
@@ -264,6 +256,17 @@ module LogBook
           datasets: datasets,
           labels: years.map { |year| year[0] }
         }
+      end
+
+      private
+
+      # return an array (not  an ActiveRecord) of AscentCragRoute
+      def uniq_ascent_crag_routes(only_lead_climbs=false)
+        if only_lead_climbs
+          @user.ascent_crag_routes.made.lead.uniq(&:crag_route_id)
+        else
+          @user.ascent_crag_routes.made.uniq(&:crag_route_id)
+        end
       end
     end
   end

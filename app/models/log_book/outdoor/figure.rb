@@ -49,7 +49,7 @@ module LogBook
       end
 
       def max_grad_value(only_lead_climbs=false)
-        uniq_ascent_crag_routes(only_lead_climbs).map(&:max_grade_value).max
+        uniq_ascent_crag_routes(only_lead_climbs).map(&:max_grade_value).compact.max
       end
 
       def countries_count
