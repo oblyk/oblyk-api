@@ -12,23 +12,23 @@ module Api
           render json: LogBook::Outdoor::Figure.new(@user, @filters).figures, status: :ok
         end
         def climb_types_chart
-          render json: LogBook::Outdoor::Chart.new(@user, @filters).climb_type, status: :ok
+          render json: LogBook::Outdoor::Chart.new(@filters).climb_type, status: :ok
         end
 
         def grades_chart
-          render json: LogBook::Outdoor::Chart.new(@user, @filters).grade, status: :ok
+          render json: LogBook::Outdoor::Chart.new(@filters).grade, status: :ok
         end
 
         def years_chart
-          render json: LogBook::Outdoor::Chart.new(@user, @filters).years, status: :ok
+          render json: LogBook::Outdoor::Chart.new(@filters).years, status: :ok
         end
 
         def months_chart
-          render json: LogBook::Outdoor::Chart.new(@user, @filters).months, status: :ok
+          render json: LogBook::Outdoor::Chart.new(@filters).months, status: :ok
         end
 
         def evolutions_chart
-          render json: LogBook::Outdoor::Chart.new(@user, @filters).evolution_by_year, status: :ok
+          render json: LogBook::Outdoor::Chart.new(@filters).evolution_by_year, status: :ok
         end
 
         def daily_ascents
@@ -89,10 +89,7 @@ module Api
         end
 
         def set_filters
-          Rails.logger.warn "Params: #{params}"
-          @filters = CragAscentFilter.new(params).extract_filters
-          Rails.logger.warn "Filters: #{@filters}"
-
+          @filters = CragAscentFilters.new(@user, params)
         end
 
       end

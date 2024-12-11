@@ -25,20 +25,22 @@ class Ascent < ApplicationRecord
   scope :on_sight, -> { where(ascent_status: :onsight) }
   scope :by_climbing_type, ->(type) { joins(:crag_route).where(crag_routes: { climbing_type: type }) }
   # scope for uniqueness: keep only the last ascent for each crag_route_id ; base_query arg is for executing this one after the others on resulting ascents
-  scope :unique_by_crag_route, ->(base_query)  {
-    where("(crag_route_id, created_at) IN (
-    SELECT crag_route_id, MAX(created_at)
-    FROM (#{base_query.to_sql}) AS filtered_results
-    GROUP BY crag_route_id
-  )")
-  }
+  # requete SQL probablement trop lente -> on utilise donc un Rails uniq dans le modele appelant
+  # TODO a supprimer apres confirmation avec Lucien
+  # scope :unique_by_crag_route, ->(base_query)  {
+  #   where("(crag_route_id, created_at) IN (
+  #   SELECT crag_route_id, MAX(created_at)
+  #   FROM (#{base_query.to_sql}) AS filtered_results
+  #   GROUP BY crag_route_id
+  # )")
+  # }
   # Combine everything in the `filtered` scope
   scope :filtered, ->(filters) {
     scoped_results = self
     scoped_results = scoped_results.lead if filters[:only_lead_climbs]
     scoped_results = scoped_results.on_sight if filters[:only_on_sight]
     scoped_results = scoped_results.by_climbing_type(filters[:climbing_type_filter]) if filters[:climbing_type_filter] && filters[:climbing_type_filter] != 'all'
-    scoped_results = scoped_results.unique_by_crag_route(scoped_results) if filters[:no_double]
+    #scoped_results = scoped_results.unique_by_crag_route(scoped_results) if filters[:no_double]
     scoped_results
   }
 

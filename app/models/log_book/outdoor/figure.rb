@@ -3,12 +3,12 @@
 module LogBook
   module Outdoor
     class Figure
-      attr_accessor :user, :filters
+      attr_accessor :user
 
+      # filters parameter is an instance of CragAscentFilters
       def initialize(user, filters)
         @user = user
-        @filters = filters
-        @filtered_ascents =  @user.ascent_crag_routes.made.filtered(@filters)
+        @filtered_ascents = filters.filtered_ascents_array
       end
 
       def figures
@@ -38,12 +38,13 @@ module LogBook
       end
 
       def max_grad_value
-        @filtered_ascents.maximum(:max_grade_value)
+        @filtered_ascents.map(&:max_grade_value).compact.max
       end
 
       # for countries, regions and crags we don't apply the filters (this choice can be discussed)
       def countries_count
         @user.ascended_crags.distinct.count(:country)
+        @filtered_ascents.map(&:crag).map(&:country).uniq.count
       end
 
       def regions_count

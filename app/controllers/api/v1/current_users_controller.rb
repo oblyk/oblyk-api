@@ -7,6 +7,7 @@ module Api
 
       before_action :protected_by_session
       before_action :set_user
+      before_action :set_filters, only: %i[ascended_crag_routes]
 
       def show
         render json: @user.detail_to_json(current_user: true), status: :ok
@@ -219,41 +220,23 @@ module Api
       def ascended_crag_routes
         page = params.fetch(:page, 1)
 
-        climbing_type_filter = params.fetch(:climbing_type, 'all')
-        climbing_filters = []
-        climbing_filters << 'sport_climbing' if %w[sport_climbing all].include?(climbing_type_filter)
-        climbing_filters << 'bouldering' if %w[bouldering all].include?(climbing_type_filter)
-        climbing_filters << 'multi_pitch' if %w[multi_pitch all].include?(climbing_type_filter)
-        climbing_filters << 'trad_climbing' if %w[trad_climbing all].include?(climbing_type_filter)
-        climbing_filters << 'aid_climbing' if %w[aid_climbing all].include?(climbing_type_filter)
-        climbing_filters << 'deep_water' if %w[deep_water all].include?(climbing_type_filter)
-        climbing_filters << 'via_ferrata' if %w[via_ferrata all].include?(climbing_type_filter)
-
-        only_lead_climbs_param = params.fetch(:only_lead_climbs, 'false')
-        only_lead_climbs = ActiveModel::Type::Boolean.new.cast(only_lead_climbs_param)
-
-        ascents = AscentCragRoute.joins(crag_route: :crag)
-                                 .includes(
-                                   crag_route: {
-                                     crag_sector: { photo: { picture_attachment: :blob } },
-                                     crag: { photo: { picture_attachment: :blob } },
-                                     photo: { picture_attachment: :blob }
-                                   }
-                                 )
-                                 .where(user_id: @user.id)
-                                 .where(crag_routes: { climbing_type: climbing_filters })
-
-        if only_lead_climbs
-          ascents = ascents.where(roping_status: [:lead_climb, :multi_pitch_leader, :multi_pitch_alternate_lead])
-        end
+        ascents = @filters.filtered_ascents_active_record
+                          .joins(crag_route: :crag)
+                          .includes(
+                            crag_route: {
+                              crag_sector: { photo: { picture_attachment: :blob } },
+                              crag: { photo: { picture_attachment: :blob } },
+                              photo: { picture_attachment: :blob }
+                            },
+                          )
 
         ascents = case params[:order]
                   when 'crags'
-                    ascents.where(ascent_status: %i[sent red_point flash onsight]).order('crags.name, crag_routes.name, crag_routes.id')
+                    ascents.no_repetition.order('crags.name, crag_routes.name, crag_routes.id')
                   when 'released_at'
-                    ascents.made.order('ascents.released_at DESC, crag_routes.name, crag_routes.id')
+                    ascents.order('ascents.released_at DESC, crag_routes.name, crag_routes.id')
                   else
-                    ascents.where(ascent_status: %i[sent red_point flash onsight]).order('ascents.max_grade_value DESC, crag_routes.name, crag_routes.id')
+                    ascents.no_repetition.order('ascents.max_grade_value DESC, crag_routes.name, crag_routes.id')
                   end
 
         ascents = ascents.page(page)
@@ -265,6 +248,8 @@ module Api
           route[:grade_gap][:max_grade_text] = ascent.max_grade_text
           route[:grade_gap][:min_grade_text] = ascent.min_grade_text
           route[:released_at] = ascent.released_at
+          # add ascent_status and roping_status fields and merge with route json
+          route = route.merge(ascent.as_json(only: %i[ascent_status roping_status]))
           ascent_routes << route
         end
 
@@ -482,6 +467,10 @@ module Api
 
       def set_user
         @user = @current_user
+      end
+
+      def set_filters
+        @filters = CragAscentFilters.new(@user, params)
       end
 
       def user_params

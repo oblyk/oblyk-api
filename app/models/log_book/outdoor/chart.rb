@@ -3,18 +3,16 @@
 module LogBook
   module Outdoor
     class Chart
-      attr_accessor :user
 
-      def initialize(user, filters)
-        @user = user
-        @filters = filters
-        @filtered_ascents =  @user.ascent_crag_routes.made.filtered(@filters)
+      # filters parameter is an instance of CragAscentFilters
+      def initialize(filters)
+        @filtered_ascents_array = filters.filtered_ascents_array
       end
 
       def climb_type
         climb_counts = Hash.new(0)
 
-        @filtered_ascents.each do |ascent|
+        @filtered_ascents_array.each do |ascent|
           climb_counts[ascent.climbing_type] += 1 if Climb::CRAG_LIST.include?(ascent.climbing_type)
         end
 
@@ -31,14 +29,9 @@ module LogBook
       end
 
       def grade
-        grades = {}
-        54.times do |grade_value|
-          next unless grade_value.even?
+        grades = Hash[(1..54).step(2).map { |grade_value| [grade_value, { count: 0 }] }]
 
-          grades[grade_value + 1] = { count: 0 }
-        end
-
-        @filtered_ascents.each do |ascent|
+        @filtered_ascents_array.each do |ascent|
           next if ascent.max_grade_value.blank? || ascent.max_grade_value.zero?
 
           grade_value = ascent.max_grade_value
@@ -60,11 +53,11 @@ module LogBook
       end
 
       def years
-        return { datasets: [{ data: [] }], labels: [] } if @filtered_ascents.blank?
+        return { datasets: [{ data: [] }], labels: [] } if @filtered_ascents_array.blank?
 
         years = Hash.new(0)
 
-        @filtered_ascents.each do |ascent|
+        @filtered_ascents_array.each do |ascent|
           next if ascent.released_at.blank?
 
           years[ascent.released_at.year] += 1
@@ -85,11 +78,11 @@ module LogBook
       end
 
       def months
-        return { datasets: [{ data: [] }], labels: [] } if @filtered_ascents.blank?
+        return { datasets: [{ data: [] }], labels: [] } if @filtered_ascents_array.blank?
 
         dates = Hash.new(0)
 
-        @filtered_ascents.each do |ascent|
+        @filtered_ascents_array.each do |ascent|
           next if ascent.released_at.blank?
           dates[ascent.released_at.strftime('%Y-%m')] += 1
         end
@@ -109,11 +102,11 @@ module LogBook
       end
 
       def evolution_by_year
-        return { datasets: [{ data: [] }], labels: [] } if @filtered_ascents.blank?
+        return { datasets: [{ data: [] }], labels: [] } if @filtered_ascents_array.blank?
 
         years = Hash.new { |hash, year| hash[year] = Hash.new(0) }
 
-        @filtered_ascents.each do |ascent|
+        @filtered_ascents_array.each do |ascent|
           next if ascent.released_at.blank? || ascent.max_grade_value.blank?
 
           year = ascent.released_at.year
@@ -125,7 +118,7 @@ module LogBook
 
         datasets = Climb::CRAG_LIST.map do |climbing_type|
           label = climbing_type.to_sym
-          next unless years.values.map { |year_data| year_data[label] }.sum.positive?
+          next unless years.values.sum { |year_data| year_data[label] }.positive?
 
           {
             data: sorted_years.map { |year| years[year][label] },
@@ -143,3 +136,4 @@ module LogBook
     end
   end
 end
+
