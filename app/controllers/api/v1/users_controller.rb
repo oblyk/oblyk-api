@@ -10,6 +10,7 @@ module Api
       before_action :protected_outdoor_log_book, only: %i[outdoor_figures outdoor_climb_types_chart ascended_crag_routes outdoor_grades_chart]
       before_action :protected_indoor_log_book, only: %i[indoor_figures indoor_climb_types_chart indoor_grade_chart indoor_by_level_chart]
       before_action :set_indoor_ascents, only: %i[indoor_grade_chart indoor_by_level_chart]
+      before_action :set_filters, only: %i[ascended_crag_routes outdoor_grades_chart outdoor_figures outdoor_climb_types_chart]
 
       def show
         render json: @user.detail_to_json, status: :ok
@@ -62,53 +63,53 @@ module Api
       end
 
       def outdoor_figures
-        render json: LogBook::Outdoor::Figure.new(@user).figures, status: :ok
+        render json: LogBook::Outdoor::Figure.new(@filters).figures, status: :ok
       end
 
       def outdoor_climb_types_chart
-        render json: LogBook::Outdoor::Chart.new(@user).climb_type, status: :ok
+        render json: LogBook::Outdoor::Chart.new(@filters).climb_type, status: :ok
       end
 
       def ascended_crag_routes
-        crag_route_ids = @user.ascent_crag_routes.made.pluck(:crag_route_id)
         page = params.fetch(:page, 1)
-        climbing_type_filter = params.fetch(:climbing_type, 'all')
-        climbing_filters = []
-        climbing_filters << 'sport_climbing' if %w[sport_climbing all].include?(climbing_type_filter)
-        climbing_filters << 'bouldering' if %w[bouldering all].include?(climbing_type_filter)
-        climbing_filters << 'multi_pitch' if %w[multi_pitch all].include?(climbing_type_filter)
-        climbing_filters << 'trad_climbing' if %w[trad_climbing all].include?(climbing_type_filter)
-        climbing_filters << 'aid_climbing' if %w[aid_climbing all].include?(climbing_type_filter)
-        climbing_filters << 'deep_water' if %w[deep_water all].include?(climbing_type_filter)
-        climbing_filters << 'via_ferrata' if %w[via_ferrata all].include?(climbing_type_filter)
-        # TODO-now ajouter aussi ici only lead climb ... ou pas
-        @crag_routes = case params[:order]
-                       when 'crags'
-                         CragRoute.includes(:crag, :crag_sector)
-                                  .where(id: crag_route_ids)
-                                  .where(climbing_type: climbing_filters)
-                                  .joins(:crag)
-                                  .order('crags.name, crag_routes.name, crag_routes.id')
-                                  .page(page)
-                       when 'released_at'
-                         CragRoute.joins("INNER JOIN ascents ON ascents.crag_route_id = crag_routes.id AND ascents.type = 'AscentCragRoute' AND ascents.user_id = #{@user.id}")
-                                  .includes(:crag, :crag_sector)
-                                  .where(climbing_type: climbing_filters)
-                                  .where(id: crag_route_ids)
-                                  .order('ascents.released_at DESC, crag_routes.name, crag_routes.id')
-                                  .page(page)
-                       else
-                         CragRoute.includes(:crag, :crag_sector)
-                                  .where(id: crag_route_ids)
-                                  .where(climbing_type: climbing_filters)
-                                  .order('crag_routes.max_grade_value DESC, crag_routes.name, crag_routes.id')
-                                  .page(page)
-                       end
-        render json: @crag_routes.map(&:summary_to_json), status: :ok
+
+        # note that we don't apply the Rails filters here (eg no-double filter is not applied)
+        ascents = @filters.filtered_ascents_active_record
+                          .joins(crag_route: :crag)
+                          .includes(
+                            crag_route: {
+                              crag_sector: { photo: { picture_attachment: :blob } },
+                              crag: { photo: { picture_attachment: :blob } },
+                              photo: { picture_attachment: :blob }
+                            },
+                            )
+
+        ascents = case params[:order]
+                  when 'crags'
+                    ascents.no_repetition.order('crags.name, crag_routes.name, crag_routes.id')
+                  when 'released_at'
+                    ascents.order('ascents.released_at DESC, crag_routes.name, crag_routes.id')
+                  else
+                    ascents.no_repetition.order('ascents.max_grade_value DESC, crag_routes.name, crag_routes.id')
+                  end
+
+        ascents = ascents.page(page)
+        ascent_routes = []
+        ascents.each do |ascent|
+          route = ascent.crag_route.summary_to_json(with_crag_in_sector: false)
+          route[:grade_gap][:max_grade_value] = ascent.max_grade_value
+          route[:grade_gap][:min_grade_value] = ascent.min_grade_value
+          route[:grade_gap][:max_grade_text] = ascent.max_grade_text
+          route[:grade_gap][:min_grade_text] = ascent.min_grade_text
+          route[:released_at] = ascent.released_at
+          ascent_routes << route
+        end
+
+        render json: ascent_routes, status: :ok
       end
 
       def outdoor_grades_chart
-        render json: LogBook::Outdoor::Chart.new(@user).grade, status: :ok
+        render json: LogBook::Outdoor::Chart.new(@filters).grade, status: :ok
       end
 
       def indoor_figures
@@ -186,6 +187,10 @@ module Api
                 else
                   User.find_by slug_name: params[:id]
                 end
+      end
+
+      def set_filters
+        @filters = CragAscentFilters.new(@user, params)
       end
 
       def set_indoor_ascents

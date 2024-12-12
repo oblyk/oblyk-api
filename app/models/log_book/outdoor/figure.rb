@@ -6,8 +6,7 @@ module LogBook
       attr_accessor :user
 
       # filters parameter is an instance of CragAscentFilters
-      def initialize(user, filters)
-        @user = user
+      def initialize(filters)
         @filtered_ascents = filters.filtered_ascents_array
       end
 

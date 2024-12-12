@@ -9,7 +9,7 @@ module Api
         before_action :set_filters, except: [:daily_ascents, :ascents_of_crag]
 
         def figures
-          render json: LogBook::Outdoor::Figure.new(@user, @filters).figures, status: :ok
+          render json: LogBook::Outdoor::Figure.new(@filters).figures, status: :ok
         end
         def climb_types_chart
           render json: LogBook::Outdoor::Chart.new(@filters).climb_type, status: :ok
