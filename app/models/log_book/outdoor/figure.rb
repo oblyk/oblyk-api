@@ -41,18 +41,16 @@ module LogBook
         @filtered_ascents.map(&:max_grade_value).compact.max
       end
 
-      # for countries, regions and crags we don't apply the filters (this choice can be discussed)
       def countries_count
-        @user.ascended_crags.distinct.count(:country)
         @filtered_ascents.map(&:crag).map(&:country).uniq.count
       end
 
       def regions_count
-        @user.ascended_crags.distinct.count(:region)
+        @filtered_ascents.map(&:crag).map(&:region).uniq.count
       end
 
       def crags_count
-        @user.ascended_crags.distinct.count(:id)
+        @filtered_ascents.map(&:crag).uniq.count
       end
     end
   end
