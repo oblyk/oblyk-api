@@ -40,7 +40,7 @@ class Ascent < ApplicationRecord
     scoped_results = scoped_results.lead if filters[:only_lead_climbs]
     scoped_results = scoped_results.on_sight if filters[:only_on_sight]
     scoped_results = scoped_results.by_climbing_type(filters[:climbing_type_filter]) if filters[:climbing_type_filter] && filters[:climbing_type_filter] != 'all'
-    #scoped_results = scoped_results.unique_by_crag_route(scoped_results) if filters[:no_double]
+    # scoped_results = scoped_results.unique_by_crag_route(scoped_results) if filters[:no_double]
     scoped_results
   }
 

@@ -81,7 +81,7 @@ module Api
         climbing_filters << 'aid_climbing' if %w[aid_climbing all].include?(climbing_type_filter)
         climbing_filters << 'deep_water' if %w[deep_water all].include?(climbing_type_filter)
         climbing_filters << 'via_ferrata' if %w[via_ferrata all].include?(climbing_type_filter)
-        # TODO-now ajouter aussi ici only lead climb
+        # TODO-now ajouter aussi ici only lead climb ... ou pas
         @crag_routes = case params[:order]
                        when 'crags'
                          CragRoute.includes(:crag, :crag_sector)

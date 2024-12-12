@@ -19,7 +19,7 @@ class CragAscentFilters
   DEFAULTS = {
     only_lead_climbs: false,
     only_on_sight: false,
-    no_double: false, # filter out repetitions and only keep the first ascent if there are multiple ascents of the same route
+    no_double: false, # filter out repetitions and only keep the last ascent if there are multiple ascents of the same route
     climbing_type_filter: 'all' # filter among the climbing types Climb::CRAG_LIST
   }.freeze
 

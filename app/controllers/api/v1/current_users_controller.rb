@@ -220,6 +220,7 @@ module Api
       def ascended_crag_routes
         page = params.fetch(:page, 1)
 
+        # note that we don't apply the Rails filters here (eg no-double filter is not applied)
         ascents = @filters.filtered_ascents_active_record
                           .joins(crag_route: :crag)
                           .includes(
@@ -248,8 +249,6 @@ module Api
           route[:grade_gap][:max_grade_text] = ascent.max_grade_text
           route[:grade_gap][:min_grade_text] = ascent.min_grade_text
           route[:released_at] = ascent.released_at
-          # add ascent_status and roping_status fields and merge with route json
-          route = route.merge(ascent.as_json(only: %i[ascent_status roping_status]))
           ascent_routes << route
         end
 
