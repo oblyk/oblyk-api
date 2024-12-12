@@ -47,3 +47,7 @@
 config/deploy/staging.rb
 config/deploy/production.rb
 config/gsc.keyfile.json
+/doc/
+/doc/
+/libffi7_3.3-4_amd64.deb
+/token.cro
