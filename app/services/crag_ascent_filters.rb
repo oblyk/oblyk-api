@@ -67,8 +67,25 @@ class CragAscentFilters
   # build the ActiveRecord query to get the filtered ascents array from the database
   def filtered_ascents_array_from_db
     # no_double filter as an ActiveRecord scope would be more slow as sql query. So we do it outside ascent.rb scope
+    # we order according to roping_status and ascent_status in order to keep the "best" ascent
     if @filters[:no_double]
-      @user.ascent_crag_routes.made.filtered(@filters).uniq(&:crag_route_id)
+      @user.ascent_crag_routes
+           .made
+           .filtered(@filters)
+           .order(Arel.sql("CASE roping_status
+                      WHEN 'lead_climb' THEN 1
+                      WHEN 'multi_pitch_leader' THEN 2
+                      WHEN 'multi_pitch_alternate_lead' THEN 3
+                      ELSE 4
+                      END"),
+                  Arel.sql("CASE ascent_status
+                      WHEN 'onsight' THEN 1
+                      WHEN 'flash' THEN 2
+                      WHEN 'red_point' THEN 3
+                      WHEN 'sent' THEN 4
+                      ELSE 4
+                      END"))
+           .uniq(&:crag_route_id)
     else
       @user.ascent_crag_routes.made.filtered(@filters).to_a
     end
