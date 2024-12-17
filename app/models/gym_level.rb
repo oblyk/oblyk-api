@@ -36,6 +36,6 @@ class GymLevel < ApplicationRecord
   end
 
   def colors_system_mark
-    levels.map { |gym_grade_line| gym_grade_line[:color] }.join
+    levels.map { |level| level['color'] }.join
   end
 end

@@ -75,6 +75,16 @@ class AscentGymRoute < Ascent
     gym_route.delete_summary_cache
   end
 
+  def init_level_color
+    return unless gym_route
+
+    gym_level = gym_route.gym.gym_levels.find_by climbing_type: gym_route.climbing_type
+    return unless gym_level&.levels&.count&.positive?
+
+    color_system = ColorSystem.create_from_level gym_level
+    self.color_system_line = color_system.color_system_lines.find_by(hex_color: gym_route.level_color) if color_system
+  end
+
   private
 
   def update_gym_route!
@@ -93,6 +103,7 @@ class AscentGymRoute < Ascent
 
   def historize_ascents
     return unless gym_route
+    return if selected_sections.blank?
 
     self.height = gym_route.height
     self.climbing_type = gym_route.climbing_type
