@@ -78,7 +78,7 @@ class AscentGymRoute < Ascent
   def init_level_color
     return unless gym_route
 
-    gym_level = gym.gym_levels.find_by climbing_type: gym_route.climbing_type
+    gym_level = gym_route.gym.gym_levels.find_by climbing_type: gym_route.climbing_type
     return unless gym_level&.levels&.count&.positive?
 
     color_system = ColorSystem.create_from_level gym_level
