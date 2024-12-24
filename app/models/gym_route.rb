@@ -53,16 +53,14 @@ class GymRoute < ApplicationRecord
     gym_grade_line&.gym_grade || gym_sector.gym_grade
   end
 
-  def calculated_point(for_gym = nil)
+  def calculated_point
     if points
       point = points
     else
-      gym = for_gym.presence || self.gym
       point_system = case climbing_type
                      when 'sport_climbing'
                        gym.sport_climbing_ranking
                      when 'bouldering'
-                       # binding.pry if gym_sector.blank?
                        gym.boulder_ranking
                      else
                        gym.pan_ranking
@@ -115,7 +113,7 @@ class GymRoute < ApplicationRecord
   end
 
   def grade_system
-    gym.gym_levels.find_by(climbing_type: climbing_type)&.grade_system
+    gym.gym_levels.find { |level| level[:climbing_type] == climbing_type }&.grade_system
   end
 
   def mounted?

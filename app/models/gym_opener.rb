@@ -21,7 +21,7 @@ class GymOpener < ApplicationRecord
         last_name: last_name,
         slug_name: slug_name,
         deactivated_at: deactivated_at,
-        gym: gym.summary_to_json
+        gym: { id: gym_id }
       }
       data[:user] = user.summary_to_json(with_avatar: true) if user
       data
@@ -32,6 +32,7 @@ class GymOpener < ApplicationRecord
     summary_to_json.merge(
       {
         email: email,
+        gym: gym.summary_to_json,
         history: {
           created_at: created_at,
           updated_at: updated_at

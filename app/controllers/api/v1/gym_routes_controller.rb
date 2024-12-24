@@ -98,6 +98,16 @@ module Api
 
         routes = dismounted ? routes.dismounted : routes.mounted
 
+        routes = routes.includes(
+          :gym_openers,
+          :gym_sector,
+          :gym_space,
+          :gym,
+          gym: :gym_levels,
+          thumbnail_attachment: :blob,
+          gym_route_cover: { picture_attachment: :blob }
+        )
+
         routes = case order_by
                  when 'sector'
                    routes.joins(:gym_sector).reorder("gym_sectors.order #{direction}, gym_sectors.name, gym_sectors.id, gym_routes.anchor_number, gym_routes.min_grade_value, gym_routes.id")
