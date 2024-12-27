@@ -7,46 +7,37 @@ class CragAscentFilters
   # filtered_ascents_active_record is an ActiveRecord::Relation after applying only the filters that can be applied in the database query
   attr_reader :filtered_ascents_array, :filtered_ascents_active_record
 
-  # List of filter keys
-  FILTER_LIST = %i[
-    only_lead_climbs
-    only_on_sight
-    no_double
-    climbing_type_filter
-  ].freeze
-
   # Default values for the filters
-  DEFAULTS = {
-    only_lead_climbs: false,
-    only_on_sight: false,
-    no_double: false, # filter out repetitions and only keep the last ascent if there are multiple ascents of the same route
-    climbing_type_filter: 'all' # filter among the climbing types Climb::CRAG_LIST
+  # other filters : list of filters that are not directly applied in the database query
+  # but in Ruby (eg no_double filter with a uniq method)
+  # for now, only "no_double" filter is in this list
+  DEFAULTS_FILTERS = {
+    "ascentStatusList" => AscentStatus::LIST, # ['sent', 'red_point', 'flash', 'repetition']
+    "ropingStatusList" => RopingStatus::LIST, # ['lead_climb', 'top_rope', ...]
+    "climbingTypesList" => Climb::CRAG_LIST,  # ['sport_climbing', 'bouldering', ...]
+    "otherFilters" => ["no_double"]
   }.freeze
 
   def initialize(user, params)
     @use_cache = true # TODO decide here if use cache or not
     @user = user
     @filters = filters_from_params(params)
+    Rails.logger.info("filters: #{@filters}") # TODO remove this line
     @filtered_ascents_array = @use_cache ? filtered_ascents_array_with_cache : filtered_ascents_array_from_db
+    # WARNING: filtered_ascents_active_record does not include the otherFilters (ie no_double)
     @filtered_ascents_active_record = @user.ascent_crag_routes.made.filtered(@filters)
   end
 
   private
 
   def filters_from_params(params)
-    # ActionController::API does not parse JSON params in the second nested level into a Hash. We need to do it ourselves.
-    # We parse the JSON string into a Ruby Hash.
-    # ATTENTION: doing this transforms 'true' and 'false' strings into true and false booleans.
-    # If parse fails, we set filters to default
-    @filters = JSON.parse(params[:filters]) rescue {}
+    # Parse `filters` if it’s a string
+    filters = params[:filters]
+    filters = JSON.parse(filters) if filters.is_a?(String)
 
-    FILTER_LIST.each_with_object({}) do |key, result|
-      result[key] = extract_one_filter(key, DEFAULTS[key])
-    end
-  end
-
-  def extract_one_filter(key, default)
-    @filters&.fetch(key.to_s, default)
+    # Merge with defaults
+    # reverse_merge only adds default values for keys that are not yet present in `filters`.
+    (filters || {}).reverse_merge(DEFAULTS_FILTERS)
   end
 
   # use cache to accelerate the process. SQL requests are called several times for each function from separate apis
@@ -68,7 +59,7 @@ class CragAscentFilters
   def filtered_ascents_array_from_db
     # no_double filter as an ActiveRecord scope would be more slow as sql query. So we do it outside ascent.rb scope
     # we order according to roping_status and ascent_status in order to keep the "best" ascent
-    if @filters[:no_double]
+    if @filters["otherFilters"].include?("no_double")
       @user.ascent_crag_routes
            .made
            .filtered(@filters)

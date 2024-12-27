@@ -85,12 +85,12 @@ module Api
                             )
 
         ascents = case params[:order]
-                  when 'crags'
-                    ascents.no_repetition.order('crags.name, crag_routes.name, crag_routes.id')
+                  when 'crags' # TODO esty ce qu'on continue a filtrer specifiquement ici les repetitions
+                    ascents.order('crags.name, crag_routes.name, crag_routes.id')
                   when 'released_at'
                     ascents.order('ascents.released_at DESC, crag_routes.name, crag_routes.id')
                   else
-                    ascents.no_repetition.order('ascents.max_grade_value DESC, crag_routes.name, crag_routes.id')
+                    ascents.order('ascents.max_grade_value DESC, crag_routes.name, crag_routes.id')
                   end
 
         ascents = ascents.page(page)
