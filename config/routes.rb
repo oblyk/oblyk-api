@@ -16,6 +16,11 @@ Rails.application.routes.draw do
 
   mount ActionCable.server => '/cable'
 
+  # equivalent of cloudflare "Transform via URL" for the development environment
+  # see : https://developers.cloudflare.com/images/transform-images/transform-via-url/
+  # only a few options are supported (fit=crop or fit=scale-down and quality)
+  get 'cdn-cgi/image/:options/:key', controller: 'cdn_cgi/images', action: :variante_path
+
   namespace :api do
     namespace :v1 do
       namespace :sessions do

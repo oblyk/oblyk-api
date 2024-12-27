@@ -46,6 +46,10 @@ class GymChain < ApplicationRecord
         slug_name: slug_name,
         description: description,
         public_chain: public_chain,
+        attachments: {
+          banner: attachment_object(banner),
+          logo: attachment_object(logo)
+        },
         banner: banner.attached? ? banner_large_url : nil,
         banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil,
         banner_cropped_url: banner ? banner_cropped_medium_url : nil,
