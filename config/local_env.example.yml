@@ -62,6 +62,12 @@ CLOUDFLARE_R2_SECRET_ACCESS_KEY: 'secret_access_key'
 CLOUDFLARE_R2_BUCKET: 'bucket'
 CLOUDFLARE_R2_DOMAIN: 'https://storage.exemple.com'
 
+# Images storage domaine
+IMAGES_STORAGE_DOMAINE: 'http://localhost:3000'
+
+# Type of storage service (used only on development environment)
+ACTIVE_STORAGE_SERVICE: 'local'
+
 # Mapbox
 MAPBOX_TOKEN: 'mapbox-token'
 MAPBOX_STATIC_MAP_STYLE: 'mapbox-style-for-static-image'
