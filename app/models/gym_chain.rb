@@ -18,26 +18,6 @@ class GymChain < ApplicationRecord
   validates :banner, blob: { content_type: :image }, allow_nil: true
   validates :name, presence: true
 
-  def banner_large_url
-    resize_attachment banner, '1920x1920'
-  end
-
-  def banner_thumbnail_url
-    resize_attachment banner, '300x300'
-  end
-
-  def banner_cropped_medium_url
-    crop_attachment banner, '500x500'
-  end
-
-  def logo_large_url
-    resize_attachment logo, '500x500'
-  end
-
-  def logo_thumbnail_url
-    resize_attachment logo, '100x100'
-  end
-
   def summary_to_json
     Rails.cache.fetch("#{cache_key_with_version}/summary_gym_chain", expires_in: 28.days) do
       {
@@ -49,12 +29,7 @@ class GymChain < ApplicationRecord
         attachments: {
           banner: attachment_object(banner),
           logo: attachment_object(logo)
-        },
-        banner: banner.attached? ? banner_large_url : nil,
-        banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil,
-        banner_cropped_url: banner ? banner_cropped_medium_url : nil,
-        logo: logo.attached? ? logo_large_url : nil,
-        logo_thumbnail_url: logo.attached? ? logo_thumbnail_url : nil
+        }
       }
     end
   end
