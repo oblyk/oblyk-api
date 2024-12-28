@@ -10,14 +10,6 @@ class Author < ApplicationRecord
 
   validates :description, :name, presence: true
 
-  def cover_large_url
-    resize_attachment cover, '1920x1920'
-  end
-
-  def cover_thumbnail_url
-    resize_attachment cover, '300x300'
-  end
-
   def summary_to_json
     detail_to_json
   end
@@ -28,8 +20,9 @@ class Author < ApplicationRecord
       name: name,
       description: description,
       user_id: user_id,
-      cover_url: cover.attached? ? cover_large_url : nil,
-      thumbnail_url: cover.attached? ? cover_thumbnail_url : nil
+      attachments: {
+        cover: attachment_object(cover)
+      }
     }
   end
 end

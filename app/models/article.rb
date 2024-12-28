@@ -34,18 +34,6 @@ class Article < ApplicationRecord
     []
   end
 
-  def cover_large_url
-    resize_attachment cover, '1920x1920'
-  end
-
-  def cover_thumbnail_url
-    resize_attachment cover, '300x300'
-  end
-
-  def cover_cropped_medium_url
-    crop_attachment cover, '500x500'
-  end
-
   def summary_to_json
     Rails.cache.fetch("#{cache_key_with_version}/summary_article", expires_in: 28.days) do
       {
@@ -58,9 +46,9 @@ class Article < ApplicationRecord
         likes_count: likes_count,
         published_at: published_at,
         published: published?,
-        cover_url: cover.attached? ? cover_large_url : nil,
-        cover_cropped_url: cover.attached? ? cover_cropped_medium_url : nil,
-        thumbnail_url: cover.attached? ? cover_thumbnail_url : nil
+        attachments: {
+          cover: attachment_object(cover)
+        }
       }
     end
   end
