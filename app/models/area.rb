@@ -3,6 +3,7 @@
 class Area < ApplicationRecord
   include Slugable
   include Searchable
+  include AttachmentResizable
 
   belongs_to :user, optional: true
   belongs_to :photo, optional: true
@@ -44,11 +45,16 @@ class Area < ApplicationRecord
         slug_name: slug_name,
         photo: {
           id: photo&.id,
+          # TODO : Delete this after variante migration
           url: photo ? photo.large_url : nil,
           cropped_url: photo ? photo.cropped_medium_url : nil,
           thumbnail_url: photo ? photo.thumbnail_url : nil,
-          illustrable_type: photo ? photo.illustrable_type : nil,
-          illustrable_name: photo ? photo.illustrable.rich_name : nil
+          # end TODO
+          illustrable_type: photo&.illustrable_type,
+          illustrable_name: photo&.illustrable&.rich_name,
+          attachments: {
+            picture: attachment_object(photo&.picture, 'Area_banner')
+          }
         }
       }
     end
