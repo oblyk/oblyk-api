@@ -23,7 +23,7 @@ class GymOpener < ApplicationRecord
         deactivated_at: deactivated_at,
         gym: gym.summary_to_json
       }
-      data[:user] = user.summary_to_json if user
+      data[:user] = user.summary_to_json(with_avatar: true) if user
       data
     end
   end

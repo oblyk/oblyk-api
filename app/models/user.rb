@@ -187,45 +187,6 @@ class User < ApplicationRecord
     subscribes.accepted.where(followable_type: 'User')
   end
 
-  def to_partner_geo_json(minimalistic: false)
-    Rails.cache.fetch("#{cache_key_with_version}/#{'minimalistic_' if minimalistic}partner_geo_json", expires_in: 28.days) do
-      features = {
-        type: 'Feature',
-        properties: {
-          type: 'PartnerUser',
-          uuid: uuid,
-          icon: 'partner-user',
-          avatar_thumbnail_url: avatar_thumbnail_url
-        },
-        geometry: { type: 'Point', "coordinates": [Float(partner_longitude), Float(partner_latitude), 0.0] }
-      }
-      unless minimalistic
-        features[:properties].merge!(
-          {
-            full_name: full_name,
-            slug_name: slug_name,
-            description: description ? Markdown.new(description, :hard_wrap).to_html.html_safe : '',
-            age: age,
-            genre: genre,
-            sport_climbing: sport_climbing,
-            bouldering: bouldering,
-            multi_pitch: multi_pitch,
-            trad_climbing: trad_climbing,
-            aid_climbing: aid_climbing,
-            deep_water: deep_water,
-            via_ferrata: via_ferrata,
-            pan: pan,
-            banner_thumbnail_url: banner_thumbnail_url,
-            grade_min: grade_min,
-            grade_max: grade_max,
-            last_activity_at: last_activity_at
-          }
-        )
-      end
-      features
-    end
-  end
-
   def local_climber_to_json
     Rails.cache.fetch("#{cache_key_with_version}/local_climber_to_json", expires_in: 28.days) do
       {
@@ -246,10 +207,14 @@ class User < ApplicationRecord
         deep_water: deep_water,
         via_ferrata: via_ferrata,
         pan: pan,
-        banner_thumbnail_url: banner_thumbnail_url,
+        banner_thumbnail_url: banner_thumbnail_url, # TODO : Delete this after variante images migration
         grade_min: grade_min,
         grade_max: grade_max,
-        last_activity_at: last_activity_at
+        last_activity_at: last_activity_at,
+        attachments: {
+          banner: attachment_object(banner),
+          avatar: attachment_object(avatar)
+        }
       }
     end
   end
@@ -363,7 +328,10 @@ class User < ApplicationRecord
         first_name: first_name,
         full_name: full_name
       }
-      json[:avatar_thumbnail_url] = avatar_thumbnail_url if with_avatar
+      if with_avatar
+        json[:avatar_thumbnail_url] = avatar_thumbnail_url # TODO : Delete this after variante images migration
+        json[:attachments] = { avatar: attachment_object(avatar) }
+      end
       json
     end
   end
@@ -399,10 +367,16 @@ class User < ApplicationRecord
       videos_count: videos.count,
       photos_count: photos.count,
       full_name: full_name,
+      attachments: {
+        banner: attachment_object(banner),
+        avatar: attachment_object(avatar)
+      },
+      # TODO : Delete this after variante images migration
       banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil,
       banner_cropped_url: banner.attached? ? banner_cropped_medium_url : nil,
       banner: banner.attached? ? banner_large_url : nil,
       avatar: avatar.attached? ? avatar_large_url : nil
+      # end TODO
     }
     if current_user
       user_data = user_data.merge(
