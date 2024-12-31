@@ -2,6 +2,7 @@
 
 class Department < ApplicationRecord
   include RouteFigurable
+  include AttachmentResizable
 
   belongs_to :country
   has_many :towns
@@ -37,10 +38,26 @@ class Department < ApplicationRecord
     hardest_sport_climbing = crag_routes.where(climbing_type: 'sport_climbing').order(max_grade_value: :desc).first
     hardest_bouldering = crag_routes.where(climbing_type: 'bouldering').order(max_grade_value: :desc).first
 
+    guide_books = GuideBookPaper.select(%i[id slug_name name author])
+                                .includes(cover_attachment: :blob)
+                                .where(id: guide_ids)
+                                .order(publication_year: :desc)
+    guide_book_papers = guide_books.map do |guide_book|
+      {
+        id: guide_book.id,
+        slug_name: guide_book.slug_name,
+        name: guide_book.name,
+        author: guide_book.author,
+        attachments: {
+          cover: attachment_object(guide_book.cover)
+        }
+      }
+    end
+
     summary_to_json.merge(
       {
         towns: towns.order(:name).map { |town| { name: town.name, slug_name: town.slug_name, zipcode: town.zipcode } },
-        guide_book_papers: GuideBookPaper.includes(cover_attachment: :blob).where(id: guide_ids).order(publication_year: :desc).map(&:summary_to_json),
+        guide_book_papers: guide_book_papers,
         figures: {
           crags: {
             count: {

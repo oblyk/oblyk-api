@@ -56,7 +56,7 @@ class Town < ApplicationRecord
     nearest_gym = nil
     nearest_gym_dist = nil
 
-    around_gyms = gyms.select(:id, :slug_name, :name, :country, :city).includes(logo_attachment: :blob).map do |gym|
+    around_gyms = gyms.select(%i[id slug_name name country city]).includes(logo_attachment: :blob).map do |gym|
       {
         id: gym.id,
         slug_name: gym.slug_name,
@@ -70,7 +70,7 @@ class Town < ApplicationRecord
     end
 
     if around_gyms.size.zero?
-      first_nearest_gym = Gym.select(:id, :slug_name, :name, :country, :city, :latitude, :longitude)
+      first_nearest_gym = Gym.select(%i[id slug_name name country city latitude longitude])
                              .order("getRange(gyms.latitude, gyms.longitude, #{latitude.to_f} , #{longitude.to_f})")
                              .first
       nearest_gym = {
@@ -144,7 +144,7 @@ class Town < ApplicationRecord
         }
       }
     else
-      guide_book_papers = GuideBookPaper.select(:id, :slug_name, :name, :author)
+      guide_book_papers = GuideBookPaper.select(%i[id slug_name name author])
                                         .includes(:guide_book_paper_crags, cover_attachment: :blob)
                                         .where(guide_book_paper_crags: { crag_id: around_crags.map(&:id) })
                                         .map do |guide_book|
