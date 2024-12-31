@@ -8,6 +8,17 @@ module Api
         before_action :set_user
         before_action :set_filters, except: [:daily_ascents, :ascents_of_crag]
 
+        def stats
+          # set filters, etc.
+          stats = {}
+          stats[:figures] = LogBook::Outdoor::Figure.new(@filters).figures if params[:stats][:figures]
+          stats[:climb_types_chart] = LogBook::Outdoor::Chart.new(@filters).climb_type if params[:stats][:climb_types_chart]
+          stats[:ascended_crag_routes] = LogBook::Outdoor::List.new(@filters).ascents if params[:stats][:ascended_crag_routes]
+          # etc.
+          render json: stats, status: :ok
+        end
+
+
         def figures
           render json: LogBook::Outdoor::Figure.new(@filters).figures, status: :ok
         end
