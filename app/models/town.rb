@@ -3,6 +3,7 @@
 class Town < ApplicationRecord
   include Geolocable
   include RouteFigurable
+  include AttachmentResizable
 
   belongs_to :department
   has_one :country, through: :department
@@ -51,17 +52,49 @@ class Town < ApplicationRecord
 
   def detail_to_json(dist)
     self.dist_around = dist
-    nearest_crag = Crag.order("getRange(crags.latitude, crags.longitude, #{latitude.to_f} , #{longitude.to_f})").first
-    nearest_gym = Gym.order("getRange(gyms.latitude, gyms.longitude, #{latitude.to_f} , #{longitude.to_f})").first
 
-    nearest_crag_dist = GeoHelper.geo_range(latitude, longitude, nearest_crag.latitude, nearest_crag.longitude)
-    nearest_gym_dist = GeoHelper.geo_range(latitude, longitude, nearest_gym.latitude, nearest_gym.longitude)
+    nearest_gym = nil
+    nearest_gym_dist = nil
 
-    around_crags = crags.includes(:crag_routes)
-    around_gyms = gyms.includes(logo_attachment: :blob, banner_attachment: :blob)
+    around_gyms = gyms.select(:id, :slug_name, :name, :country, :city).includes(logo_attachment: :blob).map do |gym|
+      {
+        id: gym.id,
+        slug_name: gym.slug_name,
+        name: gym.name,
+        country: gym.country,
+        city: gym.city,
+        attachments: {
+          logo: attachment_object(gym.logo)
+        }
+      }
+    end
 
-    guide_book_papers = GuideBookPaper.includes(:guide_book_paper_crags, cover_attachment: :blob )
-                                      .where(guide_book_paper_crags: { crag_id: around_crags.select(:id) })
+    if around_gyms.size.zero?
+      first_nearest_gym = Gym.select(:id, :slug_name, :name, :country, :city, :latitude, :longitude)
+                             .order("getRange(gyms.latitude, gyms.longitude, #{latitude.to_f} , #{longitude.to_f})")
+                             .first
+      nearest_gym = {
+        id: first_nearest_gym.id,
+        slug_name: first_nearest_gym.slug_name,
+        name: first_nearest_gym.name,
+        country: first_nearest_gym.country,
+        city: first_nearest_gym.city,
+        attachments: {
+          logo: attachment_object(first_nearest_gym.logo)
+        }
+      }
+      nearest_gym_dist = GeoHelper.geo_range(latitude, longitude, first_nearest_gym.latitude, first_nearest_gym.longitude)
+    end
+
+    guide_book_papers = []
+    nearest_crag = nil
+    nearest_crag_dist = nil
+
+    around_crags = crags.select(
+      :id, :name, :slug_name, :sport_climbing, :bouldering, :multi_pitch, :trad_climbing, :aid_climbing, :deep_water,
+      :via_ferrata, :north, :north_east, :east, :south_east, :south, :south_west, :west, :north_west, :summer,
+      :autumn, :winter, :spring, :min_approach_time, :max_approach_time
+    ).includes(:crag_routes)
 
     crag_with_levels = {}
     climbing_types = {
@@ -95,23 +128,55 @@ class Town < ApplicationRecord
       end
     end
 
+    if around_crags.size.zero?
+      first_nearest_crag = Crag.order("getRange(crags.latitude, crags.longitude, #{latitude.to_f} , #{longitude.to_f})").first
+      nearest_crag_dist = GeoHelper.geo_range(latitude, longitude, first_nearest_crag.latitude, first_nearest_crag.longitude)
+      nearest_crag = {
+        id: first_nearest_crag.id,
+        name: first_nearest_crag.name,
+        slug_name: first_nearest_crag.slug_name,
+        country: first_nearest_crag.country,
+        city: first_nearest_crag.city,
+        photo: {
+          attachments: {
+            picture: attachment_object(first_nearest_crag.photo&.picture, 'Crag_picture')
+          }
+        }
+      }
+    else
+      guide_book_papers = GuideBookPaper.select(:id, :slug_name, :name, :author)
+                                        .includes(:guide_book_paper_crags, cover_attachment: :blob)
+                                        .where(guide_book_paper_crags: { crag_id: around_crags.map(&:id) })
+                                        .map do |guide_book|
+        {
+          id: guide_book.id,
+          slug_name: guide_book.slug_name,
+          name: guide_book.name,
+          author: guide_book.author,
+          attachments: {
+            cover: attachment_object(guide_book.cover)
+          }
+        }
+      end
+    end
+
     summary_to_json.merge(
       {
         dist: dist,
         crags: {
-          nearest: nearest_crag.summary_to_json,
+          nearest: nearest_crag,
           nearest_dist: nearest_crag_dist,
           crag_count_around: around_crags.size,
           crag_count_by_climbing_types: climbing_types,
-          route_figures: route_figures,
+          route_figures: around_crags.size.positive? ? route_figures : nil,
           crag_with_levels: crag_with_levels
         },
         gyms: {
-          nearest: nearest_gym.summary_to_json,
+          nearest: nearest_gym,
           nearest_dist: nearest_gym_dist,
-          around: around_gyms.map(&:summary_to_json)
+          around: around_gyms
         },
-        guide_book_papers: guide_book_papers.map(&:summary_to_json)
+        guide_book_papers: guide_book_papers
       }
     )
   end

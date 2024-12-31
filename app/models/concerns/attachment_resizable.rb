@@ -3,9 +3,10 @@
 module AttachmentResizable
   extend ActiveSupport::Concern
 
-  def attachment_object(attachment)
+  def attachment_object(attachment, attachement_type = nil)
     variant_path = nil
     attachment_attached = false
+    attachement_type = attachement_type.presence || "#{attachment.record.class.name}_#{attachment.name}"
     if attachment.attached?
       storage_domaine = ENV.fetch('IMAGES_STORAGE_DOMAINE', ENV['OBLYK_API_URL'])
       variant_path = "#{storage_domaine}/cdn-cgi/image/:variant/#{attachment.blob.key}"
@@ -13,13 +14,14 @@ module AttachmentResizable
     end
     {
       attached: attachment_attached,
-      attachment_type: "#{attachment.record.class.name}_#{attachment.name}",
+      attachment_type: attachement_type,
       variant_path: variant_path
     }
   rescue StandardError
+    attachement_type = attachement_type.presence || "#{attachment.record.class.name}_#{attachment.name}"
     {
       attached: false,
-      attachment_type: "#{attachment&.record&.class&.name}_#{attachment&.name}",
+      attachment_type: attachement_type,
       variant_path: nil
     }
   end
