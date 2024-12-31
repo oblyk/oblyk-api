@@ -10,15 +10,16 @@ class CragAscentFilters
 
   # Default values for the filters
   DEFAULTS_FILTERS = {
-    "ascentStatusList" => AscentStatus::LIST, # ['sent', 'red_point', 'flash', 'repetition']
-    "ropingStatusList" => RopingStatus::LIST, # ['lead_climb', 'top_rope', ...]
-    "climbingTypesList" => Climb::CRAG_LIST,  # ['sport_climbing', 'bouldering', ...]
-    "no_double" => "false"
+    :ascent_status_list => AscentStatus::LIST, # ['sent', 'red_point', 'flash', 'repetition']
+    :roping_status_list => RopingStatus::LIST, # ['lead_climb', 'top_rope', ...]
+    :climbing_types_list => Climb::CRAG_LIST,  # ['sport_climbing', 'bouldering', ...]
+    :no_double => false
   }.freeze
 
   def initialize(user, params)
     @user = user
     @filters = filters_from_params(params)
+    Rails.logger.info("filters: #{@filters}") # TODO remove this line
     @filtered_ascents_array = get_filtered_ascents_array
     # WARNING: filtered_ascents_active_record does not include no_double filter
     @filtered_ascents_active_record = @user.ascent_crag_routes.made.filtered(@filters)
@@ -29,7 +30,8 @@ class CragAscentFilters
   def filters_from_params(params)
     # Parse `filters` if it’s a string
     filters = params[:filters]
-    filters = JSON.parse(filters) if filters.is_a?(String)
+    Rails.logger.info("filters before parse: #{filters}") # TODO remove this line
+    filters = JSON.parse(filters).transform_keys(&:to_sym)
 
     # Merge with defaults
     # reverse_merge only adds default values for keys that are not yet present in `filters`.
@@ -62,5 +64,4 @@ class CragAscentFilters
       @user.ascent_crag_routes.made.filtered(@filters).to_a
     end
   end
-
 end

@@ -18,20 +18,16 @@ class Ascent < ApplicationRecord
   validates :ascent_status, inclusion: { in: AscentStatus::LIST }
 
   scope :made, -> { where.not(ascent_status: :project) }
-  scope :no_repetition, -> { where.not(ascent_status: :repetition) }
-  scope :lead, -> { where(roping_status: [:lead_climb, :multi_pitch_leader, :multi_pitch_alternate_lead]) }
-  scope :noLead, -> { where(roping_status: [:top_rope, :multi_pitch_second]) }
   scope :project, -> { where(ascent_status: :project) }
-  scope :on_sight, -> { where(ascent_status: :onsight) }
   scope :by_ascent_statuses, ->(ascentStatusList) { where(ascent_status: ascentStatusList) }
   scope :by_roping_statuses, ->(ropingStatusList) { where(roping_status: ropingStatusList) }
   scope :by_climbing_types, ->(climbingTypesList) { joins(:crag_route).where(crag_routes: { climbing_type: climbingTypesList }) }
   # Combine all filters in the `filtered` scope
   scope :filtered, ->(filters) {
     scoped_results = self
-    scoped_results = scoped_results.by_ascent_statuses(filters["ascentStatusList"])
-    scoped_results = scoped_results.by_roping_statuses(filters["ropingStatusList"])
-    scoped_results = scoped_results.by_climbing_types(filters["climbingTypesList"])
+    scoped_results = scoped_results.by_ascent_statuses(filters[:ascent_status_list])
+    scoped_results = scoped_results.by_roping_statuses(filters[:roping_status_list])
+    scoped_results = scoped_results.by_climbing_types(filters[:climbing_types_list])
     scoped_results
   }
 
