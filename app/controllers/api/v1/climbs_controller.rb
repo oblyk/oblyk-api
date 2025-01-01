@@ -10,4 +10,3 @@ module Api
   end
 end
 
-# TODO ajouter aussi une api pour ascent status et roping status

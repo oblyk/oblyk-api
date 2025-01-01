@@ -7,7 +7,7 @@ module Api
 
       before_action :protected_by_session
       before_action :set_user
-      before_action :set_filters, only: %i[ascended_crag_routes]
+      before_action :set_outdoor_ascents, only: %i[ascended_crag_routes]
 
       def show
         render json: @user.detail_to_json(current_user: true), status: :ok
@@ -220,16 +220,14 @@ module Api
       def ascended_crag_routes
         page = params.fetch(:page, 1)
 
-        # note that we don't apply the Rails filters here (eg no-double filter is not applied)
-        ascents = @filters.filtered_ascents_active_record
-                          .joins(crag_route: :crag)
-                          .includes(
-                            crag_route: {
-                              crag_sector: { photo: { picture_attachment: :blob } },
-                              crag: { photo: { picture_attachment: :blob } },
-                              photo: { picture_attachment: :blob }
-                            },
-                          )
+        ascents = @outdoor_ascents.joins(crag_route: :crag)
+                                  .includes(
+                                    crag_route: {
+                                      crag_sector: { photo: { picture_attachment: :blob } },
+                                      crag: { photo: { picture_attachment: :blob } },
+                                      photo: { picture_attachment: :blob }
+                                    },
+                                  )
 
         ascents = case params[:order]
                   when 'crags'
@@ -468,8 +466,9 @@ module Api
         @user = @current_user
       end
 
-      def set_filters
-        @filters = CragAscentFilters.new(@user, params)
+      def set_outdoor_ascents
+        crag_filtered_ascents = LogBook::Outdoor::CragFilteredAscents.new(@user, params)
+        @outdoor_ascents = crag_filtered_ascents.ascents
       end
 
       def user_params

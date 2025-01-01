@@ -10,7 +10,7 @@ module Api
       before_action :protected_outdoor_log_book, only: %i[outdoor_figures outdoor_climb_types_chart ascended_crag_routes outdoor_grades_chart]
       before_action :protected_indoor_log_book, only: %i[indoor_figures indoor_climb_types_chart indoor_grade_chart indoor_by_level_chart]
       before_action :set_indoor_ascents, only: %i[indoor_grade_chart indoor_by_level_chart]
-      before_action :set_filters, only: %i[ascended_crag_routes outdoor_grades_chart outdoor_figures outdoor_climb_types_chart]
+      before_action :set_outdoor_ascents, only: %i[ascended_crag_routes outdoor_grades_chart outdoor_figures outdoor_climb_types_chart]
 
       def show
         render json: @user.detail_to_json, status: :ok
@@ -63,29 +63,27 @@ module Api
       end
 
       def outdoor_figures
-        render json: LogBook::Outdoor::Figure.new(@filters).figures, status: :ok
+        render json: LogBook::Outdoor::Figure.new(@outdoor_ascents).figures, status: :ok
       end
 
       def outdoor_climb_types_chart
-        render json: LogBook::Outdoor::Chart.new(@filters).climb_type, status: :ok
+        render json: LogBook::Outdoor::Chart.new(@outdoor_ascents).climb_type, status: :ok
       end
 
       def ascended_crag_routes
         page = params.fetch(:page, 1)
 
-        # note that we don't apply the Rails filters here (eg no-double filter is not applied)
-        ascents = @filters.filtered_ascents_active_record
-                          .joins(crag_route: :crag)
-                          .includes(
-                            crag_route: {
-                              crag_sector: { photo: { picture_attachment: :blob } },
-                              crag: { photo: { picture_attachment: :blob } },
-                              photo: { picture_attachment: :blob }
-                            },
-                            )
+        ascents = @outdoor_ascents.joins(crag_route: :crag)
+                                  .includes(
+                                    crag_route: {
+                                      crag_sector: { photo: { picture_attachment: :blob } },
+                                      crag: { photo: { picture_attachment: :blob } },
+                                      photo: { picture_attachment: :blob }
+                                    },
+                                    )
 
         ascents = case params[:order]
-                  when 'crags' # TODO esty ce qu'on continue a filtrer specifiquement ici les repetitions
+                  when 'crags'
                     ascents.order('crags.name, crag_routes.name, crag_routes.id')
                   when 'released_at'
                     ascents.order('ascents.released_at DESC, crag_routes.name, crag_routes.id')
@@ -109,7 +107,7 @@ module Api
       end
 
       def outdoor_grades_chart
-        render json: LogBook::Outdoor::Chart.new(@filters).grade, status: :ok
+        render json: LogBook::Outdoor::Chart.new(@outdoor_ascents).grade, status: :ok
       end
 
       def indoor_figures
@@ -189,8 +187,9 @@ module Api
                 end
       end
 
-      def set_filters
-        @filters = CragAscentFilters.new(@user, params)
+      def set_outdoor_ascents
+        crag_filtered_ascents = LogBook::Outdoor::CragFilteredAscents.new(@user, params)
+        @outdoor_ascents = crag_filtered_ascents.ascents
       end
 
       def set_indoor_ascents

@@ -3,16 +3,15 @@
 module LogBook
   module Outdoor
     class Chart
-
-      # filters parameter is an instance of CragAscentFilters
-      def initialize(filters)
-        @filtered_ascents_array = filters.filtered_ascents_array
+      def initialize(ascents)
+        @ascents = ascents
+        @uniq_ascents = ascents.uniq(&:crag_route_id)
       end
 
       def climb_type
         climb_counts = Hash.new(0)
 
-        @filtered_ascents_array.each do |ascent|
+        @uniq_ascents.each do |ascent|
           climb_counts[ascent.climbing_type] += 1 if Climb::CRAG_LIST.include?(ascent.climbing_type)
         end
 
@@ -31,7 +30,7 @@ module LogBook
       def grade
         grades = Hash[(1..54).step(2).map { |grade_value| [grade_value, { count: 0 }] }]
 
-        @filtered_ascents_array.each do |ascent|
+        @uniq_ascents.each do |ascent|
           next if ascent.max_grade_value.blank? || ascent.max_grade_value.zero?
 
           grade_value = ascent.max_grade_value
@@ -53,11 +52,11 @@ module LogBook
       end
 
       def years
-        return { datasets: [{ data: [] }], labels: [] } if @filtered_ascents_array.blank?
+        return { datasets: [{ data: [] }], labels: [] } if @uniq_ascents.blank?
 
         years = Hash.new(0)
 
-        @filtered_ascents_array.each do |ascent|
+        @uniq_ascents.each do |ascent|
           next if ascent.released_at.blank?
 
           years[ascent.released_at.year] += 1
@@ -78,11 +77,11 @@ module LogBook
       end
 
       def months
-        return { datasets: [{ data: [] }], labels: [] } if @filtered_ascents_array.blank?
+        return { datasets: [{ data: [] }], labels: [] } if @uniq_ascents.blank?
 
         dates = Hash.new(0)
 
-        @filtered_ascents_array.each do |ascent|
+        @uniq_ascents.each do |ascent|
           next if ascent.released_at.blank?
           dates[ascent.released_at.strftime('%Y-%m')] += 1
         end
@@ -102,11 +101,11 @@ module LogBook
       end
 
       def evolution_by_year
-        return { datasets: [{ data: [] }], labels: [] } if @filtered_ascents_array.blank?
+        return { datasets: [{ data: [] }], labels: [] } if @ascents.blank?
 
         years = Hash.new { |hash, year| hash[year] = Hash.new(0) }
 
-        @filtered_ascents_array.each do |ascent|
+        @ascents.each do |ascent|
           next if ascent.released_at.blank? || ascent.max_grade_value.blank?
 
           year = ascent.released_at.year

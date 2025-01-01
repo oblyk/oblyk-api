@@ -5,9 +5,9 @@ module LogBook
     class Figure
       attr_accessor :user
 
-      # filters parameter is an instance of CragAscentFilters
-      def initialize(filters)
-        @filtered_ascents = filters.filtered_ascents_array
+      # filters parameter is an instance of CragFilteredAscents
+      def initialize(ascents)
+        @ascents = ascents.uniq(&:crag_route_id)
       end
 
       def figures
@@ -24,11 +24,11 @@ module LogBook
       private
 
       def ascents_count
-        @filtered_ascents.count
+        @ascents.count
       end
 
       def sum_meters
-        @filtered_ascents.sum do |ascent|
+        @ascents.sum do |ascent|
           # Extract the section heights, ignoring nil values
           sections_heights = ascent.sections.map { |section| section['height'] }.compact
           # If sections have heights, sum them, otherwise fallback to the ascent's height
@@ -37,19 +37,19 @@ module LogBook
       end
 
       def max_grad_value
-        @filtered_ascents.map(&:max_grade_value).compact.max
+        @ascents.map(&:max_grade_value).compact.max
       end
 
       def countries_count
-        @filtered_ascents.map(&:crag).map(&:country).uniq.count
+        @ascents.map(&:crag).map(&:country).uniq.count
       end
 
       def regions_count
-        @filtered_ascents.map(&:crag).map(&:region).uniq.count
+        @ascents.map(&:crag).map(&:region).uniq.count
       end
 
       def crags_count
-        @filtered_ascents.map(&:crag).uniq.count
+        @ascents.map(&:crag).uniq.count
       end
     end
   end
