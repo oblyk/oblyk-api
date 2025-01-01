@@ -89,10 +89,8 @@ class Photo < ApplicationRecord
       photo_height: photo_height,
       photo_width: photo_width,
       likes_count: likes_count,
-      # TODO : Delete this after variante migration
-      picture: large_url,
-      thumbnail: thumbnail_url,
-      # end TODO
+      picture: large_url, # TODO: must be deleted
+      thumbnail: thumbnail_url, # TODO: must be deleted
       illustrable: illustrable_json,
       creator: user&.summary_to_json(with_avatar: false),
       attachments: {

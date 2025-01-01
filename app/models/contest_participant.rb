@@ -56,7 +56,7 @@ class ContestParticipant < ApplicationRecord
         contest_category: {
           id: contest_category&.id,
           name: contest_category&.name
-        },
+        }
       }
     end
   end

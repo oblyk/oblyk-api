@@ -303,10 +303,8 @@ class Contest < ApplicationRecord
         categorization_type: categorization_type,
         contest_participants_count: contest_participants.count,
         archived_at: archived_at,
-        # TODO : delete this after variante migration
-        banner: banner.attached? ? banner_large_url : nil,
-        banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil,
-        # end TODO
+        banner: banner.attached? ? banner_large_url : nil, # TODO: must be deleted
+        banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil, # TODO: must be deleted
         one_day_event: one_day_event?,
         attachments: {
           banner: attachment_object(banner)

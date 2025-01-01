@@ -207,7 +207,7 @@ class User < ApplicationRecord
         deep_water: deep_water,
         via_ferrata: via_ferrata,
         pan: pan,
-        banner_thumbnail_url: banner_thumbnail_url, # TODO : Delete this after variante images migration
+        banner_thumbnail_url: banner_thumbnail_url, # TODO: must be deleted
         grade_min: grade_min,
         grade_max: grade_max,
         last_activity_at: last_activity_at,
@@ -329,7 +329,7 @@ class User < ApplicationRecord
         full_name: full_name
       }
       if with_avatar
-        json[:avatar_thumbnail_url] = avatar_thumbnail_url # TODO : Delete this after variante images migration
+        json[:avatar_thumbnail_url] = avatar_thumbnail_url # TODO: must be deleted
         json[:attachments] = { avatar: attachment_object(avatar) }
       end
       json
@@ -371,12 +371,10 @@ class User < ApplicationRecord
         banner: attachment_object(banner),
         avatar: attachment_object(avatar)
       },
-      # TODO : Delete this after variante images migration
-      banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil,
-      banner_cropped_url: banner.attached? ? banner_cropped_medium_url : nil,
-      banner: banner.attached? ? banner_large_url : nil,
-      avatar: avatar.attached? ? avatar_large_url : nil
-      # end TODO
+      banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil, # TODO: must be deleted
+      banner_cropped_url: banner.attached? ? banner_cropped_medium_url : nil, # TODO: must be deleted
+      banner: banner.attached? ? banner_large_url : nil, # TODO: must be deleted
+      avatar: avatar.attached? ? avatar_large_url : nil # TODO: must be deleted
     }
     if current_user
       user_data = user_data.merge(

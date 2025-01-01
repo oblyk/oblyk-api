@@ -177,10 +177,8 @@ class Championship < ApplicationRecord
         description: description,
         gym_id: gym_id,
         combined_ranking_type: combined_ranking_type,
-        # TODO : delete this after variante migration
-        banner: banner.attached? ? banner_large_url : nil,
-        banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil,
-        # end TODO
+        banner: banner.attached? ? banner_large_url : nil, # TODO: must be deleted
+        banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil, # TODO: must be deleted
         archived_at: archived_at,
         attachments: {
           banner: attachment_object(banner)
