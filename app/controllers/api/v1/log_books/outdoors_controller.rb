@@ -7,7 +7,7 @@ module Api
         before_action :protected_by_session
         before_action :set_user
         before_action :set_ascents, except: [:daily_ascents, :ascents_of_crag]
-        before_action :set_stats_list, except: [:daily_ascents, :ascents_of_crag]
+        before_action :set_stats_list, except: [:daily_ascents, :ascents_of_crag, :ascended_crag_routes]
 
         def stats
           # set all stats charts, figures and lists from filtered ascents
@@ -22,8 +22,12 @@ module Api
           render json: stats, status: :ok
         end
 
+        def ascended_crag_routes
+          page = params.fetch(:page, 1)
+          render json: LogBook::Outdoor::List.new(@ascents).ascended_crag_routes(page, params[:order]), status: :ok
+        end
+
         def daily_ascents
-          #todo-now render json: LogBook::Outdoor::List.new.daily_ascents, status: :ok
           dates = []
           ascents_by_days = {}
           today = Date.current
@@ -77,8 +81,17 @@ module Api
         private
 
         def set_user
-          @user = @current_user
+          if params[:user_id].present?
+            @user = if /^[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}$/.match? params[:user_id].to_s
+                      User.find_by uuid: params[:user_id]
+                    else
+                      User.find_by slug_name: params[:user_id]
+                    end
+          else
+            @user = @current_user
+          end
         end
+
 
         def set_ascents
           crag_filtered_ascents = LogBook::Outdoor::CragFilteredAscents.new(@user, params)
@@ -86,15 +99,14 @@ module Api
         end
 
         def set_stats_list
-          stats_list = JSON.parse(params[:stats_list]).transform_keys(&:to_sym)
-          @stats_list = ActionController::Parameters.new(stats_list)
-                                                    .permit(
-                                                      :figures,
-                                                      :climb_types_chart,
-                                                      :grades_chart,
-                                                      :years_chart,
-                                                      :months_chart,
-                                                      :evolution_chart)
+          @stats_list = params.require(:stats_list).permit(
+            :figures,
+            :climb_types_chart,
+            :grades_chart,
+            :years_chart,
+            :months_chart,
+            :evolution_chart
+          )
         end
       end
     end

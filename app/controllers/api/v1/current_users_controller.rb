@@ -7,7 +7,6 @@ module Api
 
       before_action :protected_by_session
       before_action :set_user
-      before_action :set_outdoor_ascents, only: %i[ascended_crag_routes]
 
       def show
         render json: @user.detail_to_json(current_user: true), status: :ok
@@ -215,42 +214,6 @@ module Api
 
       def ascents_crag_routes
         render json: @user.ascent_crag_routes_to_a, status: :ok
-      end
-
-      def ascended_crag_routes
-        page = params.fetch(:page, 1)
-
-        ascents = @outdoor_ascents.joins(crag_route: :crag)
-                                  .includes(
-                                    crag_route: {
-                                      crag_sector: { photo: { picture_attachment: :blob } },
-                                      crag: { photo: { picture_attachment: :blob } },
-                                      photo: { picture_attachment: :blob }
-                                    },
-                                  )
-
-        ascents = case params[:order]
-                  when 'crags'
-                    ascents.order('crags.name, crag_routes.name, crag_routes.id')
-                  when 'released_at'
-                    ascents.order('ascents.released_at DESC, crag_routes.name, crag_routes.id')
-                  else
-                    ascents.order('ascents.max_grade_value DESC, crag_routes.name, crag_routes.id')
-                  end
-
-        ascents = ascents.page(page)
-        ascent_routes = []
-        ascents.each do |ascent|
-          route = ascent.crag_route.summary_to_json(with_crag_in_sector: false)
-          route[:grade_gap][:max_grade_value] = ascent.max_grade_value
-          route[:grade_gap][:min_grade_value] = ascent.min_grade_value
-          route[:grade_gap][:max_grade_text] = ascent.max_grade_text
-          route[:grade_gap][:min_grade_text] = ascent.min_grade_text
-          route[:released_at] = ascent.released_at
-          ascent_routes << route
-        end
-
-        render json: ascent_routes, status: :ok
       end
 
       def projects
@@ -464,11 +427,6 @@ module Api
 
       def set_user
         @user = @current_user
-      end
-
-      def set_outdoor_ascents
-        crag_filtered_ascents = LogBook::Outdoor::CragFilteredAscents.new(@user, params)
-        @outdoor_ascents = crag_filtered_ascents.ascents
       end
 
       def user_params

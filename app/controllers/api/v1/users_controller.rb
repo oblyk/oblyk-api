@@ -10,7 +10,6 @@ module Api
       before_action :protected_outdoor_log_book, only: %i[outdoor_figures outdoor_climb_types_chart ascended_crag_routes outdoor_grades_chart]
       before_action :protected_indoor_log_book, only: %i[indoor_figures indoor_climb_types_chart indoor_grade_chart indoor_by_level_chart]
       before_action :set_indoor_ascents, only: %i[indoor_grade_chart indoor_by_level_chart]
-      before_action :set_outdoor_ascents, only: %i[ascended_crag_routes outdoor_grades_chart outdoor_figures outdoor_climb_types_chart]
 
       def show
         render json: @user.detail_to_json, status: :ok
@@ -60,54 +59,6 @@ module Api
           guides_count: GuideBookPaper.where(user: @user).count + GuideBookPdf.where(user: @user).count + GuideBookWeb.where(user: @user).count,
           comments_count: Comment.where(user: @user).count + Ascent.where.not(comment: nil).where(private_comment: false).where(user: @user).count
         }, status: :ok
-      end
-
-      def outdoor_figures
-        render json: LogBook::Outdoor::Figure.new(@outdoor_ascents).figures, status: :ok
-      end
-
-      def outdoor_climb_types_chart
-        render json: LogBook::Outdoor::Chart.new(@outdoor_ascents).climb_type, status: :ok
-      end
-
-      def ascended_crag_routes
-        page = params.fetch(:page, 1)
-
-        ascents = @outdoor_ascents.joins(crag_route: :crag)
-                                  .includes(
-                                    crag_route: {
-                                      crag_sector: { photo: { picture_attachment: :blob } },
-                                      crag: { photo: { picture_attachment: :blob } },
-                                      photo: { picture_attachment: :blob }
-                                    },
-                                    )
-
-        ascents = case params[:order]
-                  when 'crags'
-                    ascents.order('crags.name, crag_routes.name, crag_routes.id')
-                  when 'released_at'
-                    ascents.order('ascents.released_at DESC, crag_routes.name, crag_routes.id')
-                  else
-                    ascents.order('ascents.max_grade_value DESC, crag_routes.name, crag_routes.id')
-                  end
-
-        ascents = ascents.page(page)
-        ascent_routes = []
-        ascents.each do |ascent|
-          route = ascent.crag_route.summary_to_json(with_crag_in_sector: false)
-          route[:grade_gap][:max_grade_value] = ascent.max_grade_value
-          route[:grade_gap][:min_grade_value] = ascent.min_grade_value
-          route[:grade_gap][:max_grade_text] = ascent.max_grade_text
-          route[:grade_gap][:min_grade_text] = ascent.min_grade_text
-          route[:released_at] = ascent.released_at
-          ascent_routes << route
-        end
-
-        render json: ascent_routes, status: :ok
-      end
-
-      def outdoor_grades_chart
-        render json: LogBook::Outdoor::Chart.new(@outdoor_ascents).grade, status: :ok
       end
 
       def indoor_figures
@@ -185,11 +136,6 @@ module Api
                 else
                   User.find_by slug_name: params[:id]
                 end
-      end
-
-      def set_outdoor_ascents
-        crag_filtered_ascents = LogBook::Outdoor::CragFilteredAscents.new(@user, params)
-        @outdoor_ascents = crag_filtered_ascents.ascents
       end
 
       def set_indoor_ascents

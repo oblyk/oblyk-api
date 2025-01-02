@@ -20,14 +20,11 @@ module LogBook
 
       private
       def filters_from_params(params)
-        # filters = params.require(:filters).permit(
-        #   ascent_status_list: [],
-        #   roping_status_list: [],
-        #   climbing_types_list: []
-        # ).to_h
-        filters = JSON.parse(params[:filters]).transform_keys(&:to_sym)
-        filters = ActionController::Parameters.new(filters).permit(ascent_status_list: [], roping_status_list: [], climbing_types_list: []).to_h
-
+        filters = params.require(:filters).permit(
+          ascent_status_list: [],
+          roping_status_list: [],
+          climbing_types_list: []
+        )
         # Merge with defaults
         # reverse_merge only adds default values for keys that are not yet present in `filters`.
         (filters || {}).reverse_merge(DEFAULTS_FILTERS)
