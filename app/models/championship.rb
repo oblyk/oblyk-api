@@ -20,14 +20,6 @@ class Championship < ApplicationRecord
   validates :combined_ranking_type, inclusion: { in: ContestRanking::COMBINED_RANKING_TYPE_LIST }, allow_nil: :nil
   validates :name, presence: true
 
-  def banner_large_url
-    resize_attachment banner, '1920x1920'
-  end
-
-  def banner_thumbnail_url
-    resize_attachment banner, '300x300'
-  end
-
   def results
     return nil if championship_category_matches.blank?
     return nil if contests.blank?
@@ -177,8 +169,6 @@ class Championship < ApplicationRecord
         description: description,
         gym_id: gym_id,
         combined_ranking_type: combined_ranking_type,
-        banner: banner.attached? ? banner_large_url : nil, # TODO: must be deleted
-        banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil, # TODO: must be deleted
         archived_at: archived_at,
         attachments: {
           banner: attachment_object(banner)

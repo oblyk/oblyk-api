@@ -45,9 +45,6 @@ class Area < ApplicationRecord
         slug_name: slug_name,
         photo: {
           id: photo&.id,
-          url: photo ? photo.large_url : nil, # TODO: must be deleted
-          cropped_url: photo ? photo.cropped_medium_url : nil, # TODO: must be deleted
-          thumbnail_url: photo ? photo.thumbnail_url : nil, # TODO: must be deleted
           illustrable_type: photo&.illustrable_type,
           illustrable_name: photo&.illustrable&.rich_name,
           attachments: {

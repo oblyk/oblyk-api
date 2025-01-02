@@ -191,7 +191,6 @@ class User < ApplicationRecord
     Rails.cache.fetch("#{cache_key_with_version}/local_climber_to_json", expires_in: 28.days) do
       {
         uuid: uuid,
-        avatar_thumbnail_url: avatar_thumbnail_url,
         first_name: first_name,
         full_name: full_name,
         slug_name: slug_name,
@@ -207,7 +206,6 @@ class User < ApplicationRecord
         deep_water: deep_water,
         via_ferrata: via_ferrata,
         pan: pan,
-        banner_thumbnail_url: banner_thumbnail_url, # TODO: must be deleted
         grade_min: grade_min,
         grade_max: grade_max,
         last_activity_at: last_activity_at,
@@ -217,26 +215,6 @@ class User < ApplicationRecord
         }
       }
     end
-  end
-
-  def avatar_large_url
-    resize_attachment avatar, '500x500'
-  end
-
-  def avatar_thumbnail_url
-    resize_attachment avatar, '300x300'
-  end
-
-  def banner_large_url
-    resize_attachment banner, '1920x1920'
-  end
-
-  def banner_thumbnail_url
-    resize_attachment banner, '300x300'
-  end
-
-  def banner_cropped_medium_url
-    crop_attachment banner, '500x500'
   end
 
   def subscribe_to_newsletter?
@@ -328,10 +306,7 @@ class User < ApplicationRecord
         first_name: first_name,
         full_name: full_name
       }
-      if with_avatar
-        json[:avatar_thumbnail_url] = avatar_thumbnail_url # TODO: must be deleted
-        json[:attachments] = { avatar: attachment_object(avatar) }
-      end
+      json[:attachments] = { avatar: attachment_object(avatar) } if with_avatar
       json
     end
   end
@@ -370,11 +345,7 @@ class User < ApplicationRecord
       attachments: {
         banner: attachment_object(banner),
         avatar: attachment_object(avatar)
-      },
-      banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil, # TODO: must be deleted
-      banner_cropped_url: banner.attached? ? banner_cropped_medium_url : nil, # TODO: must be deleted
-      banner: banner.attached? ? banner_large_url : nil, # TODO: must be deleted
-      avatar: avatar.attached? ? avatar_large_url : nil # TODO: must be deleted
+      }
     }
     if current_user
       user_data = user_data.merge(

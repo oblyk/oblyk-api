@@ -41,14 +41,6 @@ class Contest < ApplicationRecord
 
   scope :upcoming, -> { where(draft: false, private: false).where('contests.end_date >= ?', Date.current) }
 
-  def banner_large_url
-    resize_attachment banner, '1920x1920'
-  end
-
-  def banner_thumbnail_url
-    resize_attachment banner, '300x300'
-  end
-
   def remaining_places
     total_capacity ? total_capacity - (contest_participants.count || 0) : nil
   end
@@ -303,8 +295,6 @@ class Contest < ApplicationRecord
         categorization_type: categorization_type,
         contest_participants_count: contest_participants.count,
         archived_at: archived_at,
-        banner: banner.attached? ? banner_large_url : nil, # TODO: must be deleted
-        banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil, # TODO: must be deleted
         one_day_event: one_day_event?,
         attachments: {
           banner: attachment_object(banner)
