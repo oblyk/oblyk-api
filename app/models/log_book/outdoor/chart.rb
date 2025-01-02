@@ -125,10 +125,10 @@ module LogBook
             fill: false,
             label: climbing_type
           }
-        end.compact
+        end
 
         {
-          datasets: datasets,
+          datasets: datasets.compact,
           labels: sorted_years
         }
       end

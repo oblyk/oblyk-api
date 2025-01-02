@@ -127,12 +127,7 @@ Rails.application.routes.draw do
           namespace :log_books do
             resources :outdoors, only: %i[] do
               collection do
-                get :figures
-                get :climb_types_chart
-                get :grades_chart
-                get :years_chart
-                get :months_chart
-                get :evolutions_chart
+                get :stats
                 get :daily_ascents
                 get :ascents_of_crag
               end

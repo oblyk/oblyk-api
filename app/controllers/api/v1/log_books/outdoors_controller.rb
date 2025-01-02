@@ -7,42 +7,23 @@ module Api
         before_action :protected_by_session
         before_action :set_user
         before_action :set_ascents, except: [:daily_ascents, :ascents_of_crag]
+        before_action :set_stats_list, except: [:daily_ascents, :ascents_of_crag]
 
         def stats
-          # set filters, etc.
+          # set all stats charts, figures and lists from filtered ascents
+          charts = LogBook::Outdoor::Chart.new(@ascents)
           stats = {}
-          stats[:figures] = LogBook::Outdoor::Figure.new(@ascents).figures if params[:stats][:figures]
-          stats[:climb_types_chart] = LogBook::Outdoor::Chart.new(@ascents).climb_type if params[:stats][:climb_types_chart]
-          stats[:ascended_crag_routes] = LogBook::Outdoor::List.new(@ascents).ascents if params[:stats][:ascended_crag_routes]
-          # etc.
+          stats[:figures] = LogBook::Outdoor::Figure.new(@ascents).figures if @stats_list[:figures]
+          stats[:climb_types_chart] = charts.climb_type if @stats_list[:climb_types_chart]
+          stats[:grades_chart] = charts.grade if @stats_list[:grades_chart]
+          stats[:years_chart] = charts.years if @stats_list[:years_chart]
+          stats[:months_chart] = charts.months if @stats_list[:months_chart]
+          stats[:evolution_chart] = charts.evolution_by_year if @stats_list[:evolution_chart]
           render json: stats, status: :ok
         end
 
-
-        def figures
-          render json: LogBook::Outdoor::Figure.new(@ascents).figures, status: :ok
-        end
-        def climb_types_chart
-          render json: LogBook::Outdoor::Chart.new(@ascents).climb_type, status: :ok
-        end
-
-        def grades_chart
-          render json: LogBook::Outdoor::Chart.new(@ascents).grade, status: :ok
-        end
-
-        def years_chart
-          render json: LogBook::Outdoor::Chart.new(@ascents).years, status: :ok
-        end
-
-        def months_chart
-          render json: LogBook::Outdoor::Chart.new(@ascents).months, status: :ok
-        end
-
-        def evolutions_chart
-          render json: LogBook::Outdoor::Chart.new(@ascents).evolution_by_year, status: :ok
-        end
-
         def daily_ascents
+          #todo-now render json: LogBook::Outdoor::List.new.daily_ascents, status: :ok
           dates = []
           ascents_by_days = {}
           today = Date.current
@@ -104,6 +85,17 @@ module Api
           @ascents = crag_filtered_ascents.ascents
         end
 
+        def set_stats_list
+          stats_list = JSON.parse(params[:stats_list]).transform_keys(&:to_sym)
+          @stats_list = ActionController::Parameters.new(stats_list)
+                                                    .permit(
+                                                      :figures,
+                                                      :climb_types_chart,
+                                                      :grades_chart,
+                                                      :years_chart,
+                                                      :months_chart,
+                                                      :evolution_chart)
+        end
       end
     end
   end
