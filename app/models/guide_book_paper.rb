@@ -43,11 +43,11 @@ class GuideBookPaper < ApplicationRecord
 
   after_save :historize_around_towns
 
-  def cover_large_url
+  def cover_large_url # TODO: must be deleted
     resize_attachment cover, '700x700'
   end
 
-  def cover_thumbnail_url
+  def cover_thumbnail_url # TODO: must be deleted
     resize_attachment cover, '300x300'
   end
 
@@ -82,8 +82,11 @@ class GuideBookPaper < ApplicationRecord
         weight: weight,
         price: price_cents ? price_cents.to_d / 100 : nil,
         funding_status: funding_status,
-        cover: cover.attached? ? cover_large_url : nil,
-        thumbnail_url: cover.attached? ? cover_thumbnail_url : nil
+        cover: cover.attached? ? cover_large_url : nil, # TODO: must be deleted
+        thumbnail_url: cover.attached? ? cover_thumbnail_url : nil, # TODO: must be deleted
+        attachments: {
+          cover: attachment_object(cover)
+        }
       }
     end
   end
@@ -100,7 +103,9 @@ class GuideBookPaper < ApplicationRecord
         properties: {
           type: 'GuideBookPaper',
           id: id,
-          thumbnail_url: cover.attached? ? cover_thumbnail_url : nil,
+          attachments: {
+            cover: attachment_object(cover)
+          },
           icon: 'guide-book-paper'
         },
         geometry: { type: 'Point', coordinates: [Float(geo_center[1]), Float(geo_center[0]), 0.0] }

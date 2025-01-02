@@ -14,7 +14,7 @@ namespace :create_feeds do
     klass = Object.const_get model
 
     out.puts ''
-    out.puts "create feed for #{model}"
+    out.puts "create feed for #{klass.all.count} #{model}"
 
     klass.all.find_each(&:save_feed!)
 

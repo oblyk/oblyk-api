@@ -144,7 +144,12 @@ module Api
 
       def geo_index
         features = []
-        GuideBookPaper.where(next_guide_book_paper_id: nil).includes(:crags).all.each do |guide_book|
+        GuideBookPaper.select('guide_book_papers.*, crags.latitude, crags.longitude')
+                      .where(next_guide_book_paper_id: nil)
+                      .includes(:crags, cover_attachment: :blob)
+                      .references(:crags)
+                      .all
+                      .each do |guide_book|
           features << guide_book.to_geo_json
         end
         render json: {
