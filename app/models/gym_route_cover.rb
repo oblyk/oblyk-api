@@ -19,7 +19,10 @@ class GymRouteCover < ApplicationRecord
     Rails.cache.fetch("#{cache_key_with_version}/summary_gym_route_cover", expires_in: 28.days) do
       {
         id: id,
-        picture: picture.attached? ? picture_large_url : nil
+        picture: picture.attached? ? picture_large_url : nil, # TODO: must be deleted
+        attachments: {
+          picture: attachment_object(picture)
+        }
       }
     end
   end

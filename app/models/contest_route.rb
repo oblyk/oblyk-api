@@ -63,8 +63,12 @@ class ContestRoute < ApplicationRecord
         ),
         ranking_type: contest_stage_step.ranking_type,
         thumbnail: thumbnail,
-        picture: picture.attached? ? picture_url : nil,
-        picture_large: picture.attached? ? picture_large_url : nil
+        picture: picture.attached? ? picture_url : nil, # TODO: Must be deleted
+        picture_large: picture.attached? ? picture_large_url : nil, # TODO: Must be deleted
+        attachments: {
+          gym_route_thumbnail: attachment_object(gym_route&.thumbnail, 'GymRoute_thumbnail'),
+          picture: attachment_object(picture)
+        }
       }
     end
   end
