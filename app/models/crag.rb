@@ -10,6 +10,7 @@ class Crag < ApplicationRecord
   include ActivityFeedable
   include RouteFigurable
   include Elevable
+  include AttachmentResizable
 
   has_paper_trail only: %i[
     name
@@ -171,12 +172,20 @@ class Crag < ApplicationRecord
         photo: {
           id: photo&.id,
           url: photo ? photo.large_url : nil,
-          cropped_url: photo ? photo.cropped_medium_url : nil,
-          thumbnail_url: photo ? photo.thumbnail_url : nil
+          cropped_url: photo ? photo.cropped_medium_url : nil, # TODO: must be deleted
+          thumbnail_url: photo ? photo.thumbnail_url : nil, # TODO: must be deleted
+          attachments: {
+            picture: attachment_object(photo&.picture, 'Crag_picture')
+          }
         },
         static_map: {
           url: static_map_url(:closer),
           banner_url: static_map_url(:banner)
+        }, # TODO: must be deleted
+        attachments: {
+          static_map: attachment_object(static_map),
+          static_map_banner: attachment_object(static_map_banner),
+          cover: photo_id.present? ? attachment_object(photo.picture, 'Crag_cover') : attachment_object(static_map_banner, 'Crag_cover')
         },
         approaches: {
           min_time: min_approach_time,
@@ -279,7 +288,7 @@ class Crag < ApplicationRecord
     update min_approach_time: min_time, max_approach_time: max_time
   end
 
-  def static_map_url(type)
+  def static_map_url(type) # TODO: must be deleted
     attachement = type == :banner ? static_map_banner : static_map
     return nil unless attachement
     return nil unless attachement.attached?
