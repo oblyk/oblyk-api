@@ -94,13 +94,13 @@ class GymSpace < ApplicationRecord
         scheme_width: scheme_width,
         sectors_color: sectors_color,
         text_contrast_color: Color.black_or_white_rgb(sectors_color || 'rgb(49,153,78)'),
-        banner: banner.attached? ? banner_large_url : nil,
-        plan: plan.attached? ? plan_large_url : nil,
-        plan_thumbnail_url: plan.attached? ? plan_thumbnail_url : nil,
-        plan_tiny_thumbnail_url: plan.attached? ? plan_tiny_thumbnail_url : nil,
-        three_d_picture_url: three_d_picture_url,
-        three_d_picture_thumbnail_url: three_d_picture_thumbnail_url,
-        three_d_picture_tiny_thumbnail_url: three_d_picture_tiny_thumbnail_url,
+        banner: banner.attached? ? banner_large_url : nil, # TODO: must be deleted
+        plan: plan.attached? ? plan_large_url : nil, # TODO: must be deleted
+        plan_thumbnail_url: plan.attached? ? plan_thumbnail_url : nil, # TODO: must be deleted
+        plan_tiny_thumbnail_url: plan.attached? ? plan_tiny_thumbnail_url : nil, # TODO: must be deleted
+        three_d_picture_url: three_d_picture_url, # TODO: must be deleted
+        three_d_picture_thumbnail_url: three_d_picture_thumbnail_url, # TODO: must be deleted
+        three_d_picture_tiny_thumbnail_url: three_d_picture_tiny_thumbnail_url, # TODO: must be deleted
         gym_space_group_id: gym_space_group_id,
         anchor: anchor,
         draft: draft,
@@ -109,6 +109,11 @@ class GymSpace < ApplicationRecord
         representation_type: representation_type,
         three_d_parameters: three_d_parameters,
         three_d_label_options: three_d_label_options,
+        attachments: {
+          banner: attachment_object(banner),
+          plan: attachment_object(plan),
+          three_d_picture: attachment_object(three_d_picture)
+        },
         gym: {
           id: gym.id,
           name: gym.name,
