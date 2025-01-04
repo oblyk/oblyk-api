@@ -113,7 +113,11 @@ class GymSpace < ApplicationRecord
           id: gym.id,
           name: gym.name,
           slug_name: gym.slug_name,
-          banner: gym.banner.attached? ? gym.banner_large_url : nil
+          banner: gym.banner.attached? ? gym.banner_large_url : nil, # TODO: Must be deleted
+          attachments: {
+            banner: attachment_object(gym.banner),
+            logo: attachment_object(gym.logo)
+          }
         }
       }
     end

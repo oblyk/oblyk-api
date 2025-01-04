@@ -193,14 +193,18 @@ class Gym < ApplicationRecord
         sport_climbing_ranking: sport_climbing_ranking,
         administered: administered?,
         gym_options: gym_options.map(&:summary_to_json),
-        banner: banner.attached? ? banner_large_url : nil,
-        banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil,
-        banner_cropped_url: banner ? banner_cropped_medium_url : nil,
-        logo: logo.attached? ? logo_large_url : nil,
-        logo_thumbnail_url: logo.attached? ? logo_thumbnail_url : nil,
+        banner: banner.attached? ? banner_large_url : nil, # TODO: must be deleted
+        banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil, # TODO: must be deleted
+        banner_cropped_url: banner ? banner_cropped_medium_url : nil, # TODO: must be deleted
+        logo: logo.attached? ? logo_large_url : nil, # TODO: must be deleted
+        logo_thumbnail_url: logo.attached? ? logo_thumbnail_url : nil, # TODO: must be deleted
         gym_spaces_count: gym_spaces.count,
         three_d_camera_position: three_d_camera_position,
-        representation_type: representation_type
+        representation_type: representation_type,
+        attachments: {
+          logo: attachment_object(logo),
+          banner: attachment_object(banner)
+        }
       }
     end
   end
