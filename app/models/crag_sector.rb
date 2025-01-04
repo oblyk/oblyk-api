@@ -8,6 +8,7 @@ class CragSector < ApplicationRecord
   include RouteFigurable
   include Elevable
   include StripTagable
+  include AttachmentResizable
 
   has_paper_trail only: %i[
     name
@@ -132,8 +133,11 @@ class CragSector < ApplicationRecord
         photo: {
           id: photo&.id,
           url: photo ? photo.large_url : nil,
-          cropped_url: photo ? photo.cropped_medium_url : nil,
-          thumbnail_url: photo ? photo.thumbnail_url : nil
+          cropped_url: photo ? photo.cropped_medium_url : nil, # TODO: must be deleted
+          thumbnail_url: photo ? photo.thumbnail_url : nil, # TODO: must be deleted
+          attachments: {
+            picture: attachment_object(photo&.picture, 'CragSector_picture')
+          }
         }
       }
       json[:crag] = crag.summary_to_json if with_crag
