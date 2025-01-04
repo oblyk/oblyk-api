@@ -5,6 +5,7 @@ class CragRoute < ApplicationRecord
   include Searchable
   include Slugable
   include ActivityFeedable
+  include AttachmentResizable
 
   attr_accessor :skip_update_gap_grade, :crag_name, :crag_slug_name
 
@@ -193,8 +194,11 @@ class CragRoute < ApplicationRecord
         photo: {
           id: photo&.id,
           url: photo ? photo.large_url : nil,
-          cropped_url: photo ? photo.cropped_medium_url : nil,
-          thumbnail_url: photo ? photo.thumbnail_url : nil
+          cropped_url: photo ? photo.cropped_medium_url : nil, # TODO: must be deleted
+          thumbnail_url: photo ? photo.thumbnail_url : nil, # TODO: must be deleted
+          attachments: {
+            picture: attachment_object(photo&.picture, 'CragRoute_picture')
+          }
         }
       }
     end
