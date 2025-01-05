@@ -28,18 +28,6 @@ class Photo < ApplicationRecord
   delegate :feed_parent_type, to: :illustrable
   delegate :feed_parent_object, to: :illustrable
 
-  def large_url
-    resize_attachment picture, '1920x1920'
-  end
-
-  def cropped_medium_url
-    crop_attachment picture, '500x500'
-  end
-
-  def thumbnail_url
-    resize_attachment picture, '300x300'
-  end
-
   def photo_height
     picture.blob.metadata['height']
   end
@@ -89,8 +77,6 @@ class Photo < ApplicationRecord
       photo_height: photo_height,
       photo_width: photo_width,
       likes_count: likes_count,
-      picture: large_url, # TODO: must be deleted
-      thumbnail: thumbnail_url, # TODO: must be deleted
       illustrable: illustrable_json,
       creator: user&.summary_to_json(with_avatar: false),
       attachments: {

@@ -136,14 +136,6 @@ class GymRoute < ApplicationRecord
     save
   end
 
-  def picture_large_url
-    resize_attachment gym_route_cover.picture, '700x700' # TODO: must be delete
-  end
-
-  def thumbnail_url
-    resize_attachment thumbnail, '300x300' # TODO: must be delete
-  end
-
   def app_path
     "#{ENV['OBLYK_APP_URL']}/gyms/#{gym.id}/#{gym.slug_name}/spaces/#{gym_space.id}/#{gym_space.slug_name}?route=#{id}"
   end
@@ -208,7 +200,6 @@ class GymRoute < ApplicationRecord
         points: points,
         points_to_s: points_to_s,
         grade_to_s: grade_to_s,
-        thumbnail: thumbnail.attached? ? thumbnail_url : nil, # TODO: Muste be deleted
         anchor_number: anchor_number,
         gym_id: gym.id,
         gym_space_id: gym_space.id,
@@ -255,12 +246,10 @@ class GymRoute < ApplicationRecord
         dismounted: dismounted?,
         points_to_s: points_to_s,
         grade_to_s: grade_to_s,
-        thumbnail: thumbnail.attached? ? thumbnail_url : nil, # TODO: Must be deleted
         gym_route_cover_id: gym_route_cover_id,
         gym_sector_name: gym_sector.name,
         anchor_number: anchor_number,
         short_app_path: short_app_path,
-        picture: gym_route_cover ? picture_large_url : nil, # TODO: Must be deleted
         thumbnail_position: thumbnail_position,
         calculated_thumbnail_position: calculated_thumbnail_position,
         cover_metadata: gym_route_cover&.picture ? gym_route_cover.picture.metadata : nil,

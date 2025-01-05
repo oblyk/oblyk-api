@@ -171,17 +171,10 @@ class Crag < ApplicationRecord
         rocks: rocks,
         photo: {
           id: photo&.id,
-          url: photo ? photo.large_url : nil,
-          cropped_url: photo ? photo.cropped_medium_url : nil, # TODO: must be deleted
-          thumbnail_url: photo ? photo.thumbnail_url : nil, # TODO: must be deleted
           attachments: {
             picture: attachment_object(photo&.picture, 'Crag_picture')
           }
         },
-        static_map: {
-          url: static_map_url(:closer),
-          banner_url: static_map_url(:banner)
-        }, # TODO: must be deleted
         attachments: {
           static_map: attachment_object(static_map),
           static_map_banner: attachment_object(static_map_banner),
@@ -260,7 +253,6 @@ class Crag < ApplicationRecord
             aid_climbing: aid_climbing,
             deep_water: deep_water,
             via_ferrata: via_ferrata,
-            map_thumbnail_url: photo.present? ? photo.thumbnail_url : nil,
             route_count: crag_routes_count,
             grade_min_value: min_grade_value,
             grade_max_value: max_grade_value,
@@ -286,18 +278,6 @@ class Crag < ApplicationRecord
       max_time = approach.walking_time if max_time.nil? || approach.walking_time > max_time
     end
     update min_approach_time: min_time, max_approach_time: max_time
-  end
-
-  def static_map_url(type) # TODO: must be deleted
-    attachement = type == :banner ? static_map_banner : static_map
-    return nil unless attachement
-    return nil unless attachement.attached?
-
-    if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
-      "#{ENV['CLOUDFLARE_R2_DOMAIN']}/#{attachement.key}"
-    else
-      "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.polymorphic_url(attachement, only_path: true)}"
-    end
   end
 
   private

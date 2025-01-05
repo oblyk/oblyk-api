@@ -332,6 +332,10 @@ class Contest < ApplicationRecord
     )
   end
 
+  def banner_attachment_object
+    attachment_object(banner)
+  end
+
   def time_line
     times = {}
     # Open subscription event

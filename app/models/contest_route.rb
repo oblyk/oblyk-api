@@ -28,21 +28,6 @@ class ContestRoute < ApplicationRecord
     update_column :disabled_at, nil
   end
 
-  def thumbnail
-    return unless gym_route_id
-    return unless gym_route.thumbnail.attached?
-
-    gym_route.thumbnail_url
-  end
-
-  def picture_large_url
-    resize_attachment picture, '700x700'
-  end
-
-  def picture_url
-    resize_attachment picture, '300x300'
-  end
-
   def summary_to_json
     Rails.cache.fetch("#{cache_key_with_version}/summary_contest_route", expires_in: 28.days) do
       {
@@ -62,9 +47,6 @@ class ContestRoute < ApplicationRecord
           }
         ),
         ranking_type: contest_stage_step.ranking_type,
-        thumbnail: thumbnail,
-        picture: picture.attached? ? picture_url : nil, # TODO: Must be deleted
-        picture_large: picture.attached? ? picture_large_url : nil, # TODO: Must be deleted
         attachments: {
           gym_route_thumbnail: attachment_object(gym_route&.thumbnail, 'GymRoute_thumbnail'),
           picture: attachment_object(picture)

@@ -49,38 +49,6 @@ class GymSpace < ApplicationRecord
     save
   end
 
-  def plan_large_url
-    resize_to_limit_attachment plan, [4000, 4000]
-  end
-
-  def plan_thumbnail_url
-    resize_attachment plan, '500x500'
-  end
-
-  def plan_tiny_thumbnail_url
-    resize_attachment plan, '100x100'
-  end
-
-  def three_d_picture_url
-    resize_to_limit_attachment three_d_picture, [1000, 1000]
-  end
-
-  def three_d_picture_thumbnail_url
-    resize_to_limit_attachment three_d_picture, [500, 500]
-  end
-
-  def three_d_picture_tiny_thumbnail_url
-    resize_to_limit_attachment three_d_picture, [100, 100]
-  end
-
-  def banner_large_url
-    resize_attachment banner, '1920x1920'
-  end
-
-  def banner_thumbnail_url
-    resize_attachment banner, '300x300'
-  end
-
   def summary_to_json(with_figures: false)
     data = Rails.cache.fetch("#{cache_key_with_version}/summary_gym_space", expires_in: 28.days) do
       {
@@ -94,13 +62,6 @@ class GymSpace < ApplicationRecord
         scheme_width: scheme_width,
         sectors_color: sectors_color,
         text_contrast_color: Color.black_or_white_rgb(sectors_color || 'rgb(49,153,78)'),
-        banner: banner.attached? ? banner_large_url : nil, # TODO: must be deleted
-        plan: plan.attached? ? plan_large_url : nil, # TODO: must be deleted
-        plan_thumbnail_url: plan.attached? ? plan_thumbnail_url : nil, # TODO: must be deleted
-        plan_tiny_thumbnail_url: plan.attached? ? plan_tiny_thumbnail_url : nil, # TODO: must be deleted
-        three_d_picture_url: three_d_picture_url, # TODO: must be deleted
-        three_d_picture_thumbnail_url: three_d_picture_thumbnail_url, # TODO: must be deleted
-        three_d_picture_tiny_thumbnail_url: three_d_picture_tiny_thumbnail_url, # TODO: must be deleted
         gym_space_group_id: gym_space_group_id,
         anchor: anchor,
         draft: draft,
@@ -118,7 +79,6 @@ class GymSpace < ApplicationRecord
           id: gym.id,
           name: gym.name,
           slug_name: gym.slug_name,
-          banner: gym.banner.attached? ? gym.banner_large_url : nil, # TODO: Must be deleted
           attachments: {
             banner: attachment_object(gym.banner),
             logo: attachment_object(gym.logo)

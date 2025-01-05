@@ -43,7 +43,9 @@ module Api
                   id: ascent.gym.id,
                   name: ascent.gym.name,
                   slug_name: ascent.gym.slug_name,
-                  logo: ascent.gym.logo.attached? ? ascent.gym.logo_large_url : nil
+                  attachments: {
+                    logo: ascent.gym.logo_attachment_object
+                  }
                 },
                 ascents_count: 0,
                 max_grade: { value: nil, text: nil },

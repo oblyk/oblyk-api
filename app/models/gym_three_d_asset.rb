@@ -22,11 +22,11 @@ class GymThreeDAsset < ApplicationRecord
         name: name,
         slug_name: slug_name,
         description: description,
-        picture_url: picture.attached? ? picture_large_url : nil,
-        picture_thumbnail_url: picture.attached? ? picture_thumbnail_url : nil,
-        picture_tiny_thumbnail_url: picture.attached? ? picture_tiny_thumbnail_url : nil,
         three_d_gltf_url: three_d_gltf_url,
-        three_d_parameters: three_d_parameters
+        three_d_parameters: three_d_parameters,
+        attachments: {
+          picture: attachment_object(picture)
+        }
       }
     end
   end
@@ -37,18 +37,6 @@ class GymThreeDAsset < ApplicationRecord
 
   def three_d?
     three_d_gltf.attached?
-  end
-
-  def picture_large_url
-    resize_attachment picture, '1920x1920'
-  end
-
-  def picture_thumbnail_url
-    resize_attachment picture, '300x300'
-  end
-
-  def picture_tiny_thumbnail_url
-    resize_attachment picture, '100x100'
   end
 
   def delete_summary_cache

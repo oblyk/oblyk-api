@@ -35,8 +35,9 @@ module Api
           data = {
             id: contest.id,
             name: contest.name,
-            banner: contest.banner.attached? ? contest.banner_large_url : nil,
-            banner_thumbnail_url: contest.banner.attached? ? contest.banner_thumbnail_url : nil,
+            attachments: {
+              banner: contest.banner_attachment_object
+            },
             gym: {
               id: contest.gym.id,
               name: contest.gym.name,

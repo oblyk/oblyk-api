@@ -102,8 +102,7 @@ class Gym < ApplicationRecord
             sport_climbing: sport_climbing,
             pan: pan,
             fun_climbing: fun_climbing,
-            training_space: training_space,
-            map_thumbnail_url: banner.present? ? banner_thumbnail_url : nil
+            training_space: training_space
           }
         )
       end
@@ -136,24 +135,8 @@ class Gym < ApplicationRecord
     key
   end
 
-  def banner_large_url
-    resize_attachment banner, '1920x1920'
-  end
-
-  def banner_thumbnail_url
-    resize_attachment banner, '300x300'
-  end
-
-  def banner_cropped_medium_url
-    crop_attachment banner, '500x500'
-  end
-
-  def logo_large_url
-    resize_attachment logo, '500x500'
-  end
-
-  def logo_thumbnail_url
-    resize_attachment logo, '100x100'
+  def logo_attachment_object
+    attachment_object(logo)
   end
 
   def gym_spaces_with_anchor?
@@ -193,11 +176,6 @@ class Gym < ApplicationRecord
         sport_climbing_ranking: sport_climbing_ranking,
         administered: administered?,
         gym_options: gym_options.map(&:summary_to_json),
-        banner: banner.attached? ? banner_large_url : nil, # TODO: must be deleted
-        banner_thumbnail_url: banner.attached? ? banner_thumbnail_url : nil, # TODO: must be deleted
-        banner_cropped_url: banner ? banner_cropped_medium_url : nil, # TODO: must be deleted
-        logo: logo.attached? ? logo_large_url : nil, # TODO: must be deleted
-        logo_thumbnail_url: logo.attached? ? logo_thumbnail_url : nil, # TODO: must be deleted
         gym_spaces_count: gym_spaces.count,
         three_d_camera_position: three_d_camera_position,
         representation_type: representation_type,
