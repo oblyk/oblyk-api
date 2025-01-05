@@ -21,7 +21,6 @@ module LogBook
       private
       def filters_from_params(params)
         filters_params = JSON.parse(params[:filters]).transform_keys(&:to_sym)
-        Rails.logger.debug "Filters params: #{filters_params}"
         filters = ActionController::Parameters.new(filters_params).permit(
           ascent_status_list: [],
           roping_status_list: [],
@@ -29,7 +28,7 @@ module LogBook
         )
         # Merge with defaults
         # reverse_merge only adds default values for keys that are not yet present in `filters`.
-        filters.reverse_merge(DEFAULTS_FILTERS)
+        (filters || {}).reverse_merge(DEFAULTS_FILTERS)
       end
     end
   end
