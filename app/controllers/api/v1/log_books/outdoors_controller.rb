@@ -6,8 +6,8 @@ module Api
       class OutdoorsController < ApiController
         before_action :protected_by_session
         before_action :set_user
-        before_action :set_ascents, except: [:daily_ascents, :ascents_of_crag]
-        before_action :set_stats_list, except: [:daily_ascents, :ascents_of_crag, :ascended_crag_routes]
+        before_action :set_ascents, only: [:stats, :ascended_crag_routes]
+        before_action :set_stats_list, only: [:stats]
 
         def stats
           # set all stats charts, figures and lists from filtered ascents
@@ -99,7 +99,8 @@ module Api
         end
 
         def set_stats_list
-          @stats_list = params.require(:stats_list).permit(
+          stats_list_params = JSON.parse(params[:stats_list])
+          @stats_list = ActionController::Parameters.new(stats_list_params).permit(
             :figures,
             :climb_types_chart,
             :grades_chart,

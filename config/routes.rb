@@ -122,8 +122,8 @@ Rails.application.routes.draw do
           namespace :log_books do
             resources :outdoors, only: %i[] do
               collection do
-                post :stats
-                post :ascended_crag_routes
+                get :stats
+                get :ascended_crag_routes
                 get :daily_ascents
                 get :ascents_of_crag
               end
