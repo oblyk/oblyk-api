@@ -15,11 +15,16 @@ class GymRouteCover < ApplicationRecord
     Rails.cache.fetch("#{cache_key_with_version}/summary_gym_route_cover", expires_in: 28.days) do
       {
         id: id,
+        original_file_path: original_file_path,
         attachments: {
           picture: attachment_object(picture)
         }
       }
     end
+  end
+
+  def original_file_path
+    "#{ENV.fetch('IMAGES_STORAGE_DOMAINE', ENV['OBLYK_API_URL'])}/#{picture.blob.key}"
   end
 
   def detail_to_json
