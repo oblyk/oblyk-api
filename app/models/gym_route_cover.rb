@@ -24,7 +24,7 @@ class GymRouteCover < ApplicationRecord
   end
 
   def original_file_path
-    "#{ENV.fetch('IMAGES_STORAGE_DOMAINE', ENV['OBLYK_API_URL'])}/#{picture.blob.key}"
+    "#{ENV.fetch('IMAGES_STORAGE_DOMAINE', ENV['OBLYK_API_URL'])}/#{picture&.blob&.key}"
   end
 
   def detail_to_json

@@ -259,6 +259,7 @@ class GymRoute < ApplicationRecord
         videos_count: videos_count,
         gym_route_cover: {
           metadata: gym_route_cover&.picture ? gym_route_cover.picture.metadata : nil,
+          original_file_path: gym_route_cover.original_file_path,
           attachments: {
             picture: attachment_object(gym_route_cover&.picture, 'GymRouteCover_picture')
           }
