@@ -176,7 +176,7 @@ class Gym < ApplicationRecord
         sport_climbing_ranking: sport_climbing_ranking,
         administered: administered?,
         gym_options: gym_options.map(&:summary_to_json),
-        gym_spaces_count: gym_spaces.count,
+        gym_spaces_count: gym_spaces.size,
         three_d_camera_position: three_d_camera_position,
         representation_type: representation_type,
         attachments: {
