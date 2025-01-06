@@ -61,7 +61,7 @@ module Api
         age = params.fetch(:age, nil)
         climbing_type = params.fetch(:climbing_type, nil)
 
-        ascents = AscentGymRoute.includes(:user, gym_route: :gym)
+        ascents = AscentGymRoute.includes(:user, gym_route: :gym, user: { avatar_attachment: :blob })
                                 .where(gym: @gym)
                                 .where.not(ascent_status: %w[project repetition])
                                 .where.not(gym_route_id: nil)
@@ -106,7 +106,7 @@ module Api
             rank: nil,
             user: ascent.user.summary_to_json
           }
-          scores[user_key][:points] += ascent.gym_route.calculated_point(@gym) || 0
+          scores[user_key][:points] += ascent.gym_route.calculated_point || 0
         end
         scores = scores.map(&:last)
         scores.sort_by! { |score| -score[:points] }
