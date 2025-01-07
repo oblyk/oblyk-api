@@ -99,8 +99,7 @@ module Api
         end
 
         def set_stats_list
-          stats_list_params = JSON.parse(params[:stats_list])
-          @stats_list = ActionController::Parameters.new(stats_list_params).permit(
+          @stats_list = params.require(:stats_list).permit(
             :figures,
             :climb_types_chart,
             :grades_chart,

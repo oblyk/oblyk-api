@@ -20,8 +20,7 @@ module LogBook
 
       private
       def filters_from_params(params)
-        filters_params = JSON.parse(params[:filters]).transform_keys(&:to_sym)
-        filters = ActionController::Parameters.new(filters_params).permit(
+        filters = params.require(:filters).permit(
           ascent_status_list: [],
           roping_status_list: [],
           climbing_types_list: []
