@@ -13,12 +13,13 @@ module Api
           # set all stats charts, figures and lists from filtered ascents
           charts = LogBook::Outdoor::Chart.new(@ascents)
           stats = {}
-          stats[:figures] = LogBook::Outdoor::Figure.new(@ascents).figures if @stats_list[:figures]
-          stats[:climb_types_chart] = charts.climb_type if @stats_list[:climb_types_chart]
-          stats[:grades_chart] = charts.grade if @stats_list[:grades_chart]
-          stats[:years_chart] = charts.years if @stats_list[:years_chart]
-          stats[:months_chart] = charts.months if @stats_list[:months_chart]
-          stats[:evolution_chart] = charts.evolution_by_year if @stats_list[:evolution_chart]
+          stats[:figures] = LogBook::Outdoor::Figure.new(@ascents).figures if @stats_list.include?('figures')
+          stats[:climb_types_chart] = charts.climb_type if @stats_list.include?('climb_types_chart')
+          stats[:grades_chart] = charts.grade if @stats_list.include?('grades_chart')
+          stats[:years_chart] = charts.years if @stats_list.include?('years_chart')
+          stats[:months_chart] = charts.months if @stats_list.include?('months_chart')
+          stats[:evolution_chart] = charts.evolution_by_year if @stats_list.include?('evolution_chart')
+          Rails.logger.info("stats: #{stats}")
           render json: stats, status: :ok
         end
 
@@ -92,21 +93,13 @@ module Api
           end
         end
 
-
         def set_ascents
           crag_filtered_ascents = LogBook::Outdoor::CragFilteredAscents.new(@user, params)
           @ascents = crag_filtered_ascents.ascents
         end
 
         def set_stats_list
-          @stats_list = params.require(:stats_list).permit(
-            :figures,
-            :climb_types_chart,
-            :grades_chart,
-            :years_chart,
-            :months_chart,
-            :evolution_chart
-          )
+          @stats_list = params.require(:stats_list)
         end
       end
     end

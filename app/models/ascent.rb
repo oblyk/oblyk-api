@@ -19,15 +19,15 @@ class Ascent < ApplicationRecord
 
   scope :made, -> { where.not(ascent_status: :project) }
   scope :project, -> { where(ascent_status: :project) }
-  scope :by_ascent_statuses, ->(ascentStatusList) { where(ascent_status: ascentStatusList) }
-  scope :by_roping_statuses, ->(ropingStatusList) { where(roping_status: ropingStatusList) }
-  scope :by_climbing_types, ->(climbingTypesList) { joins(:crag_route).where(crag_routes: { climbing_type: climbingTypesList }) }
+  scope :by_ascent_statuses, ->(ascentFilter) { where(ascent_status: ascentFilter) }
+  scope :by_roping_statuses, ->(ropingFilter) { where(roping_status: ropingFilter) }
+  scope :by_climbing_types, ->(climbingTypeFilter) { joins(:crag_route).where(crag_routes: { climbing_type: climbingTypeFilter }) }
   # Combine all filters in the `filtered` scope
   scope :filtered, ->(filters) {
     scoped_results = self
-    scoped_results = scoped_results.by_ascent_statuses(filters[:ascent_status_list])
-    scoped_results = scoped_results.by_roping_statuses(filters[:roping_status_list])
-    scoped_results = scoped_results.by_climbing_types(filters[:climbing_types_list])
+    scoped_results = scoped_results.by_ascent_statuses(filters[:ascent_filter])
+    scoped_results = scoped_results.by_roping_statuses(filters[:roping_filter])
+    scoped_results = scoped_results.by_climbing_types(filters[:climbing_type_filter])
     scoped_results
   }
 
