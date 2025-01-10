@@ -94,7 +94,7 @@ module Api
           crag.crag_sectors.each do |sector|
             next unless sector.latitude
 
-            features << sector.to_geo_json(minimalistic: minimalistic)
+            features << sector.to_geo_json
           end
 
           # Crag parks
