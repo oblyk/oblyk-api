@@ -28,7 +28,7 @@ class Video < ApplicationRecord
   validates :video_service, inclusion: { in: VIDEO_SERVICES }
   validates :url, format: { with: URL_REGEXP }, if: proc { |obj| obj.video_service != 'oblyk_video' }
 
-  validates :video_file, blob: { content_type: :video }, allow_blank: true
+  validates :video_file, blob: { content_type: :video }, if: proc { |obj| obj.video_service == 'oblyk_video' }
 
   def valid_url?
     url.match? URL_REGEXP
