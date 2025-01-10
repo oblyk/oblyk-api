@@ -1,0 +1,23 @@
+Bonjour <%= @user.first_name %>,
+
+Retrouvez le rapport hebdomadaire de vos salles pour la semaine du <%= l(@start_of_week, format: :long_month) %> au <%= l(@end_of_week, format: :long_month) %>.
+
+<% @figures.each do |figure| %>
+  <%= figure[:gym][:name] %>
+  Ouverture de la semaine :
+
+  <% figure[:gym_routes].each do |climbing_type, route_figure| %>
+    <%= t("climb.#{climbing_type}") %> :
+    Sur les murs : <%= route_figure[:count] %>, +<%= route_figure[:new] %> ouverts, -<%= route_figure[:dismounted] %> démontés
+  <% end %>
+
+  Nombre d'adonné·es à la salle : <%= figure[:follower][:count] %>
+  <% if figure[:follower][:new].positive? %>
+    +<%= figure[:follower][:new] %> cette semaine
+  <% end %>
+
+  Nouveaux likes : +<%= figure[:likes_count] %>
+  Nouveaux commentaires : +<%= figure[:comments_count] %>
+  Nouvelles vidéos : +<%= figure[:videos_count] %>
+  Nouvelles croix : +<%= figure[:ascents_count] %>
+<% end %>

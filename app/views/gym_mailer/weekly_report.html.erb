@@ -34,17 +34,17 @@
             <td>Démontés</td>
           </tr>
         </thead>
-        <% figure[:gym_routes].each do |climbing_type, figure| %>
+        <% figure[:gym_routes].each do |climbing_type, route_figure| %>
           <tr>
             <th><%= t("climb.#{climbing_type}") %></th>
             <td>
-              <strong style="color: #80b2ff"><%= figure[:count] %></strong>
+              <strong style="color: #80b2ff"><%= route_figure[:count] %></strong>
             </td>
             <td>
-              <strong style="color: #6dc584">+<%= figure[:new] %></strong>
+              <strong style="color: #6dc584">+<%= route_figure[:new] %></strong>
             </td>
             <td>
-              <strong style="color: #ff9183">-<%= figure[:dismounted] %></strong>
+              <strong style="color: #ff9183">-<%= route_figure[:dismounted] %></strong>
             </td>
           </tr>
         <% end %>
