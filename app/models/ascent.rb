@@ -19,9 +19,9 @@ class Ascent < ApplicationRecord
 
   scope :made, -> { where.not(ascent_status: :project) }
   scope :project, -> { where(ascent_status: :project) }
-  scope :by_ascent_statuses, ->(ascentFilter) { where(ascent_status: ascentFilter) }
-  scope :by_roping_statuses, ->(ropingFilter) { where(roping_status: ropingFilter) }
-  scope :by_climbing_types, ->(climbingTypeFilter) { joins(:crag_route).where(crag_routes: { climbing_type: climbingTypeFilter }) }
+  scope :by_ascent_statuses, ->(ascent_filter) { where(ascent_status: ascent_filter) }
+  scope :by_roping_statuses, ->(roping_filter) { where(roping_status: roping_filter) }
+  scope :by_climbing_types, ->(climbing_type_filter) { joins(:crag_route).where(crag_routes: { climbing_type: climbing_type_filter }) }
   # Combine all filters in the `filtered` scope
   scope :filtered, ->(filters) {
     scoped_results = self
