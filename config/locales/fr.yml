@@ -114,6 +114,15 @@ fr:
     lu: 'Luxembourg'
     pe: 'Pérou'
     pt: 'Portugal'
+  climb:
+    sport_climbing: "Voie"
+    bouldering: "Bloc"
+    multi_pitch: "Grand voie"
+    trad_climbing: "Trad"
+    aid_climbing: "Artif"
+    deep_water: "Psycobloc"
+    via_ferrata: "Via ferrata"
+    pan: "Pan"
   activerecord:
     attributes:
       crag:

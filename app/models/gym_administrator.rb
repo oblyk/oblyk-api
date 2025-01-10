@@ -23,7 +23,8 @@ class GymAdministrator < ApplicationRecord
       subscribe_to_follower_feed: subscribe_to_follower_feed,
       last_comment_feed_read_at: last_comment_feed_read_at,
       last_video_feed_read_at: last_video_feed_read_at,
-      last_follower_feed_read_at: last_follower_feed_read_at
+      last_follower_feed_read_at: last_follower_feed_read_at,
+      weekly_report: weekly_report
     }
     if user
       data[:user] = {

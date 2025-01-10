@@ -1,0 +1,87 @@
+<p>Bonjour <%= @user.first_name %>,</p>
+<p>
+  Retrouvez le rapport hebdomadaire de vos salles pour la semaine du <u><%= l(@start_of_week, format: :long_month) %></u> au <u><%= l(@end_of_week, format: :long_month) %></u>.
+</p>
+
+<% @figures.each do |figure| %>
+  <div style="border-radius: 10px; padding: 15px; background-color: rgba(127, 127, 127, 0.09); margin-bottom: 15px">
+    <h1 style="font-size: 1.4em; margin-top: 0">
+      <% if figure[:gym][:logo_path] %>
+        <img
+          src="<%= figure[:gym][:logo_path] %>"
+          alt="logo <% figure[:gym][:name] %>"
+          style="border-radius: 50px; height: 30px; width: 30px; vertical-align: bottom"
+        >
+      <% end %>
+      <%= figure[:gym][:name] %>
+      <a
+        href="<%= "#{ENV['OBLYK_APP_URL']}/gyms/#{figure[:gym][:id]}/#{figure[:gym][:slug_name]}/admins" %>"
+        style="font-size: 0.6em; font-weight: normal"
+      >
+        admin
+      </a>
+    </h1>
+    <div>
+      <p style="margin-bottom: 3px">
+        Ouverture de la semaine :
+      </p>
+      <table style="width: 100%; border: solid rgba(127, 127, 127, 0.3) 1px; border-radius: 5px">
+        <thead>
+          <tr>
+            <td></td>
+            <td>Sur les murs</td>
+            <td>Ouverts</td>
+            <td>Démontés</td>
+          </tr>
+        </thead>
+        <% figure[:gym_routes].each do |climbing_type, figure| %>
+          <tr>
+            <th><%= t("climb.#{climbing_type}") %></th>
+            <td>
+              <strong style="color: #80b2ff"><%= figure[:count] %></strong>
+            </td>
+            <td>
+              <strong style="color: #6dc584">+<%= figure[:new] %></strong>
+            </td>
+            <td>
+              <strong style="color: #ff9183">-<%= figure[:dismounted] %></strong>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+    <p style="margin-bottom: 6px; margin-top: 8px">
+      Nombre d'adonné·es à la salle : <span style="color: #80b2ff"><%= figure[:follower][:count] %></span>
+      <% if figure[:follower][:new].positive? %>
+        <cite style="color: #6dc584">
+          +<%= figure[:follower][:new] %> cette semaine
+        </cite>
+      <% end %>
+    </p>
+    <div>
+      <p style="margin-bottom: 9px; margin-top: 0; line-height: 1.2em">
+        Nouveaux likes, commentaires, vidéos et croix de vos grimpeurs et grimpeuses cette semaine :
+      </p>
+      <span style="border: rgba(127, 127, 127, 0.3) 1px solid; border-radius: 20px; padding: 3px; margin-right: 5px">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="fill: #f44336; height: 18px; width: 18px; vertical-align: bottom"><title>heart</title><path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z" /></svg>
+        +<%= figure[:likes_count] %>
+      </span>
+      <span style="border: rgba(127, 127, 127, 0.3) 1px solid; border-radius: 20px; padding: 3px; margin-right: 5px">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="fill: #2196f3; height: 18px; width: 18px; vertical-align: bottom"><title>comment</title><path d="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9Z" /></svg>
+        +<%= figure[:comments_count] %>
+      </span>
+      <span style="border: rgba(127, 127, 127, 0.3) 1px solid; border-radius: 20px; padding: 3px; margin-right: 5px">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="fill: #673ab7; height: 18px; width: 18px; vertical-align: bottom"><title>video</title><path d="M17,10.5V7A1,1 0 0,0 16,6H4A1,1 0 0,0 3,7V17A1,1 0 0,0 4,18H16A1,1 0 0,0 17,17V13.5L21,17.5V6.5L17,10.5Z" /></svg>
+        +<%= figure[:videos_count] %>
+      </span>
+      <span style="border: rgba(127, 127, 127, 0.3) 1px solid; border-radius: 20px; padding: 3px">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="fill: #ffc107; height: 18px; width: 18px; vertical-align: bottom"><title>check-all</title><path d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg>
+        +<%= figure[:ascents_count] %>
+      </span>
+    </div>
+  </div>
+<% end %>
+
+<p style="text-align: center">
+  Vous pouvez vous désinscrire des rapports hebdo depuis <a href="<%= "#{ENV['OBLYK_APP_URL']}/home/settings/notifications" %>">sur votre profil</a>
+</p>

@@ -112,6 +112,15 @@ en:
     lu: 'Luxembourg'
     pe: 'Peru'
     pt: 'Portugal'
+  climb:
+    sport_climbing: "Sport climbing"
+    bouldering: "Bouldering"
+    multi_pitch: "Multi pitch"
+    trad_climbing: "Trad climbing"
+    aid_climbing: "Aid climbing"
+    deep_water: "Deep water"
+    via_ferrata: "Via ferrata"
+    pan: "Pan"
   activerecord:
     attributes:
       crag:

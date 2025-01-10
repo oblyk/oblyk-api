@@ -129,6 +129,8 @@ Rails.application.routes.draw do
           put :partner_checked
           post :accept_followers
           delete :reject_followers
+          get :gym_administrators
+          put :switch_weekly_report
           namespace :log_books do
             resources :outdoors, only: %i[] do
               collection do

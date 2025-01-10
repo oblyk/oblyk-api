@@ -130,6 +130,7 @@ module Api
           :requested_email,
           :subscribe_to_comment_feed,
           :subscribe_to_video_feed,
+          :weekly_report,
           roles: []
         )
       end

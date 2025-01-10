@@ -471,6 +471,17 @@ module Api
         head :no_content
       end
 
+      def gym_administrators
+        render json: @current_user.gym_administrators.includes(:gym, :user).map(&:detail_to_json), status: :ok
+      end
+
+      def switch_weekly_report
+        gym_administrator = @current_user.gym_administrators.find_by id: params[:gym_administrator][:id]
+        gym_administrator.weekly_report = !gym_administrator.weekly_report
+        gym_administrator.save
+        head :no_content
+      end
+
       private
 
       def set_user
