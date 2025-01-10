@@ -51,7 +51,7 @@ class GymMailer < ApplicationMailer
     @start_of_week = params[:start_of_week]
     @end_of_week = params[:end_of_week]
 
-    subject = "Oblyk, hebdo du #{I18n.l(@start_of_week)} au #{I18n.l(@end_of_week)}"
+    subject = "Oblyk, rapport du #{I18n.l(@start_of_week)} au #{I18n.l(@end_of_week)}"
     if use_send_in_blue?
       send_with_send_in_blue(@user.email, subject, 'gym_mailer/weekly_report')
     else
