@@ -5,20 +5,20 @@ class GymReportingWorker
   sidekiq_options queue: :default
 
   def perform
-    start_of_week = Date.current.prev_week.beginning_of_week
-    end_of_week = Date.current.prev_week.end_of_week
+    start_date = Date.current.prev_month.beginning_of_month
+    end_date = Date.current.prev_month.end_of_month
 
     assigned_gyms = Gym.where.not(assigned_at: nil).pluck(:id)
 
     follower_by_gyms = Follow.select('COUNT(*) AS count, followable_id')
-                             .where('follows.created_at <= ?', end_of_week.end_of_day)
+                             .where('follows.created_at <= ?', end_date.end_of_day)
                              .where(followable_type: 'Gym')
                              .where(followable_id: assigned_gyms)
                              .group('followable_id')
                              .group_by(&:followable_id)
 
     new_followers_in_week = Follow.select('COUNT(*) AS count, followable_id')
-                                  .where(created_at: start_of_week.beginning_of_day..end_of_week.end_of_day)
+                                  .where(created_at: start_date.beginning_of_day..end_date.end_of_day)
                                   .where(followable_type: 'Gym')
                                   .where(followable_id: assigned_gyms)
                                   .group('followable_id')
@@ -26,28 +26,28 @@ class GymReportingWorker
 
     gym_routes_by_gyms = GymRoute.select('COUNT(*) AS count, gym_routes.climbing_type AS climbing_type, gym_spaces.gym_id AS gym_id')
                                  .joins(gym_sector: :gym_space)
-                                 .where('opened_at <= :date AND (dismounted_at IS NULL OR dismounted_at > :date)', date: end_of_week.end_of_day)
+                                 .where('opened_at <= :date AND (dismounted_at IS NULL OR dismounted_at > :date)', date: end_date.end_of_day)
                                  .where(gym_spaces: { gym_id: assigned_gyms })
                                  .group('climbing_type, gym_id')
                                  .group_by(&:gym_id)
 
     new_gym_routes_in_week = GymRoute.select('COUNT(*) AS count, gym_routes.climbing_type AS climbing_type, gym_spaces.gym_id AS gym_id')
                                      .joins(gym_sector: :gym_space)
-                                     .where(opened_at: start_of_week.beginning_of_day..end_of_week.end_of_day)
+                                     .where(opened_at: start_date.beginning_of_day..end_date.end_of_day)
                                      .where(gym_spaces: { gym_id: assigned_gyms })
                                      .group('climbing_type, gym_id')
                                      .group_by(&:gym_id)
 
     dismounted_routes_in_week = GymRoute.select('COUNT(*) AS count, gym_routes.climbing_type AS climbing_type, gym_spaces.gym_id AS gym_id')
                                         .joins(gym_sector: :gym_space)
-                                        .where(dismounted_at: start_of_week.beginning_of_day..end_of_week.end_of_day)
+                                        .where(dismounted_at: start_date.beginning_of_day..end_date.end_of_day)
                                         .where(gym_spaces: { gym_id: assigned_gyms })
                                         .group('climbing_type, gym_id')
                                         .group_by(&:gym_id)
 
     ascents_in_week = AscentGymRoute.select('COUNT(*) AS count, gym_id AS gym_id')
                                     .where(gym_id: assigned_gyms)
-                                    .where(released_at: start_of_week.beginning_of_day..end_of_week.end_of_day)
+                                    .where(released_at: start_date.beginning_of_day..end_date.end_of_day)
                                     .group('gym_id')
                                     .group_by(&:gym_id)
 
@@ -56,7 +56,7 @@ class GymReportingWorker
                         .joins('INNER JOIN gym_sectors ON gym_sectors.id = gym_routes.gym_sector_id')
                         .joins('INNER JOIN gym_spaces ON gym_spaces.id = gym_sectors.gym_space_id')
                         .where(gym_spaces: { gym_id: assigned_gyms })
-                        .where(created_at: start_of_week.beginning_of_day..end_of_week.end_of_day)
+                        .where(created_at: start_date.beginning_of_day..end_date.end_of_day)
                         .group('gym_id')
                         .group_by(&:gym_id)
 
@@ -65,7 +65,7 @@ class GymReportingWorker
                           .joins('INNER JOIN gym_sectors ON gym_sectors.id = gym_routes.gym_sector_id')
                           .joins('INNER JOIN gym_spaces ON gym_spaces.id = gym_sectors.gym_space_id')
                           .where(gym_spaces: { gym_id: assigned_gyms })
-                          .where(created_at: start_of_week.beginning_of_day..end_of_week.end_of_day)
+                          .where(created_at: start_date.beginning_of_day..end_date.end_of_day)
                           .group('gym_id')
                           .group_by(&:gym_id)
 
@@ -74,13 +74,13 @@ class GymReportingWorker
                               .joins('INNER JOIN gym_sectors ON gym_sectors.id = gym_routes.gym_sector_id')
                               .joins('INNER JOIN gym_spaces ON gym_spaces.id = gym_sectors.gym_space_id')
                               .where(gym_spaces: { gym_id: assigned_gyms })
-                              .where(created_at: start_of_week.beginning_of_day..end_of_week.end_of_day)
+                              .where(created_at: start_date.beginning_of_day..end_date.end_of_day)
                               .group('gym_id')
                               .group_by(&:gym_id)
 
     users = User.includes(gym_administrators: :gym)
                 .where(gym_administrators: { gym_id: assigned_gyms })
-                .where(gym_administrators: { weekly_report: true })
+                .where(gym_administrators: { email_report: true })
 
     users.each do |user|
       figures = []
@@ -119,11 +119,12 @@ class GymReportingWorker
         end
         figures << figure
       end
-      GymMailer.with(user: user, start_of_week: start_of_week, end_of_week: end_of_week, figures: figures)
-               .weekly_report.deliver_now
+      GymMailer.with(user: user, start_date: start_date, end_date: end_date, figures: figures)
+               .email_report
+               .deliver_now
     end
 
-    next_monday = Time.zone.now.beginning_of_week + 1.week + 9.hours
-    GymReportingWorker.perform_at(next_monday)
+    next_month = Date.current.next_month.beginning_of_month.beginning_of_day + 9.hours
+    GymReportingWorker.perform_at(next_month)
   end
 end

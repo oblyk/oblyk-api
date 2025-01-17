@@ -205,7 +205,10 @@ fr:
         record_invalid: "Enregistrement non valide"
   date:
     month_names: [~, Janvier, Février, Mars, Avril, Mai, Juin, Juillet, Août, Septembre, Octobre, Novembre, Décembre]
+    abbr_month_names: [~, Jan, Fév, Mar, Avr, Mai, Juin, Juil, Aoû, Sep, Oct, Nov, Déc]
     formats:
       default: "%d/%m/%Y"
       iso: "%Y-%m-%d"
       long_month: "%d %B %Y"
+      month_and_year: "%B %Y"
+      day_and_short_month: "%d %b"

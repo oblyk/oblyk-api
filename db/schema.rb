@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_01_10_202619) do
+ActiveRecord::Schema.define(version: 2025_01_17_142232) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -748,7 +748,7 @@ ActiveRecord::Schema.define(version: 2025_01_10_202619) do
     t.datetime "last_comment_feed_read_at"
     t.datetime "last_video_feed_read_at"
     t.datetime "last_follower_feed_read_at"
-    t.boolean "weekly_report", default: true
+    t.boolean "email_report", default: true
     t.index ["gym_id"], name: "index_gym_administrators_on_gym_id"
     t.index ["user_id"], name: "index_gym_administrators_on_user_id"
   end

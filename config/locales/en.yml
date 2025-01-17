@@ -202,7 +202,10 @@ en:
         confirmation: "confirm"
   date:
     month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
+    abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
     formats:
       default: "%Y-%m-%d"
       iso: "%Y-%m-%d"
       long_month: "%d %B %Y"
+      month_and_year: "%B %Y"
+      day_and_short_month: "%d %B"

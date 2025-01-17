@@ -1,6 +1,6 @@
 <p>Bonjour <%= @user.first_name %>,</p>
 <p>
-  Retrouvez le rapport hebdomadaire de vos salles pour la semaine du <u><%= l(@start_of_week, format: :long_month) %></u> au <u><%= l(@end_of_week, format: :long_month) %></u>.
+  Retrouvez le rapport des ouvertures et l'activité de vos grimpeurs et grimpeuses de vos salles pour le mois de <u><%= l(@start_date, format: :month_and_year) %></u>.
 </p>
 
 <% @figures.each do |figure| %>
@@ -23,13 +23,13 @@
     </h1>
     <div>
       <p style="margin-bottom: 3px">
-        Ouverture de la semaine :
+        Ouverture du mois :
       </p>
       <table style="width: 100%; border: solid rgba(127, 127, 127, 0.3) 1px; border-radius: 5px">
         <thead>
           <tr>
             <td></td>
-            <td>Sur les murs</td>
+            <td>Sur les murs au <%= l(@end_date, format: :day_and_short_month) %></td>
             <td>Ouverts</td>
             <td>Démontés</td>
           </tr>
@@ -51,37 +51,37 @@
       </table>
     </div>
     <p style="margin-bottom: 6px; margin-top: 8px">
-      Nombre d'adonné·es à la salle : <span style="color: #80b2ff"><%= figure[:follower][:count] %></span>
+      Nombre d'adonné·es à la salle au <%= l(@end_date, format: :day_and_short_month) %> : <strong style="color: #80b2ff"><%= figure[:follower][:count] %></strong>
       <% if figure[:follower][:new].positive? %>
         <cite style="color: #6dc584">
-          +<%= figure[:follower][:new] %> cette semaine
+          +<%= figure[:follower][:new] %> ce mois
         </cite>
       <% end %>
     </p>
     <div>
       <p style="margin-bottom: 9px; margin-top: 0; line-height: 1.2em">
-        Nouveaux likes, commentaires, vidéos et croix de vos grimpeurs et grimpeuses cette semaine :
+        Nouveaux likes, commentaires, vidéos et croix de vos grimpeurs et grimpeuses ce mois :
       </p>
       <span style="border: rgba(127, 127, 127, 0.3) 1px solid; border-radius: 20px; padding: 3px; margin-right: 5px">
-        <img src="<%= "#{ENV['OBLYK_APP_URL']}/images/heart.png" %>" alt="coeur" style="vertical-align: bottom; height: 18px; width: 18px; margin-left: 3px" >
-        +<%= figure[:likes_count] %>
+        <img src="<%= "#{ENV['OBLYK_APP_URL']}/images/heart.png" %>" alt="coeur" style="vertical-align: bottom; height: 18px; width: 18px; margin-left: 3px">
+        <%= '+' if figure[:likes_count].positive? %><%= figure[:likes_count] %>
       </span>
       <span style="border: rgba(127, 127, 127, 0.3) 1px solid; border-radius: 20px; padding: 3px; margin-right: 5px">
         <img src="<%= "#{ENV['OBLYK_APP_URL']}/images/comment.png" %>" alt="coeur" style="vertical-align: bottom; height: 18px; width: 18px; margin-left: 3px" >
-        +<%= figure[:comments_count] %>
+        <%= '+' if figure[:comments_count].positive? %><%= figure[:comments_count] %>
       </span>
       <span style="border: rgba(127, 127, 127, 0.3) 1px solid; border-radius: 20px; padding: 3px; margin-right: 5px">
         <img src="<%= "#{ENV['OBLYK_APP_URL']}/images/video.png" %>" alt="coeur" style="vertical-align: bottom; height: 18px; width: 18px; margin-left: 3px" >
-        +<%= figure[:videos_count] %>
+        <%= '+' if figure[:videos_count].positive? %><%= figure[:videos_count] %>
       </span>
       <span style="border: rgba(127, 127, 127, 0.3) 1px solid; border-radius: 20px; padding: 3px">
         <img src="<%= "#{ENV['OBLYK_APP_URL']}/images/double-check.png" %>" alt="coeur" style="vertical-align: bottom; height: 18px; width: 18px; margin-left: 3px" >
-        +<%= figure[:ascents_count] %>
+        <%= '+' if figure[:ascents_count].positive? %><%= figure[:ascents_count] %>
       </span>
     </div>
   </div>
 <% end %>
 
 <p style="text-align: center">
-  Vous pouvez vous désinscrire des rapports hebdo depuis <a href="<%= "#{ENV['OBLYK_APP_URL']}/home/settings/notifications" %>">sur votre profil</a>
+  Vous pouvez vous désinscrire des rapports mensuels depuis <a href="<%= "#{ENV['OBLYK_APP_URL']}/home/settings/notifications" %>">sur votre profil</a>
 </p>

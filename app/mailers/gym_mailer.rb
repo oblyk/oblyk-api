@@ -45,15 +45,15 @@ class GymMailer < ApplicationMailer
     end
   end
 
-  def weekly_report
+  def email_report
     @user = params[:user]
     @figures = params[:figures]
-    @start_of_week = params[:start_of_week]
-    @end_of_week = params[:end_of_week]
+    @start_date = params[:start_date]
+    @end_date = params[:end_date]
 
-    subject = "Oblyk, rapport du #{I18n.l(@start_of_week)} au #{I18n.l(@end_of_week)}"
+    subject = "Oblyk, rapport de #{I18n.l(@start_date, format: :month_and_year)}"
     if use_send_in_blue?
-      send_with_send_in_blue(@user.email, subject, 'gym_mailer/weekly_report')
+      send_with_send_in_blue(@user.email, subject, 'gym_mailer/email_report')
     else
       mail(to: @user.email, subject: subject)
     end
