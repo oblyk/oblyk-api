@@ -216,54 +216,6 @@ module Api
         render json: @user.ascent_crag_routes_to_a, status: :ok
       end
 
-      def ascended_crag_routes
-        page = params.fetch(:page, 1)
-
-        climbing_type_filter = params.fetch(:climbing_type, 'all')
-        climbing_filters = []
-        climbing_filters << 'sport_climbing' if %w[sport_climbing all].include?(climbing_type_filter)
-        climbing_filters << 'bouldering' if %w[bouldering all].include?(climbing_type_filter)
-        climbing_filters << 'multi_pitch' if %w[multi_pitch all].include?(climbing_type_filter)
-        climbing_filters << 'trad_climbing' if %w[trad_climbing all].include?(climbing_type_filter)
-        climbing_filters << 'aid_climbing' if %w[aid_climbing all].include?(climbing_type_filter)
-        climbing_filters << 'deep_water' if %w[deep_water all].include?(climbing_type_filter)
-        climbing_filters << 'via_ferrata' if %w[via_ferrata all].include?(climbing_type_filter)
-
-        ascents = AscentCragRoute.joins(crag_route: :crag)
-                                 .includes(
-                                   crag_route: {
-                                     crag_sector: { photo: { picture_attachment: :blob } },
-                                     crag: { photo: { picture_attachment: :blob } },
-                                     photo: { picture_attachment: :blob }
-                                   }
-                                 )
-                                 .where(user_id: @user.id)
-                                 .where(crag_routes: { climbing_type: climbing_filters })
-
-        ascents = case params[:order]
-                  when 'crags'
-                    ascents.where(ascent_status: %i[sent red_point flash onsight]).order('crags.name, crag_routes.name, crag_routes.id')
-                  when 'released_at'
-                    ascents.made.order('ascents.released_at DESC, crag_routes.name, crag_routes.id')
-                  else
-                    ascents.where(ascent_status: %i[sent red_point flash onsight]).order('ascents.max_grade_value DESC, crag_routes.name, crag_routes.id')
-                  end
-
-        ascents = ascents.page(page)
-        ascent_routes = []
-        ascents.each do |ascent|
-          route = ascent.crag_route.summary_to_json(with_crag_in_sector: false)
-          route[:grade_gap][:max_grade_value] = ascent.max_grade_value
-          route[:grade_gap][:min_grade_value] = ascent.min_grade_value
-          route[:grade_gap][:max_grade_text] = ascent.max_grade_text
-          route[:grade_gap][:min_grade_text] = ascent.min_grade_text
-          route[:released_at] = ascent.released_at
-          ascent_routes << route
-        end
-
-        render json: ascent_routes, status: :ok
-      end
-
       def projects
         project_crag_route_ids = @user.ascent_crag_routes.project.pluck(:crag_route_id)
         crag_route_ids = @user.ascent_crag_routes.made.pluck(:crag_route_id)

@@ -10,6 +10,8 @@ module Api
       before_action :protected_outdoor_log_book, only: %i[outdoor_figures outdoor_climb_types_chart ascended_crag_routes outdoor_grades_chart]
       before_action :protected_indoor_log_book, only: %i[indoor_figures indoor_climb_types_chart indoor_grade_chart indoor_by_level_chart]
       before_action :set_indoor_ascents, only: %i[indoor_grade_chart indoor_by_level_chart]
+      before_action :set_outdoor_ascents, only: [:stats, :ascended_crag_routes]
+      before_action :set_stats_list, only: [:stats]
 
       def show
         render json: @user.detail_to_json, status: :ok
@@ -61,54 +63,22 @@ module Api
         }, status: :ok
       end
 
-      def outdoor_figures
-        render json: LogBook::Outdoor::Figure.new(@user).figures, status: :ok
-      end
-
-      def outdoor_climb_types_chart
-        render json: LogBook::Outdoor::Chart.new(@user).climb_type, status: :ok
+      def stats
+        # set all stats charts, figures and lists from filtered ascents
+        charts = LogBook::Outdoor::Chart.new(@ascents)
+        stats = {}
+        stats[:figures] = LogBook::Outdoor::Figure.new(@ascents).figures if @stats_list.include?('figures')
+        stats[:climb_types_chart] = charts.climb_type if @stats_list.include?('climb_types_chart')
+        stats[:grades_chart] = charts.grade if @stats_list.include?('grades_chart')
+        stats[:years_chart] = charts.years if @stats_list.include?('years_chart')
+        stats[:months_chart] = charts.months if @stats_list.include?('months_chart')
+        stats[:evolution_chart] = charts.evolution_by_year if @stats_list.include?('evolution_chart')
+        render json: stats, status: :ok
       end
 
       def ascended_crag_routes
-        crag_route_ids = @user.ascent_crag_routes.made.pluck(:crag_route_id)
         page = params.fetch(:page, 1)
-        climbing_type_filter = params.fetch(:climbing_type, 'all')
-        climbing_filters = []
-        climbing_filters << 'sport_climbing' if %w[sport_climbing all].include?(climbing_type_filter)
-        climbing_filters << 'bouldering' if %w[bouldering all].include?(climbing_type_filter)
-        climbing_filters << 'multi_pitch' if %w[multi_pitch all].include?(climbing_type_filter)
-        climbing_filters << 'trad_climbing' if %w[trad_climbing all].include?(climbing_type_filter)
-        climbing_filters << 'aid_climbing' if %w[aid_climbing all].include?(climbing_type_filter)
-        climbing_filters << 'deep_water' if %w[deep_water all].include?(climbing_type_filter)
-        climbing_filters << 'via_ferrata' if %w[via_ferrata all].include?(climbing_type_filter)
-
-        @crag_routes = case params[:order]
-                       when 'crags'
-                         CragRoute.includes(:crag, :crag_sector)
-                                  .where(id: crag_route_ids)
-                                  .where(climbing_type: climbing_filters)
-                                  .joins(:crag)
-                                  .order('crags.name, crag_routes.name, crag_routes.id')
-                                  .page(page)
-                       when 'released_at'
-                         CragRoute.joins("INNER JOIN ascents ON ascents.crag_route_id = crag_routes.id AND ascents.type = 'AscentCragRoute' AND ascents.user_id = #{@user.id}")
-                                  .includes(:crag, :crag_sector)
-                                  .where(climbing_type: climbing_filters)
-                                  .where(id: crag_route_ids)
-                                  .order('ascents.released_at DESC, crag_routes.name, crag_routes.id')
-                                  .page(page)
-                       else
-                         CragRoute.includes(:crag, :crag_sector)
-                                  .where(id: crag_route_ids)
-                                  .where(climbing_type: climbing_filters)
-                                  .order('crag_routes.max_grade_value DESC, crag_routes.name, crag_routes.id')
-                                  .page(page)
-                       end
-        render json: @crag_routes.map(&:summary_to_json), status: :ok
-      end
-
-      def outdoor_grades_chart
-        render json: LogBook::Outdoor::Chart.new(@user).grade, status: :ok
+        render json: LogBook::Outdoor::List.new(@ascents).ascended_crag_routes(page, params[:order]), status: :ok
       end
 
       def indoor_figures
@@ -186,6 +156,15 @@ module Api
                 else
                   User.find_by slug_name: params[:id]
                 end
+      end
+
+      def set_outdoor_ascents
+        crag_filtered_ascents = LogBook::Outdoor::CragFilteredAscents.new(@user, params)
+        @ascents = crag_filtered_ascents.ascents
+      end
+
+      def set_stats_list
+        @stats_list = params.require(:stats_list)
       end
 
       def set_indoor_ascents
