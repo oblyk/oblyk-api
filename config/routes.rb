@@ -71,6 +71,8 @@ Rails.application.routes.draw do
         get :followers, on: :member
         get :contribution, on: :member
         get :localities, on: :member
+        get :stats, on: :member
+        get :ascended_crag_routes, on: :member
         get :indoor_figures, on: :member
         get :indoor_climb_types_chart, on: :member
         get :indoor_grade_chart, on: :member

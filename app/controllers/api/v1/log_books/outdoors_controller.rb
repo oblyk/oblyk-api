@@ -19,7 +19,6 @@ module Api
           stats[:years_chart] = charts.years if @stats_list.include?('years_chart')
           stats[:months_chart] = charts.months if @stats_list.include?('months_chart')
           stats[:evolution_chart] = charts.evolution_by_year if @stats_list.include?('evolution_chart')
-          Rails.logger.info("stats: #{stats}")
           render json: stats, status: :ok
         end
 
@@ -82,15 +81,7 @@ module Api
         private
 
         def set_user
-          if params[:user_id].present?
-            @user = if /^[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}$/.match? params[:user_id].to_s
-                      User.find_by uuid: params[:user_id]
-                    else
-                      User.find_by slug_name: params[:user_id]
-                    end
-          else
             @user = @current_user
-          end
         end
 
         def set_ascents

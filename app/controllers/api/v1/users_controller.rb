@@ -10,6 +10,8 @@ module Api
       before_action :protected_outdoor_log_book, only: %i[outdoor_figures outdoor_climb_types_chart ascended_crag_routes outdoor_grades_chart]
       before_action :protected_indoor_log_book, only: %i[indoor_figures indoor_climb_types_chart indoor_grade_chart indoor_by_level_chart]
       before_action :set_indoor_ascents, only: %i[indoor_grade_chart indoor_by_level_chart]
+      before_action :set_outdoor_ascents, only: [:stats, :ascended_crag_routes]
+      before_action :set_stats_list, only: [:stats]
 
       def show
         render json: @user.detail_to_json, status: :ok
@@ -59,6 +61,24 @@ module Api
           guides_count: GuideBookPaper.where(user: @user).count + GuideBookPdf.where(user: @user).count + GuideBookWeb.where(user: @user).count,
           comments_count: Comment.where(user: @user).count + Ascent.where.not(comment: nil).where(private_comment: false).where(user: @user).count
         }, status: :ok
+      end
+
+      def stats
+        # set all stats charts, figures and lists from filtered ascents
+        charts = LogBook::Outdoor::Chart.new(@ascents)
+        stats = {}
+        stats[:figures] = LogBook::Outdoor::Figure.new(@ascents).figures if @stats_list.include?('figures')
+        stats[:climb_types_chart] = charts.climb_type if @stats_list.include?('climb_types_chart')
+        stats[:grades_chart] = charts.grade if @stats_list.include?('grades_chart')
+        stats[:years_chart] = charts.years if @stats_list.include?('years_chart')
+        stats[:months_chart] = charts.months if @stats_list.include?('months_chart')
+        stats[:evolution_chart] = charts.evolution_by_year if @stats_list.include?('evolution_chart')
+        render json: stats, status: :ok
+      end
+
+      def ascended_crag_routes
+        page = params.fetch(:page, 1)
+        render json: LogBook::Outdoor::List.new(@ascents).ascended_crag_routes(page, params[:order]), status: :ok
       end
 
       def indoor_figures
@@ -136,6 +156,15 @@ module Api
                 else
                   User.find_by slug_name: params[:id]
                 end
+      end
+
+      def set_outdoor_ascents
+        crag_filtered_ascents = LogBook::Outdoor::CragFilteredAscents.new(@user, params)
+        @ascents = crag_filtered_ascents.ascents
+      end
+
+      def set_stats_list
+        @stats_list = params.require(:stats_list)
       end
 
       def set_indoor_ascents
