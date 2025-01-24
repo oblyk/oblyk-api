@@ -154,7 +154,7 @@ module Api
           headers: true,
           col_sep: "\t"
         ) do |csv|
-          csv << %w[hold_colors tag_colors grade points height name description openers opened_at sector space ascents_count url short_url]
+          csv << %w[hold_colors tag_colors grade points height name description openers opened_at sector space anchor nb_ascents nb_comments nb_likes nb_videos url short_url]
           gym_routes.each do |gym_route|
             csv << [
               gym_route.hold_colors&.join(', '),
@@ -168,7 +168,11 @@ module Api
               gym_route.opened_at,
               gym_route.gym_sector.name,
               gym_route.gym_sector.gym_space.name,
+              gym_route.anchor_number,
               gym_route.ascents_count,
+              gym_route.comments_count,
+              gym_route.likes_count,
+              gym_route.videos_count,
               gym_route.app_path,
               gym_route.short_app_path
             ]
