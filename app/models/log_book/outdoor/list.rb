@@ -9,13 +9,13 @@ module LogBook
 
       def ascended_crag_routes(page, order)
         ascents = @ascents.joins(crag_route: :crag)
-                                  .includes(
-                                    crag_route: {
-                                      crag_sector: { photo: { picture_attachment: :blob } },
-                                      crag: { photo: { picture_attachment: :blob } },
-                                      photo: { picture_attachment: :blob }
-                                    },
-                                    )
+                          .includes(
+                            crag_route: {
+                              crag_sector: { photo: { picture_attachment: :blob } },
+                              crag: { photo: { picture_attachment: :blob } },
+                              photo: { picture_attachment: :blob }
+                            },
+                          )
 
         ascents = case order
                   when 'crags'

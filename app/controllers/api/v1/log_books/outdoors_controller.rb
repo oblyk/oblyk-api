@@ -81,7 +81,7 @@ module Api
         private
 
         def set_user
-            @user = @current_user
+          @user = @current_user
         end
 
         def set_ascents

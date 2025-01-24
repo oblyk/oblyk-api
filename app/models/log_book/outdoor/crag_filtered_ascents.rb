@@ -19,6 +19,7 @@ module LogBook
       end
 
       private
+
       def filters_from_params(params)
         filters = {
           :ascent_filter => params[:ascent_filter],
