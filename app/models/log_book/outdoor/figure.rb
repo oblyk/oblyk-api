@@ -7,7 +7,7 @@ module LogBook
 
       # filters parameter is an instance of CragFilteredAscents
       def initialize(ascents)
-        @ascents = ascents.uniq(&:crag_route_id)
+        @ascents = ascents
       end
 
       def figures

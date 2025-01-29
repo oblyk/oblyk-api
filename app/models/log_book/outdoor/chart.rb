@@ -5,13 +5,12 @@ module LogBook
     class Chart
       def initialize(ascents)
         @ascents = ascents
-        @uniq_ascents = ascents.uniq(&:crag_route_id)
       end
 
       def climb_type
         climb_counts = Hash.new(0)
 
-        @uniq_ascents.each do |ascent|
+        @ascents.each do |ascent|
           climb_counts[ascent.climbing_type] += 1 if Climb::CRAG_LIST.include?(ascent.climbing_type)
         end
 
@@ -30,7 +29,7 @@ module LogBook
       def grade
         grades = Hash[(1..54).step(2).map { |grade_value| [grade_value, { count: 0 }] }]
 
-        @uniq_ascents.each do |ascent|
+        @ascents.each do |ascent|
           next if ascent.max_grade_value.blank? || ascent.max_grade_value.zero?
 
           grade_value = ascent.max_grade_value
@@ -52,11 +51,11 @@ module LogBook
       end
 
       def years
-        return { datasets: [{ data: [] }], labels: [] } if @uniq_ascents.blank?
+        return { datasets: [{ data: [] }], labels: [] } if @ascents.blank?
 
         years = Hash.new(0)
 
-        @uniq_ascents.each do |ascent|
+        @ascents.each do |ascent|
           next if ascent.released_at.blank?
 
           years[ascent.released_at.year] += 1
@@ -77,11 +76,11 @@ module LogBook
       end
 
       def months
-        return { datasets: [{ data: [] }], labels: [] } if @uniq_ascents.blank?
+        return { datasets: [{ data: [] }], labels: [] } if @ascents.blank?
 
         dates = Hash.new(0)
 
-        @uniq_ascents.each do |ascent|
+        @ascents.each do |ascent|
           next if ascent.released_at.blank?
           dates[ascent.released_at.strftime('%Y-%m')] += 1
         end
