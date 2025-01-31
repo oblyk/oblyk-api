@@ -7,9 +7,9 @@ module LogBook
 
       # Default values for the filters
       DEFAULTS_FILTERS = {
-        :ascent_filter => AscentStatus::LIST, # ['sent', 'red_point', 'flash', 'repetition']
-        :roping_filter => RopingStatus::LIST, # ['lead_climb', 'top_rope', ...]
-        :climbing_type_filter => Climb::CRAG_LIST,  # ['sport_climbing', 'bouldering', ...]
+        ascent_filter: AscentStatus::LIST, # ['sent', 'red_point', 'flash', 'repetition']
+        roping_filter: RopingStatus::LIST, # ['lead_climb', 'top_rope', ...]
+        climbing_type_filter: Climb::CRAG_LIST # ['sport_climbing', 'bouldering', ...]
       }.freeze
 
       def initialize(user, params)
@@ -22,9 +22,9 @@ module LogBook
 
       def filters_from_params(params)
         filters = {
-          :ascent_filter => params[:ascent_filter],
-          :roping_filter => params[:roping_filter],
-          :climbing_type_filter => params[:climbing_type_filter]
+          ascent_filter: params[:ascent_filter],
+          roping_filter: params[:roping_filter],
+          climbing_type_filter: params[:climbing_type_filter]
         }
         # Merge with defaults
         # reverse_merge only adds default values for keys that are not yet present in `filters`.
