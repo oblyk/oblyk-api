@@ -76,10 +76,8 @@ Rails.application.routes.draw do
         get :followers, on: :member
         get :contribution, on: :member
         get :localities, on: :member
-        get :outdoor_figures, on: :member
-        get :outdoor_climb_types_chart, on: :member
+        get :stats, on: :member
         get :ascended_crag_routes, on: :member
-        get :outdoor_grades_chart, on: :member
         get :indoor_figures, on: :member
         get :indoor_climb_types_chart, on: :member
         get :indoor_grade_chart, on: :member
@@ -113,7 +111,6 @@ Rails.application.routes.draw do
           get :favorite_gyms
           get :upcoming_contests
           get :ascent_crag_routes
-          get :ascended_crag_routes
           get :ascended_crags_geo_json
           get :tick_lists
           get :projects
@@ -134,12 +131,8 @@ Rails.application.routes.draw do
           namespace :log_books do
             resources :outdoors, only: %i[] do
               collection do
-                get :figures
-                get :climb_types_chart
-                get :grades_chart
-                get :years_chart
-                get :months_chart
-                get :evolutions_chart
+                get :stats
+                get :ascended_crag_routes
                 get :daily_ascents
                 get :ascents_of_crag
               end

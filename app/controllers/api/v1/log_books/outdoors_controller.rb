@@ -6,37 +6,33 @@ module Api
       class OutdoorsController < ApiController
         before_action :protected_by_session
         before_action :set_user
+        before_action :set_ascents, only: [:stats, :ascended_crag_routes]
+        before_action :set_stats_list, only: [:stats]
 
-        def figures
-          render json: LogBook::Outdoor::Figure.new(@user).figures, status: :ok
+        def stats
+          # set all stats charts, figures and lists from filtered ascents
+          charts = LogBook::Outdoor::Chart.new(@ascents)
+          stats = {}
+          stats[:figures] = LogBook::Outdoor::Figure.new(@ascents).figures if @stats_list.include?('figures')
+          stats[:climb_types_chart] = charts.climb_type if @stats_list.include?('climb_types_chart')
+          stats[:grades_chart] = charts.grade if @stats_list.include?('grades_chart')
+          stats[:years_chart] = charts.years if @stats_list.include?('years_chart')
+          stats[:months_chart] = charts.months if @stats_list.include?('months_chart')
+          stats[:evolution_chart] = charts.evolution_by_year if @stats_list.include?('evolution_chart')
+          render json: stats, status: :ok
         end
 
-        def climb_types_chart
-          render json: LogBook::Outdoor::Chart.new(@user).climb_type, status: :ok
-        end
-
-        def grades_chart
-          render json: LogBook::Outdoor::Chart.new(@user).grade, status: :ok
-        end
-
-        def years_chart
-          render json: LogBook::Outdoor::Chart.new(@user).years, status: :ok
-        end
-
-        def months_chart
-          render json: LogBook::Outdoor::Chart.new(@user).months, status: :ok
-        end
-
-        def evolutions_chart
-          render json: LogBook::Outdoor::Chart.new(@user).evolution_by_year, status: :ok
+        def ascended_crag_routes
+          page = params.fetch(:page, 1)
+          render json: LogBook::Outdoor::List.new(@ascents).ascended_crag_routes(page, params[:order]), status: :ok
         end
 
         def daily_ascents
           dates = []
           ascents_by_days = {}
           today = Date.current
-          min_ascent_date = AscentCragRoute.made.where(user: @user).minimum(:released_at)
-          max_ascent_date = AscentCragRoute.made.where(user: @user).maximum(:released_at)
+          min_ascent_date = @user.ascent_crag_routes.made.minimum(:released_at)
+          max_ascent_date = @user.ascent_crag_routes.made.maximum(:released_at)
 
           if min_ascent_date.nil? || max_ascent_date.nil?
             render json: {}, status: :ok
@@ -50,7 +46,7 @@ module Api
             dates << today - 1.month # one month ago
             dates << today - 6.months # 6 months ago
 
-            ascents = AscentCragRoute.made.where(user: @user).where('DATE(released_at) IN(?)', dates).order(:released_at)
+            ascents = @user.ascent_crag_routes.made.where('DATE(released_at) IN(?)', dates).order(:released_at)
             ascents.each do |ascent|
               ascents_by_days[ascent.released_at.to_date] ||= {}
               ascents_by_days[ascent.released_at.to_date]["crag-#{ascent.crag.id}"] ||= {
@@ -86,6 +82,15 @@ module Api
 
         def set_user
           @user = @current_user
+        end
+
+        def set_ascents
+          crag_filtered_ascents = LogBook::Outdoor::CragFilteredAscents.new(@user, params)
+          @ascents = crag_filtered_ascents.ascents
+        end
+
+        def set_stats_list
+          @stats_list = params.require(:stats_list)
         end
       end
     end

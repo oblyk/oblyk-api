@@ -19,6 +19,17 @@ class Ascent < ApplicationRecord
 
   scope :made, -> { where.not(ascent_status: :project) }
   scope :project, -> { where(ascent_status: :project) }
+  scope :by_ascent_statuses, ->(ascent_filter) { where(ascent_status: ascent_filter) }
+  scope :by_roping_statuses, ->(roping_filter) { where(roping_status: roping_filter) }
+  scope :by_climbing_types, ->(climbing_type_filter) { joins(:crag_route).where(crag_routes: { climbing_type: climbing_type_filter }) }
+  # Combine all filters in the `filtered` scope
+  scope :filtered, ->(filters) {
+    scoped_results = self
+    scoped_results = scoped_results.by_ascent_statuses(filters[:ascent_filter])
+    scoped_results = scoped_results.by_roping_statuses(filters[:roping_filter])
+    scoped_results = scoped_results.by_climbing_types(filters[:climbing_type_filter])
+    scoped_results
+  }
 
   after_save :attache_to_climbing_session
   after_destroy :purge_climbing_session
