@@ -219,7 +219,15 @@ module Api
       def projects
         project_crag_route_ids = @user.ascent_crag_routes.project.pluck(:crag_route_id)
         crag_route_ids = @user.ascent_crag_routes.made.pluck(:crag_route_id)
-        crag_routes = CragRoute.includes(crag: { photo: { picture_attachment: :blob } }, crag_sector: { photo: { picture_attachment: :blob } }, photo: { picture_attachment: :blob })
+        crag_routes = CragRoute.includes(
+                                 :crag_sector,
+                                 crag: {
+                                   photo: { picture_attachment: :blob },
+                                   static_map_banner_attachment: :blob,
+                                   static_map_attachment: :blob
+                                 },
+                                 photo: { picture_attachment: :blob }
+                               )
                                .where(id: project_crag_route_ids)
                                .where.not(id: crag_route_ids)
                                .joins(:crag)
