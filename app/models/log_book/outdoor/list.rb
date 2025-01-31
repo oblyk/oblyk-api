@@ -12,7 +12,11 @@ module LogBook
                           .includes(
                             crag_route: {
                               crag_sector: { photo: { picture_attachment: :blob } },
-                              crag: { photo: { picture_attachment: :blob } },
+                              crag: {
+                                photo: { picture_attachment: :blob },
+                                static_map_banner_attachment: :blob,
+                                static_map_attachment: :blob
+                              },
                               photo: { picture_attachment: :blob }
                             }
                           )
