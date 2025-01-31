@@ -14,7 +14,7 @@ module LogBook
                               crag_sector: { photo: { picture_attachment: :blob } },
                               crag: { photo: { picture_attachment: :blob } },
                               photo: { picture_attachment: :blob }
-                            },
+                            }
                           )
 
         ascents = case order
