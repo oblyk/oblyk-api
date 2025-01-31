@@ -8,6 +8,10 @@ module LogBook
       # filters parameter is an instance of CragFilteredAscents
       def initialize(ascents)
         @ascents = ascents
+        @crags = []
+        ascents.each do |ascent|
+          @crags << ascent.crag_route.crag
+        end
       end
 
       def figures
@@ -41,15 +45,15 @@ module LogBook
       end
 
       def countries_count
-        @ascents.map(&:crag).map(&:country).uniq.count
+        @crags.map(&:country).uniq.size
       end
 
       def regions_count
-        @ascents.map(&:crag).map(&:region).uniq.count
+        @crags.map(&:region).uniq.size
       end
 
       def crags_count
-        @ascents.map(&:crag).uniq.count
+        @crags.map(&:id).uniq.size
       end
     end
   end

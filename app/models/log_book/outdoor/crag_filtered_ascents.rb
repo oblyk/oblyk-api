@@ -15,7 +15,10 @@ module LogBook
       def initialize(user, params)
         @user = user
         @filters = filters_from_params(params)
-        @ascents = @user.ascent_crag_routes.made.filtered(@filters)
+        @ascents = @user.ascent_crag_routes
+                        .includes(:crag_route, crag_route: :crag)
+                        .made
+                        .filtered(@filters)
       end
 
       private
