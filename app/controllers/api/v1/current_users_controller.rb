@@ -229,7 +229,15 @@ module Api
 
       def tick_lists
         crag_routes = @user.ticked_crag_routes
-                           .includes(crag: { photo: { picture_attachment: :blob } }, crag_sector: { photo: { picture_attachment: :blob } }, photo: { picture_attachment: :blob })
+                           .includes(
+                             :crag_sector,
+                             crag: {
+                               photo: { picture_attachment: :blob },
+                               static_map_banner_attachment: :blob,
+                               static_map_attachment: :blob
+                             },
+                             photo: { picture_attachment: :blob }
+                           )
                            .joins(:crag)
                            .order('crags.name')
         render json: crag_routes.map { |crag_route| crag_route.summary_to_json(with_crag_in_sector: false) }, status: :ok
