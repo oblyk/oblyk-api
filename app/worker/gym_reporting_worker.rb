@@ -2,7 +2,7 @@
 
 class GymReportingWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :default
+  sidekiq_options queue: :default, retry: false
 
   def perform
     start_date = Date.current.prev_month.beginning_of_month
