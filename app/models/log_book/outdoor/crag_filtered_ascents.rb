@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module LogBook
   module Outdoor
     class CragFilteredAscents
@@ -16,6 +17,7 @@ module LogBook
         @user = user
         @filters = filters_from_params(params)
         @ascents = @user.ascent_crag_routes
+                        .joins(crag_route: :crag)
                         .includes(:crag_route, crag_route: :crag)
                         .made
                         .filtered(@filters)
