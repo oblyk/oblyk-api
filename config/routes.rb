@@ -20,6 +20,11 @@ Rails.application.routes.draw do
   # see : https://developers.cloudflare.com/images/transform-images/transform-via-url/
   # only a few options are supported (fit=crop or fit=scale-down and quality)
   get 'cdn-cgi/image/:options/:key', controller: 'cdn_cgi/images', action: :variante_path
+  namespace :services do
+    namespace :stripes do
+      post :webhook, to: 'webhooks#index'
+    end
+  end
 
   namespace :api do
     namespace :v1 do
@@ -222,6 +227,13 @@ Rails.application.routes.draw do
         get :comments, on: :member
         get :videos, on: :member
         get :three_d, on: :member
+        get :stripe_customer_portal, on: :member
+        resources :gym_billing_accounts, only: %i[show create update]
+        resources :indoor_subscriptions, only: %i[index show create update] do
+          get :figures, on: :collection
+          post :start_free_trial, on: :collection
+        end
+        resources :indoor_subscription_products, only: %i[index show]
         resources :gym_three_d_elements
         resources :gym_three_d_assets do
           put :change_three_d_file, on: :member

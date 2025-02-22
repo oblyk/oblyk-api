@@ -1,0 +1,16 @@
+Bonjour,
+
+Nous avons bien pris en compte votre demande de résiliation pour l'abonnement de <%= @multi_gym ? 'vos salles :' : 'votre salle' %> <%= @indoor_subscription.gyms.map(&:name).join(', ') %>
+
+La fin effective de votre abonnement est le <%= l(@indoor_subscription.end_date, format: :long_month) %>.
+Jusqu'à cette date, vous pouvez continuer d'utiliser toutes les fonctionnalités d'Oblyk.
+
+Après le <%= l(@indoor_subscription.end_date, format: :long_month) %>, vous repasserez sur la version gratuite et perdrez les fonctionnalités suivantes :
+
+<%= render 'indoor_subscription_mailer/partial/features' %>
+
+Bon à savoir :
+Vous pouvez à tout moment annuler votre demande de résiliation et ne pas perdre l'accès à ces fonctionnalités.<br>
+Rendez-vous sur la page de gestion de votre abonnement sur votre dashboard
+
+À bientôt !

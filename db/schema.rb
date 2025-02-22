@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_01_17_142232) do
+ActiveRecord::Schema.define(version: 2025_01_31_143142) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -753,6 +753,15 @@ ActiveRecord::Schema.define(version: 2025_01_17_142232) do
     t.index ["user_id"], name: "index_gym_administrators_on_user_id"
   end
 
+  create_table "gym_billing_accounts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.string "uuid"
+    t.string "customer_stripe_id"
+    t.string "email"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["uuid"], name: "index_gym_billing_accounts_on_uuid"
+  end
+
   create_table "gym_chain_administrators", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "gym_chain_id"
     t.bigint "user_id"
@@ -765,6 +774,7 @@ ActiveRecord::Schema.define(version: 2025_01_17_142232) do
   create_table "gym_chain_gyms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "gym_chain_id"
     t.bigint "gym_id"
+    t.json "meta"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["gym_chain_id"], name: "index_gym_chain_gyms_on_gym_chain_id"
@@ -1092,9 +1102,47 @@ ActiveRecord::Schema.define(version: 2025_01_17_142232) do
     t.bigint "department_id"
     t.string "representation_type", default: "2d_picture"
     t.json "three_d_camera_position"
+    t.string "gym_type"
+    t.bigint "gym_billing_account_id"
     t.index ["department_id"], name: "index_gyms_on_department_id"
+    t.index ["gym_billing_account_id"], name: "index_gyms_on_gym_billing_account_id"
     t.index ["name"], name: "index_gyms_on_name"
     t.index ["user_id"], name: "index_gyms_on_user_id"
+  end
+
+  create_table "indoor_subscription_gyms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.bigint "indoor_subscription_id"
+    t.bigint "gym_id"
+    t.index ["gym_id"], name: "index_indoor_subscription_gyms_on_gym_id"
+    t.index ["indoor_subscription_id"], name: "index_indoor_subscription_gyms_on_indoor_subscription_id"
+  end
+
+  create_table "indoor_subscription_products", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.string "reference"
+    t.integer "order"
+    t.boolean "recommended"
+    t.integer "price_cents", default: 0, null: false
+    t.string "price_currency", default: "USD", null: false
+    t.string "for_gym_type"
+    t.integer "month_by_occurrence"
+    t.string "product_stripe_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "indoor_subscriptions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.boolean "for_free_trial"
+    t.string "for_gym_type"
+    t.integer "month_by_occurrence"
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "cancelled_at"
+    t.string "payment_link"
+    t.string "payment_status"
+    t.string "subscription_stripe_id"
+    t.string "payment_link_stipe_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "ip_black_lists", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1316,6 +1364,14 @@ ActiveRecord::Schema.define(version: 2025_01_17_142232) do
     t.index ["secondary_bucket"], name: "index_searches_on_secondary_bucket"
   end
 
+  create_table "stripe_checkout_sessions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.string "checkout_session_id"
+    t.datetime "processed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["checkout_session_id"], name: "index_stripe_checkout_sessions_on_checkout_session_id"
+  end
+
   create_table "subscribes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "email"
     t.datetime "subscribed_at"
@@ -1492,5 +1548,8 @@ ActiveRecord::Schema.define(version: 2025_01_17_142232) do
   add_foreign_key "gym_three_d_elements", "gym_spaces"
   add_foreign_key "gym_three_d_elements", "gym_three_d_assets"
   add_foreign_key "gym_three_d_elements", "gyms"
+  add_foreign_key "gyms", "gym_billing_accounts"
+  add_foreign_key "indoor_subscription_gyms", "gyms"
+  add_foreign_key "indoor_subscription_gyms", "indoor_subscriptions"
   add_foreign_key "likes", "users"
 end

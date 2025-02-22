@@ -1,0 +1,51 @@
+<p>
+  Bonjour,
+</p>
+
+<p>
+  La période d'essais d'Oblyk Indoor pour <%= @multi_gym ? 'vos salles :' : 'votre salle' %> <strong><%= @indoor_subscription.gyms.map(&:name).join(', ') %></strong>
+  se termine demain.
+</p>
+
+<p>
+  Sans action de votre part, vous allez re-passer sur la version gratuite et <strong>perdre les fonctionnalités suivantes :</strong>
+</p>
+
+<%= render 'indoor_subscription_mailer/partial/features' %>
+
+<p>
+  Abonnez-vous mensuellement ou annuellement et conservez le plein potentiel d'Oblyk indoor pour votre salle !
+</p>
+
+<p style="text-align: center">
+  <a
+    href="<%= @gym.admin_app_path %>/indoor-subscriptions"
+    style="background-color: #6200ea; color: white; padding: 7px 12px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold"
+  >
+    JE M'ABONNE !
+  </a>
+</p>
+
+<p>
+  Si vous avez des questions, n'hésitez pas à nous écrire 🙂
+</p>
+
+<div style="border-radius: 10px; padding: 15px; background-color: rgba(127, 127, 127, 0.09); margin-top: 2em">
+  <p style="margin-top: 0">
+    <strong>Adhérez à un projet de valeur</strong>
+  </p>
+  <p>
+    Sur Oblyk il n'y aucune publicité, aucun tracker Google ou Facebook, nous respectons la vie privée des grimpeurs et grimpeuses, nous ne sommes pas agressif <cite>(on ne vous a pas demandé votre CB pour commencer l'essai par exemple)</cite>, nous militons pour l'achat des topos, notre code est open-source et entièrement transparent !<br>
+  </p>
+  <p>
+    Si ces valeurs n'ont pas de prix, elles ont un coût.
+  </p>
+  <p>
+    En vous abonnant, vous accédez aux fonctionnalités avancées d'Oblyk pour votre salle ainsi que toutes les fonctionnalités à venir !<br>
+    Mais vous permettez aussi à Oblyk de continuer de se développer et d'améliorer ses outils pour la communauté grimpante dont nous faisons tous partie 🙂
+  </p>
+  <p style="text-align: right; margin-bottom: 0; font-style: italic">
+    Lucien CHASTAN<br>
+    Développeur & Fondateur d'Oblyk
+  </p>
+</div>

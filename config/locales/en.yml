@@ -42,6 +42,25 @@ en:
     gym:
       administration_request:
         title: "[admin] New administration request : %{gym_name}"
+      new_administrator:
+        title: "You have been added to the %{gym_name} team"
+    indoor_subscription:
+      start_trial_period:
+        title: "%{gym_name} & Oblyk, your trial period has begun !"
+      trial_period_ends_soon:
+        title: "%{gym_name} & Oblyk, your trial period is coming to an end soon!"
+      trial_period_ends_tomorrow:
+        title: "%{gym_name} & Oblyk, your trial period ends tomorrow!"
+      end_trial_period:
+        title: "%{gym_name} & Oblyk, your trial period is over ..."
+      start_indoor_subscription:
+        title: "%{gym_name} & Oblyk, your subscription"
+      cancel_indoor_subscription:
+        title: "%{gym_name} & Oblyk, subscription - your cancellation request"
+      un_cancel_indoor_subscription:
+        title: "%{gym_name} & Oblyk, subscription - your reactivation request"
+      end_indoor_subscription:
+        title: "%{gym_name} & Oblyk, your subscription has ended"
     report:
       new_report:
         title: "[admin] New problem %{report_id}"

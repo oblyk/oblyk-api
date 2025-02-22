@@ -259,6 +259,15 @@ GEM
     mini_mime (1.1.0)
     mini_portile2 (2.5.0)
     minitest (5.14.4)
+    monetize (1.13.0)
+      money (~> 6.12)
+    money (6.19.0)
+      i18n (>= 0.6.4, <= 2)
+    money-rails (1.15.0)
+      activesupport (>= 3.0)
+      monetize (~> 1.9)
+      money (~> 6.13)
+      railties (>= 3.0)
     msgpack (1.4.2)
     multi_json (1.15.0)
     multipart-post (2.3.0)
@@ -450,6 +459,7 @@ GEM
     sshkit (1.21.2)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
+    stripe (13.4.1)
     thor (1.1.0)
     thread_safe (0.3.6)
     trailblazer-option (0.1.2)
@@ -507,6 +517,7 @@ DEPENDENCIES
   levenshtein-ffi
   listen (~> 3.2)
   mini_magick
+  money-rails (~> 1.15)
   mysql2 (>= 0.4.4, < 0.6.0)
   oj
   paper_trail (~> 11.1)
@@ -534,6 +545,7 @@ DEPENDENCIES
   sitemap_generator
   spring
   spring-watcher-listen (~> 2.0.0)
+  stripe
   tzinfo-data
   useragent
   wicked_pdf

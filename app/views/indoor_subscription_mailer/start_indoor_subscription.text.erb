@@ -1,0 +1,14 @@
+Bonjour,
+
+Nous vous confirmons votre inscription à l'abonnement "Pack complet" pour <%= @multi_gym ? 'vos salles :' : 'votre salle' %> <%= @indoor_subscription.gyms.map(&:name).join(', ') %>
+
+En plus des fonctionnalités gratuites, vous avez désormais accès en illimité aux fonctionnalités suivantes :
+
+<%= render 'indoor_subscription_mailer/partial/features' %>
+
+N'hésitez pas à nous écrire si vous avez des remarques ou des questions.
+
+À bientôt !
+
+Bon à savoir :
+Vous pouvez résilier votre abonnement à tout moment depuis la page de gestion de votre abonnement.
