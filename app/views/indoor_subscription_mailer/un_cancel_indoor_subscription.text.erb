@@ -1,0 +1,12 @@
+Bonjour,
+
+Nous avons bien pris en compte votre demande de réactivation de l'abonnement de <%= @multi_gym ? 'vos salles :' : 'votre salle' %> <%= @indoor_subscription.gyms.map(&:name).join(', ') %>
+
+Vous avez de nouveau accès aux fonctionnalités suivantes :
+
+<%= render 'indoor_subscription_mailer/partial/features' %>
+
+Merci et à bientôt !
+
+Bon à savoir :
+Vous pouvez résilier votre abonnement à tout moment depuis la page de gestion de votre abonnement.

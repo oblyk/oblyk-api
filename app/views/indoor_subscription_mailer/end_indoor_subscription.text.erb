@@ -1,0 +1,14 @@
+Bonjour,
+
+Votre abonnement "Pack complet" pour <%= @multi_gym ? 'vos salles :' : 'votre salle' %> <%= @indoor_subscription.gyms.map(&:name).join(', ') %> est terminée.
+
+Votre compte est repassé sur la version gratuite, vous perdez l'accès aux fonctionnalités suivantes :
+
+<%= render 'indoor_subscription_mailer/partial/features' %>
+
+Vous pouvez à tout moment vous réabonner et accéder de nouveau au plein potentiel d'Oblyk pour votre salle !
+
+Rendez-vous sur votre Dashboard et allez dans "Abonnement"
+
+En espérant de-nouveau vous compter parmi nos abonnés !
+Nous vous souhaitons une bonne continuation sur la version gratuite d'Oblyk

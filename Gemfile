@@ -101,6 +101,12 @@ gem 'oj'
 # Zip gen
 gem 'rubyzip', '~> 2.3', '>= 2.3.2'
 
+# Manage money with rails
+gem 'money-rails', '~> 1.15'
+
+# Stripe (payment webhook)
+gem 'stripe'
+
 group :development, :test do
   gem 'bullet'
   # Ruby static code analyzer

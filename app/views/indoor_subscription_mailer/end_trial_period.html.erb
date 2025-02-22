@@ -1,0 +1,31 @@
+<p>
+  Bonjour,
+</p>
+
+<p>
+  Votre période d'essais d'un mois d'Oblyk Indoor pour <%= @multi_gym ? 'vos salles :' : 'votre salle' %> <strong><%= @indoor_subscription.gyms.map(&:name).join(', ') %></strong> est désormais <u>terminée</u>.
+</p>
+
+<p>
+  Votre compte est repassé sur la version gratuite, vous <strong>perdez l'accès aux fonctionnalités suivantes :</strong>
+</p>
+
+<%= render 'indoor_subscription_mailer/partial/features' %>
+
+<p>
+  Mais il n'est pas trop tard pour vous abonner et accéder au <strong>plein potentiel d'Oblyk pour votre salle !</strong>
+</p>
+
+<p style="text-align: center;">
+  <a
+    href="<%= @gym.admin_app_path %>/indoor-subscriptions"
+    style="background-color: #6200ea; color: white; padding: 7px 12px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold"
+  >
+    JE M'ABONNE !
+  </a>
+</p>
+
+<p style="margin-top: 3em">
+  En espérant bientôt vous compter parmi nos abonnés !<br>
+  Nous vous souhaitons une bonne continuation sur la version gratuite d'Oblyk 🙂
+</p>

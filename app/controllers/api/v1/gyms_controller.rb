@@ -7,10 +7,11 @@ module Api
       include UploadVerification
 
       before_action :protected_by_super_admin, only: %i[destroy]
-      before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes tree_structures tree_routes figures comments videos]
-      before_action :set_gym, only: %i[show versions ascent_scores update destroy add_banner add_logo routes_count routes tree_structures tree_routes figures comments videos three_d]
+      before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes tree_structures tree_routes figures comments videos stripe_customer_portal]
+      before_action :set_gym, only: %i[show versions ascent_scores update destroy add_banner add_logo routes_count routes tree_structures tree_routes figures comments videos three_d stripe_customer_portal]
       before_action :protected_by_administrator, only: %i[update add_banner add_logo routes_count routes tree_structures tree_routes figures comments videos]
       before_action :user_can_manage_gym, except: %i[index search geo_json show create gyms_around versions ascent_scores routes_count routes comments videos three_d figures]
+      before_action :user_can_manage_subscription, only: %i[stripe_customer_portal]
 
       def index
         gyms = params[:ids].present? ? Gym.where(id: params[:ids]) : Gym.all
@@ -375,6 +376,18 @@ module Api
         }, status: :ok
       end
 
+      def stripe_customer_portal
+        return if @gym.gym_billing_account.blank?
+
+        stripe_portal = @gym.gym_billing_account.create_strip_portal!(@gym)
+
+        return if stripe_portal.blank?
+
+        render json: {
+          url: stripe_portal.url
+        }
+      end
+
       private
 
       def geo_json_features(minimalistic)
@@ -444,6 +457,10 @@ module Api
 
       def user_can_manage_gym
         can? GymRole::MANAGE_GYM if @gym.administered?
+      end
+
+      def user_can_manage_subscription
+        can? GymRole::MANAGE_SUBSCRIPTION if @gym.administered?
       end
     end
   end

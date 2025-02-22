@@ -34,11 +34,14 @@ class Gym < ApplicationRecord
   ], if: proc { |_obj| ENV['PAPER_TRAIL'] == 'true' }
 
   RANKING_TYPES = %w[division fixed_points point_by_grade].freeze
+  PLAN_LIST = %w[free free_trial full_package].freeze
+  GYM_TYPE_LIST = %w[club private].freeze
 
   has_one_attached :logo
   has_one_attached :banner
   belongs_to :user, optional: true
   belongs_to :department, optional: true
+  belongs_to :gym_billing_account, optional: true
   has_many :follows, as: :followable
   has_many :videos, as: :viewable
   has_many :comments, as: :commentable
@@ -62,11 +65,15 @@ class Gym < ApplicationRecord
   has_many :gym_three_d_elements
   has_many :gym_levels
   has_many :gym_opening_sheets
+  has_many :indoor_subscription_gyms
+  has_many :indoor_subscriptions, through: :indoor_subscription_gyms
 
   validates :logo, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true
   validates :name, :latitude, :longitude, :address, :country, :city, :big_city, presence: true
   validates :boulder_ranking, :sport_climbing_ranking, :pan_ranking, inclusion: { in: RANKING_TYPES }, allow_nil: true
+  validates :plan, inclusion: { in: PLAN_LIST }, allow_nil: true
+  validates :gym_type, inclusion: { in: GYM_TYPE_LIST }, allow_nil: true
 
   after_save :historize_around_towns
   after_save :delete_routes_caches
@@ -119,6 +126,7 @@ class Gym < ApplicationRecord
     self.sport_climbing_ranking ||= 'point_by_grade'
     self.pan_ranking ||= 'division'
     self.assigned_at ||= Time.current
+    self.plan ||= 'free'
     init_gym_levels
     save
   end
@@ -179,6 +187,8 @@ class Gym < ApplicationRecord
         gym_spaces_count: gym_spaces.size,
         three_d_camera_position: three_d_camera_position,
         representation_type: representation_type,
+        gym_type: gym_type,
+        gym_billing_account_id: gym_billing_account_id,
         attachments: {
           logo: attachment_object(logo),
           banner: attachment_object(banner)
@@ -197,6 +207,7 @@ class Gym < ApplicationRecord
         gym_space_groups: gym_space_groups.map(&:summary_to_json),
         sorts_available: sorts_available,
         display_ranking: ranking?,
+        plan: plan,
         gym_climbing_styles: gym_climbing_styles.activated.map { |style| { style: style.style, climbing_type: style.climbing_type, color: style.color } },
         gym_spaces_with_anchor: gym_spaces_with_anchor?,
         upcoming_contests: contests.upcoming.map(&:summary_to_json),
@@ -217,6 +228,19 @@ class Gym < ApplicationRecord
     gym_levels << GymLevel.new(climbing_type: Climb::BOULDERING, grade_system: nil, level_representation: GymLevel::TAG_AND_HOLD_REPRESENTATION) unless GymLevel.exists?(gym_id: id, climbing_type: Climb::BOULDERING)
     gym_levels << GymLevel.new(climbing_type: Climb::SPORT_CLIMBING, grade_system: 'french', level_representation: GymLevel::HOLD_REPRESENTATION) unless GymLevel.exists?(gym_id: id, climbing_type: Climb::SPORT_CLIMBING)
     gym_levels << GymLevel.new(climbing_type: Climb::PAN, grade_system: 'french', level_representation: GymLevel::TAG_REPRESENTATION) unless GymLevel.exists?(gym_id: id, climbing_type: Climb::PAN)
+  end
+
+  def update_plan!
+    plan = 'free'
+    indoor_subscriptions.each do |indoor_subscription|
+      plan = 'free_trial' if indoor_subscription.for_free_trial && indoor_subscription.active?
+      if !indoor_subscription.for_free_trial && indoor_subscription.active?
+        plan = 'full_package'
+        break
+      end
+    end
+    self.plan = plan
+    save
   end
 
   private
