@@ -19,7 +19,11 @@ module GymRolesVerification
 
     render json: {
       error: 'You do not have the necessary rights to access this resource',
-      code_error: 'right_required'
+      code_error: 'right_required',
+      need: {
+        gym_name: @gym.name,
+        role: role
+      }
     }, status: :forbidden
   end
 end
