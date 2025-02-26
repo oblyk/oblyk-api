@@ -48,11 +48,9 @@ fr:
       start_trial_period:
         title: "%{gym_name} & Oblyk, votre période d'essais à commencé !"
       trial_period_ends_soon:
-        title: "%{gym_name} & Oblyk, votre période d'essais prend fin bientôt !"
+        title: "[Rappel] %{gym_name} & Oblyk, votre période d'essais prend fin bientôt !"
       trial_period_ends_tomorrow:
-        title: "%{gym_name} & Oblyk, votre période d'essais prend fin demain !"
-      end_trial_period:
-        title: "%{gym_name} & Oblyk, votre période d'essais est terminée ..."
+        title: "[Rappel] %{gym_name} & Oblyk, votre période d'essais prend fin demain !"
       start_indoor_subscription:
         title: "%{gym_name} & Oblyk, votre abonnement"
       cancel_indoor_subscription:

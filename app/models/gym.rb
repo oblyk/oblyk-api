@@ -212,6 +212,7 @@ class Gym < ApplicationRecord
         gym_spaces_with_anchor: gym_spaces_with_anchor?,
         upcoming_contests: contests.upcoming.map(&:summary_to_json),
         gym_label_templates: gym_label_templates.unarchived.map { |label| { name: label.name, id: label.id } },
+        have_indoor_subscriptions: indoor_subscriptions.count.positive?,
         history: {
           created_at: created_at,
           updated_at: updated_at
@@ -232,13 +233,8 @@ class Gym < ApplicationRecord
 
   def update_plan!
     plan = 'free'
-    indoor_subscriptions.each do |indoor_subscription|
-      plan = 'free_trial' if indoor_subscription.for_free_trial && indoor_subscription.active?
-      if !indoor_subscription.for_free_trial && indoor_subscription.active?
-        plan = 'full_package'
-        break
-      end
-    end
+    active_subscription = indoor_subscriptions.active.order(created_at: :desc).first
+    plan = active_subscription.in_free_trial? ? 'free_trial' : 'full_package' if active_subscription.present?
     self.plan = plan
     save
   end

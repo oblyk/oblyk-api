@@ -31,45 +31,25 @@ module Api
 
         indoor_subscription_product = IndoorSubscriptionProduct.find create_indoor_subscription_params[:indoor_subscription_product_id]
 
+        trial_end_date = nil
+        number_of_trials_days = nil
+        if @gym.indoor_subscriptions.count.zero?
+          number_of_trials_days = 28
+          trial_end_date = Date.current + number_of_trials_days
+        end
+
         indoor_subscription = IndoorSubscription.new(
-          for_free_trial: false,
           for_gym_type: @gym.gym_type,
           month_by_occurrence: indoor_subscription_product.month_by_occurrence,
           start_date: Date.current,
+          trial_end_date: trial_end_date,
           payment_status: IndoorSubscription::WAITING_FIST_PAYMENT_STATUS
         )
         indoor_subscription.gyms << @gym
 
         if indoor_subscription.save
-          indoor_subscription.create_payment_link!(indoor_subscription_product, @gym)
+          indoor_subscription.create_payment_link!(indoor_subscription_product, @gym, number_of_trials_days)
           indoor_subscription.reload
-
-          render json: indoor_subscription.detail_to_json, status: :ok
-        else
-          render json: { error: indoor_subscription.errors }, status: :unprocessable_entity
-        end
-      end
-
-      def start_free_trial
-        if IndoorSubscription.joins(:gyms).where(gyms: { id: @gym.id }).exists?
-          render json: { error: { base: ['free_trial_already_exists'] } }, status: :unprocessable_entity
-          return
-        end
-
-        indoor_subscription = IndoorSubscription.new(
-          month_by_occurrence: 1,
-          start_date: Date.current,
-          for_free_trial: true,
-          for_gym_type: @gym.gym_type,
-          end_date: Date.current + 1.month
-        )
-        indoor_subscription.gyms << @gym
-        if indoor_subscription.save
-          indoor_subscription.update_gym_plans!
-
-          IndoorSubscriptionMailer.with(indoor_subscription: indoor_subscription)
-                                  .start_trial_period
-                                  .deliver_now
 
           render json: indoor_subscription.detail_to_json, status: :ok
         else

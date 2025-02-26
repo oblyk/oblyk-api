@@ -3,32 +3,16 @@
 </p>
 
 <p>
-  Nous vous confirmons le début de votre période d'essais d'un mois d'Oblyk Indoor pour <%= @multi_gym ? 'vos salles :' : 'votre salle' %> <strong><%= @indoor_subscription.gyms.map(&:name).join(', ') %></strong>.
+  Nous vous confirmons le début de votre période d'essais de 28 jours pour <%= @multi_gym ? 'vos salles :' : 'votre salle' %> <strong><%= @indoor_subscription.gyms.map(&:name).join(', ') %></strong>.
 </p>
 
 <p>
-  Jusqu'au <u><%= l(@indoor_subscription.end_date, format: :long_month) %></u> vous pouvez essayer en illimité les fonctionnalités suivantes :
+  Jusqu'au <u><%= l(@indoor_subscription.trial_end_date, format: :long_month) %></u> vous pouvez essayer en illimité les fonctionnalités suivantes :
 </p>
 
 <%= render 'indoor_subscription_mailer/partial/features' %>
 
-<p style="margin-top: 2em">
-  <strong>Convaincu ?</strong> Vous pouvez vous abonner à tout moment ! La facturation commencera quand votre période d'essais sera terminée.
-</p>
-
-<p style="margin-bottom: 0; text-align: center; font-style: italic">
-  Je prends de l'avance
-</p>
-<p style="text-align: center; margin-top: 0">
-  <a
-    href="<%= @gym.admin_app_path %>/indoor-subscriptions"
-    style="background-color: #6200ea; color: white; padding: 7px 12px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold"
-  >
-    JE M'ABONNE !
-  </a>
-</p>
-
 <p>
-  N'hésitez pas à nous écrire si vous avez des questions 🙂<br>
+  Vous avez des questions ? N'hésitez pas à nous écrire 🙂<br>
   Bonne découverte à vous !
 </p>

@@ -1,14 +1,16 @@
 Bonjour,
 
+La période d'essais pour <%= @multi_gym ? 'vos salles :' : 'votre salle' %> <%= @indoor_subscription.gyms.map(&:name).join(', ') %>
+prend fin dans une semaine !
+Soit le <%= l(@indoor_subscription.end_date, format: :long_month) %>
 
-La période d'essais d'Oblyk Indoor pour <%= @multi_gym ? 'vos salles :' : 'votre salle' %> <%= @indoor_subscription.gyms.map(&:name).join(', ') %> prend fin dans une semaine.
-
-Sans action de votre part, le <%= l(@indoor_subscription.end_date, format: :long_month) %>, vous repasserez sur la version gratuite et perdrez les fonctionnalités suivantes :
+Avez-vous eu le temps de tester les fonctionnalités suivantes ?
 
 <%= render 'indoor_subscription_mailer/partial/features' %>
 
-N'attendez pas que votre période d'essais se termine, passez dès à présent au niveau supérieur !
+Vous avez des questions ? N'hésitez pas à nous écrire 🙂
 
-Rendez-vous sur votre Dashboard et allez dans "Abonnements"
+________________________________________________________
 
-Si vous avez des questions n'hésitez pas à nous écrire !
+Bon à savoir
+Vous pouvez mettre fin à votre période d'essais à tout moment depuis la page de gestion de votre abonnement.

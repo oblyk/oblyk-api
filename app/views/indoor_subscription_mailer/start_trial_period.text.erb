@@ -1,14 +1,10 @@
 Bonjour,
 
-Nous vous confirmons le début de votre période d'essais d'un mois d'Oblyk Indoor pour <%= @multi_gym ? 'vos salles :' : 'votre salle' %> <%= @indoor_subscription.gyms.map(&:name).join(', ') %>.
+Nous vous confirmons le début de votre période d'essais de 28 jours pour <%= @multi_gym ? 'vos salles :' : 'votre salle' %> <%= @indoor_subscription.gyms.map(&:name).join(', ') %>.
 
-Jusqu'au <%= l(@indoor_subscription.end_date, format: :long_month) %> vous pouvez essayer en illimité les fonctionnalités suivantes :
+Jusqu'au <%= l(@indoor_subscription.trial_end_date, format: :long_month) %> vous pouvez essayer en illimité les fonctionnalités suivantes :
 
 <%= render 'indoor_subscription_mailer/partial/features' %>
 
-Convaincu ? Vous pouvez vous abonner à tout moment ! La facturation commencera quand votre période d'essais sera terminée.
-
-Rendez-vous sur votre Dashboard et allez dans "Abonnement"
-
-N'hésitez pas à nous écrire si vous avez des questions.
-Bonne découverte à vous !
+Vous avez des questions ? N'hésitez pas à nous écrire !
+Bonne découverte à vous :)

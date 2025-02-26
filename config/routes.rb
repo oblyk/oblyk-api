@@ -231,7 +231,6 @@ Rails.application.routes.draw do
         resources :gym_billing_accounts, only: %i[show create update]
         resources :indoor_subscriptions, only: %i[index show create update] do
           get :figures, on: :collection
-          post :start_free_trial, on: :collection
         end
         resources :indoor_subscription_products, only: %i[index show]
         resources :gym_three_d_elements
