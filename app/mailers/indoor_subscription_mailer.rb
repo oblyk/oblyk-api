@@ -33,16 +33,6 @@ class IndoorSubscriptionMailer < ApplicationMailer
     end
   end
 
-  def end_trial_period
-    subject = t('mailer.indoor_subscription.trial_period_ends_tomorrow.title', gym_name: @gym.name)
-
-    if use_send_in_blue?
-      send_with_send_in_blue(@email, subject, 'indoor_subscription_mailer/end_trial_period')
-    else
-      mail(to: @email, subject: subject)
-    end
-  end
-
   def start_indoor_subscription
     subject = t('mailer.indoor_subscription.start_indoor_subscription.title', gym_name: @gym.name)
 

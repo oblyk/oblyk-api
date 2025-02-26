@@ -48,11 +48,9 @@ en:
       start_trial_period:
         title: "%{gym_name} & Oblyk, your trial period has begun !"
       trial_period_ends_soon:
-        title: "%{gym_name} & Oblyk, your trial period is coming to an end soon!"
+        title: "[Reminder] %{gym_name} & Oblyk, your trial period is coming to an end soon!"
       trial_period_ends_tomorrow:
-        title: "%{gym_name} & Oblyk, your trial period ends tomorrow!"
-      end_trial_period:
-        title: "%{gym_name} & Oblyk, your trial period is over ..."
+        title: "[Reminder] %{gym_name} & Oblyk, your trial period ends tomorrow!"
       start_indoor_subscription:
         title: "%{gym_name} & Oblyk, your subscription"
       cancel_indoor_subscription:

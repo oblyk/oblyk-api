@@ -3,29 +3,26 @@
 </p>
 
 <p>
-  La période d'essais d'Oblyk Indoor pour <%= @multi_gym ? 'vos salles :' : 'votre salle' %> <strong><%= @indoor_subscription.gyms.map(&:name).join(', ') %></strong>
-  prend fin dans une semaine !
+  La période d'essais pour <%= @multi_gym ? 'vos salles :' : 'votre salle' %> <strong><%= @indoor_subscription.gyms.map(&:name).join(', ') %></strong>
+  prend fin dans une semaine !<br>
+  Soit le <u><%= l(@indoor_subscription.end_date, format: :long_month) %></u>
 </p>
 
 <p>
-  Sans action de votre part, le <u><%= l(@indoor_subscription.end_date, format: :long_month) %></u>, vous repasserez sur la version gratuite et <strong>perdrez les fonctionnalités suivantes :</strong>
+  Avez-vous eu le temps de tester les fonctionnalités suivantes ?
 </p>
 
 <%= render 'indoor_subscription_mailer/partial/features' %>
 
 <p>
-  N'attendez pas que votre période d'essais se termine, passez dès à présent au niveau supérieur !
+  Vous avez des questions ? N'hésitez pas à nous écrire 🙂
 </p>
 
-<p style="text-align: center">
-  <a
-    href="<%= @gym.admin_app_path %>/indoor-subscriptions"
-    style="background-color: #6200ea; color: white; padding: 7px 12px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold"
-  >
-    JE M'ABONNE !
-  </a>
-</p>
-
-<p>
-  Si vous avez des questions n'hésitez pas à nous écrire 🙂
-</p>
+<div style="border-radius: 10px; padding: 15px; background-color: rgba(127, 127, 127, 0.09); margin-top: 2em">
+  <p style="margin-top: 0">
+    <strong>Bon à savoir</strong>
+  </p>
+  <p>
+    Vous pouvez mettre fin à votre période d'essais à tout moment depuis la page de <a href="<%= @gym.admin_app_path %>/indoor-subscriptions">gestion de votre abonnement</a>.
+  </p>
+</div>

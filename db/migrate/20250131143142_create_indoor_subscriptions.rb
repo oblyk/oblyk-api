@@ -23,10 +23,10 @@ class CreateIndoorSubscriptions < ActiveRecord::Migration[6.0]
     end
 
     create_table :indoor_subscriptions do |t|
-      t.boolean :for_free_trial
       t.string :for_gym_type
       t.integer :month_by_occurrence
       t.date :start_date
+      t.date :trial_end_date
       t.date :end_date
       t.datetime :cancelled_at
       t.string :payment_link
