@@ -127,6 +127,7 @@ class Gym < ApplicationRecord
     self.pan_ranking ||= 'division'
     self.assigned_at ||= Time.current
     self.plan ||= 'free'
+    self.gym_type ||= 'private'
     init_gym_levels
     save
   end
