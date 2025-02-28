@@ -56,5 +56,11 @@ class GymAdministrationRequest < ApplicationRecord
       last_name: last_name,
       justification: justification
     ).new_request.deliver_later
+
+    GymMailer.with(
+      gym: gym,
+      email: email,
+      first_name: first_name
+    ).new_request_confirmation.deliver_later
   end
 end

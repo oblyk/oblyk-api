@@ -42,6 +42,8 @@ fr:
     gym:
       administration_request:
         title: "[admin] Nouvelle demande d'administation : %{gym_name}"
+      new_request_confirmation:
+        title: '%{gym_name} & Oblyk, nous avons reçu votre demande'
       new_administrator:
         title: "Vous avez été ajouté à l'équipe de %{gym_name}"
     indoor_subscription:

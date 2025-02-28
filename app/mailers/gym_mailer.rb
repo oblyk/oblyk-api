@@ -16,6 +16,20 @@ class GymMailer < ApplicationMailer
     end
   end
 
+  def new_request_confirmation
+    @gym = params[:gym]
+    @email = params[:email]
+    @first_name = params[:first_name]
+
+    subject = t('mailer.gym.new_request_confirmation.title', gym_name: @gym.name)
+
+    if use_send_in_blue?
+      send_with_send_in_blue(@email, subject, 'gym_mailer/new_request_confirmation')
+    else
+      mail(to: @email, subject: subject)
+    end
+  end
+
   def new_administrator
     @user = params[:user]
     @host = params[:host]
