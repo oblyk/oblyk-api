@@ -120,7 +120,7 @@ class IndoorSubscription < ApplicationRecord
 
     IndoorSubscriptionMailer.with(indoor_subscription: self)
                             .cancel_indoor_subscription
-                            .deliver_now
+                            .deliver_later
   end
 
   def un_cancel!
@@ -134,7 +134,7 @@ class IndoorSubscription < ApplicationRecord
 
     IndoorSubscriptionMailer.with(indoor_subscription: self)
                             .un_cancel_indoor_subscription
-                            .deliver_now
+                            .deliver_later
   end
 
   def update_gym_plans!

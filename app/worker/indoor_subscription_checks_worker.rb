@@ -14,7 +14,7 @@ class IndoorSubscriptionChecksWorker
 
       IndoorSubscriptionMailer.with(indoor_subscription: subscription)
                               .end_indoor_subscription
-                              .deliver_now
+                              .deliver_later
     end
 
     # # End of trial period in one week's time
@@ -22,7 +22,7 @@ class IndoorSubscriptionChecksWorker
     subscriptions_free_trial_ended_soon.find_each do |subscription|
       IndoorSubscriptionMailer.with(indoor_subscription: subscription)
                               .trial_period_ends_soon
-                              .deliver_now
+                              .deliver_later
     end
 
     # End of trial period tomorrow
@@ -30,7 +30,7 @@ class IndoorSubscriptionChecksWorker
     subscriptions_free_trial_ended_soon.find_each do |subscription|
       IndoorSubscriptionMailer.with(indoor_subscription: subscription)
                               .trial_period_ends_tomorrow
-                              .deliver_now
+                              .deliver_later
     end
 
     # Perform each day at 8 am
