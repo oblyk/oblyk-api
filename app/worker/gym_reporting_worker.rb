@@ -121,7 +121,7 @@ class GymReportingWorker
       end
       GymMailer.with(user: user, start_date: start_date, end_date: end_date, figures: figures)
                .email_report
-               .deliver_now
+               .deliver_later
     end
 
     next_month = Date.current.next_month.beginning_of_month.beginning_of_day + 9.hours
