@@ -30,11 +30,11 @@ class StripeService
         if subscription.in_free_trial?
           IndoorSubscriptionMailer.with(indoor_subscription: subscription)
                                   .start_trial_period
-                                  .deliver_now
+                                  .deliver_later
         else
           IndoorSubscriptionMailer.with(indoor_subscription: subscription)
                                   .start_indoor_subscription
-                                  .deliver_now
+                                  .deliver_later
         end
       end
     end
