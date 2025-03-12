@@ -8,7 +8,7 @@ module Api
       skip_before_action :protected_by_gym_administrator, only: %i[show index]
       before_action :set_gym_space
       before_action :set_gym_sector, only: %i[show update destroy dismount_routes last_routes_with_pictures delete_three_d_path]
-      before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[index show]
+      before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[index show last_routes_with_pictures]
 
       def index
         gym_sectors = @gym_space.gym_sectors
