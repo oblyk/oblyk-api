@@ -62,6 +62,7 @@ module Api
         climbing_type = params.fetch(:climbing_type, nil)
 
         ascents = AscentGymRoute.includes(:user, gym_route: :gym, user: { avatar_attachment: :blob })
+                                .joins(gym_route: { gym_sector: :gym_space })
                                 .where(gym: @gym)
                                 .where.not(ascent_status: %w[project repetition])
                                 .where.not(gym_route_id: nil)
