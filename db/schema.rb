@@ -774,7 +774,6 @@ ActiveRecord::Schema.define(version: 2025_01_31_143142) do
   create_table "gym_chain_gyms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "gym_chain_id"
     t.bigint "gym_id"
-    t.json "meta"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["gym_chain_id"], name: "index_gym_chain_gyms_on_gym_chain_id"
