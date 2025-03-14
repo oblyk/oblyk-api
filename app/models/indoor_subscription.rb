@@ -62,9 +62,6 @@ class IndoorSubscription < ApplicationRecord
   def create_payment_link!(indoor_subscription_product, gym, number_of_trials_days = nil)
     Stripe.api_key = ENV['STRIPE_API_KEY']
 
-    # trial_period_days = nil
-    # trial_period_days = (Date.current + 28.days).to_i if gym.indoor_subscriptions.count.zero?
-
     plan = Stripe::Plan.create(
       {
         amount: indoor_subscription_product.price_cents,
