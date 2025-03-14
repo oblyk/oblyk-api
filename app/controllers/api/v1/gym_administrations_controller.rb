@@ -51,6 +51,8 @@ module Api
       end
 
       def accept_request
+        @administration_request.gym.gym_type = params.fetch(:gym_type, nil)
+        @administration_request.gym.save
         @administration_request.accept!
         GymMailer.with(user: @administration_request.user, gym: @administration_request.gym, email: @administration_request.email)
                  .accept_administrator
