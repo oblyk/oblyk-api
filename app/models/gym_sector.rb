@@ -37,6 +37,7 @@ class GymSector < ApplicationRecord
         polygon: polygon,
         three_d_path: three_d_path,
         three_d_height: three_d_height,
+        three_d_elevated: three_d_elevated,
         gym_space_id: gym_space_id,
         can_be_more_than_one_pitch: can_be_more_than_one_pitch,
         min_anchor_number: min_anchor_number,

@@ -93,6 +93,7 @@ module Api
           :polygon,
           :can_be_more_than_one_pitch,
           :three_d_height,
+          :three_d_elevated,
           three_d_path: %i[x y z],
           three_d_label_options: %i[x y z]
         )

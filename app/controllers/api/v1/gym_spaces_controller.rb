@@ -55,6 +55,7 @@ module Api
             name: gym_sector.name,
             three_d_path: gym_sector.three_d_path,
             three_d_height: gym_sector.three_d_height,
+            three_d_elevated: gym_sector.three_d_elevated,
             three_d_label_options: gym_sector.three_d_label_options
           }
         end
