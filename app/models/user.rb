@@ -158,6 +158,7 @@ class User < ApplicationRecord
       json_ascents << {
         gym_route_id: ascent.gym_route_id,
         ascent_status: ascent.ascent_status,
+        roping_status: ascent.roping_status,
         released_at: ascent.released_at
       }
     end

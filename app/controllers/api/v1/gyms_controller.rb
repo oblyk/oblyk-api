@@ -62,24 +62,26 @@ module Api
         age = params.fetch(:age, nil)
         climbing_type = params.fetch(:climbing_type, nil)
 
-        ascents = AscentGymRoute.includes(:user, gym_route: :gym, user: { avatar_attachment: :blob })
+        ascents = AscentGymRoute.includes(:user, :gym_route, gym_route: :gym, user: { avatar_attachment: :blob })
                                 .joins(gym_route: { gym_sector: :gym_space })
                                 .where(gym: @gym)
                                 .where.not(ascent_status: %w[project repetition])
                                 .where.not(gym_route_id: nil)
 
         # Date filter
-        if start_date || end_date
-          ascents = ascents.where(released_at: [start_date..end_date])
+        ascents = if start_date || end_date
+                    ascents.where(released_at: [start_date..end_date])
+                           .where('gym_routes.opened_at <= :end_date AND (gym_routes.dismounted_at IS NULL OR gym_routes.dismounted_at >= :start_date)', end_date: end_date, start_date: start_date)
                            .where('ascents.created_at >= ?', start_date.beginning_of_day)
                            .where('ascents.created_at <= ?', (end_date + 1.day).end_of_day)
-        end
+                  else
+                    ascents.where(gym_routes: { dismounted_at: nil })
+                  end
 
         # Gender filter
         ascents = ascents.where(users: { genre: gender }) if gender != 'all' && gender.present?
 
         # Climbing type filter
-        # binding.pry
         ascents = ascents.joins(:gym_route).where(gym_routes: { climbing_type: climbing_type }) if climbing_type != 'all' && climbing_type.present?
 
         # Age filter
@@ -100,16 +102,67 @@ module Api
           ascents = ascents.joins(:user).where(date_of_birth) if date_of_birth
         end
 
+        # Get limite of grade
+        gym_routes = GymRoute.joins(gym_sector: :gym_space).where(gym_spaces: { gym_id: @gym.id })
+        gym_routes = start_date.present? ? gym_routes.where('opened_at <= :start_date AND dismounted_at IS NULL OR dismounted_at >= :end_date', start_date: start_date, end_date: end_date) : gym_routes.mounted
+        min_max = gym_routes.select('MIN(gym_routes.min_grade_value) AS min_grade_value, MAX(gym_routes.min_grade_value) AS max_grade_value, gym_routes.climbing_type').group(:climbing_type)&.group_by(&:climbing_type)
+
+        # Get colors for charts
+        chart_templates = {}
+        @gym.gym_levels
+            .where(enabled: true)
+            .order("FIELD(climbing_type, 'sport_climbing', 'bouldering', 'pan')")
+            .each do |gym_level|
+          climbing_type = gym_level.climbing_type
+          chart_templates[climbing_type] = {
+            climbing_type: climbing_type,
+            data: nil,
+            colors: nil,
+            grade_system: nil,
+            min: nil,
+            have_levels: false
+          }
+          chart_templates[climbing_type][:grade_system] = gym_level.grade_system
+          chart_templates[climbing_type][:have_levels] = gym_level.levels.present?
+
+          if gym_level.grade_system == 'french'
+            min = min_max[gym_level.climbing_type].try(:first).try(:min_grade_value) || 0
+            max = min_max[gym_level.climbing_type].try(:first).try(:max_grade_value) || 53
+            chart_templates[climbing_type][:min] = min
+            range = ((min / 2).to_i)..((max / 2).to_i)
+            chart_templates[climbing_type][:colors] = Grade.degree_colors[range]
+            chart_templates[climbing_type][:data] = range.map { |_index| 0 }
+          elsif gym_level.levels
+            chart_templates[climbing_type][:colors] = gym_level.levels.map { |level| level['color'] }
+            chart_templates[climbing_type][:data] = gym_level.levels.map { |_index| 0 }
+          else
+            chart_templates[climbing_type][:colors] = Grade.range_values(gym_level.grade_system.to_sym).map { |value| Grade::GRADES_COLOR[value] }
+            chart_templates[climbing_type][:data] = Grade.range_values(gym_level.grade_system.to_sym).map { |_index| 0 }
+          end
+        end
+
         scores = {}
         ascents.find_each do |ascent|
           user_key = "user-#{ascent.user_id}"
           scores[user_key] ||= {
             points: 0,
             rank: nil,
+            charts: chart_templates.deep_dup,
             user: ascent.user.summary_to_json
           }
-          scores[user_key][:points] += ascent.gym_route.calculated_point || 0
+          scores[user_key][:points] += ascent.points(ascent.gym_route, @gym)[:score] || 0
+          climbing_type = ascent.gym_route.climbing_type
+
+          grade_value = if chart_templates[climbing_type][:grade_system] == 'french'
+                          ((ascent.gym_route.min_grade_value - chart_templates[climbing_type][:min]) / 2).to_i
+                        elsif chart_templates[climbing_type][:have_levels]
+                          ascent.gym_route.level_index
+                        else
+                          Grade.range_values(chart_templates[climbing_type][:grade_system].to_sym).find_index(ascent.gym_route.min_grade_value - 1)
+                        end
+          scores[user_key][:charts][climbing_type][:data][grade_value] += 1
         end
+
         scores = scores.map(&:last)
         scores.sort_by! { |score| -score[:points] }
         ranked_score = []
@@ -117,6 +170,7 @@ module Api
           score[:rank] = index + 1
           ranked_score << score
         end
+
         render json: ranked_score, status: :ok
       end
 
@@ -443,7 +497,12 @@ module Api
           :sport_climbing_ranking,
           :representation_type,
           :latitude,
-          :longitude
+          :longitude,
+          ascents_multiplier: {
+            sport_climbing: %i[onsight flash red_point lead_climb top_rope],
+            bouldering: %i[onsight flash red_point],
+            pan: %i[onsight flash red_point]
+          }
         )
       end
 

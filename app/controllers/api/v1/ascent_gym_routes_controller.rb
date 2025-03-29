@@ -4,7 +4,7 @@ module Api
   module V1
     class AscentGymRoutesController < ApiController
       before_action :protected_by_session
-      before_action :set_ascent_gym_route, except: %i[create index create_bulk]
+      before_action :set_ascent_gym_route, except: %i[create index create_bulk points]
       before_action :protected_by_owner, only: %i[update destroy]
 
       def index
@@ -34,6 +34,40 @@ module Api
 
       def show
         render json: @ascent_gym_route.detail_to_json, status: :ok
+      end
+
+      def points
+        user = User.find_by uuid: params[:user_uuid]
+        gym = Gym.find_by id: params[:gym_id]
+        page = params.fetch(:page, 1)
+        start_date = params.fetch(:start_date, nil)
+        end_date = params.fetch(:end_date, nil)
+        climbing_type = params.fetch(:climbing_type, nil)
+
+        gym_level = gym.gym_levels.find_by(climbing_type: climbing_type)
+
+        ascents = user.ascent_gym_routes
+                      .joins(gym_route: { gym_sector: :gym_space })
+                      .where(gym_spaces: { gym_id: gym.id })
+                      .where.not(ascent_status: %w[project repetition])
+
+        ascents = if start_date.present?
+                    ascents.where(realised_at: start_date..end_date)
+                  else
+                    ascents.where(gym_routes: { dismounted_at: nil })
+                  end
+
+        ascents = ascents.where(gym_routes: { climbing_type: climbing_type }) if climbing_type.present?
+
+        ascents = if gym_level.grade_system.blank?
+                    ascents.order('gym_routes.level_index DESC, ascents.released_at DESC, ascents.id')
+                  else
+                    ascents.order('gym_routes.min_grade_value DESC, ascents.released_at DESC, ascents.id')
+                  end
+
+        ascents = ascents.page(page).map(&:summary_to_json)
+
+        render json: ascents, status: :ok
       end
 
       def create
@@ -149,6 +183,7 @@ module Api
       def ascent_gym_route_params
         params.require(:ascent_gym_route).permit(
           :ascent_status,
+          :roping_status,
           :hardness_status,
           :gym_route_id,
           :gym_id,

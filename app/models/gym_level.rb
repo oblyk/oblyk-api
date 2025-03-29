@@ -17,6 +17,7 @@ class GymLevel < ApplicationRecord
   def summary_to_json
     {
       climbing_type: climbing_type,
+      enabled: enabled,
       grade_system: grade_system,
       level_representation: level_representation,
       levels: levels, # { order color default_grade default_point }

@@ -188,4 +188,22 @@ class Grade
     return '9b' if (51..52).cover? value
     return '9c' if (53..54).cover? value
   end
+
+  def self.degree_colors
+    colors = []
+    GRADES_COLOR.each_with_index do |color, index|
+      colors << color if index.even?
+    end
+    colors
+  end
+
+  def self.range_values(grade_system)
+    ranges = {
+      french: 0..53,
+      pick_district: [12, 14, 16, 22, 31, 33, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49],
+      usa_lead: [0, 6, 8, 12, 14, 18, 20, 24, 26, 28, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53],
+      usa_bouldering: [12, 13, 14, 16, 21, 23, 26, 33, 35, 36, 37, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48]
+    }
+    ranges[grade_system]
+  end
 end

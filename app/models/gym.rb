@@ -75,6 +75,7 @@ class Gym < ApplicationRecord
   validates :plan, inclusion: { in: PLAN_LIST }, allow_nil: true
   validates :gym_type, inclusion: { in: GYM_TYPE_LIST }, allow_nil: true
 
+  before_validation :normalize_ascents_multiplier
   after_save :historize_around_towns
   after_save :delete_routes_caches
 
@@ -128,6 +129,7 @@ class Gym < ApplicationRecord
     self.assigned_at ||= Time.current
     self.plan ||= 'free'
     init_gym_levels
+    init_ascents_multiplier
     save
   end
 
@@ -207,12 +209,14 @@ class Gym < ApplicationRecord
         gym_space_groups: gym_space_groups.map(&:summary_to_json),
         sorts_available: sorts_available,
         display_ranking: ranking?,
+        ascents_multiplier: ascents_multiplier,
         plan: plan,
         gym_climbing_styles: gym_climbing_styles.activated.map { |style| { style: style.style, climbing_type: style.climbing_type, color: style.color } },
         gym_spaces_with_anchor: gym_spaces_with_anchor?,
         upcoming_contests: contests.upcoming.map(&:summary_to_json),
         gym_label_templates: gym_label_templates.unarchived.map { |label| { name: label.name, id: label.id } },
         have_indoor_subscriptions: indoor_subscriptions.count.positive?,
+        levels: levels,
         history: {
           created_at: created_at,
           updated_at: updated_at
@@ -231,12 +235,36 @@ class Gym < ApplicationRecord
     gym_levels << GymLevel.new(climbing_type: Climb::PAN, grade_system: 'french', level_representation: GymLevel::TAG_REPRESENTATION) unless GymLevel.exists?(gym_id: id, climbing_type: Climb::PAN)
   end
 
+  def init_ascents_multiplier
+    ascents_multiplier = {}
+    [Climb::BOULDERING, Climb::SPORT_CLIMBING, Climb::PAN].each do |type|
+      ascents_multiplier[type] = {
+        onsight: 1.1,
+        flash: 1.05,
+        red_point: 1
+      }
+      if type == Climb::SPORT_CLIMBING
+        ascents_multiplier[type][:lead_climb] = 1
+        ascents_multiplier[type][:top_rope] = 0.5
+      end
+    end
+    self.ascents_multiplier ||= ascents_multiplier
+  end
+
   def update_plan!
     plan = 'free'
     active_subscription = indoor_subscriptions.active.order(created_at: :desc).first
     plan = active_subscription.in_free_trial? ? 'free_trial' : 'full_package' if active_subscription.present?
     self.plan = plan
     save
+  end
+
+  def levels
+    levels = {}
+    gym_levels.order("FIELD(climbing_type, 'sport_climbing', 'bouldering', 'pan')").each do |gym_level|
+      levels[gym_level.climbing_type] = gym_level.summary_to_json
+    end
+    levels
   end
 
   private
@@ -298,5 +326,15 @@ class Gym < ApplicationRecord
 
   def delete_routes_caches
     gym_routes.find_each(&:delete_summary_cache) if saved_change_to_boulder_ranking? || saved_change_to_sport_climbing_ranking? || saved_change_to_pan_ranking?
+  end
+
+  def normalize_ascents_multiplier
+    return unless ascents_multiplier_changed?
+
+    ascents_multiplier&.each do |k, _v|
+      ascents_multiplier[k].each do |k2, v2|
+        ascents_multiplier[k][k2] = v2.to_f
+      end
+    end
   end
 end

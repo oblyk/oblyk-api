@@ -171,6 +171,7 @@ Rails.application.routes.draw do
       end
 
       resources :ascent_gym_routes do
+        get :points, on: :collection
         post :create_bulk, on: :collection
       end
 

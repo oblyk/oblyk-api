@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_03_15_161112) do
+ActiveRecord::Schema.define(version: 2025_03_17_212444) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -865,6 +865,7 @@ ActiveRecord::Schema.define(version: 2025_03_15_161112) do
   create_table "gym_levels", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
     t.bigint "gym_id"
     t.string "climbing_type"
+    t.boolean "enabled", default: true
     t.string "grade_system"
     t.string "level_representation"
     t.json "levels"
@@ -1084,6 +1085,7 @@ ActiveRecord::Schema.define(version: 2025_03_15_161112) do
     t.string "sport_climbing_ranking"
     t.string "pan_ranking"
     t.string "boulder_ranking"
+    t.json "ascents_multiplier"
     t.decimal "latitude", precision: 10, scale: 6
     t.decimal "longitude", precision: 10, scale: 6
     t.bigint "user_id"

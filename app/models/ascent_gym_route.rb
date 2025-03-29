@@ -31,6 +31,7 @@ class AscentGymRoute < Ascent
     {
       id: id,
       ascent_status: ascent_status,
+      roping_status: roping_status,
       hardness_status: hardness_status,
       gym_route_id: gym_route_id,
       gym_grade_level: gym_grade_level,
@@ -51,6 +52,7 @@ class AscentGymRoute < Ascent
       gym_route: gym_route ? gym_route.summary_to_json : nil,
       gym: gym.summary_to_json,
       climbing_type: climbing_type,
+      points: points,
       history: {
         created_at: created_at,
         updated_at: updated_at
@@ -83,6 +85,22 @@ class AscentGymRoute < Ascent
 
     color_system = ColorSystem.create_from_level gym_level
     self.color_system_line = color_system.color_system_lines.find_by(hex_color: gym_route.level_color) if color_system
+  end
+
+  def points(gym_route = nil, gym = nil)
+    gym_route ||= self.gym_route
+    gym ||= self.gym
+    base = gym_route.calculated_point
+    status_multiplier = gym.ascents_multiplier[gym_route.climbing_type][ascent_status] || 1
+    roping_multiplier = gym.ascents_multiplier[gym_route.climbing_type][roping_status] || 1
+    multiplier = status_multiplier * roping_multiplier
+    {
+      base: base,
+      multiplier: multiplier,
+      status_multiplier: status_multiplier,
+      roping_multiplier: roping_multiplier,
+      score: (base * multiplier).round
+    }
   end
 
   private

@@ -51,16 +51,19 @@ module Api
         params.require(:gym_levels).permit(
           sport_climbing: [
             :grade_system,
+            :enabled,
             :level_representation,
             { levels: %i[order color default_grade default_point] }
           ],
           bouldering: [
             :grade_system,
+            :enabled,
             :level_representation,
             { levels: %i[order color default_grade default_point] }
           ],
           pan: [
             :grade_system,
+            :enabled,
             :level_representation,
             { levels: %i[order color default_grade default_point] }
           ]
