@@ -90,6 +90,9 @@ class AscentGymRoute < Ascent
   def points(gym_route = nil, gym = nil)
     gym_route ||= self.gym_route
     gym ||= self.gym
+
+    return nil if gym_route.blank?
+
     base = gym_route.calculated_point || 0
     status_multiplier = gym.ascents_multiplier[gym_route.climbing_type][ascent_status] || 1
     roping_multiplier = gym.ascents_multiplier[gym_route.climbing_type][roping_status] || 1
