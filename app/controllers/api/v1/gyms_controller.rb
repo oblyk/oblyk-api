@@ -160,7 +160,7 @@ module Api
                         else
                           Grade.range_values(chart_templates[climbing_type][:grade_system].to_sym).find_index(ascent.gym_route.min_grade_value - 1)
                         end
-          scores[user_key][:charts][climbing_type][:data][grade_value] += 1
+          scores[user_key][:charts][climbing_type][:data][grade_value] += 1 if grade_value.present?
         end
 
         scores = scores.map(&:last)
