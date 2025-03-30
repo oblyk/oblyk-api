@@ -154,7 +154,7 @@ module Api
           climbing_type = ascent.gym_route.climbing_type
 
           grade_value = if chart_templates[climbing_type][:grade_system] == 'french'
-                          ((ascent.gym_route.min_grade_value - chart_templates[climbing_type][:min]) / 2).to_i
+                          ((ascent.gym_route.min_grade_value || 0 - chart_templates[climbing_type][:min] || 0) / 2).to_i
                         elsif chart_templates[climbing_type][:have_levels]
                           ascent.gym_route.level_index
                         else
