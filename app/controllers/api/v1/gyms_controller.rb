@@ -135,7 +135,7 @@ module Api
           elsif gym_level.levels
             chart_templates[climbing_type][:colors] = gym_level.levels.map { |level| level['color'] }
             chart_templates[climbing_type][:data] = gym_level.levels.map { |_index| 0 }
-          else
+          elsif %w[usa_lead usa_bouldering pick_district].include? gym_level.grade_system
             chart_templates[climbing_type][:colors] = Grade.range_values(gym_level.grade_system.to_sym).map { |value| Grade::GRADES_COLOR[value] }
             chart_templates[climbing_type][:data] = Grade.range_values(gym_level.grade_system.to_sym).map { |_index| 0 }
           end
