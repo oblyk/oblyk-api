@@ -91,6 +91,7 @@ class IndoorSubscription < ApplicationRecord
         },
         billing_address_collection: 'required',
         subscription_data: subscription_data,
+        allow_promotion_codes: true,
         tax_id_collection: {
           enabled: true
         },
