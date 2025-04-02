@@ -5,7 +5,7 @@ module Api
     class CommentsController < ApiController
       before_action :protected_by_session, only: %i[create update destroy moderate_by_gym_administrator]
       before_action :set_comment, only: %i[show comments update destroy moderate_by_gym_administrator]
-      before_action :protected_by_owner, only: %i[update destroy moderate_by_gym_administrator]
+      before_action :protected_by_owner, only: %i[update destroy]
 
       def index
         comments = Comment.where(
@@ -81,7 +81,7 @@ module Api
           return
         end
 
-        @comment.moderated_at = DateTime.now
+        @comment.moderated_at = Time.zone.now
         if @comment.save
           head :no_content
         else
