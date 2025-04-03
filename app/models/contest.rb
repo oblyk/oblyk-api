@@ -291,6 +291,7 @@ class Contest < ApplicationRecord
         draft: draft,
         authorise_public_subscription: authorise_public_subscription,
         private: private,
+        hide_results: hide_results,
         total_capacity: total_capacity,
         categorization_type: categorization_type,
         contest_participants_count: contest_participants.count,

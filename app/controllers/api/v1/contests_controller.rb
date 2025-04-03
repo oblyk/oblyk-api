@@ -144,7 +144,8 @@ module Api
           :categorization_type,
           :authorise_public_subscription,
           :combined_ranking_type,
-          :private
+          :private,
+          :hide_results
         )
       end
 
