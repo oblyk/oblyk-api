@@ -8,6 +8,8 @@ class ContestWave < ApplicationRecord
 
   validates :name, presence: true
 
+  before_validation :normalize_attributes
+
   after_save :delete_caches
   after_destroy :delete_caches
 
@@ -17,6 +19,7 @@ class ContestWave < ApplicationRecord
     {
       id: id,
       name: name,
+      capacity: capacity,
       contest_id: contest_id,
       contest_participants_count: contest_participants.count
     }
@@ -36,5 +39,11 @@ class ContestWave < ApplicationRecord
   def delete_caches
     contest.contest_categories.each(&:delete_summary_cache)
     contest_participants.each(&:delete_summary_cache)
+  end
+
+  private
+
+  def normalize_attributes
+    self.capacity = nil if capacity.blank? || capacity.zero?
   end
 end

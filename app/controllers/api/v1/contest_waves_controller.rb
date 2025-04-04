@@ -69,7 +69,10 @@ module Api
       end
 
       def contest_wave_params
-        params.require(:contest_wave).permit(:name)
+        params.require(:contest_wave).permit(
+          :name,
+          :capacity
+        )
       end
 
       def user_can_manage_contest
