@@ -178,6 +178,19 @@ class ContestParticipant < ApplicationRecord
     Rails.cache.delete("#{cache_key_with_version}/summary_contest_participant")
   end
 
+  def create_participant_step
+    contest.contest_stages.each do |contest_stage|
+      contest_stage.contest_stage_steps.order(:step_order).limit(1).each do |contest_stage_step|
+        contest_stage_step.contest_route_groups.each do |contest_route_group|
+          next unless genre == contest_route_group.genre_type || contest_route_group.genre_type == 'unisex'
+          next unless contest_route_group.contest_route_group_categories.pluck(:contest_category_id).include?(contest_category_id)
+
+          ContestParticipantStep.find_or_create_by(contest_participant_id: id, contest_stage_step_id: contest_stage_step.id)
+        end
+      end
+    end
+  end
+
   private
 
   def delete_caches
@@ -230,19 +243,6 @@ class ContestParticipant < ApplicationRecord
     end
     waves.sort_by! { |wave| wave[:participant_count] }
     self.contest_wave_id = waves.first[:id]
-  end
-
-  def create_participant_step
-    contest.contest_stages.each do |contest_stage|
-      contest_stage.contest_stage_steps.order(:step_order).limit(1).each do |contest_stage_step|
-        contest_stage_step.contest_route_groups.each do |contest_route_group|
-          next unless genre == contest_route_group.genre_type || contest_route_group.genre_type == 'unisex'
-          next unless contest_route_group.contest_route_group_categories.pluck(:contest_category_id).include?(contest_category_id)
-
-          ContestParticipantStep.create(contest_participant_id: id, contest_stage_step_id: contest_stage_step.id)
-        end
-      end
-    end
   end
 
   def validate_age
