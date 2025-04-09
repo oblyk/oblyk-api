@@ -9,7 +9,6 @@ class GymBillingAccount < ApplicationRecord
     {
       id: id,
       uuid: uuid,
-      name: name,
       email: email
     }
   end
