@@ -52,7 +52,7 @@ module Api
                       .where.not(ascent_status: %w[project repetition])
 
         ascents = if start_date.present?
-                    ascents.where(realised_at: start_date..end_date)
+                    ascents.where(released_at: start_date..end_date)
                   else
                     ascents.where(gym_routes: { dismounted_at: nil })
                   end
