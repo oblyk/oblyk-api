@@ -272,22 +272,9 @@ class ContestParticipant < ApplicationRecord
     return unless uxx_age
 
     participant_under_age = contest.start_date.year - date_of_birth.year
-    categories = contest.contest_categories.map { |category| { id: category.id, under_age: category.under_age, previous_under_age: 0 } }
-    categories.sort_by! { |category| category[:under_age] }
-    categories.each_with_index do |_category, category_index|
-      next if category_index.zero?
+    return if participant_under_age >= contest_category.over_age && participant_under_age < contest_category.under_age
 
-      categories[category_index][:previous_under_age] = categories[category_index - 1][:under_age]
-    end
-    categories.each do |category|
-      next unless category[:id] == contest_category_id
-
-      registrable = participant_under_age >= category[:previous_under_age] && participant_under_age < category[:under_age]
-      unless registrable
-        errors.add(:base, "Le participant en pas s'inscrire en #{contest_category.name}")
-        break
-      end
-    end
+    errors.add(:base, "Le participant en pas s'inscrire en #{contest_category.name}")
   end
 
   def validate_capacity

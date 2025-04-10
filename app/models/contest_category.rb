@@ -22,6 +22,18 @@ class ContestCategory < ApplicationRecord
     U10, U12, U14, U16, U18, U20, SENIOR, VETERAN_1, VETERAN_2
   ].freeze
 
+  UNDER_AGE_BY_UXX = {
+    U10 => 10,
+    U12 => 12,
+    U14 => 14,
+    U16 => 16,
+    U18 => 18,
+    U20 => 20,
+    SENIOR => 40,
+    VETERAN_1 => 50,
+    VETERAN_2 => 100
+  }.freeze
+
   belongs_to :contest
   has_one :gym, through: :contest
 
@@ -46,16 +58,17 @@ class ContestCategory < ApplicationRecord
   def under_age
     return nil if registration_obligation.blank? || registration_obligation == BETWEEN_AGE
 
-    return 10 if registration_obligation == U10
-    return 12 if registration_obligation == U12
-    return 14 if registration_obligation == U14
-    return 16 if registration_obligation == U16
-    return 18 if registration_obligation == U18
-    return 20 if registration_obligation == U20
-    return 40 if registration_obligation == SENIOR
-    return 50 if registration_obligation == VETERAN_1
+    UNDER_AGE_BY_UXX[registration_obligation]
+  end
 
-    100 if registration_obligation == VETERAN_2
+  def over_age
+    return min_age if min_age.present?
+    return nil unless UXX_LIST.include?(registration_obligation)
+
+    uxx_list = contest.contest_categories.pluck(:registration_obligation).uniq
+    uxx_list.sort! { |a, b| UNDER_AGE_BY_UXX[a] - UNDER_AGE_BY_UXX[b] }
+    registration_index = uxx_list.find_index(registration_obligation)
+    registration_index.zero? ? 0 : UNDER_AGE_BY_UXX[uxx_list[registration_index - 1]]
   end
 
   def summary_to_json
@@ -72,6 +85,7 @@ class ContestCategory < ApplicationRecord
         min_age: min_age,
         max_age: max_age,
         under_age: under_age,
+        over_age: over_age,
         auto_distribute: auto_distribute,
         waveable: waveable,
         contest_participants_count: contest_participants.count,
