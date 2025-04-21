@@ -33,7 +33,7 @@ class IndoorSubscriptionChecksWorker
                               .deliver_later
     end
 
-    # Perform each day at 8 am
-    GymReportingWorker.perform_at(Date.current.beginning_of_day) + 7.hours
+    # Perform each day
+    IndoorSubscriptionChecksWorker.perform_at((Date.tomorrow.beginning_of_day + 7.hours))
   end
 end
