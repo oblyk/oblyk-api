@@ -4,12 +4,16 @@ class Park < ApplicationRecord
   include Geolocable
   include Elevable
   include StripTagable
+  include AttachmentResizable
 
+  has_one_attached :static_map
   belongs_to :user, optional: true
   belongs_to :crag
   has_many :reports, as: :reportable
 
   validates :latitude, :longitude, presence: true
+
+  after_save :historize_static_map
 
   def location
     [latitude, longitude]
@@ -47,7 +51,10 @@ class Park < ApplicationRecord
       description: description,
       latitude: latitude,
       longitude: longitude,
-      elevation: elevation
+      elevation: elevation,
+      attachments: {
+        static_map: attachment_object(static_map)
+      }
     }
   end
 
@@ -62,5 +69,13 @@ class Park < ApplicationRecord
         }
       }
     )
+  end
+
+  private
+
+  def historize_static_map
+    return unless saved_change_to_latitude? || saved_change_to_longitude?
+
+    HistorizeParkStaticMapWorker.perform_async id
   end
 end
