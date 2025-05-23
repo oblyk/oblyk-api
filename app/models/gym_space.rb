@@ -61,7 +61,7 @@ class GymSpace < ApplicationRecord
         scheme_height: scheme_height,
         scheme_width: scheme_width,
         sectors_color: sectors_color,
-        text_contrast_color: Color.black_or_white_rgb(sectors_color || 'rgb(49,153,78)'),
+        text_contrast_color: Color.black_or_white_rgb(sectors_color || 'rgb(0,0,0)'),
         gym_space_group_id: gym_space_group_id,
         anchor: anchor,
         draft: draft,
