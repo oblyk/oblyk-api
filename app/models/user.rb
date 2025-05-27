@@ -154,7 +154,7 @@ class User < ApplicationRecord
 
   def ascent_gym_routes_to_a
     json_ascents = []
-    ascent_gym_routes.where.not(gym_route_id: nil).each do |ascent|
+    ascent_gym_routes.where.not(gym_route_id: nil, ascent_status: 'repetition').each do |ascent|
       json_ascents << {
         gym_route_id: ascent.gym_route_id,
         ascent_status: ascent.ascent_status,
