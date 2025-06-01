@@ -155,6 +155,8 @@ Rails.application.routes.draw do
               end
             end
           end
+          resources :user_applications, only: %i[index show destroy]
+          resources :user_application_ffme_my_compets, only: %i[create]
           resources :climbing_sessions, only: %i[index show update]
         end
       end

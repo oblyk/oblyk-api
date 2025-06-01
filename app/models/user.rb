@@ -70,6 +70,7 @@ class User < ApplicationRecord
   has_many :localities, through: :locality_users
   has_many :likes
   has_many :contest_participants
+  has_many :user_applications
 
   before_validation :init_slug_name
   before_validation :set_uuid
