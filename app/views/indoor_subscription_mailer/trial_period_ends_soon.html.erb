@@ -5,7 +5,7 @@
 <p>
   La période d'essais pour <%= @multi_gym ? 'vos salles :' : 'votre salle' %> <strong><%= @indoor_subscription.gyms.map(&:name).join(', ') %></strong>
   prend fin dans une semaine !<br>
-  Soit le <u><%= l(@indoor_subscription.end_date, format: :long_month) %></u>
+  Soit le <u><%= l(@indoor_subscription.trial_end_date, format: :long_month) %></u>
 </p>
 
 <p>
