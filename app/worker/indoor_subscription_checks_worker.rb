@@ -17,7 +17,7 @@ class IndoorSubscriptionChecksWorker
                               .deliver_later
     end
 
-    # # End of trial period in one week's time
+    # End of trial period in one week's time
     subscriptions_free_trial_ended_soon = IndoorSubscription.where(trial_end_date: Date.current - 1.week)
     subscriptions_free_trial_ended_soon.find_each do |subscription|
       IndoorSubscriptionMailer.with(indoor_subscription: subscription)
