@@ -216,6 +216,7 @@ class Gym < ApplicationRecord
         upcoming_contests: contests.upcoming.map(&:summary_to_json),
         gym_label_templates: gym_label_templates.unarchived.map { |label| { name: label.name, id: label.id } },
         have_indoor_subscriptions: indoor_subscriptions.count.positive?,
+        subscription_possibility: subscription_possibility,
         levels: levels,
         history: {
           created_at: created_at,
@@ -265,6 +266,16 @@ class Gym < ApplicationRecord
       levels[gym_level.climbing_type] = gym_level.summary_to_json
     end
     levels
+  end
+
+  def subscription_possibility
+    return 'start_a_free_trial' if indoor_subscriptions.count.zero?
+
+    indoor_subscriptions.each do |subscription|
+      return 'reactivate_my_subscription' if subscription.payment_status == 'waiting_first_payment' && subscription.end_date.present? && subscription.end_date <= Date.current
+      return 'manage_my_subscription' if subscription.payment_status == 'paid' && (subscription.end_date.blank? || subscription.end_date <= Date.current)
+    end
+    'resubscribe'
   end
 
   private
