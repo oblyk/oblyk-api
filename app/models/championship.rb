@@ -207,6 +207,6 @@ class Championship < ApplicationRecord
     self.description = description&.strip
     self.description = nil if description.blank?
 
-    self.combined_ranking_type ||= ContestService::Constant::COMBINED_RANKING_ADDITION
+    self.combined_ranking_type ||= ContestService::Constant::COMBINED_RANKING_DECREMENT_POINTS
   end
 end

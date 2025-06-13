@@ -335,7 +335,7 @@ class Contest < ApplicationRecord
     self.description = nil if description.blank?
 
     self.total_capacity = nil if total_capacity.blank? || total_capacity.zero?
-    self.combined_ranking_type ||= ContestService::Constant::COMBINED_RANKING_ADDITION
+    self.combined_ranking_type ||= ContestService::Constant::COMBINED_RANKING_DECREMENT_POINTS
   end
 
   def create_u_age
