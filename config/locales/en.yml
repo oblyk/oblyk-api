@@ -219,6 +219,8 @@ en:
         identification_system: "you_must_choose_at_least_one_identification_system"
         content_type: "is_not_in_the_right_format"
         confirmation: "confirm"
+        record_invalid: "invalid_record"
+        greater_than_or_equal_to: "greater_than_or_equal_to"
   date:
     month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
     abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]

@@ -20,7 +20,7 @@ class ContestStageStep < ApplicationRecord
             :ranking_type,
             presence: true
 
-  validates :ranking_type, inclusion: { in: ContestRanking::RANKING_TYPE_LIST.freeze }
+  validates :ranking_type, inclusion: { in: ContestService::Constant::RANKING_TYPE_LIST.freeze }
   validates :ascents_limit, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
 
   def summary_to_json(with_routes: false)
@@ -67,30 +67,6 @@ class ContestStageStep < ApplicationRecord
         }
       }
     )
-  end
-
-  def category_to_next_step(category_id, genre)
-    category = contest.contest_categories.find category_id
-    results = contest.results category.id
-    next_step = ContestStage.find(contest_stage_id).contest_stage_steps.find_by('step_order > ?', step_order)
-
-    results.each do |result|
-      next if result[:genre] != genre && !result[:unisex]
-
-      result[:participants].each do |participant|
-        participant[:stages].each do |stage|
-          next if stage[:stage_id] != contest_stage_id
-
-          stage[:steps].each do |step|
-            next if step[:step_id] != id
-            next unless step[:index] <= default_participants_for_next_step
-
-            participant_step = ContestParticipantStep.find_or_initialize_by contest_participant_id: participant[:participant_id], contest_stage_step_id: next_step.id
-            participant_step.save
-          end
-        end
-      end
-    end
   end
 
   def delete_summary_cache

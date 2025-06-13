@@ -332,6 +332,7 @@ Rails.application.routes.draw do
           post :add_banner, on: :member
           resources :contest_categories
           resources :contest_waves
+          resources :contest_teams
           resources :contest_participant_steps, only: %i[] do
             post :subscribe, on: :collection
           end

@@ -22,6 +22,7 @@ class Contest < ApplicationRecord
   has_many :contest_routes, through: :contest_route_groups
   has_many :championship_contests
   has_many :championships, through: :championship_contests
+  has_many :contest_teams
 
   before_validation :normalize_attributes
   before_create :set_draft_mode
@@ -29,7 +30,8 @@ class Contest < ApplicationRecord
 
   validates :banner, blob: { content_type: :image }, allow_nil: true
   validates :categorization_type, inclusion: { in: %w[official_under_age custom] }
-  validates :combined_ranking_type, inclusion: { in: ContestRanking::COMBINED_RANKING_TYPE_LIST }, allow_nil: :nil
+  validates :combined_ranking_type, inclusion: { in: ContestService::Constant::COMBINED_RANKING_TYPE_LIST }, allow_nil: :nil
+  validates :participant_per_team, numericality: { greater_than_or_equal_to: 2 }, if: proc { |record| record.team_contest }
   validates :name,
             :start_date,
             :end_date,
@@ -51,203 +53,6 @@ class Contest < ApplicationRecord
 
   def public_app_path
     "#{ENV['OBLYK_APP_URL']}/gyms/#{gym.id}/#{gym.slug_name}/contests/#{id}/#{slug_name}"
-  end
-
-  def results(category_id = nil, rich_data = false)
-    rich_key = rich_data ? 'rich' : ''
-    cache_key = category_id.present? ? "#{results_cache_key}-cat-#{category_id}-#{rich_key}" : "#{results_cache_key}-#{rich_key}"
-    Rails.cache.fetch(cache_key, expires_in: 10.minutes) do
-      results = {}
-      points_by_steps = {}
-      stage_steps = {}
-      rankers = {}
-      stages = contest_stages.includes(:contest_stage_steps).order(:stage_order)
-
-      participant_by_steps = {}
-      ContestParticipantStep.joins(contest_stage_step: :contest_stage)
-                            .where(contest_stages: { contest_id: id })
-                            .find_each do |participant_step|
-        participant_by_steps[participant_step.contest_stage_step_id] ||= []
-        participant_by_steps[participant_step.contest_stage_step_id] << participant_step.contest_participant_id
-      end
-
-      category_by_steps = {}
-      ContestRouteGroupCategory.joins(contest_route_group: { contest_stage_step: :contest_stage })
-                               .where(contest_stages: { contest_id: id })
-                               .find_each do |group_category|
-        category_by_steps[group_category.contest_route_group.contest_stage_step.id] ||= []
-        category_by_steps[group_category.contest_route_group.contest_stage_step.id] << group_category.contest_category_id
-      end
-
-      # Filter by categories
-      categories = category_id.present? ? contest_categories.where(id: category_id) : contest_categories
-
-      categories.order(:order).each do |category|
-        contest_participants.includes(:contest_participant_ascents)
-                            .where(contest_category: category)
-                            .find_each do |participant|
-          cat_key = category.unisex ? "category-#{category.id}" : "category-#{category.id}-#{participant.genre}"
-          results[cat_key] ||= {
-            category_name: category.name,
-            category_id: category.id,
-            unisex: category.unisex,
-            genre: participant.genre,
-            order: category.order,
-            participants: {}
-          }
-
-          participant_key = "participant-#{participant.id}"
-          results[cat_key][:participants][participant_key] ||= {
-            global_rank: nil,
-            global_rank_point: nil,
-            ranks: [],
-            participant_id: participant.id,
-            first_name: participant.first_name,
-            last_name: participant.last_name,
-            affiliation: participant.affiliation,
-            stages: {}
-          }
-          if rich_data
-            results[cat_key][:participants][participant_key][:email] ||= participant.email
-            results[cat_key][:participants][participant_key][:date_of_birth] ||= participant.date_of_birth
-          end
-          stages.each do |stage|
-            stage_key = "stage-#{stage.id}"
-            results[cat_key][:participants][participant_key][:stages][stage_key] ||= {
-              stage_id: stage.id,
-              climbing_type: stage.climbing_type,
-              stage_name: stage.name,
-              stage_rank: nil,
-              steps: []
-            }
-            stage_steps[stage.id] ||= stage.contest_stage_steps.order(:step_order)
-            stage_steps[stage.id].each do |step|
-              next unless category_by_steps[step.id]&.include? category.id
-
-              rankers["#{cat_key}-#{step.id}"] ||= ContestRanking.new step, category, participant.genre
-              scores = rankers["#{cat_key}-#{step.id}"].participant_scores(participant.id)
-              results[cat_key][:participants][participant_key][:stages][stage_key][:steps] << {
-                step_id: step.id,
-                step_order: step.step_order,
-                name: step.name,
-                participant_for_next_step: step.default_participants_for_next_step,
-                subscribe: participant_by_steps[step.id]&.include?(participant.id),
-                rank: nil,
-                index: nil,
-                points: scores[:value],
-                score_details: scores[:details],
-                unit_details: scores[:units]
-              }
-              points_by_steps[cat_key] ||= {}
-              points_by_steps[cat_key][stage_key] ||= {}
-              points_by_steps[cat_key][stage_key]["step-#{step.id}"] ||= []
-              points_by_steps[cat_key][stage_key]["step-#{step.id}"] << scores[:value] if scores[:value]
-            end
-          end
-        end
-      end
-
-      # Sort points array
-      points_by_steps.each do |cat_key, category|
-        category.each do |stage_key, stage|
-          stage.each do |step_key, _points|
-            points_by_steps[cat_key][stage_key][step_key].sort!.reverse!
-          end
-        end
-      end
-
-      # Normalize results array and set step rank
-      results = results.map(&:last)
-      results.each_with_index do |category, category_index|
-        results[category_index][:participants] = results[category_index][:participants].map(&:last)
-        results[category_index][:participants].each_with_index do |participant, participant_index|
-          ranks = []
-          results[category_index][:participants][participant_index][:stages] = results[category_index][:participants][participant_index][:stages].map(&:last)
-          results[category_index][:participants][participant_index][:stages].each_with_index do |stage, stage_index|
-            results[category_index][:participants][participant_index][:stages][stage_index][:steps].each_with_index do |step, step_index|
-              cat_key = category[:unisex] ? "category-#{category[:category_id]}" : "category-#{category[:category_id]}-#{category[:genre]}"
-              rank = points_by_steps[cat_key]["stage-#{stage[:stage_id]}"]["step-#{step[:step_id]}"].find_index(step[:points])
-              rank += 1 if rank
-              ranks.unshift rank
-              results[category_index][:participants][participant_index][:stages][stage_index][:steps][step_index][:rank] = rank
-            end
-          end
-          results[category_index][:participants][participant_index][:ranks] = ranks
-          number_of_participants = results[category_index][:participants].size
-
-          # Get last rank of each step for first sort
-          ranks = []
-          participant[:stages].each_with_index do |stage, stage_index|
-            last_step_rank = stage[:steps].map { |step| step[:rank] }.last
-            rank_decimal = ''
-            stage[:steps].map { |step| step[:rank] }
-                         .reverse
-                         .each_with_index do |rank, rank_index|
-              next if rank_index.zero?
-
-              rank_decimal = "#{rank_decimal}#{(rank || number_of_participants).to_s.rjust(number_of_participants.to_s.size, '0')}"
-            end
-            rank_decimal = "#{last_step_rank || number_of_participants}.#{rank_decimal}".to_f
-            results[category_index][:participants][participant_index][:stages][stage_index][:stage_rank] = rank_decimal
-            ranks << rank_decimal
-          end
-
-          # Calculate global rank points
-          case combined_ranking_type
-          when ContestRanking::COMBINED_RANKING_ADDITION
-            rank_point = 0
-            ranks.each do |rank|
-              rank_point += rank || number_of_participants
-            end
-          when ContestRanking::COMBINED_RANKING_MULTIPLICATION
-            rank_point = 1
-            ranks.each do |rank|
-              rank_point *= rank || number_of_participants
-            end
-          when ContestRanking::COMBINED_RANKING_DECREMENT_POINTS
-            rank_point = 0
-            ranks.each do |rank|
-              rank_point += if rank.blank?
-                              0
-                            elsif rank <= 30
-                              ContestRanking::COMBINED_RANKING_POINT_MATRIX[rank.to_i - 1].to_f
-                            else
-                              1.0 - (1.0 / (number_of_participants - 29)) * (rank - 29)
-                            end
-            end
-          else
-            rank_point = 0
-            ranks.each do |rank|
-              rank_point += rank || number_of_participants
-            end
-          end
-
-          results[category_index][:participants][participant_index][:global_rank_point] = rank_point
-        end
-
-        # Sort participant by global rank point
-        results[category_index][:participants] = if combined_ranking_type == ContestRanking::COMBINED_RANKING_DECREMENT_POINTS
-                                                   results[category_index][:participants].sort_by { |participant| -participant[:global_rank_point] }
-                                                 else
-                                                   results[category_index][:participants].sort_by { |participant| participant[:global_rank_point] }
-                                                 end
-
-        # Create global rank index
-        results[category_index][:participants].each_with_index do |participant, index|
-          global_rank = if index.positive? && results[category_index][:participants][index - 1][:global_rank_point] == participant[:global_rank_point]
-                          results[category_index][:participants][index - 1][:global_rank]
-                        else
-                          index + 1
-                        end
-          results[category_index][:participants][index][:global_rank] = global_rank
-        end
-      end
-    end
-  end
-
-  def results_cache_key
-    last_ascent = contest_participant_ascents.maximum(:registered_at) || 'no-ascents'
-    "contest-results-#{id}-#{last_ascent}"
   end
 
   def subscription_opened?
@@ -297,6 +102,8 @@ class Contest < ApplicationRecord
         contest_participants_count: contest_participants.count,
         archived_at: archived_at,
         one_day_event: one_day_event?,
+        team_contest: team_contest,
+        participant_per_team: participant_per_team,
         attachments: {
           banner: attachment_object(banner)
         },
@@ -459,11 +266,11 @@ class Contest < ApplicationRecord
   end
 
   def delete_results_cache
-    Rails.cache.delete(results_cache_key)
+    ContestService::Result.new(self).delete_cache_key
   end
 
-  def results_to_csv
-    results = self.results nil, true
+  def results_to_csv(unisex: false, by_team: false)
+    results = ContestService::Result.new(self, unisex: unisex, by_team: by_team, rich_data: true).results
     CSV.generate(headers: true, encoding: 'utf-8', col_sep: "\t") do |csv|
       header = []
       header << 'Classement général'
@@ -528,7 +335,7 @@ class Contest < ApplicationRecord
     self.description = nil if description.blank?
 
     self.total_capacity = nil if total_capacity.blank? || total_capacity.zero?
-    self.combined_ranking_type ||= ContestRanking::COMBINED_RANKING_ADDITION
+    self.combined_ranking_type ||= ContestService::Constant::COMBINED_RANKING_ADDITION
   end
 
   def create_u_age

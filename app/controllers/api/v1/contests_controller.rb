@@ -45,11 +45,14 @@ module Api
       end
 
       def results
-        render json: @contest.results, status: :ok
+        by_team = params.fetch(:by_team, 'false') == 'true'
+        by_team = false unless @contest.team_contest
+        unisex = params.fetch(:unisex, 'false') == 'true'
+        render json: ContestService::Result.new(@contest, by_team: by_team, unisex: unisex).results, status: :ok
       end
 
       def export_results
-        send_data @contest.results_to_csv, filename: "export-results-#{@contest.name.parameterize}-#{Date.current}.csv"
+        send_data @contest.results_to_csv, filename: "export-results-#{@contest.name&.parameterize}-#{Date.current}.csv"
       end
 
       def create
@@ -145,7 +148,9 @@ module Api
           :authorise_public_subscription,
           :combined_ranking_type,
           :private,
-          :hide_results
+          :hide_results,
+          :team_contest,
+          :participant_per_team
         )
       end
 

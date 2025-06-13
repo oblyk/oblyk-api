@@ -15,6 +15,7 @@ class ContestRouteGroup < ApplicationRecord
   after_validation :validate_categories
 
   after_save :delete_caches
+  after_create :create_participant_step
   after_destroy :delete_caches
 
   validates :genre_type, inclusion: { in: %w[unisex male female] }
@@ -76,6 +77,10 @@ class ContestRouteGroup < ApplicationRecord
         gym_route: gym_route
       )
     end
+  end
+
+  def create_participant_step
+    contest.contest_participants.each(&:create_participant_step)
   end
 
   private

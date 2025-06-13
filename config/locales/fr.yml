@@ -219,7 +219,8 @@ fr:
         identification_system: "you_must_choose_at_least_one_identification_system"
         content_type: "is_not_in_the_right_format"
         confirmation: "confirm"
-        record_invalid: "Enregistrement non valide"
+        record_invalid: "invalid_record"
+        greater_than_or_equal_to: "greater_than_or_equal_to"
   date:
     month_names: [~, Janvier, Février, Mars, Avril, Mai, Juin, Juillet, Août, Septembre, Octobre, Novembre, Décembre]
     abbr_month_names: [~, Jan, Fév, Mar, Avr, Mai, Juin, Juil, Aoû, Sep, Oct, Nov, Déc]

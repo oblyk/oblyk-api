@@ -17,7 +17,7 @@ class ContestStage < ApplicationRecord
             presence: true
 
   validates :climbing_type, inclusion: { in: [Climb::SPORT_CLIMBING, Climb::BOULDERING, Climb::SPEED_CLIMBING] }
-  validates :default_ranking_type, inclusion: { in: ContestRanking::RANKING_TYPE_LIST.freeze }, allow_blank: true
+  validates :default_ranking_type, inclusion: { in: ContestService::Constant::RANKING_TYPE_LIST.freeze }, allow_blank: true
 
   default_scope { order(:stage_order) }
 

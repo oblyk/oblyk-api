@@ -231,6 +231,15 @@ module Api
 
       def create
         contest_participant = ContestParticipant.new(contest_participant_params)
+        if @contest.team_contest && params[:contest_team].present? && contest_team_params[:id].nil?
+          contest_team = ContestTeam.find_or_initialize_by(contest_id: @contest.id, name: contest_team_params[:name])
+          if contest_team.save
+            contest_participant.contest_team = contest_team
+          else
+            render json: { error: contest_team.errors }, status: :unprocessable_entity
+            return
+          end
+        end
         if contest_participant.save
           render json: contest_participant.detail_to_json, status: :ok
         else
@@ -334,7 +343,15 @@ module Api
           :affiliation,
           :contest_category_id,
           :contest_wave_id,
+          :contest_team_id,
           :tombola_winner
+        )
+      end
+
+      def contest_team_params
+        params.require(:contest_team).permit(
+          :id,
+          :name
         )
       end
 

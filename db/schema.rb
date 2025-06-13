@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_04_04_083254) do
+ActiveRecord::Schema.define(version: 2025_06_01_123903) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -320,7 +320,9 @@ ActiveRecord::Schema.define(version: 2025_04_04_083254) do
     t.boolean "tombola_winner", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "contest_team_id"
     t.index ["contest_category_id"], name: "index_contest_participants_on_contest_category_id"
+    t.index ["contest_team_id"], name: "index_contest_participants_on_contest_team_id"
     t.index ["contest_wave_id"], name: "index_contest_participants_on_contest_wave_id"
     t.index ["token"], name: "index_contest_participants_on_token"
     t.index ["user_id"], name: "index_contest_participants_on_user_id"
@@ -391,6 +393,15 @@ ActiveRecord::Schema.define(version: 2025_04_04_083254) do
     t.index ["contest_id"], name: "index_contest_stages_on_contest_id"
   end
 
+  create_table "contest_teams", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.bigint "contest_id"
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["contest_id"], name: "index_contest_teams_on_contest_id"
+    t.index ["name", "contest_id"], name: "index_contest_teams_on_name_and_contest_id", unique: true
+  end
+
   create_table "contest_time_blocks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.time "start_time"
     t.time "end_time"
@@ -434,6 +445,8 @@ ActiveRecord::Schema.define(version: 2025_04_04_083254) do
     t.boolean "private", default: false
     t.boolean "hide_results", default: false
     t.string "combined_ranking_type"
+    t.boolean "team_contest", default: false
+    t.integer "participant_per_team", default: 0
     t.index ["gym_id"], name: "index_contests_on_gym_id"
   end
 

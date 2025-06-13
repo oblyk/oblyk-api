@@ -8,6 +8,7 @@ class ContestParticipant < ApplicationRecord
   belongs_to :contest_category
   belongs_to :contest_wave, optional: true
   belongs_to :user, optional: true
+  belongs_to :contest_team, optional: true
   has_one :gym, through: :contest_category
   has_one :contest, through: :contest_category
 
@@ -48,6 +49,7 @@ class ContestParticipant < ApplicationRecord
         genre: genre,
         contest_category_id: contest_category_id,
         contest_wave_id: contest_wave_id,
+        contest_team_id: contest_team_id,
         user_id: user_id,
         contest_wave: {
           id: contest_wave&.id,
@@ -56,6 +58,11 @@ class ContestParticipant < ApplicationRecord
         contest_category: {
           id: contest_category&.id,
           name: contest_category&.name
+        },
+        contest_team: {
+          id: contest_team&.id,
+          name: contest_team&.name,
+          number_of_participants: contest_team&.number_of_participants
         }
       }
     end
@@ -197,6 +204,7 @@ class ContestParticipant < ApplicationRecord
     contest.contest_categories.each(&:delete_summary_cache)
     contest.delete_summary_cache
     contest.delete_results_cache
+    contest_team&.contest_participants&.each(&:delete_summary_cache)
   end
 
   def normalize_values

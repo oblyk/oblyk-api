@@ -17,7 +17,7 @@ class Championship < ApplicationRecord
   before_validation :normalize_attributes
 
   validates :banner, blob: { content_type: :image }, allow_nil: true
-  validates :combined_ranking_type, inclusion: { in: ContestRanking::COMBINED_RANKING_TYPE_LIST }, allow_nil: :nil
+  validates :combined_ranking_type, inclusion: { in: ContestService::Constant::COMBINED_RANKING_TYPE_LIST }, allow_nil: :nil
   validates :name, presence: true
 
   def results
@@ -41,7 +41,7 @@ class Championship < ApplicationRecord
     last_ranks = []
     all_contest_results = []
     contests.order(:start_date).each do |contest|
-      results = contest.results(nil, true)
+      results = ContestService::Result.new(contest, rich_data: true).results
       results.each do |category|
         championship_results.each do |_k, v|
           next unless v[:matches_contest_categories].include?(category[:category_id]) && v[:genre] == category[:genre]
@@ -105,23 +105,23 @@ class Championship < ApplicationRecord
       number_of_participant = championship_results[index][:participants].size
       championship_results[index][:participants].each_with_index do |participant, participant_index|
         case combined_ranking_type
-        when ContestRanking::COMBINED_RANKING_ADDITION
+        when ContestService::Constant::COMBINED_RANKING_ADDITION
           rank_point = 0
           participant[:contests].each do |_k, v|
             rank_point += v[:present] ? v[:rank] : max_number_of_participant
           end
-        when ContestRanking::COMBINED_RANKING_MULTIPLICATION
+        when ContestService::Constant::COMBINED_RANKING_MULTIPLICATION
           rank_point = 1
           participant[:contests].each do |_k, v|
             rank_point *= v[:present] ? v[:rank] : max_number_of_participant
           end
-        when ContestRanking::COMBINED_RANKING_DECREMENT_POINTS
+        when ContestService::Constant::COMBINED_RANKING_DECREMENT_POINTS
           rank_point = 0
           participant[:contests].each do |_k, v|
             rank_point += if !v[:present]
                             0
                           elsif v[:rank] <= 30
-                            ContestRanking::COMBINED_RANKING_POINT_MATRIX[v[:rank] - 1]
+                            ContestService::Constant::COMBINED_RANKING_POINT_MATRIX[v[:rank] - 1]
                           else
                             1.0 - (1.0 / (number_of_participant - 29)) * (v[:rank] - 29)
                           end
@@ -137,7 +137,7 @@ class Championship < ApplicationRecord
       end
 
       # Sort participant by global rank point
-      championship_results[index][:participants] = if combined_ranking_type == ContestRanking::COMBINED_RANKING_DECREMENT_POINTS
+      championship_results[index][:participants] = if combined_ranking_type == ContestService::Constant::COMBINED_RANKING_DECREMENT_POINTS
                                                      championship_results[index][:participants].sort_by { |participant| -participant[:rank_point] }
                                                    else
                                                      championship_results[index][:participants].sort_by { |participant| participant[:rank_point] }
@@ -207,6 +207,6 @@ class Championship < ApplicationRecord
     self.description = description&.strip
     self.description = nil if description.blank?
 
-    self.combined_ranking_type ||= ContestRanking::COMBINED_RANKING_ADDITION
+    self.combined_ranking_type ||= ContestService::Constant::COMBINED_RANKING_ADDITION
   end
 end
