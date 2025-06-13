@@ -207,9 +207,9 @@ module ContestService
 
         # Sort participant by global rank point
         results[category_index][:participants] = if @contest.combined_ranking_type == Constant::COMBINED_RANKING_DECREMENT_POINTS
-                                                   results[category_index][:participants].sort_by { |participant| -participant[:global_rank_point] }
+                                                   results[category_index][:participants].sort_by { |participant| [-participant[:global_rank_point], participant[:team_id]] }
                                                  else
-                                                   results[category_index][:participants].sort_by { |participant| participant[:global_rank_point] }
+                                                   results[category_index][:participants].sort_by { |participant| [participant[:global_rank_point], participant[:team_id]] }
                                                  end
 
         # Create global rank index
