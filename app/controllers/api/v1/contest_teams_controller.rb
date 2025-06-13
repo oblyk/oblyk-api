@@ -5,12 +5,12 @@ module Api
     class ContestTeamsController < ApiController
       include GymRolesVerification
 
-      before_action :protected_by_session, only: %i[create update destroy]
+      before_action :protected_by_session, only: %i[update destroy]
       before_action :set_gym
       before_action :set_contest
       before_action :set_contest_team, only: %i[show update destroy]
-      before_action :protected_by_administrator, only: %i[create update destroy]
-      before_action :user_can_manage_contest, except: %i[index show]
+      before_action :protected_by_administrator, only: %i[update destroy]
+      before_action :user_can_manage_contest, except: %i[create index show]
 
       def index
         render json: @contest.contest_teams.includes(:contest_participants, :contest).order(:name).map(&:summary_to_json), status: :ok
