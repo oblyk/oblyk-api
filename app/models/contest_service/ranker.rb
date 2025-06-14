@@ -20,9 +20,10 @@ module ContestService
       self.ascents = ascents.select(:id, :contest_participant_id, :contest_route_id) if [Constant::DIVISION].include?(step.ranking_type)
       self.ascents = ascents.select(:id, :contest_participant_id, :contest_route_id, :top_attempt, :zone_1_attempt) if [Constant::DIVISION_AND_ZONE].include?(step.ranking_type)
       self.ascents = ascents.joins(contest_route: { contest_route_group: :contest_stage_step }).order('contest_routes.fixed_points DESC') if [Constant::FIXED_POINTS].include?(step.ranking_type)
+      self.ascents = ascents.joins(contest_route: { contest_route_group: :contest_stage_step }).order('(contest_participant_ascents.hold_number / contest_routes.number_of_holds * contest_routes.fixed_points) DESC') if [Constant::POINT_RELATIVE_TO_HIGHEST_HOLD].include?(step.ranking_type)
       self.ascents_by_participants = {}
 
-      limited = [Constant::FIXED_POINTS].include?(step.ranking_type) && step.ascents_limit.present?
+      limited = [Constant::FIXED_POINTS, Constant::POINT_RELATIVE_TO_HIGHEST_HOLD].include?(step.ranking_type) && step.ascents_limit.present?
       ascents.each do |ascent|
         ascents_by_participants[ascent.contest_participant_id] ||= []
         ascents_by_participants[ascent.contest_participant_id] << ascent if !limited || ascents_by_participants[ascent.contest_participant_id].count < step.ascents_limit
@@ -124,6 +125,19 @@ module ContestService
           value: point,
           details: [current_ascent.hold_number, plus]
         }
+      when Constant::POINT_RELATIVE_TO_HIGHEST_HOLD
+        hold_number = current_ascent.hold_number || 0
+        fixed_point = current_ascent.contest_route.fixed_points || 0
+        number_of_holds = current_ascent.contest_route.number_of_holds || 0
+        point = if hold_number.positive?
+                  hold_number.to_d / number_of_holds.to_d * fixed_point.to_d
+                else
+                  0
+                end
+        {
+          value: point,
+          details: [point.round, hold_number]
+        }
       when Constant::BEST_TIMES
         second = current_ascent.ascent_time&.seconds_since_midnight
         detail = if second.blank? || second.zero?
@@ -185,6 +199,12 @@ module ContestService
             details[1] += 1 if ascent_scores[:details].second
           end
         elsif [Constant::HIGHEST_HOLD].include? step.ranking_type
+          details ||= [0, 0]
+          if ascent_value.present?
+            details[0] += ascent_scores[:details].first
+            details[1] += ascent_scores[:details].second
+          end
+        elsif [Constant::POINT_RELATIVE_TO_HIGHEST_HOLD].include? step.ranking_type
           details ||= [0, 0]
           if ascent_value.present?
             details[0] += ascent_scores[:details].first

@@ -12,6 +12,7 @@ module ContestService
     FIXED_POINTS = 'fixed_points'
     HIGHEST_HOLD = 'highest_hold'
     BEST_TIMES = 'best_times'
+    POINT_RELATIVE_TO_HIGHEST_HOLD = 'point_relative_to_highest_hold'
 
     RANKING_TYPE_LIST = [
       DIVISION,
@@ -23,7 +24,8 @@ module ContestService
       ATTEMPTS_TO_TWO_ZONES_AND_TOP,
       HIGHEST_HOLD,
       FIXED_POINTS,
-      BEST_TIMES
+      BEST_TIMES,
+      POINT_RELATIVE_TO_HIGHEST_HOLD
     ].freeze
 
     RANKING_UNITS = {
@@ -35,7 +37,8 @@ module ContestService
       ZONE_AND_TOP_REALISED => %w[top zone(s)],
       ATTEMPTS_TO_ONE_ZONE_AND_TOP => 'zone_and_top_blocks',
       HIGHEST_HOLD => %w[prise(s) +],
-      BEST_TIMES => %w[]
+      BEST_TIMES => %w[],
+      POINT_RELATIVE_TO_HIGHEST_HOLD => %w[pts prise(s)]
     }.freeze
 
     COMBINED_RANKING_ADDITION = 'addition'
