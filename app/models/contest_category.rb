@@ -3,6 +3,8 @@
 class ContestCategory < ApplicationRecord
   include StripTagable
 
+  U6 = 'u6'
+  U8 = 'u8'
   U10 = 'u10'
   U12 = 'u12'
   U14 = 'u14'
@@ -15,14 +17,16 @@ class ContestCategory < ApplicationRecord
   BETWEEN_AGE = 'between_age'
 
   OBLIGATION_LIST = [
-    U10, U12, U14, U16, U18, U20, SENIOR, VETERAN_1, VETERAN_2, BETWEEN_AGE
+    U6, U8, U10, U12, U14, U16, U18, U20, SENIOR, VETERAN_1, VETERAN_2, BETWEEN_AGE
   ].freeze
 
   UXX_LIST = [
-    U10, U12, U14, U16, U18, U20, SENIOR, VETERAN_1, VETERAN_2
+    U6, U8, U10, U12, U14, U16, U18, U20, SENIOR, VETERAN_1, VETERAN_2
   ].freeze
 
   UNDER_AGE_BY_UXX = {
+    U6 => 6,
+    U8 => 8,
     U10 => 10,
     U12 => 12,
     U14 => 14,
