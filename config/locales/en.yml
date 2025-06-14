@@ -221,6 +221,8 @@ en:
         confirmation: "confirm"
         record_invalid: "invalid_record"
         greater_than_or_equal_to: "greater_than_or_equal_to"
+        must_be_specified: "must_be_specified"
+        must_have_a_minimum_or_maximum_age_specified: 'must_have_a_minimum_or_maximum_age_specified'
   date:
     month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
     abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]

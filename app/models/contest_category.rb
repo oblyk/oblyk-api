@@ -56,6 +56,7 @@ class ContestCategory < ApplicationRecord
   validates :name, presence: true
   validates :registration_obligation, inclusion: { in: OBLIGATION_LIST }, allow_nil: true
   validate :age_limit_when_between_age
+  validate :validate_capacity, if: proc { |record| record.parity }
 
   default_scope { order(:order) }
 
@@ -93,8 +94,11 @@ class ContestCategory < ApplicationRecord
         auto_distribute: auto_distribute,
         waveable: waveable,
         contest_participants_count: contest_participants.count,
+        contest_participants_female_count: contest_participants.where(genre: :female).count,
+        contest_participants_male_count: contest_participants.where(genre: :male).count,
         contest_id: contest_id,
         waves: waves,
+        parity: parity,
         gym: {
           id: gym.id,
           name: gym.name,
@@ -193,6 +197,11 @@ class ContestCategory < ApplicationRecord
   def age_limit_when_between_age
     return unless registration_obligation == BETWEEN_AGE
 
-    errors.add(:registration_obligation, 'doit avoir un age minimum ou maximum de renseigné') if min_age.blank? && max_age.blank?
+    errors.add(:registration_obligation, 'must_have_a_minimum_or_maximum_age_specified') if min_age.blank? && max_age.blank?
+  end
+
+  def validate_capacity
+    errors.add(:capacity, 'must_be_specified') if capacity.blank?
+    errors.add(:capacity, 'cannot_be_odd') if capacity.present? && !capacity&.even?
   end
 end

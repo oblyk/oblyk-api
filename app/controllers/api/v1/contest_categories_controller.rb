@@ -84,7 +84,8 @@ module Api
           :registration_obligation,
           :min_age,
           :max_age,
-          :waveable
+          :waveable,
+          :parity
         )
       end
 

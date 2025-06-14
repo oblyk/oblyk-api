@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_06_01_123903) do
+ActiveRecord::Schema.define(version: 2025_06_14_140440) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -280,6 +280,7 @@ ActiveRecord::Schema.define(version: 2025_06_01_123903) do
     t.bigint "contest_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "parity", default: false
     t.index ["contest_id"], name: "index_contest_categories_on_contest_id"
   end
 
