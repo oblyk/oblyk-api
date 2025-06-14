@@ -70,7 +70,7 @@ class ContestCategory < ApplicationRecord
     return min_age if min_age.present?
     return nil unless UXX_LIST.include?(registration_obligation)
 
-    uxx_list = contest.contest_categories.pluck(:registration_obligation).uniq
+    uxx_list = contest.contest_categories.where(registration_obligation: UXX_LIST).pluck(:registration_obligation).uniq
     uxx_list.sort! { |a, b| UNDER_AGE_BY_UXX[a] - UNDER_AGE_BY_UXX[b] }
     registration_index = uxx_list.find_index(registration_obligation)
     registration_index.zero? ? 0 : UNDER_AGE_BY_UXX[uxx_list[registration_index - 1]]
