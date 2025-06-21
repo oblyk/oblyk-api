@@ -326,6 +326,7 @@ Rails.application.routes.draw do
           get :time_line, on: :member
           get :results, on: :member
           get :export_results, on: :member
+          get :statistics, on: :member
           put :draft, on: :member
           put :archived, on: :member
           put :unarchived, on: :member
@@ -333,6 +334,7 @@ Rails.application.routes.draw do
           resources :contest_categories
           resources :contest_waves
           resources :contest_teams
+          resources :contest_participant_ascents, only: %i[index]
           resources :contest_participant_steps, only: %i[] do
             post :subscribe, on: :collection
           end

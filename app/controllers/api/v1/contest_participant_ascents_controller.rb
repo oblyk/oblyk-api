@@ -4,7 +4,17 @@ module Api
   module V1
     class ContestParticipantAscentsController < ApiController
       before_action :set_contest
-      before_action :set_contest_participant
+      before_action :set_contest_participant, except: %i[index]
+
+      def index
+        ascents = @contest.contest_participant_ascents
+                          .joins(:contest_participant)
+                          .includes(contest_participant: %i[contest_category contest_wave])
+        ascents = ascents.where(contest_route_id: params[:contest_route_id]) if params[:contest_route_id].present?
+        ascents = ascents.order('contest_participants.last_name, contest_participants.first_name')
+
+        render json: ascents.map(&:detail_to_json), status: :ok
+      end
 
       def create
         contest_ascent = ContestParticipantAscent.find_or_initialize_by(

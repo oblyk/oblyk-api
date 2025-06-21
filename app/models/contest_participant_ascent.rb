@@ -34,10 +34,7 @@ class ContestParticipantAscent < ApplicationRecord
   def detail_to_json
     summary_to_json.merge(
       {
-        history: {
-          created_at: created_at,
-          updated_at: updated_at
-        }
+        contest_participant: contest_participant.summary_to_json
       }
     )
   end

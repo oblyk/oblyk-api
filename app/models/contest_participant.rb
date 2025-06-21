@@ -34,8 +34,14 @@ class ContestParticipant < ApplicationRecord
   after_create :send_subscription_mail, unless: :skip_subscription_mail
   after_destroy :delete_caches
 
+  scope :with_ascents, -> { where('EXISTS(SELECT * FROM contest_participant_ascents WHERE contest_participants.id = contest_participant_ascents.contest_participant_id)') }
+
   def age
     date_of_birth.present? ? ((Time.zone.now - Time.zone.parse(date_of_birth.to_s)) / 1.year.seconds).floor : nil
+  end
+
+  def slug_name
+    "#{first_name}-#{last_name}".parameterize
   end
 
   def summary_to_json
@@ -45,6 +51,7 @@ class ContestParticipant < ApplicationRecord
         id: id,
         first_name: first_name,
         last_name: last_name,
+        slug_name: slug_name,
         affiliation: affiliation,
         genre: genre,
         contest_category_id: contest_category_id,
