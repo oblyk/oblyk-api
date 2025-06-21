@@ -3,7 +3,13 @@
 module Api
   module V1
     class ContestParticipantAscentsController < ApiController
+      include GymRolesVerification
+
+      before_action :protected_by_session, only: %i[index]
+      before_action :set_gym, only: %i[index]
       before_action :set_contest
+      before_action :protected_by_administrator, only: %i[index]
+      before_action :user_can_manage_contest, only: %i[index]
       before_action :set_contest_participant, except: %i[index]
 
       def index
@@ -76,6 +82,10 @@ module Api
         }
       end
 
+      def set_gym
+        @gym = Gym.find(params[:gym_id])
+      end
+
       def set_contest
         @contest = Contest.where(gym_id: params[:gym_id]).find params[:contest_id]
       end
@@ -114,6 +124,18 @@ module Api
                       hold_number_plus
                       ascent_time]
         )
+      end
+
+      def protected_by_administrator
+        return if @current_user.super_admin
+
+        return unless @gym.administered?
+
+        not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).count.zero?
+      end
+
+      def user_can_manage_contest
+        can? GymRole::MANAGE_GYM if @gym.administered?
       end
     end
   end
