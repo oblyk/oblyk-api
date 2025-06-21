@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_06_14_140440) do
+ActiveRecord::Schema.define(version: 2025_06_21_135339) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -1007,6 +1007,10 @@ ActiveRecord::Schema.define(version: 2025_06_14_140440) do
     t.decimal "three_d_height", precision: 10, scale: 6
     t.decimal "three_d_elevated", precision: 10, scale: 6, default: "0.0"
     t.json "three_d_label_options"
+    t.float "linear_metre"
+    t.float "developed_metre"
+    t.string "category_name"
+    t.integer "average_opening_time"
     t.index ["gym_grade_id"], name: "index_gym_sectors_on_gym_grade_id"
     t.index ["gym_space_id"], name: "index_gym_sectors_on_gym_space_id"
   end

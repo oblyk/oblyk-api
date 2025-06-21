@@ -37,6 +37,34 @@ module Api
         end
       end
 
+      def bulk_update
+        sectors_params = gym_sectors_bulk_params[:gym_sectors]
+        update_sectors = []
+        errors = []
+
+        sectors_params.each do |sector_params|
+          sector = @gym_space.gym_sectors.find(sector_params[:id])
+          sector.order = sector_params[:order]
+          sector.name = sector_params[:name]
+          sector.height = sector_params[:height]
+          sector.linear_metre = sector_params[:linear_metre]
+          sector.developed_metre = sector_params[:developed_metre]
+          sector.category_name = sector_params[:category_name]
+          sector.average_opening_time = sector_params[:average_opening_time]
+          if sector.valid?
+            update_sectors << sector
+          else
+            errors << sector.errors.full_messages
+          end
+        end
+
+        if errors.size.positive?
+          render json: { error: errors }, status: :unprocessable_entity
+        else
+          update_sectors.each(&:save)
+        end
+      end
+
       def destroy
         if @gym_sector.destroy
           head :no_content
@@ -94,8 +122,27 @@ module Api
           :can_be_more_than_one_pitch,
           :three_d_height,
           :three_d_elevated,
+          :linear_metre,
+          :developed_metre,
+          :category_name,
+          :average_opening_time,
           three_d_path: %i[x y z],
           three_d_label_options: %i[x y z]
+        )
+      end
+
+      def gym_sectors_bulk_params
+        params.permit(
+          gym_sectors: %i[
+            id
+            name
+            order
+            height
+            linear_metre
+            developed_metre
+            category_name
+            average_opening_time
+          ]
         )
       end
     end

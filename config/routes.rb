@@ -276,6 +276,7 @@ Rails.application.routes.draw do
           post :add_three_d_file, on: :member
           post :add_three_d_capture, on: :member
           resources :gym_sectors do
+            put :bulk_update, on: :collection
             get :last_routes_with_pictures, on: :member
             delete :dismount_routes, on: :member
             delete :delete_three_d_path, on: :member

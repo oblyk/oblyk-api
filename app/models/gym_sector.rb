@@ -46,6 +46,10 @@ class GymSector < ApplicationRecord
         anchor: anchor,
         have_three_d_path: three_d_path?,
         three_d_label_options: three_d_label_options,
+        linear_metre: linear_metre,
+        developed_metre: developed_metre,
+        category_name: category_name,
+        average_opening_time: average_opening_time,
         gym: {
           id: gym.id,
           slug_name: gym.slug_name
