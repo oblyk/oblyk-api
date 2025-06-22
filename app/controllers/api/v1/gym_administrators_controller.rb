@@ -19,10 +19,16 @@ module Api
       end
 
       def create
-        user = User.find_by email: gym_administrator_params[:requested_email]
-        @gym_administrator = GymAdministrator.new gym_administrator_params
+        user = if gym_administrator_params.fetch(:user_uuid, nil).present?
+                 User.find_by uuid: gym_administrator_params[:user_uuid]
+               else
+                 User.find_by email: gym_administrator_params[:requested_email]
+               end
+        @gym_administrator = GymAdministrator.new gym_administrator_params.except(:user_uuid)
+        @gym_administrator.requested_email ||= user.email if user.present?
         @gym_administrator.user = user
         @gym_administrator.gym = @gym
+        @gym_administrator.email_report = gym_administrator_params[:requested_email] == true
         if @gym_administrator.save
           @gym_administrator.send_invitation_email! @current_user
           render json: @gym_administrator.detail_to_json, status: :ok
@@ -127,6 +133,7 @@ module Api
       def gym_administrator_params
         params.require(:gym_administrator).permit(
           :id,
+          :user_uuid,
           :requested_email,
           :subscribe_to_comment_feed,
           :subscribe_to_video_feed,
