@@ -168,7 +168,8 @@ module Api
           :private,
           :hide_results,
           :team_contest,
-          :participant_per_team
+          :participant_per_team,
+          :optional_gender
         )
       end
 

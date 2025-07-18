@@ -19,8 +19,8 @@ class ContestParticipant < ApplicationRecord
   before_validation :normalize_values
   before_validation :set_token
 
-  validates :first_name, :last_name, :genre, :date_of_birth, presence: true
-  validates :genre, inclusion: { in: %w[male female] }
+  validates :first_name, :last_name, :date_of_birth, presence: true
+  validates :genre, inclusion: { in: %w[male female] }, unless: proc { |record| record.contest.optional_gender }
   validates :token, uniqueness: { scope: :contest }, on: :create
   validate :unique_participant
   validate :validate_age

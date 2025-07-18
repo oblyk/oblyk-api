@@ -104,6 +104,7 @@ class Contest < ApplicationRecord
         one_day_event: one_day_event?,
         team_contest: team_contest,
         participant_per_team: participant_per_team,
+        optional_gender: optional_gender,
         attachments: {
           banner: attachment_object(banner)
         },
