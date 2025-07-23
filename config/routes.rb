@@ -335,6 +335,14 @@ Rails.application.routes.draw do
           resources :contest_categories
           resources :contest_waves
           resources :contest_teams
+          resources :contest_judges do
+            post :add_routes, on: :member
+            delete :delete_route, on: :member
+          end
+          resources :contest_judge_interfaces, only: %i[show] do
+            post :unlock, on: :member
+            get :participants, on: :member
+          end
           resources :contest_participant_ascents, only: %i[index]
           resources :contest_participant_steps, only: %i[] do
             post :subscribe, on: :collection

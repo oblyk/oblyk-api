@@ -11,6 +11,8 @@ class ContestRoute < ApplicationRecord
   has_one :contest, through: :contest_stage
   has_many :contest_participant_ascents, dependent: :destroy
   has_many :contest_participant_ascents, dependent: :destroy
+  has_many :contest_judge_routes, dependent: :destroy
+  has_many :contest_judges, through: :contest_judge_routes
 
   validates :number, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :number_of_holds, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_blank: true
@@ -40,6 +42,7 @@ class ContestRoute < ApplicationRecord
         disabled_at: disabled_at,
         contest_route_group_id: contest_route_group_id,
         gym_route_id: gym_route_id,
+        contest_judges: contest_judges.map { |judge| { name: judge.name, id: judge.id } },
         gym_route: gym_route&.tree_summary&.merge(
           {
             gym_space_name: gym_route&.gym_sector&.gym_space&.name,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_07_18_122850) do
+ActiveRecord::Schema.define(version: 2025_07_18_143837) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -282,6 +282,26 @@ ActiveRecord::Schema.define(version: 2025_07_18_122850) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "parity", default: false
     t.index ["contest_id"], name: "index_contest_categories_on_contest_id"
+  end
+
+  create_table "contest_judge_routes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.bigint "contest_judge_id", null: false
+    t.bigint "contest_route_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["contest_judge_id"], name: "index_contest_judge_routes_on_contest_judge_id"
+    t.index ["contest_route_id"], name: "index_contest_judge_routes_on_contest_route_id"
+  end
+
+  create_table "contest_judges", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.string "name"
+    t.string "uuid"
+    t.string "code"
+    t.bigint "contest_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["contest_id"], name: "index_contest_judges_on_contest_id"
+    t.index ["uuid"], name: "index_contest_judges_on_uuid"
   end
 
   create_table "contest_participant_ascents", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1541,6 +1561,9 @@ ActiveRecord::Schema.define(version: 2025_07_18_122850) do
   add_foreign_key "championship_contests", "contests"
   add_foreign_key "championships", "gyms"
   add_foreign_key "contest_categories", "contests"
+  add_foreign_key "contest_judge_routes", "contest_judges"
+  add_foreign_key "contest_judge_routes", "contest_routes"
+  add_foreign_key "contest_judges", "contests"
   add_foreign_key "contest_participant_ascents", "contest_participants"
   add_foreign_key "contest_participant_ascents", "contest_routes"
   add_foreign_key "contest_participant_steps", "contest_participants"

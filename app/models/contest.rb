@@ -23,6 +23,7 @@ class Contest < ApplicationRecord
   has_many :championship_contests
   has_many :championships, through: :championship_contests
   has_many :contest_teams
+  has_many :contest_judges
 
   before_validation :normalize_attributes
   before_create :set_draft_mode
