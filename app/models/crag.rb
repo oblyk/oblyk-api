@@ -169,6 +169,10 @@ class Crag < ApplicationRecord
         city: city,
         region: region,
         rocks: rocks,
+        crag_routes_count: crag_routes_count,
+        follows_count: follows_count,
+        ascents_count: ascents_count,
+        ascent_users_count: ascent_users_count,
         photo: {
           id: photo&.id,
           attachments: {
@@ -200,13 +204,12 @@ class Crag < ApplicationRecord
   def detail_to_json
     summary_to_json.merge(
       {
-        comment_count: comments.count,
+        comment_count: comments_count,
         link_count: links.count,
-        follow_count: follows.count,
         park_count: parks.count,
         alert_count: alerts.count,
-        video_count: videos.count,
-        photo_count: photos.count,
+        video_count: videos_count,
+        photo_count: photos_count,
         versions_count: versions.count,
         articles_count: articles_count,
         all_photos_count: all_photos_count,
@@ -278,6 +281,22 @@ class Crag < ApplicationRecord
       max_time = approach.walking_time if max_time.nil? || approach.walking_time > max_time
     end
     update min_approach_time: min_time, max_approach_time: max_time
+  end
+
+  def update_ascents_count!
+    self.ascent_users_count = AscentCragRoute.select('COUNT(DISTINCT ascents.user_id) AS count')
+                                             .joins(:crag_route)
+                                             .find_by(
+                                               crag_routes: { crag_id: id },
+                                               ascents: { ascent_status: AscentStatus::FIRST_TOP_LIST }
+                                             )[:count]
+    self.ascents_count = AscentCragRoute.select('COUNT(*) AS count')
+                                        .joins(:crag_route)
+                                        .find_by(
+                                          crag_routes: { crag_id: id },
+                                          ascents: { ascent_status: AscentStatus::FIRST_TOP_LIST }
+                                        )[:count]
+    save
   end
 
   private

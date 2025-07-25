@@ -24,7 +24,9 @@ class AscentCragRoute < Ascent
 
   after_save :update_crag_route!
   after_create :delete_tick_in_list
+  after_create :update_ascents_count!
   after_destroy :update_crag_route!
+  before_destroy :update_ascents_count!
 
   def summary_to_json(with_user: false)
     detail_to_json(with_user: with_user)
@@ -166,5 +168,12 @@ class AscentCragRoute < Ascent
   def delete_tick_in_list
     tick = TickList.find_by crag_route: crag_route, user: user
     tick&.destroy
+  end
+
+  def update_ascents_count!
+    return unless AscentStatus::FIRST_TOP_LIST.include?(ascent_status)
+
+    crag_route.crag_sector.update_ascents_count! if crag_route.crag_sector_id.present?
+    crag.update_ascents_count!
   end
 end

@@ -104,6 +104,8 @@ class CragSector < ApplicationRecord
         south_west: south_west,
         west: west,
         north_west: north_west,
+        ascents_count: ascents_count,
+        ascent_users_count: ascent_users_count,
         routes_figures: {
           count: crag_routes_count,
           grade: {
@@ -137,6 +139,22 @@ class CragSector < ApplicationRecord
         }
       }
     )
+  end
+
+  def update_ascents_count!
+    self.ascent_users_count = AscentCragRoute.select('COUNT(DISTINCT ascents.user_id) AS count')
+                                             .joins(:crag_route)
+                                             .find_by(
+                                               crag_routes: { crag_sector_id: id },
+                                               ascents: { ascent_status: AscentStatus::FIRST_TOP_LIST }
+                                             )[:count]
+    self.ascents_count = AscentCragRoute.select('COUNT(*) AS count')
+                                        .joins(:crag_route)
+                                        .find_by(
+                                          crag_routes: { crag_sector_id: id },
+                                          ascents: { ascent_status: AscentStatus::FIRST_TOP_LIST }
+                                        )[:count]
+    save
   end
 
   private

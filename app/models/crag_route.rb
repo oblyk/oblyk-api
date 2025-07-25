@@ -129,8 +129,13 @@ class CragRoute < ApplicationRecord
 
     self.note = note_count ? sum_note / note_count : nil
     self.note_count = note_count
-    self.ascents_count = ascent_count
     self.difficulty_appreciation = hardness_value ? hardness_value.to_d / hardness_count : nil
+    self.ascents_count = ascent_count
+    self.ascent_users_count = AscentCragRoute.select('COUNT(DISTINCT ascents.user_id) AS count')
+                                             .find_by(
+                                               crag_route_id: id,
+                                               ascents: { ascent_status: AscentStatus::FIRST_TOP_LIST }
+                                             )[:count]
     self.votes = {
       difficulty_appreciations: hardness_votes,
       notes: note_votes
@@ -177,6 +182,7 @@ class CragRoute < ApplicationRecord
         note: note,
         note_count: note_count,
         ascents_count: ascents_count,
+        ascent_users_count: ascent_users_count,
         photos_count: photos_count,
         videos_count: videos_count,
         comments_count: comments_count,

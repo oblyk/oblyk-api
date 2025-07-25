@@ -9,4 +9,11 @@ class AscentStatus
     onsight
     repetition
   ].freeze
+
+  FIRST_TOP_LIST = %w[
+    sent
+    red_point
+    flash
+    onsight
+  ].freeze
 end
