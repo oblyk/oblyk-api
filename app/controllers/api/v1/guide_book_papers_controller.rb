@@ -10,14 +10,16 @@ module Api
       before_action :set_guide_book_paper, only: %i[crags crags_figures photos links versions geo_json alternatives show update destroy add_crag remove_crag add_cover remove_cover articles]
 
       def index
+        order = params.fetch(:order, 'publication_year')
         crag_id = params.fetch :crag_id, nil
-        guide_book_papers = if crag_id
-                              GuideBookPaper.includes(:guide_book_paper_crags, cover_attachment: :blob)
-                                            .where(guide_book_paper_crags: { crag_id: params[:crag_id] })
-                                            .order(publication_year: :desc)
-                            else
-                              GuideBookPaper.includes(cover_attachment: :blob).all.order(:name)
-                            end
+        guide_book_papers = GuideBookPaper.includes(cover_attachment: :blob)
+        guide_book_papers = guide_book_papers.where(guide_book_paper_crags: { crag_id: params[:crag_id] }) if crag_id
+
+        guide_book_papers = guide_book_papers.order(publication_year: :desc, id: :asc) if order == 'publication_year'
+        guide_book_papers = guide_book_papers.order(follows_count: :desc, id: :asc) if order == 'popularity'
+        guide_book_papers = guide_book_papers.order(name: :asc, id: :asc) if order == 'name'
+        guide_book_papers = guide_book_papers.page(params[:page]).per(params.fetch(:per_page, 25)) if params[:page].present?
+
         render json: guide_book_papers.map(&:summary_to_json), status: :ok
       end
 

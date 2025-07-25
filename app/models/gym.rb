@@ -191,6 +191,9 @@ class Gym < ApplicationRecord
         representation_type: representation_type,
         gym_type: gym_type,
         gym_billing_account_id: gym_billing_account_id,
+        follows_count: follows_count,
+        have_guide_book: guide_book?,
+        optimal_spaces_path: optimal_spaces_path,
         attachments: {
           logo: attachment_object(logo),
           banner: attachment_object(banner)
@@ -276,6 +279,20 @@ class Gym < ApplicationRecord
       return 'manage_my_subscription' if subscription.payment_status == 'paid' && (subscription.end_date.blank? || subscription.end_date <= Date.current)
     end
     'resubscribe'
+  end
+
+  def guide_book?
+    spaces = gym_spaces.reject(&:draft)
+    spaces.size.positive?
+  end
+
+  def optimal_spaces_path
+    spaces = gym_spaces.reject(&:draft)
+    if spaces.size == 1
+      "/spaces/#{spaces.first.id}/#{spaces.first.slug_name}"
+    elsif spaces.size > 1
+      '/spaces'
+    end
   end
 
   private

@@ -35,6 +35,10 @@ module Api
         figures = params.fetch(:figures, [])
         data = {}
         data[:climbers_count] = User.count if figures.include? 'climbers_count'
+        data[:gyms_count] = Gym.count if figures.include? 'gyms_count'
+        data[:crags_count] = Crag.count if figures.include? 'crags_count'
+        data[:crag_routes_count] = CragRoute.count if figures.include? 'crag_routes_count'
+        data[:guide_book_papers_count] = GuideBookPaper.count if figures.include? 'guide_book_papers_count'
         render json: data, status: :ok
       end
 

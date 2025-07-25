@@ -15,6 +15,14 @@ module Api
 
       def index
         gyms = params[:ids].present? ? Gym.where(id: params[:ids]) : Gym.all
+        if params[:latitude].present?
+          latitude = params[:latitude].to_f
+          longitude = params[:longitude].to_f
+          gyms = gyms.order("getRange(gyms.latitude, gyms.longitude, #{latitude}, #{longitude}) ASC, gyms.id ASC")
+        end
+        gyms = gyms.order('gyms.follows_count DESC, id') if params[:order].present? && params[:order] == 'popularity'
+        gyms = gyms.page(params[:page]).per(params.fetch(:per_page, 25)) if params[:page].present?
+
         render json: gyms.map(&:summary_to_json), status: :ok
       end
 

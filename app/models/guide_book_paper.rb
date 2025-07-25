@@ -74,6 +74,7 @@ class GuideBookPaper < ApplicationRecord
         weight: weight,
         price: price_cents ? price_cents.to_d / 100 : nil,
         funding_status: funding_status,
+        follows_count: follows_count,
         attachments: {
           cover: attachment_object(cover)
         }

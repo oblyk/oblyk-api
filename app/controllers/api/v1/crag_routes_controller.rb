@@ -4,7 +4,7 @@ module Api
   module V1
     class CragRoutesController < ApiController
       before_action :protected_by_super_admin, only: %i[destroy]
-      before_action :protected_by_session, only: %i[create update]
+      before_action :protected_by_session, only: %i[create update suggested_routes]
       before_action :set_crag_route, only: %i[show photos videos versions update destroy]
       before_action :set_crag_sector, only: %i[index search search_by_grades]
       before_action :set_crag, only: %i[index search search_by_grades]
@@ -19,6 +19,8 @@ module Api
                   'crag_routes.max_grade_value ASC, crag_routes.name, crag_routes.id'
                 when 'note'
                   'crag_routes.note DESC, crag_routes.name, crag_routes.id'
+                when 'popularity'
+                  'crag_routes.ascent_users_count DESC, crag_routes.ascents_count DESC, crag_routes.name, crag_routes.id'
                 else
                   'crag_routes.name, crag_routes.id'
                 end
@@ -36,6 +38,20 @@ module Api
         crag_routes = crag_routes.page(params.fetch(:page, 1)).per(params.fetch(:page_limit, 25)) if params[:page] != 'all'
 
         render json: routes_summary(crag_routes), status: :ok
+      end
+
+      def suggested_routes
+        ascents_count = AscentCragRoute.where(user_id: @current_user.id).count
+        min_max = AscentCragRoute.select('MIN(min_grade_value) AS min_grade_value, MAX(max_grade_value) AS max_grade_value').find_by(user_id: @current_user.id) if ascents_count.positive?
+
+        crag_routes = CragRoute.where('EXISTS (SELECT * FROM follows WHERE followable_type = "Crag" AND followable_id = crag_routes.crag_id AND follows.user_id = :user_id)', user_id: @current_user.id)
+                               .where.not('EXISTS (SELECT * FROM ascents WHERE ascents.crag_route_id = crag_routes.id AND ascents.user_id = :user_id)', user_id: @current_user.id)
+        crag_routes = crag_routes.where(max_grade_value: [min_max[:min_grade_value]..min_max[:max_grade_value] + 1]) if min_max
+        crag_routes = crag_routes.order('ascent_users_count DESC, note_count DESC')
+                                 .page(params.fetch(:page, 1))
+                                 .per(params.fetch(:page_limit, 25))
+
+        render json: crag_routes.map { |route| route.summary_to_json(with_crag_in_sector: false) }, status: :ok
       end
 
       def search

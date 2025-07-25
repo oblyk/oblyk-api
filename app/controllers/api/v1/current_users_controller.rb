@@ -81,6 +81,7 @@ module Api
                           .where(followable_type: 'Gym')
                           .order(updated_at: :desc)
                           .page(params.fetch(:page, 1))
+                          .per(params.fetch(:per_page, 25))
         render json: subscribes.map(&:summary_to_json), status: :ok
       end
 
@@ -448,6 +449,14 @@ module Api
         gym_administrator.email_report = !gym_administrator.email_report
         gym_administrator.save
         head :no_content
+      end
+
+      def suggested_friends
+        friends = ClimberProximity.new(@current_user).results(
+          page: params.fetch(:page, 1),
+          per_page: params.fetch(:per_page, 1)
+        )
+        render json: friends, status: :ok
       end
 
       private

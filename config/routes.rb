@@ -133,6 +133,7 @@ Rails.application.routes.draw do
           delete :reject_followers
           get :gym_administrators
           put :switch_email_report
+          get :suggested_friends
           namespace :log_books do
             resources :outdoors, only: %i[] do
               collection do
@@ -512,6 +513,8 @@ Rails.application.routes.draw do
           get :photos, on: :member
           get :videos, on: :member
           get :random, on: :collection
+          get :search, on: :collection
+          get :suggested_routes, on: :collection
         end
 
         resources :parks

@@ -8,7 +8,15 @@ module Api
       before_action :set_crag, only: %i[show versions update guide_books_around areas_around geo_json_around destroy guides photos videos articles route_figures]
 
       def index
-        render json: Crag.all.map(&:summary_to_json), status: :ok
+        crags = params[:ids].present? ? Crag.where(id: params[:ids]) : Crag.all
+        if params[:latitude].present?
+          latitude = params[:latitude].to_f
+          longitude = params[:longitude].to_f
+          crags = crags.order("getRange(crags.latitude, crags.longitude, #{latitude}, #{longitude}) ASC, crags.id ASC")
+        end
+        crags = crags.order('crags.ascent_users_count DESC, crags.ascents_count, id') if params[:order].present? && params[:order] == 'popularity'
+        crags = crags.page(params[:page]).per(params.fetch(:per_page, 25)) if params[:page].present?
+        render json: crags.map(&:summary_to_json), status: :ok
       end
 
       def search
