@@ -143,6 +143,9 @@ module Api
 
         scores = {}
         ascents.find_each do |ascent|
+          climbing_type = ascent.gym_route.climbing_type
+          next unless chart_templates[climbing_type]
+
           user_key = "user-#{ascent.user_id}"
           scores[user_key] ||= {
             points: 0,
@@ -151,7 +154,6 @@ module Api
             user: ascent.user.summary_to_json
           }
           scores[user_key][:points] += ascent.points(ascent.gym_route, @gym)[:score] || 0
-          climbing_type = ascent.gym_route.climbing_type
 
           grade_value = if chart_templates[climbing_type][:grade_system] == 'french'
                           (((ascent.gym_route.min_grade_value || 0) - (chart_templates[climbing_type][:min] || 0)) / 2).to_i
