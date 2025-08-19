@@ -14,7 +14,7 @@ module Api
           longitude = params[:longitude].to_f
           crags = crags.order("getRange(crags.latitude, crags.longitude, #{latitude}, #{longitude}) ASC, crags.id ASC")
         end
-        crags = crags.order('crags.ascent_users_count DESC, crags.ascents_count, id') if params[:order].present? && params[:order] == 'popularity'
+        crags = crags.order('crags.ascent_users_count DESC, crags.ascents_count DESC, id') if params[:order].present? && params[:order] == 'popularity'
         crags = crags.page(params[:page]).per(params.fetch(:per_page, 25)) if params[:page].present?
         render json: crags.map(&:summary_to_json), status: :ok
       end
