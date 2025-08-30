@@ -19,6 +19,7 @@ class User < ApplicationRecord
   has_secure_password
   has_one_attached :avatar
   has_one_attached :banner
+  has_one :user_application_my_compet
   has_many :follows, as: :followable
   has_many :subscribes, class_name: 'Follow', foreign_key: :user_id
   has_many :conversation_messages

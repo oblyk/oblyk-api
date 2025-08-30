@@ -58,6 +58,7 @@ class ContestParticipant < ApplicationRecord
         contest_wave_id: contest_wave_id,
         contest_team_id: contest_team_id,
         user_id: user_id,
+        synchronise_with_ffme_contest: synchronise_with_ffme_contest,
         contest_wave: {
           id: contest_wave&.id,
           name: contest_wave&.name

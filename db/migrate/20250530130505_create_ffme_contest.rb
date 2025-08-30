@@ -1,4 +1,4 @@
-class CreateMyCompetConnections < ActiveRecord::Migration[6.0]
+class CreateFfmeContest < ActiveRecord::Migration[6.0]
   def change
     create_table :user_applications do |t|
       t.references :user, foreign_key: true
@@ -12,19 +12,22 @@ class CreateMyCompetConnections < ActiveRecord::Migration[6.0]
 
     add_index :user_applications, %i[type user_id], unique: true
 
-    create_table :contest_ffme_my_compets do |t|
-      t.references :contest, foreign_key: true
+    create_table :ffme_contests do |t|
+      t.references :contest, foreign_key: true, unique: true
+      t.string :status
       t.string :contest_type
       t.string :name
       t.string :description, limit: 2048
-      t.datetime :start_date
-      t.datetime :end_date
+      t.date :start_date
+      t.date :end_date
       t.string :contact_email
       t.string :contact_phone
+      t.bigint :external_ffme_contest_id
       t.date :results_send_at
+      t.timestamps
     end
 
-    add_column :contest_participants, :synchronise_with_my_compet, :boolean
+    add_column :contest_participants, :synchronise_with_ffme_contest, :boolean
     add_column :gyms, :insee_code, :string
   end
 end

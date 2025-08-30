@@ -5,7 +5,7 @@ class UserApplication < ApplicationRecord
 
   validates :user_application_id, presence: true
   validates :user_id, uniqueness: { scope: :type }
-  validates :type, inclusion: { in: %w[UserApplicationFfmeMyCompet] }
+  validates :type, inclusion: { in: %w[UserApplicationMyCompet] }
 
   before_validation :set_user_application_id
 
@@ -15,7 +15,7 @@ class UserApplication < ApplicationRecord
       type: type,
       status: status
     }
-    data[:ffme_licence_number] = ffme_licence_number if type == 'UserApplicationFfmeMyCompet'
+    data[:ffme_licence_number] = ffme_licence_number if type == 'UserApplicationMyCompet'
     data
   end
 

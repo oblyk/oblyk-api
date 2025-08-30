@@ -284,19 +284,6 @@ ActiveRecord::Schema.define(version: 2025_07_25_145934) do
     t.index ["contest_id"], name: "index_contest_categories_on_contest_id"
   end
 
-  create_table "contest_ffme_my_compets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
-    t.bigint "contest_id"
-    t.string "contest_type"
-    t.string "name"
-    t.string "description", limit: 2048
-    t.datetime "start_date"
-    t.datetime "end_date"
-    t.string "contact_email"
-    t.string "contact_phone"
-    t.date "results_send_at"
-    t.index ["contest_id"], name: "index_contest_ffme_my_compets_on_contest_id"
-  end
-
   create_table "contest_judge_routes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
     t.bigint "contest_judge_id", null: false
     t.bigint "contest_route_id", null: false
@@ -354,8 +341,8 @@ ActiveRecord::Schema.define(version: 2025_07_25_145934) do
     t.boolean "tombola_winner", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.boolean "synchronise_with_my_compet"
     t.bigint "contest_team_id"
+    t.boolean "synchronise_with_ffme_contest"
     t.index ["contest_category_id"], name: "index_contest_participants_on_contest_category_id"
     t.index ["contest_team_id"], name: "index_contest_participants_on_contest_team_id"
     t.index ["contest_wave_id"], name: "index_contest_participants_on_contest_wave_id"
@@ -702,6 +689,23 @@ ActiveRecord::Schema.define(version: 2025_07_25_145934) do
     t.index ["parent_id"], name: "index_feeds_on_parent_id"
     t.index ["parent_type"], name: "index_feeds_on_parent_type"
     t.index ["posted_at"], name: "index_feeds_on_posted_at"
+  end
+
+  create_table "ffme_contests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.bigint "contest_id"
+    t.string "status"
+    t.string "contest_type"
+    t.string "name"
+    t.string "description", limit: 2048
+    t.date "start_date"
+    t.date "end_date"
+    t.string "contact_email"
+    t.string "contact_phone"
+    t.bigint "external_ffme_contest_id"
+    t.date "results_send_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["contest_id"], name: "index_ffme_contests_on_contest_id"
   end
 
   create_table "follows", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1595,7 +1599,6 @@ ActiveRecord::Schema.define(version: 2025_07_25_145934) do
   add_foreign_key "championship_contests", "contests"
   add_foreign_key "championships", "gyms"
   add_foreign_key "contest_categories", "contests"
-  add_foreign_key "contest_ffme_my_compets", "contests"
   add_foreign_key "contest_judge_routes", "contest_judges"
   add_foreign_key "contest_judge_routes", "contest_routes"
   add_foreign_key "contest_judges", "contests"
@@ -1617,6 +1620,7 @@ ActiveRecord::Schema.define(version: 2025_07_25_145934) do
   add_foreign_key "contest_time_blocks", "contest_waves"
   add_foreign_key "contest_waves", "contests"
   add_foreign_key "contests", "gyms"
+  add_foreign_key "ffme_contests", "contests"
   add_foreign_key "gym_chain_administrators", "gym_chains"
   add_foreign_key "gym_chain_administrators", "users"
   add_foreign_key "gym_chain_gyms", "gym_chains"

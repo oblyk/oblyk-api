@@ -1,0 +1,58 @@
+### Associate Oblyk account and FFME MyCompet
+POST https://demo.escalade.online/ws/partenaire/ob/demandeAssociation
+Content-Type: application/json
+Authorization: {{my_compet_token}}
+
+{
+  "idPersonne": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx",
+  "nom": "Quelque UN",
+  "numeroFFME": 1111
+}
+
+### Create Contest
+POST https://demo.escalade.online/ws/partenaire/ob/creationCompetition
+Content-Type: application/json
+Authorization: {{my_compet_token}}
+
+{
+  "idCompetition": 1,
+  "type": "BLOC",
+  "complement": "Contest test Oblyk 1",
+  "debut": "2025-11-30T00:00:00Z",
+  "fin": "2025-11-30T00:00:00Z",
+  "structureOrganisatrice": "Climb Up Test",
+  "lieu": "148 Avenue Jean Jaurès Lyon",
+  "ville": 69387,
+  "emailContact": "ekip@oblyk.org",
+  "telContact": "06-00-00-00-00",
+  "descriptionCompetition": "Test création compétition de test via les API"
+}
+
+### Update Contest
+POST https://demo.escalade.online/ws/partenaire/ob/modificationCompetition
+Content-Type: application/json
+Authorization: {{my_compet_token}}
+
+{
+  "idCompetition": 96,
+  "type": "DIFFICULTE",
+  "complement": "Oblyk test",
+  "debut": "2026-01-31T00:00:00Z",
+  "fin": "2026-01-31T00:00:00Z",
+  "structureOrganisatrice": "Ma Salle",
+  "lieu": "Chemin du Merlançon",
+  "ville": "13005",
+  "emailContact": "ekip@oblyk.org",
+  "telContact": "+336-00-00-00-00",
+  "descriptionCompetition": "Contest test de voie sur Oblyk",
+  "visuel": null
+}
+
+### Get contest link
+POST https://demo.escalade.online/ws/partenaire/ob/urlCompetition
+Content-Type: application/json
+Authorization: {{my_compet_token}}
+
+{
+  "idCompetition": 1
+}
