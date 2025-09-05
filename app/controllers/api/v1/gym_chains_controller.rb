@@ -58,8 +58,9 @@ module Api
 
       def geo_json_features
         features = []
-        @gym_chain.gyms.all.each do |gym|
-          features << gym.to_geo_json(minimalistic: true)
+        gyms = @gym_chain.gyms.select(%i[id name longitude latitude]).includes(banner_attachment: :blob)
+        gyms.each do |gym|
+          features << gym.to_geo_json
         end
         features
       end

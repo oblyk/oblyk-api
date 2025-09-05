@@ -456,9 +456,9 @@ module Api
 
       def geo_json_features(minimalistic)
         features = []
-        gyms = minimalistic ? Gym.all : Gym.includes(banner_attachment: :blob).all
+        gyms = Gym.select(%i[id name longitude latitude]).includes(banner_attachment: :blob).all
         gyms.each do |gym|
-          features << gym.to_geo_json(minimalistic: minimalistic)
+          features << gym.to_geo_json
         end
         features
       end

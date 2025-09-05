@@ -87,35 +87,20 @@ class Gym < ApplicationRecord
     [latitude, longitude]
   end
 
-  def to_geo_json(minimalistic: false)
-    Rails.cache.fetch("#{cache_key_with_version}/#{'minimalistic_' if minimalistic}geo_json_gym", expires_in: 28.days) do
-      features = {
-        type: 'Feature',
-        properties: {
-          type: 'Gym',
-          id: id,
-          name: name,
-          icon: "gym-marker-#{climbing_key}"
-        },
-        geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
-      }
-      unless minimalistic
-        features[:properties].merge!(
-          {
-            name: name,
-            slug_name: slug_name,
-            climbing_key: climbing_key,
-            localization: "#{city}, #{region}",
-            bouldering: bouldering,
-            sport_climbing: sport_climbing,
-            pan: pan,
-            fun_climbing: fun_climbing,
-            training_space: training_space
-          }
-        )
-      end
-      features
-    end
+  def to_geo_json
+    {
+      type: 'Feature',
+      properties: {
+        type: 'Gym',
+        id: id,
+        name: name,
+        icon: 'gym-marker',
+        attachments: {
+          logo: attachment_object(logo)
+        }
+      },
+      geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
+    }
   end
 
   def administered?
