@@ -457,6 +457,20 @@ module Api
         features = []
         gyms = Gym.select(%i[id name longitude latitude updated_at])
                   .includes(banner_attachment: :blob)
+
+        climbing_style = params.fetch(:climbing_style, nil)
+        if climbing_style.present?
+          climbing_style = %w[sport_climbing bouldering fun_climbing].include?(climbing_style) ? climbing_style : nil
+          gyms = gyms.where(climbing_style => true) if climbing_style.present?
+        end
+
+        gym_type = params.fetch(:gym_type, nil)
+        gyms = gyms.where(gym_type: 'club') if gym_type == 'club'
+        gyms = gyms.where(gym_type: 'private') if gym_type == 'private'
+
+        with_guide_book = params.fetch(:with_guide_book, nil) == 'true'
+        gyms = gyms.where('EXISTS(SELECT * FROM gym_routes INNER JOIN gym_sectors ON gym_routes.gym_sector_id = gym_sectors.id INNER JOIN gym_spaces ON gym_sectors.gym_space_id = gym_spaces.id WHERE gym_routes.dismounted_at IS NULL AND gym_spaces.draft IS FALSE AND gym_spaces.gym_id = gyms.id AND gym_routes.opened_at > NOW() - INTERVAL 400 DAY)') if with_guide_book
+
         gyms.each do |gym|
           features << gym.to_geo_json
         end
