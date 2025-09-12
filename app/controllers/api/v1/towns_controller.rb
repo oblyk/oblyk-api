@@ -59,7 +59,7 @@ module Api
         end
 
         # Gyms
-        gyms = @town.gyms.select(%i[id name longitude latitude]).includes(banner_attachment: :blob)
+        gyms = @town.gyms.select(%i[id name longitude latitude updated_at]).includes(banner_attachment: :blob)
         gyms.find_each do |gym|
           features << gym.to_geo_json
         end
