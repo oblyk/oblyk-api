@@ -88,19 +88,21 @@ class Gym < ApplicationRecord
   end
 
   def to_geo_json
-    {
-      type: 'Feature',
-      properties: {
-        type: 'Gym',
-        id: id,
-        name: name,
-        icon: 'gym-marker',
-        attachments: {
-          logo: attachment_object(logo)
-        }
-      },
-      geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
-    }
+    Rails.cache.fetch("#{cache_key_with_version}/geo_json_gym", expires_in: 28.days) do
+      {
+        type: 'Feature',
+        properties: {
+          type: 'Gym',
+          id: id,
+          name: name,
+          icon: 'gym-marker',
+          attachments: {
+            logo: attachment_object(logo)
+          }
+        },
+        geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
+      }
+    end
   end
 
   def administered?
