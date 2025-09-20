@@ -16,6 +16,16 @@ class AscentGymRoute < Ascent
   after_save :update_gym_route!
   after_destroy :update_gym_route!
 
+  def logbook_summary_to_json
+    {
+      id: id,
+      gym_route_id: gym_route_id,
+      ascent_status: ascent_status,
+      roping_status: roping_status,
+      released_at: released_at
+    }
+  end
+
   def summary_to_json
     detail_to_json
   end

@@ -130,7 +130,12 @@ module Api
                  end
 
         routes = routes.page(params.fetch(:page, 1))
-        render json: routes.map(&:summary_to_json), status: :ok
+                       .map(&:summary_to_json)
+
+        # Map user ascents onto routes liste
+        routes = GymRouteAscentsMapper.new(routes, @current_user).map_ascents if login?
+
+        render json: routes, status: :ok
       end
 
       def print
@@ -186,7 +191,10 @@ module Api
       end
 
       def show
-        render json: @gym_route.detail_to_json, status: :ok
+        route = @gym_route.detail_to_json
+        route = GymRouteAscentsMapper.new(route, @current_user).map_ascents if login?
+
+        render json: route, status: :ok
       end
 
       def similar_sectors

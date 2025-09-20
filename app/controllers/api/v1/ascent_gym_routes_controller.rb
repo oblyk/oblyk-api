@@ -82,7 +82,7 @@ module Api
         @ascent_gym_route.init_level_color if @ascent_gym_route.gym_route
 
         if @ascent_gym_route.save
-          render json: @current_user.ascent_gym_routes_to_a, status: :created
+          render json: gym_routes_ascent_response([@ascent_gym_route.gym_route_id]), status: :created
         else
           render json: { error: @ascent_gym_route.errors }, status: :unprocessable_entity
         end
@@ -158,9 +158,10 @@ module Api
         elsif @ascent_gym_route.ascent_comment
           @ascent_gym_route.ascent_comment = nil if @ascent_gym_route.ascent_comment.destroy
         end
+
         if @ascent_gym_route.update(ascent_gym_route_params)
           @ascent_gym_route.ascent_comment&.save
-          render json: @current_user.ascent_gym_routes_to_a, status: :created
+          render json: gym_routes_ascent_response([@ascent_gym_route.gym_route_id]), status: :created
         else
           render json: { error: @ascent_gym_route.errors }, status: :unprocessable_entity
         end
@@ -168,13 +169,26 @@ module Api
 
       def destroy
         if @ascent_gym_route.destroy
-          render json: @current_user.ascent_gym_routes_to_a, status: :created
+          render json: gym_routes_ascent_response([@ascent_gym_route.gym_route_id]), status: :created
         else
           render json: { error: @ascent_gym_route.errors }, status: :unprocessable_entity
         end
       end
 
       private
+
+      def gym_routes_ascent_response(gym_route_ids)
+        route_ascents = {}
+        gym_routes_ascents = AscentGymRoute.where(user: @current_user, gym_route_id: gym_route_ids)
+                                           .order('ascent_status, "onsight", "flash", "red_point", "sent", "repetition", "project"')
+        user_ascents = gym_routes_ascents.group_by(&:gym_route_id)
+
+        gym_route_ids.each do |gym_route_id|
+          ascents = user_ascents[gym_route_id]
+          route_ascents[gym_route_id] = ascents&.map(&:logbook_summary_to_json) || []
+        end
+        route_ascents
+      end
 
       def set_ascent_gym_route
         @ascent_gym_route = AscentGymRoute.find params[:id]

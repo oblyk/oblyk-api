@@ -364,7 +364,7 @@ class User < ApplicationRecord
           organizations: organizations.map(&:summary_to_json),
           subscribes: subscribes_to_a,
           ascent_crag_routes: ascent_crag_routes_to_a,
-          ascent_gym_routes: ascent_gym_routes_to_a,
+          ascent_gym_routes: ascent_gym_routes_to_a, # TODO : delete this after ascents pusher refactoring
           tick_list: tick_list_to_a,
           minor: minor?
         }
