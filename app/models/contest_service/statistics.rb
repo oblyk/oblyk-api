@@ -188,8 +188,13 @@ module ContestService
                 top_attempt = 0.0
                 top_by_attempt = Hash.new { |h, k| h[k] = 0 }
                 ascents.each do |ascent|
-                  top += 1 if ascent.realised
-                  next unless ascent.realised
+                  if step.ranking_type == Constant::DIVISION_AND_ATTEMPT
+                    top += 1 if ascent.realised
+                    next unless ascent.realised
+                  else
+                    top += 1 if ascent.top_attempt >= 1
+                    next unless ascent.top_attempt
+                  end
 
                   top_attempt += ascent.top_attempt
                   top_by_attempt[ascent.top_attempt] += 1
@@ -243,7 +248,6 @@ module ContestService
               if [Constant::BEST_TIMES].include? step.ranking_type
                 best_time = nil
                 worst_time = nil
-                # times = Hash.new { |h, k| h[k] = 0 }
                 times = []
                 colors = []
                 ascents.each do |ascent|
