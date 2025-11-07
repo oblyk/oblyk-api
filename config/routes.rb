@@ -173,7 +173,9 @@ Rails.application.routes.draw do
 
       resources :ascent_gym_routes do
         get :points, on: :collection
+        get :gym_routes_infos_in_logbook, on: :collection
         post :create_bulk, on: :collection
+        post :add_bulk, on: :collection
       end
 
       resources :comments do

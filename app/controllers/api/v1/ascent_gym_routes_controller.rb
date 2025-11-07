@@ -4,7 +4,7 @@ module Api
   module V1
     class AscentGymRoutesController < ApiController
       before_action :protected_by_session
-      before_action :set_ascent_gym_route, except: %i[create index create_bulk points]
+      before_action :set_ascent_gym_route, only: %i[show update destroy]
       before_action :protected_by_owner, only: %i[update destroy]
 
       def index
@@ -30,6 +30,23 @@ module Api
         ascent_gym_routes = ascent_gym_routes.where(climbing_types: climbing_types) if climbing_types.size.positive?
 
         render json: ascent_gym_routes.map(&:summary_to_json), status: :ok
+      end
+
+      def gym_routes_infos_in_logbook
+        route_ids = params.fetch(:route_ids, [])&.map(&:to_i)
+        made_ids = AscentGymRoute.where(gym_route_id: route_ids, user: @current_user)
+                                 .where.not(ascent_status: :project)
+                                 .pluck(:gym_route_id)
+                                 .uniq
+        route_climbing_type = GymRoute.where(id: route_ids).group(:climbing_type).count
+        new_ids = route_ids - made_ids
+
+        render json: {
+          made: made_ids,
+          new: new_ids,
+          climbing_types: route_climbing_type,
+          gym_routes: GymRoute.where(id: route_ids).map(&:summary_to_json)
+        }, status: :ok
       end
 
       def show
@@ -147,6 +164,45 @@ module Api
         end
       end
 
+      def add_bulk
+        new_ascents = []
+        ascent_add_bulk_params[:gym_ascents].each do |ascent|
+          gym_ascent = AscentGymRoute.new(
+            ascent_status: ascent[:ascent_status],
+            gym_route_id: ascent[:gym_route_id],
+            hardness_status: ascent[:hardness_status],
+            released_at: ascent[:released_at],
+            roping_status: ascent[:roping_status],
+            user: @current_user,
+            selected_sections: [0]
+          )
+          if ascent[:ascent_comment].present? && ascent[:ascent_comment][:body].present?
+            gym_ascent.ascent_comment = Comment.new(
+              body: ascent[:ascent_comment][:body],
+              user: @current_user,
+              commentable_id: ascent[:gym_route_id],
+              commentable_type: 'AscentGymRoute'
+            )
+          end
+          new_ascents << gym_ascent
+        end
+
+        errors = []
+        new_ascents.each do |new_ascent|
+          unless new_ascent.valid?
+            errors << new_ascent.errors
+            break
+          end
+        end
+
+        if errors.size.zero?
+          new_ascents.each(&:save)
+          render json: gym_routes_ascent_response(new_ascents.map(&:gym_route_id)), status: :created
+        else
+          render json: { error: errors.first }, status: :unprocessable_entity
+        end
+      end
+
       def update
         if ascent_comment_params.fetch(:ascent_comment, []).fetch(:body, nil).present?
           if @ascent_gym_route.ascent_comment
@@ -228,6 +284,19 @@ module Api
           :description,
           :released_at,
           ascents: %i[height grade color_system_line_id quantity ascent_status]
+        )
+      end
+
+      def ascent_add_bulk_params
+        params.permit(
+          gym_ascents: [
+            :ascent_status,
+            :gym_route_id,
+            :hardness_status,
+            :released_at,
+            :roping_status,
+            { ascent_comment: %i[body] }
+          ]
         )
       end
 
