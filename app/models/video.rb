@@ -83,6 +83,15 @@ class Video < ApplicationRecord
     save
   end
 
+  def convert_to_mp4
+    video_file.open(tmpdir: '/tmp') do |file|
+      movie = FFMPEG::Movie.new(file.path)
+      path = "tmp/video-#{SecureRandom.alphanumeric(12)}.mp4"
+      movie.transcode(path, { video_codec: 'libx264', audio_codec: 'aac' })
+      video_file.attach(io: File.open(path), filename: "video-#{SecureRandom.alphanumeric(12)}.mp4", content_type: 'video/mp4')
+    end
+  end
+
   private
 
   def embedded_code_service
