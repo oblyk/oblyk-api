@@ -38,13 +38,23 @@ class Video < ApplicationRecord
     return nil unless video_service == 'oblyk_video'
 
     if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
-      # Use CLOUDFLARE R2 CDN
-      "#{ENV['CLOUDFLARE_R2_DOMAIN']}/#{video_file.attachment.key}"
+      # Use CLOUDFLARE R2 CDN, AND CONVERT VIDEO IF IS VIDEO/QUICKTIME
+      if needs_be_converted?
+        "#{ENV['CLOUDFLARE_R2_DOMAIN']}/cdn-cgi/media/mode=video,fit=scale-down,height=1920,width=1920/#{ENV['CLOUDFLARE_R2_DOMAIN']}/#{video_file.attachment.key}"
+      else
+        "#{ENV['CLOUDFLARE_R2_DOMAIN']}/#{video_file.attachment.key}"
+      end
 
     else
       # Use local active storage
       "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.rails_blob_path(video_file, only_path: true)}"
     end
+  end
+
+  def video_content_type
+    return nil unless video_service == 'oblyk_video'
+
+    needs_be_converted? ? 'video/mp4' : video_file.content_type
   end
 
   def summary_to_json
@@ -65,7 +75,7 @@ class Video < ApplicationRecord
       creator: user&.summary_to_json(with_avatar: true),
       oblyk_video: {
         path: video_file_path,
-        content_type: video_service == 'oblyk_video' ? video_file.content_type : nil
+        content_type: video_content_type
       },
       history: {
         created_at: created_at,
@@ -93,6 +103,10 @@ class Video < ApplicationRecord
   end
 
   private
+
+  def needs_be_converted?
+    video_service == 'oblyk_video' && video_file.content_type == 'video/quicktime'
+  end
 
   def embedded_code_service
     if url.blank?
