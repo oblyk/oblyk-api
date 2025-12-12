@@ -202,9 +202,12 @@ module ContestService
                 top_by_attempt_color = []
                 route_hash[:top] = top
                 route_hash[:top_attempt] = top_attempt
-                (1..top_by_attempt.max_by(&:first).first).each do |index|
-                  top_by_attempt[index] ||= 0
-                  top_by_attempt_color << '#7b1fa2'
+                number_of_tentatives = top_by_attempt.max_by(&:first)&.first
+                if number_of_tentatives.present?
+                  (1..number_of_tentatives).each do |index|
+                    top_by_attempt[index] ||= 0
+                    top_by_attempt_color << '#7b1fa2'
+                  end
                 end
                 top_by_attempt = top_by_attempt.sort.to_h
                 route_hash[:top_by_attempt_colors] = top_by_attempt_color
