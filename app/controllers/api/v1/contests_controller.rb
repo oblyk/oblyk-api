@@ -108,6 +108,7 @@ module Api
         end
 
         if @contest.destroy
+          @contest.championship_contests.each(&:destroy)
           render json: {}, status: :ok
         else
           render json: { error: @contest.errors }, status: :unprocessable_entity
