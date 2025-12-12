@@ -40,6 +40,7 @@ module ContestService
       stage_steps = {}
       results = {}
       rankers = {}
+      is_combined = stages.size > 1
 
       # Create a [Hash] participant_by_steps to determine whether the participant participates in the step.
       build_participant_by_steps
@@ -155,7 +156,7 @@ module ContestService
           rlt_participant[:ranks] = ranks
           rlt_participant[:team_ranks] = team_ranks if @contest.team_contest
 
-          # Get last rank of each step for first sort
+          # Get the last rank of each step for the first sort
           ranks = []
           rlt_participant[:stages].each do |rlt_stage|
             last_step_rank = rlt_stage[:steps].map { |step| step[rank_key] }.last
@@ -173,27 +174,29 @@ module ContestService
           end
 
           # Calculate global rank points
-          case @contest.combined_ranking_type
-          when Constant::COMBINED_RANKING_ADDITION
-            rank_point = 0
-            ranks.each do |rank|
-              rank_point += rank || max_rank
-            end
-          when Constant::COMBINED_RANKING_MULTIPLICATION
-            rank_point = 1
-            ranks.each do |rank|
-              rank_point *= rank || max_rank
-            end
-          when Constant::COMBINED_RANKING_DECREMENT_POINTS
-            rank_point = 0
-            ranks.each do |rank|
-              rank_point += if rank.blank?
-                              0
-                            elsif rank <= 30
-                              Constant::COMBINED_RANKING_POINT_MATRIX[rank.to_i - 1].to_f
-                            else
-                              1.0 - (1.0 / (max_rank - 29)) * (rank - 29)
-                            end
+          if is_combined
+            case @contest.combined_ranking_type
+            when Constant::COMBINED_RANKING_ADDITION
+              rank_point = 0
+              ranks.each do |rank|
+                rank_point += rank || max_rank
+              end
+            when Constant::COMBINED_RANKING_MULTIPLICATION
+              rank_point = 1
+              ranks.each do |rank|
+                rank_point *= rank || max_rank
+              end
+            when Constant::COMBINED_RANKING_DECREMENT_POINTS
+              rank_point = 0
+              ranks.each do |rank|
+                rank_point += if rank.blank?
+                                0
+                              elsif rank <= 30
+                                Constant::COMBINED_RANKING_POINT_MATRIX[rank.to_i - 1].to_f
+                              else
+                                1.0 - (1.0 / (max_rank - 29)) * (rank - 29)
+                              end
+              end
             end
           else
             rank_point = 0
@@ -206,7 +209,7 @@ module ContestService
         end
 
         # Sort participant by global rank point
-        results[category_index][:participants] = if @contest.combined_ranking_type == Constant::COMBINED_RANKING_DECREMENT_POINTS
+        results[category_index][:participants] = if is_combined && @contest.combined_ranking_type == Constant::COMBINED_RANKING_DECREMENT_POINTS
                                                    results[category_index][:participants].sort_by { |participant| [-participant[:global_rank_point], (participant[:team_id] || 0)] }
                                                  else
                                                    results[category_index][:participants].sort_by { |participant| [participant[:global_rank_point], (participant[:team_id] || 0)] }
