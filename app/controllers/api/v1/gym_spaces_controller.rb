@@ -6,6 +6,8 @@ module Api
   module V1
     class GymSpacesController < ApiController
       include Gymable
+      include ImageParamsConvert
+
       skip_before_action :protected_by_session, only: %i[show index groups three_d_elements]
       skip_before_action :protected_by_gym_administrator, only: %i[show index groups three_d_elements]
       before_action :set_gym_space, except: %i[index create groups tree_sectors]
@@ -114,6 +116,7 @@ module Api
       end
 
       def add_banner
+        params[:gym_space][:banner] = convert_image_on_params %i[gym_space banner]
         if @gym_space.update(banner_params)
           render json: @gym_space.detail_to_json, status: :ok
         else
@@ -122,6 +125,7 @@ module Api
       end
 
       def add_plan
+        params[:gym_space][:plan] = convert_image_on_params %i[gym_space plan]
         if @gym_space.update(plan_params)
           @gym_space.set_plan_dimension!
           render json: @gym_space.detail_to_json, status: :ok

@@ -4,6 +4,7 @@ module Api
   module V1
     class GymRoutesController < ApiController
       include Gymable
+      include ImageParamsConvert
 
       skip_before_action :protected_by_session, only: %i[show index paginated ascents comments]
       skip_before_action :protected_by_gym_administrator, only: %i[show index paginated ascents comments]
@@ -229,6 +230,7 @@ module Api
       def add_picture
         new_gym_route_cover_id = picture_params.fetch(:gym_route_cover_id, nil)
 
+        params[:gym_route][:gym_route_cover][:picture] = convert_image_on_params %i[gym_route gym_route_cover picture]
         # If change picture or used other picture already saved
         if new_gym_route_cover_id
           route_with_same_covers = GymRoute.where(gym_route_cover_id: new_gym_route_cover_id)

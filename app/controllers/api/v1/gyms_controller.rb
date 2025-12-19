@@ -5,6 +5,7 @@ module Api
     class GymsController < ApiController
       include GymRolesVerification
       include UploadVerification
+      include ImageParamsConvert
 
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes tree_structures tree_routes figures comments videos stripe_customer_portal]
@@ -204,6 +205,7 @@ module Api
       def add_banner
         return unless verify_file banner_params[:banner], :image
 
+        params[:gym][:banner] = convert_image_on_params %i[gym banner]
         if @gym.update(banner_params)
           render json: @gym.detail_to_json, status: :ok
         else
@@ -214,6 +216,7 @@ module Api
       def add_logo
         return unless verify_file logo_params[:logo], :image
 
+        params[:gym][:logo] = convert_image_on_params %i[gym logo]
         if @gym.update(logo_params)
           render json: @gym.detail_to_json, status: :ok
         else

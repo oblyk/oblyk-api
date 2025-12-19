@@ -3,6 +3,8 @@
 module Api
   module V1
     class PhotosController < ApiController
+      include ImageParamsConvert
+
       before_action :protected_by_session, only: %i[create update destroy]
       before_action :set_photo, only: %i[show update destroy]
       before_action :protected_by_owner, only: %i[update destroy]
@@ -17,6 +19,7 @@ module Api
       end
 
       def create
+        params[:photo][:picture] = convert_image_on_params %i[photo picture]
         @photo = Photo.new(photo_params)
         @photo.user = @current_user
         if @photo.save

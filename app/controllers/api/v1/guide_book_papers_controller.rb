@@ -4,6 +4,7 @@ module Api
   module V1
     class GuideBookPapersController < ApiController
       include UploadVerification
+      include ImageParamsConvert
 
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update add_crag remove_crag add_cover remove_cover]
@@ -271,6 +272,7 @@ module Api
       def add_cover
         return unless verify_file cover_params[:cover], :image
 
+        params[:guide_book_paper][:cover] = convert_image_on_params %i[guide_book_paper cover]
         if @guide_book_paper.update(cover_params)
           render json: @guide_book_paper.detail_to_json, status: :ok
         else

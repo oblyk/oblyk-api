@@ -8,7 +8,7 @@ module UploadVerification
   def verify_file(file, type = :image)
     content_types = case type
                     when :image
-                      %w[image/jpeg image/png]
+                      %w[image/jpeg image/png image/heic image/heif]
                     when :csv
                       %w[text/csv]
                     end

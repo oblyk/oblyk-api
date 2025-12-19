@@ -5,6 +5,7 @@ module Api
     class ContestRoutesController < ApiController
       include UploadVerification
       include GymRolesVerification
+      include ImageParamsConvert
 
       before_action :protected_by_session, except: %i[index show]
       before_action :set_gym
@@ -66,6 +67,7 @@ module Api
       def add_picture
         return unless verify_file picture_params[:picture], :image
 
+        params[:contest_route][:picture] = convert_image_on_params %i[contest_route picture]
         @contest_route.update picture_params
         head :no_content
       end

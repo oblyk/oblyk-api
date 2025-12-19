@@ -5,6 +5,7 @@ module Api
     class ChampionshipsController < ApiController
       include UploadVerification
       include GymRolesVerification
+      include ImageParamsConvert
 
       before_action :protected_by_session, only: %i[available_contests create update destroy add_banner archived unarchived]
       before_action :set_gym
@@ -80,6 +81,7 @@ module Api
       def add_banner
         return unless verify_file banner_params[:banner], :image
 
+        params[:championship][:banner] = convert_image_on_params %i[championship banner]
         if @championship.update(banner_params)
           render json: @championship.detail_to_json, status: :ok
         else

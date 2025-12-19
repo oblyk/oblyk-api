@@ -4,6 +4,7 @@ module Api
   module V1
     class CurrentUsersController < ApiController
       include UploadVerification
+      include ImageParamsConvert
 
       before_action :protected_by_session
       before_action :set_user
@@ -325,6 +326,7 @@ module Api
       def banner
         return unless verify_file banner_params[:banner], :image
 
+        params[:user][:banner] = convert_image_on_params %i[user banner]
         if @user.update(banner_params)
           render json: @user.detail_to_json(current_user: true), status: :ok
         else
@@ -335,6 +337,7 @@ module Api
       def avatar
         return unless verify_file avatar_params[:avatar], :image
 
+        params[:user][:avatar] = convert_image_on_params %i[user avatar]
         if @user.update(avatar_params)
           render json: @user.detail_to_json(current_user: true), status: :ok
         else
