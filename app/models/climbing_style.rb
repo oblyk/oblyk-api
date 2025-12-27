@@ -12,5 +12,13 @@ class ClimbingStyle
     coordination
     tall_people
     small_people
+    balance
+    clamp
+    volume
+    core_strength
+    commitment
+    precision
+    promptness
+    dynamic
   ].freeze
 end
