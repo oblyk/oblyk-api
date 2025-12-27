@@ -9,6 +9,7 @@ class AscentGymRoute < Ascent
 
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }
 
+  before_validation :normalize_roping_status
   before_validation :set_gym_and_system
   before_validation :historize_ascents
   before_validation :historize_grade_gap
@@ -175,5 +176,12 @@ class AscentGymRoute < Ascent
     self.max_grade_value = max_grade_value
     self.min_grade_value = min_grade_value
     self.sections_count = sections.count
+  end
+
+  def normalize_roping_status
+    self.roping_status = nil if RopingStatus::LIST.exclude? roping_status
+    return if roping_status.blank?
+
+    self.roping_status = nil unless gym_route.climbing_type == Climb::SPORT_CLIMBING
   end
 end
