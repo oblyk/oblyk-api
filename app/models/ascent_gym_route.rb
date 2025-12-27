@@ -180,7 +180,7 @@ class AscentGymRoute < Ascent
 
   def normalize_roping_status
     self.roping_status = nil if RopingStatus::LIST.exclude? roping_status
-    return if roping_status.blank?
+    return if roping_status.blank? || gym_route_id.blank?
 
     self.roping_status = nil unless gym_route.climbing_type == Climb::SPORT_CLIMBING
   end
