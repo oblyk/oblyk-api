@@ -236,7 +236,7 @@ module Api
       def gym_routes_ascent_response(gym_route_ids)
         route_ascents = {}
         gym_routes_ascents = AscentGymRoute.where(user: @current_user, gym_route_id: gym_route_ids)
-                                           .order('ascent_status, "onsight", "flash", "red_point", "sent", "repetition", "project"')
+                                           .order('FIELD(ascent_status, "onsight", "flash", "red_point", "sent", "repetition", "project")')
         user_ascents = gym_routes_ascents.group_by(&:gym_route_id)
 
         gym_route_ids.each do |gym_route_id|
