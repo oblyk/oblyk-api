@@ -8,10 +8,10 @@ module Api
       include Gymable
       include ImageParamsConvert
 
-      skip_before_action :protected_by_session, only: %i[show index groups three_d_elements]
-      skip_before_action :protected_by_gym_administrator, only: %i[show index groups three_d_elements]
+      skip_before_action :protected_by_session, only: %i[show index groups three_d_elements routes_by_styles]
+      skip_before_action :protected_by_gym_administrator, only: %i[show index groups three_d_elements routes_by_styles]
       before_action :set_gym_space, except: %i[index create groups tree_sectors]
-      before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[index show groups three_d_elements tree_sectors]
+      before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[index show groups three_d_elements tree_sectors routes_by_styles]
 
       def index
         gym_spaces = @gym.gym_spaces

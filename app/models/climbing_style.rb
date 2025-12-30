@@ -20,5 +20,13 @@ class ClimbingStyle
     precision
     promptness
     dynamic
+    complex
+    sensation
+    u8
+    u10
+    u12
+    u14
+    u16
+    u18
   ].freeze
 end

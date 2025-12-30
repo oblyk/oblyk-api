@@ -9,7 +9,7 @@ module Api
       skip_before_action :protected_by_session, only: %i[show index paginated ascents comments]
       skip_before_action :protected_by_gym_administrator, only: %i[show index paginated ascents comments]
       before_action :set_gym_space, except: %i[add_picture similar_sectors add_thumbnail dismount mount dismount_collection mount_collection ascents delete_picture comments opening_sheet_collection]
-      before_action :set_gym_sector, except: %i[index show similar_sectors add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents delete_picture comments opening_sheet_collection]
+      before_action :set_gym_sector, except: %i[index show similar_sectors add_picture add_thumbnail dismount mount dismount_collection mount_collection ascents delete_picture comments opening_sheet_collection paginated]
       before_action :set_gym_route, only: %i[show similar_sectors update destroy add_picture add_thumbnail dismount mount ascents delete_picture comments]
       before_action -> { can? GymRole::MANAGE_OPENING }, except: %i[index paginated show similar_sectors ascents comments]
 
@@ -86,10 +86,10 @@ module Api
         route_ids = params.fetch(:route_ids, nil)
         direction = params.fetch(:direction, 'asc') == 'asc' ? 'ASC' : 'DESC'
         dismounted = params.fetch(:dismounted, 'false') == 'true'
+        filters = params.fetch(:filters, [])
+        filters = filters.map { |filter| JSON.parse(filter) }
 
-        routes = if @gym_sector.present?
-                   @gym_sector.gym_routes
-                 elsif @gym_space.present?
+        routes = if @gym_space.present?
                    @gym_space.gym_routes
                  elsif route_ids.present?
                    @gym.gym_routes.where(ids: route_ids)
@@ -98,6 +98,14 @@ module Api
                  end
 
         routes = dismounted ? routes.dismounted : routes.mounted
+
+        filters.each do |filter|
+          if filter['type'] == 'style' && ClimbingStyle::STYLE_LIST.include?(filter['value'])
+            routes = routes.where("JSON_SEARCH(sections->'$[*].styles[*]', 'one', :style) IS NOT NULL", style: filter['value'])
+          elsif filter['type'] == 'sector'
+            routes = routes.where(gym_sector_id: filter['value'].to_i)
+          end
+        end
 
         routes = routes.includes(
           :gym_openers,

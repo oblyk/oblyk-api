@@ -9,9 +9,9 @@ module Api
 
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update add_banner add_logo routes_count routes tree_structures tree_routes figures comments videos stripe_customer_portal]
-      before_action :set_gym, only: %i[show versions ascent_scores update destroy add_banner add_logo routes_count routes tree_structures tree_routes figures comments videos three_d stripe_customer_portal]
+      before_action :set_gym, only: %i[show versions ascent_scores update destroy add_banner add_logo routes_count routes tree_structures tree_routes figures comments videos three_d stripe_customer_portal routes_by_styles]
       before_action :protected_by_administrator, only: %i[update add_banner add_logo routes_count routes tree_structures tree_routes figures comments videos]
-      before_action :user_can_manage_gym, except: %i[index search geo_json show create gyms_around versions ascent_scores routes_count routes comments videos three_d figures stripe_customer_portal]
+      before_action :user_can_manage_gym, except: %i[index search geo_json show create gyms_around versions ascent_scores routes_count routes comments videos three_d figures stripe_customer_portal routes_by_styles]
       before_action :user_can_manage_subscription, only: %i[stripe_customer_portal]
 
       def index
@@ -452,6 +452,24 @@ module Api
         render json: {
           url: stripe_portal.url
         }
+      end
+
+      def routes_by_styles
+        styles = Hash.new(0)
+        routes = if params[:gym_space_id].present?
+                   space = @gym.gym_spaces.find params[:gym_space_id]
+                   space.gym_routes.mounted
+                 else
+                   @gym.gym_routes.mounted
+                 end
+        routes.each do |route|
+          route.sections.each do |section|
+            section['styles'].each do |style|
+              styles[style] += 1
+            end
+          end
+        end
+        render json: styles, status: :ok
       end
 
       private

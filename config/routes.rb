@@ -232,6 +232,7 @@ Rails.application.routes.draw do
         get :videos, on: :member
         get :three_d, on: :member
         get :stripe_customer_portal, on: :member
+        get :routes_by_styles, on: :member
         resources :gym_billing_accounts, only: %i[show create update]
         resources :indoor_subscriptions, only: %i[index show create update] do
           get :figures, on: :collection
