@@ -464,6 +464,8 @@ module Api
                  end
         routes.each do |route|
           route.sections.each do |section|
+            next if section['styles'].blank?
+
             section['styles'].each do |style|
               styles[style] += 1
             end
