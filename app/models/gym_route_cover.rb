@@ -24,7 +24,14 @@ class GymRouteCover < ApplicationRecord
   end
 
   def original_file_path
-    "#{ENV.fetch('IMAGES_STORAGE_DOMAINE', ENV['OBLYK_API_URL'])}/#{picture&.blob&.key}"
+    if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
+      # Use CLOUDFLARE R2 CDN
+      "#{ENV.fetch('IMAGES_STORAGE_DOMAINE', ENV['OBLYK_API_URL'])}/#{picture&.blob&.key}"
+
+    else
+      # Use local active storage
+      "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.polymorphic_url(picture, only_path: true)}"
+    end
   end
 
   def detail_to_json
