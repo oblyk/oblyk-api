@@ -8,6 +8,7 @@ class GymLevel < ApplicationRecord
   TAG_AND_HOLD_REPRESENTATION = 'hold_and_tag'
   LEVEL_REPRESENTATIONS = [HOLD_REPRESENTATION, TAG_REPRESENTATION, TAG_AND_HOLD_REPRESENTATION].freeze
 
+  before_validation :normalize_sub_level
   validates :climbing_type, :level_representation, presence: true
   validates :climbing_type, uniqueness: { scope: [:gym_id] }
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }
@@ -20,6 +21,8 @@ class GymLevel < ApplicationRecord
       enabled: enabled,
       grade_system: grade_system,
       level_representation: level_representation,
+      sub_level_enabled: sub_level_enabled,
+      sub_level_max: sub_level_max,
       levels: levels, # { order color default_grade default_point }
       gym_id: gym_id
     }
@@ -38,5 +41,17 @@ class GymLevel < ApplicationRecord
 
   def colors_system_mark
     levels.map { |level| level['color'] }.join
+  end
+
+  private
+
+  def normalize_sub_level
+    unless sub_level_enabled
+      self.sub_level_max = nil
+      return
+    end
+
+    self.sub_level_max = 5 if sub_level_max > 5
+    self.sub_level_max = 1 if sub_level_max < 1
   end
 end

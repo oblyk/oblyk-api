@@ -53,18 +53,24 @@ module Api
             :grade_system,
             :enabled,
             :level_representation,
+            :sub_level_enabled,
+            :sub_level_max,
             { levels: %i[order color default_grade default_point] }
           ],
           bouldering: [
             :grade_system,
             :enabled,
             :level_representation,
+            :sub_level_enabled,
+            :sub_level_max,
             { levels: %i[order color default_grade default_point] }
           ],
           pan: [
             :grade_system,
             :enabled,
             :level_representation,
+            :sub_level_enabled,
+            :sub_level_max,
             { levels: %i[order color default_grade default_point] }
           ]
         )

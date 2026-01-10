@@ -35,6 +35,7 @@ class GymRoute < ApplicationRecord
   before_validation :historize_level_information
   before_save :historize_grade_gap
   before_save :historize_sections_count
+  before_save :historize_sub_level_max
   after_update :delete_contest_route_cache
 
   scope :dismounted, -> { where.not(dismounted_at: nil) }
@@ -255,6 +256,8 @@ class GymRoute < ApplicationRecord
         updated_at: updated_at,
         all_comments_count: all_comments_count,
         videos_count: videos_count,
+        sub_level: sub_level,
+        sub_level_max: sub_level_max,
         gym_route_cover: {
           metadata: gym_route_cover&.picture ? gym_route_cover.picture.metadata : nil,
           original_file_path: gym_route_cover&.picture ? gym_route_cover.original_file_path : nil,
@@ -383,6 +386,14 @@ class GymRoute < ApplicationRecord
       self.level_length = nil
       self.level_color = nil
     end
+  end
+
+  def historize_sub_level_max
+    return unless sub_level_changed?
+    return if sub_level.blank?
+
+    gym_level = gym.gym_levels.find_by(climbing_type: climbing_type)
+    self.sub_level_max = gym_level.sub_level_max if gym_level.sub_level_enabled
   end
 
   def gradiant(colors, fluid: true)

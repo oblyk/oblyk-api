@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_07_25_145934) do
+ActiveRecord::Schema.define(version: 2026_01_09_105017) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -911,6 +911,8 @@ ActiveRecord::Schema.define(version: 2025_07_25_145934) do
     t.string "grade_system"
     t.string "level_representation"
     t.json "levels"
+    t.boolean "sub_level_enabled", default: false
+    t.integer "sub_level_max"
     t.index ["gym_id", "climbing_type"], name: "index_gym_levels_on_gym_id_and_climbing_type", unique: true
     t.index ["gym_id"], name: "index_gym_levels_on_gym_id"
   end
@@ -1007,6 +1009,8 @@ ActiveRecord::Schema.define(version: 2025_07_25_145934) do
     t.float "difficulty_appreciation"
     t.json "votes"
     t.integer "anchor_number"
+    t.integer "sub_level"
+    t.integer "sub_level_max"
     t.index ["gym_grade_line_id"], name: "index_gym_routes_on_gym_grade_line_id"
     t.index ["gym_route_cover_id"], name: "index_gym_routes_on_gym_route_cover_id"
     t.index ["gym_sector_id"], name: "index_gym_routes_on_gym_sector_id"

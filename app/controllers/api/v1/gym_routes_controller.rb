@@ -168,16 +168,18 @@ module Api
           headers: true,
           col_sep: "\t"
         ) do |csv|
-          csv << %w[hold_colors tag_colors grade points height name description openers opened_at sector space anchor nb_ascents nb_comments nb_likes nb_videos url short_url]
+          csv << %w[hold_colors tag_colors grade points sous_niveau height name description styles openers opened_at sector space anchor nb_ascents nb_comments nb_likes nb_videos url short_url]
           gym_routes.each do |gym_route|
             csv << [
               gym_route.hold_colors&.join(', '),
               gym_route.tag_colors&.join(', '),
               gym_route.grade_to_s,
               gym_route.points_to_s,
+              gym_route.sub_level,
               gym_route.height,
               gym_route.name,
               gym_route.description,
+              gym_route.styles.join(', '),
               gym_route.gym_openers&.map(&:name)&.join(', '),
               gym_route.opened_at,
               gym_route.gym_sector.name,
@@ -430,6 +432,8 @@ module Api
           :level_index,
           :level_length,
           :level_color,
+          :sub_level,
+          :sub_level_max,
           gym_opener_ids: [],
           sections: [:climbing_type, :description, :grade, :height, { styles: [] }],
           hold_colors: %i[],
