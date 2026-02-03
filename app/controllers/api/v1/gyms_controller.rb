@@ -346,6 +346,8 @@ module Api
         data[:mounted_gym_routes_count] = @gym.gym_routes.mounted.count if figures.include? 'mounted_gym_routes_count'
         data[:gym_administrators_count] = @gym.gym_administrators.count if figures.include? 'gym_administrators_count'
         data[:gym_openers_count] = @gym.gym_openers.count if figures.include? 'gym_openers_count'
+        data[:publications_count] = @gym.publications.where.not(published_at: nil).count if figures.include? 'publications_count'
+        data[:publication_drafts_count] = @gym.publications.where(published_at: nil).count if figures.include? 'publication_drafts_count'
         if figures.include? 'comments_count'
           route_comments_count = Comment.joins('INNER JOIN gym_routes ON commentable_id = gym_routes.id')
                                         .joins('INNER JOIN gym_sectors ON gym_routes.gym_sector_id = gym_sectors.id')
@@ -389,7 +391,11 @@ module Api
                                          ascents: { gym_id: @gym.id }
                                        )
         comments = Comment.from("(#{route_comments_count.to_sql} UNION #{ascent_comments_count.to_sql}) AS comments").order(updated_at: :desc).page(page)
-        render json: comments.map(&:detail_to_json), status: :ok
+        render json: serializer(
+          CommentSerializer,
+          comments,
+          { include: [:user, :commentable, 'commentable.ascent_gym_route', 'commentable.ascent_gym_route.gym_route', 'commentable.gym_route'] }
+        ), status: :ok
       end
 
       def videos

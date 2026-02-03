@@ -4,7 +4,6 @@ class CragRoute < ApplicationRecord
   include SoftDeletable
   include Searchable
   include Slugable
-  include ActivityFeedable
   include AttachmentResizable
 
   attr_accessor :skip_update_gap_grade, :crag_name, :crag_slug_name
@@ -33,10 +32,6 @@ class CragRoute < ApplicationRecord
   has_many :reports, as: :reportable
   has_many :ascent_crag_routes
 
-  delegate :feed_parent_id, to: :crag
-  delegate :feed_parent_type, to: :crag
-  delegate :feed_parent_object, to: :crag
-
   validates :name, presence: true
   validates :climbing_type, inclusion: { in: Climb::CRAG_LIST }
   validates :incline_type, inclusion: { in: Incline::LIST }, allow_nil: true
@@ -54,9 +49,14 @@ class CragRoute < ApplicationRecord
   before_save :historize_sections_count
   before_save :historize_max_bolt
   after_save :update_gap_grade!
+  after_create_commit :publication_push!
 
   def rich_name
     "#{grade_to_s} - #{name}"
+  end
+
+  def app_path
+    "/crag-routes/#{id}/#{slug_name}"
   end
 
   def grade_to_s
@@ -173,6 +173,7 @@ class CragRoute < ApplicationRecord
         id: id,
         name: name,
         slug_name: slug_name,
+        app_path: app_path,
         height: height,
         open_year: open_year,
         opener: opener,
@@ -229,6 +230,27 @@ class CragRoute < ApplicationRecord
         }
       }
     )
+  end
+
+  def publication_push!(publishable_subject = :new_crag_routes)
+    publication = Publication.includes(:publication_attachments).find_by(
+      publishable_id: crag_id,
+      publishable_type: 'Crag',
+      publishable_subject: publishable_subject,
+      published_at: [created_at.beginning_of_week..created_at.end_of_week]
+    )
+
+    publication ||= Publication.new(
+      publishable_id: crag_id,
+      publishable_type: 'Crag',
+      publishable_subject: publishable_subject,
+      generated: true,
+      author_id: user_id
+    )
+    publication.published_at = created_at
+    publication.last_updated_at = created_at
+    publication.publication_attachments << PublicationAttachment.new(attachable_type: 'CragRoute', attachable_id: id)
+    publication.save
   end
 
   private

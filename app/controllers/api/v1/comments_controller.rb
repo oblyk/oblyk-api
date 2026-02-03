@@ -12,7 +12,11 @@ module Api
           commentable_type: params[:commentable_type],
           commentable_id: params[:commentable_id]
         )
-        render json: comments.map(&:summary_to_json), status: :ok
+        render json: serializer(
+          CommentSerializer,
+          comments,
+          { include: %i[user], params: { include_attachments: { User: %i[avatar] } } }
+        ), status: :ok
       end
 
       def comments
@@ -21,18 +25,30 @@ module Api
                           .order(created_at: :asc)
                           .page(page)
                           .per(5)
-        render json: comments.map(&:summary_to_json), status: :ok
+        render json: serializer(
+          CommentSerializer,
+          comments,
+          { include: %i[user], params: { include_attachments: { User: %i[avatar] } } }
+        ), status: :ok
       end
 
       def show
-        render json: @comment.detail_to_json, status: :ok
+        render json: serializer(
+          CommentSerializer,
+          @comment,
+          { include: %i[user commentable], params: { include_attachments: { User: %i[avatar] } } }
+        ), status: :ok
       end
 
       def create
         @comment = Comment.new(comment_params)
         @comment.user = @current_user
         if @comment.save
-          render json: @comment.detail_to_json, status: :ok
+          render json: serializer(
+            CommentSerializer,
+            @comment,
+            { include: %i[user commentable], params: { include_attachments: { User: %i[avatar] } } }
+          ), status: :ok
         else
           render json: { error: @comment.errors }, status: :unprocessable_entity
         end
@@ -40,7 +56,11 @@ module Api
 
       def update
         if @comment.update(comment_params)
-          render json: @comment.detail_to_json, status: :ok
+          render json: serializer(
+            CommentSerializer,
+            @comment,
+            { include: %i[user commentable], params: { include_attachments: { User: %i[avatar] } } }
+          ), status: :ok
         else
           render json: { error: @comment.errors }, status: :unprocessable_entity
         end

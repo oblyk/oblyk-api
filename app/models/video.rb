@@ -1,22 +1,20 @@
 # frozen_string_literal: true
 
 class Video < ApplicationRecord
-  include ActivityFeedable
   include StripTagable
 
   belongs_to :user, optional: true
   belongs_to :viewable, polymorphic: true, counter_cache: :videos_count, touch: true
   has_many :reports, as: :reportable, dependent: :destroy
   has_many :likes, as: :likeable, dependent: :destroy
+  has_many :publication_attachments, as: :attachable, dependent: :destroy
 
   has_one_attached :video_file
 
   delegate :latitude, to: :viewable
   delegate :longitude, to: :viewable
 
-  delegate :feed_parent_id, to: :viewable
-  delegate :feed_parent_type, to: :viewable
-  delegate :feed_parent_object, to: :viewable
+  after_create_commit :publication_push!
 
   URL_REGEXP = /(youtu\.be|youtube\.com|vimeo\.com|dai\.ly|dailymotion\.com|instagram\.com|tiktok.com)/.freeze
   VIDEO_SERVICES = %w[youtube vimeo dailymotion instagram tiktok oblyk_video].freeze
@@ -29,6 +27,14 @@ class Video < ApplicationRecord
   validates :url, format: { with: URL_REGEXP }, if: proc { |obj| obj.video_service != 'oblyk_video' }
 
   validates :video_file, blob: { content_type: :video }, if: proc { |obj| obj.video_service == 'oblyk_video' }
+
+  def name
+    id
+  end
+
+  def app_path
+    "/videos/#{id}"
+  end
 
   def valid_url?
     url.match? URL_REGEXP
@@ -65,6 +71,7 @@ class Video < ApplicationRecord
     {
       id: id,
       url: url,
+      app_path: app_path,
       description: description,
       likes_count: likes_count,
       viewable_type: viewable_type,
@@ -100,6 +107,43 @@ class Video < ApplicationRecord
       movie.transcode(path, { video_codec: 'libx264', audio_codec: 'aac' })
       video_file.attach(io: File.open(path), filename: "video-#{SecureRandom.alphanumeric(12)}.mp4", content_type: 'video/mp4')
     end
+  end
+
+  def publication_push!(publishable_subject = :new_video)
+    case viewable_type
+    when 'CragRoute'
+      publishable_type = 'Crag'
+      publishable_id = viewable.crag_id
+    when 'CragSector'
+      publishable_type = 'Crag'
+      publishable_id = viewable.crag_id
+    when 'GymRoute'
+      publishable_type = 'Gym'
+      publishable_id = viewable.gym_sector&.gym_space&.gym_id
+    else
+      publishable_type = viewable_type
+      publishable_id = viewable_id
+    end
+
+    return unless publishable_id
+
+    publication = Publication.includes(:publication_attachments).find_by(
+      publishable_id: publishable_id,
+      publishable_type: publishable_type,
+      publishable_subject: publishable_subject,
+      published_at: [created_at.beginning_of_week..created_at.end_of_week]
+    )
+
+    publication ||= Publication.new(
+      publishable_id: publishable_id,
+      publishable_type: publishable_type,
+      publishable_subject: publishable_subject,
+      generated: true
+    )
+    publication.published_at = created_at
+    publication.last_updated_at = created_at
+    publication.publication_attachments << PublicationAttachment.new(attachable_type: 'Video', attachable_id: id)
+    publication.save
   end
 
   private

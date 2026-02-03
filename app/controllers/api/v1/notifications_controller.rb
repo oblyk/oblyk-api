@@ -8,8 +8,14 @@ module Api
 
       def index
         unread_only = params.fetch(:unread_only, 'true')
-        notifications = unread_only == 'true' ? @current_user.notifications.unread : @current_user.notifications.page(params.fetch(:page, 1))
-        render json: notifications.map(&:summary_to_json), status: :ok
+        notifications = @current_user.notifications.includes(:notifiable, notifiable: [:publishable, { user: { avatar_attachment: :blob } }])
+        notifications = unread_only == 'true' ? notifications.unread : notifications.page(params.fetch(:page, 1))
+
+        render json: serializer(
+          NotificationSerializer,
+          notifications,
+          { include: [:notifiable], params: { include_attachments: { User: %i[avatar] } } }
+        ), status: :ok
       end
 
       def unread_count

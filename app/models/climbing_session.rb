@@ -9,7 +9,7 @@ class ClimbingSession < ApplicationRecord
   has_many :ascent_gym_routes
   has_many :ascent_crag_routes
 
-  def summary_to_json
+  def summary_to_json(for_current_user: true)
     crag_ascents = ascents.joins(crag_route: :crag).select { |ascent| ascent.type == 'AscentCragRoute' }.sort_by { |ascent| -(ascent.max_grade_value || 0) }
     gym_ascents = ascents.made.select { |ascent| ascent.type == 'AscentGymRoute' }.sort_by { |ascent| -(ascent.max_grade_value || 0) }
 
@@ -63,7 +63,8 @@ class ClimbingSession < ApplicationRecord
 
     {
       id: id,
-      description: description,
+      for_current_user: for_current_user,
+      description: for_current_user ? description : nil,
       user_id: user_id,
       session_date: session_date,
       crags: crag_ids,
@@ -83,7 +84,7 @@ class ClimbingSession < ApplicationRecord
     }
   end
 
-  def detail_to_json
+  def detail_to_json(for_current_user: true)
     previous_climbing_session = ClimbingSession
                                 .where(user: user)
                                 .where('climbing_sessions.session_date < ?', session_date)
@@ -95,13 +96,13 @@ class ClimbingSession < ApplicationRecord
 
     user_ids = AscentUser.where(ascent_id: ascent_crag_routes.pluck(:id)).pluck(:user_id).uniq
 
-    summary = summary_to_json
+    summary = summary_to_json(for_current_user: for_current_user)
     summary[:crags] = Crag.where(id: summary[:crags]).map(&:summary_to_json)
     summary[:gyms] = Gym.where(id: summary[:gyms]).map(&:summary_to_json)
     summary[:gym_ascents] = []
     summary[:crag_ascents] = []
     ascent_crag_routes.each do |ascent_crag_route|
-      ascent_route = ascent_crag_route.summary_to_json
+      ascent_route = ascent_crag_route.summary_to_json(for_current_user: for_current_user)
       ascent_route[:crag_route][:grade_gap][:max_grade_value] = ascent_crag_route.max_grade_value
       ascent_route[:crag_route][:grade_gap][:min_grade_value] = ascent_crag_route.min_grade_value
       ascent_route[:crag_route][:grade_gap][:max_grade_text] = ascent_crag_route.max_grade_text

@@ -25,6 +25,7 @@ class Report < ApplicationRecord
     Word
     User
     Organization
+    Publication
   ].freeze
 
   validates :reportable_type, inclusion: { in: REPORTABLE_LIST }

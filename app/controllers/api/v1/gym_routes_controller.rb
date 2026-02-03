@@ -349,7 +349,11 @@ module Api
           comments << ascent.ascent_comment
         end
         comments = comments.sort_by(&:created_at)
-        render json: comments.map(&:summary_to_json), status: :ok
+        render json: serializer(
+          CommentSerializer,
+          comments,
+          { include: [:user], params: { include_attachments: { User: %i[avatar] } } }
+        ), status: :ok
       end
 
       private

@@ -30,6 +30,15 @@ en:
         body: "You have new unread messages in your oblyk messenger"
         for_see_messenger: "To go to your messenger, visit this link :"
         check_my_message: "check my message"
+      new_publications:
+        title:
+          one: "One new post"
+          other: "%{count} new posts"
+        body: 'Here is a summary of yesterday’s posts that you haven’t seen yet:'
+        attachments_count:
+          one: 'One attached object'
+          other: '%{count} attached objects'
+        see_publication: "VOIR LA PUBLICATION"
       request_for_follow_up:
         title: "%{name} wishes to follow you"
         body: "%{name} requests to follow you, go to your subscriber page to accept or decline his request"

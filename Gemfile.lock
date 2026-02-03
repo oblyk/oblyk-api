@@ -220,6 +220,8 @@ GEM
       ruby-vips (>= 2.0.17, < 3)
     jmespath (1.6.2)
     json (2.6.3)
+    jsonapi-serializer (2.2.0)
+      activesupport (>= 4.2)
     jwt (2.2.3)
     kaminari (1.2.1)
       activesupport (>= 4.1.0)
@@ -513,6 +515,7 @@ DEPENDENCIES
   google-cloud-storage (~> 1.11)
   hiredis
   image_processing (~> 1.2)
+  jsonapi-serializer
   jwt
   kaminari
   letter_opener

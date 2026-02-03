@@ -55,6 +55,9 @@ module Api
       # PUT /articles/:id/publish
       def publish
         @article.publish!
+        @article.reload
+        @article.publication_push!
+
         head :no_content
       end
 

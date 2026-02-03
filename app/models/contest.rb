@@ -57,6 +57,14 @@ class Contest < ApplicationRecord
     "#{ENV['OBLYK_APP_URL']}/gyms/#{gym.id}/#{gym.slug_name}/contests/#{id}/#{slug_name}"
   end
 
+  def app_path
+    "/gyms/#{gym.id}/#{gym.slug_name}/contests/#{id}/#{slug_name}"
+  end
+
+  def app_admin_path
+    "/gyms/#{gym.id}/#{gym.slug_name}/admins/contests/#{id}"
+  end
+
   def subscription_opened?
     Date.current >= subscription_start_date && Date.current <= subscription_end_date
   end
@@ -86,6 +94,8 @@ class Contest < ApplicationRecord
       {
         id: id,
         name: name,
+        app_path: app_path,
+        app_admin_path: app_admin_path,
         slug_name: slug_name,
         description: description,
         gym_id: gym_id,

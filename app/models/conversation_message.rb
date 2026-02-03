@@ -13,6 +13,10 @@ class ConversationMessage < ApplicationRecord
 
   validates :body, presence: true
 
+  def app_path
+    "/home/messenger/#{conversation_id}#message-id=#{id}"
+  end
+
   def conversation_user
     ConversationUser.find_by conversation: conversation, user: user
   end

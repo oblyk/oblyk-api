@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Photo < ApplicationRecord
-  include ActivityFeedable
   include AttachmentResizable
   include StripTagable
 
@@ -16,17 +15,17 @@ class Photo < ApplicationRecord
   has_many :crag_routes
   has_many :areas
   has_many :likes, as: :likeable
+  has_many :publication_attachments, as: :attachable, dependent: :destroy
 
   before_validation :init_posted_at
+  after_create_commit :publication_push!
 
   validates :illustrable_type, inclusion: { in: %w[Crag CragSector CragRoute Article Newsletter].freeze }
   validates :picture, blob: { content_type: :image }
 
   delegate :longitude, to: :illustrable
   delegate :latitude, to: :illustrable
-  delegate :feed_parent_id, to: :illustrable
-  delegate :feed_parent_type, to: :illustrable
-  delegate :feed_parent_object, to: :illustrable
+  delegate :name, to: :illustrable
 
   def photo_height
     picture.blob.metadata['height']
@@ -44,6 +43,18 @@ class Photo < ApplicationRecord
     Rails.cache.fetch("#{cache_key_with_version}/summary_photo", expires_in: 28.days) do
       detail_to_json
     end
+  end
+
+  def app_path
+    "/photos/#{id}"
+  end
+
+  def copy
+    copies = []
+    copies << 'BY' if copyright_by
+    copies << 'NC' if copyright_nc
+    copies << 'ND' if copyright_nd
+    copies.join ' - '
   end
 
   def detail_to_json
@@ -67,6 +78,7 @@ class Photo < ApplicationRecord
     {
       id: id,
       description: description,
+      app_path: app_path,
       exif_model: exif_model,
       exif_make: exif_make,
       source: source,
@@ -74,6 +86,7 @@ class Photo < ApplicationRecord
       copyright_by: copyright_by,
       copyright_nc: copyright_nc,
       copyright_nd: copyright_nd,
+      copy: copy,
       photo_height: photo_height,
       photo_width: photo_width,
       likes_count: likes_count,
@@ -87,6 +100,32 @@ class Photo < ApplicationRecord
         updated_at: updated_at
       }
     }
+  end
+
+  def publication_push!(publishable_subject = :new_photo)
+    return unless %w[Crag CragRoute CragSector].include?(illustrable_type)
+
+    crag_id = %w[CragRoute CragSector].include?(illustrable_type) ? illustrable.crag_id : illustrable_id
+
+    publication = Publication.includes(:publication_attachments).find_by(
+      publishable_id: crag_id,
+      publishable_type: 'Crag',
+      publishable_subject: publishable_subject,
+      published_at: [posted_at.beginning_of_week..posted_at.end_of_week],
+      author_id: user_id
+    )
+
+    publication ||= Publication.new(
+      publishable_id: crag_id,
+      publishable_type: 'Crag',
+      publishable_subject: publishable_subject,
+      generated: true,
+      author_id: user_id
+    )
+    publication.published_at = posted_at
+    publication.last_updated_at = posted_at
+    publication.publication_attachments << PublicationAttachment.new(attachable_type: 'Photo', attachable_id: id)
+    publication.save
   end
 
   private

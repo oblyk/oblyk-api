@@ -1,0 +1,13 @@
+<%= t('mailer.notification.hello', name: @user.first_name) %>
+
+<%= t('mailer.notification.new_publications.body', count: @publications.size) %>
+
+<% @publications.each do |publication| %>
+  <%= publication[:body] %>
+
+  <% if publication[:attachables_count].positive? %>
+    <%= t('mailer.notification.new_publications.attachments_count', count: publication[:attachables_count]) %>
+  <% end %>
+
+  <%= t('mailer.notification.new_publications.see_publication') %> : <%= publication[:publication_app_path] %>
+<% end %>

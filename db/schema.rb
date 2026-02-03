@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_01_09_105017) do
+ActiveRecord::Schema.define(version: 2026_01_11_144734) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -1100,6 +1100,7 @@ ActiveRecord::Schema.define(version: 2026_01_09_105017) do
     t.json "three_d_camera_position"
     t.json "three_d_label_options"
     t.string "representation_type", default: "2d_picture"
+    t.text "svg_sectors"
     t.index ["gym_grade_id"], name: "index_gym_spaces_on_gym_grade_id"
     t.index ["gym_id"], name: "index_gym_spaces_on_gym_id"
     t.index ["gym_space_group_id"], name: "index_gym_spaces_on_gym_space_group_id"
@@ -1296,6 +1297,7 @@ ActiveRecord::Schema.define(version: 2026_01_09_105017) do
     t.bigint "notifiable_id"
     t.datetime "posted_at"
     t.datetime "read_at"
+    t.datetime "email_notification_sent_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["notifiable_type", "notifiable_id"], name: "index_notifications_on_notifiable_type_and_notifiable_id"
@@ -1384,6 +1386,49 @@ ActiveRecord::Schema.define(version: 2026_01_09_105017) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["guide_book_paper_id"], name: "index_place_of_sales_on_guide_book_paper_id"
     t.index ["user_id"], name: "index_place_of_sales_on_user_id"
+  end
+
+  create_table "publication_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.bigint "publication_id"
+    t.string "attachable_type"
+    t.bigint "attachable_id"
+    t.index ["attachable_type", "attachable_id"], name: "index_publications_attachments_on_attachable_type_and_id"
+    t.index ["publication_id"], name: "index_publication_attachments_on_publication_id"
+  end
+
+  create_table "publication_views", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.bigint "publication_id"
+    t.bigint "user_id"
+    t.datetime "viewed_at"
+    t.index ["publication_id"], name: "index_publication_views_on_publication_id"
+    t.index ["user_id", "publication_id"], name: "index_publication_views_on_user_id_and_publication_id", unique: true
+    t.index ["user_id"], name: "index_publication_views_on_user_id"
+  end
+
+  create_table "publications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.string "publishable_type"
+    t.bigint "publishable_id"
+    t.bigint "author_id"
+    t.string "publishable_subject"
+    t.text "body"
+    t.datetime "published_at"
+    t.datetime "last_updated_at"
+    t.integer "comments_count", default: 0
+    t.integer "likes_count", default: 0
+    t.integer "attachables_count"
+    t.json "attachable_types_count"
+    t.boolean "generated", default: false
+    t.datetime "pined_at"
+    t.decimal "latitude", precision: 10, scale: 6
+    t.decimal "longitude", precision: 10, scale: 6
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["author_id"], name: "index_publications_on_author_id"
+    t.index ["latitude"], name: "index_publications_on_latitude"
+    t.index ["longitude"], name: "index_publications_on_longitude"
+    t.index ["pined_at"], name: "index_publications_on_pined_at"
+    t.index ["publishable_type", "publishable_id"], name: "index_publications_on_publishable_type_and_publishable_id"
+    t.index ["published_at"], name: "index_publications_on_published_at"
   end
 
   create_table "refresh_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1641,5 +1686,9 @@ ActiveRecord::Schema.define(version: 2026_01_09_105017) do
   add_foreign_key "indoor_subscription_gyms", "gyms"
   add_foreign_key "indoor_subscription_gyms", "indoor_subscriptions"
   add_foreign_key "likes", "users"
+  add_foreign_key "publication_attachments", "publications"
+  add_foreign_key "publication_views", "publications"
+  add_foreign_key "publication_views", "users"
+  add_foreign_key "publications", "users", column: "author_id"
   add_foreign_key "user_applications", "users"
 end

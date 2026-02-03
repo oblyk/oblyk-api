@@ -110,6 +110,9 @@ gem 'money-rails', '~> 1.15'
 # Stripe (payment webhook)
 gem 'stripe'
 
+# JSON API serializer https://github.com/jsonapi-serializer/jsonapi-serializer
+gem 'jsonapi-serializer'
+
 group :development, :test do
   gem 'bullet'
   # Ruby static code analyzer

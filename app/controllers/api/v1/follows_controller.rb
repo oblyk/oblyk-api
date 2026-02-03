@@ -52,6 +52,29 @@ module Api
         render json: {}, status: :ok
       end
 
+      def my_follows_by_types
+        items = {}
+        follows = Follow.includes(followable:
+                                    { photo: { picture_attachment: :blob },
+                                      banner_attachment: :blob,
+                                      logo_attachment: :blob,
+                                      static_map_attachment: :blob,
+                                      static_map_banner_attachment: :blob
+                                    })
+                        .where(
+                          followable_type: params[:followable_types],
+                          user: @current_user
+                        )
+                        .order(updated_at: :desc)
+        follows = follows.group_by(&:followable_type)
+        follows.each do |type, follows_in_type|
+          serializers = { 'Crag' => CragSerializer, 'Gym' => GymSerializer }
+          records = follows_in_type.map(&:followable)
+          items[type] = serializers[type].new(records).serializable_hash[:data].map { |data| data[:attributes] }
+        end
+        render json: items, status: :ok
+      end
+
       private
 
       def set_follow

@@ -3,8 +3,6 @@
 class GuideBookPaper < ApplicationRecord
   include Searchable
   include Slugable
-  include ParentFeedable
-  include ActivityFeedable
   include AttachmentResizable
 
   has_paper_trail only: %i[
@@ -36,12 +34,14 @@ class GuideBookPaper < ApplicationRecord
   has_many :articles, through: :article_guide_book_papers
   belongs_to :next_guide_book_paper, class_name: 'GuideBookPaper', optional: true
   has_many :previous_guide_book_papers, class_name: 'GuideBookPaper', foreign_key: :next_guide_book_paper_id
+  has_many :publications, as: :publishable
 
   validates :name, presence: true
   validates :cover, blob: { content_type: :image }, allow_nil: true
   validates :funding_status, inclusion: { in: FUNDING_STATUS_LIST }, allow_blank: true
 
   after_save :historize_around_towns
+  after_create_commit :publication_push!
 
   def all_photos_count
     photos_count = 0
@@ -58,12 +58,17 @@ class GuideBookPaper < ApplicationRecord
     photos
   end
 
+  def app_path
+    "/guide-book-papers/#{id}/#{slug_name}"
+  end
+
   def summary_to_json
     Rails.cache.fetch("#{cache_key_with_version}/summary_guide_book_paper", expires_in: 28.days) do
       {
         id: id,
         name: name,
         slug_name: slug_name,
+        app_path: app_path,
         author: author,
         editor: editor,
         publication_year: publication_year,
@@ -141,9 +146,41 @@ class GuideBookPaper < ApplicationRecord
     }
   end
 
+  def latitude
+    location.first
+  end
+
+  def longitude
+    location.last
+  end
+
+  def location
+    crags_coordinates = []
+    if crags.size.zero?
+      return [nil, nil]
+    end
+
+    crags.each do |crag|
+      crags_coordinates << [crag.latitude, crag.longitude]
+    end
+    GeoHelper.point_central crags_coordinates
+  end
+
   def delete_summary_cache
     Rails.cache.delete("#{cache_key_with_version}/summary_guide_book_paper")
     Rails.cache.delete("#{cache_key_with_version}/geo_json_guide_book_paper")
+  end
+
+  def publication_push!(publishable_subject = :create)
+    Publication.create(
+      publishable_id: id,
+      publishable_type: 'GuideBookPaper',
+      publishable_subject: publishable_subject,
+      published_at: created_at,
+      last_updated_at: created_at,
+      generated: true,
+      author: user
+    )
   end
 
   private

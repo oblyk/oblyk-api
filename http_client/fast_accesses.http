@@ -1,0 +1,5 @@
+### GET follow for current user fast access
+GET {{api_url}}/fast_accesses.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json

@@ -39,6 +39,25 @@ module Api
         data[:crags_count] = Crag.count if figures.include? 'crags_count'
         data[:crag_routes_count] = CragRoute.count if figures.include? 'crag_routes_count'
         data[:guide_book_papers_count] = GuideBookPaper.count if figures.include? 'guide_book_papers_count'
+        if figures.include? 'partner_search_count'
+          data[:partner_search_count] = User.where(partner_search: true)
+                                            .where('EXISTS(SELECT * FROM locality_users WHERE deactivated_at IS NULL AND user_id = users.id)')
+                                            .where('users.last_activity_at > ?', Date.current - 3.years).count
+        end
+        if figures.include? 'gym_active_guides_count'
+          results = ActiveRecord::Base.connection.execute(
+            'SELECT COUNT(*), gym_id
+                FROM gyms
+                     INNER JOIN gym_spaces ON gyms.id = gym_spaces.gym_id
+                     INNER JOIN gym_sectors ON gym_spaces.id = gym_sectors.gym_space_id
+                     INNER JOIN gym_routes ON gym_sectors.id = gym_routes.gym_sector_id
+                WHERE gym_routes.dismounted_at IS NULL
+                  AND gym_routes.opened_at > CURRENT_DATE - INTERVAL 1 YEAR
+                GROUP BY gym_id
+                HAVING COUNT(*) > 20'
+          )
+          data[:gym_active_guides_count] = results.size
+        end
         render json: data, status: :ok
       end
 

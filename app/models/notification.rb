@@ -3,19 +3,20 @@
 class Notification < ApplicationRecord
   include Readable
 
-  NOTIFIABLE_TYPE_LIST = %w[User Article ConversationMessage Like Comment].freeze
+  NOTIFIABLE_TYPE_LIST = %w[User ConversationMessage Like Comment Publication].freeze
   NOTIFICATION_TYPE_LIST = %w[
     new_message
     new_follower
     subscribe_accepted
     request_for_follow_up
-    new_article
+    new_publication
     new_like
     new_reply
   ].freeze
 
   EMAILABLE_NOTIFICATION_LIST = %w[
     new_message
+    new_publication
     request_for_follow_up
     new_article
   ].freeze
@@ -32,6 +33,32 @@ class Notification < ApplicationRecord
   before_validation :set_posted_at
   after_create :send_email_notification
   after_save :broadcast_notification
+
+  def name
+    if notifiable_type == 'User'
+      notifiable.first_name
+    elsif notifiable_type == 'Article'
+      notifiable.name
+    elsif %w[ConversationMessage Like Comment].include? notifiable_type
+      notifiable.user.first_name
+    elsif notifiable_type == 'Publication'
+      notifiable.publishable.name
+    end
+  end
+
+  def app_path
+    if notification_type == 'new_message'
+      notifiable.app_path
+    elsif %w[new_follower subscribe_accepted request_for_follow_up].include? notification_type
+      notifiable.app_path
+    elsif notification_type == 'new_like'
+      notifiable.likeable.app_path
+    elsif notification_type == 'new_reply'
+      notifiable.app_path
+    elsif notification_type == 'new_publication'
+      notifiable.app_path
+    end
+  end
 
   def summary_to_json
     detail_to_json
@@ -62,8 +89,9 @@ class Notification < ApplicationRecord
   end
 
   def send_email_notification
+    return if notification_type == 'new_publication' && notifiable_type == 'Publication' # Send with SendPublicationsEmailsJob
     return if user.email_notifiable_list.blank?
-    return unless user.email_notifiable_list.include?(notification_type)
+    return unless user.email_notifiable_list&.include?(notification_type)
 
     EmailNotificationWorker.perform_in(5.minutes, id)
   end

@@ -30,6 +30,15 @@ fr:
         body: "Vous avez des nouveaux messages non lus sur votre messagerie Oblyk"
         for_see_messenger: "Pour vous rendre sur votre messagerie, visitez ce lien :"
         check_my_message: "Voir ma messagerie"
+      new_publications:
+        title:
+          one: "Une nouvelle publication"
+          other: "%{count} nouvelles publications"
+        body: "Voici le récapitulatif des publications d'hier que vous n'avez pas encore consulté :"
+        attachments_count:
+          one: 'Un objet attaché'
+          other: '%{count} objets attachés'
+        see_publication: "VOIR LA PUBLICATION"
       request_for_follow_up:
         title: "%{name} souhaite vous suivre"
         body: "%{name} souhaite vous suivre, rendez vous sur la page de vos abonné·e·s pour accepter ou refuser sa demande"

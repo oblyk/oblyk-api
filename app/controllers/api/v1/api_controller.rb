@@ -13,6 +13,12 @@ module Api
 
       private
 
+      def serializer(serializer_class, resource, options = {})
+        serializer = serializer_class.new(resource, options).serializable_hash
+        serializer[:json_type] = 'jsonapi.org'
+        serializer
+      end
+
       # Check if request ip isn't in ip black list
       def check_ip
         return unless request_can_write?

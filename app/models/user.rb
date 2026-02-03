@@ -72,6 +72,8 @@ class User < ApplicationRecord
   has_many :likes
   has_many :contest_participants
   has_many :user_applications
+  has_many :publications, as: :publishable
+  has_many :publication_views, dependent: :destroy
 
   before_validation :init_slug_name
   before_validation :set_uuid
@@ -190,6 +192,16 @@ class User < ApplicationRecord
     subscribes.accepted.where(followable_type: 'User')
   end
 
+  def other_user_can?(other_user, request: :see_publications)
+    return true if public_profile
+
+    follows.where(user: other_user).where.not(accepted_at: nil).exists?
+  end
+
+  def app_path
+    "/climbers/#{slug_name}"
+  end
+
   def local_climber_to_json
     Rails.cache.fetch("#{cache_key_with_version}/local_climber_to_json", expires_in: 28.days) do
       {
@@ -197,6 +209,7 @@ class User < ApplicationRecord
         first_name: first_name,
         full_name: full_name,
         slug_name: slug_name,
+        app_path: app_path,
         description: description ? Markdown.new(description, :hard_wrap).to_html.html_safe : '',
         age: age,
         genre: genre,
@@ -292,6 +305,7 @@ class User < ApplicationRecord
         locality_users.destroy_all
         gym_openers.update_all(user_id: nil)
         likes.destroy_all
+        publication_views.destroy_all
 
         # Purge feed in relation
         Feed.where(parent_id: id, parent_type: 'User').destroy_all
@@ -439,7 +453,7 @@ class User < ApplicationRecord
   end
 
   def init_email_notifiable_list
-    self.email_notifiable_list ||= ['new_message']
+    self.email_notifiable_list ||= %w[new_message new_publication]
   end
 
   def init_partner_search_activated_at
