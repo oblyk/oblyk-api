@@ -54,7 +54,7 @@ module ContestService
       # CALCULATE PARTICIPANTS SCORES
       categories.each do |category|
         participants = @contest.contest_participants
-                               .includes(:contest_participant_ascents)
+                               .includes(:contest_participant_ascents, :user)
                                .where(contest_category: category)
         participants = participants.includes(:contest_team) if @contest.team_contest
 
@@ -333,6 +333,8 @@ module ContestService
         first_name: participant.first_name,
         last_name: participant.last_name,
         affiliation: participant.affiliation,
+        user_uuid: participant.user&.uuid,
+        synchronise_with_ffme_contest: participant.synchronise_with_ffme_contest,
         stages: {}
       }
       if @contest.team_contest

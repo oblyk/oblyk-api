@@ -342,6 +342,7 @@ ActiveRecord::Schema.define(version: 2026_01_09_105017) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "contest_team_id"
+    t.boolean "synchronise_with_ffme_contest"
     t.index ["contest_category_id"], name: "index_contest_participants_on_contest_category_id"
     t.index ["contest_team_id"], name: "index_contest_participants_on_contest_team_id"
     t.index ["contest_wave_id"], name: "index_contest_participants_on_contest_wave_id"
@@ -688,6 +689,23 @@ ActiveRecord::Schema.define(version: 2026_01_09_105017) do
     t.index ["parent_id"], name: "index_feeds_on_parent_id"
     t.index ["parent_type"], name: "index_feeds_on_parent_type"
     t.index ["posted_at"], name: "index_feeds_on_posted_at"
+  end
+
+  create_table "ffme_contests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.bigint "contest_id"
+    t.string "status"
+    t.string "contest_type"
+    t.string "name"
+    t.string "description", limit: 2048
+    t.date "start_date"
+    t.date "end_date"
+    t.string "contact_email"
+    t.string "contact_phone"
+    t.bigint "external_ffme_contest_id"
+    t.date "results_send_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["contest_id"], name: "index_ffme_contests_on_contest_id"
   end
 
   create_table "follows", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1156,6 +1174,7 @@ ActiveRecord::Schema.define(version: 2026_01_09_105017) do
     t.json "three_d_camera_position"
     t.string "gym_type"
     t.bigint "gym_billing_account_id"
+    t.string "insee_code"
     t.index ["department_id"], name: "index_gyms_on_department_id"
     t.index ["gym_billing_account_id"], name: "index_gyms_on_gym_billing_account_id"
     t.index ["name"], name: "index_gyms_on_name"
@@ -1473,6 +1492,20 @@ ActiveRecord::Schema.define(version: 2026_01_09_105017) do
     t.index ["slug_name"], name: "index_towns_on_slug_name", unique: true
   end
 
+  create_table "user_applications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "type"
+    t.string "user_application_id"
+    t.string "status"
+    t.string "ffme_licence_number"
+    t.json "meta_data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["type", "user_id"], name: "index_user_applications_on_type_and_user_id", unique: true
+    t.index ["user_application_id"], name: "index_user_applications_on_user_application_id"
+    t.index ["user_id"], name: "index_user_applications_on_user_id"
+  end
+
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "first_name", null: false
     t.string "last_name"
@@ -1591,6 +1624,7 @@ ActiveRecord::Schema.define(version: 2026_01_09_105017) do
   add_foreign_key "contest_time_blocks", "contest_waves"
   add_foreign_key "contest_waves", "contests"
   add_foreign_key "contests", "gyms"
+  add_foreign_key "ffme_contests", "contests"
   add_foreign_key "gym_chain_administrators", "gym_chains"
   add_foreign_key "gym_chain_administrators", "users"
   add_foreign_key "gym_chain_gyms", "gym_chains"
@@ -1607,4 +1641,5 @@ ActiveRecord::Schema.define(version: 2026_01_09_105017) do
   add_foreign_key "indoor_subscription_gyms", "gyms"
   add_foreign_key "indoor_subscription_gyms", "indoor_subscriptions"
   add_foreign_key "likes", "users"
+  add_foreign_key "user_applications", "users"
 end

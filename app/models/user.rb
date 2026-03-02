@@ -19,6 +19,7 @@ class User < ApplicationRecord
   has_secure_password
   has_one_attached :avatar
   has_one_attached :banner
+  has_one :user_application_my_compet
   has_many :follows, as: :followable
   has_many :subscribes, class_name: 'Follow', foreign_key: :user_id
   has_many :conversation_messages
@@ -70,6 +71,7 @@ class User < ApplicationRecord
   has_many :localities, through: :locality_users
   has_many :likes
   has_many :contest_participants
+  has_many :user_applications
 
   before_validation :init_slug_name
   before_validation :set_uuid

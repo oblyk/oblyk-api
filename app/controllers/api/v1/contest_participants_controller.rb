@@ -6,12 +6,12 @@ module Api
       include UploadVerification
       include GymRolesVerification
 
-      before_action :protected_by_session, only: %i[index export import import_template create update destroy tombola tombola_winners]
+      before_action :protected_by_session, only: %i[index export import import_template create update destroy tombola tombola_winners link_to_current_user synchronise_participant_with_ffme_contest]
       before_action :set_gym
       before_action :set_contest
-      before_action :set_contest_participant, only: %i[show update destroy]
+      before_action :set_contest_participant, only: %i[show update destroy link_to_current_user synchronise_participant_with_ffme_contest]
       before_action :protected_by_administrator, only: %i[export import import_template create update destroy tombola tombola_winners]
-      before_action :user_can_manage_contest, except: %i[index show participant subscribe tombola tombola_winners]
+      before_action :user_can_manage_contest, except: %i[index show participant subscribe tombola tombola_winners link_to_current_user synchronise_participant_with_ffme_contest]
 
       def index
         render json: @contest.contest_participants.includes(:contest_category, :contest_wave).map(&:summary_to_json), status: :ok
@@ -167,7 +167,11 @@ module Api
         end
 
         render json: {
+          id: participant.id,
           token: participant.token,
+          linked_to_user: participant.user_id.present?,
+          user_id: participant.user_id,
+          synchronise_with_ffme_contest: participant.synchronise_with_ffme_contest?,
           first_name: participant.first_name,
           last_name: participant.last_name,
           wave: participant.contest_wave&.name,
@@ -179,44 +183,12 @@ module Api
       def subscribe
         participant = ContestParticipant.new(contest_participant_params)
         participant.contest = @contest
-        create_account = params[:contest_participant][:create_account] == true
         save_user = params[:contest_participant][:save_user] == true
         session_token = nil
         session_refresh_token = nil
-        user = nil
-
-        # Is user want create an account but email is not free
-        if create_account && User.exists?(email: participant.email)
-          render json: { error: :need_authentification }, status: :unprocessable_entity
-          return
-        end
-
-        # Create account
-        if create_account
-          user = User.new(
-            first_name: contest_participant_params[:first_name],
-            last_name: contest_participant_params[:last_name],
-            date_of_birth: contest_participant_params[:date_of_birth],
-            genre: contest_participant_params[:genre],
-            email: contest_participant_params[:email],
-            password: params[:contest_participant][:password],
-            password_confirmation: params[:contest_participant][:password_confirmation]
-          )
-          if user.save
-            user_data = user.as_json(only: %i[id first_name last_name])
-            exp = Time.now.to_i + Rails.application.config.jwt_session_lifetime
-            session_token = JwtToken::Token.generate(user_data, exp)
-            session_refresh_token = JwtToken::Token.generate(user_data, exp + 3.months)
-            UserMailer.with(user: user).welcome.deliver_later
-          else
-            render json: { error: user.errors }, status: :unprocessable_entity
-            return
-          end
-        end
 
         # Save user in participant if new account or user is logged and want save contest
         participant.user = @current_user if save_user && login?
-        participant.user = user if user && save_user
 
         if participant.save
           render json: {
@@ -301,6 +273,18 @@ module Api
         render json: @contest.contest_participants.where(tombola_winner: true).map(&:summary_to_json), status: :ok
       end
 
+      def link_to_current_user
+        @contest_participant.user = @current_user
+        @contest_participant.save
+        head :no_content
+      end
+
+      def synchronise_participant_with_ffme_contest
+        @contest_participant.synchronise_with_ffme_contest = true
+        @contest_participant.save
+        head :no_content
+      end
+
       private
 
       def set_gym
@@ -344,7 +328,8 @@ module Api
           :contest_category_id,
           :contest_wave_id,
           :contest_team_id,
-          :tombola_winner
+          :tombola_winner,
+          :synchronise_with_ffme_contest
         )
       end
 

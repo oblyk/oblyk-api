@@ -155,6 +155,8 @@ Rails.application.routes.draw do
               end
             end
           end
+          resources :user_applications, only: %i[index show destroy]
+          resources :user_application_my_compets, only: %i[create index]
           resources :climbing_sessions, only: %i[index show update]
         end
       end
@@ -336,6 +338,10 @@ Rails.application.routes.draw do
           put :archived, on: :member
           put :unarchived, on: :member
           post :add_banner, on: :member
+          resources :ffme_contests, only: %i[create update show] do
+            get :link, on: :member
+            post :send_results, on: :member
+          end
           resources :contest_categories
           resources :contest_waves
           resources :contest_teams
@@ -359,6 +365,8 @@ Rails.application.routes.draw do
             get :import_template, on: :collection
             get :participant, on: :member
             post :subscribe, on: :collection
+            put :link_to_current_user, on: :member
+            put :synchronise_participant_with_ffme_contest, on: :member
             resources :contest_participant_ascents, only: %i[create] do
               post :bulk, on: :collection
             end

@@ -24,6 +24,7 @@ class Contest < ApplicationRecord
   has_many :championships, through: :championship_contests
   has_many :contest_teams
   has_many :contest_judges
+  has_one :ffme_contest
 
   before_validation :normalize_attributes
   before_create :set_draft_mode
@@ -134,6 +135,8 @@ class Contest < ApplicationRecord
         contest_stages: contest_stages.map(&:summary_to_json),
         championships: championships.map(&:summary_to_json),
         contest_waves: contest_waves.map { |wave| { id: wave.id, name: wave.name, capacity: wave.capacity }},
+        ffme_contest_id: ffme_contest&.id,
+        ffme_contest: ffme_contest&.summary_to_json,
         history: {
           created_at: created_at,
           updated_at: updated_at
