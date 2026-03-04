@@ -16,9 +16,29 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
       - data-mysql:/var/lib/mysql
+  app:
+    build: .
+    ports:
+      - "3001:3000"
+    volumes:
+      - .:/app
+      - bundle-cache:/usr/local/bundle
+      - storage-data:/app/storage
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - DB_HOST=mysql
+      - DB_PORT=3306
+    depends_on:
+      - mysql
+      - redis
 
 volumes:
   data-redis:
     name: oblyk-api-data-redis
   data-mysql:
     name: oblyk-api-data-mysql
+  bundle-cache:
+    name: oblyk-api-bundle-cache
+  storage-data:
+    name: oblyk-api-storage-data
