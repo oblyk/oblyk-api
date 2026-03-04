@@ -89,6 +89,10 @@ gem 'sib-api-v3-sdk'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
 
+# Generate circular chart PDFs
+gem 'prawn'
+gem 'prawn-svg'
+
 # Generate QrCode
 gem 'rqrcode', '~> 2.0'
 
