@@ -57,9 +57,6 @@
 #   pdf_io = DiscChartService.new(routes).generate_pdf
 #   send_data pdf_io.read, filename: 'route_labels.pdf', type: 'application/pdf'
 
-require 'prawn'
-require 'prawn-svg'
-
 class DiscChartService
   TITLE_FS       = 14
   GRADE_FS       = 18
