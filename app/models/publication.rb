@@ -39,6 +39,7 @@ class Publication < ApplicationRecord
   before_create :historize_location
 
   validates :body, presence: true, if: proc { |object| object.published_at.present? && object.publishable_subject.blank? }
+  validates :body, length: { maximum: 4000 }
   validates :publishable_type, inclusion: { in: PUBLISHABLE_TYPES }
   validates :publishable_subject, inclusion: { in: PUBLISHABLE_SUBJECTS }, allow_blank: true
 
