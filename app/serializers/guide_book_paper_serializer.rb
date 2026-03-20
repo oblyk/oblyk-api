@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-class GuideBookPaperSerializer
-  include JSONAPI::Serializer
+class GuideBookPaperSerializer < BaseSerializer
   include AttachmentsSerializerHelper
 
   attributes :id,

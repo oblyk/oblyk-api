@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class GymOptionSerializer
-  include JSONAPI::Serializer
-
+class GymOptionSerializer < BaseSerializer
   attributes :id,
              :name,
              :option_type,

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class GymSectorSerializer
-  include JSONAPI::Serializer
-
+class GymSectorSerializer < BaseSerializer
   belongs_to :gym_space
   belongs_to :gym
 

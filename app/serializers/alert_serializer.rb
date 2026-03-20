@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class AlertSerializer
-  include JSONAPI::Serializer
-
+class AlertSerializer < BaseSerializer
   has_one :alertable, polymorphic: true
 
   attributes :id,

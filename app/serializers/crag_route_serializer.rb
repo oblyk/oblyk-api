@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class CragRouteSerializer
-  include JSONAPI::Serializer
-
+class CragRouteSerializer < BaseSerializer
   belongs_to :crag
   belongs_to :crag_sector
 

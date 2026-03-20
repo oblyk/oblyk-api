@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class ConversationMessageSerializer
-  include JSONAPI::Serializer
-
+class ConversationMessageSerializer < BaseSerializer
   belongs_to :user
 
   attributes :id,

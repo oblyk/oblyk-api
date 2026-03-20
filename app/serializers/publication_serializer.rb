@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class PublicationSerializer
-  include JSONAPI::Serializer
-
+class PublicationSerializer < BaseSerializer
   has_many :publication_attachments
   belongs_to :publishable, polymorphic: true
   belongs_to :author, serializer: :publication_author

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class CommentSerializer
-  include JSONAPI::Serializer
-
+class CommentSerializer < BaseSerializer
   belongs_to :user
   has_one :commentable, polymorphic: true
 

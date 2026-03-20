@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class LikeSerializer
-  include JSONAPI::Serializer
-
+class LikeSerializer < BaseSerializer
   belongs_to :likeable, polymorphic: true
 
   attributes :id,

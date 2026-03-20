@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-class GymSerializer
-  include JSONAPI::Serializer
+class GymSerializer < BaseSerializer
   include AttachmentsSerializerHelper
 
-  has_many :gym_options
+  has_many :gym_options, lazy_load_data: true
 
   attributes :id,
              :name,

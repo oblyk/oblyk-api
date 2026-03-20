@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-class ArticleSerializer
-  include JSONAPI::Serializer
+class ArticleSerializer < BaseSerializer
   include AttachmentsSerializerHelper
 
-  has_many :crags
-  has_many :guide_book_papers
+  has_many :crags, lazy_load_data: true
+  has_many :guide_book_papers, lazy_load_data: true
   belongs_to :author, serializer: UserSerializer
 
   attributes :id,

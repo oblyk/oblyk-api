@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-class ChampionshipSerializer
-  include JSONAPI::Serializer
+class ChampionshipSerializer < BaseSerializer
   include AttachmentsSerializerHelper
 
   belongs_to :gym
-  has_many :contests
+  has_many :contests, lazy_load_data: true
 
   attributes :id,
              :name,
@@ -16,7 +15,7 @@ class ChampionshipSerializer
              :archived_at
 
   attribute :contests_count do |object|
-    object.contests.count
+    object.contests.size
   end
 
   attribute :history do |object|

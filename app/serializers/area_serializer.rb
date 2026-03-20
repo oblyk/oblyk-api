@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-class AreaSerializer
-  include JSONAPI::Serializer
+class AreaSerializer < BaseSerializer
   include AttachmentsSerializerHelper
 
-  has_many :crags
+  has_many :crags, lazy_load_data: true
   belongs_to :user
 
   attributes :id,

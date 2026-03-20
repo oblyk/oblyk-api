@@ -141,7 +141,7 @@ class Gym < ApplicationRecord
   end
 
   def gym_spaces_with_anchor?
-    gym_spaces.where(anchor: true).count.positive?
+    gym_spaces.where(anchor: true).size.positive?
   end
 
   def ranking?
@@ -292,10 +292,10 @@ class Gym < ApplicationRecord
   end
 
   def app_first_spaces_path
-    spaces = gym_spaces
-    if spaces.size == 1
-      "#{app_path}/spaces/#{spaces.first.id}/#{spaces.first.slug_name}"
-    elsif spaces.size > 1
+    gym_space_count = gym_spaces.size
+    if gym_space_count == 1
+      "#{app_path}/spaces/#{gym_spaces.first.id}/#{gym_spaces.first.slug_name}"
+    elsif gym_space_count > 1
       "#{app_path}/spaces"
     else
       app_path

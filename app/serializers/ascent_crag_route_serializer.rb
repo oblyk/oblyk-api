@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
-class AscentCragRouteSerializer
-  include JSONAPI::Serializer
-
+class AscentCragRouteSerializer < BaseSerializer
   belongs_to :crag_route
   belongs_to :crag
   belongs_to :user
-  has_many :ascent_users
+  has_many :ascent_users, lazy_load_data: true
 
   attributes :id,
              :ascent_status,

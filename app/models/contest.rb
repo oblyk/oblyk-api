@@ -46,7 +46,7 @@ class Contest < ApplicationRecord
   scope :upcoming, -> { where(draft: false, private: false).where('contests.end_date >= ?', Date.current) }
 
   def remaining_places
-    total_capacity ? total_capacity - (contest_participants.count || 0) : nil
+    total_capacity ? total_capacity - (contest_participants.size || 0) : nil
   end
 
   def one_day_event?

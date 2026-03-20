@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-class GymRouteSerializer
-  include JSONAPI::Serializer
+class GymRouteSerializer < BaseSerializer
   include AttachmentsSerializerHelper
 
-  has_many :gym_openers
+  has_many :gym_openers, lazy_load_data: true
   belongs_to :gym_space
   belongs_to :gym_sector
   belongs_to :gym, through: :gym_sector
@@ -47,8 +46,8 @@ class GymRouteSerializer
   attribute :grade_to_s, &:grade_to_s
   attribute :calculated_thumbnail_position, &:calculated_thumbnail_position
 
-  attribute :gym_opener_ids do |object|
-    object.gym_openers.map(&:id)
+  attribute :gym_opener_ids do |object, params|
+    include_attribute(params, :gym_opener_ids) ? object.gym_openers.map(&:id) : nil
   end
 
   attribute :gym_sector_name do |object|
@@ -59,18 +58,20 @@ class GymRouteSerializer
     object.likes_count&.positive? ? object.likes_count : nil
   end
 
-  attribute :cover_metadata do |object|
-    object.gym_route_cover&.picture ? object.gym_route_cover.picture.metadata : nil
+  attribute :cover_metadata do |object, params|
+    object.gym_route_cover.picture.metadata if include_attribute(params, :cover_metadata) && object.gym_route_cover&.picture
   end
 
-  attribute :gym_route_cover do |object|
-    {
-      metadata: object.gym_route_cover&.picture ? object.gym_route_cover.picture.metadata : nil,
-      original_file_path: object.gym_route_cover&.picture ? object.gym_route_cover.original_file_path : nil,
-      attachments: {
-        picture: object.attachment_object(object.gym_route_cover&.picture, 'GymRouteCover_picture')
+  attribute :gym_route_cover do |object, params|
+    if include_attribute(params, :gym_route_cover)
+      {
+        metadata: object.gym_route_cover&.picture ? object.gym_route_cover.picture.metadata : nil,
+        original_file_path: object.gym_route_cover&.picture ? object.gym_route_cover.original_file_path : nil,
+        attachments: {
+          picture: object.attachment_object(object.gym_route_cover&.picture, 'GymRouteCover_picture')
+        }
       }
-    }
+    end
   end
 
   attribute :grade_gap do |object|

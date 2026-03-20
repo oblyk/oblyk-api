@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-class CragSectorSerializer
-  include JSONAPI::Serializer
-
+class CragSectorSerializer < BaseSerializer
   attributes :id, :name
 end

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class ColorSystemLineSerializer
-  include JSONAPI::Serializer
-
+class ColorSystemLineSerializer < BaseSerializer
   belongs_to :color_system
 
   attributes :id,

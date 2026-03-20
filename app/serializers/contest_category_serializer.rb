@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class ContestCategorySerializer
-  include JSONAPI::Serializer
-
+class ContestCategorySerializer < BaseSerializer
   belongs_to :contest
 
   attributes :id,
@@ -24,15 +22,15 @@ class ContestCategorySerializer
              :parity
 
   attribute :contest_participants_count do |object|
-    object.contest_participants.count
+    object.contest_participants.size
   end
 
   attribute :contest_participants_female_count do |object|
-    object.contest_participants.where(genre: :female).count
+    object.contest_participants.group_by { |participant| participant[:genre] }['female']&.size || 0
   end
 
   attribute :contest_participants_male_count do |object|
-    object.contest_participants.where(genre: :male).count
+    object.contest_participants.group_by { |participant| participant[:genre] }['male']&.size || 0
   end
 
   attribute :history do |object|

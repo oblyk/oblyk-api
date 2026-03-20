@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-class PublicationAuthorSerializer
-  include JSONAPI::Serializer
+class PublicationAuthorSerializer < BaseSerializer
   include AttachmentsSerializerHelper
 
   attributes :id,

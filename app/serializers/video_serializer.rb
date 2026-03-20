@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class VideoSerializer
-  include JSONAPI::Serializer
-
+class VideoSerializer < BaseSerializer
   belongs_to :viewable, polymorphic: true
   belongs_to :user
 

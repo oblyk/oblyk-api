@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-class PhotoSerializer
-  include JSONAPI::Serializer
+class PhotoSerializer < BaseSerializer
   include AttachmentsSerializerHelper
 
   belongs_to :illustrable, polymorphic: true

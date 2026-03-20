@@ -1,5 +1,5 @@
 ### GET Publication for current users
-GET {{api_url}}/publications/my_publication_feed.json?page=1&per_page=1
+GET {{api_url}}/publications/my_publication_feed.json?page=1&per_page=5
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json

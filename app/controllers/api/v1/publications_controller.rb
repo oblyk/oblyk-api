@@ -201,7 +201,7 @@ module Api
             { crag_sector: :crag },
             { crag_space: { plan_attachment: :blob, three_d_picture_attachment: :blob } },
             { guide_book_paper: { cover_attachment: :blob } },
-            { gym: { logo_attachment: :blob } },
+            { gym: [:gym_spaces, { logo_attachment: :blob }] },
             { gym_sector: :gym_space },
             { photo: { picture_attachment: :blob } }
           ]

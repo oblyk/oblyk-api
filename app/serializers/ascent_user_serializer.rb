@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-class AscentUserSerializer
-  include JSONAPI::Serializer
-
+class AscentUserSerializer < BaseSerializer
   belongs_to :user
 end

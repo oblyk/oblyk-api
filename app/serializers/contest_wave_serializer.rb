@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
-class ContestWaveSerializer
-  include JSONAPI::Serializer
-
+class ContestWaveSerializer < BaseSerializer
   attributes :id,
              :name,
              :capacity,
              :contest_id
 
   attribute :contest_participants_count do |object|
-    object.contest_participants.counts
+    object.contest_participants.size
   end
 
   attribute :history do |object|

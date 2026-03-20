@@ -394,7 +394,10 @@ module Api
         render json: serializer(
           CommentSerializer,
           comments,
-          { include: [:user, :commentable, 'commentable.ascent_gym_route', 'commentable.ascent_gym_route.gym_route', 'commentable.gym_route'] }
+          {
+            include: [:user, :commentable, 'commentable.ascent_gym_route', 'commentable.ascent_gym_route.gym_route', 'commentable.gym_route'],
+            params: { include_attachments: { User: %i[avatar], GymRoute: %i[thumbnail] } }
+          }
         ), status: :ok
       end
 

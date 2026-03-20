@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class GymOpenerSerializer
-  include JSONAPI::Serializer
-
+class GymOpenerSerializer < BaseSerializer
   belongs_to :gym
   belongs_to :user
 

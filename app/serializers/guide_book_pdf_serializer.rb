@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class GuideBookPdfSerializer
-  include JSONAPI::Serializer
-
+class GuideBookPdfSerializer < BaseSerializer
   belongs_to :user
   belongs_to :crag
 

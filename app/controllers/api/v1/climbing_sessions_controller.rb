@@ -11,7 +11,7 @@ module Api
       # :crag_ids to filter to specific crag or crag array, example: crag_ids=1 or crag_ids[]=1&crag_ids[]=2
       # :only_crag to select climbing session with crag, example: only_crag=true
       # :only_gym to select climbing session with gym, example: only_gym=true
-      # :user_id for see climbing session from other user, example: user_id=1
+      # :user_uuid for see climbing session from other user, example: user_uuid=1
       def index
         gym_ids = params.fetch(:gym_ids, nil)
         crag_ids = params.fetch(:crag_ids, nil)

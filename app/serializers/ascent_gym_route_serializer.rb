@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class AscentGymRouteSerializer
-  include JSONAPI::Serializer
-
+class AscentGymRouteSerializer < BaseSerializer
   belongs_to :gym_route
   belongs_to :gym
   belongs_to :user

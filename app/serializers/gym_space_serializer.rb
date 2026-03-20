@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-class GymSpaceSerializer
-  include JSONAPI::Serializer
+class GymSpaceSerializer < BaseSerializer
   include AttachmentsSerializerHelper
 
   belongs_to :gym

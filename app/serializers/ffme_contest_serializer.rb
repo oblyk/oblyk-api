@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class FfmeContestSerializer
-  include JSONAPI::Serializer
-
+class FfmeContestSerializer < BaseSerializer
   attributes :id,
              :contest_id,
              :status,

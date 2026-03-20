@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 
-class ContestSerializer
-  include JSONAPI::Serializer
+class ContestSerializer < BaseSerializer
   include AttachmentsSerializerHelper
 
   belongs_to :gym
-  has_many :contest_categories
-  has_many :contest_stages
-  has_many :championships
-  has_many :contest_waves
-  has_one :ffme_contest
+  has_many :contest_categories, lazy_load_data: true
+  has_many :contest_stages, lazy_load_data: true
+  has_many :championships, lazy_load_data: true
+  has_many :contest_waves, lazy_load_data: true
+  has_one :ffme_contest, lazy_load_data: true
 
   attributes :id,
              :name,
@@ -45,7 +44,7 @@ class ContestSerializer
   attribute :authentification_opened, &:authentification_opened?
 
   attribute :contest_participants_count do |object|
-    object.contest_participants.count
+    object.contest_participants.size
   end
 
   attribute :ffme_contest_id do |object|

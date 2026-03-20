@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class NotificationSerializer
-  include JSONAPI::Serializer
-
+class NotificationSerializer < BaseSerializer
   belongs_to :notifiable, polymorphic: true
 
   attributes :id,

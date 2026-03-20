@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-class ContestStageSerializer
-  include JSONAPI::Serializer
-
+class ContestStageSerializer < BaseSerializer
   belongs_to :contest
-  has_many :contest_stage_steps
+  has_many :contest_stage_steps, lazy_load_data: true
 
   attributes :id,
              :climbing_type,
