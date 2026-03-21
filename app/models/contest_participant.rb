@@ -130,10 +130,16 @@ class ContestParticipant < ApplicationRecord
       end_date = nil
       additional_time = Contest::REGISTRATION_TOLERANCE
       routes = nil
-      step.contest_route_groups
-          .joins(:contest_route_group_categories)
-          .where(contest_route_group_categories: { contest_category_id: contest_category.id })
-          .each do |route_group|
+      contest_route_groups = step.contest_route_groups
+                                 .joins(:contest_route_group_categories)
+                                 .where(contest_route_group_categories: { contest_category_id: contest_category.id })
+      unless contest_category.unisex?
+        contest_route_groups = contest_route_groups.where(
+          "contest_route_groups.genre_type = 'unisex' OR contest_route_groups.genre_type = :genre",
+          genre: genre
+        )
+      end
+      contest_route_groups.each do |route_group|
         wave = route_group.waveable ? route_group.contest_time_blocks.find_by(contest_wave_id: contest_wave_id) : nil
         next if route_group.waveable && wave.blank?
 

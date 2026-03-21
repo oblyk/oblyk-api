@@ -16,7 +16,7 @@ class ContestJudge < ApplicationRecord
       code: code,
       uuid: uuid,
       contest_id: contest_id,
-      contest_routes: contest_routes.map(&:summary_to_json),
+      contest_routes: contest_routes.map(&:summary_to_json)
     }
   end
 
