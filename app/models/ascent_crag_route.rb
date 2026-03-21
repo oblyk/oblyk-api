@@ -3,17 +3,11 @@
 require 'csv'
 
 class AscentCragRoute < Ascent
-  include ActivityFeedable
-
   belongs_to :crag_route
   has_one :crag, through: :crag_route
 
   delegate :latitude, to: :crag_route
   delegate :longitude, to: :crag_route
-
-  delegate :feed_parent_id, to: :user
-  delegate :feed_parent_type, to: :user
-  delegate :feed_parent_object, to: :user
 
   validates :roping_status, inclusion: { in: RopingStatus::LIST }
   validates :climbing_type, inclusion: { in: Climb::CRAG_LIST }
@@ -28,11 +22,12 @@ class AscentCragRoute < Ascent
   after_destroy :update_crag_route!
   before_destroy :update_ascents_count!
 
-  def summary_to_json(with_user: false)
-    detail_to_json(with_user: with_user)
+  def summary_to_json(with_user: false, for_current_user: true)
+    detail_to_json(with_user: with_user, for_current_user: for_current_user)
   end
 
-  def detail_to_json(with_user: false)
+  def detail_to_json(with_user: false, for_current_user: true)
+    comment = for_current_user || !private_comment ? self.comment : nil
     detail = {
       id: id,
       ascent_status: ascent_status,

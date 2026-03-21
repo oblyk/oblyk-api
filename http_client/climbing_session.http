@@ -25,3 +25,9 @@ Content-Type: application/json
     "description": "Je change la description"
   }
 }
+
+### GET Friends climbing sessions
+GET {{api_url}}/current_users/climbing_sessions/friends_climbing_sessions.json
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json

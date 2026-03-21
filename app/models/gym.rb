@@ -5,8 +5,6 @@ class Gym < ApplicationRecord
   include SoftDeletable
   include Searchable
   include Slugable
-  include ParentFeedable
-  include ActivityFeedable
   include AttachmentResizable
   include StripTagable
   include Emailable
@@ -67,6 +65,7 @@ class Gym < ApplicationRecord
   has_many :gym_opening_sheets
   has_many :indoor_subscription_gyms
   has_many :indoor_subscriptions, through: :indoor_subscription_gyms
+  has_many :publications, as: :publishable
 
   validates :logo, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true
@@ -78,6 +77,7 @@ class Gym < ApplicationRecord
   before_validation :normalize_ascents_multiplier
   after_save :historize_around_towns
   after_save :delete_routes_caches
+  after_create_commit :publication_push!
 
   def all_championships
     Championship.where('gym_id = :gym_id OR id IN (SELECT championship_id FROM championship_contests INNER JOIN contests ON championship_contests.contest_id = contests.id WHERE gym_id = :gym_id)', gym_id: id)
@@ -103,6 +103,10 @@ class Gym < ApplicationRecord
         geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
       }
     end
+  end
+
+  def app_path
+    "/gyms/#{id}/#{slug_name}"
   end
 
   def administered?
@@ -137,7 +141,7 @@ class Gym < ApplicationRecord
   end
 
   def gym_spaces_with_anchor?
-    gym_spaces.where(anchor: true).count.positive?
+    gym_spaces.where(anchor: true).size.positive?
   end
 
   def ranking?
@@ -150,6 +154,9 @@ class Gym < ApplicationRecord
         id: id,
         name: name,
         slug_name: slug_name,
+        app_path: app_path,
+        app_first_spaces_path: app_first_spaces_path,
+        optimal_spaces_path: optimal_spaces_path,
         description: description,
         email: email,
         phone_number: phone_number,
@@ -180,7 +187,6 @@ class Gym < ApplicationRecord
         gym_billing_account_id: gym_billing_account_id,
         follows_count: follows_count,
         have_guide_book: guide_book?,
-        optimal_spaces_path: optimal_spaces_path,
         attachments: {
           logo: attachment_object(logo),
           banner: attachment_object(banner)
@@ -208,6 +214,7 @@ class Gym < ApplicationRecord
         have_indoor_subscriptions: indoor_subscriptions.count.positive?,
         subscription_possibility: subscription_possibility,
         levels: levels,
+        last_publication_at: Publication.where(publishable_type: 'Gym', publishable_id: id).maximum(:published_at),
         history: {
           created_at: created_at,
           updated_at: updated_at
@@ -279,7 +286,32 @@ class Gym < ApplicationRecord
       "/spaces/#{spaces.first.id}/#{spaces.first.slug_name}"
     elsif spaces.size > 1
       '/spaces'
+    else
+      ''
     end
+  end
+
+  def app_first_spaces_path
+    gym_space_count = gym_spaces.size
+    if gym_space_count == 1
+      "#{app_path}/spaces/#{gym_spaces.first.id}/#{gym_spaces.first.slug_name}"
+    elsif gym_space_count > 1
+      "#{app_path}/spaces"
+    else
+      app_path
+    end
+  end
+
+  def publication_push!(publishable_subject = :create)
+    Publication.create(
+      publishable_id: id,
+      publishable_type: 'Gym',
+      publishable_subject: publishable_subject,
+      published_at: created_at,
+      last_updated_at: created_at,
+      generated: true,
+      author_id: user_id
+    )
   end
 
   private

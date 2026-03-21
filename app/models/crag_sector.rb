@@ -38,10 +38,6 @@ class CragSector < ApplicationRecord
   has_many :reports, as: :reportable
   has_many :rock_bars
 
-  delegate :feed_parent_id, to: :crag
-  delegate :feed_parent_type, to: :crag
-  delegate :feed_parent_object, to: :crag
-
   before_validation :historize_location
 
   after_update :update_routes_location!

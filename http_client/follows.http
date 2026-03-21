@@ -42,4 +42,11 @@ Content-Type: application/json
 ### GET all follows for one item
 GET {{api_url}}/follows.json?followable_type=Crag&followable_id=1
 HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET follow for current user by type
+GET {{api_url}}/follows/my_follows_by_types.json?followable_types[]=Crag&followable_types[]=Gym
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
 Accept: application/json

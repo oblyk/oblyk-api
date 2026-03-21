@@ -72,6 +72,18 @@ Rails.application.routes.draw do
         post :add_crag, on: :member
         post :add_guide_book_paper, on: :member
       end
+      resources :publications do
+        put :publish, on: :member
+        get :drafts, on: :collection
+        get :my_publication_feed, on: :collection
+        resources :publication_attachments do
+          post :create_bulk, on: :collection
+        end
+      end
+      resources :publication_views, only: %i[] do
+        get :unread_count, on: :collection
+        get :my_unread_count, on: :collection
+      end
 
       resources :users, only: %i[show] do
         get :search, on: :collection
@@ -157,9 +169,14 @@ Rails.application.routes.draw do
           end
           resources :user_applications, only: %i[index show destroy]
           resources :user_application_my_compets, only: %i[create index]
-          resources :climbing_sessions, only: %i[index show update]
+          resources :climbing_sessions, only: %i[index show update] do
+            get :subscribes_climbing_sessions, on: :collection
+            get :friends_climbing_sessions, on: :collection
+          end
         end
       end
+
+      resources :fast_accesses, only: %i[index]
 
       resources :notifications, only: %i[index] do
         get :unread_count, on: :collection
@@ -190,6 +207,7 @@ Rails.application.routes.draw do
       resources :links
       resources :follows, only: %i[index create] do
         get :followers, on: :collection
+        get :my_follows_by_types, on: :collection
         put :increment, on: :collection
       end
       delete 'follows', controller: :follows, action: :destroy

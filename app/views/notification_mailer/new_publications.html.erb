@@ -1,0 +1,41 @@
+<h1 style="font-size: 16px">
+  <%= t('mailer.notification.hello', name: @user.first_name) %>
+</h1>
+
+<p>
+  <%= t('mailer.notification.new_publications.body') %>
+</p>
+
+<% @publications.each do |publication| %>
+  <div style="border-radius: 10px; padding: 15px; border: solid rgb(200, 200, 200) 1px; margin-bottom: 15px">
+    <h1 style="font-size: 1.4em; margin-top: 0">
+      <% if publication[:avatar] %>
+        <img
+          src="<%= publication[:avatar] %>"
+          alt="avatar <% publication[:publishable_name] %>"
+          style="border-radius: 50px; height: 30px; width: 30px; vertical-align: bottom"
+        >
+      <% end %>
+      <%= publication[:publishable_name] %>
+    </h1>
+    <div style="margin-bottom: 20px">
+      <%= publication[:body].html_safe %>
+    </div>
+    <% if publication[:attachables_count].positive? %>
+      <p style="margin-top: 0; margin-bottom: 20px">
+      <span style="display: inline-block; background-color: rgba(150, 150, 150, 0.2); border-radius: 40px; padding: 3px 10px 3px 5px">
+        <img src="<%= "#{ENV['OBLYK_APP_URL']}/images/attachments.png" %>" alt="attachments icon" style="vertical-align: sub; height: 18px; width: 18px; margin-left: 3px;">
+        <%= t('mailer.notification.new_publications.attachments_count', count: publication[:attachables_count]) %>
+      </span>
+      </p>
+    <% end %>
+    <p style="text-align: center; margin-bottom: 0; margin-top: 0">
+      <a
+        href="<%= publication[:publication_app_path] %>"
+        style="background-color: #000000; color: white; padding: 7px 12px; text-decoration: none; border-radius: 10px; display: inline-block; font-weight: bold"
+      >
+        <%= t('mailer.notification.new_publications.see_publication') %>
+      </a>
+    </p>
+  </div>
+<% end %>

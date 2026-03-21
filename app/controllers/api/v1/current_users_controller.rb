@@ -69,7 +69,7 @@ module Api
 
       def favorite_crags
         subscribes = @user.subscribes
-                          .includes(:user, followable: { photo: { picture_attachment: :blob } })
+                          .includes(:user, followable: { photo: { picture_attachment: :blob }, static_map_attachment: :blob, static_map_banner_attachment: :blob })
                           .where(followable_type: 'Crag')
                           .order(updated_at: :desc)
                           .page(params.fetch(:page, 1))
@@ -78,7 +78,7 @@ module Api
 
       def favorite_gyms
         subscribes = @user.subscribes
-                          .includes(:user, followable: { photo: { picture_attachment: :blob } })
+                          .includes(:user, followable: [:gym_spaces, :gym_options, { logo_attachment: :blob, banner_attachment: :blob }])
                           .where(followable_type: 'Gym')
                           .order(updated_at: :desc)
                           .page(params.fetch(:page, 1))

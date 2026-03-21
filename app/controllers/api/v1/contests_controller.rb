@@ -34,7 +34,11 @@ module Api
       end
 
       def index
-        render json: @gym.contests.order(:archived_at, start_date: :desc).map(&:summary_to_json), status: :ok
+        contests = @gym.contests
+        contests = contests.where(archived_at: nil) if params.fetch(:active, 'false') == 'true'
+        contests = contests.where.not(archived_at: nil) if params.fetch(:archived, 'false') == 'true'
+
+        render json: contests.order(:archived_at, start_date: :desc).map(&:summary_to_json), status: :ok
       end
 
       def show

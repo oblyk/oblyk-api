@@ -6,8 +6,6 @@ class Crag < ApplicationRecord
   include SoftDeletable
   include Slugable
   include GapGradable
-  include ParentFeedable
-  include ActivityFeedable
   include RouteFigurable
   include Elevable
   include AttachmentResizable
@@ -71,6 +69,7 @@ class Crag < ApplicationRecord
   has_many :article_crags
   has_many :articles, through: :article_crags
   has_many :rock_bars
+  has_many :publications, as: :publishable
 
   validates :name, :latitude, :longitude, :city, presence: true
   validates :rain, inclusion: { in: Rain::LIST }, allow_nil: true
@@ -80,6 +79,7 @@ class Crag < ApplicationRecord
   after_update :update_routes_location
   after_save :historize_around_towns
   after_save :historize_static_map
+  after_create_commit :publication_push!
 
   def location
     [latitude, longitude]
@@ -134,12 +134,17 @@ class Crag < ApplicationRecord
     save
   end
 
+  def app_path
+    "/crags/#{id}/#{slug_name}"
+  end
+
   def summary_to_json
     Rails.cache.fetch("#{cache_key_with_version}/summary_crag", expires_in: 28.days) do
       {
         id: id,
         name: name,
         slug_name: slug_name,
+        app_path: app_path,
         rain: rain,
         sun: sun,
         sport_climbing: sport_climbing,
@@ -297,6 +302,18 @@ class Crag < ApplicationRecord
                                           ascents: { ascent_status: AscentStatus::FIRST_TOP_LIST }
                                         )[:count]
     save
+  end
+
+  def publication_push!(publishable_subject = :create)
+    Publication.create(
+      publishable_id: id,
+      publishable_type: 'Crag',
+      publishable_subject: publishable_subject,
+      published_at: created_at,
+      last_updated_at: created_at,
+      generated: true,
+      author_id: user_id
+    )
   end
 
   private

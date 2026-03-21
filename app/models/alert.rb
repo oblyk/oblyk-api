@@ -1,18 +1,15 @@
 # frozen_string_literal: true
 
 class Alert < ApplicationRecord
-  include ActivityFeedable
   include StripTagable
 
   belongs_to :user, optional: true
   belongs_to :alertable, polymorphic: true
 
+  has_many :publication_attachments, as: :attachable, dependent: :destroy
+
   delegate :latitude, to: :alertable
   delegate :longitude, to: :alertable
-
-  delegate :feed_parent_id, to: :alertable
-  delegate :feed_parent_type, to: :alertable
-  delegate :feed_parent_object, to: :alertable
 
   ALERT_TYPES_LIST = %w[good warning info bad omega_roc].freeze
 
@@ -22,7 +19,13 @@ class Alert < ApplicationRecord
   validates :alertable_type, inclusion: { in: %w[Crag CragSector CragRoute].freeze }
   validates :alert_type, inclusion: { in: ALERT_TYPES_LIST.freeze }
 
+  after_create :publication_push!
+
   default_scope { order(alerted_at: :desc) }
+
+  def name
+    "#{alert_type} - #{alertable_type}/#{alertable_id}"
+  end
 
   def summary_to_json
     detail_to_json
@@ -43,6 +46,25 @@ class Alert < ApplicationRecord
         updated_at: updated_at
       }
     }
+  end
+
+  def publication_push!(publishable_subject = :new_alert)
+    return if %w[omega_roc good info].include?(alert_type)
+
+    publication = Publication.new(
+      publishable_id: alertable_id,
+      publishable_type: alertable_type,
+      publishable_subject: publishable_subject,
+      published_at: alerted_at,
+      last_updated_at: alerted_at,
+      generated: true,
+      author_id: nil
+    )
+    publication.publication_attachments << PublicationAttachment.new(
+      attachable_type: 'Alert',
+      attachable_id: id
+    )
+    publication.save
   end
 
   private

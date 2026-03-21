@@ -16,6 +16,7 @@ class GymSector < ApplicationRecord
   delegate :anchor, to: :gym_space
 
   after_save :remove_routes_cache
+  after_save :historize_svg_sectors!
 
   default_scope { order(:order) }
 
@@ -24,11 +25,16 @@ class GymSector < ApplicationRecord
     GymGrade.unscoped { super }
   end
 
+  def app_path
+    "/gyms/#{gym_space.gym.id}/#{gym_space.gym.slug_name}/spaces/#{gym_space.id}/#{gym_space.slug_name}?sector=#{id}"
+  end
+
   def summary_to_json
     Rails.cache.fetch("#{cache_key_with_version}/summary_gym_sector", expires_in: 28.days) do
       {
         id: id,
         name: name,
+        app_path: app_path,
         order: order,
         description: description,
         group_sector_name: group_sector_name,
@@ -99,5 +105,9 @@ class GymSector < ApplicationRecord
     return unless saved_change_to_name?
 
     gym_routes.find_each(&:delete_summary_cache)
+  end
+
+  def historize_svg_sectors!
+    gym_space.historize_svg_sectors! if saved_change_to_polygon? || saved_change_to_three_d_path?
   end
 end

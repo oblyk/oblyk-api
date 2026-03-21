@@ -14,16 +14,21 @@ class Comment < ApplicationRecord
   before_validation :normalize_blank_values
 
   validates :body, presence: true
-  validates :commentable_type, inclusion: { in: %w[Crag CragSector CragRoute GuideBookPaper Area Gym GymRoute Article Comment Ascent].freeze }
+  validates :commentable_type, inclusion: { in: %w[Crag CragSector CragRoute GuideBookPaper Area Gym GymRoute Article Comment Ascent Publication].freeze }
 
   after_create :create_notification!
   after_create :refresh_comments_count!
   after_destroy :destroy_notification!
   after_destroy :refresh_comments_count!
 
+  def app_path
+    "/comments/#{id}"
+  end
+
   def summary_to_json
     {
       id: id,
+      app_path: app_path,
       body: moderated_at.blank? ? body : nil,
       creator: user&.summary_to_json(with_avatar: true),
       likes_count: likes_count,

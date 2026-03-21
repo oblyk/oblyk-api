@@ -46,7 +46,7 @@ class Contest < ApplicationRecord
   scope :upcoming, -> { where(draft: false, private: false).where('contests.end_date >= ?', Date.current) }
 
   def remaining_places
-    total_capacity ? total_capacity - (contest_participants.count || 0) : nil
+    total_capacity ? total_capacity - (contest_participants.size || 0) : nil
   end
 
   def one_day_event?
@@ -55,6 +55,14 @@ class Contest < ApplicationRecord
 
   def public_app_path
     "#{ENV['OBLYK_APP_URL']}/gyms/#{gym.id}/#{gym.slug_name}/contests/#{id}/#{slug_name}"
+  end
+
+  def app_path
+    "/gyms/#{gym.id}/#{gym.slug_name}/contests/#{id}/#{slug_name}"
+  end
+
+  def app_admin_path
+    "/gyms/#{gym.id}/#{gym.slug_name}/admins/contests/#{id}"
   end
 
   def subscription_opened?
@@ -86,6 +94,8 @@ class Contest < ApplicationRecord
       {
         id: id,
         name: name,
+        app_path: app_path,
+        app_admin_path: app_admin_path,
         slug_name: slug_name,
         description: description,
         gym_id: gym_id,

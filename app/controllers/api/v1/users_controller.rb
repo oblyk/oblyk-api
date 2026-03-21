@@ -10,7 +10,7 @@ module Api
       before_action :protected_outdoor_log_book, only: %i[outdoor_figures outdoor_climb_types_chart ascended_crag_routes outdoor_grades_chart]
       before_action :protected_indoor_log_book, only: %i[indoor_figures indoor_climb_types_chart indoor_grade_chart indoor_by_level_chart]
       before_action :set_indoor_ascents, only: %i[indoor_grade_chart indoor_by_level_chart]
-      before_action :set_outdoor_ascents, only: [:stats, :ascended_crag_routes]
+      before_action :set_outdoor_ascents, only: %i[stats ascended_crag_routes]
       before_action :set_stats_list, only: [:stats]
 
       def show

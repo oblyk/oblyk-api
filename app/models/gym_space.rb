@@ -32,6 +32,7 @@ class GymSpace < ApplicationRecord
   after_create :delete_gym_cache
   after_save :remove_routes_cache
   after_update :remove_sectors_cache
+  after_update :historize_svg_sectors!, if: :saved_change_to_representation_type?
   after_destroy :delete_gym_cache
 
   # TODO: DELETE AFTER MIGRATION
@@ -49,12 +50,17 @@ class GymSpace < ApplicationRecord
     save
   end
 
+  def app_path
+    "/gyms/#{gym_id}/#{gym.slug_name}/spaces/#{id}/#{slug_name}"
+  end
+
   def summary_to_json(with_figures: false)
     data = Rails.cache.fetch("#{cache_key_with_version}/summary_gym_space", expires_in: 28.days) do
       {
         id: id,
         name: name,
         slug_name: slug_name,
+        app_path: app_path,
         description: description,
         order: order,
         climbing_type: climbing_type,
@@ -71,6 +77,7 @@ class GymSpace < ApplicationRecord
         three_d_parameters: three_d_parameters,
         three_d_label_options: three_d_label_options,
         attachments: {
+          avatar: representation_type == '3d' ? attachment_object(three_d_picture) :  attachment_object(plan),
           banner: attachment_object(banner),
           plan: attachment_object(plan),
           three_d_picture: attachment_object(three_d_picture)
@@ -79,6 +86,7 @@ class GymSpace < ApplicationRecord
           id: gym.id,
           name: gym.name,
           slug_name: gym.slug_name,
+          app_path: gym.app_path,
           attachments: {
             banner: attachment_object(gym.banner),
             logo: attachment_object(gym.logo)
@@ -116,6 +124,35 @@ class GymSpace < ApplicationRecord
     three_d_gltf.attached?
   end
 
+  def gym_sector_polygones
+    points = []
+    gym_sectors.each do |sector|
+      sector_points = {
+        id: "id-#{sector.id}",
+        points: []
+      }
+      if representation_type == '3d' && sector.three_d_path
+        sector.three_d_path.each do |xyz|
+          sector_points[:points] << { x: xyz['z'], y: xyz['x'] }
+        end
+      else
+        next if sector.polygon.blank?
+
+        polygones = JSON.parse sector.polygon
+        polygones.each do |yx|
+          sector_points[:points] << { x: yx[1], y: yx[0] }
+        end
+      end
+      points << sector_points
+    end
+    points
+  end
+
+  def gym_sectors_to_svg
+    svg_service = PointsToSvg.new gym_sector_polygones
+    svg_service.svg_file
+  end
+
   def destroy
     return if deleted?
 
@@ -137,6 +174,11 @@ class GymSpace < ApplicationRecord
     else
       "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.polymorphic_url(three_d_gltf.attachment, only_path: true)}"
     end
+  end
+
+  def historize_svg_sectors!
+    self.svg_sectors = gym_sectors_to_svg
+    save!
   end
 
   private

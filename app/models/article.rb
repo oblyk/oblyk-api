@@ -3,8 +3,6 @@
 class Article < ApplicationRecord
   include Slugable
   include Publishable
-  include ParentFeedable
-  include ActivityFeedable
   include AttachmentResizable
 
   has_one_attached :cover
@@ -17,6 +15,7 @@ class Article < ApplicationRecord
   has_many :article_guide_book_papers
   has_many :guide_book_papers, through: :article_guide_book_papers
   has_many :photos, as: :illustrable
+  has_many :publications, as: :publishable
 
   validates :name, :description, :body, :author, presence: true
 
@@ -34,6 +33,10 @@ class Article < ApplicationRecord
     []
   end
 
+  def app_path
+    "/articles/#{id}/#{slug_name}"
+  end
+
   def summary_to_json
     Rails.cache.fetch("#{cache_key_with_version}/summary_article", expires_in: 28.days) do
       {
@@ -45,6 +48,7 @@ class Article < ApplicationRecord
         comments_count: comments_count,
         likes_count: likes_count,
         published_at: published_at,
+        app_path: app_path,
         published: published?,
         attachments: {
           cover: attachment_object(cover)
@@ -66,6 +70,22 @@ class Article < ApplicationRecord
           updated_at: updated_at
         }
       }
+    )
+  end
+
+  def publication_push!
+    return unless published?
+
+    return if Publication.where(publishable_type: 'Article', publishable_id: id, publishable_subject: :create).exists?
+
+    Publication.create(
+      publishable_id: id,
+      publishable_type: 'Article',
+      publishable_subject: 'create',
+      published_at: published_at,
+      last_updated_at: published_at,
+      generated: true,
+      author_id: nil
     )
   end
 end

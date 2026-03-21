@@ -18,10 +18,6 @@ class GymRoute < ApplicationRecord
   has_many :contest_routes
   has_many :comments, as: :commentable
 
-  delegate :feed_parent_id, to: :gym
-  delegate :feed_parent_type, to: :gym
-  delegate :feed_parent_object, to: :gym
-
   validates :opened_at, presence: true
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }
   validates :height, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
@@ -143,6 +139,10 @@ class GymRoute < ApplicationRecord
     "#{ENV['OBLYK_APP_URL']}/gr/#{gym.id}-#{id}"
   end
 
+  def gym_space_app_path
+    "/gyms/#{gym_id}/#{gym.slug_name}/spaces/#{gym_space.id}/#{gym_space.slug_name}?route=#{id}"
+  end
+
   def hold_gradiant
     gradiant(hold_colors, fluid: true)
   end
@@ -258,6 +258,7 @@ class GymRoute < ApplicationRecord
         videos_count: videos_count,
         sub_level: sub_level,
         sub_level_max: sub_level_max,
+        gym_space_app_path: gym_space_app_path,
         gym_route_cover: {
           metadata: gym_route_cover&.picture ? gym_route_cover.picture.metadata : nil,
           original_file_path: gym_route_cover&.picture ? gym_route_cover.original_file_path : nil,
@@ -285,7 +286,8 @@ class GymRoute < ApplicationRecord
         },
         gym: {
           id: gym.id,
-          slug_name: gym.slug_name
+          slug_name: gym.slug_name,
+          app_path: gym.app_path
         }
       }
     end
@@ -310,6 +312,20 @@ class GymRoute < ApplicationRecord
   def refresh_all_comments_count!
     self.all_comments_count = (comments_count || 0) + AscentGymRoute.where(gym_route_id: id).sum(:comments_count)
     save
+  end
+
+  def calculated_thumbnail_position
+    return nil unless thumbnail_position
+
+    tp = thumbnail_position.symbolize_keys
+    {
+      img_h: tp[:img_h].to_d,
+      img_w: tp[:img_w].to_d,
+      h: tp[:thb_h].to_d / tp[:img_h].to_d * 100,
+      w: tp[:thb_w].to_d / tp[:img_w].to_d * 100,
+      delta_y: (tp[:img_h].to_d / 2 - tp[:thb_y].to_d) / tp[:img_h].to_d * 100,
+      delta_x: (tp[:img_w].to_d / 2 - tp[:thb_x].to_d) / tp[:img_w].to_d * 100
+    }
   end
 
   private
@@ -415,20 +431,6 @@ class GymRoute < ApplicationRecord
       end
     end
     gradiant
-  end
-
-  def calculated_thumbnail_position
-    return nil unless thumbnail_position
-
-    tp = thumbnail_position.symbolize_keys
-    {
-      img_h: tp[:img_h].to_d,
-      img_w: tp[:img_w].to_d,
-      h: tp[:thb_h].to_d / tp[:img_h].to_d * 100,
-      w: tp[:thb_w].to_d / tp[:img_w].to_d * 100,
-      delta_y: (tp[:img_h].to_d / 2 - tp[:thb_y].to_d) / tp[:img_h].to_d * 100,
-      delta_x: (tp[:img_w].to_d / 2 - tp[:thb_x].to_d) / tp[:img_w].to_d * 100
-    }
   end
 
   def delete_contest_route_cache
