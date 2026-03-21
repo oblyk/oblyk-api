@@ -3,3 +3,22 @@ GET {{api_url}}/publications/my_publication_feed.json?page=1&per_page=5
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json
+
+### GET Current Users drafts
+GET {{api_url}}/publications/drafts.json?publishable_type=CurrentUser&publishable_id=1
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+
+### GET Publication from other user
+GET {{api_url}}/publications.json?page=1&per_page=5&publishable_type=User&publishable_id=376
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json
+
+### GET Unread publication on user profil
+GET {{api_url}}/publication_views/unread_count.json?publishable_type=User&publishable_id=58
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Accept: application/json

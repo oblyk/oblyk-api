@@ -319,6 +319,7 @@ class User < ApplicationRecord
       json = {
         id: id,
         uuid: uuid,
+        app_path: app_path,
         slug_name: slug_name,
         first_name: first_name,
         full_name: full_name
@@ -332,6 +333,7 @@ class User < ApplicationRecord
     user_data = {
       id: id,
       uuid: uuid,
+      app_path: app_path,
       first_name: first_name,
       last_name: last_name,
       slug_name: slug_name,

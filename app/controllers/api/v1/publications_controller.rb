@@ -28,6 +28,11 @@ module Api
                            type: type,
                            id: id
                          )
+                       elsif type == 'User'
+                         Publication.where(author_id: id)
+                                    .where.not(publishable_type: %w[Gym])
+                                    .where('publications.publishable_subject IS NULL OR publications.publishable_subject NOT IN ("new_crag_routes", "new_video", "new_alert")')
+                                    .where.not(published_at: nil)
                        else
                          Publication.where(publishable_type: type, publishable_id: id)
                                     .where.not(published_at: nil)
@@ -143,12 +148,13 @@ module Api
       private
 
       def set_publications
-        if params[:publishable_type].blank? || Publication::PUBLISHABLE_TYPES.exclude?(params[:publishable_type])
+        publishable_type = params[:publishable_type] == 'CurrentUser' ? 'User' : params[:publishable_type]
+        if publishable_type.blank? || Publication::PUBLISHABLE_TYPES.exclude?(publishable_type)
           render json: nil, status: :not_found
           return
         end
 
-        @publications = Publication.where(publishable_type: params[:publishable_type], publishable_id: params[:publishable_id].to_i)
+        @publications = Publication.where(publishable_type: publishable_type, publishable_id: params[:publishable_id].to_i)
       end
 
       def set_publication
@@ -225,9 +231,12 @@ module Api
       end
 
       def index_private_protected
-        return true unless params[:publishable_type] == 'User'
+        return true if params[:publishable_type] != 'User'
 
         user = User.find_by(id: params[:publishable_id])
+
+        # Set current user
+        login?
 
         forbidden if user.present? && !user.other_user_can?(@current_user, request: :see_publications)
       end

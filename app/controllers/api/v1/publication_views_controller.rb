@@ -9,10 +9,20 @@ module Api
           return
         end
 
-        publications = Publication.where(publishable_type: params[:publishable_type], publishable_id: params[:publishable_id])
-                                  .where.not(published_at: nil)
-                                  .where('publications.published_at >= ?', Time.current - 3.months)
-                                  .where('NOT EXISTS(SELECT * FROM publication_views WHERE publication_id = publications.id AND publication_views.user_id = :user_id)', user_id: @current_user.id)
+        publications = if params[:publishable_type] == 'User'
+                         Publication.where(author_id: params[:publishable_id])
+                                    .where.not(publishable_type: %w[Gym])
+                                    .where('publications.publishable_subject IS NULL OR publications.publishable_subject NOT IN ("new_crag_routes", "new_video", "new_alert")')
+                                    .where.not(published_at: nil)
+                                    .where('publications.published_at >= ?', Time.current - 3.months)
+                                    .where('NOT EXISTS(SELECT * FROM publication_views WHERE publication_id = publications.id AND publication_views.user_id = :user_id)', user_id: @current_user.id)
+                       else
+                         Publication.where(publishable_type: params[:publishable_type], publishable_id: params[:publishable_id])
+                                    .where.not(published_at: nil)
+                                    .where('publications.published_at >= ?', Time.current - 3.months)
+                                    .where('NOT EXISTS(SELECT * FROM publication_views WHERE publication_id = publications.id AND publication_views.user_id = :user_id)', user_id: @current_user.id)
+                       end
+
 
         render json: publications.count, status: :ok
       end
