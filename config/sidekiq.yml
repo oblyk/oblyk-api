@@ -7,3 +7,4 @@
   - default
   - mailers
   - low
+  - active_storage_analysis
