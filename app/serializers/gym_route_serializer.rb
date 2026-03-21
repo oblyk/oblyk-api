@@ -47,7 +47,7 @@ class GymRouteSerializer < BaseSerializer
   attribute :calculated_thumbnail_position, &:calculated_thumbnail_position
 
   attribute :gym_opener_ids do |object, params|
-    include_attribute(params, :gym_opener_ids) ? object.gym_openers.map(&:id) : nil
+    include_attribute(params, :gym_opener_ids, :GymRoute) ? object.gym_openers.map(&:id) : nil
   end
 
   attribute :gym_sector_name do |object|
@@ -59,11 +59,11 @@ class GymRouteSerializer < BaseSerializer
   end
 
   attribute :cover_metadata do |object, params|
-    object.gym_route_cover.picture.metadata if include_attribute(params, :cover_metadata) && object.gym_route_cover&.picture
+    object.gym_route_cover.picture.metadata if include_attribute(params, :cover_metadata, :GymRoute) && object.gym_route_cover&.picture
   end
 
   attribute :gym_route_cover do |object, params|
-    if include_attribute(params, :gym_route_cover)
+    if include_attribute(params, :gym_route_cover, :GymRoute)
       {
         metadata: object.gym_route_cover&.picture ? object.gym_route_cover.picture.metadata : nil,
         original_file_path: object.gym_route_cover&.picture ? object.gym_route_cover.original_file_path : nil,
