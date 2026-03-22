@@ -11,6 +11,7 @@ class VideoSerializer < BaseSerializer
              :viewable_type,
              :viewable_id,
              :embedded_code,
+             :video_metadata,
              :video_service
 
   attribute :oblyk_video do |object|

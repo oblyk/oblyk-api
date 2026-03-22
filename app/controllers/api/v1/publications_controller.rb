@@ -209,6 +209,7 @@ module Api
             { guide_book_paper: { cover_attachment: :blob } },
             { gym: [:gym_spaces, { logo_attachment: :blob }] },
             { gym_sector: :gym_space },
+            { video: { video_file_attachment: :blob } },
             { photo: { picture_attachment: :blob } }
           ]
         }

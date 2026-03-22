@@ -32,6 +32,12 @@ class Video < ApplicationRecord
     id
   end
 
+  def video_metadata
+    return nil unless video_file.attached?
+
+    video_file.blob.metadata
+  end
+
   def app_path
     "/videos/#{id}"
   end
@@ -79,6 +85,7 @@ class Video < ApplicationRecord
       viewable: viewable.summary_to_json,
       embedded_code: embedded_code,
       video_service: video_service,
+      video_metadata: video_metadata,
       creator: user&.summary_to_json(with_avatar: true),
       oblyk_video: {
         path: video_file_path,
