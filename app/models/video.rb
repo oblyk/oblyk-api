@@ -89,7 +89,6 @@ class Video < ApplicationRecord
       embedded_code: embedded_code,
       video_service: video_service,
       video_metadata: video_metadata,
-      video_thumbnail_url: thumbnail_url,
       creator: user&.summary_to_json(with_avatar: true),
       oblyk_video: {
         path: video_file_path,
