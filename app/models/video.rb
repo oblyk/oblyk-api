@@ -33,6 +33,7 @@ class Video < ApplicationRecord
   end
 
   def video_metadata
+    return nil unless video_service == 'oblyk_video'
     return nil unless video_file.attached?
 
     video_file.blob.metadata
