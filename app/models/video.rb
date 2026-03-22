@@ -110,6 +110,9 @@ class Video < ApplicationRecord
   end
 
   def publication_push!(publishable_subject = :new_video)
+    # Do not create publication for embedded video on GymRoute
+    return if viewable_type == 'GymRoute' && video_service != 'oblyk_video'
+
     case viewable_type
     when 'CragRoute'
       publishable_type = 'Crag'
