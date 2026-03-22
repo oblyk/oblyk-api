@@ -2,6 +2,7 @@
 
 class Video < ApplicationRecord
   include StripTagable
+  include Rails.application.routes.url_helpers
 
   belongs_to :user, optional: true
   belongs_to :viewable, polymorphic: true, counter_cache: :videos_count, touch: true
@@ -10,6 +11,7 @@ class Video < ApplicationRecord
   has_many :publication_attachments, as: :attachable, dependent: :destroy
 
   has_one_attached :video_file
+  has_one_attached :video_thumbnail
 
   delegate :latitude, to: :viewable
   delegate :longitude, to: :viewable
@@ -87,6 +89,7 @@ class Video < ApplicationRecord
       embedded_code: embedded_code,
       video_service: video_service,
       video_metadata: video_metadata,
+      video_thumbnail_url: thumbnail_url,
       creator: user&.summary_to_json(with_avatar: true),
       oblyk_video: {
         path: video_file_path,
@@ -97,6 +100,16 @@ class Video < ApplicationRecord
         updated_at: updated_at
       }
     }
+  end
+
+  def thumbnail_url
+    return nil unless video_service == 'oblyk_video'
+    return nil unless video_file.attached?
+
+    rails_representation_url(
+      video_file.preview(resize_to_limit: [300, 300]).processed,
+      host: ENV.fetch('IMAGES_STORAGE_DOMAINE', ENV['OBLYK_API_URL'])
+    )
   end
 
   def init_embedded_code
