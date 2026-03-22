@@ -53,6 +53,11 @@ GET {{api_url}}/public/towns/grenoble.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
+### GET not found towns
+GET {{api_url}}/public/towns/null.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
 ### GET town
 GET {{api_url}}/public/towns/dieulefit/geo_json.json
 HttpApiAccessToken: {{api_access_token}}

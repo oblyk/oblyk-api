@@ -80,6 +80,8 @@ module Api
 
       def set_town
         @town = Town.find_by slug_name: params[:id]
+
+        head :not_found unless @town
       end
     end
   end
