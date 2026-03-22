@@ -10,6 +10,7 @@ class VideoSerializer < BaseSerializer
              :likes_count,
              :viewable_type,
              :viewable_id,
+             :thumbnail_url,
              :embedded_code,
              :video_metadata,
              :video_service

@@ -89,6 +89,7 @@ class Video < ApplicationRecord
       embedded_code: embedded_code,
       video_service: video_service,
       video_metadata: video_metadata,
+      thumbnail_url: thumbnail_url,
       creator: user&.summary_to_json(with_avatar: true),
       oblyk_video: {
         path: video_file_path,
@@ -106,8 +107,8 @@ class Video < ApplicationRecord
     return nil unless video_file.attached?
 
     rails_representation_url(
-      video_file.preview(resize_to_limit: [300, 300]).processed,
-      host: ENV.fetch('IMAGES_STORAGE_DOMAINE', ENV['OBLYK_API_URL'])
+      video_file.preview(resize_to_limit: [1000, 1000]).processed,
+      host: ENV['OBLYK_API_URL']
     )
   end
 
