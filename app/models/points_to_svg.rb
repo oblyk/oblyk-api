@@ -35,6 +35,8 @@ class PointsToSvg
         [svg_x.round(3), svg_y.round(3)]
       end
 
+      next if points.size.zero?
+
       # POLYGONE CENTROID FOR CIRCLE
       cx = (points.sum { |pt| pt[0] } / points.size).round(3)
       cy = (points.sum { |pt| pt[1] } / points.size).round(3)
