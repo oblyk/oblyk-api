@@ -155,7 +155,7 @@ class Video < ApplicationRecord
       publishable_id: publishable_id,
       publishable_type: publishable_type,
       publishable_subject: publishable_subject,
-      published_at: [created_at.beginning_of_week..created_at.end_of_week]
+      published_at: [created_at.beginning_of_day..created_at.end_of_day]
     )
 
     publication ||= Publication.new(

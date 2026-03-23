@@ -111,7 +111,7 @@ class Photo < ApplicationRecord
       publishable_id: crag_id,
       publishable_type: 'Crag',
       publishable_subject: publishable_subject,
-      published_at: [posted_at.beginning_of_week..posted_at.end_of_week],
+      published_at: [posted_at.beginning_of_day..posted_at.end_of_day],
       author_id: user_id
     )
 
