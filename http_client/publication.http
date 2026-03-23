@@ -22,3 +22,8 @@ GET {{api_url}}/publication_views/unread_count.json?publishable_type=User&publis
 HttpApiAccessToken: {{api_access_token}}
 Authorization: Bearer {{auth_token}}
 Accept: application/json
+
+### GET publication by id
+GET {{api_url}}/publications/1.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json

@@ -104,6 +104,7 @@ module Api
       end
 
       def show
+        publication = @publication
         publication = PublicationViewsMapper.new(@publication, @current_user).map_publications if login?
 
         render json: serialized_publication(publication), status: :ok
