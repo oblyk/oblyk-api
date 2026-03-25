@@ -10,6 +10,7 @@ module Api
         articles = Article.published
                           .order(published_at: :desc)
                           .page(params.fetch(:page, 1))
+                          .per(params.fetch(:per_page, 25))
         render json: articles.map(&:summary_to_json), status: :ok
       end
 

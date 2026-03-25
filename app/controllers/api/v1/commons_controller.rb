@@ -101,6 +101,37 @@ module Api
         end
         render json: data, status: :ok
       end
+
+      def last_contributions
+        publications = Publication.includes(publishable: {
+                                              crag: { static_map_attachment: :blob, photo: { picture_attachment: :blob } },
+                                              gym: [:gym_options, :gym_spaces, { logo_attachment: :blob }]
+                                            })
+                                  .where(publishable_type: %i[Crag Gym GuideBookPaper], publishable_subject: :create)
+                                  .order(published_at: :desc, id: :desc)
+                                  .page(params.fetch(:page, 1))
+                                  .per(params.fetch(:per_page, 5))
+
+        publications = PublicationViewsMapper.new(publications, @current_user).map_publications if login?
+
+        publication_options = {
+          include: [
+            :publication_attachments,
+            :publishable,
+            :author,
+            'publication_attachments.attachable'
+          ],
+          params: {
+            include_attachments: {
+              Crag: %i[avatar cover],
+              Gym: %i[avatar logo],
+              GuideBookPaper: %i[avatar]
+            }
+          }
+        }
+
+        render json: serializer(PublicationSerializer, publications, publication_options), status: :ok
+      end
     end
   end
 end

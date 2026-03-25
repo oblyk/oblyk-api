@@ -15,10 +15,15 @@ class Word < ApplicationRecord
 
   default_scope { order(:name) }
 
+  def app_path
+    "/words/#{id}/#{slug_name}"
+  end
+
   def summary_to_json
     {
       id: id,
       name: name,
+      app_path: app_path,
       slug_name: slug_name,
       definition: definition
     }
