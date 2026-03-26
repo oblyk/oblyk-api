@@ -27,6 +27,10 @@ class Alert < ApplicationRecord
     "#{alert_type} - #{alertable_type}/#{alertable_id}"
   end
 
+  def app_path
+    "/alerts/#{id}"
+  end
+
   def summary_to_json
     detail_to_json
   end
@@ -34,6 +38,7 @@ class Alert < ApplicationRecord
   def detail_to_json
     {
       id: id,
+      app_path: app_path,
       description: description,
       alert_type: alert_type,
       alerted_at: alerted_at,

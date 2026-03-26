@@ -4,6 +4,7 @@ class AlertSerializer < BaseSerializer
   has_one :alertable, polymorphic: true
 
   attributes :id,
+             :app_path,
              :description,
              :alert_type,
              :alerted_at,
