@@ -24,7 +24,7 @@
 #
 # +routes+ is an Array of Hashes with the following keys:
 #
-#   :anchor_number  Integer        Groups routes onto the same disc (e.g. 1, 2, 3)
+#   :sheet_reference  Integer        Groups routes onto the same disc (e.g. 1, 2, 3)
 #   :hold_colors    Array<String>  Hex color strings. One color = solid fill;
 #                                  two or more = linear gradient.
 #                                  Examples: ["#ff0000"] or ["#ff0000", "#0000ff"]
@@ -48,7 +48,7 @@
 #
 #   routes = gym_routes.map do |r|
 #     {
-#       anchor_number: r.anchor_number,
+#       sheet_reference: r.sheet_reference,
 #       hold_colors:   r.hold_colors,
 #       grade_to_s:    r.grade_to_s,
 #       openers:       r.openers.map { |o| { name: o.name } },
@@ -90,7 +90,7 @@ class DiscChartService
   end
 
   def generate_pdf
-    grouped  = @routes.group_by { |r| r[:anchor_number] }
+    grouped  = @routes.group_by { |r| r[:sheet_reference] }
     svg_list = grouped.map { |relay, group| generate_svg_for_relay(relay, group) }
     assemble_pdf(svg_list)
   end

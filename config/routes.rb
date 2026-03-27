@@ -287,6 +287,9 @@ Rails.application.routes.draw do
           put :unarchived, on: :member
           post :copy, on: :member
         end
+        resources :gym_community_labels, only: %i[] do
+          get :disc_chart, on: :collection
+        end
         resources :gym_grades do
           resources :gym_grade_lines
         end

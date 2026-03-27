@@ -1,0 +1,10 @@
+
+### Print Disc PDF gym routes
+GET {{api_url}}/gyms/1/gym_community_labels/disc_chart.pdf
+HttpApiAccessToken: {{api_access_token}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "ids": [1, 2, 3]
+}

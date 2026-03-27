@@ -21,7 +21,7 @@ namespace :disc_charts do
       qr_svg = RQRCode::QRCode.new(short_url, level: :l).as_svg(viewbox: true, use_path: true)
 
       {
-        anchor_number: row['anchor'].to_i,
+        sheet_reference: row['anchor'].to_i,
         hold_colors: colors,
         grade_to_s: row['grade'],
         openers: openers,
@@ -29,15 +29,15 @@ namespace :disc_charts do
       }
     end
 
-    routes.sort_by! { |r| r[:anchor_number] }
+    routes.sort_by! { |r| r[:sheet_reference] }
 
     pdf_io = DiscChartService.new(routes).generate_pdf
 
     basename = File.basename(csv_path, File.extname(csv_path))
-    output_path = "/tmp/#{basename}.pdf"
+    output_path = Rails.root.join('tmp', "#{basename}.pdf")
     File.binwrite(output_path, pdf_io.string)
     puts "PDF written to #{output_path} (#{File.size(output_path)} bytes)"
-    puts "#{routes.size} routes across #{routes.map { |r| r[:anchor_number] }.uniq.size} anchors"
+    puts "#{routes.size} routes across #{routes.map { |r| r[:sheet_reference] }.uniq.size} anchors"
   end
 
   desc 'Generate disc chart PDF for a gym space (routes fetched from the database)'
@@ -45,7 +45,7 @@ namespace :disc_charts do
     require 'rqrcode'
 
     space = GymSpace.find(args[:gym_space_id])
-    gym_routes = space.gym_routes.includes(:gym_openers).where(dismounted_at: nil).order(:anchor_number)
+    gym_routes = space.gym_routes.includes(:gym_openers).where(dismounted_at: nil).order(:sheet_reference)
 
     if gym_routes.empty?
       warn "No active routes found for GymSpace ##{space.id} (#{space.name})"
@@ -55,7 +55,7 @@ namespace :disc_charts do
     routes = gym_routes.map do |r|
       qr_svg = RQRCode::QRCode.new(r.short_app_path, level: :l).as_svg(viewbox: true, use_path: true)
       {
-        anchor_number: r.anchor_number,
+        sheet_reference: r.sheet_reference,
         hold_colors: r.hold_colors,
         grade_to_s: r.grade_to_s,
         openers: r.gym_openers.map { |o| { name: o.name } },
@@ -66,10 +66,10 @@ namespace :disc_charts do
     pdf_io = DiscChartService.new(routes).generate_pdf
 
     slug = space.name.parameterize
-    output_path = "/tmp/disc_charts_#{slug}.pdf"
+    output_path = Rails.root.join('tmp', "disc_charts_#{slug}.pdf")
     File.binwrite(output_path, pdf_io.string)
     puts "PDF written to #{output_path} (#{File.size(output_path)} bytes)"
-    puts "#{routes.size} routes across #{routes.map { |r| r[:anchor_number] }.uniq.size} anchors"
+    puts "#{routes.size} routes across #{routes.map { |r| r[:sheet_reference] }.uniq.size} anchors"
     puts "Gym space: #{space.name} (ID: #{space.id})"
   end
 end
