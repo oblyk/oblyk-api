@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Generates A4 PDFs containing one circular disc per anchor (relay), where each
 # slice represents one climbing route. Inspired by the Python tool at
 # https://github.com/hleroy/climbing_route_chart but rewritten in Ruby to
@@ -64,7 +66,7 @@ class DiscChartService
   RADIUS         = 69.5
   CENTER_X       = 105.0
   CENTER_Y       = 150.0
-  QR_SIZE_SINGLE = 35   # QR side length (mm) for a single-route disc
+  QR_SIZE_SINGLE = 35 # QR side length (mm) for a single-route disc
 
   # Radial layout configs per route count — distances are fractions of RADIUS
   # along each slice's bisector, measured from center.
@@ -76,7 +78,7 @@ class DiscChartService
     3 => { text_d: 0.83, qr_d: 0.55, grade_fs: 14, setter_fs: 8,  qr_size: 25, grade_gap: 6, setter_gap: 11, offset: 270.0 },
     4 => { text_d: 0.83, qr_d: 0.60, grade_fs: 13, setter_fs: 7,  qr_size: 22, grade_gap: 5, setter_gap: 10, offset: 270.0 },
     5 => { text_d: 0.83, qr_d: 0.62, grade_fs: 11, setter_fs: 6,  qr_size: 20, grade_gap: 3, setter_gap: 8,  offset: 270.0 },
-    6 => { text_d: 0.85, qr_d: 0.62, grade_fs: 10, setter_fs: 5,  qr_size: 18, grade_gap: 2, setter_gap: 6,  offset: 270.0 },
+    6 => { text_d: 0.85, qr_d: 0.62, grade_fs: 10, setter_fs: 5,  qr_size: 18, grade_gap: 2, setter_gap: 6,  offset: 270.0 }
   }.freeze
 
   def initialize(routes, params = {})
@@ -95,7 +97,7 @@ class DiscChartService
 
   private
 
-  # ── Color helpers ─────────────────────────────────────────────────────────
+  # --- Color helpers ----
 
   def dark_color?(hex)
     r = hex[1..2].to_i(16)
@@ -104,8 +106,8 @@ class DiscChartService
     (0.299 * r + 0.587 * g + 0.114 * b) / 255.0 < 0.5
   end
 
-  def lerp(a, b, t)
-    (a + (b - a) * t).round
+  def linear_interpolation(start_value, end_value, ratio)
+    (start_value + (end_value - start_value) * ratio).round
   end
 
   def interpolate_middle_color(colors)
@@ -116,25 +118,25 @@ class DiscChartService
     t   = (0.5 - seg * (1.0 / n)) / (1.0 / n)
     c1  = colors[seg]
     c2  = colors[seg + 1]
-    r   = lerp(c1[1..2].to_i(16), c2[1..2].to_i(16), t)
-    g   = lerp(c1[3..4].to_i(16), c2[3..4].to_i(16), t)
-    b   = lerp(c1[5..6].to_i(16), c2[5..6].to_i(16), t)
-    "#%02x%02x%02x" % [r, g, b]
+    r   = linear_interpolation(c1[1..2].to_i(16), c2[1..2].to_i(16), t)
+    g   = linear_interpolation(c1[3..4].to_i(16), c2[3..4].to_i(16), t)
+    b   = linear_interpolation(c1[5..6].to_i(16), c2[5..6].to_i(16), t)
+    format('#%02x%02x%02x', r, g, b)
   end
 
   def text_color_for(hold_colors)
     ref = hold_colors.length > 1 ? interpolate_middle_color(hold_colors) : hold_colors[0]
-    dark_color?(ref) ? "white" : "black"
+    dark_color?(ref) ? 'white' : 'black'
   end
 
-  # ── QR code embedding ─────────────────────────────────────────────────────
+  # --- QR code embedding ----
 
   # Wraps an SVG string (e.g. from rqrcode's +as_svg+) into a nested <svg>
   # element positioned at (+x+, +y+) with the given +size+ (square).
   # A white backing rect is drawn first so the QR is always legible regardless
   # of the slice fill color (including white slices).
   def qr_nested_svg(qr_svg, x, y, size)
-    viewbox = qr_svg.match(/viewBox="([^"]+)"/i)&.captures&.first || "0 0 580 580"
+    viewbox = qr_svg.match(/viewBox="([^"]+)"/i)&.captures&.first || '0 0 580 580'
     inner   = qr_svg.sub(/<svg[^>]*>/m, '').sub(%r{</svg>\s*\z}m, '').strip
     rx = x.round(2)
     ry = y.round(2)
@@ -146,24 +148,24 @@ class DiscChartService
     XML
   end
 
-  # ── Opener formatting ─────────────────────────────────────────────────────
+  # --- Opener formatting ----
 
   def openers_to_s(openers)
     names = openers.map { |o| o[:name] }
-    return "" if names.empty?
+    return '' if names.empty?
     return names[0] if names.length == 1
 
     "#{names[0..-2].join(', ')} / #{names[-1]}"
   end
 
-  # ── SVG fill / gradient helpers ───────────────────────────────────────────
+  # --- SVG fill / gradient helpers ----
 
   # Returns a <linearGradient> XML fragment, or "" for solid colors.
   def gradient_def(id, x1, y1, x2, y2, colors)
-    return "" if colors.length == 1
+    return '' if colors.length == 1
 
     stops = colors.each_with_index.map do |color, idx|
-      offset = colors.length == 1 ? "0%" : "#{(idx * 100.0 / (colors.length - 1)).round}%"
+      offset = colors.length == 1 ? '0%' : "#{(idx * 100.0 / (colors.length - 1)).round}%"
       %(<stop offset="#{offset}" stop-color="#{color}"/>)
     end.join("\n      ")
 
@@ -179,14 +181,14 @@ class DiscChartService
     colors.length > 1 ? %( fill="url(##{id})") : %( fill="#{colors[0]}")
   end
 
-  # ── Relay number box ──────────────────────────────────────────────────────
+  # --- Relay number box ----
 
   def relay_box_svg(relay)
     cx          = CENTER_X
     cy          = CENTER_Y
     relay_text  = relay.to_s
     font_size   = 14
-    rect_width  = relay_text.length * 12 + 8   # 4 px padding each side at ~12px/char
+    rect_width  = relay_text.length * 12 + 8 # 4 px padding each side at ~12px/char
     rect_height = 18
     rect_x      = cx - rect_width / 2.0
     rect_y      = cy - @radius + 4
@@ -201,7 +203,7 @@ class DiscChartService
     XML
   end
 
-  # ── Single-route disc ─────────────────────────────────────────────────────
+  # -- Single-route disc ----
 
   def render_single_route(relay, route)
     cx           = CENTER_X
@@ -212,7 +214,7 @@ class DiscChartService
     fill         = fill_attr(grad_id, hold_colors)
     text_color   = text_color_for(hold_colors)
     grade_y      = cy - @radius / 2.0
-    setter_y     = grade_y + 12
+    setter_y     = grade_y + @grade_fs * 0.7
     grade_to_s   = route[:grade_to_s]
     openers      = openers_to_s(route[:openers])
 
@@ -222,7 +224,6 @@ class DiscChartService
     XML
 
     grade_y  = cy - @radius + 44
-    setter_y = grade_y + @grade_fs * 0.7
     setter_fs = 10
     texts = <<~XML
       <text x="#{cx}" y="#{grade_y}" font-size="#{@grade_fs}" text-anchor="middle" dominant-baseline="central"
@@ -231,7 +232,7 @@ class DiscChartService
             fill="#{text_color}" font-family="DejaVu Sans, sans-serif">#{openers}</text>
     XML
 
-    qr_element = ""
+    qr_element = ''
     if route[:qr_svg]
       qr_size    = QR_SIZE_SINGLE
       qr_x       = cx - qr_size / 2.0
@@ -242,16 +243,18 @@ class DiscChartService
     { defs: grad, body: circle + texts + qr_element }
   end
 
-  # ── Multi-route disc ──────────────────────────────────────────────────────
+  # --- Multi-route disc ----
 
   def render_multi_route(relay, group)
-    cx, cy = CENTER_X, CENTER_Y
+    cx = CENTER_X
+    cy = CENTER_Y
     n = group.length
-    cfg = LAYOUT[[n, 6].min]
+    cfg = DiscChartService::LAYOUT[[n, 6].min]
     sweep = 360.0 / n
     # Per-N offset so no bisector points at 270° (relay box at top of disc)
     offset = cfg[:offset]
-    defs, body = [], []
+    defs = []
+    body = []
 
     group.each_with_index do |route, i|
       start_angle = offset + i * sweep
@@ -287,8 +290,8 @@ class DiscChartService
       setter_y = (anchor_y + half_gap).round(2)
 
       # QR code — mid-zone along bisector
-      qr_element = ""
-      texts = ""
+      qr_element = ''
+      texts = ''
       if route[:qr_svg]
         qr_cx = cx + cfg[:qr_d] * @radius * Math.cos(mid_rad)
         qr_cy = cy + cfg[:qr_d] * @radius * Math.sin(mid_rad)
@@ -312,7 +315,7 @@ class DiscChartService
     { defs: defs.join, body: body.join }
   end
 
-  # ── Full SVG page for one relay ───────────────────────────────────────────
+  # --- Full SVG page for one relay ----
 
   def generate_svg_for_relay(relay, group)
     result = group.length == 1 ? render_single_route(relay, group[0]) : render_multi_route(relay, group)
@@ -332,12 +335,12 @@ class DiscChartService
     SVG
   end
 
-  # ── PDF assembly ──────────────────────────────────────────────────────────
+  # --- PDF assembly ----
 
   def assemble_pdf(svg_list)
     pdf = Prawn::Document.new(page_size: 'A4', margin: 0)
     svg_list.each_with_index do |svg, idx|
-      pdf.start_new_page if idx > 0
+      pdf.start_new_page if idx.positive?
       pdf.svg(svg, at: [0, pdf.bounds.top], width: pdf.bounds.width)
     end
     StringIO.new(pdf.render)

@@ -22,10 +22,10 @@ namespace :disc_charts do
 
       {
         anchor_number: row['anchor'].to_i,
-        hold_colors:   colors,
-        grade_to_s:    row['grade'],
-        openers:       openers,
-        qr_svg:        qr_svg
+        hold_colors: colors,
+        grade_to_s: row['grade'],
+        openers: openers,
+        qr_svg: qr_svg
       }
     end
 
@@ -56,10 +56,10 @@ namespace :disc_charts do
       qr_svg = RQRCode::QRCode.new(r.short_app_path, level: :l).as_svg(viewbox: true, use_path: true)
       {
         anchor_number: r.anchor_number,
-        hold_colors:   r.hold_colors,
-        grade_to_s:    r.grade_to_s,
-        openers:       r.gym_openers.map { |o| { name: o.name } },
-        qr_svg:        qr_svg
+        hold_colors: r.hold_colors,
+        grade_to_s: r.grade_to_s,
+        openers: r.gym_openers.map { |o| { name: o.name } },
+        qr_svg: qr_svg
       }
     end
 
