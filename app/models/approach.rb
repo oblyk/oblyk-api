@@ -15,6 +15,10 @@ class Approach < ApplicationRecord
   validates :polyline, presence: true
   validates :approach_type, inclusion: { in: STYLES_LIST }, allow_nil: true
 
+  def app_path
+    "/crags/#{crag.id}/#{crag.slug_name}/approaches/#{id}"
+  end
+
   def to_geo_json(minimalistic: false)
     features = {
       type: 'Feature',
@@ -96,6 +100,7 @@ class Approach < ApplicationRecord
   def detail_to_json
     {
       id: id,
+      app_path: app_path,
       description: description,
       approach_type: approach_type,
       polyline: polyline,
