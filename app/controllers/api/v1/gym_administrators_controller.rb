@@ -28,7 +28,7 @@ module Api
         @gym_administrator.requested_email ||= user.email if user.present?
         @gym_administrator.user = user
         @gym_administrator.gym = @gym
-        @gym_administrator.email_report = gym_administrator_params[:requested_email] == true
+        @gym_administrator.email_report = gym_administrator_params[:email_report] == true
         if @gym_administrator.save
           @gym_administrator.send_invitation_email! @current_user
           render json: @gym_administrator.detail_to_json, status: :ok
