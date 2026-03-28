@@ -2,6 +2,10 @@ fr:
   mailer:
     signature: "L'ékip Oblyk"
     hello: "Bonjour %{name}"
+    delete_this_email: 'Pensez à supprimer ce mail si vous ne comptez pas le relire'
+    discovery_app: "Découvrez l'application Oblyk"
+    follow_us: 'Suivez-nous sur les réseaux'
+    email_settings: 'Mes paramètres de <a href="%{url}">notification par mail</a>'
     welcome:
       subject: "Bienvenue %{name}"
       title: "Bienvenue %{name} !"

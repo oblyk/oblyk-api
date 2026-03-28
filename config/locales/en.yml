@@ -2,6 +2,10 @@ en:
   mailer:
     signature: "Oblyk team"
     hello: "Hello %{name}"
+    delete_this_email: "Please delete this email if you don't plan on reading it again"
+    discovery_app: 'Discovery the Oblyk app'
+    follow_us: 'Follow us on social media'
+    email_settings: 'My <a href="%{url}">email notification</a> settings'
     welcome:
       subject: "Welcome %{name}"
       title: "Welcome %{name} !"

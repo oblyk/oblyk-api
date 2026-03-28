@@ -45,18 +45,23 @@
       >
         <%= t('mailer.signature') %>
       </p>
-      <p style="text-align: center; margin-top: 30px">
-        <small>🌱 Pensez à supprimer ce mail si vous ne comptez pas le relire</small>
+      <p style="text-align: center; margin-top: 30px; margin-bottom: 0;">
+        <small>🌱 <%= t('mailer.delete_this_email') %></small>
+      </p>
+      <p style="text-align: center; margin-top: 0;">
+        <small>
+          ⚙ <%= t('mailer.email_settings', url: "#{@app_url}/home/settings/notifications").html_safe %>
+        </small>
       </p>
       <div>
         <div style="text-align: center">
           <p style="margin-bottom: 6px">
-            Découvrez l'application Oblyk
+            <%= t('mailer.discovery_app') %>
           </p>
           <a style="margin-left: 4px; margin-right: 4px" href="https://play.google.com/store/apps/details?id=org.oblyk.twa"><img height="55" src="https://storage.oblyk.org/email-footer-google-play-btn-h110.png" alt="logo Google Play Store" ></a>
           <a style="margin-left: 4px; margin-right: 4px" href="https://apps.apple.com/fr/app/oblyk/id6569245391"><img height="55" src="https://storage.oblyk.org/email-footer-apple-store-btn-h110.png" alt="logo Apple App Store" ></a>
           <p style="margin-bottom: 6px">
-            Suivez-nous sur les réseaux
+            <%= t('mailer.follow_us') %>
           </p>
           <a style="color: black" href="https://www.facebook.com/pageoblyk">Facebook</a> ·
           <a style="color: black" href="https://www.instagram.com/oblyk.climbing">Instagram</a> ·
