@@ -202,6 +202,10 @@ class User < ApplicationRecord
     "/climbers/#{slug_name}"
   end
 
+  def avatar_attachment_object
+    attachment_object(avatar)
+  end
+
   def local_climber_to_json
     Rails.cache.fetch("#{cache_key_with_version}/local_climber_to_json", expires_in: 28.days) do
       {

@@ -134,6 +134,14 @@ class Crag < ApplicationRecord
     save
   end
 
+  def cover_attachment_object
+    if photo_id.present?
+      attachment_object(photo.picture, 'Crag_cover')
+    else
+      attachment_object(static_map, 'Crag_cover')
+    end
+  end
+
   def app_path
     "/crags/#{id}/#{slug_name}"
   end
@@ -187,7 +195,7 @@ class Crag < ApplicationRecord
         attachments: {
           static_map: attachment_object(static_map),
           static_map_banner: attachment_object(static_map_banner),
-          cover: photo_id.present? ? attachment_object(photo.picture, 'Crag_cover') : attachment_object(static_map_banner, 'Crag_cover')
+          cover: cover_attachment_object
         },
         approaches: {
           min_time: min_approach_time,

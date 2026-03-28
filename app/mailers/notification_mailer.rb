@@ -41,10 +41,10 @@ class NotificationMailer < ApplicationMailer
                  publication.publishable.logo_attachment_object[:variant_path].gsub(':variant', 'fit=crop,width=50,height=50')
                elsif publication.publishable_type == 'User' && publication.publishable.avatar_attachment_object[:attached]
                  publication.publishable.avatar_attachment_object[:variant_path].gsub(':variant', 'fit=crop,width=50,height=50')
-               elsif publication.publishable_type == 'Crag' && publication.publishable.photo?.picture_attachment_object.try(:[], :attached)
-                 publication.publishable.photo.picture_attachment_object[:variant_path].gsub(':variant', 'fit=crop,width=50,height=50')
-               elsif publication.publishable_type == 'GuideBookPaper' && publication.publishable.cover_attachment_object[:attached]
+               elsif publication.publishable_type == 'Crag' && publication.publishable.cover_attachment_object[:attached]
                  publication.publishable.cover_attachment_object[:variant_path].gsub(':variant', 'fit=crop,width=50,height=50')
+               elsif publication.publishable_type == 'GuideBookPaper' && publication.publishable.cover_attachment_object[:attached]
+                 publication.publishable.cover_attachment_object[:variant_path].gsub(':variant', 'fit=scale-down,width=50,height=50')
                end
       @publications << {
         body: body,

@@ -58,6 +58,10 @@ class GuideBookPaper < ApplicationRecord
     photos
   end
 
+  def cover_attachment_object
+    attachment_object(cover)
+  end
+
   def app_path
     "/guide-book-papers/#{id}/#{slug_name}"
   end
