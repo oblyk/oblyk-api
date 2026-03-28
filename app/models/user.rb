@@ -103,11 +103,12 @@ class User < ApplicationRecord
   validates :password, allow_nil: true, format: { with: PASSWORD_FORMAT }, confirmation: true, on: :update
 
   validate :validate_email_notifiable_list
-
   validate :can_change_date_of_birth
 
   scope :deleted, -> { where(deleted_at: nil) }
   scope :undeleted, -> { where.not(deleted_at: nil) }
+
+  alias_attribute :name, :first_name
 
   def location
     [latitude, longitude]
