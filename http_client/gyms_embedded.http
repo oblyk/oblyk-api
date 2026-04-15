@@ -1,0 +1,3 @@
+### GET embedded gyms data
+GET {{embedded_url}}/gyms/229.json
+Accept: application/json

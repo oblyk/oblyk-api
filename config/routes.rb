@@ -581,5 +581,10 @@ Rails.application.routes.draw do
         end
       end
     end
+    namespace :embedded do
+      resources :gyms, only: %i[show] do
+        resources :gym_routes, only: %i[index show]
+      end
+    end
   end
 end
