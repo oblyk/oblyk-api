@@ -25,6 +25,15 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   end
 
   allow do
+    origins 'https://embedded.oblyk.org',
+            'https://next-embedded.oblyk.org'
+
+    resource '/api/embedded/*',
+             headers: :any,
+             methods: %i[get options]
+  end
+
+  allow do
     origins '*'
 
     resource '/api/v1/public/*',
