@@ -8,6 +8,7 @@ module Embedded
 
     attributes :id,
                :name,
+               :app_path,
                :height,
                :description,
                :climbing_type,
