@@ -5,9 +5,11 @@ module Embedded
     include AttachmentsSerializerHelper
 
     belongs_to :gym_sector, serializer: Embedded::GymSectorSerializer
+    has_many :videos, as: :viewable, serializer: Embedded::VideoSerializer, lazy_load_data: true
 
     attributes :id,
                :name,
+               :app_path,
                :height,
                :description,
                :climbing_type,

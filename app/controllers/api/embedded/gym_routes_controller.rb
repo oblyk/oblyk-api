@@ -46,7 +46,7 @@ module Api
         serializer = ::Embedded::GymRouteSerializer.new(
           gym_route,
           {
-            include: [:gym_sector, 'gym_sector.gym_space'],
+            include: [:gym_sector, 'gym_sector.gym_space', :videos],
             params: {
               include_gym_route_cover: true,
               include_cover_metadata: true,
