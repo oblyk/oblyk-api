@@ -118,7 +118,7 @@ module ContestService
           details: [top, zone]
         }
       when Constant::HIGHEST_HOLD
-        point = current_ascent.hold_number
+        point = current_ascent.hold_number || 0
         point += 0.5 if current_ascent.hold_number_plus
         plus = current_ascent.hold_number_plus ? 1 : 0
         {
