@@ -123,7 +123,7 @@ module ContestService
         plus = current_ascent.hold_number_plus ? 1 : 0
         {
           value: point,
-          details: [current_ascent.hold_number, plus]
+          details: [current_ascent.hold_number || 0, plus]
         }
       when Constant::POINT_RELATIVE_TO_HIGHEST_HOLD
         hold_number = current_ascent.hold_number || 0
