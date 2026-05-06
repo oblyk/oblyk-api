@@ -118,7 +118,6 @@ gem 'stripe'
 gem 'jsonapi-serializer'
 
 group :development, :test do
-  gem 'bullet'
   # Ruby static code analyzer
   gem 'rubocop'
   gem 'rubocop-faker'
