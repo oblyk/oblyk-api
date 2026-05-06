@@ -117,6 +117,9 @@ gem 'stripe'
 # JSON API serializer https://github.com/jsonapi-serializer/jsonapi-serializer
 gem 'jsonapi-serializer'
 
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+
 group :development, :test do
   # Ruby static code analyzer
   gem 'rubocop'
@@ -153,6 +156,3 @@ group :development do
 
   gem 'bundler-leak'
 end
-
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
