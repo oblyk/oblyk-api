@@ -63,10 +63,6 @@ gem 'rest-client'
 # Monitoring rails performance with RoR vs Wild
 gem 'rorvswild'
 
-# Gem for test and documentation API
-gem 'rspec_api_documentation'
-gem 'apitome', github: 'jejacks0n/apitome'
-
 # Gem for export to csv
 gem 'csv'
 
@@ -96,7 +92,7 @@ gem 'prawn-svg'
 # Generate QrCode
 gem 'rqrcode', '~> 2.0'
 
-# Google cloud storage
+# Google Cloud storage
 gem 'google-cloud-storage', '~> 1.11', require: false
 
 # Aws sdk s3 for Cloudflare R2 object storage
@@ -128,13 +124,9 @@ group :development, :test do
   gem 'rubocop-rails'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
-  gem 'database_cleaner'
-  gem 'factory_bot_rails'
-  gem 'faker'
   # Small gem which causes rails console to open pry
   gem 'pry-doc'
   gem 'pry-rails'
-  gem 'rspec-rails', '~> 5.0.0'
 end
 
 group :development do
@@ -155,4 +147,14 @@ group :development do
   gem 'capistrano-sidekiq'
 
   gem 'bundler-leak'
+end
+
+group :test do
+  # Adds support for Capybara system testing and selenium driver
+  gem 'capybara', '>= 2.15'
+  gem 'selenium-webdriver'
+  # Test coverage : https://github.com/simplecov-ruby/simplecov
+  gem 'simplecov', require: false
+  # Easy installation and use of web drivers to run system tests with browsers
+  gem 'webdrivers'
 end

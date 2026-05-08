@@ -86,9 +86,9 @@ class User < ApplicationRecord
 
   validates :first_name, :email, :uuid, :ws_token, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, if: proc { |obj| obj.deleted_at.blank? }
-  validates :email, uniqueness: true
-  validates :uuid, uniqueness: true, on: :create
-  validates :ws_token, uniqueness: true, on: :create
+  validates :email, uniqueness: { case_sensitive: false }
+  validates :uuid, uniqueness: { case_sensitive: true }, on: :create
+  validates :ws_token, uniqueness: { case_sensitive: true }, on: :create
   validates :genre, inclusion: { in: %w[male female] }, allow_blank: true
   validates :language, inclusion: { in: %w[fr en] }, allow_blank: true
 
