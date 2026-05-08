@@ -1,0 +1,17 @@
+my_gym:
+  name: Ma salle
+  description: La salle de ta ville
+  address: 1 rue de l'Avenue
+  postal_code: 01000
+  code_country: fr
+  country: France
+  city: Ville
+  big_city: Grande ville
+  region: Drôme
+  email: ma.salle@mail.fr
+  phone_number: 01 00 00 00 00
+  web_site: https://oblyk.org
+  bouldering: 1
+  sport_climbing: 1
+  latitude: 45
+  longitude: 5

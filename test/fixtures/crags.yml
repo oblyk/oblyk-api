@@ -1,0 +1,16 @@
+rocher_des_aures:
+  name: Rocher des Aures
+  rocks: [limestone]
+  rain: exposed
+  sun: sunny_all_day
+  latitude: 44.469592
+  longitude: 5.058089
+  code_country: fr
+  city: Roche-Saint-Secret-Béconne
+  region: Drôme
+  sport_climbing: 1
+  autumn: 1
+  winter: 1
+  spring: 1
+  south_east: 1
+  elevation: 713

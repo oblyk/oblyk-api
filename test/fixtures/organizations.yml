@@ -1,0 +1,12 @@
+oblyk_orga:
+  name: Oblyk
+  api_access_token: oblyk-api-access-token
+  api_usage_type: ecosystem
+  email: oblyk-teame@mail.org
+  slug_name: oblyk
+
+public_orga:
+  name: Parc des Calanques
+  api_access_token: parc-des-calanques-api-access-token
+  api_usage_type: institutional
+  email: parce-des-calanques@mail.fr
