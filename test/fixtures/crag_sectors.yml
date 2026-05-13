@@ -1,0 +1,15 @@
+# frozen_string_literal: true
+
+sector_one:
+  name: Sector One
+  crag: rocher_des_aures
+  latitude: 44.469592
+  longitude: 5.058089
+  rain: protected
+  sun: sunny_all_day
+
+sector_two:
+  name: Sector Two
+  crag: rocher_des_aures
+  latitude: 44.470000
+  longitude: 5.060000
