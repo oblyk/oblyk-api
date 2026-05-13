@@ -1,0 +1,15 @@
+article_1:
+  name: Premier Article
+  description: Une super description pour le premier article.
+  body: Le corps du texte du premier article.
+  author: lucien
+  published_at: <%= Time.current %>
+  views: 10
+
+article_2:
+  name: Deuxième Article
+  description: Une autre description.
+  body: Le corps du texte du deuxième article.
+  author: lucien
+  published_at: nil
+  views: 0

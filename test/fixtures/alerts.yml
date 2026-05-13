@@ -1,0 +1,13 @@
+warning_alert:
+  description: This is a warning alert
+  alert_type: warning
+  alertable: rocher_des_aures (Crag)
+  user: normal_user
+  alerted_at: <%= Time.current %>
+
+good_alert:
+  description: Everything is fine
+  alert_type: good
+  alertable: rocher_des_aures (Crag)
+  user: normal_user
+  alerted_at: <%= Time.current %>
