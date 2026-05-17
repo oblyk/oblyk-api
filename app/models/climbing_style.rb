@@ -22,11 +22,18 @@ class ClimbingStyle
     dynamic
     complex
     sensation
+    basic
     u8
+    u9
     u10
+    u11
     u12
+    u13
     u14
+    u15
     u16
+    u17
     u18
+    u19
   ].freeze
 end
