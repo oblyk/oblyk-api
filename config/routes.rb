@@ -350,6 +350,7 @@ Rails.application.routes.draw do
             post :appreciation_figures, on: :collection
             post :opening_frequencies, on: :collection
           end
+          resources :cross_statistics, only: %i[index]
         end
         resources :contests do
           get :time_line, on: :member
