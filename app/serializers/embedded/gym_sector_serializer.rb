@@ -8,6 +8,7 @@ module Embedded
 
     attributes :id,
                :name,
+               :climbing_type,
                :three_d_path,
                :three_d_height,
                :three_d_label_options,

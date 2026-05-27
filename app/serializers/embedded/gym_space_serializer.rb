@@ -8,6 +8,7 @@ module Embedded
 
     attributes :id,
                :name,
+               :climbing_type,
                :svg_sectors,
                :sectors_color,
                :representation_type,
