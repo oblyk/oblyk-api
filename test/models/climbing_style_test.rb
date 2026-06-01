@@ -29,12 +29,19 @@ class ClimbingStyleTest < ActiveSupport::TestCase
       dynamic
       complex
       sensation
+      basic
       u8
+      u9
       u10
+      u11
       u12
+      u13
       u14
+      u15
       u16
+      u17
       u18
+      u19
     ]
     assert_equal expected_anchors.sort, ClimbingStyle::STYLE_LIST.sort
   end
@@ -44,6 +51,6 @@ class ClimbingStyleTest < ActiveSupport::TestCase
   end
 
   test 'ClimbingStyle::STYLE_LIST has 26 elements' do
-    assert_equal 26, ClimbingStyle::STYLE_LIST.size
+    assert_equal 33, ClimbingStyle::STYLE_LIST.size
   end
 end
