@@ -9,7 +9,12 @@ module Api
         gym = Gym.includes(gym_spaces: [:gym_sectors, { plan_attachment: :blob, three_d_picture_attachment: :blob }])
                  .where(gym_spaces: { draft: false, archived_at: nil })
                  .references(:gym_spaces)
-                 .find(@gym.id)
+                 .find_by(id: @gym.id)
+
+        unless gym
+          render json: { error: 'Gym not found' }, status: :not_found
+          return
+        end
 
         serializer = ::Embedded::GymSerializer.new(
           gym,
@@ -35,7 +40,7 @@ module Api
       private
 
       def set_gym
-        @gym = Gym.where.not(assigned_at: nil).find params[:id]
+        @gym = Gym.where.not(assigned_at: nil).find_by id: params[:id]
 
         render json: { error: 'Gym not found' }, status: :not_found unless @gym
       end
