@@ -1,0 +1,5 @@
+valence_json:
+  town: valence
+  dist: 30
+  json_object: { "id": 1, "name": "Valence" }
+  version_date: <%= Time.zone.now %>

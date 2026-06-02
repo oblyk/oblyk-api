@@ -1,0 +1,17 @@
+drome:
+  name: Drôme
+  slug_name: drome
+  department_number: '26'
+  name_prefix_type: 'in'
+  in_sentence_prefix_type: 'in'
+  country: france
+  geo_polygon: "[[[5.0, 44.0], [5.1, 44.0], [5.1, 44.1], [5.0, 44.1], [5.0, 44.0]]]"
+
+isere:
+  name: Isère
+  slug_name: isere
+  department_number: '38'
+  name_prefix_type: 'in'
+  in_sentence_prefix_type: 'in'
+  country: france
+  geo_polygon: "[[[5.2, 45.0], [5.3, 45.0], [5.3, 45.1], [5.2, 45.1], [5.2, 45.0]]]"

@@ -1,0 +1,13 @@
+park_one:
+  crag: rocher_des_aures
+  user: herve
+  latitude: 44.469592
+  longitude: 5.058089
+  description: Un petit parking ombragé.
+  elevation: 700
+
+park_two:
+  crag: rocher_des_aures
+  latitude: 44.469000
+  longitude: 5.057000
+  description: Parking du bas.
