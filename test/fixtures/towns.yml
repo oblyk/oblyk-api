@@ -1,0 +1,19 @@
+valence:
+  name: Valence
+  slug_name: valence
+  latitude: 44.9333
+  longitude: 4.8917
+  population: 62000
+  town_code: '26362'
+  zipcode: '26000'
+  department: drome
+
+beaufort:
+  name: Beaufort
+  slug_name: beaufort
+  latitude: 44.7167
+  longitude: 5.1167
+  population: 500
+  town_code: '26038'
+  zipcode: '26400'
+  department: drome

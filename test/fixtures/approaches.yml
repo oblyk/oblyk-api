@@ -1,0 +1,13 @@
+approach_one:
+  crag: rocher_des_aures
+  user: herve
+  polyline: [[44.469592, 5.058089], [44.470000, 5.060000]]
+  length: 200
+  approach_type: steep_ascent
+  description: Approche raide mais courte.
+
+approach_two:
+  crag: rocher_des_aures
+  polyline: [[44.469000, 5.057000], [44.469500, 5.058000]]
+  length: 500
+  approach_type: soft_ascent
