@@ -1,0 +1,9 @@
+my_gym_boulder_space:
+  name: Bloc
+  description: Espace de bloc de ma salle
+  order: 1
+  climbing_type: bouldering
+  gym: my_gym
+  draft: false
+  slug_name: bloc
+  representation_type: 2d_picture
