@@ -12,7 +12,7 @@ module Api
         if params[:latitude].present?
           latitude = params[:latitude].to_f
           longitude = params[:longitude].to_f
-          crags = crags.order("getRange(crags.latitude, crags.longitude, #{latitude}, #{longitude}) ASC, crags.id ASC")
+          crags = crags.order(Crag.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(crags.longitude, crags.latitude), POINT(?, ?)), crags.id', longitude, latitude]))
         end
         crags = crags.order('crags.ascent_users_count DESC, crags.ascents_count DESC, id') if params[:order].present? && params[:order] == 'popularity'
         crags = crags.page(params[:page]).per(params.fetch(:per_page, 25)) if params[:page].present?
@@ -101,12 +101,14 @@ module Api
         # Localisation
         if latitude.present? && longitude.present?
           crag_object = crag_object.where(
-            'getRange(latitude, longitude, :latitude, :longitude) <= :limit',
+            'ST_DISTANCE_SPHERE(POINT(crags.longitude, crags.latitude), POINT(:longitude, :latitude)) <= :limit',
             latitude: latitude.to_f,
             longitude: longitude.to_f,
             limit: distance
           )
-          crag_object = crag_object.order("getRange(latitude, longitude, #{latitude.to_f}, #{longitude.to_f})")
+          crag_object = crag_object.order(
+            Crag.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(crags.longitude, crags.latitude), POINT(?, ?))', longitude, latitude])
+          )
         else
           crag_object = crag_object.limit(params.fetch(:limit, 20))
         end

@@ -25,7 +25,7 @@ module Api
         articles_feed = Feed.where(feedable_type: 'Article')
         guide_books_feed = Feed.where(feedable_type: 'GuideBookPaper')
         local_feed = Feed.where(
-          "getRange(latitude, longitude, :user_lat, :user_lng) < 30000 AND feedable_type IN ('Crag', 'CragRoute', 'GuideBookWeb', 'GuideBookPdf', 'Gym', 'Alert', 'Photo', 'Video')",
+          "ST_DISTANCE_SPHERE(POINT(longitude, latitude), POINT(:user_lng, :user_lat)) < 30000 AND feedable_type IN ('Crag', 'CragRoute', 'GuideBookWeb', 'GuideBookPdf', 'Gym', 'Alert', 'Photo', 'Video')",
           user_lat: latitude.presence || User.current.latitude,
           user_lng: longitude.presence || User.current.longitude
         )
@@ -369,7 +369,7 @@ module Api
                            .where('users.last_activity_at > ?', Date.current - 3.years)
                            .where.not(user: @current_user)
                            .where(
-                             'getRange(localities.latitude, localities.longitude, :lat, :lng) < :dist',
+                             'ST_DISTANCE_SPHERE(POINT(localities.longitude, localities.latitude), POINT(:lng, :lat)) < :dist',
                              lat: current_user_locality.locality.latitude.to_f,
                              lng: current_user_locality.locality.longitude.to_f,
                              dist: current_user_locality.radius * 1000
@@ -416,7 +416,7 @@ module Api
             .where(users: { partner_search: true })
             .where.not(user: @current_user)
             .where(
-              'getRange(localities.latitude, localities.longitude, :lat, :lng) < :dist',
+              'ST_DISTANCE_SPHERE(POINT(localities.longitude, localities.latitude), POINT(:lng, :lat)) < :dist',
               lat: current_user_locality.locality.latitude.to_f,
               lng: current_user_locality.locality.longitude.to_f,
               dist: current_user_locality.radius * 1000

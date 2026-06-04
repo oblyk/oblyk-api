@@ -19,7 +19,7 @@ module Api
                                     .where('EXISTS(SELECT * FROM locality_users WHERE deactivated_at IS NULL AND user_id = users.id)')
                                     .where('users.last_activity_at > ?', Date.current - 3.years)
                                     .where(
-                                      'getRange(localities.latitude, localities.longitude, :lat, :lng) < (locality_users.radius * 1000)',
+                                      'ST_DISTANCE_SPHERE(POINT(localities.longitude, localities.latitude), POINT(:lng, :lat)) < (locality_users.radius * 1000)',
                                       lat: params[:latitude].to_f,
                                       lng: params[:longitude].to_f
                                     )

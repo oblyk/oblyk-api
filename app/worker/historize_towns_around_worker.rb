@@ -8,10 +8,10 @@ class HistorizeTownsAroundWorker
     Town
       .where('updated_at < ?', request_date)
       .where(
-        '(population BETWEEN 0 AND 10000 AND getRange(towns.latitude, towns.longitude, :latitude, :longitude) < 10000)
-        OR (population BETWEEN 10001 AND 25000 AND getRange(towns.latitude, towns.longitude, :latitude, :longitude) < 15000)
-        OR (population BETWEEN 25001 AND 50000 AND getRange(towns.latitude, towns.longitude, :latitude, :longitude) < 20000)
-        OR (population > 50000 AND getRange(towns.latitude, towns.longitude, :latitude, :longitude) < 30000)',
+        '(population BETWEEN 0 AND 10000 AND ST_DISTANCE_SPHERE(POINT(towns.longitude, towns.latitude), POINT(:longitude, :latitude)) < 10000)
+        OR (population BETWEEN 10001 AND 25000 AND ST_DISTANCE_SPHERE(POINT(towns.longitude, towns.latitude), POINT(:longitude, :latitude)) < 15000)
+        OR (population BETWEEN 25001 AND 50000 AND ST_DISTANCE_SPHERE(POINT(towns.longitude, towns.latitude), POINT(:longitude, :latitude)) < 20000)
+        OR (population > 50000 AND ST_DISTANCE_SPHERE(POINT(towns.longitude, towns.latitude), POINT(:longitude, :latitude)) < 30000)',
         latitude: latitude,
         longitude: longitude
       )

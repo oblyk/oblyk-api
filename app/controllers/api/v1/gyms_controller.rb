@@ -19,7 +19,9 @@ module Api
         if params[:latitude].present?
           latitude = params[:latitude].to_f
           longitude = params[:longitude].to_f
-          gyms = gyms.order("getRange(gyms.latitude, gyms.longitude, #{latitude}, #{longitude}) ASC, gyms.id ASC")
+          gyms = gyms.order(
+            Gym.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(gyms.longitude, gyms.latitude), POINT(?, ?)) ASC, gyms.id ASC', longitude.to_f, latitude.to_f])
+          )
         end
         gyms = gyms.order('gyms.follows_count DESC, id') if params[:order].present? && params[:order] == 'popularity'
         gyms = gyms.page(params[:page]).per(params.fetch(:per_page, 25)) if params[:page].present?

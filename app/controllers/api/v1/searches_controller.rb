@@ -71,7 +71,7 @@ module Api
           [
             "SELECT id,
                     type,
-                    getrange(latitude, longitude, :latitude, :longitude)
+                    ST_DISTANCE_SPHERE(POINT(longitude, latitude), POINT(:longitude, :latitude))
              FROM (SELECT id, 'Crag' AS type, name, latitude, longitude
                    FROM crags
                    WHERE deleted_at IS NULL
@@ -79,7 +79,7 @@ module Api
                    SELECT id, 'Gym' AS type, name, latitude, longitude
                    FROM gyms
                    WHERE deleted_at IS NULL) AS crag_and_gyms
-             ORDER BY getrange(latitude, longitude, :latitude, :longitude)
+             ORDER BY ST_DISTANCE_SPHERE(POINT(longitude, latitude), POINT(:longitude, :latitude))
              LIMIT 25 OFFSET :page",
             {
               latitude: latitude,

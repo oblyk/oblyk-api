@@ -9,12 +9,12 @@ module Geolocable
 
     def self.geo_search(latitude, longitude, distance)
       where(
-        'getRange(latitude, longitude, :lat, :lng) < :distance',
+        'ST_DISTANCE_SPHERE(POINT(longitude, latitude), POINT(:lng, :lat)) < :distance',
         lat: latitude.to_f,
         lng: longitude.to_f,
         distance: distance.to_i * 1000
       )
-        .order("getRange(latitude, longitude, #{latitude.to_f} , #{longitude.to_f})")
+        .order(sanitize_sql(['ST_DISTANCE_SPHERE(POINT(longitude, latitude), POINT(?, ?))', longitude.to_f, latitude.to_f]))
     end
   end
 end

@@ -71,7 +71,7 @@ class Town < ApplicationRecord
 
     if around_gyms.size.zero?
       first_nearest_gym = Gym.select(%i[id slug_name name country city latitude longitude])
-                             .order("getRange(gyms.latitude, gyms.longitude, #{latitude.to_f} , #{longitude.to_f})")
+                             .order(Gym.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(gyms.longitude, gyms.latitude), POINT(?, ?))', longitude.to_f, latitude.to_f]))
                              .first
       nearest_gym = {
         id: first_nearest_gym.id,
@@ -129,7 +129,9 @@ class Town < ApplicationRecord
     end
 
     if around_crags.size.zero?
-      first_nearest_crag = Crag.order("getRange(crags.latitude, crags.longitude, #{latitude.to_f} , #{longitude.to_f})").first
+      first_nearest_crag = Crag.order(
+        Crag.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(crags.longitude, crags.latitude), POINT(?, ?))', longitude.to_f, latitude.to_f])
+      ).first
       nearest_crag_dist = GeoHelper.geo_range(latitude, longitude, first_nearest_crag.latitude, first_nearest_crag.longitude)
       nearest_crag = {
         id: first_nearest_crag.id,
