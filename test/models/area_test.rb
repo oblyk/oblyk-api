@@ -7,6 +7,7 @@ class AreaTest < ActiveSupport::TestCase
     @user = users(:normal_user)
     @area = areas(:foret_de_saou)
     @crag = crags(:rocher_des_aures)
+    @crag_orpierre = crags(:orpierre)
   end
 
   test 'area is valid' do
@@ -20,23 +21,12 @@ class AreaTest < ActiveSupport::TestCase
   end
 
   test 'crag_routes_count returns sum of crags routes count' do
-    @area.crags << @crag
-    @crag.update_column(:crag_routes_count, 10)
-    
-    assert_equal 10, @area.crag_routes_count
-    
+    assert_equal 3, @area.crag_routes_count
+
     # Ajout d'un autre site avec des voies
-    crag2 = Crag.create!(
-      name: 'Second Crag',
-      latitude: 45,
-      longitude: 5,
-      city: 'Test City',
-      user: @user
-    )
-    crag2.update_column(:crag_routes_count, 5)
-    AreaCrag.create!(area: @area, crag: crag2)
-    
-    assert_equal 15, @area.crag_routes_count
+    AreaCrag.create!(area: @area, crag: @crag_orpierre)
+
+    assert_equal 4, @area.crag_routes_count
   end
 
   test 'hardest_route returns the crag with the highest max_grade_value' do
@@ -98,7 +88,6 @@ class AreaTest < ActiveSupport::TestCase
   end
 
   test 'detail_to_json returns expected keys' do
-    @area.crags << @crag
     json = @area.detail_to_json
     
     assert_equal @area.id, json[:id]

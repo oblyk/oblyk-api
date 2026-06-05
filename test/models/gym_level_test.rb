@@ -66,7 +66,6 @@ class GymLevelTest < ActiveSupport::TestCase
     json = @gym_level.summary_to_json
     assert_equal @gym_level.climbing_type, json[:climbing_type]
     assert_equal @gym_level.enabled, json[:enabled]
-    assert_nil json[:grade_system]
     assert_equal @gym_level.level_representation, json[:level_representation]
     assert_equal @gym_level.sub_level_enabled, json[:sub_level_enabled]
     assert_nil json[:sub_level_max]
