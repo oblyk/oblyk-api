@@ -99,7 +99,7 @@ class GymOpeningSheet < ApplicationRecord
       end
     end
 
-    data = data.map(&:second)
+    data = data.values
     data.each_with_index do |row, row_index|
       row[:build_routes].each do |route|
         data[row_index][:routes] << route[:open]
