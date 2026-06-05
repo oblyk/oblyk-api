@@ -14,7 +14,7 @@ class Organization < ApplicationRecord
   API_USAGE_LIST = %w[study personal commercial institutional ecosystem].freeze
 
   validates :name, :email, :api_usage_type, presence: true
-  validates :name, uniqueness: true, on: :create
+  validates :name, uniqueness: { case_sensitive: false }, on: :create
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :api_usage_type, inclusion: { in: API_USAGE_LIST }
 

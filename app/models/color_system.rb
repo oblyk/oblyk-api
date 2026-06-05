@@ -3,7 +3,7 @@
 class ColorSystem < ApplicationRecord
   has_many :color_system_lines
 
-  validates :colors_mark, presence: true, uniqueness: true
+  validates :colors_mark, presence: true, uniqueness: { case_sensitive: false }
 
   def init_line_form_colors(colors)
     order = 1

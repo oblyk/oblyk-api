@@ -8,7 +8,7 @@ class ContestTeam < ApplicationRecord
   before_destroy :un_team_participants
 
   validates :name, presence: true
-  validates :name, uniqueness: { scope: :contest_id }
+  validates :name, uniqueness: { scope: :contest_id, case_sensitive: false }
 
   def summary_to_json
     {

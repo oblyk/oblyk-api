@@ -21,7 +21,7 @@ class ContestParticipant < ApplicationRecord
 
   validates :first_name, :last_name, :date_of_birth, presence: true
   validates :genre, inclusion: { in: %w[male female] }, unless: proc { |record| record.contest.optional_gender }
-  validates :token, uniqueness: { scope: :contest }, on: :create
+  validates :token, uniqueness: { scope: :contest, case_sensitive: false }, on: :create
   validate :unique_participant
   validate :validate_age
   validate :validate_category_obligations

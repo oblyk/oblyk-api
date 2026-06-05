@@ -10,7 +10,7 @@ class GymLevel < ApplicationRecord
 
   before_validation :normalize_sub_level
   validates :climbing_type, :level_representation, presence: true
-  validates :climbing_type, uniqueness: { scope: [:gym_id] }
+  validates :climbing_type, uniqueness: { scope: [:gym_id], case_sensitive: false }
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }
   validates :grade_system, inclusion: { in: Grade::GRADE_STYLES }, allow_blank: true
   validates :level_representation, inclusion: { in: LEVEL_REPRESENTATIONS }

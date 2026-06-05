@@ -4,5 +4,5 @@ class ArticleGuideBookPaper < ApplicationRecord
   belongs_to :guide_book_paper, counter_cache: :articles_count, touch: true
   belongs_to :article
 
-  validates :article, uniqueness: { scope: :guide_book_paper }
+  validates :article, uniqueness: { scope: :guide_book_paper, case_sensitive: false }
 end
