@@ -1,0 +1,9 @@
+ascent_user_one:
+  user: normal_user
+  released_at: 2024-06-01
+  ascent_status: sent
+
+ascent_user_two:
+  user: normal_user
+  released_at: 2024-06-02
+  ascent_status: project

@@ -1,0 +1,11 @@
+gym_administrator_one:
+  user: super_admin_user
+  gym: my_gym
+  roles: [ "manage_team_member", "manage_gym" ]
+  requested_email: admin@oblyk.org
+
+gym_administrator_two:
+  user: normal_user
+  gym: my_gym
+  roles: [ "manage_space" ]
+  requested_email: normal@oblyk.org

@@ -1,0 +1,15 @@
+element_1:
+  gym: my_gym
+  gym_space: my_gym_boulder_space
+  gym_three_d_asset: asset_1
+  three_d_position: [0, 0, 0]
+  three_d_rotation: [0, 0, 0]
+  three_d_scale: [1, 1, 1]
+
+element_2:
+  gym: my_gym
+  gym_space: my_gym_boulder_space
+  gym_three_d_asset: asset_2
+  three_d_position: [1, 1, 1]
+  three_d_rotation: [0, 45, 0]
+  three_d_scale: [2, 1, 1]

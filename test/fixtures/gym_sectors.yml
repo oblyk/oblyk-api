@@ -1,0 +1,8 @@
+# frozen_string_literal: true
+
+my_gym_sector:
+  name: Secteur 1
+  height: 4.5
+  climbing_type: bouldering
+  order: 1
+  gym_space: my_gym_boulder_space

@@ -1,0 +1,12 @@
+asset_1:
+  name: Cube
+  slug_name: cube
+  description: Un cube 3D
+  three_d_parameters: { color: '#ff0000' }
+  gym: my_gym
+
+asset_2:
+  name: Wall
+  slug_name: wall
+  description: Un mur 3D
+  gym: my_gym

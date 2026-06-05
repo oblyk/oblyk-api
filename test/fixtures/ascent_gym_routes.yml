@@ -1,0 +1,19 @@
+gym_ascent_one:
+  type: AscentGymRoute
+  user: normal_user
+  gym: my_gym
+  gym_route: gym_route_one
+  released_at: 2024-06-03
+  ascent_status: sent
+  climbing_type: bouldering
+  sections:
+    - index: 0
+      height: 4
+      grade: '6a'
+      grade_value: 32
+  height: 4
+  sections_count: 1
+  min_grade_value: 32
+  max_grade_value: 32
+  min_grade_text: '6a'
+  max_grade_text: '6a'

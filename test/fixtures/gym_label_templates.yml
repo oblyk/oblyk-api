@@ -1,0 +1,29 @@
+one:
+  gym: my_gym
+  name: Template 1
+  label_direction: one_by_row
+  font_family: lato
+  qr_code_position: in_label
+  page_format: A4
+  page_direction: portrait
+  label_arrangement: rectangular_horizontal
+  grade_style: none
+  label_options: <%= GymLabelTemplate.default_label_options.to_json %>
+  layout_options: <%= GymLabelTemplate.default_layout_options.to_json %>
+  footer_options: <%= GymLabelTemplate.default_footer_options.to_json %>
+  header_options: <%= GymLabelTemplate.default_header_options.to_json %>
+
+two:
+  gym: my_gym
+  name: Template 2
+  label_direction: circular
+  font_family: overpass
+  qr_code_position: footer
+  page_format: A5
+  page_direction: landscape
+  label_arrangement: rectangular_vertical
+  grade_style: circle
+  label_options: <%= GymLabelTemplate.default_label_options.to_json %>
+  layout_options: <%= GymLabelTemplate.default_layout_options.to_json %>
+  footer_options: <%= GymLabelTemplate.default_footer_options.to_json %>
+  header_options: <%= GymLabelTemplate.default_header_options.to_json %>

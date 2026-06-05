@@ -7,3 +7,4 @@ my_gym_boulder_space:
   draft: false
   slug_name: bloc
   representation_type: 2d_picture
+  gym_space_group: gym_space_group_1

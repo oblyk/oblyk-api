@@ -1,0 +1,30 @@
+contest_option:
+  gym: my_gym
+  option_type: contest
+  start_date: <%= Date.current - 1.day %>
+  unlimited_unit: false
+  remaining_unit: 10
+
+api_option:
+  gym: my_gym
+  option_type: api
+  start_date: <%= Date.current - 1.day %>
+  unlimited_unit: true
+
+expired_option:
+  gym: my_gym
+  option_type: statistic
+  start_date: <%= Date.current - 10.days %>
+  end_date: <%= Date.current - 1.day %>
+
+future_option:
+  gym: my_gym
+  option_type: picture
+  start_date: <%= Date.current + 1.day %>
+
+no_credit_contest:
+  gym: my_gym
+  option_type: contest
+  start_date: <%= Date.current - 1.day %>
+  unlimited_unit: false
+  remaining_unit: 0
