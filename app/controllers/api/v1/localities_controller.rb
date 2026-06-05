@@ -56,7 +56,7 @@ module Api
         localities = localities.where(users: { climbing_type => true }) if climbing_type
 
         localities.page(page)
-                  .order('users.last_activity_at DESC, id')
+                  .order(Arel.sql('users.last_activity_at DESC, id'))
                   .each do |locality_user|
           json << locality_user.local_to_json
         end

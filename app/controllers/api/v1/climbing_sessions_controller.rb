@@ -91,7 +91,7 @@ module Api
                                      AND follows.user_id = :user_id)',
                            user_id: @current_user.id)
                     .includes(avatar_attachment: :blob, banner_attachment: :blob)
-                    .order('last_released_at DESC, users.id')
+                    .order(Arel.sql('last_released_at DESC, users.id'))
                     .page(params.fetch(:page, 1))
                     .per(10)
 

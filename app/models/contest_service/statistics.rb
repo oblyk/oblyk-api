@@ -34,7 +34,7 @@ module ContestService
 
       participants = @participants.select('COUNT(*) AS count, TIMESTAMPDIFF(YEAR, contest_participants.date_of_birth, CURDATE()) AS age')
                                   .group('2')
-                                  .reorder('2')
+                                  .reorder(Arel.sql('2'))
       return false if participants.blank?
 
       participants = participants.map { |participant| { age: participant[:age], count: participant[:count] } }

@@ -179,7 +179,7 @@ module Api
                                .where(id: project_crag_route_ids)
                                .where.not(id: crag_route_ids)
                                .joins(:crag)
-                               .order('crags.name')
+                               .order(Arel.sql('crags.name'))
         render json: crag_routes.map { |crag_route| crag_route.summary_to_json(with_crag_in_sector: false) }, status: :ok
       end
 
@@ -195,7 +195,7 @@ module Api
                              photo: { picture_attachment: :blob }
                            )
                            .joins(:crag)
-                           .order('crags.name')
+                           .order(Arel.sql('crags.name'))
         render json: crag_routes.map { |crag_route| crag_route.summary_to_json(with_crag_in_sector: false) }, status: :ok
       end
 
@@ -338,7 +338,7 @@ module Api
         user_localities = LocalityUser.joins(:user)
                                       .includes(:user, :locality)
                                       .where(id: around_localities)
-                                      .order('users.last_activity_at DESC, user_id')
+                                      .order(Arel.sql('users.last_activity_at DESC, user_id'))
                                       .page(params.fetch(:page, 1))
 
         json_user_localities = user_localities.map do |user_locality|

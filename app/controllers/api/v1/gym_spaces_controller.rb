@@ -17,7 +17,7 @@ module Api
         gym_spaces = @gym.gym_spaces
                          .unarchived
                          .joins('LEFT JOIN gym_space_groups ON gym_space_groups.id = gym_spaces.gym_space_group_id')
-                         .reorder('gym_space_groups.order IS NULL ASC, gym_space_groups.order, gym_spaces.order')
+                         .reorder(Arel.sql('gym_space_groups.order IS NULL ASC, gym_space_groups.order, gym_spaces.order'))
         render json: gym_spaces.map { |gym_space| gym_space.summary_to_json(with_figures: true) }, status: :ok
       end
 
@@ -25,7 +25,7 @@ module Api
         gym_spaces = @gym.gym_spaces
                          .unarchived
                          .joins('LEFT JOIN gym_space_groups ON gym_space_groups.id = gym_spaces.gym_space_group_id')
-                         .reorder('gym_space_groups.order IS NULL ASC, gym_space_groups.order, gym_spaces.order')
+                         .reorder(Arel.sql('gym_space_groups.order IS NULL ASC, gym_space_groups.order, gym_spaces.order'))
         in_group = {}
         out_group = []
         gym_spaces.each do |gym_space|

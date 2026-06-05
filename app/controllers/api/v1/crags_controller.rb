@@ -14,7 +14,7 @@ module Api
           longitude = params[:longitude].to_f
           crags = crags.order(Arel.sql(Crag.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(crags.longitude, crags.latitude), POINT(?, ?)), crags.id', longitude, latitude])))
         end
-        crags = crags.order('crags.ascent_users_count DESC, crags.ascents_count DESC, id') if params[:order].present? && params[:order] == 'popularity'
+        crags = crags.order(Arel.sql('crags.ascent_users_count DESC, crags.ascents_count DESC, id')) if params[:order].present? && params[:order] == 'popularity'
         crags = crags.page(params[:page]).per(params.fetch(:per_page, 25)) if params[:page].present?
         render json: crags.map(&:summary_to_json), status: :ok
       end
@@ -144,7 +144,7 @@ module Api
       end
 
       def random
-        crag = Crag.order('RAND()').first
+        crag = Crag.order(Arel.sql('RAND()')).first
         render json: crag.detail_to_json, status: :ok
       end
 

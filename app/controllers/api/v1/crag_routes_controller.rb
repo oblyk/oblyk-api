@@ -47,7 +47,7 @@ module Api
         crag_routes = CragRoute.where('EXISTS (SELECT * FROM follows WHERE followable_type = "Crag" AND followable_id = crag_routes.crag_id AND follows.user_id = :user_id)', user_id: @current_user.id)
                                .where.not('EXISTS (SELECT * FROM ascents WHERE ascents.crag_route_id = crag_routes.id AND ascents.user_id = :user_id)', user_id: @current_user.id)
         crag_routes = crag_routes.where(max_grade_value: [min_max[:min_grade_value]..min_max[:max_grade_value] + 1]) if min_max
-        crag_routes = crag_routes.order('ascent_users_count DESC, note_count DESC')
+        crag_routes = crag_routes.order(Arel.sql('ascent_users_count DESC, note_count DESC'))
                                  .page(params.fetch(:page, 1))
                                  .per(params.fetch(:page_limit, 25))
 
@@ -115,7 +115,7 @@ module Api
       end
 
       def random
-        crag_route = CragRoute.order('RAND()').first
+        crag_route = CragRoute.order(Arel.sql('RAND()')).first
         render json: crag_route.detail_to_json, status: :ok
       end
 

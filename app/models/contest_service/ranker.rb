@@ -19,8 +19,8 @@ module ContestService
       self.ascents = ascents.where(realised: true) if [Constant::DIVISION, Constant::DIVISION_AND_ATTEMPT, Constant::FIXED_POINTS].include?(step.ranking_type)
       self.ascents = ascents.select(:id, :contest_participant_id, :contest_route_id) if [Constant::DIVISION].include?(step.ranking_type)
       self.ascents = ascents.select(:id, :contest_participant_id, :contest_route_id, :top_attempt, :zone_1_attempt) if [Constant::DIVISION_AND_ZONE].include?(step.ranking_type)
-      self.ascents = ascents.joins(contest_route: { contest_route_group: :contest_stage_step }).order('contest_routes.fixed_points DESC') if [Constant::FIXED_POINTS].include?(step.ranking_type)
-      self.ascents = ascents.joins(contest_route: { contest_route_group: :contest_stage_step }).order('(contest_participant_ascents.hold_number / contest_routes.number_of_holds * contest_routes.fixed_points) DESC') if [Constant::POINT_RELATIVE_TO_HIGHEST_HOLD].include?(step.ranking_type)
+      self.ascents = ascents.joins(contest_route: { contest_route_group: :contest_stage_step }).order(Arel.sql('contest_routes.fixed_points DESC')) if [Constant::FIXED_POINTS].include?(step.ranking_type)
+      self.ascents = ascents.joins(contest_route: { contest_route_group: :contest_stage_step }).order(Arel.sql('(contest_participant_ascents.hold_number / contest_routes.number_of_holds * contest_routes.fixed_points) DESC')) if [Constant::POINT_RELATIVE_TO_HIGHEST_HOLD].include?(step.ranking_type)
       self.ascents_by_participants = {}
 
       limited = [Constant::FIXED_POINTS, Constant::POINT_RELATIVE_TO_HIGHEST_HOLD].include?(step.ranking_type) && step.ascents_limit.present?

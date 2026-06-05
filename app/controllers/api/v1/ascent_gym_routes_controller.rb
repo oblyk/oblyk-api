@@ -77,9 +77,9 @@ module Api
         ascents = ascents.where(gym_routes: { climbing_type: climbing_type }) if climbing_type.present?
 
         ascents = if gym_level.grade_system.blank?
-                    ascents.order('gym_routes.level_index DESC, ascents.released_at DESC, ascents.id')
+                    ascents.order(Arel.sql('gym_routes.level_index DESC, ascents.released_at DESC, ascents.id'))
                   else
-                    ascents.order('gym_routes.min_grade_value DESC, ascents.released_at DESC, ascents.id')
+                    ascents.order(Arel.sql('gym_routes.min_grade_value DESC, ascents.released_at DESC, ascents.id'))
                   end
 
         ascents = ascents.page(page).map(&:summary_to_json)
@@ -236,7 +236,7 @@ module Api
       def gym_routes_ascent_response(gym_route_ids)
         route_ascents = {}
         gym_routes_ascents = AscentGymRoute.where(user: @current_user, gym_route_id: gym_route_ids)
-                                           .order('FIELD(ascent_status, "onsight", "flash", "red_point", "sent", "repetition", "project")')
+                                           .order(Arel.sql('FIELD(ascent_status, "onsight", "flash", "red_point", "sent", "repetition", "project")'))
         user_ascents = gym_routes_ascents.group_by(&:gym_route_id)
 
         gym_route_ids.each do |gym_route_id|

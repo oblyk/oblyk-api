@@ -21,7 +21,7 @@ module Api
                               followable_type: params[:followable_type],
                               followable_id: params[:followable_id]
                             )
-                            .order('users.last_activity_at DESC, id')
+                            .order(Arel.sql('users.last_activity_at DESC, id'))
                             .page(params.fetch(:page, 1))
         render json: subscribers.map { |follow| follow.user.summary_to_json }, status: :ok
       end

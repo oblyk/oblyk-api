@@ -36,7 +36,7 @@ module Api
                                            gym_spaces: { gym_id: @gym.id, archived_at: nil, deleted_at: nil },
                                            dismounted_at: nil
                                          )
-                                         .order('distinct_number_of')
+                                         .order(Arel.sql('distinct_number_of'))
                                          .map(&:distinct_number_of)
 
           routes = GymRoute.joins(gym_sector: :gym_space)
@@ -48,7 +48,7 @@ module Api
           routes = routes.where(gym_spaces: { gym_id: @gym.id, archived_at: nil, deleted_at: nil })
                          .where('gym_routes.dismounted_at IS NULL OR gym_routes.dismounted_at > ?', opened_at)
                          .group('by_field, number_of')
-                         .order('by_field, number_of')
+                         .order(Arel.sql('by_field, number_of'))
 
           routes = routes.group_by(&:by_field)
 

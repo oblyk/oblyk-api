@@ -21,9 +21,9 @@ module Api
 
         # Order
         gym_routes = gym_routes.reorder(opened_at: :desc) if sort == 'opened_at'
-        gym_routes = gym_routes.reorder('gym_spaces.order, gym_spaces.name, gym_sectors.order, gym_sectors.name, gym_routes.id') if sort == 'sector'
-        gym_routes = gym_routes.reorder('gym_routes.level_index DESC, gym_routes.id') if sort == 'color'
-        gym_routes = gym_routes.reorder('gym_routes.min_grade_text DESC, gym_routes.id') if sort == 'grade'
+        gym_routes = gym_routes.reorder(Arel.sql('gym_spaces.order, gym_spaces.name, gym_sectors.order, gym_sectors.name, gym_routes.id')) if sort == 'sector'
+        gym_routes = gym_routes.reorder(Arel.sql('gym_routes.level_index DESC, gym_routes.id')) if sort == 'color'
+        gym_routes = gym_routes.reorder(Arel.sql('gym_routes.min_grade_text DESC, gym_routes.id')) if sort == 'grade'
 
         gym_routes = gym_routes.page(page)
 
