@@ -42,7 +42,6 @@ Rails.application.routes.draw do
 
       get 'figures', controller: :commons, action: :figures
       get 'micro_stats', controller: :commons, action: :micro_stats
-      get 'last_activity_feed', controller: :commons, action: :last_activity_feed
       get 'last_added', controller: :commons, action: :last_added
       get 'active_gyms', controller: :commons, action: :active_gyms
       get 'last_contributions', controller: :commons, action: :last_contributions
@@ -61,8 +60,6 @@ Rails.application.routes.draw do
         post :add_cover, on: :member
       end
       resources :articles do
-        get :feed, on: :collection
-        get :last, on: :collection
         get :photos, on: :member
         get :crags, on: :member
         get :guide_book_papers, on: :member
@@ -115,7 +112,6 @@ Rails.application.routes.draw do
           get '', action: :show
           put '', action: :update
           delete '', action: :destroy
-          get :feed
           get :library
           get :library_figures
           get :ascents_without_guides

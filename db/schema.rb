@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_06_05_123813) do
+ActiveRecord::Schema.define(version: 2026_06_05_132825) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -668,26 +668,6 @@ ActiveRecord::Schema.define(version: 2026_06_05_123813) do
     t.index ["department_number"], name: "index_departments_on_department_number"
     t.index ["name"], name: "index_departments_on_name"
     t.index ["slug_name"], name: "index_departments_on_slug_name", unique: true
-  end
-
-  create_table "feeds", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "feedable_type"
-    t.bigint "feedable_id"
-    t.json "feed_object"
-    t.string "parent_type"
-    t.bigint "parent_id"
-    t.json "parent_object"
-    t.decimal "latitude", precision: 10, scale: 6
-    t.decimal "longitude", precision: 10, scale: 6
-    t.datetime "posted_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["feedable_type", "feedable_id"], name: "index_feeds_on_feedable_type_and_feedable_id"
-    t.index ["latitude"], name: "index_feeds_on_latitude"
-    t.index ["longitude"], name: "index_feeds_on_longitude"
-    t.index ["parent_id"], name: "index_feeds_on_parent_id"
-    t.index ["parent_type"], name: "index_feeds_on_parent_type"
-    t.index ["posted_at"], name: "index_feeds_on_posted_at"
   end
 
   create_table "ffme_contests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb3", force: :cascade do |t|

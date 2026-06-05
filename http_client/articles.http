@@ -3,11 +3,6 @@ GET {{api_url}}/articles.json
 HttpApiAccessToken: {{api_access_token}}
 Accept: application/json
 
-### GET all articles feed
-GET {{api_url}}/articles/feed.json
-HttpApiAccessToken: {{api_access_token}}
-Accept: application/json
-
 ### GET last 4 articles
 GET {{api_url}}/articles/last.json
 HttpApiAccessToken: {{api_access_token}}

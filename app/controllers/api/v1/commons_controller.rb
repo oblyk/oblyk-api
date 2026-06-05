@@ -61,13 +61,6 @@ module Api
         render json: data, status: :ok
       end
 
-      def last_activity_feed
-        feeds = Feed.where(feedable_type: %w[Crag Gym GuideBookPaper])
-                    .order(posted_at: :desc)
-                    .page(params.fetch(:page, 1))
-        render json: feeds, status: :ok
-      end
-
       def last_added
         crags = Crag.where.not(photo_id: nil).order(created_at: :desc).limit(10)
         gyms = Gym.order(created_at: :desc).limit(10)

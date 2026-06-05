@@ -76,24 +76,6 @@ bundle exec rake search_tasks:import["Word"]
 bundle exec rake search_tasks:import["User"]
 ```
 
-### Recreate feeds
-_(sidekiq must be started)_
-
-```shell
-bundle exec rake create_feeds:for_model["Alert"]
-bundle exec rake create_feeds:for_model["Gym"]
-bundle exec rake create_feeds:for_model["GuideBookPaper"]
-bundle exec rake create_feeds:for_model["GuideBookPdf"]
-bundle exec rake create_feeds:for_model["GuideBookWeb"]
-bundle exec rake create_feeds:for_model["Word"]
-bundle exec rake create_feeds:for_model["Video"]
-bundle exec rake create_feeds:for_model["Photo"]
-bundle exec rake create_feeds:for_model["AscentCragRoute"]
-bundle exec rake create_feeds:for_model["Article"]
-bundle exec rake create_feeds:for_model["Crag"]
-bundle exec rake create_feeds:for_model["CragRoute"]
-```
-
 ### Generate API documentation
 
 ```shell

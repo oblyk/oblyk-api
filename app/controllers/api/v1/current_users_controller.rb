@@ -13,60 +13,6 @@ module Api
         render json: @user.detail_to_json(current_user: true), status: :ok
       end
 
-      def feed
-        articles = params.fetch(:articles, false) == 'true'
-        guide_books = params.fetch(:guide_books, false) == 'true'
-        subscribes = params.fetch(:subscribes, false) == 'true'
-        local_news = params.fetch(:local_news, false) == 'true'
-
-        latitude = params.fetch(:latitude, nil)
-        longitude = params.fetch(:longitude, nil)
-
-        articles_feed = Feed.where(feedable_type: 'Article')
-        guide_books_feed = Feed.where(feedable_type: 'GuideBookPaper')
-        local_feed = Feed.where(
-          "ST_DISTANCE_SPHERE(POINT(longitude, latitude), POINT(:user_lng, :user_lat)) < 30000 AND feedable_type IN ('Crag', 'CragRoute', 'GuideBookWeb', 'GuideBookPdf', 'Gym', 'Alert', 'Photo', 'Video')",
-          user_lat: latitude.presence || User.current.latitude,
-          user_lng: longitude.presence || User.current.longitude
-        )
-
-        crags = []
-        gyms = []
-        guides = []
-        users = []
-        if subscribes
-          @current_user.subscribes.accepted.find_each do |subscribe|
-            crags << subscribe.followable_id if subscribe.followable_type == 'Crag'
-            gyms << subscribe.followable_id if subscribe.followable_type == 'Gym'
-            guides << subscribe.followable_id if subscribe.followable_type == 'GuideBookPaper'
-            users << subscribe.followable_id if subscribe.followable_type == 'User'
-          end
-        end
-        subscribe_crags_feed = Feed.where(parent_type: 'Crag', parent_id: crags)
-        subscribe_gyms_feed = Feed.where(parent_type: 'Gym', parent_id: gyms)
-        subscribe_guides_feed = Feed.where(parent_type: 'GuideBookPaper', parent_id: guides)
-        subscribe_users_feed = Feed.where(parent_type: 'User', parent_id: users)
-
-        # Unselect all feeds by default for chained "or" after
-        feeds = Feed.where('1 = 0')
-
-        # Global feed
-        feeds = feeds.or(articles_feed) if articles
-        feeds = feeds.or(local_feed) if local_news
-        feeds = feeds.or(guide_books_feed) if guide_books
-
-        # Subscribe feed
-        feeds = feeds.or(subscribe_crags_feed) if crags.count.positive?
-        feeds = feeds.or(subscribe_gyms_feed) if gyms.count.positive?
-        feeds = feeds.or(subscribe_guides_feed) if guides.count.positive?
-        feeds = feeds.or(subscribe_users_feed) if users.count.positive?
-
-        # Order & Pagination
-        feeds = feeds.order(posted_at: :desc)
-                     .page(params.fetch(:page, 1))
-        render json: feeds, status: :ok
-      end
-
       def favorite_crags
         subscribes = @user.subscribes
                           .includes(:user, followable: { photo: { picture_attachment: :blob }, static_map_attachment: :blob, static_map_banner_attachment: :blob })

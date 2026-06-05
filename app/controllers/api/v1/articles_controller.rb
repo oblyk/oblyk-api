@@ -3,8 +3,8 @@
 module Api
   module V1
     class ArticlesController < ApiController
-      before_action :protected_by_super_admin, except: %i[index last feed show view crags guide_book_papers]
-      before_action :set_article, except: %i[index last feed create]
+      before_action :protected_by_super_admin, except: %i[index show view crags guide_book_papers]
+      before_action :set_article, except: %i[index create]
 
       def index
         articles = Article.published
@@ -12,20 +12,6 @@ module Api
                           .page(params.fetch(:page, 1))
                           .per(params.fetch(:per_page, 25))
         render json: articles.map(&:summary_to_json), status: :ok
-      end
-
-      def last
-        feeds = Feed.where(feedable_type: 'Article')
-                    .order(posted_at: :desc)
-                    .limit(3)
-        render json: feeds, status: :ok
-      end
-
-      def feed
-        feeds = Feed.where(feedable_type: 'Article')
-                    .order(posted_at: :desc)
-                    .page(params.fetch(:page, 1))
-        render json: feeds, status: :ok
       end
 
       def show

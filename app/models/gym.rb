@@ -43,7 +43,6 @@ class Gym < ApplicationRecord
   has_many :follows, as: :followable
   has_many :videos, as: :viewable
   has_many :comments, as: :commentable
-  has_many :feeds, as: :feedable
   has_many :gym_administrators
   has_many :gym_administration_requests
   has_many :gym_spaces

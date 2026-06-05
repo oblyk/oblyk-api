@@ -2,7 +2,6 @@
 
 class User < ApplicationRecord
   include Searchable
-  include ParentFeedable
   include AttachmentResizable
   include StripTagable
   include Emailable
@@ -311,10 +310,6 @@ class User < ApplicationRecord
         gym_openers.update_all(user_id: nil)
         likes.destroy_all
         publication_views.destroy_all
-
-        # Purge feed in relation
-        Feed.where(parent_id: id, parent_type: 'User').destroy_all
-        Feed.where(feedable_id: id, feedable_type: 'User').destroy_all
       end
     end
   end
