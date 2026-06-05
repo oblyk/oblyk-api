@@ -1,0 +1,9 @@
+rock_bar_one:
+  crag: rocher_des_aures
+  user: normal_user
+  polyline: [[44.469592, 5.058089], [44.470000, 5.060000]]
+
+rock_bar_two:
+  crag: rocher_des_aures
+  crag_sector: sector_one
+  polyline: [[44.469000, 5.057000], [44.469500, 5.058000]]

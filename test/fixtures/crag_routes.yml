@@ -1,0 +1,54 @@
+# frozen_string_literal: true
+
+route_one:
+  name: Route One
+  crag: rocher_des_aures
+  climbing_type: sport_climbing
+  sections:
+    - grade: '6a'
+      grade_value: 32
+      climbing_type: sport_climbing
+      height: 20
+  height: 20
+  sections_count: 1
+  min_grade_value: 32
+  max_grade_value: 32
+  min_grade_text: '6a'
+  max_grade_text: '6a'
+
+route_two:
+  name: Route Two
+  crag: rocher_des_aures
+  crag_sector: sector_one
+  climbing_type: sport_climbing
+  sections:
+    - grade: '7a'
+      grade_value: 41
+      climbing_type: sport_climbing
+      height: 25
+  height: 25
+  sections_count: 1
+  min_grade_value: 41
+  max_grade_value: 41
+  min_grade_text: '7a'
+  max_grade_text: '7a'
+
+multi_pitch_route:
+  name: Multi Pitch Route
+  crag: rocher_des_aures
+  climbing_type: multi_pitch
+  sections:
+    - grade: '5c'
+      grade_value: 30
+      climbing_type: sport_climbing
+      height: 30
+    - grade: '6a'
+      grade_value: 32
+      climbing_type: sport_climbing
+      height: 35
+  height: 65
+  sections_count: 2
+  min_grade_value: 30
+  max_grade_value: 32
+  min_grade_text: '5c'
+  max_grade_text: '6a'

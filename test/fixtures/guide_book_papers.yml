@@ -1,0 +1,15 @@
+guide_book_2024:
+  name: Guide Book 2024
+  author: John Doe
+  editor: Oblyk
+  publication_year: 2024
+  price_cents: 2500
+  funding_status: contributes_to_financing
+
+guide_book_2020:
+  name: Guide Book 2020
+  author: Jane Doe
+  editor: Climbing Editor
+  publication_year: 2020
+  price_cents: 2000
+  funding_status: not_contributes_to_financing
