@@ -24,6 +24,8 @@ class GymRouteCover < ApplicationRecord
   end
 
   def original_file_path
+    return nil unless picture.attached?
+
     if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
       # Use CLOUDFLARE R2 CDN
       "#{ENV.fetch('IMAGES_STORAGE_DOMAINE', ENV['OBLYK_API_URL'])}/#{picture&.blob&.key}"
