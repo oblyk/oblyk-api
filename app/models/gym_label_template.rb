@@ -86,7 +86,7 @@ class GymLabelTemplate < ApplicationRecord
     font_families << font_family.to_sym
     font_families << label_options['grade']['font_family'].to_sym
     font_families << label_options['information']['font_family'].to_sym
-    font_families.uniq
+    font_families = font_families.uniq
     fonts = []
     font_families.each do |font|
       fonts << GymLabelFont::FONTS[font.to_sym]
