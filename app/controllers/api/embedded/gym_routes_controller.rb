@@ -18,8 +18,12 @@ module Api
 
         gym_routes = gym_routes.where(gym_sectors: { gym_space_id: gym_space_id }) if gym_space_id.present?
         gym_routes = gym_routes.where(gym_sectors: { id: gym_sector_id }) if gym_sector_id.present?
+
+        # Order
         gym_routes = gym_routes.reorder(opened_at: :desc) if sort == 'opened_at'
         gym_routes = gym_routes.reorder('gym_spaces.order, gym_spaces.name, gym_sectors.order, gym_sectors.name, gym_routes.id') if sort == 'sector'
+        gym_routes = gym_routes.reorder('gym_routes.level_index DESC, gym_routes.id') if sort == 'color'
+        gym_routes = gym_routes.reorder('gym_routes.min_grade_text DESC, gym_routes.id') if sort == 'grade'
 
         gym_routes = gym_routes.page(page)
 
