@@ -290,9 +290,6 @@ Rails.application.routes.draw do
         resources :gym_community_labels, only: %i[] do
           get :disc_chart, on: :collection
         end
-        resources :gym_grades do
-          resources :gym_grade_lines
-        end
         resources :gym_spaces do
           get :groups, on: :collection
           get :tree_sectors, on: :collection

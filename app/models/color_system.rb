@@ -17,16 +17,6 @@ class ColorSystem < ApplicationRecord
     end
   end
 
-  def init_line_form_grade_line(gym_grade)
-    gym_grade.gym_grade_lines.each do |gym_grade_line|
-      color_system_line = ColorSystemLine.new(
-        hex_color: gym_grade_line.colors.first,
-        order: gym_grade_line.order
-      )
-      color_system_lines << color_system_line
-    end
-  end
-
   def init_line_from_gym_level(gym_level)
     gym_level.levels.each do |level|
       color_system_line = ColorSystemLine.new(
@@ -35,16 +25,6 @@ class ColorSystem < ApplicationRecord
       )
       color_system_lines << color_system_line
     end
-  end
-
-  def self.create_form_grade(gym_grade)
-    colors_mark = gym_grade.colors_system_mark
-    return unless colors_mark
-
-    color_system = ColorSystem.find_or_initialize_by colors_mark: colors_mark
-    color_system.init_line_form_grade_line(gym_grade) if color_system.new_record?
-    color_system.save
-    color_system
   end
 
   def self.create_from_level(gym_level)

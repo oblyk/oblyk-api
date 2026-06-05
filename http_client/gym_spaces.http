@@ -8,8 +8,7 @@ Content-Type: application/json
   "gym_space": {
     "name": "Salle principal",
     "description": "L'escpace avec le plus de bloc trop beau",
-    "climbing_type": "bouldering",
-    "gym_grade_id": 1
+    "climbing_type": "bouldering"
   }
 }
 > {%

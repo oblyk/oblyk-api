@@ -7,7 +7,6 @@ class GymRoute < ApplicationRecord
   has_one_attached :thumbnail
   belongs_to :gym_route_cover, optional: true
   belongs_to :gym_sector, optional: true
-  belongs_to :gym_grade_line, optional: true # TODO : DELETE AFTER MIGRATION
   has_one :gym_space, through: :gym_sector
   has_one :gym, through: :gym_sector
   has_many :videos, as: :viewable
@@ -39,16 +38,6 @@ class GymRoute < ApplicationRecord
 
   accepts_nested_attributes_for :gym_route_cover
   attr_accessor :qrcode
-
-  # TODO: DELETE AFTER MIGRATION
-  def gym_grade_line
-    GymGradeLine.unscoped { super }
-  end
-
-  # TODO: DELETE AFTER MIGRATION
-  def gym_grade
-    gym_grade_line&.gym_grade || gym_sector.gym_grade
-  end
 
   def calculated_point
     if points

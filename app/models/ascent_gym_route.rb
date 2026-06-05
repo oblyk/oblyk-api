@@ -3,7 +3,6 @@
 class AscentGymRoute < Ascent
   belongs_to :gym_route, optional: true
   belongs_to :gym
-  belongs_to :gym_grade, optional: true # TODO : DELETE AFTER MIGRATION
   belongs_to :color_system_line, optional: true
   has_one :ascent_comment, class_name: 'Comment', as: :commentable, dependent: :destroy
 

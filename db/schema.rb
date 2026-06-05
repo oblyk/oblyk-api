@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_06_05_122302) do
+ActiveRecord::Schema.define(version: 2026_06_05_123813) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -161,14 +161,12 @@ ActiveRecord::Schema.define(version: 2026_06_05_122302) do
     t.string "hardness_status"
     t.integer "gym_grade_level"
     t.bigint "gym_id"
-    t.bigint "gym_grade_id"
     t.integer "quantity", default: 1
     t.bigint "climbing_session_id"
     t.bigint "color_system_line_id"
     t.index ["climbing_session_id"], name: "index_ascents_on_climbing_session_id"
     t.index ["color_system_line_id"], name: "index_ascents_on_color_system_line_id"
     t.index ["crag_route_id"], name: "index_ascents_on_crag_route_id"
-    t.index ["gym_grade_id"], name: "index_ascents_on_gym_grade_id"
     t.index ["gym_id"], name: "index_ascents_on_gym_id"
     t.index ["gym_route_id"], name: "index_ascents_on_gym_route_id"
     t.index ["user_id"], name: "index_ascents_on_user_id"
@@ -864,35 +862,6 @@ ActiveRecord::Schema.define(version: 2026_06_05_122302) do
     t.index ["gym_id"], name: "index_gym_climbing_styles_on_gym_id"
   end
 
-  create_table "gym_grade_lines", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "name"
-    t.json "colors"
-    t.integer "order"
-    t.string "grade_text"
-    t.integer "grade_value"
-    t.bigint "gym_grade_id"
-    t.bigint "legacy_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "deleted_at"
-    t.integer "points"
-    t.index ["gym_grade_id"], name: "index_gym_grade_lines_on_gym_grade_id"
-  end
-
-  create_table "gym_grades", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "name"
-    t.bigint "gym_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "deleted_at"
-    t.boolean "difficulty_by_grade", default: false
-    t.boolean "difficulty_by_level"
-    t.boolean "tag_color"
-    t.boolean "hold_color"
-    t.string "point_system_type", default: "none"
-    t.index ["gym_id"], name: "index_gym_grades_on_gym_id"
-  end
-
   create_table "gym_label_templates", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.string "label_direction"
@@ -1000,7 +969,6 @@ ActiveRecord::Schema.define(version: 2026_06_05_122302) do
     t.json "sections"
     t.bigint "gym_sector_id"
     t.bigint "gym_route_cover_id"
-    t.bigint "gym_grade_line_id"
     t.integer "note"
     t.integer "note_count"
     t.integer "ascents_count"
@@ -1030,7 +998,6 @@ ActiveRecord::Schema.define(version: 2026_06_05_122302) do
     t.integer "anchor_number"
     t.integer "sub_level"
     t.integer "sub_level_max"
-    t.index ["gym_grade_line_id"], name: "index_gym_routes_on_gym_grade_line_id"
     t.index ["gym_route_cover_id"], name: "index_gym_routes_on_gym_route_cover_id"
     t.index ["gym_sector_id"], name: "index_gym_routes_on_gym_sector_id"
   end
@@ -1043,7 +1010,6 @@ ActiveRecord::Schema.define(version: 2026_06_05_122302) do
     t.integer "height"
     t.text "polygon"
     t.bigint "gym_space_id"
-    t.bigint "gym_grade_id"
     t.bigint "legacy_id"
     t.datetime "deleted_at"
     t.datetime "created_at", precision: 6, null: false
@@ -1060,7 +1026,6 @@ ActiveRecord::Schema.define(version: 2026_06_05_122302) do
     t.float "developed_metre"
     t.string "category_name"
     t.integer "average_opening_time"
-    t.index ["gym_grade_id"], name: "index_gym_sectors_on_gym_grade_id"
     t.index ["gym_space_id"], name: "index_gym_sectors_on_gym_space_id"
   end
 
@@ -1084,7 +1049,6 @@ ActiveRecord::Schema.define(version: 2026_06_05_122302) do
     t.decimal "latitude", precision: 10, scale: 6
     t.decimal "longitude", precision: 10, scale: 6
     t.bigint "gym_id"
-    t.bigint "gym_grade_id"
     t.bigint "legacy_id"
     t.datetime "deleted_at"
     t.datetime "archived_at"
@@ -1102,7 +1066,6 @@ ActiveRecord::Schema.define(version: 2026_06_05_122302) do
     t.json "three_d_label_options"
     t.string "representation_type", default: "2d_picture"
     t.text "svg_sectors"
-    t.index ["gym_grade_id"], name: "index_gym_spaces_on_gym_grade_id"
     t.index ["gym_id"], name: "index_gym_spaces_on_gym_id"
     t.index ["gym_space_group_id"], name: "index_gym_spaces_on_gym_space_group_id"
   end

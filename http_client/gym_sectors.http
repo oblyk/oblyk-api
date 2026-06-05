@@ -10,8 +10,7 @@ Content-Type: application/json
     "description": "Dèvers droite",
     "group_sector_name": "Les devers",
     "climbing_type": "bouldering",
-    "height": 5,
-    "gym_grade_id": 1
+    "height": 5
   }
 }
 > {%

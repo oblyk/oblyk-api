@@ -46,7 +46,6 @@ class Gym < ApplicationRecord
   has_many :feeds, as: :feedable
   has_many :gym_administrators
   has_many :gym_administration_requests
-  has_many :gym_grades # TODO : DELETE AFTER MIGRATION
   has_many :gym_spaces
   has_many :gym_space_groups
   has_many :reports, as: :reportable

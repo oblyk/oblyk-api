@@ -6,7 +6,6 @@ class GymSector < ApplicationRecord
 
   belongs_to :gym_space
   has_one :gym, through: :gym_space
-  belongs_to :gym_grade, optional: true # TODO: DELETE AFTER MIGRATION
   has_many :gym_routes
   has_many :gym_route_covers, through: :gym_routes
 
@@ -19,11 +18,6 @@ class GymSector < ApplicationRecord
   after_save :historize_svg_sectors!
 
   default_scope { order(:order) }
-
-  # TODO: DELETE AFTER MIGRATION
-  def gym_grade
-    GymGrade.unscoped { super }
-  end
 
   def app_path
     "/gyms/#{gym_space.gym.id}/#{gym_space.gym.slug_name}/spaces/#{gym_space.id}/#{gym_space.slug_name}?sector=#{id}"

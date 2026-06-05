@@ -12,7 +12,6 @@ class GymSpace < ApplicationRecord
   has_one_attached :three_d_picture
   has_one_attached :three_d_gltf
   belongs_to :gym
-  belongs_to :gym_grade, optional: true # TODO: DELETE AFTER MIGRATION
   belongs_to :gym_space_group, optional: true
   has_many :gym_sectors
   has_many :gym_routes, through: :gym_sectors
@@ -34,11 +33,6 @@ class GymSpace < ApplicationRecord
   after_update :remove_sectors_cache
   after_update :historize_svg_sectors!, if: :saved_change_to_representation_type?
   after_destroy :delete_gym_cache
-
-  # TODO: DELETE AFTER MIGRATION
-  def gym_grade
-    GymGrade.unscoped { super }
-  end
 
   def set_plan_dimension!
     return unless plan.attached?
