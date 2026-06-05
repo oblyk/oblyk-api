@@ -15,3 +15,12 @@ isere:
   in_sentence_prefix_type: 'in'
   country: france
   geo_polygon: "[[[5.2, 45.0], [5.3, 45.0], [5.3, 45.1], [5.2, 45.1], [5.2, 45.0]]]"
+
+hautes_alpes:
+  name: Hautes-Alpes
+  slug_name: hautes-alpes
+  department_number: '05'
+  name_prefix_type: 'in'
+  in_sentence_prefix_type: 'in'
+  country: france
+  geo_polygon: "[[[5.2, 45.0], [5.3, 45.0], [5.3, 45.1], [5.2, 45.1], [5.2, 45.0]]]"

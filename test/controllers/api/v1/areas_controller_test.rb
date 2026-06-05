@@ -8,6 +8,7 @@ module Api
       setup do
         @area = areas(:foret_de_saou)
         @crag = crags(:rocher_des_aures)
+        @crag_orpierre = crags(:orpierre)
         @user = users(:normal_user)
         @super_admin = users(:super_admin_user)
         @api_headers = api_headers(user: :normal_user)
@@ -75,7 +76,7 @@ module Api
 
       test 'should add crag to area' do
         post add_crag_api_v1_area_url(@area),
-             params: { area: { crag_id: @crag.id } },
+             params: { area: { crag_id: @crag_orpierre.id } },
              headers: @api_headers,
              as: :json
         assert_response :success

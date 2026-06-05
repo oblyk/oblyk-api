@@ -52,3 +52,19 @@ multi_pitch_route:
   max_grade_value: 32
   min_grade_text: '5c'
   max_grade_text: '6a'
+
+petit_ange:
+  name: Petit Ange
+  crag: orpierre
+  climbing_type: sport_climbing
+  sections:
+    - grade: '7a'
+      grade_value: 41
+      climbing_type: sport_climbing
+      height: 32
+  height: 32
+  sections_count: 1
+  min_grade_value: 41
+  max_grade_value: 41
+  min_grade_text: '7a'
+  max_grade_text: '7a'
