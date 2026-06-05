@@ -20,7 +20,7 @@ module Api
           latitude = params[:latitude].to_f
           longitude = params[:longitude].to_f
           gyms = gyms.order(
-            Gym.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(gyms.longitude, gyms.latitude), POINT(?, ?)) ASC, gyms.id ASC', longitude.to_f, latitude.to_f])
+            Arel.sql(Gym.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(gyms.longitude, gyms.latitude), POINT(?, ?)) ASC, gyms.id ASC', longitude.to_f, latitude.to_f]))
           )
         end
         gyms = gyms.order('gyms.follows_count DESC, id') if params[:order].present? && params[:order] == 'popularity'

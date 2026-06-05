@@ -14,7 +14,7 @@ module Geolocable
         lng: longitude.to_f,
         distance: distance.to_i * 1000
       )
-        .order(sanitize_sql(['ST_DISTANCE_SPHERE(POINT(longitude, latitude), POINT(?, ?))', longitude.to_f, latitude.to_f]))
+        .order(Arel.sql(sanitize_sql(['ST_DISTANCE_SPHERE(POINT(longitude, latitude), POINT(?, ?))', longitude.to_f, latitude.to_f])))
     end
   end
 end

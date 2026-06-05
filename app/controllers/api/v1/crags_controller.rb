@@ -12,7 +12,7 @@ module Api
         if params[:latitude].present?
           latitude = params[:latitude].to_f
           longitude = params[:longitude].to_f
-          crags = crags.order(Crag.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(crags.longitude, crags.latitude), POINT(?, ?)), crags.id', longitude, latitude]))
+          crags = crags.order(Arel.sql(Crag.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(crags.longitude, crags.latitude), POINT(?, ?)), crags.id', longitude, latitude])))
         end
         crags = crags.order('crags.ascent_users_count DESC, crags.ascents_count DESC, id') if params[:order].present? && params[:order] == 'popularity'
         crags = crags.page(params[:page]).per(params.fetch(:per_page, 25)) if params[:page].present?
@@ -107,7 +107,7 @@ module Api
             limit: distance
           )
           crag_object = crag_object.order(
-            Crag.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(crags.longitude, crags.latitude), POINT(?, ?))', longitude, latitude])
+            Arel.sql(Crag.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(crags.longitude, crags.latitude), POINT(?, ?))', longitude, latitude]))
           )
         else
           crag_object = crag_object.limit(params.fetch(:limit, 20))

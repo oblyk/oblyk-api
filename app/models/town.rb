@@ -71,7 +71,7 @@ class Town < ApplicationRecord
 
     if around_gyms.size.zero?
       first_nearest_gym = Gym.select(%i[id slug_name name country city latitude longitude])
-                             .order(Gym.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(gyms.longitude, gyms.latitude), POINT(?, ?))', longitude.to_f, latitude.to_f]))
+                             .order(Arel.sql(Gym.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(gyms.longitude, gyms.latitude), POINT(?, ?))', longitude.to_f, latitude.to_f])))
                              .first
       nearest_gym = {
         id: first_nearest_gym.id,
@@ -130,7 +130,7 @@ class Town < ApplicationRecord
 
     if around_crags.size.zero?
       first_nearest_crag = Crag.order(
-        Crag.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(crags.longitude, crags.latitude), POINT(?, ?))', longitude.to_f, latitude.to_f])
+        Arel.sql(Crag.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(crags.longitude, crags.latitude), POINT(?, ?))', longitude.to_f, latitude.to_f]))
       ).first
       nearest_crag_dist = GeoHelper.geo_range(latitude, longitude, first_nearest_crag.latitude, first_nearest_crag.longitude)
       nearest_crag = {
