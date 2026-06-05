@@ -1,0 +1,12 @@
+guide_book_web_1:
+  name: "Topo Web 1"
+  url: "https://example.com/topo1"
+  crag: rocher_des_aures
+  user: normal_user
+  publication_year: 2023
+
+guide_book_web_without_user:
+  name: "Topo Web sans utilisateur"
+  url: "https://example.com/topo2"
+  crag: rocher_des_aures
+  publication_year: 2022

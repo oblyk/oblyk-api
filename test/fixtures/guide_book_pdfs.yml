@@ -1,0 +1,12 @@
+guide_book_pdf_1:
+  name: "Topo PDF 1"
+  crag: rocher_des_aures
+  user: normal_user
+  publication_year: 2023
+  description: "Un topo PDF de test"
+  author: "Jean Jack"
+
+guide_book_pdf_without_user:
+  name: "Topo PDF sans utilisateur"
+  crag: rocher_des_aures
+  publication_year: 2022

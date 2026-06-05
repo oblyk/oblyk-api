@@ -1,0 +1,29 @@
+gym_route_one:
+  name: Voie 1
+  gym_sector: my_gym_sector
+  climbing_type: bouldering
+  height: 4
+  min_grade_value: 32
+  max_grade_value: 32
+  min_grade_text: '6a'
+  max_grade_text: '6a'
+  hold_colors: ["#FF0000"]
+  tag_colors: ["#000000"]
+  opened_at: <%= Date.current %>
+  sections_count: 1
+  sections: [{grade: "6a", grade_value: 32}]
+
+gym_route_two:
+  name: Voie 2
+  gym_sector: my_gym_sector
+  climbing_type: bouldering
+  height: 4
+  min_grade_value: 36
+  max_grade_value: 36
+  min_grade_text: '6b'
+  max_grade_text: '6b'
+  hold_colors: ["#00FF00"]
+  tag_colors: ["#FFFFFF"]
+  opened_at: <%= Date.current %>
+  sections_count: 1
+  sections: [{grade: "6b", grade_value: 36}]

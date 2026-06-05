@@ -1,0 +1,9 @@
+account_1:
+  uuid: 4474775d-e063-448a-9c76-d305886d2642
+  email: contact@oblyk.org
+  customer_stripe_id: cus_12345
+
+account_2:
+  uuid: 8c9e5482-a311-4770-9851-933333333333
+  email: salle@gym.com
+  customer_stripe_id: cus_67890

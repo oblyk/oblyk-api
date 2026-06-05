@@ -1,0 +1,15 @@
+gym_administration_request_one:
+  user: normal_user
+  gym: my_gym
+  first_name: Luc
+  last_name: Skywalker
+  email: luc@skywalker.com
+  justification: Je suis le fils du gérant.
+
+gym_administration_request_two:
+  user: super_admin_user
+  gym: my_gym
+  first_name: Leia
+  last_name: Organa
+  email: leia@organa.com
+  justification: J'ai les accès.

@@ -1,0 +1,11 @@
+sheet_one:
+  gym: my_gym
+  title: Fiche d'ouverture 1
+  description: Ma super fiche
+  number_of_columns: 3
+
+sheet_archived:
+  gym: my_gym
+  title: Fiche archivée
+  number_of_columns: 2
+  archived_at: <%= 1.day.ago %>

@@ -1,0 +1,6 @@
+subscription_one:
+  for_gym_type: private
+  month_by_occurrence: 1
+  start_date: 2026-06-01
+  end_date: 2026-07-01
+  payment_status: paid

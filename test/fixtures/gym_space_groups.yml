@@ -1,0 +1,9 @@
+gym_space_group_1:
+  name: Bloc Group
+  order: 1
+  gym: my_gym
+
+gym_space_group_2:
+  name: Voie Group
+  order: 2
+  gym: my_gym

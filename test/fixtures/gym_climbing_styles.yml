@@ -1,0 +1,11 @@
+one:
+  gym: my_gym
+  style: boulder
+  climbing_type: bouldering
+  color: "#ff0000"
+
+two:
+  gym: my_gym
+  style: endurance
+  climbing_type: sport_climbing
+  color: "#00ff00"

@@ -1,0 +1,7 @@
+gro_one:
+  gym_opener: opener_one
+  gym_route: gym_route_one
+
+gro_two:
+  gym_opener: opener_two
+  gym_route: gym_route_one

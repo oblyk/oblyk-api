@@ -1,0 +1,7 @@
+ascent_user_one:
+  user: normal_user
+  ascent: ascent_user_one
+
+ascent_user_two:
+  user: second_user
+  ascent: ascent_user_one

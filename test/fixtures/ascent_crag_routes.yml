@@ -1,0 +1,39 @@
+crag_ascent_one:
+  type: AscentCragRoute
+  user: normal_user
+  crag_route: route_one
+  released_at: 2024-06-01
+  ascent_status: sent
+  roping_status: lead_climb
+  climbing_type: sport_climbing
+  sections:
+    - index: 0
+      height: 20
+      grade: '6a'
+      grade_value: 32
+  height: 20
+  sections_count: 1
+  min_grade_value: 32
+  max_grade_value: 32
+  min_grade_text: '6a'
+  max_grade_text: '6a'
+
+crag_ascent_project:
+  type: AscentCragRoute
+  user: normal_user
+  crag_route: route_two
+  released_at: 2024-06-02
+  ascent_status: project
+  roping_status: lead_climb
+  climbing_type: sport_climbing
+  sections:
+    - index: 0
+      height: 25
+      grade: '7a'
+      grade_value: 41
+  height: 25
+  sections_count: 1
+  min_grade_value: 41
+  max_grade_value: 41
+  min_grade_text: '7a'
+  max_grade_text: '7a'

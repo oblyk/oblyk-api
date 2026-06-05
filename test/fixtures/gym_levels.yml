@@ -1,0 +1,22 @@
+one:
+  gym: my_gym
+  climbing_type: bouldering
+  level_representation: hold
+  grade_system: french
+  enabled: true
+  levels:
+    - order: 1
+      color: "#ff0000"
+      default_grade: 4a
+      default_point: 100
+
+two:
+  gym: my_gym
+  climbing_type: sport_climbing
+  level_representation: tag
+  enabled: true
+  levels:
+    - order: 1
+      color: "#00ff00"
+      default_grade: 5a
+      default_point: 200

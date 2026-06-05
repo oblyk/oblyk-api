@@ -1,0 +1,12 @@
+opener_one:
+  name: Lucien
+  first_name: Lucien
+  last_name: P
+  gym: my_gym
+  user: normal_user
+
+opener_two:
+  name: Jean
+  first_name: Jean
+  last_name: J
+  gym: my_gym
