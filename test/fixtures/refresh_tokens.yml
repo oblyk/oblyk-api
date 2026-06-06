@@ -1,0 +1,9 @@
+one:
+  user: normal_user
+  token: 'token_one'
+  user_agent: 'Mozilla/5.0'
+
+two:
+  user: normal_user
+  token: 'token_two'
+  user_agent: 'Safari/1.0'

@@ -1,0 +1,7 @@
+one:
+  user: normal_user
+  crag_route: route_one
+
+two:
+  user: normal_user
+  crag_route: route_two
