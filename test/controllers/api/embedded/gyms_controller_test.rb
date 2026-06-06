@@ -25,6 +25,18 @@ module Api
         assert_response :not_found
       end
 
+      test 'should return 404 for gym with only draft spaces' do
+        @gym.gym_spaces.update_all(draft: true)
+        get api_embedded_gym_url(@gym), headers: @headers, as: :json
+        assert_response :not_found
+      end
+
+      test 'should return 404 for gym with only archived spaces' do
+        @gym.gym_spaces.update_all(archived_at: Time.current)
+        get api_embedded_gym_url(@gym), headers: @headers, as: :json
+        assert_response :not_found
+      end
+
       test 'should return 404 for non-existent gym' do
         get api_embedded_gym_url(id: 0), headers: @headers, as: :json
         assert_response :not_found
