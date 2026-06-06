@@ -43,8 +43,6 @@ class TownTest < ActiveSupport::TestCase
   end
 
   test 'detail_to_json returns a hash with crags and gyms' do
-    # On teste que la méthode ne crache pas et retourne la structure de base
-    # La logique interne dépend de Crag.geo_search et Gym.geo_search qui sont déjà testés ailleurs normalement
     json = @town.detail_to_json(20)
     assert_equal 20, json[:dist]
     assert json.key?(:crags)
@@ -53,16 +51,15 @@ class TownTest < ActiveSupport::TestCase
   end
 
   test 'historize! creates or updates a TownJsonObject' do
-    assert_difference 'TownJsonObject.count', 0 do # valence a déjà un objet dans les fixtures
+    assert_difference 'TownJsonObject.count', 0 do
       @town.historize!
     end
-    
-    # Pour Beaufort qui n'en a pas
+
     beaufort = towns(:beaufort)
     assert_difference 'TownJsonObject.count', 1 do
       beaufort.historize!
     end
-    
+
     town_json = TownJsonObject.find_by(town: beaufort)
     assert_not_nil town_json
     assert_equal beaufort.default_dist, town_json.dist

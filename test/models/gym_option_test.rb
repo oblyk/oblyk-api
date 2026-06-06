@@ -52,15 +52,12 @@ class GymOptionTest < ActiveSupport::TestCase
 
   test 'delete_gym_cache is called after save' do
     gym = gyms(:my_gym)
-    # On crée une nouvelle option pour déclencher le callback
     option = GymOption.new(
       gym: gym,
       option_type: GymOption::OPTION_API,
       start_date: Date.current
     )
-    
-    # On peut vérifier que la méthode est appelée en mockant ou en vérifiant un effet de bord si possible.
-    # Ici on va juste vérifier que ça ne lève pas d'erreur et que l'objet est sauvegardé.
+
     assert option.save
   end
 end

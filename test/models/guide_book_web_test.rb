@@ -42,11 +42,11 @@ class GuideBookWebTest < ActiveSupport::TestCase
         @guide_book_web.publication_push!
       end
     end
-    
+
     publication = Publication.last
     assert_equal @guide_book_web.crag_id, publication.publishable_id
     assert_equal 'Crag', publication.publishable_type
-    
+
     attachment = PublicationAttachment.last
     assert_equal 'GuideBookWeb', attachment.attachable_type
     assert_equal @guide_book_web.id, attachment.attachable_id

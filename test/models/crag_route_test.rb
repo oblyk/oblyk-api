@@ -34,15 +34,15 @@ class CragRouteTest < ActiveSupport::TestCase
   end
 
   test 'rich_name returns grade and name' do
-    assert_equal "6a - Route One", @route_one.rich_name
+    assert_equal '6a - Route One', @route_one.rich_name
   end
 
   test 'grade_to_s returns pitch count for multi_pitch' do
-    assert_equal "2L.", @multi_pitch.grade_to_s
+    assert_equal '2L.', @multi_pitch.grade_to_s
   end
 
   test 'grade_to_s returns grade text for single pitch' do
-    assert_equal "6a", @route_one.grade_to_s
+    assert_equal '6a', @route_one.grade_to_s
   end
 
   test 'app_path returns correct path' do

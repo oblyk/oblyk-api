@@ -1,0 +1,9 @@
+wave_1:
+  name: "Wave 1"
+  contest: contest_1
+  capacity: 20
+
+wave_2:
+  name: "Wave 2"
+  contest: contest_1
+  capacity: 30

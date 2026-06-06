@@ -1,13 +1,17 @@
 normal_user:
+  uuid: 'user-1-uuid'
   first_name: Jean
   last_name: Jack
   email: jean.jack@mail.com
   password_digest: <%= BCrypt::Password.create("JeanJack@1234") %>
   ws_token: 'token-123'
+  slug_name: 'jean-jack'
 
 super_admin_user:
+  uuid: 'user-2-uuid'
   first_name: Super-jean
   last_name: Jack
   email: super-jean.jack@mail.com
   password_digest: <%= BCrypt::Password.create("SuperJeanJack@1234") %>
   super_admin: true
+  slug_name: 'super-jean-jack'

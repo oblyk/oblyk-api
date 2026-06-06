@@ -6,11 +6,11 @@ class CreatePublicationNotificationsJobTest < ActiveSupport::TestCase
   setup do
     @user = users(:normal_user)
     @crag = crags(:rocher_des_aures)
-    @follow = Follow.create!(
+    @follow_crag = Follow.find_or_create_by(
       user: @user,
-      followable: @crag,
-      accepted_at: Time.current
+      followable: @crag
     )
+    @follow_crag.update_column :accepted_at, Time.current
     @publication = Publication.create!(
       publishable: @crag,
       published_at: Time.current,
@@ -23,7 +23,7 @@ class CreatePublicationNotificationsJobTest < ActiveSupport::TestCase
       CreatePublicationNotificationsJob.perform_now(@publication.id)
     end
 
-    notification = Notification.last
+    notification = Notification.where(notifiable: @publication).last
     assert_equal 'new_publication', notification.notification_type
     assert_equal 'Publication', notification.notifiable_type
     assert_equal @publication.id, notification.notifiable_id
@@ -42,9 +42,7 @@ class CreatePublicationNotificationsJobTest < ActiveSupport::TestCase
   end
 
   test 'it does not create notification if follow is not accepted' do
-    # Pour un Crag, auto_accepted remplit accepted_at. On doit le mettre à nil après.
-    @follow.update_column(:accepted_at, nil)
-
+    @follow_crag.update_column(:accepted_at, nil)
     assert_no_difference 'Notification.count' do
       CreatePublicationNotificationsJob.perform_now(@publication.id)
     end

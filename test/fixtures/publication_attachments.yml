@@ -1,0 +1,9 @@
+attachment_photo:
+  publication: publication_user
+  attachable_type: Photo
+  attachable: logo_my_gym
+
+attachment_crag:
+  publication: publication_crag
+  attachable_type: Crag
+  attachable: rocher_des_aures

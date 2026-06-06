@@ -24,11 +24,6 @@ class AscentGymRouteTest < ActiveSupport::TestCase
   end
 
   test 'points calculation' do
-    # On mocke un peu pour tester la logique de points si possible, 
-    # ou au moins vérifier que la méthode existe et retourne une structure attendue.
-    # Note: points() dépend de gym_route.calculated_point et gym.ascents_multiplier
-    
-    # Pour l'instant on vérifie que la méthode retourne nil si pas de gym_route
     @ascent.gym_route = nil
     assert_nil @ascent.points
   end

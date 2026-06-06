@@ -1,0 +1,7 @@
+one:
+  user: normal_user
+  organization: oblyk_orga
+
+two:
+  user: super_admin_user
+  organization: oblyk_orga

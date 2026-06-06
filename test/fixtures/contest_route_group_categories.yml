@@ -1,0 +1,7 @@
+route_group_1_cat_u16:
+  contest_route_group: route_group_1
+  contest_category: category_u16
+
+route_group_2_cat_u18:
+  contest_route_group: route_group_2
+  contest_category: category_u18

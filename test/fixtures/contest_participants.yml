@@ -1,0 +1,19 @@
+participant_1:
+  first_name: "Jean"
+  last_name: "Dujardin"
+  date_of_birth: <%= 20.years.ago.to_date %>
+  genre: "male"
+  contest_category: category_senior
+  contest_team: team_1
+  contest_wave: wave_1
+  token: "jean.abc"
+
+participant_2:
+  first_name: "Marie"
+  last_name: "Curie"
+  date_of_birth: <%= 17.years.ago.to_date %>
+  genre: "female"
+  contest_category: category_u18
+  contest_team: team_1
+  contest_wave: wave_1
+  token: "marie.def"

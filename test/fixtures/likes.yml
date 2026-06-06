@@ -1,0 +1,7 @@
+gym_route_like:
+  user: normal_user
+  likeable: gym_route_one (GymRoute)
+
+comment_like:
+  user: normal_user
+  likeable: comment_on_crag (Comment)

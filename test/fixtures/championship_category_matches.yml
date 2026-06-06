@@ -1,0 +1,7 @@
+match_senior_1:
+  championship_category: cat_championship_senior
+  contest_category: category_senior
+
+match_u16_1:
+  championship_category: cat_championship_u16
+  contest_category: category_u16

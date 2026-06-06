@@ -1,0 +1,19 @@
+locality_paris:
+  name: Paris
+  code_country: fr
+  region: Île-de-France
+  latitude: 48.8566
+  longitude: 2.3522
+  partner_search_users_count: 0
+  local_sharing_users_count: 0
+  distinct_users_count: 0
+
+locality_lyon:
+  name: Lyon
+  code_country: fr
+  region: Auvergne-Rhône-Alpes
+  latitude: 45.7640
+  longitude: 4.8357
+  partner_search_users_count: 0
+  local_sharing_users_count: 0
+  distinct_users_count: 0

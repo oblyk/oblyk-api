@@ -1,0 +1,20 @@
+stage_1:
+  contest: contest_1
+  climbing_type: sport_climbing
+  name: "Qualifications"
+  stage_order: 1
+  default_ranking_type: division
+
+stage_2:
+  contest: contest_1
+  climbing_type: sport_climbing
+  name: "Demi-finale"
+  stage_order: 2
+  default_ranking_type: division
+
+stage_3:
+  contest: contest_1
+  climbing_type: sport_climbing
+  name: "Finale"
+  stage_order: 3
+  default_ranking_type: division

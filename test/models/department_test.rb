@@ -26,7 +26,7 @@ class DepartmentTest < ActiveSupport::TestCase
     assert_includes detail.keys, :towns
     assert_includes detail.keys, :guide_book_papers
     assert_includes detail.keys, :figures
-    
+
     figures = detail[:figures]
     assert_equal @department.crags.count, figures[:crags][:count][:all]
     assert_equal @department.gyms.count, figures[:gyms][:count][:all]

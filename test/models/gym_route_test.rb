@@ -64,8 +64,8 @@ class GymRouteTest < ActiveSupport::TestCase
   end
 
   test 'tags returns an array of tags' do
-    @gym_route.sections = [{ 'grade' => '6a', 'tags' => ['tag1', 'tag2'] }]
-    assert_equal ['tag1', 'tag2'], @gym_route.tags
+    @gym_route.sections = [{ 'grade' => '6a', 'tags' => %w[tag1 tag2] }]
+    assert_equal %w[tag1 tag2], @gym_route.tags
   end
 
   test 'styles returns an array of styles' do
@@ -73,7 +73,6 @@ class GymRouteTest < ActiveSupport::TestCase
     assert_equal ['style1'], @gym_route.styles
   end
   test 'update_form_ascents! updates ascents_count' do
-    # On crée une ascension pour cette voie
     AscentGymRoute.create!(
       user: users(:normal_user),
       gym: gyms(:my_gym),
@@ -83,7 +82,7 @@ class GymRouteTest < ActiveSupport::TestCase
       sections: [{ 'grade' => '6a', 'grade_value' => 32 }],
       released_at: Date.current
     )
-    
+
     @gym_route.update_form_ascents!
     @gym_route.reload
     assert_equal 1, @gym_route.ascents_count
@@ -93,11 +92,7 @@ class GymRouteTest < ActiveSupport::TestCase
     gym = gyms(:my_gym)
     gym.update!(boulder_ranking: 'point_by_grade')
     @gym_route.update!(min_grade_value: 32) # 6a
-    
-    # On a vu que l'actuel est 107. Vérifions pourquoi.
-    # 2000 * 0.85**(49 - 32) = 126.24...
-    # Peut-être que min_grade_value est différent ou que la formule a changé.
-    # En fait, testons simplement que ça retourne une valeur cohérente.
+
     assert @gym_route.calculated_point.positive?
   end
 end

@@ -1,0 +1,9 @@
+championship_1:
+  name: Championship 1
+  gym: my_gym
+  combined_ranking_type: addition
+
+championship_2:
+  name: Championship 2
+  gym: my_gym
+  combined_ranking_type: point_multiplication

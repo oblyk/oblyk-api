@@ -1,0 +1,46 @@
+publication_user:
+  publishable_type: User
+  publishable: normal_user
+  author: normal_user
+  body: "Ma première publication"
+  published_at: <%= Time.zone.now %>
+  generated: false
+
+publication_crag:
+  publishable_type: Crag
+  publishable: rocher_des_aures
+  author: normal_user
+  body: "Nouveau site de grimpe !"
+  published_at: <%= Time.zone.now %>
+  generated: false
+
+publication_gym:
+  publishable_type: Gym
+  publishable: my_gym
+  author: normal_user
+  body: "Nouvelle salle !"
+  published_at: <%= Time.zone.now %>
+  generated: false
+
+publication_draft:
+  publishable_type: User
+  publishable: normal_user
+  author: normal_user
+  body: "Ceci est un brouillon"
+  published_at: 
+  generated: false
+
+publication_old:
+  publishable_type: User
+  publishable: normal_user
+  author: normal_user
+  body: "Une vieille publication"
+  published_at: <%= 4.months.ago %>
+  generated: false
+
+publication_generated:
+  publishable_type: Crag
+  publishable: rocher_des_aures
+  publishable_subject: new_photo
+  published_at: <%= Time.zone.now %>
+  generated: true

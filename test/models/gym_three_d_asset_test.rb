@@ -26,8 +26,6 @@ class GymThreeDAssetTest < ActiveSupport::TestCase
 
   test 'three_d? returns true if three_d_gltf is attached' do
     assert_not @gym_three_d_asset.three_d?
-    # Simuler l'attachement est complexe sans fichier réel, 
-    # mais on peut tester le comportement par défaut
   end
 
   test 'three_d_gltf_url returns nil if nothing attached' do

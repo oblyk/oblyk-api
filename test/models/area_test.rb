@@ -23,7 +23,6 @@ class AreaTest < ActiveSupport::TestCase
   test 'crag_routes_count returns sum of crags routes count' do
     assert_equal 3, @area.crag_routes_count
 
-    # Ajout d'un autre site avec des voies
     AreaCrag.create!(area: @area, crag: @crag_orpierre)
 
     assert_equal 4, @area.crag_routes_count
@@ -46,10 +45,10 @@ class AreaTest < ActiveSupport::TestCase
       max_grade_value: 50,
       user: @user
     )
-    
+
     AreaCrag.create!(area: @area, crag: crag_easy)
     AreaCrag.create!(area: @area, crag: crag_hard)
-    
+
     assert_equal crag_hard, @area.hardest_route
   end
 
@@ -70,10 +69,10 @@ class AreaTest < ActiveSupport::TestCase
       min_grade_value: 50,
       user: @user
     )
-    
+
     AreaCrag.create!(area: @area, crag: crag_easy)
     AreaCrag.create!(area: @area, crag: crag_hard)
-    
+
     assert_equal crag_easy, @area.easiest_route
   end
 
@@ -89,7 +88,7 @@ class AreaTest < ActiveSupport::TestCase
 
   test 'detail_to_json returns expected keys' do
     json = @area.detail_to_json
-    
+
     assert_equal @area.id, json[:id]
     assert_equal 1, json[:crags_count]
     assert_includes json.keys, :routes_figures
@@ -97,10 +96,8 @@ class AreaTest < ActiveSupport::TestCase
     assert_includes json.keys, :creator
     assert_includes json.keys, :history
   end
-  
+
   test 'all_photos returns all photos from crags, sectors and routes' do
-    # Cette méthode est assez complexe car elle traverse beaucoup d'associations.
-    # On va au moins tester qu'elle s'exécute sans erreur et renvoie un tableau.
     assert_kind_of Array, @area.all_photos
   end
 end

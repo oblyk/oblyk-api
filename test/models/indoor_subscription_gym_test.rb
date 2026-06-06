@@ -24,9 +24,9 @@ class IndoorSubscriptionGymTest < ActiveSupport::TestCase
   test 'destroying jointure does not destroy gym or subscription' do
     gym = @indoor_subscription_gym.gym
     subscription = @indoor_subscription_gym.indoor_subscription
-    
+
     @indoor_subscription_gym.destroy
-    
+
     assert Gym.exists?(gym.id)
     assert IndoorSubscription.exists?(subscription.id)
   end

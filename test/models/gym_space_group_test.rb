@@ -33,9 +33,9 @@ class GymSpaceGroupTest < ActiveSupport::TestCase
   test 'destroying a gym_space_group unsets gym_space_group_id on its gym_spaces' do
     gym_space = gym_spaces(:my_gym_boulder_space)
     assert_equal @gym_space_group.id, gym_space.gym_space_group_id
-    
+
     @gym_space_group.destroy
-    
+
     gym_space.reload
     assert_nil gym_space.gym_space_group_id
     assert_not GymSpaceGroup.exists?(@gym_space_group.id)

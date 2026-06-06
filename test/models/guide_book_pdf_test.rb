@@ -53,11 +53,11 @@ class GuideBookPdfTest < ActiveSupport::TestCase
         @guide_book_pdf.publication_push!
       end
     end
-    
+
     publication = Publication.last
     assert_equal @guide_book_pdf.crag_id, publication.publishable_id
     assert_equal 'Crag', publication.publishable_type
-    
+
     attachment = PublicationAttachment.last
     assert_equal 'GuideBookPdf', attachment.attachable_type
     assert_equal @guide_book_pdf.id, attachment.attachable_id

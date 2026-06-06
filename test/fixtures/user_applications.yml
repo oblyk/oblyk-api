@@ -1,0 +1,6 @@
+my_compet_app:
+  user: normal_user
+  type: UserApplicationMyCompet
+  user_application_id: <%= SecureRandom.uuid %>
+  status: active
+  ffme_licence_number: "123456"

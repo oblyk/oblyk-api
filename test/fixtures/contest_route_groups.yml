@@ -1,0 +1,9 @@
+route_group_1:
+  contest_stage_step: step_1_stage_1
+  genre_type: unisex
+  waveable: false
+
+route_group_2:
+  contest_stage_step: step_2_stage_1
+  genre_type: male
+  waveable: false

@@ -1,0 +1,7 @@
+judge_route_1:
+  contest_judge: judge_1
+  contest_route: route_1
+
+judge_route_2:
+  contest_judge: judge_1
+  contest_route: route_2

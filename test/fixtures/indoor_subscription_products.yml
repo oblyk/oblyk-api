@@ -1,0 +1,19 @@
+product_one:
+  reference: "pack_complet_1m"
+  order: 1
+  recommended: false
+  price_cents: 10000
+  price_currency: "EUR"
+  for_gym_type: "private"
+  month_by_occurrence: 1
+  product_stripe_id: "prod_123"
+
+product_two:
+  reference: "pack_complet_12m"
+  order: 2
+  recommended: true
+  price_cents: 100000
+  price_currency: "EUR"
+  for_gym_type: "private"
+  month_by_occurrence: 12
+  product_stripe_id: "prod_456"

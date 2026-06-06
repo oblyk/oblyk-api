@@ -1,0 +1,7 @@
+team_1:
+  name: "Team 1"
+  contest: contest_ongoing
+
+team_2:
+  name: "Team 2"
+  contest: contest_ongoing

@@ -28,20 +28,17 @@ class GymOpeningSheetTest < ActiveSupport::TestCase
   end
 
   test 'build_row_json builds expected structure' do
-    # Note: GymRoute.mounted is used in build_row_json
-    # mounted? is dismounted_at.nil? && archived_at.nil?
-    
+
     @sheet.build_row_json
     assert_not_nil @sheet.row_json
     assert @sheet.row_json.is_a?(Array)
-    
-    assert @sheet.row_json.size >= 1, "Should have at least one row in row_json"
-    
+
+    assert @sheet.row_json.size >= 1, 'Should have at least one row in row_json'
+
     first_row = @sheet.row_json.first.with_indifferent_access
-    assert_not_nil first_row[:sector], "Row should have a sector"
-    assert_not_nil first_row[:routes], "Row should have routes"
-    
-    # number_of_columns * 3 (open, to_open, opened)
+    assert_not_nil first_row[:sector], 'Row should have a sector'
+    assert_not_nil first_row[:routes], 'Row should have routes'
+
     assert_equal @sheet.number_of_columns * 3, first_row[:routes].size
   end
 
@@ -64,7 +61,6 @@ class GymOpeningSheetTest < ActiveSupport::TestCase
     route = gym_routes(:gym_route_one)
     @sheet.gym_route_ids = [route.id]
     @sheet.build_row_json
-    # Même avec un filtre sur une route, il devrait trouver le secteur de cette route
     assert @sheet.row_json.size >= 1
   end
 end
