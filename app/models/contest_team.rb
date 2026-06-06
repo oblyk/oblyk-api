@@ -48,7 +48,7 @@ class ContestTeam < ApplicationRecord
   private
 
   def strip_whitespace
-    self.name = name.strip
+    self.name = name&.strip
   end
 
   def un_team_participants
