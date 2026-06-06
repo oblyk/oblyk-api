@@ -4,8 +4,7 @@ class RefreshToken < ApplicationRecord
   belongs_to :user
 
   validates :token, :user_agent, presence: true
-  validates :token, uniqueness: true
-  validates :token, uniqueness: { scope: :user_agent }
+  validates :token, uniqueness: { scope: :user_agent, case_sensitive: true }
 
   def unused_token
     token_attempt = SecureRandom.base36

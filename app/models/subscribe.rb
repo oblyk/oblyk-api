@@ -9,7 +9,7 @@ class Subscribe < ApplicationRecord
   before_validation :init_error_counter
 
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validates :email, uniqueness: true, on: :create
+  validates :email, uniqueness: { case_sensitive: false }, on: :create
 
   scope :sendable, -> { where('`subscribes`.`error` < 3').where(complained_at: nil) }
 
