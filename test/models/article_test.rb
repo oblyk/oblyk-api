@@ -69,14 +69,13 @@ class ArticleTest < ActiveSupport::TestCase
   test 'publication_push! creates a Publication for published article' do
     @article.published_at = Time.current
     assert @article.published?
-    
-    # On s'assure qu'il n'existe pas déjà
+
     Publication.where(publishable_type: 'Article', publishable_id: @article.id).destroy_all
-    
+
     assert_difference 'Publication.count', 1 do
       @article.publication_push!
     end
-    
+
     publication = Publication.last
     assert_equal 'Article', publication.publishable_type
     assert_equal @article.id, publication.publishable_id
@@ -86,7 +85,7 @@ class ArticleTest < ActiveSupport::TestCase
   test 'publication_push! does not create Publication if already exists' do
     @article.published_at = Time.current
     @article.publication_push!
-    
+
     assert_no_difference 'Publication.count' do
       @article.publication_push!
     end
@@ -95,7 +94,7 @@ class ArticleTest < ActiveSupport::TestCase
   test 'publication_push! does nothing if article is not published' do
     article = articles(:article_2)
     assert_not article.published?
-    
+
     assert_no_difference 'Publication.count' do
       article.publication_push!
     end

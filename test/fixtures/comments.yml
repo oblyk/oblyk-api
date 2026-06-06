@@ -1,0 +1,10 @@
+comment_on_crag:
+  user: normal_user
+  body: "C'est un super falaise !"
+  commentable: rocher_des_aures (Crag)
+
+reply_to_comment:
+  user: normal_user
+  body: "Je suis d'accord."
+  commentable: comment_on_crag (Comment)
+  reply_to_comment: comment_on_crag

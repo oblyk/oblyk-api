@@ -10,7 +10,6 @@ class GymRouteAscentsMapperTest < ActiveSupport::TestCase
   end
 
   test 'map_ascents maps ascents for a single route' do
-    # On passe un hash car le mapper utilise route[:id]
     route_hash = @gym_route.summary_to_json
     mapper = GymRouteAscentsMapper.new(route_hash, @user)
     mapped_route = mapper.map_ascents
@@ -31,12 +30,10 @@ class GymRouteAscentsMapperTest < ActiveSupport::TestCase
 
     assert_kind_of Array, mapped_routes
     assert_equal 2, mapped_routes.size
-    
-    # gym_route_one devrait avoir des ascensions
+
     assert mapped_routes[0].key?(:my_ascents)
     assert_equal 1, mapped_routes[0][:my_ascents].size
-    
-    # gym_route_two ne devrait pas en avoir
+
     assert_not mapped_routes[1].key?(:my_ascents)
   end
 

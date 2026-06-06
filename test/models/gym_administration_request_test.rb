@@ -27,7 +27,7 @@ class GymAdministrationRequestTest < ActiveSupport::TestCase
     assert_difference 'GymAdministrator.count', 1 do
       @request.accept!
     end
-    
+
     administrator = GymAdministrator.last
     assert_equal @request.user_id, administrator.user_id
     assert_equal @request.gym_id, administrator.gym_id

@@ -1,0 +1,25 @@
+category_u16:
+  name: "U16"
+  contest: contest_1
+  registration_obligation: "u16"
+  order: 1
+
+category_u18:
+  name: "U18"
+  contest: contest_1
+  registration_obligation: "u18"
+  order: 2
+
+category_senior:
+  name: "Senior"
+  contest: contest_1
+  registration_obligation: "senior"
+  order: 3
+
+category_custom:
+  name: "Custom"
+  contest: contest_1
+  registration_obligation: "between_age"
+  min_age: 10
+  max_age: 20
+  order: 4

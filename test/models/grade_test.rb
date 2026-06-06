@@ -23,7 +23,7 @@ class GradeTest < ActiveSupport::TestCase
     assert Grade.valid?('PD')
     assert Grade.valid?('IV')
     assert Grade.valid?('?')
-    
+
     assert_not Grade.valid?('invalid')
     assert_not Grade.valid?('')
     assert_not Grade.valid?(nil)
@@ -39,14 +39,13 @@ class GradeTest < ActiveSupport::TestCase
   end
 
   test 'grade_color returns expected color' do
-    # value for 6a is 31. value_color(31) is GRADES_COLOR[32]
     expected_color = Grade.value_color(31)
     assert_equal expected_color, Grade.grade_color('6a')
   end
 
   test 'value_color returns expected color from value' do
-    assert_equal 'rgb(255,85,220)', Grade.value_color(-1) # index 0
-    assert_equal 'rgb(246,68,211)', Grade.value_color(0)  # index 1
+    assert_equal 'rgb(255,85,220)', Grade.value_color(-1)
+    assert_equal 'rgb(246,68,211)', Grade.value_color(0)
   end
 
   test 'degree returns degree string' do

@@ -26,7 +26,6 @@ class RockBarTest < ActiveSupport::TestCase
     assert_nil geo_json[:properties][:sector_id]
     assert_nil geo_json[:properties][:icon]
 
-    # Vérifie l'inversion des coordonnées (lat/lng -> lng/lat pour GeoJSON)
     first_coord = @rock_bar.polyline.first
     assert_equal [first_coord[1], first_coord[0]], geo_json[:geometry][:coordinates].first
   end
@@ -44,7 +43,7 @@ class RockBarTest < ActiveSupport::TestCase
     assert_equal @rock_bar.id, detail[:id]
     assert_includes detail.keys, :crag
     assert_includes detail.keys, :history
-    # Si crag_sector est présent
+
     @rock_bar.crag_sector = crag_sectors(:sector_one)
     detail_with_sector = @rock_bar.detail_to_json
     assert_includes detail_with_sector.keys, :crag_sector

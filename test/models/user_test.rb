@@ -73,7 +73,7 @@ class UserTest < ActiveSupport::TestCase
   test 'minor? returns true if under 18' do
     @user.date_of_birth = 17.years.ago.to_date
     assert @user.minor?
-    
+
     @user.date_of_birth = 19.years.ago.to_date
     assert_not @user.minor?
   end

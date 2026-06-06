@@ -28,7 +28,8 @@ module ActiveSupport
     include AuthHelper
 
     # Run tests in parallel with specified workers
-    parallelize(workers: :number_of_processors)
+    number_of_processors = ENV.fetch('TEST_NUMBER_OF_PROCESSORS', 5)
+    parallelize(workers: number_of_processors)
 
     parallelize_setup do |worker|
       SimpleCov.command_name "#{SimpleCov.command_name}-#{worker}"
@@ -40,7 +41,5 @@ module ActiveSupport
 
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
-
-    # Add more helper methods to be used by all tests here...
   end
 end

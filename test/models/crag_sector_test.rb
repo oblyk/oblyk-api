@@ -99,7 +99,6 @@ class CragSectorTest < ActiveSupport::TestCase
 
   test 'update_routes_location! updates routes location' do
     sector = crag_sectors(:sector_one)
-    # On crée une route manuellement pour ce test
     route = CragRoute.new(
       name: 'Test Route',
       crag: sector.crag,
@@ -110,9 +109,9 @@ class CragSectorTest < ActiveSupport::TestCase
       sections: [{ grade: '6a', climbing_type: 'sport_climbing' }]
     )
     route.save!
-    
+
     sector.update!(latitude: 46.0, longitude: 6.0)
-    
+
     route.reload
     assert_equal [46.0, 6.0].map(&:to_s), route.location if route.location.first.is_a?(String)
     assert_equal [46.0, 6.0], route.location if route.location.first.is_a?(Numeric)

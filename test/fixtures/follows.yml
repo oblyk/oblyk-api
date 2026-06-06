@@ -1,0 +1,23 @@
+# User follows User (accepted)
+follow_user_to_user:
+  user: normal_user
+  followable: super_admin_user (User)
+  accepted_at: <%= Time.current %>
+
+# User follows User (pending)
+follow_user_to_user_pending:
+  user: super_admin_user
+  followable: normal_user (User)
+  accepted_at: nil
+
+# User follows Crag
+follow_user_to_crag:
+  user: normal_user
+  followable: rocher_des_aures (Crag)
+  accepted_at: <%= Time.current %>
+
+# User follows Gym
+follow_user_to_gym:
+  user: normal_user
+  followable: my_gym (Gym)
+  accepted_at: <%= Time.current %>

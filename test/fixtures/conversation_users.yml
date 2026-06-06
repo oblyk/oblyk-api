@@ -1,0 +1,9 @@
+conversation_1_jean:
+  conversation: conversation_1
+  user: normal_user
+  last_read_at: <%= Time.current %>
+
+conversation_1_super_jean:
+  conversation: conversation_1
+  user: super_admin_user
+  last_read_at: <%= Time.current %>

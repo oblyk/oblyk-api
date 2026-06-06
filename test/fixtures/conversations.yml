@@ -1,0 +1,2 @@
+conversation_1:
+  last_message_at: <%= Time.current %>

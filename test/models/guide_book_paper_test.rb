@@ -52,21 +52,15 @@ class GuideBookPaperTest < ActiveSupport::TestCase
   end
 
   test 'all_photos_count returns sum of photos' do
-    # Initial count based on fixtures
     assert_equal 0, @guide_book_paper.all_photos_count
 
-    # Add a photo to a crag
     crag = crags(:rocher_des_aures)
     crag.update_column(:photos_count, 10)
-    
+
     assert_equal 10, @guide_book_paper.all_photos_count
   end
 
   test 'historize_around_towns is called after save' do
-    # We check if the worker is queued
-    # Since assert_enqueued_with might not be available or requires Sidekiq::Testing
-    # and the worker is Sidekiq, we can check if it performs.
-    # For now, let's just check that it doesn't crash and the callback is reached.
     @guide_book_paper.update(name: 'New Name')
   end
 end

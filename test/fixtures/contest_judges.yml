@@ -1,0 +1,11 @@
+judge_1:
+  contest: contest_1
+  name: "Juge 1"
+  code: "CODE1"
+  uuid: <%= SecureRandom.uuid %>
+
+judge_2:
+  contest: contest_1
+  name: "Juge 2"
+  code: "CODE2"
+  uuid: <%= SecureRandom.uuid %>

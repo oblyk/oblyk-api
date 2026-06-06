@@ -18,8 +18,7 @@ class AscentCragRouteTest < ActiveSupport::TestCase
   end
 
   test 'ascent_crag_route climbing_type is historized' do
-    # On vérifie que historize_ascents remet la bonne valeur provenant de crag_route
-    @ascent.climbing_type = 'bouldering' # Valeur valide mais différente de sport_climbing de la fixture
+    @ascent.climbing_type = 'bouldering'
     @ascent.valid?
     assert_equal 'sport_climbing', @ascent.climbing_type
   end

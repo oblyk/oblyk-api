@@ -1,0 +1,13 @@
+lu_jean_paris:
+  user: normal_user
+  locality: locality_paris
+  partner_search: true
+  local_sharing: true
+  radius: 20
+
+lu_admin_lyon:
+  user: super_admin_user
+  locality: locality_lyon
+  partner_search: false
+  local_sharing: true
+  radius: 10

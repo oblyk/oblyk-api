@@ -124,7 +124,6 @@ class CragTest < ActiveSupport::TestCase
   end
 
   test 'all_photos_count returns sum of photos' do
-    # Initial counts are 0
     assert_equal 0, @crag.all_photos_count
 
     @crag.photos_count = 5
@@ -132,7 +131,6 @@ class CragTest < ActiveSupport::TestCase
   end
 
   test 'all_videos_count returns sum of videos' do
-    # Initial counts are 0
     assert_equal 0, @crag.all_videos_count
 
     @crag.videos_count = 3
@@ -143,7 +141,7 @@ class CragTest < ActiveSupport::TestCase
     summary = @crag.summary_to_json
     assert_equal @crag.id, summary[:id]
     assert_equal @crag.name, summary[:name]
-    assert_nil summary[:slug_name] # Actually slug_name is nil in the fixture if not set
+    assert_nil summary[:slug_name]
     assert_equal @crag.city, summary[:city]
     assert_includes summary.keys, :sport_climbing
     assert_includes summary.keys, :bouldering
@@ -173,7 +171,6 @@ class CragTest < ActiveSupport::TestCase
   end
 
   test 'update_climbing_type! updates climbing types based on routes' do
-    # Create a route for this crag
     route = CragRoute.new(
       name: 'Test Route',
       crag: @crag,
@@ -191,7 +188,6 @@ class CragTest < ActiveSupport::TestCase
     assert @crag.sport_climbing
     assert_not @crag.bouldering
 
-    # Add a bouldering route
     CragRoute.create!(
       name: 'Test Bolt',
       crag: @crag,

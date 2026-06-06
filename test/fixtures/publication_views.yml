@@ -1,0 +1,9 @@
+view_pierrot_user:
+  user: normal_user
+  publication: publication_user
+  viewed_at: <%= Time.zone.now %>
+
+view_pierrot_crag:
+  user: normal_user
+  publication: publication_crag
+  viewed_at: <%= Time.zone.now %>

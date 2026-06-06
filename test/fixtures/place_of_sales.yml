@@ -1,0 +1,19 @@
+one:
+  name: Vieux Campeur
+  guide_book_paper: guide_book_2024
+  user: normal_user
+  latitude: 45.75
+  longitude: 4.85
+  description: Magasin de sport
+  url: https://example.com
+  address: 45 rue de la République
+  city: Lyon
+  postal_code: 69002
+  country: France
+  code_country: FR
+
+two:
+  name: Decathlon
+  guide_book_paper: guide_book_2020
+  latitude: 48.85
+  longitude: 2.35

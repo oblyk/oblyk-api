@@ -1,0 +1,24 @@
+line_1_1:
+  color_system: system_1
+  hex_color: "#FF0000"
+  order: 1
+
+line_1_2:
+  color_system: system_1
+  hex_color: "#00FF00"
+  order: 2
+
+line_1_3:
+  color_system: system_1
+  hex_color: "#0000FF"
+  order: 3
+
+line_2_1:
+  color_system: system_2
+  hex_color: "#FFFFFF"
+  order: 1
+
+line_2_2:
+  color_system: system_2
+  hex_color: "#000000"
+  order: 2

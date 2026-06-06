@@ -1,0 +1,11 @@
+ascent_1:
+  contest_participant: participant_1
+  contest_route: route_1
+  realised: true
+
+ascent_2:
+  contest_participant: participant_2
+  contest_route: route_3
+  realised: true
+  zone_1_attempt: 1
+  top_attempt: 2

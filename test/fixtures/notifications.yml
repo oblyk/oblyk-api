@@ -1,0 +1,11 @@
+new_message_notif:
+  user: normal_user
+  notifiable: message_1 (ConversationMessage)
+  notification_type: new_message
+  posted_at: <%= Time.current %>
+
+new_follower_notif:
+  user: normal_user
+  notifiable: super_admin_user (User)
+  notification_type: new_follower
+  posted_at: <%= Time.current %>

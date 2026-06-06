@@ -27,14 +27,14 @@ class GymAdministratorTest < ActiveSupport::TestCase
     gym = gyms(:my_gym)
     gym.update_column(:assigned_at, nil)
     assert_not gym.administered?
-    
+
     GymAdministrator.create(
       user: users(:normal_user),
       gym: gym,
       roles: [GymRole::MANAGE_GYM],
       requested_email: 'new-admin@example.com'
     )
-    
+
     assert gym.reload.assigned_at.present?
   end
 

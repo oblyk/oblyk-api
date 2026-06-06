@@ -1,0 +1,11 @@
+message_1:
+  body: "Hello!"
+  conversation: conversation_1
+  user: normal_user
+  posted_at: <%= Time.current - 1.hour %>
+
+message_2:
+  body: "Hi Jean!"
+  conversation: conversation_1
+  user: super_admin_user
+  posted_at: <%= Time.current %>

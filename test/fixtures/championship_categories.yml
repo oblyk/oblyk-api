@@ -1,0 +1,7 @@
+cat_championship_senior:
+  name: Senior
+  championship: championship_1
+
+cat_championship_u16:
+  name: U16
+  championship: championship_1
