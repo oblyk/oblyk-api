@@ -23,7 +23,6 @@ class ContestParticipantMailerTest < ActionMailer::TestCase
     )
     @contest_participant.save(validate: false)
 
-    # Désactiver SendInBlue par défaut
     ENV['SEND_EMAIL_WITH'] = 'smtp'
     Rails.application.config.action_mailer.default_url_options = { host: 'localhost:3000' }
   end
@@ -51,7 +50,6 @@ class ContestParticipantMailerTest < ActionMailer::TestCase
   test 'subscribe sends email with SendInBlue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
 
-    # Mock de l'API Send In Blue
     mock_api = Minitest::Mock.new
     mock_api.expect :send_transac_email, nil, [SibApiV3Sdk::SendSmtpEmail]
 

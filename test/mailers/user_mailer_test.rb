@@ -5,7 +5,6 @@ require 'test_helper'
 class UserMailerTest < ActionMailer::TestCase
   setup do
     @user = users(:normal_user)
-    # On s'assure que SEND_EMAIL_WITH n'est pas 'send_in_blue' pour tester ActionMailer standard
     ENV['SEND_EMAIL_WITH'] = 'smpt'
     Rails.application.config.action_mailer.default_url_options = { host: 'localhost:3000' }
   end
@@ -29,12 +28,10 @@ class UserMailerTest < ActionMailer::TestCase
     token = 'fake-token'
     email = UserMailer.with(user: @user, token: token).reset_password
 
-    # Test de l'envoi
     assert_emails 1 do
       email.deliver_now
     end
 
-    # Test du contenu
     assert_equal [@user.email], email.to
     assert_equal 'Mot de passe oublié', email.subject
     assert_match /#{token}/, email.html_part.body.to_s
@@ -51,7 +48,6 @@ class UserMailerTest < ActionMailer::TestCase
   test 'send welcome with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
 
-    # Mock de l'API Send In Blue
     mock_api = Minitest::Mock.new
     mock_api.expect :send_transac_email, nil, [SibApiV3Sdk::SendSmtpEmail]
 
@@ -67,7 +63,6 @@ class UserMailerTest < ActionMailer::TestCase
   test 'send reset_password with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
 
-    # Mock de l'API Send In Blue
     mock_api = Minitest::Mock.new
     mock_api.expect :send_transac_email, nil, [SibApiV3Sdk::SendSmtpEmail]
 
