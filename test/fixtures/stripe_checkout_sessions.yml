@@ -1,0 +1,7 @@
+one:
+  checkout_session_id: cs_test_one
+  processed_at: 2026-06-06 14:51:00
+
+two:
+  checkout_session_id: cs_test_two
+  processed_at: nil

@@ -1,0 +1,13 @@
+video_youtube:
+  user: normal_user
+  viewable: rocher_des_aures (Crag)
+  video_service: youtube
+  url: https://www.youtube.com/watch?v=123456
+  description: Une vidéo sur YouTube
+
+video_vimeo:
+  user: normal_user
+  viewable: orpierre (Crag)
+  video_service: vimeo
+  url: https://vimeo.com/123456
+  description: Une vidéo sur Vimeo

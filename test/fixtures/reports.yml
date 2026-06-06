@@ -1,0 +1,13 @@
+# frozen_string_literal: true
+
+report_on_crag:
+  reportable: rocher_des_aures (Crag)
+  body: "There is a problem with the approach."
+  user: normal_user
+  report_from_url: "https://oblyk.org/crags/rocher-des-aures"
+
+report_on_user:
+  reportable: normal_user (User)
+  body: "Inappropriate content in profile."
+  user: super_admin_user
+  report_from_url: "https://oblyk.org/users/jean-jack"

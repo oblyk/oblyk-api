@@ -1,0 +1,17 @@
+# frozen_string_literal: true
+
+one:
+  email: "one@oblyk.org"
+  subscribed_at: 2026-06-06 14:53:00
+  error: 0
+
+two:
+  email: "two@oblyk.org"
+  subscribed_at: 2026-06-06 14:53:00
+  error: 3
+
+complained:
+  email: "complained@oblyk.org"
+  subscribed_at: 2026-06-06 14:53:00
+  error: 0
+  complained_at: 2026-06-06 14:53:00
