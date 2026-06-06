@@ -47,6 +47,11 @@ module Api
       def show
         gym_route = @gym.gym_routes.find_by id: params[:id]
 
+        unless gym_route
+          render json: { error: 'Gym route not found' }, status: :not_found
+          return
+        end
+
         serializer = ::Embedded::GymRouteSerializer.new(
           gym_route,
           {
@@ -67,7 +72,7 @@ module Api
       private
 
       def set_gym
-        @gym = Gym.find params[:gym_id]
+        @gym = Gym.find_by id: params[:gym_id]
 
         render json: { error: 'Gym not found' }, status: :not_found unless @gym
       end
