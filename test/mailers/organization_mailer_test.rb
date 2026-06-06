@@ -10,7 +10,7 @@ class OrganizationMailerTest < ActionMailer::TestCase
       email: 'contact@oblyk.org',
       api_usage_type: 'commercial'
     }
-    # Désactiver SendInBlue par défaut
+
     ENV['SEND_EMAIL_WITH'] = 'smtp'
     ENV['SMTP_USER_NAME'] = 'admin@oblyk.org'
     ENV['SEND_IN_BLUE_REPLY_EMAIL'] = 'reply@oblyk.org'
@@ -38,7 +38,6 @@ class OrganizationMailerTest < ActionMailer::TestCase
   test 'new_organization sends email with SendInBlue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
 
-    # Mock de l'API Send In Blue
     mock_api = Minitest::Mock.new
     mock_api.expect :send_transac_email, nil, [SibApiV3Sdk::SendSmtpEmail]
 
