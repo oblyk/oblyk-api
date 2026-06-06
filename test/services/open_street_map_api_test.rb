@@ -6,7 +6,7 @@ class OpenStreetMapApiTest < ActiveSupport::TestCase
   test 'search returns parsed JSON on success' do
     query = 'Grenoble'
     response_body = [{ 'lat' => '45.1875602', 'lon' => '5.7357819', 'display_name' => 'Grenoble, Isère, France' }].to_json
-    
+
     mock_response = Minitest::Mock.new
     mock_response.expect :code, 200
     mock_response.expect :body, response_body
