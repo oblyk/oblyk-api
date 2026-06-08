@@ -2,8 +2,16 @@ route_group_1:
   contest_stage_step: step_1_stage_1
   genre_type: unisex
   waveable: false
+  start_date: <%= Date.current %>
+  start_time: <%= Time.current %>
+  end_date: <%= Date.current %>
+  end_time: <%= Time.current + 2.hours %>
 
 route_group_2:
   contest_stage_step: step_2_stage_1
   genre_type: male
   waveable: false
+  start_date: <%= Date.current %>
+  start_time: <%= Time.current %>
+  end_date: <%= Date.current %>
+  end_time: <%= Time.current + 2.hours %>

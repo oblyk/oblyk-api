@@ -6,6 +6,7 @@ normal_user:
   password_digest: <%= BCrypt::Password.create("JeanJack@1234") %>
   ws_token: 'token-123'
   slug_name: 'jean-jack'
+  public_profile: true
 
 super_admin_user:
   uuid: 'user-2-uuid'
@@ -15,3 +16,41 @@ super_admin_user:
   password_digest: <%= BCrypt::Password.create("SuperJeanJack@1234") %>
   super_admin: true
   slug_name: 'super-jean-jack'
+  public_profile: true
+
+other_user:
+  uuid: 'user-3-uuid'
+  first_name: Other
+  last_name: User
+  email: other.user@mail.com
+  password_digest: <%= BCrypt::Password.create("OtherUser@1234") %>
+  slug_name: 'other-user'
+
+lulu:
+  uuid: 'user-4-uuid'
+  first_name: Lulu
+  last_name: Berlu
+  email: lulu@oblyk.org
+  password_digest: <%= BCrypt::Password.create("LuluBerlu@1234") %>
+  slug_name: 'lulu-berlu'
+
+gym_route_setter_user:
+  uuid: 'user-5-uuid'
+  first_name: Pierre
+  last_name: Cailloux
+  email: pierre.cailloux@mail.com
+  password_digest: <%= BCrypt::Password.create("PierreCailloux@1234") %>
+  ws_token: 'pierre-cailloux-123'
+  slug_name: 'pierre-cailloux'
+  public_profile: true
+
+private_user:
+  uuid: 'user-6-uuid'
+  first_name: Mister
+  last_name: Private
+  email: mister.private@mail.com
+  password_digest: <%= BCrypt::Password.create("MisterPrivate@1234") %>
+  ws_token: 'token-mister-private-123'
+  slug_name: 'mister-private'
+  public_profile: false
+

@@ -2,10 +2,10 @@ link_1:
   name: "Topo Orpierre"
   url: "https://example.com/orpierre"
   linkable: orpierre (Crag)
-  user: nicolas
+  user: normal_user
 
 link_2:
   name: "Site FFME"
   url: "https://ffme.fr"
   linkable: rocher_des_aures (Crag)
-  user: nicolas
+  user: normal_user

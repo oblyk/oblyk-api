@@ -8,8 +8,8 @@ module Api
       class GymRouteStatisticsControllerTest < ActionDispatch::IntegrationTest
         setup do
           @gym = gyms(:my_gym)
-          @user = users(:normal_user)
-          @headers = api_headers(user: :normal_user)
+          @user = users(:gym_route_setter_user)
+          @headers = api_headers(user: :gym_route_setter_user)
           @filters = { filters: { date: Date.current.to_s } }
         end
 

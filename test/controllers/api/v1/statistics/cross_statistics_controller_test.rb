@@ -8,8 +8,8 @@ module Api
       class CrossStatisticsControllerTest < ActionDispatch::IntegrationTest
         setup do
           @gym = gyms(:my_gym)
-          @user = users(:normal_user) # normal_user is gym_administrator for my_gym
-          @headers = api_headers(user: :normal_user)
+          @user = users(:gym_route_setter_user) # gym_route_setter_user is gym_administrator for my_gym
+          @headers = api_headers(user: :gym_route_setter_user)
         end
 
         test 'should get index' do

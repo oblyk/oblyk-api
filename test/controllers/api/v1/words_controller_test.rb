@@ -17,7 +17,7 @@ module Api
       end
 
       test 'should search words' do
-        @word.refresh_search_index
+        Search.create!(index_name: 'a-doigts', index_id: @word.id, collection: 'Word')
         get search_api_v1_words_url(query: 'doigts'), headers: @api_headers, as: :json
         assert_response :success
         json_response = JSON.parse(response.body)
