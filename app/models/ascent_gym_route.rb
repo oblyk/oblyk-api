@@ -160,6 +160,8 @@ class AscentGymRoute < Ascent
     min_grade_value = nil
     min_grade_text = nil
 
+    return if sections.blank?
+
     sections.each do |section|
       next unless section['grade_value']
 

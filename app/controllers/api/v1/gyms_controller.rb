@@ -121,7 +121,7 @@ module Api
         chart_templates = {}
         @gym.gym_levels
             .where(enabled: true)
-            .order("FIELD(climbing_type, 'sport_climbing', 'bouldering', 'pan')")
+            .order(Arel.sql("FIELD(climbing_type, 'sport_climbing', 'bouldering', 'pan')"))
             .each do |gym_level|
           climbing_type = gym_level.climbing_type
           chart_templates[climbing_type] = {

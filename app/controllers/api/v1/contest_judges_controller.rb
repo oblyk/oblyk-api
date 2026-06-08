@@ -77,6 +77,7 @@ module Api
       end
 
       def protected_by_administrator
+        protected_by_session
         return if @current_user.super_admin
 
         return unless @gym.administered?

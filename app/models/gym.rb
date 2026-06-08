@@ -257,7 +257,7 @@ class Gym < ApplicationRecord
 
   def levels
     levels = {}
-    gym_levels.order("FIELD(climbing_type, 'sport_climbing', 'bouldering', 'pan')").each do |gym_level|
+    gym_levels.order(Arel.sql("FIELD(climbing_type, 'sport_climbing', 'bouldering', 'pan')")).each do |gym_level|
       levels[gym_level.climbing_type] = gym_level.summary_to_json
     end
     levels

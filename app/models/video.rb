@@ -51,6 +51,7 @@ class Video < ApplicationRecord
 
   def video_file_path
     return nil unless video_service == 'oblyk_video'
+    return nil unless video_file.attached?
 
     if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
       # Use CLOUDFLARE R2 CDN, AND CONVERT VIDEO IF IS VIDEO/QUICKTIME
@@ -68,6 +69,7 @@ class Video < ApplicationRecord
 
   def video_content_type
     return nil unless video_service == 'oblyk_video'
+    return nil unless video_file.attached?
 
     needs_be_converted? ? 'video/mp4' : video_file.content_type
   end

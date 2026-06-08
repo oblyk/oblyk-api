@@ -3,7 +3,7 @@
 module Api
   module V1
     class ArticlesController < ApiController
-      before_action :protected_by_super_admin, except: %i[index show view crags guide_book_papers]
+      before_action :protected_by_super_admin, except: %i[index show view photos crags guide_book_papers]
       before_action :set_article, except: %i[index create]
 
       def index

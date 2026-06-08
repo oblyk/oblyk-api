@@ -89,6 +89,8 @@ module Api
       end
 
       def protected_by_owner
+        return forbidden if @follow.blank?
+
         forbidden if @current_user.id != @follow.user_id
       end
     end

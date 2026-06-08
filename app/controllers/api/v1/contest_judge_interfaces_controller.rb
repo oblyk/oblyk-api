@@ -64,6 +64,8 @@ module Api
 
       def verify_contest_judge_access
         token = JwtToken::Token.decode(request.headers['HttpContestJudgeToken']).try(:[], 'data')
+        return render json: {}, status: 419 if token.blank?
+
         judge = @contest.contest_judges.find_by(id: token['judge_id'], code: token['code'])
 
         return if judge

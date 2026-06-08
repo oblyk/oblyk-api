@@ -8,7 +8,7 @@ class ContestStageStep < ApplicationRecord
   has_one :gym, through: :contest
   has_many :contest_route_groups, dependent: :destroy
   has_many :contest_routes, through: :contest_route_groups
-  has_many :contest_participant_steps
+  has_many :contest_participant_steps, dependent: :destroy
   has_many :contest_participants, through: :contest_participant_steps
 
   before_validation :set_order

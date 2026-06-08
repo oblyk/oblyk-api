@@ -8,7 +8,7 @@ module Api
       def create
         report = Report.new(report_params)
         report.reportable_type ||= 'Organization'
-        report.reportable_id ||= Organization.current.id
+        report.reportable_id ||= Organization.current&.id
         report.user = @current_user
         if report.save
           render json: {}, status: :ok

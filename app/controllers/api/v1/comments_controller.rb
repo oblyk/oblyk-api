@@ -97,7 +97,7 @@ module Api
         end
 
         unless authorize
-          render forbidden
+          forbidden
           return
         end
 

@@ -6,7 +6,7 @@ module Api
       before_action :protected_by_super_admin, only: %i[destroy]
       before_action :protected_by_session, only: %i[create update]
       before_action :set_crag, only: %i[index create update]
-      before_action :set_rock_bar, only: %i[show update]
+      before_action :set_rock_bar, only: %i[show update destroy]
 
       def index
         render json: @crag.rock_bars.all.map(&:summary_to_json), status: :ok

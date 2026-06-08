@@ -48,7 +48,7 @@ module Api
       def moderate_by_gym_administrator
         gym_ids = @current_user.gym_administrators&.pluck(:gym_id)
         unless gym_ids
-          render forbidden
+          forbidden
           return
         end
 
@@ -56,7 +56,7 @@ module Api
           @video.destroy
           head :no_content
         else
-          render forbidden
+          forbidden
         end
       end
 

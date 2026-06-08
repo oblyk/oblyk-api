@@ -27,7 +27,7 @@ module Api
         ascent_gym_routes = ascent_gym_routes.where(ascent_status: ascent_status) if ascent_status.size.positive?
 
         # Filter by climbing types [sport_climbing, bouldering, pan]
-        ascent_gym_routes = ascent_gym_routes.where(climbing_types: climbing_types) if climbing_types.size.positive?
+        ascent_gym_routes = ascent_gym_routes.where(climbing_type: climbing_types) if climbing_types.size.positive?
 
         render json: ascent_gym_routes.map(&:summary_to_json), status: :ok
       end
@@ -91,7 +91,7 @@ module Api
         @ascent_gym_route = AscentGymRoute.new(ascent_gym_route_params)
         @ascent_gym_route.user = @current_user
 
-        if ascent_comment_params.fetch(:ascent_comment, []).fetch(:body, nil).present?
+        if params[:ascent_gym_route] && params[:ascent_gym_route][:ascent_comment] && params[:ascent_gym_route][:ascent_comment][:body].present?
           @ascent_gym_route.ascent_comment = Comment.new ascent_comment_params[:ascent_comment]
           @ascent_gym_route.ascent_comment.user = @current_user
         end
@@ -204,14 +204,14 @@ module Api
       end
 
       def update
-        if ascent_comment_params.fetch(:ascent_comment, []).fetch(:body, nil).present?
+        if params[:ascent_gym_route] && params[:ascent_gym_route][:ascent_comment] && params[:ascent_gym_route][:ascent_comment][:body].present?
           if @ascent_gym_route.ascent_comment
             @ascent_gym_route.ascent_comment.body = ascent_comment_params[:ascent_comment][:body]
           else
             @ascent_gym_route.ascent_comment = Comment.new(body: ascent_comment_params[:ascent_comment][:body])
             @ascent_gym_route.ascent_comment.user = @current_user
           end
-        elsif @ascent_gym_route.ascent_comment
+        elsif @ascent_gym_route.ascent_comment && params[:ascent_gym_route] && params[:ascent_gym_route].key?(:ascent_comment)
           @ascent_gym_route.ascent_comment = nil if @ascent_gym_route.ascent_comment.destroy
         end
 

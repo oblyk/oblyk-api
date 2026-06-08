@@ -5,7 +5,7 @@ class ContestStage < ApplicationRecord
 
   belongs_to :contest
   has_one :gym, through: :contest
-  has_many :contest_stage_steps
+  has_many :contest_stage_steps, dependent: :destroy
 
   before_validation :set_order
   before_validation :normalize_attributes

@@ -206,6 +206,12 @@ module Api
         )
       end
 
+      def three_d_file_params
+        params.require(:gym_three_d_asset).permit(
+          :three_d_gltf
+        )
+      end
+
       def gym_asset_picture_params
         params.require(:gym_three_d_asset).permit(:picture)
       end

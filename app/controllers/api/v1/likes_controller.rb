@@ -50,7 +50,7 @@ module Api
       end
 
       def protected_by_owner
-        forbidden if @current_user.id != @like.user_id
+        forbidden if @like && @current_user.id != @like.user_id
       end
     end
   end
