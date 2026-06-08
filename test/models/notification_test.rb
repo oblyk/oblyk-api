@@ -83,17 +83,20 @@ class NotificationTest < ActiveSupport::TestCase
     @user.update_column(:email_notifiable_list, ['new_message'])
 
     ActionCable.server.stub :broadcast, true do
-      mock_worker = Minitest::Mock.new
-      mock_worker.expect(:call, true, [5.minutes, Integer])
+      mock_set = Minitest::Mock.new
+      mock_set.expect(:perform_later, true, [Integer])
 
-      EmailNotificationWorker.stub :perform_in, ->(delay, id) { mock_worker.call(delay, id) } do
+      EmailNotificationJob.stub :set, lambda { |options|
+        assert_equal 5.minutes, options[:wait]
+        mock_set
+      } do
         Notification.create!(
           user: @user,
           notifiable: conversation_messages(:message_2),
           notification_type: 'new_message'
         )
       end
-      assert_mock mock_worker
+      assert_mock mock_set
     end
   end
 
