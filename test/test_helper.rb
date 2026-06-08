@@ -11,7 +11,6 @@ SimpleCov.start 'rails' do
   add_group 'Models',      'app/models'
   add_group 'Serializers', 'app/serializers'
   add_group 'Services',    'app/services'
-  add_group 'Workers',     'app/worker'
 end
 
 ENV['RAILS_ENV'] ||= 'test'
