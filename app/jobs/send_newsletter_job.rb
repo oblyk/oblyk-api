@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-class SendNewsletterWorker
-  include Sidekiq::Worker
-  sidekiq_options queue: :low
+class SendNewsletterJob < ApplicationJob
+  queue_as :low
 
   def perform(subscribe_id, newsletter_id)
     subscribe = Subscribe.find subscribe_id

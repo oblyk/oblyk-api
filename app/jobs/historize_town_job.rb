@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-class HistorizeTownWorker
-  include Sidekiq::Worker
-  sidekiq_options queue: :low
+class HistorizeTownJob < ApplicationJob
+  queue_as :low
 
   def perform(town_id)
     town = Town.find town_id

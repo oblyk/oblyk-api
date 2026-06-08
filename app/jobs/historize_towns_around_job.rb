@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-class HistorizeTownsAroundWorker
-  include Sidekiq::Worker
-  sidekiq_options queue: :low
+class HistorizeTownsAroundJob < ApplicationJob
+  queue_as :low
 
   def perform(latitude, longitude, request_date)
     Town
@@ -16,7 +15,7 @@ class HistorizeTownsAroundWorker
         longitude: longitude
       )
       .find_each do |town|
-      HistorizeTownWorker.perform_async town.id
+      HistorizeTownJob.perform_later town.id
     end
   end
 end

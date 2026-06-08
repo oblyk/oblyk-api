@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-class EmailNotificationWorker
-  include Sidekiq::Worker
-  sidekiq_options queue: :default
+class EmailNotificationJob < ApplicationJob
+  queue_as :default
 
   def perform(notification_id)
     notification = Notification.find notification_id

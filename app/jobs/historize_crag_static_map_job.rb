@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-class HistorizeCragStaticMapWorker
-  include Sidekiq::Worker
-  sidekiq_options queue: :default
+class HistorizeCragStaticMapJob < ApplicationJob
+  queue_as :default
 
   def perform(crag_id)
     crag = Crag.find crag_id

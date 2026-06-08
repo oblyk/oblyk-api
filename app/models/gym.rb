@@ -365,7 +365,7 @@ class Gym < ApplicationRecord
        saved_change_to_code_country? ||
        saved_change_to_city? ||
        logo_change
-      HistorizeTownsAroundWorker.perform_in(1.hour, latitude, longitude, Time.current)
+      HistorizeTownsAroundJob.set(wait: 1.hour).perform_later(latitude, longitude, Time.current)
     end
   end
 

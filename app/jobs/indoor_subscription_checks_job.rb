@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class IndoorSubscriptionChecksWorker
-  include Sidekiq::Worker
-  sidekiq_options queue: :default, retry: false
+class IndoorSubscriptionChecksJob < ApplicationJob
+  queue_as :default
+  sidekiq_options retry: false
 
   def perform
     # Subscription ends (the day before)
@@ -34,6 +34,6 @@ class IndoorSubscriptionChecksWorker
     end
 
     # Perform each day
-    IndoorSubscriptionChecksWorker.perform_at((Date.tomorrow.beginning_of_day + 7.hours))
+    self.class.set(wait_until: Date.tomorrow.beginning_of_day + 7.hours).perform_later
   end
 end

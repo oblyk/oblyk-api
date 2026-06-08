@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class GymReportingWorker
-  include Sidekiq::Worker
-  sidekiq_options queue: :default, retry: false
+class GymReportingJob < ApplicationJob
+  queue_as :default
+  sidekiq_options retry: false
 
   def perform
     start_date = Date.current.prev_month.beginning_of_month
@@ -125,6 +125,6 @@ class GymReportingWorker
     end
 
     next_month = Date.current.next_month.beginning_of_month.beginning_of_day + 9.hours
-    GymReportingWorker.perform_at(next_month)
+    self.class.set(wait_until: next_month).perform_later
   end
 end

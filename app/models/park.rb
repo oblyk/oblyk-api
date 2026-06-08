@@ -76,6 +76,6 @@ class Park < ApplicationRecord
   def historize_static_map
     return unless saved_change_to_latitude? || saved_change_to_longitude?
 
-    HistorizeParkStaticMapWorker.perform_async id
+    HistorizeParkStaticMapJob.perform_later id
   end
 end

@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-class HistorizeParkStaticMapWorker
-  include Sidekiq::Worker
-  sidekiq_options queue: :default
+class HistorizeParkStaticMapJob < ApplicationJob
+  queue_as :default
 
   def perform(park_id)
     park = Park.find park_id

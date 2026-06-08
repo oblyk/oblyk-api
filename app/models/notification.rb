@@ -93,7 +93,7 @@ class Notification < ApplicationRecord
     return if user.email_notifiable_list.blank?
     return unless user.email_notifiable_list&.include?(notification_type)
 
-    EmailNotificationWorker.perform_in(5.minutes, id)
+    EmailNotificationJob.set(wait: 5.minutes).perform_later(id)
   end
 
   def broadcast_notification
