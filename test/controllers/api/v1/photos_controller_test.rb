@@ -31,9 +31,8 @@ module Api
       end
 
       test 'should get index' do
-        skip "Action index seems to have a bug or unexpected behavior with 422 error"
         photo = Photo.last
-        get api_v1_photos_url, params: { photo_ids: [photo.id] }, headers: @user_headers, as: :json
+        get api_v1_photos_url, params: { photo_ids: [photo.id] }, headers: @user_headers
         assert_response :success
       end
 

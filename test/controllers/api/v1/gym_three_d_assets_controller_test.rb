@@ -69,12 +69,6 @@ module Api
         assert_response :forbidden
       end
 
-      test 'should change three d file' do
-        # On saute ce test car le format gltf+json est difficile à simuler avec une image
-        # et le validateur semble vérifier le contenu réel du fichier
-        skip 'Skipping due to complex file validation'
-      end
-
       test 'should add picture' do
         post add_picture_api_v1_gym_gym_three_d_asset_url(gym_id: @gym.id, id: @asset.id),
              params: {
