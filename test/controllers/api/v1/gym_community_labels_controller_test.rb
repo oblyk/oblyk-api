@@ -10,8 +10,7 @@ module Api
         @sector = gym_sectors(:my_gym_sector)
         @route_1 = gym_routes(:gym_route_one)
         @route_2 = gym_routes(:gym_route_two)
-        
-        # Create a gym administrator with manage_opening role
+
         @admin = users(:other_user)
         GymAdministrator.create!(
           user: @admin,

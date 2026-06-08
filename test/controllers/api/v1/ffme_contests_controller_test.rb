@@ -10,21 +10,20 @@ module Api
         @gym.update_column(:assigned_at, Time.current)
         @contest = contests(:contest_1)
         @ffme_contest = ffme_contests(:ffme_contest_1)
-        
+
         @admin = users(:super_admin_user)
-        @gym_admin = users(:gym_route_setter_user) # Supposons que gym_route_setter_user administre my_gym dans les fixtures
-        
-        # S'assurer que gym_route_setter_user est admin de la salle avec les droits nécessaires
+        @gym_admin = users(:gym_route_setter_user)
+
         ga = GymAdministrator.find_or_create_by!(gym: @gym, user: @gym_admin)
         ga.update!(roles: [GymRole::MANAGE_GYM])
-        
+
         @admin_headers = api_headers(user: :super_admin_user)
         @gym_admin_headers = api_headers(user: :gym_route_setter_user)
         @user_headers = api_headers(user: :other_user)
       end
 
       test 'should show ffme contest' do
-        get api_v1_gym_contest_ffme_contest_url(@gym, @contest, @ffme_contest), 
+        get api_v1_gym_contest_ffme_contest_url(@gym, @contest, @ffme_contest),
             headers: @gym_admin_headers
         assert_response :success
         json_response = JSON.parse(response.body)
@@ -91,9 +90,8 @@ module Api
       end
 
       test 'should send results if sendable' do
-        # On simule que le concours est envoyable (entre start_date et max_send_date)
         @ffme_contest.update(start_date: Date.yesterday, end_date: Date.tomorrow)
-        
+
         MyCompet.stub :send_results, true do
           post send_results_api_v1_gym_contest_ffme_contest_url(@gym, @contest, @ffme_contest),
                headers: @gym_admin_headers
@@ -105,9 +103,8 @@ module Api
       end
 
       test 'should not send results if not sendable' do
-        # On simule que le concours n'est pas encore commencé
         @ffme_contest.update(start_date: Date.tomorrow, end_date: Date.tomorrow + 1.day)
-        
+
         post send_results_api_v1_gym_contest_ffme_contest_url(@gym, @contest, @ffme_contest),
              headers: @gym_admin_headers
         assert_response :unprocessable_entity
@@ -116,7 +113,7 @@ module Api
       end
 
       test 'should be protected by administrator' do
-        get api_v1_gym_contest_ffme_contest_url(@gym, @contest, @ffme_contest), 
+        get api_v1_gym_contest_ffme_contest_url(@gym, @contest, @ffme_contest),
             headers: @user_headers
         assert_response :unauthorized
       end

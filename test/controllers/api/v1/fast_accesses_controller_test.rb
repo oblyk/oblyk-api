@@ -14,7 +14,7 @@ module Api
       test 'should get index' do
         get api_v1_fast_accesses_url, headers: @user_headers, as: :json
         assert_response :success
-        
+
         json_response = JSON.parse(response.body)
         assert_includes json_response, 'follows_count'
         assert_includes json_response, 'contests'
@@ -26,16 +26,15 @@ module Api
       end
 
       test 'should return followed crag and gym' do
-        # On s'assure qu'il y a des suivis pour l'utilisateur
         crag = crags(:rocher_des_aures)
         gym = gyms(:my_gym)
-        
+
         Follow.create!(user: @user, followable: crag)
         Follow.create!(user: @user, followable: gym)
 
         get api_v1_fast_accesses_url, headers: @user_headers, as: :json
         assert_response :success
-        
+
         json_response = JSON.parse(response.body)
         assert_not_nil json_response['crag']
         assert_equal crag.name, json_response['crag']['name']
@@ -44,18 +43,15 @@ module Api
       end
 
       test 'should return active contests participation' do
-        # On utilise les fixtures existantes pour simuler une participation à un concours
         contest = contests(:contest_1)
         category = contest_categories(:category_senior)
-        
-        # S'assurer que le concours est en cours (utilisé dans le controller)
-        # On utilise update_columns pour éviter les validations si elles posent problème
+
         contest.update_columns(
           subscription_start_date: Date.current - 1.day,
           subscription_end_date: Date.current + 1.day,
           end_date: Date.current + 1.day
         )
-        
+
         participant = ContestParticipant.new(
           user: @user,
           contest_category: category,
@@ -66,15 +62,14 @@ module Api
           email: @user.email,
           token: 'test-token'
         )
-        
-        # On mock l'envoi de mail pour éviter l'erreur NoMethodError sur app_url
+
         participant.stub :send_subscription_mail, nil do
           participant.save(validate: false)
         end
 
         get api_v1_fast_accesses_url, headers: @user_headers, as: :json
         assert_response :success
-        
+
         json_response = JSON.parse(response.body)
         assert_not_empty json_response['contests']
         assert_equal contest.name, json_response['contests'].first['name']

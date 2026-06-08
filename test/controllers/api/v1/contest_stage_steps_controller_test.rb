@@ -11,10 +11,10 @@ module Api
         @contest = contests(:contest_1)
         @contest_stage = contest_stages(:stage_1)
         @contest_stage_step = contest_stage_steps(:step_1_stage_1)
-        
+
         @admin = users(:super_admin_user)
         @user = users(:gym_route_setter_user)
-        
+
         @public_headers = api_access_token_headers
         @admin_headers = api_headers(user: :super_admin_user)
         @user_headers = api_headers(user: :gym_route_setter_user)
@@ -28,8 +28,8 @@ module Api
       end
 
       test 'should get index with routes' do
-        get api_v1_gym_contest_contest_stage_contest_stage_steps_url(@gym, @contest, @contest_stage), 
-            params: { with_routes: 'true' }, 
+        get api_v1_gym_contest_contest_stage_contest_stage_steps_url(@gym, @contest, @contest_stage),
+            params: { with_routes: 'true' },
             headers: @public_headers
         assert_response :success
       end

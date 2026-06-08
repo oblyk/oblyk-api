@@ -35,11 +35,7 @@ module Api
       end
 
       test 'should not show another user application' do
-        # On utilise un autre utilisateur
         other_user_headers = api_headers(user: :other_user)
-        # Note: Dans le contrôleur, il utilise @current_user.user_applications.find(params[:id])
-        # Donc si l'ID n'appartient pas à l'utilisateur, ça devrait lever une ActiveRecord::RecordNotFound
-        # Rails transforme généralement cela en 404 dans les tests d'intégration API
         assert_raises(ActiveRecord::RecordNotFound) do
           get api_v1_user_application_url(@user_application), headers: other_user_headers, as: :json
         end

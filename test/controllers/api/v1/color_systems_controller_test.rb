@@ -40,7 +40,7 @@ module Api
           post api_v1_color_systems_url,
                params: {
                  color_system: {
-                   colors: ['#111111', '#222222']
+                   colors: %w[#111111 #222222]
                  }
                },
                headers: @user_headers,
@@ -56,7 +56,7 @@ module Api
           post api_v1_color_systems_url,
                params: {
                  color_system: {
-                   colors: ['#FF0000', '#00FF00', '#0000FF']
+                   colors: %w[#FF0000 #00FF00 #0000FF]
                  }
                },
                headers: @user_headers,

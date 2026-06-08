@@ -38,17 +38,15 @@ class DiscChartServiceTest < ActiveSupport::TestCase
   end
 
   test 'dark_color? identifies dark and light colors correctly' do
-    assert @service.send(:dark_color?, '#000000') # Black
-    assert @service.send(:dark_color?, '#ff0000') # Red (perceived dark in this formula)
-    assert_not @service.send(:dark_color?, '#ffffff') # White
-    assert_not @service.send(:dark_color?, '#ffff00') # Yellow
+    assert @service.send(:dark_color?, '#000000')
+    assert @service.send(:dark_color?, '#ff0000')
+    assert_not @service.send(:dark_color?, '#ffffff')
+    assert_not @service.send(:dark_color?, '#ffff00')
   end
 
   test 'interpolate_middle_color calculates middle color' do
-    # Single color
     assert_equal '#ff0000', @service.send(:interpolate_middle_color, ['#ff0000'])
-    # Two colors (middle of #ff0000 and #000000 is #800000)
-    assert_equal '#800000', @service.send(:interpolate_middle_color, ['#ff0000', '#000000'])
+    assert_equal '#800000', @service.send(:interpolate_middle_color, %w[#ff0000 #000000])
   end
 
   test 'text_color_for returns white for dark backgrounds and black for light' do
@@ -71,7 +69,7 @@ class DiscChartServiceTest < ActiveSupport::TestCase
     assert_match(/Relais n°1/, svg)
     assert_match(/6a/, svg)
     assert_match(/Alice/, svg)
-    assert_match(/<circle/, svg) # Single route uses a circle
+    assert_match(/<circle/, svg)
   end
 
   test 'generate_svg_for_relay generates valid SVG for multi routes' do
@@ -83,12 +81,11 @@ class DiscChartServiceTest < ActiveSupport::TestCase
     assert_match(/6b/, svg)
     assert_match(/Alice/, svg)
     assert_match(/Bob \/ Charlie/, svg)
-    assert_match(/<path/, svg) # Multi route uses paths for wedges
-    assert_match(/linearGradient id="grad_1_1"/, svg) # Check gradient for the second route
+    assert_match(/<path/, svg)
+    assert_match(/linearGradient id="grad_1_1"/, svg)
   end
 
   test 'generate_svg_for_relay handles routes without QR codes' do
-    # Pour une seule route sans QR
     route = {
       sheet_reference: 1,
       hold_colors: ['#ff0000'],
@@ -104,11 +101,9 @@ class DiscChartServiceTest < ActiveSupport::TestCase
   end
 
   test 'generate_pdf returns a StringIO containing PDF data' do
-    # Since we use Prawn and SVG, this is more of an integration test
     result = @service.generate_pdf
 
     assert_kind_of StringIO, result
-    # PDF magic number
     assert result.string.start_with?('%PDF-')
   end
 end

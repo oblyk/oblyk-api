@@ -41,7 +41,6 @@ class OblykVersionTest < ActiveSupport::TestCase
   end
 
   test 'index returns formatted list of versions' do
-    # We need a second mock for the index test
     version2 = Minitest::Mock.new
     version2.expect :event, 'create'
     version2.expect :created_at, @created_at

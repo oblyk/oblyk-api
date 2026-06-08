@@ -11,10 +11,10 @@ module Api
         @contest = contests(:contest_1)
         @ongoing_contest = contests(:contest_ongoing)
         @finished_contest = contests(:contest_finished)
-        
+
         @user = users(:normal_user)
         @admin = users(:super_admin_user)
-        
+
         @public_headers = api_access_token_headers
         @user_headers = api_headers(user: :normal_user)
         @admin_headers = api_headers(user: :super_admin_user)
@@ -60,9 +60,8 @@ module Api
       end
 
       test 'should add banner' do
-        # Create a dummy image file for upload
         dummy_file = fixture_file_upload('test/fixtures/files/image.jpg', 'image/jpeg')
-        
+
         post add_banner_api_v1_gym_contest_url(@gym, @contest),
              params: { contest: { banner: dummy_file } },
              headers: @admin_headers
@@ -128,7 +127,7 @@ module Api
             params: { contest: { draft: true } },
             headers: @admin_headers,
             as: :json
-        assert_response :no_content # draft action doesn't render anything explicitly, so it returns 204
+        assert_response :no_content
         @contest.reload
         assert @contest.draft
       end

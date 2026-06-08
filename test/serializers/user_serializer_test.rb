@@ -5,7 +5,7 @@ require 'test_helper'
 class UserSerializerTest < ActiveSupport::TestCase
   setup do
     @user = users(:normal_user)
-    @user.save # Force callbacks to generate UUIDs, slug names, etc.
+    @user.save
     @serializer = UserSerializer.new(@user)
     @serialization = JSON.parse(@serializer.serializable_hash.to_json)
   end

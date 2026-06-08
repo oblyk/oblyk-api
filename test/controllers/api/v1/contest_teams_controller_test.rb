@@ -10,10 +10,10 @@ module Api
         @gym.update_column(:assigned_at, Time.current)
         @contest = contests(:contest_ongoing)
         @team = contest_teams(:team_1)
-        
+
         @user = users(:gym_route_setter_user)
         @admin = users(:super_admin_user)
-        
+
         @public_headers = api_access_token_headers
         @user_headers = api_headers(user: :gym_route_setter_user)
         @admin_headers = api_headers(user: :super_admin_user)

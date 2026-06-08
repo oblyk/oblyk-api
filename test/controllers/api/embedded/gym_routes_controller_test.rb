@@ -16,7 +16,7 @@ module Api
       test 'should get index' do
         get api_embedded_gym_gym_routes_url(gym_id: @gym.id), headers: @headers, as: :json
         assert_response :success
-        
+
         json_response = JSON.parse(response.body)
         assert_not_empty json_response['data']
       end
@@ -24,17 +24,15 @@ module Api
       test 'should filter index by gym_space_id' do
         get api_embedded_gym_gym_routes_url(gym_id: @gym.id, gym_space_id: @gym_space.id), headers: @headers, as: :json
         assert_response :success
-        
+
         json_response = JSON.parse(response.body)
         assert_not_empty json_response['data']
-        # Tous les résultats devraient appartenir à cet espace (via le secteur)
-        # Note: Le serializer Embedded::GymRouteSerializer inclut gym_sector
       end
 
       test 'should filter index by gym_sector_id' do
         get api_embedded_gym_gym_routes_url(gym_id: @gym.id, gym_sector_id: @gym_sector.id), headers: @headers, as: :json
         assert_response :success
-        
+
         json_response = JSON.parse(response.body)
         assert_not_empty json_response['data']
       end
@@ -57,7 +55,7 @@ module Api
       test 'should get show' do
         get api_embedded_gym_gym_route_url(gym_id: @gym.id, id: @gym_route.id), headers: @headers, as: :json
         assert_response :success
-        
+
         json_response = JSON.parse(response.body)
         assert_equal @gym_route.id.to_s, json_response['data']['id']
       end

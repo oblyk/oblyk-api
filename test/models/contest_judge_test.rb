@@ -46,13 +46,13 @@ class ContestJudgeTest < ActiveSupport::TestCase
     assert_equal @judge.id, json[:id]
     assert_kind_of Array, json[:routes_table]
     assert_not_empty json[:routes_table]
-    
+
     route_data = json[:routes_table].first
     assert_includes route_data.keys, :contest_stage
     assert_includes route_data.keys, :contest_stage_step
     assert_includes route_data.keys, :contest_route_group
     assert_includes route_data.keys, :contest_categories
-    
+
     assert_includes json.keys, :history
     assert_includes json[:history].keys, :created_at
     assert_includes json[:history].keys, :updated_at

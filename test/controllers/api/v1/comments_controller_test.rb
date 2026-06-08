@@ -12,7 +12,7 @@ module Api
         @admin = users(:super_admin_user)
         @crag = crags(:rocher_des_aures)
         @gym_route = gym_routes(:gym_route_one)
-        
+
         @public_headers = api_access_token_headers
         @user_headers = api_headers(user: :normal_user)
         @admin_headers = api_headers(user: :super_admin_user)
@@ -89,18 +89,16 @@ module Api
       end
 
       test 'should moderate comment by gym administrator' do
-        # We need a comment on a gym route
         gym_comment = Comment.create!(
           user: @user,
           commentable: @gym_route,
           body: 'Comment to moderate'
         )
-        
-        # admin is administrator of my_gym (which owns gym_route_one)
+
         delete moderate_by_gym_administrator_api_v1_comment_url(gym_comment),
                headers: @admin_headers,
                as: :json
-        
+
         assert_response :no_content
         gym_comment.reload
         assert_not_nil gym_comment.moderated_at
@@ -112,17 +110,7 @@ module Api
           commentable: @gym_route,
           body: 'Comment to moderate'
         )
-        
-        # Super admin is admin of everything in this project?
-        # Let's try to use another user for a gym they don't own.
-        
-        new_user = users(:normal_user) # normal_user is also gym admin in fixtures.
-        # Let's find a user who is not a gym admin.
-        # Check fixtures again or create one.
-        
-        # Actually, in comments_controller, it checks @current_user.gym_administrators
-        # If I create a new user, they won't have any gym_administrators.
-        
+
         non_admin_user = User.create!(
           first_name: 'No',
           last_name: 'Admin',
@@ -131,22 +119,18 @@ module Api
           uuid: SecureRandom.uuid,
           slug_name: 'no-admin'
         )
-        
-        # Need to use a symbol that exists in users fixture if I use api_headers(user: :symbol)
-        # But wait, api_headers calls users(user).
-        # Let's just create the headers manually for this new user.
-        
+
         token = generate_token(non_admin_user)
         non_admin_headers = {
           'Authorization' => token,
           'HttpApiAccessToken' => organizations(:oblyk_orga).api_access_token,
           'Content-Type' => 'application/json'
         }
-        
+
         delete moderate_by_gym_administrator_api_v1_comment_url(gym_comment),
                headers: non_admin_headers,
                as: :json
-        
+
         assert_response :forbidden
       end
     end

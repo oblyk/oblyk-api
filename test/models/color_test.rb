@@ -20,13 +20,13 @@ class ColorTest < ActiveSupport::TestCase
   end
 
   test 'black_or_white_rgb returns black for light hex colors' do
-    assert_equal 'rgb(0,0,0)', Color.black_or_white_rgb('#ffffff') # Blanc
-    assert_equal 'rgb(0,0,0)', Color.black_or_white_rgb('#ffff00') # Jaune
+    assert_equal 'rgb(0,0,0)', Color.black_or_white_rgb('#ffffff')
+    assert_equal 'rgb(0,0,0)', Color.black_or_white_rgb('#ffff00')
   end
 
   test 'black_or_white_rgb returns white for dark hex colors' do
-    assert_equal 'rgb(255,255,255)', Color.black_or_white_rgb('#000000') # Noir
-    assert_equal 'rgb(255,255,255)', Color.black_or_white_rgb('#333333') # Gris foncé
+    assert_equal 'rgb(255,255,255)', Color.black_or_white_rgb('#000000')
+    assert_equal 'rgb(255,255,255)', Color.black_or_white_rgb('#333333')
   end
 
   test 'black_or_white_rgb returns black for light rgb colors' do

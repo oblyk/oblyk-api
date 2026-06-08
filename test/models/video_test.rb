@@ -17,11 +17,8 @@ class VideoTest < ActiveSupport::TestCase
 
   test 'validates video service inclusion' do
     video = Video.new(viewable: @crag, url: nil)
-    # init_embedded_code est appelé before_validation et met 'oblyk_video' si url est nil.
-    # Pour tester l'échec de validation, on peut mettre une URL qui n'est pas reconnue par le service.
     video.url = 'https://google.com'
     assert_not video.valid?
-    # embedded_code_service retourne nil pour le service si l'URL ne matche pas, ce qui déclenche l'erreur de présence/inclusion.
     assert_not_empty video.errors[:video_service]
   end
 
@@ -45,10 +42,9 @@ class VideoTest < ActiveSupport::TestCase
     assert_not_empty video.errors[:url]
 
     video.url = 'https://www.youtube.com/watch?v=valid'
-    # Mocking Net::HTTP for embedded_code_service called in before_validation
     mock_response = Minitest::Mock.new
     mock_response.expect :body, '{"html": "<iframe></iframe>"}'
-    
+
     Net::HTTP.stub :get_response, mock_response do
       assert video.valid?
     end
@@ -76,12 +72,12 @@ class VideoTest < ActiveSupport::TestCase
       viewable: @crag,
       url: 'https://www.youtube.com/watch?v=123'
     )
-    
+
     mock_response = Minitest::Mock.new
     mock_response.expect :body, '{"html": "<iframe src=\"https://www.youtube.com/embed/123\"></iframe>"}'
-    
+
     Net::HTTP.stub :get_response, mock_response do
-      video.valid? # triggers init_embedded_code via before_validation
+      video.valid?
       assert_equal 'youtube', video.video_service
       assert_equal '<iframe src="https://www.youtube.com/embed/123"></iframe>', video.embedded_code
     end
@@ -102,7 +98,7 @@ class VideoTest < ActiveSupport::TestCase
         video.save!
       end
     end
-    
+
     publication = Publication.last
     assert_equal @crag.id, publication.publishable_id
     assert_equal 'Crag', publication.publishable_type

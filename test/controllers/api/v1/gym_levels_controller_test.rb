@@ -7,7 +7,7 @@ module Api
     class GymLevelsControllerTest < ActionDispatch::IntegrationTest
       setup do
         @gym = gyms(:my_gym)
-        @user = users(:gym_route_setter_user) # Has MANAGE_SPACE role
+        @user = users(:gym_route_setter_user)
         @user_headers = api_headers(user: :gym_route_setter_user)
         @gym_level = gym_levels(:one)
       end
@@ -46,11 +46,6 @@ module Api
       end
 
       test 'should fail to update_all if not authorized' do
-        # Note: GymLevelsController has: before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[index update_all]
-        # Wait, the controller says update_all is EXCEPTED from the MANAGE_SPACE check.
-        # 7:      before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[index update_all]
-        # This seems strange for an update action, but I should follow the code's logic.
-        
         other_user_headers = api_headers(user: :lulu)
         put update_all_api_v1_gym_gym_levels_url(gym_id: @gym.id),
             params: {
@@ -61,7 +56,6 @@ module Api
               }
             },
             headers: other_user_headers, as: :json
-        # Since it's excepted from the before_action, it should succeed if logged in
         assert_response :no_content
       end
     end

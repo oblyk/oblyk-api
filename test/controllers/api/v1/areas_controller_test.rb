@@ -83,9 +83,8 @@ module Api
       end
 
       test 'should remove crag from area' do
-        # First add it to be sure it's there
         AreaCrag.create(area: @area, crag: @crag, user: @user)
-        
+
         delete remove_crag_api_v1_area_url(@area),
                params: { area: { crag_id: @crag.id } },
                headers: @api_headers,

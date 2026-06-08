@@ -94,7 +94,6 @@ module Api
       test 'should accept follower' do
         other_user = users(:other_user)
         private_user = users(:private_user)
-        # Create a follow relationship to accept
         follow = Follow.create!(
           user: other_user,
           followable: private_user,
@@ -105,8 +104,6 @@ module Api
              params: { user_id: other_user.id },
              headers: api_headers(user: :private_user),
              as: :json
-        # The controller doesn't render anything, it just calls accept!
-        # Based on the code: def accept_followers; follower = @user.follows.awaiting_acceptance.find_by user_id: params[:user_id]; follower.accept!; end
         assert_response :no_content
         follow.reload
         assert_not_nil follow.accepted_at

@@ -14,7 +14,6 @@ module Api
           filename: 'test.pdf',
           content_type: 'application/pdf'
         )
-        # Attach to other fixture to avoid delegation error in index
         guide_book_pdfs(:guide_book_pdf_without_user).pdf_file.attach(
           io: File.open(Rails.root.join('test/fixtures/files/test.pdf')),
           filename: 'test.pdf',

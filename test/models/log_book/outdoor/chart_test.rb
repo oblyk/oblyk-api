@@ -23,7 +23,7 @@ module LogBook
         data = @chart.grade
         assert_includes data.keys, :datasets
         assert_includes data.keys, :labels
-        assert_equal 27, data[:labels].size # (1..54).step(2)
+        assert_equal 27, data[:labels].size
       end
 
       test 'years returns correct structure' do

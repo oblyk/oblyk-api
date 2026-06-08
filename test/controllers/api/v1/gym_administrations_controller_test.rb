@@ -26,8 +26,8 @@ module Api
         request = gym_administration_requests(:gym_administration_request_one)
         assert_difference('GymAdministrator.count', 1) do
           put accept_request_api_v1_gym_administrations_url,
-               params: { id: request.id, gym_type: 'commercial_gym' },
-               headers: @super_admin_headers, as: :json
+              params: { id: request.id, gym_type: 'commercial_gym' },
+              headers: @super_admin_headers, as: :json
         end
         assert_response :no_content
       end
@@ -52,7 +52,6 @@ module Api
       end
 
       test 'should delete option' do
-        # On ajoute d'abord l'option pour être sûr qu'elle existe
         GymOption.find_or_create_by(gym: @gym, option_type: GymOption::OPTION_PRINT_LABEL) do |option|
           option.start_date = Date.current
         end

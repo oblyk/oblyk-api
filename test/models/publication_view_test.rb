@@ -14,7 +14,6 @@ class PublicationViewTest < ActiveSupport::TestCase
   end
 
   test 'sets viewed_at before create' do
-    # Using @user_2 to avoid duplicate entry with @user and @pub_crag if already in fixtures
     @user_2 = users(:super_admin_user)
     publication_view = PublicationView.create(user: @user_2, publication: publications(:publication_crag))
     assert_not_nil publication_view.viewed_at

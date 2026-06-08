@@ -13,7 +13,6 @@ class SearchableTest < ActiveSupport::TestCase
   end
 
   test 'search_push is called after save' do
-    # On mock Search.push pour vérifier qu'il est appelé
     Search.stub :push, ->(value, id, class_name, bucket, secondary_bucket) { @pushed = true } do
       @crag.name = 'New Name'
       @crag.save
@@ -22,7 +21,6 @@ class SearchableTest < ActiveSupport::TestCase
   end
 
   test 'search_destroy is called after destroy' do
-    # On utilise Word qui est Searchable
     word = words(:with_fingers)
     Search.stub :delete_object, ->(class_name, id) { @deleted = true } do
       word.destroy

@@ -86,7 +86,6 @@ module Api
       end
 
       test 'should print template' do
-        # Testing print with a sector
         sector = gym_sectors(:my_gym_sector)
         get print_api_v1_gym_gym_label_template_url(gym_id: @gym.id, id: @template.id),
             params: { sector_id: sector.id },

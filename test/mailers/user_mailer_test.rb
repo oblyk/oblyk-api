@@ -12,12 +12,10 @@ class UserMailerTest < ActionMailer::TestCase
   test 'welcome' do
     email = UserMailer.with(user: @user).welcome
 
-    # Test de l'envoi
     assert_emails 1 do
       email.deliver_now
     end
 
-    # Test du contenu
     assert_equal [@user.email], email.to
     assert_equal "Bienvenue #{@user.first_name}", email.subject
     assert_match /Bienvenue #{@user.first_name} !/, email.html_part.body.to_s

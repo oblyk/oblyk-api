@@ -71,7 +71,6 @@ module Api
       end
 
       test 'should add crag to guide_book_paper' do
-        # On s'assure que le crag n'est pas déjà lié (ou on en prend un autre)
         new_crag = crags(:orpierre)
         assert_difference('GuideBookPaperCrag.count', 1) do
           post add_crag_api_v1_guide_book_paper_url(@guide_book_paper),
@@ -82,9 +81,8 @@ module Api
       end
 
       test 'should remove crag from guide_book_paper' do
-        # On lie d'abord un crag pour être sûr de pouvoir le supprimer
         GuideBookPaperCrag.create(guide_book_paper: @guide_book_paper, crag: @crag, user: @user)
-        
+
         assert_difference('GuideBookPaperCrag.count', -1) do
           delete remove_crag_api_v1_guide_book_paper_url(@guide_book_paper),
                  params: { guide_book_paper: { crag_id: @crag.id } },

@@ -19,7 +19,6 @@ class HistorizeTownJobTest < ActiveJob::TestCase
   end
 
   test 'it historizes the town correctly' do
-    # On supprime les éventuels objets existants pour tester la création
     TownJsonObject.where(town: @town).destroy_all
 
     assert_difference 'TownJsonObject.count', 1 do

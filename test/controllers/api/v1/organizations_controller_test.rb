@@ -9,7 +9,7 @@ module Api
         @user = users(:normal_user)
         @other_user = users(:other_user)
         @organization = organizations(:oblyk_orga)
-        @other_organization = organizations(:public_orga) # other_user n'est pas membre de celle-ci par défaut dans les fixtures si on suit organization_users.yml
+        @other_organization = organizations(:public_orga)
         @headers = api_headers(user: :normal_user)
         @other_headers = api_headers(user: :other_user)
       end
@@ -31,7 +31,6 @@ module Api
       end
 
       test 'should not show an organization I do not own' do
-        # public_orga n'a pas de membres dans fixtures, donc personne ne devrait y avoir accès sauf via protected_by_owner
         get api_v1_organization_url(@other_organization), headers: @headers
         assert_response :forbidden
       end
@@ -51,8 +50,7 @@ module Api
         assert_response :success
         json_response = JSON.parse(response.body)
         assert_equal 'New Organization', json_response['name']
-        
-        # Vérifie que le créateur est membre
+
         new_orga = Organization.find(json_response['id'])
         assert_includes new_orga.users, @user
       end
@@ -113,8 +111,6 @@ module Api
       end
 
       test 'should not access any action if not logged in' do
-        # On utilise des headers avec un token d'organisation mais sans Authorization (session)
-        # On s'attend à du 401 si protected_by_session échoue
         get api_v1_organizations_url, headers: api_access_token_headers
         assert_response :unauthorized
       end

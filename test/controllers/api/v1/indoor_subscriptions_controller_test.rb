@@ -11,7 +11,7 @@ module Api
         @product = indoor_subscription_products(:product_one)
         @admin = users(:super_admin_user)
         @admin_headers = api_headers(user: :super_admin_user)
-        @user_headers = api_headers(user: :gym_route_setter_user) # gym_route_setter_user is also gym admin but check roles
+        @user_headers = api_headers(user: :gym_route_setter_user)
       end
 
       test 'should get index' do
@@ -29,7 +29,6 @@ module Api
       end
 
       test 'should create indoor subscription' do
-        # Mock Stripe calls
         Stripe::Plan.stub :create, OpenStruct.new(id: 'plan_123') do
           Stripe::PaymentLink.stub :create, OpenStruct.new(id: 'pl_123', url: 'https://stripe.com/pay') do
             assert_difference('IndoorSubscription.count', 1) do
@@ -68,15 +67,12 @@ module Api
       end
 
       test 'should not access if not authorized' do
-        # other_user n'est pas admin de la salle
         other_headers = api_headers(user: :other_user)
         get api_v1_gym_indoor_subscriptions_url(gym_id: @gym.id), headers: other_headers
         assert_response :unauthorized
       end
 
       test 'should not access if user does not have manage_subscription role' do
-        # gym_route_setter_user est admin de la salle mais n'a pas le rôle manage_subscription
-        # gym_administrator_two (gym_route_setter_user) a ["manage_space", "manage_opening"]
         get api_v1_gym_indoor_subscriptions_url(gym_id: @gym.id), headers: @user_headers
         assert_response :forbidden
       end

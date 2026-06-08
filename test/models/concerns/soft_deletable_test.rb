@@ -21,10 +21,10 @@ class SoftDeletableTest < ActiveSupport::TestCase
   test 'deleted? returns true if deleted_at is present and in the past' do
     @crag.deleted_at = 1.day.ago
     assert @crag.deleted?
-    
+
     @crag.deleted_at = nil
     assert_not @crag.deleted?
-    
+
     @crag.deleted_at = 1.day.from_now
     assert_not @crag.deleted?
   end

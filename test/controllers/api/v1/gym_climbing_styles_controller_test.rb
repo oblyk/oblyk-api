@@ -7,7 +7,7 @@ module Api
     class GymClimbingStylesControllerTest < ActionDispatch::IntegrationTest
       setup do
         @gym = gyms(:my_gym)
-        @user = users(:gym_route_setter_user) # Has MANAGE_SPACE role in gym_administrator_two
+        @user = users(:gym_route_setter_user)
         @user_headers = api_headers(user: :gym_route_setter_user)
         @climbing_style = gym_climbing_styles(:one)
       end
@@ -68,7 +68,7 @@ module Api
       end
 
       test 'should fail to create if not authorized' do
-        other_user_headers = api_headers(user: :lulu) # lulu does not have MANAGE_SPACE
+        other_user_headers = api_headers(user: :lulu)
         post api_v1_gym_gym_climbing_styles_url(gym_id: @gym.id),
              params: {
                gym_climbing_style: {

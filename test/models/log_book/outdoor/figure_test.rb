@@ -25,7 +25,7 @@ module LogBook
       test 'ascents_count returns correct count' do
         assert_equal 2, @figure.send(:ascents_count)
       end
-      
+
       test 'sum_meters handles nil height' do
         @ascent1.stub :sections, [] do
           @ascent1.stub :height, nil do

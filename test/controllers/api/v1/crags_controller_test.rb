@@ -60,8 +60,6 @@ module Api
       end
 
       test 'should destroy crag' do
-        # We need a crag that can be destroyed (e.g. without dependent routes if there are constraints)
-        # Or just a new one
         new_crag = Crag.create!(
           name: 'To Destroy',
           rocks: ['granite'],

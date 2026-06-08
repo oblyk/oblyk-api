@@ -18,7 +18,6 @@ module Api
         assert_response :success
         json_response = JSON.parse(response.body)
         assert_kind_of Array, json_response
-        # normal_user is part of conversation_1
         assert_includes json_response.map { |c| c['id'] }, @conversation.id
       end
 
@@ -30,9 +29,8 @@ module Api
       end
 
       test 'should not show conversation if user is not part of it' do
-        # Create a conversation where normal_user is not part of it
         new_conversation = Conversation.create!
-        
+
         get api_v1_conversation_url(new_conversation), headers: @user_headers
         assert_response :forbidden
       end

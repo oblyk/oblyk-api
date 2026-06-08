@@ -25,7 +25,6 @@ class ImageConverterServiceTest < ActiveSupport::TestCase
   end
 
   test 'should call image processing with correct parameters' do
-    # On mock ImageProcessing::MiniMagick
     chain = Minitest::Mock.new
     chain.expect :convert, chain, [@type]
     chain.expect :call, 'converted_file_mock'

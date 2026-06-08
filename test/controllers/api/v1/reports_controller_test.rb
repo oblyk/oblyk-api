@@ -41,7 +41,7 @@ module Api
                as: :json
         end
         assert_response :success
-        
+
         report = Report.last
         assert_equal 'Organization', report.reportable_type
         assert_equal @organization.id, report.reportable_id
@@ -65,12 +65,12 @@ module Api
         post api_v1_reports_url,
              params: {
                report: {
-                 reportable_type: 'Ascent', # Ascent n'est pas dans la liste REPORTABLE_LIST de Report
+                 reportable_type: 'Ascent',
                  body: 'Type de signalement non autorisé.'
                }
              },
              headers: @user_headers,
-               as: :json
+             as: :json
         assert_response :unprocessable_entity
       end
     end

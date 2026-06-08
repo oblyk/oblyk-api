@@ -10,7 +10,7 @@ module Api
         @other_user = users(:other_user)
         @gym_route = gym_routes(:gym_route_one)
         @like = likes(:gym_route_like)
-        
+
         @user_headers = api_headers(user: :normal_user)
         @other_user_headers = api_headers(user: :other_user)
       end
@@ -23,7 +23,6 @@ module Api
       end
 
       test 'should create like' do
-        # On utilise une autre route pour tester la création
         new_route = gym_routes(:gym_route_two)
         assert_difference('Like.count', 1) do
           post api_v1_likes_url,

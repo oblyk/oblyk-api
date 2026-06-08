@@ -51,12 +51,11 @@ module Api
       end
 
       test 'should get participants for judge' do
-        # On génère un token pour le juge
         exp = Time.zone.tomorrow.end_of_day.to_i
         token = JwtToken::Token.generate({ judge_id: @judge.id, code: @judge.code }, exp)
-        
+
         headers = @public_headers.merge({ 'HttpContestJudgeToken' => token })
-        
+
         get participants_api_v1_gym_contest_contest_judge_interface_url(@gym, @contest, @judge.uuid),
             headers: headers,
             as: :json

@@ -8,8 +8,8 @@ module Api
       setup do
         @gym = gyms(:my_gym)
         @gym_space = gym_spaces(:my_gym_boulder_space)
-        @user_headers = api_headers(user: :gym_route_setter_user) # admin de l'espace dans les fixtures
-        @other_user_headers = api_headers(user: :lulu) # pas admin de l'espace
+        @user_headers = api_headers(user: :gym_route_setter_user)
+        @other_user_headers = api_headers(user: :lulu)
       end
 
       test 'should get index' do

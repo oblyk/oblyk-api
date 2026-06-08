@@ -11,7 +11,7 @@ module Api
         @participant = contest_participants(:participant_1)
         @contest_route = contest_routes(:route_1)
         @admin = users(:super_admin_user)
-        
+
         @admin_headers = api_headers(user: :super_admin_user)
         @public_headers = api_access_token_headers
       end

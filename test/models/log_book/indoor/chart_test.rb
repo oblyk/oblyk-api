@@ -20,10 +20,9 @@ module LogBook
       end
 
       test 'by_levels returns correct structure' do
-        # On s'assure que l'ascension a un color_system_line
         line = color_system_lines(:line_1_1)
         @ascent.update_column(:color_system_line_id, line.id)
-        
+
         ascents = [@ascent]
         charts = Chart.by_levels(ascents)
 
@@ -39,8 +38,7 @@ module LogBook
         chart_data = chart.climb_type
 
         assert chart_data.key?(:datasets)
-        assert_equal ['sport_climbing', 'bouldering', 'pan'], chart_data[:labels]
-        # Dans les fixtures, gym_ascent_one est du bouldering
+        assert_equal %w[sport_climbing bouldering pan], chart_data[:labels]
         assert_equal 1, chart_data[:datasets][0][:data][1]
       end
 

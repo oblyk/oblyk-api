@@ -61,9 +61,6 @@ class MyCompetTest < ActiveSupport::TestCase
     mock_response = Minitest::Mock.new
     mock_response.expect :body, { 'idFFME' => 123 }.to_json
 
-    # We expect url_mode 'creationCompetition' for create
-    expected_url = "#{ENV['MY_COMPET_BASE_URL']}/creationCompetition"
-
     RestClient.stub :post, mock_response do
       result = MyCompet.create_contest(@ffme_contest)
       assert_equal({ 'idFFME' => 123 }, result)
@@ -74,9 +71,6 @@ class MyCompetTest < ActiveSupport::TestCase
   test 'update_contest calls update_or_create_contest with update mode' do
     mock_response = Minitest::Mock.new
     mock_response.expect :body, { 'success' => true }.to_json
-
-    # We expect url_mode 'modificationCompetition' for update
-    expected_url = "#{ENV['MY_COMPET_BASE_URL']}/modificationCompetition"
 
     RestClient.stub :post, mock_response do
       result = MyCompet.update_contest(@ffme_contest)
@@ -89,7 +83,6 @@ class MyCompetTest < ActiveSupport::TestCase
     mock_response = Minitest::Mock.new
     mock_response.expect :body, { 'success' => true }.to_json
 
-    # Mocking ContestService::Result because it's complex and we want to test MyCompet
     mock_result_service = Minitest::Mock.new
     mock_result_service.expect :delete_cache_key, nil
     mock_result_service.expect :results, [
@@ -121,8 +114,7 @@ class MyCompetTest < ActiveSupport::TestCase
     mock_response.expect :body, { 'idFFME' => 123 }.to_json
 
     expected_url = "#{ENV['MY_COMPET_BASE_URL']}/creationCompetition"
-    # We verify some of the data fields
-    RestClient.stub :post, ->(url, payload, headers) {
+    RestClient.stub :post, lambda { |url, payload, _headers|
       assert_equal expected_url, url
       data = JSON.parse(payload)
       assert_equal @ffme_contest.contest_id, data['idCompetition']

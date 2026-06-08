@@ -10,7 +10,7 @@ module Api
         @gym.update_column(:assigned_at, Time.current)
         @contest = contests(:contest_1)
         @judge = contest_judges(:judge_1)
-        @route = contest_routes(:route_3) # Une route non assignée à judge_1 dans les fixtures
+        @route = contest_routes(:route_3)
         @admin_headers = api_headers(user: :super_admin_user)
         @user_headers = api_headers(user: :normal_user)
       end
@@ -89,7 +89,6 @@ module Api
       end
 
       test 'should not allow non-admin to manage judges' do
-        # On utilise un utilisateur qui n'est pas administrateur de la salle
         other_user_headers = api_headers(user: :other_user)
         get api_v1_gym_contest_contest_judges_url(@gym, @contest), headers: other_user_headers, as: :json
         assert_response :unauthorized

@@ -32,7 +32,6 @@ class ChampionshipContestTest < ActiveSupport::TestCase
 
     @championship_contest.destroy
 
-    # Verify matches are destroyed
     matches_count_after = ChampionshipCategoryMatch.joins(championship_category: :championship)
                                                    .where(championship_categories: { championship_id: championship.id })
                                                    .joins(:contest_category)

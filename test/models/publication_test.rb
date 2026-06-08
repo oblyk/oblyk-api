@@ -24,8 +24,6 @@ class PublicationTest < ActiveSupport::TestCase
     )
   end
 
-  # test_helper_locales
-
   test 'validates publishable type' do
     pub = Publication.new(publishable: @user, author: @user, body: 'test', published_at: Time.zone.now)
     assert pub.valid?
@@ -64,7 +62,6 @@ class PublicationTest < ActiveSupport::TestCase
   end
 
   test 'publish! sets published_at and creates notification' do
-    # Create a new user to avoid daily limit
     new_user = User.new(
       first_name: 'New',
       last_name: 'User',
@@ -78,7 +75,7 @@ class PublicationTest < ActiveSupport::TestCase
     assert_nil pub.published_at
 
     result = pub.publish!
-    assert result, "Publication should be published"
+    assert result, 'Publication should be published'
     assert_not_nil pub.published_at
     assert pub.published?
   end
@@ -93,7 +90,6 @@ class PublicationTest < ActiveSupport::TestCase
     )
     new_user.save(validate: false)
 
-    # User limit is 1
     pub1 = Publication.new(publishable: new_user, author: new_user, body: 'Pub 1')
     pub1.publish!
 

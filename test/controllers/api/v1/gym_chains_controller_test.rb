@@ -9,7 +9,7 @@ module Api
         @gym_chain = gym_chains(:arkose)
         @user = users(:normal_user)
         @user_headers = api_headers(user: :normal_user)
-        @other_user_headers = api_headers(user: :other_user) # other_user n'est pas admin de la chaine arkose dans les fixtures
+        @other_user_headers = api_headers(user: :other_user)
         @public_headers = api_access_token_headers
       end
 
@@ -59,7 +59,6 @@ module Api
       end
 
       test 'should add banner' do
-        # On simule un upload de fichier
         banner_file = fixture_file_upload('test/fixtures/files/image.jpg', 'image/jpeg')
         post add_banner_api_v1_gym_chain_url(@gym_chain.slug_name),
              params: { gym_chain: { banner: banner_file } },

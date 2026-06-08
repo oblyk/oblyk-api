@@ -47,13 +47,11 @@ class SearchTest < ActiveSupport::TestCase
     Search.push('Chamonix', 2, 'Crag', 'climbing')
     Search.push('Cham', 3, 'Crag', 'climbing')
 
-    # Empty query
     assert_empty Search.search('', 'Crag', 'climbing')
 
-    # Results by similarity
     results = Search.search('Ceuse', 'Crag', 'climbing')
     assert_includes results, 1
-    
+
     results = Search.search('Cham', 'Crag', 'climbing')
     assert_includes results, 2
     assert_includes results, 3

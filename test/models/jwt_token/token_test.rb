@@ -14,7 +14,7 @@ class JwtToken::TokenTest < ActiveSupport::TestCase
     data = { 'user_id' => 1 }
     token = JwtToken::Token.generate(data)
     decoded = JwtToken::Token.decode(token)
-    
+
     assert_equal data, decoded['data']
     assert decoded['exp'].present?
   end
@@ -24,7 +24,7 @@ class JwtToken::TokenTest < ActiveSupport::TestCase
     exp = Time.now.to_i + 3600
     token = JwtToken::Token.generate(data, exp)
     decoded = JwtToken::Token.decode(token)
-    
+
     assert_equal exp, decoded['exp']
   end
 
@@ -35,10 +35,9 @@ class JwtToken::TokenTest < ActiveSupport::TestCase
 
   test 'it returns an empty hash when decoding an expired token' do
     data = { user_id: 1 }
-    # Token expiré il y a une heure
     exp = Time.now.to_i - 3600
     token = JwtToken::Token.generate(data, exp)
-    
+
     decoded = JwtToken::Token.decode(token)
     assert_equal({}, decoded)
   end

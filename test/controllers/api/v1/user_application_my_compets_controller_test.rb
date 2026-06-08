@@ -19,18 +19,16 @@ module Api
       end
 
       test 'should get 404 on index when my_compet does not exist' do
-        # On utilise un autre utilisateur qui n'a pas d'application
         other_user_headers = api_headers(user: :other_user)
         get api_v1_user_application_my_compets_url, headers: other_user_headers, as: :json
         assert_response :not_found
       end
 
       test 'should create my_compet application' do
-        # On supprime l'application existante pour pouvoir en créer une nouvelle (unicité user_id + type)
         user_applications(:my_compet_app).destroy
 
         mock_response = { 'status' => 'IN_REVIEW' }
-        
+
         MyCompet.stub :association_request, mock_response do
           assert_difference('UserApplicationMyCompet.count', 1) do
             post api_v1_user_application_my_compets_url,

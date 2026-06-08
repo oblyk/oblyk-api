@@ -8,7 +8,6 @@ module LogBook
       setup do
         @user = users(:normal_user)
         @ascent = ascent_gym_routes(:gym_ascent_one)
-        # S'assurer que l'ascent est bien comptée
         @ascent.update_columns(
           released_at: Date.current,
           quantity: 1,
@@ -32,14 +31,12 @@ module LogBook
         figure = Figure.new(@user)
         stats = figure.figures
 
-        # my_gym est associé à @ascent dans les fixtures
         assert_equal 1, stats[:gyms]
         assert_equal 1, stats[:countries]
         assert_equal 1, stats[:regions]
       end
 
       test 'climbing sessions stats' do
-        # On crée une session pour l'utilisateur avec une ascension indoor
         session = ClimbingSession.create!(
           user: @user,
           session_date: Date.current

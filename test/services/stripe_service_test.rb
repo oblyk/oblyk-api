@@ -24,7 +24,6 @@ class StripeServiceTest < ActiveSupport::TestCase
   end
 
   test 'fulfill_checkout processes successful payment' do
-    # Mock de Stripe::Checkout::Session.retrieve
     metadata = OpenStruct.new(
       gym_billing_account_uuid: @gym_billing_account.uuid,
       indoor_subscription_id: @indoor_subscription.id

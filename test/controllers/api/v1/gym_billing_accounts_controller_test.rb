@@ -8,10 +8,10 @@ module Api
       setup do
         @gym = gyms(:my_gym)
         @billing_account = gym_billing_accounts(:account_1)
-        
+
         @super_admin_headers = api_headers(user: :super_admin_user)
-        @subscription_admin_headers = api_headers(user: :lulu) # lulu a le rôle manage_subscription
-        @normal_admin_headers = api_headers(user: :gym_route_setter_user) # gym_route_setter_user est admin mais sans manage_subscription
+        @subscription_admin_headers = api_headers(user: :lulu)
+        @normal_admin_headers = api_headers(user: :gym_route_setter_user)
       end
 
       test 'should show gym billing account' do
@@ -23,7 +23,6 @@ module Api
       end
 
       test 'should create gym billing account' do
-        # On crée une nouvelle salle sans compte de facturation pour le test
         new_gym = Gym.create!(
           name: 'New Gym',
           address: 'Address',
@@ -35,7 +34,6 @@ module Api
           latitude: 0,
           longitude: 0
         )
-        # On ajoute lulu comme admin de cette nouvelle salle
         GymAdministrator.create!(
           user: users(:lulu),
           gym: new_gym,

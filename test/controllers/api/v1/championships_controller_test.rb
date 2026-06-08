@@ -52,7 +52,6 @@ class Api::V1::ChampionshipsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get results' do
     get results_api_v1_gym_championship_url(gym_id: @gym.id, id: @championship.id), headers: @auth_headers, as: :json
-    # results might be empty or content, both are ok as long as it's not 404/500
     assert_includes [200, 204], response.status
   end
 

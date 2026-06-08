@@ -31,7 +31,6 @@ module Api
       end
 
       test 'unread count should be 0 if not logged in' do
-        # On doit fournir les headers de l'organisation même sans login
         get unread_count_api_v1_publication_views_url,
             params: { publishable_type: 'Crag', publishable_id: crags(:rocher_des_aures).id },
             headers: api_access_token_headers

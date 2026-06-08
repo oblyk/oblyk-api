@@ -77,7 +77,7 @@ class AreaTest < ActiveSupport::TestCase
   end
 
   test 'summary_to_json returns expected keys' do
-    @area.save # Génère le slug si absent
+    @area.save
     json = @area.summary_to_json
     assert_equal @area.id, json[:id]
     assert_equal @area.name, json[:name]

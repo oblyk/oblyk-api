@@ -103,9 +103,8 @@ module Api
       end
 
       test 'should remove ascent user' do
-        # First add one
         AscentUser.create!(user: @other_user, ascent: @ascent_crag_route)
-        
+
         delete remove_ascent_user_api_v1_ascent_crag_route_url(@ascent_crag_route),
                params: { ascent_user: { user_id: @other_user.id } },
                headers: @user_headers,

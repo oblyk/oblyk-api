@@ -52,7 +52,6 @@ module Api
       end
 
       test 'should get index with user_uuid' do
-        # normal_user suit super_admin_user dans les fixtures
         get api_v1_climbing_sessions_url, params: { user_uuid: @other_user.uuid }, headers: @user_headers
         assert_response :success
         json_response = JSON.parse(response.body)

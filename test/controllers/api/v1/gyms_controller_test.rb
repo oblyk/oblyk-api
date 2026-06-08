@@ -14,16 +14,12 @@ module Api
         @public_headers = api_access_token_headers
       end
 
-      # --- Lecture ---
-
       test 'should get index' do
         get api_v1_gyms_url, headers: @public_headers
         assert_response :success
       end
 
       test 'should search gyms' do
-        # La recherche peut être désactivée en test ou dépendre d'un moteur externe.
-        # On vérifie au moins que l'action répond.
         get search_api_v1_gyms_url(query: 'Ma'), headers: @public_headers
         assert_response :success
       end
@@ -52,15 +48,12 @@ module Api
         assert_response :success
       end
 
-      # --- Stats & Infos ---
-
       test 'should get ascent scores' do
         get ascent_scores_api_v1_gym_url(@gym.id), headers: @public_headers
         assert_response :success
       end
 
       test 'should get routes count' do
-        # Nécessite d'être connecté (protected_by_session)
         get routes_count_api_v1_gym_url(@gym.id), headers: @user_headers
         assert_response :success
       end
@@ -74,8 +67,6 @@ module Api
         get routes_by_styles_api_v1_gym_url(@gym.id), headers: @public_headers
         assert_response :success
       end
-
-      # --- Administration ---
 
       test 'should create gym' do
         assert_difference('Gym.count', 1) do
@@ -97,7 +88,6 @@ module Api
       end
 
       test 'should update gym if admin' do
-        # On utilise super_admin pour être sûr d'avoir les droits ou on pourrait ajouter un GymAdministrator
         patch api_v1_gym_url(@gym.id),
               params: { gym: { name: 'Updated Name' } },
               headers: @super_admin_headers, as: :json
@@ -107,12 +97,9 @@ module Api
       end
 
       test 'should not update gym if not admin' do
-        # gym_route_setter_user n'est pas admin de my_gym par défaut dans les fixtures si non défini
         patch api_v1_gym_url(@gym.id),
               params: { gym: { name: 'Hacker Name' } },
               headers: @user_headers, as: :json
-        # Si la salle n'est pas "administered", l'accès peut être autorisé. 
-        # Mais dans GymsController: before_action :protected_by_administrator
       end
 
       test 'should destroy gym if super_admin' do
@@ -128,8 +115,6 @@ module Api
         end
         assert_response :forbidden
       end
-
-      # --- Médias ---
 
       test 'should add banner' do
         banner_file = fixture_file_upload('test/fixtures/files/image.jpg', 'image/jpeg')

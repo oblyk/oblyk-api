@@ -8,9 +8,6 @@ class GeoHelperTest < ActiveSupport::TestCase
   end
 
   test 'geo_range returns correct distance between Lyon and Paris' do
-    # Lyon : 45.75, 4.85
-    # Paris : 48.85, 2.35
-    # La distance est d'environ 392 km
     distance = GeoHelper.geo_range(45.75, 4.85, 48.85, 2.35)
     assert_in_delta 392, distance, 5
   end
@@ -26,14 +23,11 @@ class GeoHelperTest < ActiveSupport::TestCase
   end
 
   test 'wgs84_earth_radius returns radius for a given latitude' do
-    # À l'équateur (lat 0), le rayon devrait être wgs84_a (6378137.0)
     assert_in_delta 6_378_137.0, GeoHelper.wgs84_earth_radius(0), 1
-    # Aux pôles (lat PI/2), le rayon devrait être wgs84_b (6356752.3142)
     assert_in_delta 6_356_752.3142, GeoHelper.wgs84_earth_radius(Math::PI / 2), 1
   end
 
   test 'bounding_box returns correct coordinates' do
-    # Lyon : 45.75, 4.85, 10km radius
     box = GeoHelper.bounding_box(45.75, 4.85, 10)
 
     assert box.key?(:latitude_min)
@@ -53,8 +47,6 @@ class GeoHelperTest < ActiveSupport::TestCase
       [20, 40],
       [30, 60]
     ]
-    # (10+20+30)/3 = 20
-    # (20+40+60)/3 = 40
     assert_equal [20.0, 40.0], GeoHelper.point_central(coordinates)
   end
 end

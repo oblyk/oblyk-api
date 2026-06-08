@@ -26,11 +26,9 @@ class GeolocableTest < ActiveSupport::TestCase
   end
 
   test 'geo_search returns objects within distance' do
-    # Orpierre est à 44.319430, 5.697820
     results = Crag.geo_search(44.319, 5.697, 5)
     assert_includes results, @crag
 
-    # Très loin
     results = Crag.geo_search(48.8566, 2.3522, 10) # Paris
     assert_not_includes results, @crag
   end

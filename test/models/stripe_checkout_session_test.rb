@@ -14,9 +14,9 @@ class StripeCheckoutSessionTest < ActiveSupport::TestCase
   test 'processed! should set processed_at and save' do
     session = StripeCheckoutSession.new(checkout_session_id: 'cs_test_123')
     assert_nil session.processed_at
-    
+
     session.processed!
-    
+
     assert_not_nil session.processed_at
     assert session.processed?
     assert_predicate session, :persisted?

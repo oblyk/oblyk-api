@@ -40,7 +40,6 @@ class GymBillingAccountTest < ActiveSupport::TestCase
 
   test 'create_strip_portal! creates a stripe session' do
     mock_session = Minitest::Mock.new
-    # L'appel attendu avec les arguments spécifiques
     mock_session.expect :call, true, [
       {
         customer: @gym_billing_account.customer_stripe_id,

@@ -20,9 +20,8 @@ class Api::V1::ChampionshipContestsControllerTest < ActionDispatch::IntegrationT
   end
 
   test 'should remove contest from championship' do
-    # First add it
     ChampionshipContest.create(championship: @championship, contest: @contest)
-    
+
     assert_difference('ChampionshipContest.count', -1) do
       delete delete_api_v1_gym_championship_championship_contests_url(gym_id: @gym.id, championship_id: @championship.id),
              params: { championship: { contest_id: @contest.id } },

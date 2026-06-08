@@ -11,15 +11,14 @@ module Api
         @participant = contest_participants(:participant_1)
         @category = contest_categories(:category_senior)
         @wave = contest_waves(:wave_1)
-        
+
         @user = users(:gym_route_setter_user)
         @admin = users(:super_admin_user)
-        
+
         @public_headers = api_access_token_headers
         @user_headers = api_headers(user: :gym_route_setter_user)
         @admin_headers = api_headers(user: :super_admin_user)
 
-        # Set host for mailer
         Rails.application.config.action_mailer.default_url_options = { host: 'http://localhost:3000' }
       end
 
@@ -32,7 +31,7 @@ module Api
 
       test 'should show participant' do
         p = ContestParticipant.create!(
-          first_name: 'Test', last_name: 'Test', date_of_birth: '2000-01-01', 
+          first_name: 'Test', last_name: 'Test', date_of_birth: '2000-01-01',
           genre: 'male', contest_category: contest_categories(:category_senior),
           email: 'test@test.com'
         )
@@ -42,7 +41,7 @@ module Api
 
       test 'should get participant details' do
         p = ContestParticipant.create!(
-          first_name: 'Test', last_name: 'Test', date_of_birth: '2000-01-01', 
+          first_name: 'Test', last_name: 'Test', date_of_birth: '2000-01-01',
           genre: 'male', contest_category: contest_categories(:category_senior),
           email: 'test@test.com'
         )
@@ -76,24 +75,23 @@ module Api
 
       test 'should not create participant as user' do
         other_user = User.create!(
-          first_name: 'Other', last_name: 'User', email: "other-#{SecureRandom.hex}@user.com", 
+          first_name: 'Other', last_name: 'User', email: "other-#{SecureRandom.hex}@user.com",
           password: 'Password123!', slug_name: "other-user-#{SecureRandom.hex}", uuid: SecureRandom.uuid
         )
         other_headers = api_headers(user: :gym_route_setter_user).merge('Authorization' => generate_token(other_user))
-        
-        # We need to make sure the gym is administered to trigger protected_by_administrator
+
         @gym.update_column(:assigned_at, Time.current)
-        
+
         post api_v1_gym_contest_contest_participants_url(@gym, @contest),
-             params: { 
-               contest_participant: { 
+             params: {
+               contest_participant: {
                  first_name: 'New',
                  last_name: 'Part',
                  date_of_birth: '2000-01-01',
                  genre: 'male',
                  email: 'test@test.com',
                  contest_category_id: @category.id
-               } 
+               }
              },
              headers: other_headers,
              as: :json

@@ -21,9 +21,6 @@ module Api
         assert_includes json_response.keys, 'crag_routes'
         assert_includes json_response.keys, 'words'
         assert_includes json_response.keys, 'areas'
-
-        # Optional: Check if at least one result is found if search index is populated
-        # Since we use fixtures, search indexes might not be populated unless we do it manually
       end
 
       test 'should find results when search index is populated' do
@@ -31,13 +28,11 @@ module Api
         Crag.find_each(&:refresh_search_index)
         Gym.find_each(&:refresh_search_index)
 
-        # Test index
         get api_v1_search_url(query: 'orpierre'), headers: @api_headers, as: :json
         assert_response :success
         json_response = JSON.parse(response.body)
         assert_not_empty json_response['crags']
 
-        # Test search_all
         get api_v1_search_all_url(query: 'orpierre'), headers: @api_headers, as: :json
         assert_response :success
         json_response = JSON.parse(response.body)
@@ -61,7 +56,6 @@ module Api
       end
 
       test 'should get search around results' do
-        # Orpierre is at 44.319430, 5.697820 in fixtures
         get api_v1_search_around_url(latitude: 44.3, longitude: 5.7), headers: @api_headers, as: :json
         assert_response :success
 

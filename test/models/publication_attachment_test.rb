@@ -8,11 +8,6 @@ class PublicationAttachmentTest < ActiveSupport::TestCase
     @crag = crags(:rocher_des_aures)
   end
 
-  test 'validates uniqueness of attachable per publication' do
-    # No uniqueness validation in model, so we can't test it unless it's in DB
-    # Let's skip it if it's not implemented.
-  end
-
   test 'after_save refresh publication attachment types count' do
     pub = Publication.new(publishable: users(:normal_user), author: users(:normal_user), body: 'test')
     pub.save(validate: false)
@@ -22,7 +17,6 @@ class PublicationAttachmentTest < ActiveSupport::TestCase
     attachment = PublicationAttachment.new(publication: pub, attachable: @crag)
     attachment.save!
 
-    # Callback uses before_save on publication, which is called when publication.save is called in refresh_count_or_destroy_publication!
     attachment.refresh_count_or_destroy_publication!
 
     pub.reload
@@ -42,8 +36,6 @@ class PublicationAttachmentTest < ActiveSupport::TestCase
     assert_equal 0, pub.attachables_count
 
     attachment.destroy
-    # Manually delete because destroy callback might have failed to find the record if already deleted in some environments,
-    # but here we call it on the object.
     attachment.refresh_count_or_destroy_publication!
 
     pub.reload
@@ -55,7 +47,7 @@ class PublicationAttachmentTest < ActiveSupport::TestCase
       publishable: crags(:rocher_des_aures),
       author: users(:normal_user),
       generated: true,
-      publishable_subject: 'new_alert' # must be in the list in auto_remove_publication!
+      publishable_subject: 'new_alert'
     )
     pub.save(validate: false)
 
@@ -63,7 +55,6 @@ class PublicationAttachmentTest < ActiveSupport::TestCase
     pub.reload
 
     assert_no_difference 'Publication.count' do
-      # Still has attachments
       pub.auto_remove_publication!
     end
 

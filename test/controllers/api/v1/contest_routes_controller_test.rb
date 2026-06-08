@@ -11,7 +11,7 @@ module Api
         @contest_route = contest_routes(:route_1)
         @user = users(:normal_user)
         @admin = users(:super_admin_user)
-        
+
         @public_headers = api_access_token_headers
         @user_headers = api_headers(user: :normal_user)
         @admin_headers = api_headers(user: :super_admin_user)
@@ -69,7 +69,6 @@ module Api
       end
 
       test 'should destroy contest_route' do
-        # On s'assure que la route n'a pas d'ascensions pour qu'elle puisse être supprimée
         @contest_route.contest_participant_ascents.destroy_all
         assert_difference('ContestRoute.count', -1) do
           delete api_v1_gym_contest_contest_route_url(@gym, @contest, @contest_route),

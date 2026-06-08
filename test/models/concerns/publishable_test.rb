@@ -10,7 +10,7 @@ class PublishableTest < ActiveSupport::TestCase
   test 'published scope returns only published objects' do
     @article.publish!
     assert_includes Article.published, @article
-    
+
     @article.unpublish!
     assert_not_includes Article.published, @article
   end
@@ -18,7 +18,7 @@ class PublishableTest < ActiveSupport::TestCase
   test 'unpublished scope returns only unpublished objects' do
     @article.unpublish!
     assert_includes Article.unpublished, @article
-    
+
     @article.publish!
     assert_not_includes Article.unpublished, @article
   end
@@ -40,7 +40,7 @@ class PublishableTest < ActiveSupport::TestCase
   test 'published? returns true if published_at is present' do
     @article.published_at = Time.current
     assert @article.published?
-    
+
     @article.published_at = nil
     assert_not @article.published?
   end
@@ -48,7 +48,7 @@ class PublishableTest < ActiveSupport::TestCase
   test 'unpublished? returns true if published_at is nil' do
     @article.published_at = nil
     assert @article.unpublished?
-    
+
     @article.published_at = Time.current
     assert_not @article.unpublished?
   end

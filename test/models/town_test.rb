@@ -15,13 +15,13 @@ class TownTest < ActiveSupport::TestCase
     @town.population = 5000
     assert_equal 10, @town.default_dist
 
-    @town.population = 15000
+    @town.population = 15_000
     assert_equal 15, @town.default_dist
 
-    @town.population = 35000
+    @town.population = 35_000
     assert_equal 20, @town.default_dist
 
-    @town.population = 60000
+    @town.population = 60_000
     assert_equal 30, @town.default_dist
   end
 

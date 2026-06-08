@@ -76,7 +76,6 @@ module Api
       end
 
       test 'should not access messages of a conversation user is not part of' do
-        # Create a conversation where normal_user is not part of it
         new_conversation = Conversation.create!
         other_user_2 = User.create!(
           first_name: 'Other',
@@ -88,7 +87,7 @@ module Api
         )
         ConversationUser.create!(conversation: new_conversation, user: @other_user)
         ConversationUser.create!(conversation: new_conversation, user: other_user_2)
-        
+
         get api_v1_conversation_conversation_messages_url(new_conversation), headers: @user_headers
         assert_response :forbidden
       end

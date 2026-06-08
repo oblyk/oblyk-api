@@ -24,18 +24,6 @@ class ReportTest < ActiveSupport::TestCase
     )
     assert report.valid?
 
-    report.reportable_type = 'Area' # In REPORTABLE_LIST
-    # assert report.valid? # Fails if no reportable object of type Area exists with ID @crag.id
-
-    report.reportable_type = 'Gym' # In REPORTABLE_LIST
-    # assert report.valid?
-
-    # We use a known class that is NOT in the list to avoid NameError if Rails constantizes it
-    # But wait, REPORTABLE_LIST seems to cover most models.
-    # Let's try "Rain" which is NOT in REPORTABLE_LIST but might not be a class.
-    # Actually, let's just use a string that is definitely not a class and not in the list.
-    # If it constantizes, we catch it.
-    
     report.reportable_type = 'NotAModel'
     begin
       is_invalid = report.invalid?

@@ -52,7 +52,6 @@ module Api
         assert_response :success
         json_response = JSON.parse(response.body)
         features = json_response['features']
-        # Check that @crag_sector is not in features
         features.each do |feature|
           if feature['properties']['type'] == 'CragSector'
             assert_not_equal @crag_sector.id, feature['properties']['id']

@@ -80,9 +80,8 @@ module Api
       end
 
       test 'should dismount routes in sector' do
-        # On s'assure qu'il y a des voies montées
         assert @gym_sector.gym_routes.mounted.count.positive?
-        
+
         delete dismount_routes_api_v1_gym_gym_space_gym_sector_url(gym_id: @gym.id, gym_space_id: @gym_space.id, id: @gym_sector.id),
                headers: @headers, as: :json
         assert_response :success

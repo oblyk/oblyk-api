@@ -13,7 +13,7 @@ module Api
         @contest_route_group = contest_route_groups(:route_group_1)
         @user = users(:normal_user)
         @admin = users(:super_admin_user)
-        
+
         @public_headers = api_access_token_headers
         @user_headers = api_headers(user: :normal_user)
         @admin_headers = api_headers(user: :super_admin_user)

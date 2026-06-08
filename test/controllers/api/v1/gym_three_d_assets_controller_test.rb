@@ -7,9 +7,9 @@ module Api
     class GymThreeDAssetsControllerTest < ActionDispatch::IntegrationTest
       setup do
         @gym = gyms(:my_gym)
-        @asset = gym_three_d_assets(:asset_2) # Utilisons asset_2 qui est peut-être moins lié
-        @admin_headers = api_headers(user: :gym_route_setter_user) # gym_route_setter_user a le rôle manage_space sur my_gym
-        @user_headers = api_headers(user: :lulu) # lulu n'a pas le rôle manage_space sur my_gym
+        @asset = gym_three_d_assets(:asset_2)
+        @admin_headers = api_headers(user: :gym_route_setter_user)
+        @user_headers = api_headers(user: :lulu)
       end
 
       test 'should get index' do
@@ -31,7 +31,6 @@ module Api
                }
              },
              headers: @admin_headers, as: :json
-        # Retourne 422 car attach_three_d_file échoue pour 'gltf'
         assert_response :unprocessable_entity
       end
 
@@ -49,7 +48,6 @@ module Api
       end
 
       test 'should destroy gym three d asset' do
-        # On crée un asset pour être sûr de pouvoir le supprimer sans contrainte FK
         asset = GymThreeDAsset.create!(name: 'Temp', gym: @gym)
         assert_difference('GymThreeDAsset.count', -1) do
           delete api_v1_gym_gym_three_d_asset_url(gym_id: @gym.id, id: asset.id),

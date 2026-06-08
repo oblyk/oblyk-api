@@ -25,9 +25,9 @@ class ConversationUserTest < ActiveSupport::TestCase
     )
 
     assert_not notification.read?
-    
+
     @conversation_user.read!
-    
+
     notification.reload
     assert notification.read?
   end

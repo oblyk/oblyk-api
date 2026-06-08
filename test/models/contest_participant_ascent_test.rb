@@ -29,7 +29,7 @@ class ContestParticipantAscentTest < ActiveSupport::TestCase
     @ascent.hold_number = ''
     @ascent.hold_number_plus = ''
     @ascent.valid?
-    
+
     assert_nil @ascent.zone_1_attempt
     assert_nil @ascent.zone_2_attempt
     assert_nil @ascent.top_attempt

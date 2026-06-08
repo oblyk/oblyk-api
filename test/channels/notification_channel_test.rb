@@ -18,7 +18,6 @@ class NotificationChannelTest < ActionCable::Channel::TestCase
 
     subscribe
 
-    # On vérifie qu'on a bien un stream après souscription
     assert_has_stream "notification_#{user.id}"
   end
 

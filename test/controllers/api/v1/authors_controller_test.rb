@@ -62,9 +62,6 @@ module Api
       end
 
       test 'should add cover' do
-        # On simule l'ajout d'un fichier. Dans les tests Rails, on peut utiliser fixture_file_upload
-        # Mais ici on va juste vérifier que l'action répond correctement si on envoie un paramètre valide
-        # Pour simplifier et éviter de dépendre de fichiers externes, on peut tester la structure du contrôleur
         post add_cover_api_v1_author_url(@author),
              params: {
                author: {

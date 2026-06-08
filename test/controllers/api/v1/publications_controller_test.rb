@@ -66,11 +66,9 @@ module Api
       end
 
       test 'should publish publication' do
-        # On s'assure qu'on ne dépasse pas la limite quotidienne pour le test
         lulu = users(:lulu)
         lulu_headers = api_headers(user: :lulu)
-        
-        # S'assurer que lulu a un profil public pour passer private_protected
+
         lulu.update_column(:public_profile, true)
 
         draft = Publication.create!(
@@ -79,7 +77,7 @@ module Api
           body: 'Draft body',
           published_at: nil
         )
-        
+
         put publish_api_v1_publication_url(draft),
             headers: lulu_headers
         assert_response :success
@@ -88,30 +86,18 @@ module Api
       end
 
       test 'should destroy publication' do
-        # On utilise une publication qui n'a pas d'attachements pour éviter le bug du frozen hash
-        # ou on s'assure que le hash n'est pas frozen (mais c'est interne au modèle)
-        # Utilisons une publication sans attachements.
         publication_without_attachments = Publication.create!(
           publishable: @user,
           author: @user,
           body: 'Temp publication',
           published_at: Time.current
         )
-        
+
         assert_difference('Publication.count', -1) do
           delete api_v1_publication_url(publication_without_attachments),
                  headers: @user_headers, as: :json
         end
         assert_response :success
-      end
-
-      test 'should not destroy publication of another user' do
-        other_publication = publications(:publication_generated) # Owned by normal_user but linked to Crag, let's pick one linked to another user if possible, or just check forbidden
-        # Actually publication_generated is author: normal_user.
-        # Let's assume we can't destroy if not owner.
-        
-        # We need a publication not owned by normal_user
-        # Let's check if there is one in fixtures
       end
     end
   end

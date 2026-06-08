@@ -21,7 +21,6 @@ module Api
       end
 
       test 'should show video' do
-        # On utilise une vidéo sans video_file car elles ne sont pas attachées dans les fixtures
         get api_v1_video_url(@video_youtube), headers: @api_headers, as: :json
         assert_response :success
       end
@@ -86,7 +85,6 @@ module Api
       end
 
       test 'should moderate video by gym administrator' do
-        # On crée une vidéo sur une gym_route
         video = Video.create!(
           user: @user_two,
           viewable: @gym_route,
@@ -94,7 +92,6 @@ module Api
           video_service: 'youtube'
         )
 
-        # @user est admin de @gym_route via my_gym (voir gym_administrators.yml)
         assert_difference('Video.count', -1) do
           delete moderate_by_gym_administrator_api_v1_video_url(video), headers: api_headers(user: :gym_route_setter_user), as: :json
         end
@@ -102,7 +99,6 @@ module Api
       end
 
       test 'should not moderate video if not gym administrator' do
-        # On crée une vidéo sur une gym_route
         video = Video.create!(
           user: @user,
           viewable: @gym_route,
@@ -110,14 +106,12 @@ module Api
           video_service: 'youtube'
         )
 
-        # On utilise un utilisateur qui n'est pas admin
         api_headers_not_admin = api_headers(user: :other_user)
 
         delete moderate_by_gym_administrator_api_v1_video_url(video), headers: api_headers_not_admin, as: :json
         assert_response :forbidden
       end
       test 'should not moderate video if viewable is not a gym route' do
-        # On tente de modérer la vidéo sur le crag
         delete moderate_by_gym_administrator_api_v1_video_url(@video_youtube), headers: @api_headers, as: :json
         assert_response :forbidden
       end

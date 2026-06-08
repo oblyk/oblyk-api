@@ -3,7 +3,6 @@
 require 'test_helper'
 
 class FollowTest < ActiveSupport::TestCase
-  parallelize_threshold = 1
   parallelize(workers: 1)
 
   setup do
@@ -59,7 +58,6 @@ class FollowTest < ActiveSupport::TestCase
   end
 
   test 'auto_accepted for User depends on public_profile' do
-    # On s'assure que @target_user a un profil public (par défaut il devrait l'être si public_profile? est vrai)
     @target_user.update_column(:public_profile, true)
     follow_public_user = Follow.create(user: @user, followable: @target_user)
     assert follow_public_user.accepted?
@@ -82,21 +80,16 @@ class FollowTest < ActiveSupport::TestCase
   end
 
   test 'start_following_notify! creates notification when following a User' do
-    # On vide tout pour isoler
     Follow.delete_all
     Notification.delete_all
 
-    # Cas d'un suivi auto-accepté (profil public)
     @target_user.update_column(:public_profile, true)
     assert_difference -> { Notification.where(user_id: @target_user.id, notification_type: 'new_follower').count }, 1 do
       Follow.create!(user: @user, followable: @target_user)
     end
 
-    # Cas d'un suivi en attente (profil privé)
     @target_user.update_column(:public_profile, false)
-    # Utiliser un autre follower
     user2 = users(:super_admin_user)
-    # On ré-utilise @user comme cible pour varier
     @user.update_column(:public_profile, false)
     assert_difference -> { Notification.where(user_id: @user.id, notification_type: 'request_for_follow_up').count }, 1 do
       Follow.create!(user: user2, followable: @user)
@@ -104,29 +97,26 @@ class FollowTest < ActiveSupport::TestCase
   end
 
   test 'notify_accepted_change! creates notification when follow is accepted' do
-    # Nettoyage
     Follow.delete_all
     Notification.delete_all
 
     @target_user.update_column(:public_profile, false)
     follow = Follow.create!(user: @user, followable: @target_user)
-    
+
     assert_difference -> { Notification.where(user_id: @user.id, notification_type: 'subscribe_accepted').count }, 1 do
       follow.accept!
     end
   end
 
   test 'destroy_follow_notification! removes related notifications' do
-    # Nettoyage
     Follow.delete_all
     Notification.delete_all
 
-    # Créer un suivi qui génère une notification
     @target_user.update_column(:public_profile, true)
     follow = Follow.create!(user: @user, followable: @target_user)
-    
+
     assert_equal 1, Notification.where(user_id: @target_user.id, notification_type: 'new_follower').count
-    
+
     assert_difference -> { Notification.where(user_id: @target_user.id, notification_type: 'new_follower').count }, -1 do
       follow.destroy
     end

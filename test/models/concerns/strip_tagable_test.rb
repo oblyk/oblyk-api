@@ -16,8 +16,6 @@ class StripTagableTest < ActiveSupport::TestCase
   end
 
   test 'strip_tag_column strips tags from body' do
-    # On utilise ConversationMessage car Article semble ne pas être StripTagable (à vérifier)
-    # ou alors Article n'a pas StripTagable dans sa liste d'includes
     message = ConversationMessage.new(body: '<div>Body</div>')
     message.valid?
     assert_equal 'Body', message.body

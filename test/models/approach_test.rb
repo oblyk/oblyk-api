@@ -65,8 +65,6 @@ class ApproachTest < ActiveSupport::TestCase
       { 'elevation' => 730 },
       { 'elevation' => 800 }
     ]
-    # Positive: (750-700) + (800-730) = 50 + 70 = 120
-    # Negative: (730-750) = -20
     assert_equal 120, @approach.positive_drop
     assert_equal(-20, @approach.negative_drop)
   end

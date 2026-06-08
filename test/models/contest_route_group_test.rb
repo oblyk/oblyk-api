@@ -74,7 +74,6 @@ class ContestRouteGroupTest < ActiveSupport::TestCase
     space = gym_spaces(:my_gym_boulder_space)
     initial_count = @route_group.contest_routes.count
 
-    # Check gym routes available in this space
     gym_routes_count = GymRoute.joins(:gym_sector).where(gym_sectors: { gym_space_id: space.id }).mounted.count
 
     assert_difference 'ContestRoute.count', gym_routes_count do

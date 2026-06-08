@@ -11,8 +11,7 @@ module Api
         @archived_sheet = gym_opening_sheets(:sheet_archived)
         @admin = users(:super_admin_user)
         @admin_headers = api_headers(user: :super_admin_user)
-        
-        # S'assurer que l'admin a le rôle manage_opening pour cette salle
+
         gym_admin = @admin.gym_administrators.find_or_initialize_by(gym: @gym)
         gym_admin.roles ||= []
         gym_admin.roles << 'manage_opening' unless gym_admin.roles.include?('manage_opening')
@@ -70,9 +69,8 @@ module Api
       end
 
       test 'should update cells' do
-        # On initialise row_json pour que le test puisse le modifier
         @sheet.update_column :row_json, [{ 'routes' => [{}, { 'grade' => '5a' }] }]
-        
+
         put update_cells_api_v1_gym_gym_opening_sheet_url(gym_id: @gym.id, id: @sheet.id),
             params: {
               gym_opening_sheet: {
@@ -117,17 +115,13 @@ module Api
       end
 
       test 'should print gym opening sheet' do
-        # On mocke WickedPdf et render_to_string pour éviter l'erreur de template manquant et de génération de PDF en test
         pdf_mock = Minitest::Mock.new
         pdf_mock.expect :pdf_from_string, 'PDF DATA', [String]
 
         WickedPdf.stub :new, pdf_mock do
-          # Au lieu de stubber render_to_string sur ActionController::Base,
-          # on va stubber la méthode de classe New qui est utilisée dans le contrôleur.
-          # gym_opening_sheets_controller.rb:31: ActionController::Base.new.render_to_string
           base_mock = Minitest::Mock.new
           base_mock.expect :render_to_string, '<html></html>', [Hash]
-          
+
           ActionController::Base.stub :new, base_mock do
             get print_api_v1_gym_gym_opening_sheet_url(gym_id: @gym.id, id: @sheet.id), headers: @admin_headers
             assert_response :success
