@@ -1,0 +1,19 @@
+session_one:
+  user: normal_user
+  session_date: 2024-06-01
+  description: 'Une super séance'
+
+session_two:
+  user: normal_user
+  session_date: 2024-06-02
+  description: 'Encore une super séance'
+
+session_gym:
+  user: normal_user
+  session_date: 2024-06-03
+  description: 'Séance en salle'
+
+session_other_user:
+  user: super_admin_user
+  session_date: 2024-06-01
+  description: 'Séance d un autre utilisateur'

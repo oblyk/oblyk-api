@@ -1,11 +1,17 @@
 gym_administrator_one:
   user: super_admin_user
   gym: my_gym
-  roles: [ "manage_team_member", "manage_gym" ]
+  roles: [ "manage_team_member", "manage_gym", "manage_subscription", "manage_opener" ]
   requested_email: admin@oblyk.org
 
 gym_administrator_two:
-  user: normal_user
+  user: gym_route_setter_user
   gym: my_gym
-  roles: [ "manage_space" ]
+  roles: [ "manage_space", "manage_opening" ]
   requested_email: normal@oblyk.org
+
+gym_administrator_three:
+  user: lulu
+  gym: my_gym
+  roles: [ "manage_subscription" ]
+  requested_email: subscription@oblyk.org

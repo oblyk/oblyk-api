@@ -17,6 +17,7 @@ end
 ENV['RAILS_ENV'] ||= 'test'
 ENV['SEND_EMAIL_WITH'] = 'smtp'
 ENV['MY_COMPET_TOKEN'] = 'oblyk-test-token'
+ENV['APP_URL'] = 'http://localhost:3000'
 
 require_relative '../config/environment'
 require 'rails/test_help'

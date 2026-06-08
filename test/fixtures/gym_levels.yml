@@ -20,3 +20,14 @@ two:
       color: "#00ff00"
       default_grade: 5a
       default_point: 200
+
+three:
+  gym: my_gym
+  climbing_type: pan
+  level_representation: tag
+  enabled: true
+  levels:
+    - order: 1
+      color: "#0000ff"
+      default_grade: 6a
+      default_point: 300
