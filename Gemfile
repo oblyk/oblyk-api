@@ -78,8 +78,8 @@ gem 'dalli'
 # Levenshtein in C
 gem 'levenshtein-ffi', require: 'levenshtein'
 
-# Sendinblue email sdk
-gem 'sib-api-v3-sdk'
+# Brevo email sdk
+gem 'brevo'
 
 # Generate PDF from html
 gem 'wicked_pdf'

@@ -31,9 +31,9 @@ class IndoorSubscriptionMailerTest < ActionMailer::TestCase
   test 'start_trial_period with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [SibApiV3Sdk::SendSmtpEmail]
+    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
 
-    SibApiV3Sdk::TransactionalEmailsApi.stub :new, mock_api do
+    Brevo::TransactionalEmailsApi.stub :new, mock_api do
       IndoorSubscriptionMailer.with(indoor_subscription: @indoor_subscription).start_trial_period.deliver_now
     end
 
@@ -56,9 +56,9 @@ class IndoorSubscriptionMailerTest < ActionMailer::TestCase
   test 'trial_period_ends_soon with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [SibApiV3Sdk::SendSmtpEmail]
+    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
 
-    SibApiV3Sdk::TransactionalEmailsApi.stub :new, mock_api do
+    Brevo::TransactionalEmailsApi.stub :new, mock_api do
       IndoorSubscriptionMailer.with(indoor_subscription: @indoor_subscription).trial_period_ends_soon.deliver_now
     end
 
@@ -81,9 +81,9 @@ class IndoorSubscriptionMailerTest < ActionMailer::TestCase
   test 'trial_period_ends_tomorrow with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [SibApiV3Sdk::SendSmtpEmail]
+    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
 
-    SibApiV3Sdk::TransactionalEmailsApi.stub :new, mock_api do
+    Brevo::TransactionalEmailsApi.stub :new, mock_api do
       IndoorSubscriptionMailer.with(indoor_subscription: @indoor_subscription).trial_period_ends_tomorrow.deliver_now
     end
 
@@ -106,9 +106,9 @@ class IndoorSubscriptionMailerTest < ActionMailer::TestCase
   test 'start_indoor_subscription with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [SibApiV3Sdk::SendSmtpEmail]
+    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
 
-    SibApiV3Sdk::TransactionalEmailsApi.stub :new, mock_api do
+    Brevo::TransactionalEmailsApi.stub :new, mock_api do
       IndoorSubscriptionMailer.with(indoor_subscription: @indoor_subscription).start_indoor_subscription.deliver_now
     end
 
@@ -131,9 +131,9 @@ class IndoorSubscriptionMailerTest < ActionMailer::TestCase
   test 'cancel_indoor_subscription with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [SibApiV3Sdk::SendSmtpEmail]
+    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
 
-    SibApiV3Sdk::TransactionalEmailsApi.stub :new, mock_api do
+    Brevo::TransactionalEmailsApi.stub :new, mock_api do
       IndoorSubscriptionMailer.with(indoor_subscription: @indoor_subscription).cancel_indoor_subscription.deliver_now
     end
 
@@ -156,9 +156,9 @@ class IndoorSubscriptionMailerTest < ActionMailer::TestCase
   test 'un_cancel_indoor_subscription with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [SibApiV3Sdk::SendSmtpEmail]
+    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
 
-    SibApiV3Sdk::TransactionalEmailsApi.stub :new, mock_api do
+    Brevo::TransactionalEmailsApi.stub :new, mock_api do
       IndoorSubscriptionMailer.with(indoor_subscription: @indoor_subscription).un_cancel_indoor_subscription.deliver_now
     end
 
@@ -181,9 +181,9 @@ class IndoorSubscriptionMailerTest < ActionMailer::TestCase
   test 'end_indoor_subscription with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [SibApiV3Sdk::SendSmtpEmail]
+    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
 
-    SibApiV3Sdk::TransactionalEmailsApi.stub :new, mock_api do
+    Brevo::TransactionalEmailsApi.stub :new, mock_api do
       IndoorSubscriptionMailer.with(indoor_subscription: @indoor_subscription).end_indoor_subscription.deliver_now
     end
 

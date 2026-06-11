@@ -10,8 +10,8 @@ class ApplicationMailer < ActionMailer::Base
 
   def send_with_send_in_blue(to, subject, template)
     # Init Send In Blue instance and Email
-    send_in_blue = SibApiV3Sdk::TransactionalEmailsApi.new
-    sid_email = SibApiV3Sdk::SendSmtpEmail.new
+    send_in_blue = Brevo::TransactionalEmailsApi.new
+    sid_email = Brevo::SendSmtpEmail.new
 
     # Build content
     html_content = render_to_string template, formats: [:html]
@@ -34,7 +34,7 @@ class ApplicationMailer < ActionMailer::Base
     # Send email
     begin
       send_in_blue.send_transac_email(sid_email)
-    rescue SibApiV3Sdk::ApiError => e
+    rescue Brevo::ApiError => e
       Rails.logger.error "Exception when calling TransactionalEmailsApi -> send_transac_email: #{e}"
     end
   end
