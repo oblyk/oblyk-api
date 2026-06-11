@@ -11,8 +11,17 @@ class VideoTest < ActiveSupport::TestCase
   end
 
   test 'video is valid' do
-    assert @video_youtube.valid?
-    assert @video_vimeo.valid?
+    mock_response = Minitest::Mock.new
+    mock_response.expect :body, '{"html": "<iframe></iframe>"}'
+    Net::HTTP.stub :get_response, mock_response do
+      assert @video_youtube.valid?
+    end
+
+    mock_response = Minitest::Mock.new
+    mock_response.expect :body, '{"html": "<iframe></iframe>"}'
+    Net::HTTP.stub :get_response, mock_response do
+      assert @video_vimeo.valid?
+    end
   end
 
   test 'validates video service inclusion' do
@@ -24,10 +33,20 @@ class VideoTest < ActiveSupport::TestCase
 
   test 'validates viewable type inclusion' do
     video = Video.new(viewable: @crag, video_service: 'youtube', url: 'https://youtu.be/123')
-    assert video.valid?
+    mock_response = Minitest::Mock.new
+    mock_response.expect :body, '{"html": "<iframe></iframe>"}'
+
+    Net::HTTP.stub :get_response, mock_response do
+      assert video.valid?
+    end
 
     video.viewable_type = 'User'
-    video.valid?
+
+    mock_response = Minitest::Mock.new
+    mock_response.expect :body, '{"html": "<iframe></iframe>"}'
+    Net::HTTP.stub :get_response, mock_response do
+      video.valid?
+    end
     assert_not_empty video.errors[:viewable_type]
   end
 
