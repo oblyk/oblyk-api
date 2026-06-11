@@ -39,9 +39,9 @@ class OrganizationMailerTest < ActionMailer::TestCase
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
 
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [SibApiV3Sdk::SendSmtpEmail]
+    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
 
-    SibApiV3Sdk::TransactionalEmailsApi.stub :new, mock_api do
+    Brevo::TransactionalEmailsApi.stub :new, mock_api do
       OrganizationMailer.with(@params).new_organization.deliver_now
     end
 

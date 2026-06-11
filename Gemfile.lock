@@ -82,6 +82,10 @@ GEM
     bcrypt (3.1.16)
     bootsnap (1.7.4)
       msgpack (~> 1.0)
+    brevo (4.0.0)
+      addressable (~> 2.3, >= 2.3.0)
+      json (~> 2.1, >= 2.1.0)
+      typhoeus (~> 1.0, >= 1.0.1)
     builder (3.2.4)
     bundler-leak (0.2.0)
       bundler (>= 1.2.0, < 3)
@@ -134,8 +138,9 @@ GEM
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     erubi (1.10.0)
-    ethon (0.16.0)
+    ethon (0.18.0)
       ffi (>= 1.15.0)
+      logger
     faker (2.17.0)
       i18n (>= 1.6, < 2)
     faraday (1.10.3)
@@ -234,6 +239,7 @@ GEM
     listen (3.5.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
+    logger (1.7.0)
     loofah (2.9.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -407,10 +413,6 @@ GEM
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2)
-    sib-api-v3-sdk (9.1.0)
-      addressable (~> 2.3, >= 2.3.0)
-      json (~> 2.1, >= 2.1.0)
-      typhoeus (~> 1.0, >= 1.0.1)
     sidekiq (6.0.7)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
@@ -449,8 +451,8 @@ GEM
     thread_safe (0.3.6)
     trailblazer-option (0.1.2)
     ttfunk (1.7.0)
-    typhoeus (1.4.0)
-      ethon (>= 0.9.0)
+    typhoeus (1.6.0)
+      ethon (>= 0.18.0)
     tzinfo (1.2.9)
       thread_safe (~> 0.1)
     uber (0.1.0)
@@ -484,6 +486,7 @@ DEPENDENCIES
   aws-sdk-s3 (~> 1.142)
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.2)
+  brevo
   bundler-leak
   byebug
   capistrano
@@ -529,7 +532,6 @@ DEPENDENCIES
   rubocop-rails
   rubyzip (~> 2.3, >= 2.3.2)
   selenium-webdriver
-  sib-api-v3-sdk
   sidekiq
   simplecov
   sitemap_generator

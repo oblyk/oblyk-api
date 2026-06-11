@@ -34,7 +34,7 @@ class GymMailerTest < ActionMailer::TestCase
   test 'new_request with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [SibApiV3Sdk::SendSmtpEmail]
+    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
 
     params = {
       user: @user,
@@ -45,7 +45,7 @@ class GymMailerTest < ActionMailer::TestCase
       last_name: 'Jack'
     }
 
-    SibApiV3Sdk::TransactionalEmailsApi.stub :new, mock_api do
+    Brevo::TransactionalEmailsApi.stub :new, mock_api do
       GymMailer.with(params).new_request.deliver_now
     end
 
@@ -73,7 +73,7 @@ class GymMailerTest < ActionMailer::TestCase
   test 'new_request_confirmation with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [SibApiV3Sdk::SendSmtpEmail]
+    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
 
     params = {
       gym: @gym,
@@ -81,7 +81,7 @@ class GymMailerTest < ActionMailer::TestCase
       first_name: 'Jean'
     }
 
-    SibApiV3Sdk::TransactionalEmailsApi.stub :new, mock_api do
+    Brevo::TransactionalEmailsApi.stub :new, mock_api do
       GymMailer.with(params).new_request_confirmation.deliver_now
     end
 
@@ -110,7 +110,7 @@ class GymMailerTest < ActionMailer::TestCase
   test 'new_administrator with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [SibApiV3Sdk::SendSmtpEmail]
+    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
 
     params = {
       user: @user,
@@ -119,7 +119,7 @@ class GymMailerTest < ActionMailer::TestCase
       requested_email: 'admin@gym.com'
     }
 
-    SibApiV3Sdk::TransactionalEmailsApi.stub :new, mock_api do
+    Brevo::TransactionalEmailsApi.stub :new, mock_api do
       GymMailer.with(params).new_administrator.deliver_now
     end
 
@@ -147,7 +147,7 @@ class GymMailerTest < ActionMailer::TestCase
   test 'accept_administrator with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [SibApiV3Sdk::SendSmtpEmail]
+    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
 
     params = {
       user: @user,
@@ -155,7 +155,7 @@ class GymMailerTest < ActionMailer::TestCase
       email: 'admin@gym.com'
     }
 
-    SibApiV3Sdk::TransactionalEmailsApi.stub :new, mock_api do
+    Brevo::TransactionalEmailsApi.stub :new, mock_api do
       GymMailer.with(params).accept_administrator.deliver_now
     end
 
@@ -184,7 +184,7 @@ class GymMailerTest < ActionMailer::TestCase
   test 'email_report with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [SibApiV3Sdk::SendSmtpEmail]
+    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
 
     params = {
       user: @user,
@@ -193,7 +193,7 @@ class GymMailerTest < ActionMailer::TestCase
       end_date: Date.current.end_of_month
     }
 
-    SibApiV3Sdk::TransactionalEmailsApi.stub :new, mock_api do
+    Brevo::TransactionalEmailsApi.stub :new, mock_api do
       GymMailer.with(params).email_report.deliver_now
     end
 
