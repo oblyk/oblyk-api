@@ -26,31 +26,39 @@ module Api
       end
 
       test 'should create video' do
-        assert_difference('Video.count') do
-          post api_v1_videos_url,
-               params: {
-                 video: {
-                   viewable_type: 'Crag',
-                   viewable_id: @crag.id,
-                   video_service: 'youtube',
-                   url: 'https://www.youtube.com/watch?v=newvideo'
-                 }
-               },
-               headers: @api_headers,
-               as: :json
+        mock_response = Minitest::Mock.new
+        mock_response.expect :body, '{"html": "<iframe></iframe>"}'
+        Net::HTTP.stub :get_response, mock_response do
+          assert_difference('Video.count') do
+            post api_v1_videos_url,
+                 params: {
+                   video: {
+                     viewable_type: 'Crag',
+                     viewable_id: @crag.id,
+                     video_service: 'youtube',
+                     url: 'https://www.youtube.com/watch?v=newvideo'
+                   }
+                 },
+                 headers: @api_headers,
+                 as: :json
+          end
         end
         assert_response :success
       end
 
       test 'should update video' do
-        put api_v1_video_url(@video_youtube),
-            params: {
-              video: {
-                description: 'Updated description'
-              }
-            },
-            headers: @api_headers,
-            as: :json
+        mock_response = Minitest::Mock.new
+        mock_response.expect :body, '{"html": "<iframe></iframe>"}'
+        Net::HTTP.stub :get_response, mock_response do
+          put api_v1_video_url(@video_youtube),
+              params: {
+                video: {
+                  description: 'Updated description'
+                }
+              },
+              headers: @api_headers,
+              as: :json
+        end
         assert_response :success
         @video_youtube.reload
         assert_equal 'Updated description', @video_youtube.description
@@ -85,30 +93,38 @@ module Api
       end
 
       test 'should moderate video by gym administrator' do
-        video = Video.create!(
-          user: @user_two,
-          viewable: @gym_route,
-          url: 'https://www.youtube.com/watch?v=gymvideo',
-          video_service: 'youtube'
-        )
+        mock_response = Minitest::Mock.new
+        mock_response.expect :body, '{"html": "<iframe></iframe>"}'
+        Net::HTTP.stub :get_response, mock_response do
+          @video = Video.create!(
+            user: @user_two,
+            viewable: @gym_route,
+            url: 'https://www.youtube.com/watch?v=gymvideo',
+            video_service: 'youtube'
+          )
+        end
 
         assert_difference('Video.count', -1) do
-          delete moderate_by_gym_administrator_api_v1_video_url(video), headers: api_headers(user: :gym_route_setter_user), as: :json
+          delete moderate_by_gym_administrator_api_v1_video_url(@video), headers: api_headers(user: :gym_route_setter_user), as: :json
         end
         assert_response :no_content
       end
 
       test 'should not moderate video if not gym administrator' do
-        video = Video.create!(
-          user: @user,
-          viewable: @gym_route,
-          url: 'https://www.youtube.com/watch?v=gymvideo',
-          video_service: 'youtube'
-        )
+        mock_response = Minitest::Mock.new
+        mock_response.expect :body, '{"html": "<iframe></iframe>"}'
+        Net::HTTP.stub :get_response, mock_response do
+          @video = Video.create!(
+            user: @user,
+            viewable: @gym_route,
+            url: 'https://www.youtube.com/watch?v=gymvideo',
+            video_service: 'youtube'
+          )
+        end
 
         api_headers_not_admin = api_headers(user: :other_user)
 
-        delete moderate_by_gym_administrator_api_v1_video_url(video), headers: api_headers_not_admin, as: :json
+        delete moderate_by_gym_administrator_api_v1_video_url(@video), headers: api_headers_not_admin, as: :json
         assert_response :forbidden
       end
       test 'should not moderate video if viewable is not a gym route' do
