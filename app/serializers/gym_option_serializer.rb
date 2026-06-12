@@ -2,7 +2,6 @@
 
 class GymOptionSerializer < BaseSerializer
   attributes :id,
-             :name,
              :option_type,
              :start_date,
              :end_date,

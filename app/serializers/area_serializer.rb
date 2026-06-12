@@ -7,18 +7,10 @@ class AreaSerializer < BaseSerializer
   belongs_to :user
 
   attributes :id,
-             :uuid,
+             :name,
              :slug_name,
-             :first_name,
-             :full_name,
              :app_path,
-             :photos_count,
-             :crags_count,
-             :links_count,
-             :versions_count,
-             :articles_count,
-             :place_of_sales_count,
-             :next_guide_book_paper
+             :comments_count
 
   attribute :history do |object|
     {
