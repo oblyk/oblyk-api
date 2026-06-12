@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_06_05_132825) do
+ActiveRecord::Schema.define(version: 2026_06_12_143915) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -1222,16 +1222,6 @@ ActiveRecord::Schema.define(version: 2026_06_05_132825) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["locality_id"], name: "index_locality_users_on_locality_id"
     t.index ["user_id"], name: "index_locality_users_on_user_id"
-  end
-
-  create_table "newsletters", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "name"
-    t.string "slug_name"
-    t.text "body"
-    t.integer "photos_count"
-    t.datetime "sent_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
