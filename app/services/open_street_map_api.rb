@@ -7,13 +7,11 @@ class OpenStreetMapApi
   def self.search(query)
     request = RestClient.get(
       "#{BASE_URL}/search",
-      {
-        params: {
-          q: query,
-          format: 'json',
-          addressdetails: 1,
-          email: EMAIL
-        }
+      params: {
+        q: query,
+        format: 'json',
+        addressdetails: 1,
+        email: EMAIL
       }
     )
 
@@ -27,15 +25,13 @@ class OpenStreetMapApi
   def self.reverse_geocoding(latitude, longitude)
     request = RestClient.get(
       "#{BASE_URL}/reverse",
-      {
-        params: {
-          format: 'json',
-          lat: latitude,
-          lon: longitude,
-          zoom: 13,
-          addressdetails: 1,
-          email: EMAIL
-        }
+      params: {
+        format: 'json',
+        lat: latitude,
+        lon: longitude,
+        zoom: 13,
+        addressdetails: 1,
+        email: EMAIL
       }
     )
 

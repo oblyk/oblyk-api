@@ -33,7 +33,7 @@ class ApplicationMailer < ActionMailer::Base
 
     # Send email
     begin
-      send_in_blue.send_transac_email(sid_email)
+      send_in_blue.send_transac_email(**sid_email)
     rescue Brevo::ApiError => e
       Rails.logger.error "Exception when calling TransactionalEmailsApi -> send_transac_email: #{e}"
     end

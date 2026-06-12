@@ -29,10 +29,8 @@ class GymBillingAccount < ApplicationRecord
 
     Stripe.api_key = ENV['STRIPE_API_KEY']
     Stripe::BillingPortal::Session.create(
-      {
-        customer: customer_stripe_id,
-        return_url: "#{gym.admin_app_path}/indoor-subscriptions"
-      }
+      customer: customer_stripe_id,
+      return_url: "#{gym.admin_app_path}/indoor-subscriptions"
     )
   end
 

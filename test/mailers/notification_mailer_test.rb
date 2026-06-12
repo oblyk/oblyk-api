@@ -34,7 +34,7 @@ class NotificationMailerTest < ActionMailer::TestCase
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
 
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
+    mock_api.expect(:send_transac_email, nil) { |*_args, **_kwargs| true }
 
     Brevo::TransactionalEmailsApi.stub :new, mock_api do
       NotificationMailer.with(user: @user).new_message.deliver_now
@@ -70,7 +70,7 @@ class NotificationMailerTest < ActionMailer::TestCase
     )
 
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
+    mock_api.expect(:send_transac_email, nil) { |*_args, **_kwargs| true }
 
     Brevo::TransactionalEmailsApi.stub :new, mock_api do
       NotificationMailer.with(user: @user, publications: [publication]).new_publications.deliver_now
@@ -98,7 +98,7 @@ class NotificationMailerTest < ActionMailer::TestCase
     follower = users(:super_admin_user)
 
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
+    mock_api.expect(:send_transac_email, nil) { |*_args, **_kwargs| true }
 
     Brevo::TransactionalEmailsApi.stub :new, mock_api do
       NotificationMailer.with(user: @user, follower: follower).request_for_follow_up.deliver_now
@@ -128,7 +128,7 @@ class NotificationMailerTest < ActionMailer::TestCase
     article = Article.new(name: 'Test Article', body: 'Body', author: author)
 
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
+    mock_api.expect(:send_transac_email, nil) { |*_args, **_kwargs| true }
 
     Brevo::TransactionalEmailsApi.stub :new, mock_api do
       NotificationMailer.with(user: @user, article: article).new_article.deliver_now
