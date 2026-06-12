@@ -16,9 +16,6 @@ class EmailNotificationJob < ApplicationJob
     when 'request_for_follow_up'
       follower = notification.notifiable
       NotificationMailer.with(user: notification.user, follower: follower).request_for_follow_up.deliver_now
-    when 'new_article'
-      article = notification.notifiable
-      NotificationMailer.with(user: notification.user, article: article).new_article.deliver_now
     end
   end
 end
