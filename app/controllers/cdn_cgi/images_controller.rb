@@ -17,7 +17,7 @@ module CdnCgi
 
       when 'crop'
         size = "#{options['width']}x#{options['height']}"
-        resize_attachement = attachment.variant({ combine_options: { gravity: 'Center', resize: "#{size}^", crop: "#{size}+0+0", quality: options['quality'].to_i } }).processed
+        resize_attachement = attachment.variant(gravity: 'Center', resize: "#{size}^", crop: "#{size}+0+0", quality: options['quality'].to_i).processed
         redirect_to "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.rails_representation_url(resize_attachement, only_path: true)}"
 
       else
