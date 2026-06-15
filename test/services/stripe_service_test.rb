@@ -58,7 +58,7 @@ class StripeServiceTest < ActiveSupport::TestCase
   test 'deactivated_payment_link updates stripe payment link' do
     payment_link_id = 'pl_123'
     mock_update = Minitest::Mock.new
-    mock_update.expect(:call, true) { |*_args, **_kwargs| true }
+    mock_update.expect :call, true, [payment_link_id, { active: false }]
 
     Stripe::PaymentLink.stub :update, mock_update do
       StripeService.deactivated_payment_link(payment_link_id)

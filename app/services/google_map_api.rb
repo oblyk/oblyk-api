@@ -13,9 +13,11 @@ class GoogleMapApi
     float_coordinates = float_coordinates.join('|')
     request = RestClient.get(
       "#{BASE_URL}/elevation/json",
-      params: {
-        locations: float_coordinates,
-        key: GOOGLE_KEY
+      {
+        params: {
+          locations: float_coordinates,
+          key: GOOGLE_KEY
+        }
       }
     )
 
@@ -29,11 +31,13 @@ class GoogleMapApi
   def self.places(query)
     request = RestClient.get(
       "#{BASE_URL}/place/findplacefromtext/json",
-      params: {
-        input: query,
-        inputtype: 'textquery',
-        fields: 'formatted_address,name,geometry',
-        key: GOOGLE_KEY
+      {
+        params: {
+          input: query,
+          inputtype: 'textquery',
+          fields: 'formatted_address,name,geometry',
+          key: GOOGLE_KEY
+        }
       }
     )
 
@@ -47,10 +51,12 @@ class GoogleMapApi
   def self.reverse_geocoding(lat, lng)
     request = RestClient.get(
       "#{BASE_URL}/geocode/json",
-      params: {
-        latlng: "#{lat},#{lng}",
-        key: GOOGLE_KEY,
-        result_type: 'locality|postal_code'
+      {
+        params: {
+          latlng: "#{lat},#{lng}",
+          key: GOOGLE_KEY,
+          result_type: 'locality|postal_code'
+        }
       }
     )
     return if request.code != 200

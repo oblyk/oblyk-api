@@ -3,14 +3,10 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.7.8'
+ruby '2.6.5'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '6.0.6.1'
-# Pin concurrent-ruby < 1.3.0 (1.3.0+ breaks ActiveSupport 6.0.x LoggerThreadSafeLevel)
-gem 'concurrent-ruby', '1.3.4'
-# DELETE THIS WHEN UPGRADE TO Ruby 3.*
-gem 'net-http', '~> 0.9.1'
+gem 'rails', '~> 6.0.3'
 # Use sqlite3 as the database for Active Record
 gem 'mysql2', '>= 0.4.4', '< 0.6.0'
 # Use Puma as the app server

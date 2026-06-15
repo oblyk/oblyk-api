@@ -15,8 +15,7 @@ class OpenElevationApi
     request = RestClient.post(
       'https://api.open-elevation.com/api/v1/lookup',
       { locations: float_coordinates }.to_json,
-      content_type: :json,
-      accept: :json
+      { content_type: :json, accept: :json }
     )
 
     return if request.code != 200

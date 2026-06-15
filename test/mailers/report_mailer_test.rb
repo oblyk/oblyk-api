@@ -36,7 +36,7 @@ class ReportMailerTest < ActionMailer::TestCase
   test 'new_report with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
     mock_api = Minitest::Mock.new
-    mock_api.expect(:send_transac_email, nil) { |*_args, **_kwargs| true }
+    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
 
     Brevo::TransactionalEmailsApi.stub :new, mock_api do
       ReportMailer.with(

@@ -9,8 +9,10 @@ class MyCompet
         nom: ffme_application.user.full_name,
         numeroFFME: ffme_application.ffme_licence_number
       }.to_json,
-      content_type: :json,
-      authorization: ENV['MY_COMPET_TOKEN']
+      {
+        content_type: :json,
+        authorization: ENV['MY_COMPET_TOKEN']
+      }
     )
     JSON.parse(request.body)
   rescue RestClient::ExceptionWithResponse => e
@@ -19,11 +21,11 @@ class MyCompet
   end
 
   def self.create_contest(ffme_contest)
-    MyCompet.update_or_create_contest(ffme_contest, mode: :create)
+    MyCompet.update_or_create_contest ffme_contest, mode: :create
   end
 
   def self.update_contest(ffme_contest)
-    MyCompet.update_or_create_contest(ffme_contest, mode: :update)
+    MyCompet.update_or_create_contest ffme_contest, mode: :update
   end
 
   def self.link(ffme_contest)
@@ -32,8 +34,10 @@ class MyCompet
       {
         idCompetition: ffme_contest.contest_id
       }.to_json,
-      content_type: :json,
-      authorization: ENV['MY_COMPET_TOKEN']
+      {
+        content_type: :json,
+        authorization: ENV['MY_COMPET_TOKEN']
+      }
     )
     JSON.parse(request.body)
   rescue RestClient::ExceptionWithResponse => e
@@ -72,8 +76,10 @@ class MyCompet
         idCompetition: ffme_contest.contest_id,
         resultats: results
       }.to_json,
-      content_type: :json,
-      authorization: ENV['MY_COMPET_TOKEN']
+      {
+        content_type: :json,
+        authorization: ENV['MY_COMPET_TOKEN']
+      }
     )
     JSON.parse(request.body)
   rescue RestClient::ExceptionWithResponse => e
@@ -103,8 +109,10 @@ class MyCompet
     request = RestClient.post(
       "#{ENV['MY_COMPET_BASE_URL']}/#{url_mode}",
       data.to_json,
-      content_type: :json,
-      authorization: ENV['MY_COMPET_TOKEN']
+      {
+        content_type: :json,
+        authorization: ENV['MY_COMPET_TOKEN']
+      }
     )
     JSON.parse(request.body)
   rescue RestClient::ExceptionWithResponse => e

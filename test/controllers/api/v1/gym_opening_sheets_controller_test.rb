@@ -120,7 +120,7 @@ module Api
 
         WickedPdf.stub :new, pdf_mock do
           base_mock = Minitest::Mock.new
-          base_mock.expect(:render_to_string, '<html></html>') { |*_args, **_kwargs| true }
+          base_mock.expect :render_to_string, '<html></html>', [Hash]
 
           ActionController::Base.stub :new, base_mock do
             get print_api_v1_gym_gym_opening_sheet_url(gym_id: @gym.id, id: @sheet.id), headers: @admin_headers

@@ -63,11 +63,13 @@ class IndoorSubscription < ApplicationRecord
     Stripe.api_key = ENV['STRIPE_API_KEY']
 
     plan = Stripe::Plan.create(
-      amount: indoor_subscription_product.price_cents,
-      currency: indoor_subscription_product.price_currency,
-      interval: 'month',
-      interval_count: indoor_subscription_product.month_by_occurrence,
-      product: indoor_subscription_product.product_stripe_id
+      {
+        amount: indoor_subscription_product.price_cents,
+        currency: indoor_subscription_product.price_currency,
+        interval: 'month',
+        interval_count: indoor_subscription_product.month_by_occurrence,
+        product: indoor_subscription_product.product_stripe_id
+      }
     )
 
     subscription_data = {
@@ -76,25 +78,27 @@ class IndoorSubscription < ApplicationRecord
     subscription_data[:trial_period_days] = number_of_trials_days if number_of_trials_days.present?
 
     payment_link = Stripe::PaymentLink.create(
-      line_items: [
-        price: plan,
-        quantity: 1
-      ],
-      after_completion: {
-        type: 'redirect',
-        redirect: {
-          url: "#{gym.admin_app_path}/indoor-subscriptions"
+      {
+        line_items: [
+          price: plan,
+          quantity: 1
+        ],
+        after_completion: {
+          type: 'redirect',
+          redirect: {
+            url: "#{gym.admin_app_path}/indoor-subscriptions"
+          }
+        },
+        billing_address_collection: 'required',
+        subscription_data: subscription_data,
+        allow_promotion_codes: true,
+        tax_id_collection: {
+          enabled: true
+        },
+        metadata: {
+          gym_billing_account_uuid: gym.gym_billing_account.uuid,
+          indoor_subscription_id: id
         }
-      },
-      billing_address_collection: 'required',
-      subscription_data: subscription_data,
-      allow_promotion_codes: true,
-      tax_id_collection: {
-        enabled: true
-      },
-      metadata: {
-        gym_billing_account_uuid: gym.gym_billing_account.uuid,
-        indoor_subscription_id: id
       }
     )
 
