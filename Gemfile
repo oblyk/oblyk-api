@@ -9,8 +9,6 @@ ruby '2.7.8'
 gem 'rails', '6.0.6.1'
 # Pin concurrent-ruby < 1.3.0 (1.3.0+ breaks ActiveSupport 6.0.x LoggerThreadSafeLevel)
 gem 'concurrent-ruby', '1.3.4'
-# DELETE THIS WHEN UPGRADE TO Ruby 3.*
-gem 'net-http', '~> 0.9.1'
 # Use sqlite3 as the database for Active Record
 gem 'mysql2'
 # Use Puma as the app server

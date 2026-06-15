@@ -260,8 +260,6 @@ GEM
     mutex_m (0.3.0)
     mysql2 (0.5.7)
       bigdecimal
-    net-http (0.9.1)
-      uri (>= 0.11.1)
     net-imap (0.4.24)
       date
       net-protocol
@@ -472,7 +470,6 @@ GEM
       thread_safe (~> 0.1)
     uber (0.1.0)
     unicode-display_width (2.0.0)
-    uri (1.1.1)
     useragent (0.16.11)
     webdrivers (5.3.1)
       nokogiri (~> 1.6)
@@ -525,7 +522,6 @@ DEPENDENCIES
   mini_magick
   money-rails
   mysql2
-  net-http (~> 0.9.1)
   oj
   paper_trail
   prawn
