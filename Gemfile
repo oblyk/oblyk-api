@@ -3,33 +3,37 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.5'
+ruby '2.7.8'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0.3'
+gem 'rails', '6.0.6.1'
+# Pin concurrent-ruby < 1.3.0 (1.3.0+ breaks ActiveSupport 6.0.x LoggerThreadSafeLevel)
+gem 'concurrent-ruby', '1.3.4'
+# DELETE THIS WHEN UPGRADE TO Ruby 3.*
+gem 'net-http', '~> 0.9.1'
 # Use sqlite3 as the database for Active Record
-gem 'mysql2', '>= 0.4.4', '< 0.6.0'
+gem 'mysql2'
 # Use Puma as the app server
-gem 'puma', '~> 4.1'
+gem 'puma'
 # Use Redis adapter to run Action Cable in production
-gem 'redis', '~> 4.1.2'
+gem 'redis'
 # Redis gem for cache
 gem 'hiredis'
 # Use Active Model has_secure_password
-gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt'
 # provides a full set of stores (Cache, Session, HTTP Cache) for Ruby on Rails
 gem 'redis-rails'
 # Adds a Redis::Namespace class which can be used to namespace Redis keys
 gem 'redis-namespace'
 
 # Use Active Storage variant
-gem 'image_processing', '~> 1.2'
+gem 'image_processing', '~> 1.14'
 
 # Convert Video (from .mov to .mp4 by example)
-gem 'streamio-ffmpeg', '~> 3.0', '>= 3.0.2'
+gem 'streamio-ffmpeg'
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.4.2', require: false
+gem 'bootsnap', require: false
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'jwt'
@@ -39,7 +43,7 @@ gem 'rack-cors'
 gem 'addressable'
 
 # Active storage validation
-gem 'activestorage-validator', '~> 0.1.3'
+gem 'activestorage-validator'
 
 # Analyze image
 gem 'mini_magick'
@@ -51,11 +55,10 @@ gem 'useragent'
 gem 'kaminari'
 
 # Sidekiq
-gem 'sidekiq'
-# gem 'sidekiq-statistic'
+gem 'sidekiq', '~> 6'
 
 # Track changes
-gem 'paper_trail', '~> 11.1'
+gem 'paper_trail'
 
 # Simple Rest Client
 gem 'rest-client'
@@ -87,25 +90,25 @@ gem 'wkhtmltopdf-binary'
 
 # Generate circular chart PDFs
 gem 'prawn'
-gem 'prawn-svg'
+gem 'prawn-svg', '0.34.2'
 
 # Generate QrCode
 gem 'rqrcode', '~> 2.0'
 
 # Google Cloud storage
-gem 'google-cloud-storage', '~> 1.11', require: false
+gem 'google-cloud-storage', require: false
 
 # Aws sdk s3 for Cloudflare R2 object storage
-gem 'aws-sdk-s3', '~> 1.142'
+gem 'aws-sdk-s3', '1.142.0'
 
 # A fast JSON parser and Object marshaller as a Ruby gem.
 gem 'oj'
 
 # Zip gen
-gem 'rubyzip', '~> 2.3', '>= 2.3.2'
+gem 'rubyzip'
 
 # Manage money with rails
-gem 'money-rails', '~> 1.15'
+gem 'money-rails'
 
 # Stripe (payment webhook)
 gem 'stripe'

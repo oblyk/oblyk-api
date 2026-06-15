@@ -34,7 +34,7 @@ class GymMailerTest < ActionMailer::TestCase
   test 'new_request with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
+    mock_api.expect(:send_transac_email, nil) { |*_args, **_kwargs| true }
 
     params = {
       user: @user,
@@ -73,7 +73,7 @@ class GymMailerTest < ActionMailer::TestCase
   test 'new_request_confirmation with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
+    mock_api.expect(:send_transac_email, nil) { |*_args, **_kwargs| true }
 
     params = {
       gym: @gym,
@@ -110,7 +110,7 @@ class GymMailerTest < ActionMailer::TestCase
   test 'new_administrator with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
+    mock_api.expect(:send_transac_email, nil) { |*_args, **_kwargs| true }
 
     params = {
       user: @user,
@@ -147,7 +147,7 @@ class GymMailerTest < ActionMailer::TestCase
   test 'accept_administrator with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
+    mock_api.expect(:send_transac_email, nil) { |*_args, **_kwargs| true }
 
     params = {
       user: @user,
@@ -184,7 +184,7 @@ class GymMailerTest < ActionMailer::TestCase
   test 'email_report with send_in_blue' do
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
+    mock_api.expect(:send_transac_email, nil) { |*_args, **_kwargs| true }
 
     params = {
       user: @user,

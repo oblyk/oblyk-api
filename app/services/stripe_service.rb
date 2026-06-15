@@ -7,7 +7,7 @@ class StripeService
     stripe_checkout_session = StripeCheckoutSession.find_or_initialize_by checkout_session_id: checkout_session_id
     return false if stripe_checkout_session.processed?
 
-    checkout_session = Stripe::Checkout::Session.retrieve({ id: checkout_session_id, expand: ['line_items'] })
+    checkout_session = Stripe::Checkout::Session.retrieve(id: checkout_session_id, expand: ['line_items'])
 
     ActiveRecord::Base.transaction do
       # Update GymBillingAccount
@@ -42,7 +42,7 @@ class StripeService
 
   def self.deactivated_payment_link(payment_link_id)
     Stripe.api_key = ENV['STRIPE_API_KEY']
-    Stripe::PaymentLink.update(payment_link_id, { active: false })
+    Stripe::PaymentLink.update(payment_link_id, active: false)
   end
 
   def self.customer_subscription_update(event)

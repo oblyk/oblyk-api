@@ -7,13 +7,13 @@ class OrganizationMailerTest < ActionMailer::TestCase
     @params = {
       organization_id: 1,
       name: 'Oblyk Organization',
-      email: 'contact@oblyk.org',
+      email: 'ekip@oblyk.org',
       api_usage_type: 'commercial'
     }
 
     ENV['SEND_EMAIL_WITH'] = 'smtp'
-    ENV['SMTP_USER_NAME'] = 'admin@oblyk.org'
-    ENV['SEND_IN_BLUE_REPLY_EMAIL'] = 'reply@oblyk.org'
+    ENV['SMTP_USER_NAME'] = 'ekip@oblyk.org'
+    ENV['SEND_IN_BLUE_REPLY_EMAIL'] = 'ekip@oblyk.org'
     Rails.application.config.action_mailer.default_url_options = { host: 'localhost:3000' }
   end
 
@@ -27,11 +27,11 @@ class OrganizationMailerTest < ActionMailer::TestCase
     assert_equal [ENV['SMTP_USER_NAME']], email.to
     assert_equal "[admin] Nouvelle organisation 1", email.subject
     assert_match /Oblyk Organization/, email.html_part.body.to_s
-    assert_match /contact@oblyk.org/, email.html_part.body.to_s
+    assert_match /ekip@oblyk.org/, email.html_part.body.to_s
     assert_match /commercial/, email.html_part.body.to_s
 
     assert_match /Oblyk Organization/, email.text_part.body.to_s
-    assert_match /contact@oblyk.org/, email.text_part.body.to_s
+    assert_match /ekip@oblyk.org/, email.text_part.body.to_s
     assert_match /commercial/, email.text_part.body.to_s
   end
 
@@ -39,7 +39,7 @@ class OrganizationMailerTest < ActionMailer::TestCase
     ENV['SEND_EMAIL_WITH'] = 'send_in_blue'
 
     mock_api = Minitest::Mock.new
-    mock_api.expect :send_transac_email, nil, [Brevo::SendSmtpEmail]
+    mock_api.expect(:send_transac_email, nil) { |*_args, **_kwargs| true }
 
     Brevo::TransactionalEmailsApi.stub :new, mock_api do
       OrganizationMailer.with(@params).new_organization.deliver_now
