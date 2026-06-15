@@ -136,7 +136,6 @@ class DiscChartService
   # A white backing rect is drawn first so the QR is always legible regardless
   # of the slice fill color (including white slices).
   def qr_nested_svg(qr_svg, x, y, size)
-    qr_svg = qr_svg.gsub(/<\?xml[^?]*\?>\s*/, '')
     viewbox = qr_svg.match(/viewBox="([^"]+)"/i)&.captures&.first || '0 0 580 580'
     inner   = qr_svg.sub(/<svg[^>]*>/m, '').sub(%r{</svg>\s*\z}m, '').strip
     rx = x.round(2)
@@ -342,7 +341,7 @@ class DiscChartService
     pdf = Prawn::Document.new(page_size: 'A4', margin: 0)
     svg_list.each_with_index do |svg, idx|
       pdf.start_new_page if idx.positive?
-      pdf.svg(svg, at: [0, pdf.bounds.top], width: pdf.bounds.width, enable_web_requests: true)
+      pdf.svg(svg, at: [0, pdf.bounds.top], width: pdf.bounds.width)
     end
     StringIO.new(pdf.render)
   end

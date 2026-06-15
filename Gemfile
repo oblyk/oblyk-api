@@ -12,28 +12,28 @@ gem 'concurrent-ruby', '1.3.4'
 # DELETE THIS WHEN UPGRADE TO Ruby 3.*
 gem 'net-http', '~> 0.9.1'
 # Use sqlite3 as the database for Active Record
-gem 'mysql2'
+gem 'mysql2', '>= 0.4.4', '< 0.6.0'
 # Use Puma as the app server
-gem 'puma'
+gem 'puma', '~> 4.1'
 # Use Redis adapter to run Action Cable in production
-gem 'redis'
+gem 'redis', '~> 4.1.2'
 # Redis gem for cache
 gem 'hiredis'
 # Use Active Model has_secure_password
-gem 'bcrypt'
+gem 'bcrypt', '~> 3.1.7'
 # provides a full set of stores (Cache, Session, HTTP Cache) for Ruby on Rails
 gem 'redis-rails'
 # Adds a Redis::Namespace class which can be used to namespace Redis keys
 gem 'redis-namespace'
 
 # Use Active Storage variant
-gem 'image_processing', '~> 1.14'
+gem 'image_processing', '~> 1.2'
 
 # Convert Video (from .mov to .mp4 by example)
-gem 'streamio-ffmpeg'
+gem 'streamio-ffmpeg', '~> 3.0', '>= 3.0.2'
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', require: false
+gem 'bootsnap', '>= 1.4.2', require: false
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'jwt'
@@ -43,7 +43,7 @@ gem 'rack-cors'
 gem 'addressable'
 
 # Active storage validation
-gem 'activestorage-validator'
+gem 'activestorage-validator', '~> 0.1.3'
 
 # Analyze image
 gem 'mini_magick'
@@ -55,10 +55,11 @@ gem 'useragent'
 gem 'kaminari'
 
 # Sidekiq
-gem 'sidekiq', '~> 6'
+gem 'sidekiq'
+# gem 'sidekiq-statistic'
 
 # Track changes
-gem 'paper_trail'
+gem 'paper_trail', '~> 11.1'
 
 # Simple Rest Client
 gem 'rest-client'
@@ -90,25 +91,25 @@ gem 'wkhtmltopdf-binary'
 
 # Generate circular chart PDFs
 gem 'prawn'
-gem 'prawn-svg', '0.34.2'
+gem 'prawn-svg'
 
 # Generate QrCode
 gem 'rqrcode', '~> 2.0'
 
 # Google Cloud storage
-gem 'google-cloud-storage', require: false
+gem 'google-cloud-storage', '~> 1.11', require: false
 
 # Aws sdk s3 for Cloudflare R2 object storage
-gem 'aws-sdk-s3', '1.142.0'
+gem 'aws-sdk-s3', '~> 1.142'
 
 # A fast JSON parser and Object marshaller as a Ruby gem.
 gem 'oj'
 
 # Zip gen
-gem 'rubyzip'
+gem 'rubyzip', '~> 2.3', '>= 2.3.2'
 
 # Manage money with rails
-gem 'money-rails'
+gem 'money-rails', '~> 1.15'
 
 # Stripe (payment webhook)
 gem 'stripe'
