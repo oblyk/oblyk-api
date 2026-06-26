@@ -45,7 +45,7 @@ require 'capistrano/puma'
 require 'capistrano/sitemap_generator'
 
 install_plugin Capistrano::Puma
-install_plugin Capistrano::Puma::Daemon
+install_plugin Capistrano::Puma::Systemd
 install_plugin Capistrano::Sidekiq
 install_plugin Capistrano::Sidekiq::Systemd
 

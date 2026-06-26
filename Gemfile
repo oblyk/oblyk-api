@@ -145,8 +145,12 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
-  gem 'capistrano-sidekiq'
+  gem 'capistrano-sidekiq', '>= 3.0'
+  # Deployment whit ed25519
+  gem 'bcrypt_pbkdf'
+  gem 'ed25519'
 
+  # Bundler leak memory
   gem 'bundler-leak'
 end
 
