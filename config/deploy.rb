@@ -32,6 +32,9 @@ set :linked_files, fetch(:linked_files, []).push(
   'public/sitemap1.xml'
 )
 
+set :default_env, 'PATH' => '$HOME/.gem/bin:$PATH', 'GEM_HOME' => '$HOME/.gem', 'GEM_PATH' => '$HOME/.gem'
+set :init_system, :systemd
+
 set :puma_role, :web
 
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
