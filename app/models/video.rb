@@ -56,7 +56,7 @@ class Video < ApplicationRecord
     if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
       # Use CLOUDFLARE R2 CDN, AND CONVERT VIDEO IF IS VIDEO/QUICKTIME
       if needs_be_converted?
-        "#{ENV['CLOUDFLARE_R2_DOMAIN']}/cdn-cgi/media/mode=video,fit=scale-down,height=1920,width=1920/#{ENV['CLOUDFLARE_R2_DOMAIN']}/#{video_file.attachment.key}"
+        "#{ENV['CLOUDFLARE_R2_DOMAIN']}/cdn-cgi/media/mode=video,fit=scale-down,height=1920,width=1920/#{video_file.attachment.key}"
       else
         "#{ENV['CLOUDFLARE_R2_DOMAIN']}/#{video_file.attachment.key}"
       end
@@ -108,10 +108,14 @@ class Video < ApplicationRecord
     return nil unless video_service == 'oblyk_video'
     return nil unless video_file.attached?
 
-    rails_representation_url(
-      video_file.preview(resize_to_limit: [1000, 1000]).processed,
-      host: ENV['OBLYK_API_URL']
-    )
+    if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
+      "#{ENV['CLOUDFLARE_R2_DOMAIN']}/cdn-cgi/media/mode=frame,time=0s,width=1000,height=1000,fit=scale-down/#{video_file.attachment.key}"
+    else
+      rails_representation_url(
+        video_file.preview(resize_to_limit: [1000, 1000]).processed,
+        host: ENV['OBLYK_API_URL']
+      )
+    end
   end
 
   def init_embedded_code
