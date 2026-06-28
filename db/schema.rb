@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_06_12_143915) do
+ActiveRecord::Schema.define(version: 2026_06_28_150116) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -167,8 +167,10 @@ ActiveRecord::Schema.define(version: 2026_06_12_143915) do
     t.index ["climbing_session_id"], name: "index_ascents_on_climbing_session_id"
     t.index ["color_system_line_id"], name: "index_ascents_on_color_system_line_id"
     t.index ["crag_route_id"], name: "index_ascents_on_crag_route_id"
+    t.index ["created_at"], name: "index_ascents_on_created_at"
     t.index ["gym_id"], name: "index_ascents_on_gym_id"
     t.index ["gym_route_id"], name: "index_ascents_on_gym_route_id"
+    t.index ["released_at"], name: "index_ascents_on_released_at"
     t.index ["user_id"], name: "index_ascents_on_user_id"
   end
 
@@ -259,6 +261,7 @@ ActiveRecord::Schema.define(version: 2026_06_12_143915) do
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "moderated_at"
     t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id"
+    t.index ["created_at"], name: "index_comments_on_created_at"
     t.index ["reply_to_comment_id"], name: "index_comments_on_reply_to_comment_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
@@ -550,6 +553,7 @@ ActiveRecord::Schema.define(version: 2026_06_12_143915) do
     t.json "votes"
     t.index ["crag_id"], name: "index_crag_routes_on_crag_id"
     t.index ["crag_sector_id"], name: "index_crag_routes_on_crag_sector_id"
+    t.index ["created_at"], name: "index_crag_routes_on_created_at"
     t.index ["name"], name: "index_crag_routes_on_name"
     t.index ["photo_id"], name: "index_crag_routes_on_photo_id"
     t.index ["user_id"], name: "index_crag_routes_on_user_id"
@@ -648,6 +652,7 @@ ActiveRecord::Schema.define(version: 2026_06_12_143915) do
     t.integer "max_approach_time"
     t.integer "ascent_users_count", default: 0
     t.integer "ascents_count", default: 0
+    t.index ["created_at"], name: "index_crags_on_created_at"
     t.index ["department_id"], name: "index_crags_on_department_id"
     t.index ["name"], name: "index_crags_on_name"
     t.index ["photo_id"], name: "index_crags_on_photo_id"
@@ -732,6 +737,7 @@ ActiveRecord::Schema.define(version: 2026_06_12_143915) do
     t.integer "comments_count"
     t.string "funding_status"
     t.bigint "next_guide_book_paper_id"
+    t.index ["created_at"], name: "index_guide_book_papers_on_created_at"
     t.index ["next_guide_book_paper_id"], name: "index_guide_book_papers_on_next_guide_book_paper_id"
     t.index ["user_id"], name: "index_guide_book_papers_on_user_id"
   end
@@ -747,6 +753,7 @@ ActiveRecord::Schema.define(version: 2026_06_12_143915) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["crag_id"], name: "index_guide_book_pdfs_on_crag_id"
+    t.index ["created_at"], name: "index_guide_book_pdfs_on_created_at"
     t.index ["user_id"], name: "index_guide_book_pdfs_on_user_id"
   end
 
@@ -760,6 +767,7 @@ ActiveRecord::Schema.define(version: 2026_06_12_143915) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["crag_id"], name: "index_guide_book_webs_on_crag_id"
+    t.index ["created_at"], name: "index_guide_book_webs_on_created_at"
     t.index ["user_id"], name: "index_guide_book_webs_on_user_id"
   end
 
@@ -978,6 +986,7 @@ ActiveRecord::Schema.define(version: 2026_06_12_143915) do
     t.integer "anchor_number"
     t.integer "sub_level"
     t.integer "sub_level_max"
+    t.index ["created_at"], name: "index_gym_routes_on_created_at"
     t.index ["gym_route_cover_id"], name: "index_gym_routes_on_gym_route_cover_id"
     t.index ["gym_sector_id"], name: "index_gym_routes_on_gym_sector_id"
   end
@@ -1120,6 +1129,7 @@ ActiveRecord::Schema.define(version: 2026_06_12_143915) do
     t.string "gym_type"
     t.bigint "gym_billing_account_id"
     t.string "insee_code"
+    t.index ["created_at"], name: "index_gyms_on_created_at"
     t.index ["department_id"], name: "index_gyms_on_department_id"
     t.index ["gym_billing_account_id"], name: "index_gyms_on_gym_billing_account_id"
     t.index ["name"], name: "index_gyms_on_name"
@@ -1298,6 +1308,7 @@ ActiveRecord::Schema.define(version: 2026_06_12_143915) do
     t.datetime "posted_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["created_at"], name: "index_photos_on_created_at"
     t.index ["illustrable_type", "illustrable_id"], name: "index_photos_on_illustrable_type_and_illustrable_id"
     t.index ["user_id"], name: "index_photos_on_user_id"
   end
@@ -1530,6 +1541,7 @@ ActiveRecord::Schema.define(version: 2026_06_12_143915) do
     t.datetime "partner_notified_at"
     t.json "email_notifiable_list"
     t.string "ws_token"
+    t.index ["created_at"], name: "index_users_on_created_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["uuid"], name: "index_users_on_uuid", unique: true
     t.index ["ws_token"], name: "index_users_on_ws_token", unique: true
@@ -1558,6 +1570,7 @@ ActiveRecord::Schema.define(version: 2026_06_12_143915) do
     t.bigint "legacy_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["created_at"], name: "index_videos_on_created_at"
     t.index ["user_id"], name: "index_videos_on_user_id"
     t.index ["viewable_type", "viewable_id"], name: "index_videos_on_viewable_type_and_viewable_id"
   end
