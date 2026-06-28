@@ -156,6 +156,8 @@ module Api
                 else
                   User.find_by slug_name: params[:id]
                 end
+
+        head :not_found unless @user
       end
 
       def set_outdoor_ascents
