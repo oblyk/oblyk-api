@@ -103,17 +103,16 @@ module Api
         max_ascent_by_users = Ascent.from("(#{from_ascents.to_sql}) AS ascents").where('rn = 1')
 
         max_ascent_by_users = max_ascent_by_users.map do |ascent|
+          ascent_text, ascent_background_color = nil
           if ascent.max_grade_value.present?
             ascent_text = ascent.max_grade_text
             ascent_background_color = Grade::GRADES_COLOR[ascent.max_grade_value - 1]
           elsif ascent.gym_route_id.present?
-            ascent_text = nil
             ascent_background_color = ascent.gym_route.level_color
           elsif ascent.color_system_line_id.present?
-            ascent_text = nil
             ascent_background_color = ascent.color_system_line.hex_color
           end
-          ascent_text_color = Color.black_or_white_rgb(ascent_background_color)
+          ascent_text_color = Color.black_or_white_rgb(ascent_background_color) if ascent_background_color.present?
           released_at_is = if ascent.released_at.today?
                              'today'
                            elsif ascent.released_at == Date.current.yesterday
