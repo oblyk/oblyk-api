@@ -126,8 +126,8 @@ module Api
           climbing_type = gym_level.climbing_type
           chart_templates[climbing_type] = {
             climbing_type: climbing_type,
-            data: nil,
-            colors: nil,
+            data: [],
+            colors: [],
             grade_system: nil,
             min: nil,
             have_levels: false
@@ -172,6 +172,8 @@ module Api
                         elsif chart_templates[climbing_type][:have_levels]
                           ascent.gym_route.level_index
                         else
+                          next if chart_templates[climbing_type][:grade_system].blank?
+
                           Grade.range_values(chart_templates[climbing_type][:grade_system].to_sym).find_index(ascent.gym_route.min_grade_value - 1)
                         end
           scores[user_key][:charts][climbing_type][:data][grade_value] += 1 if grade_value.present?
