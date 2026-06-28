@@ -1,0 +1,9 @@
+### Get drome departements
+GET {{api_url}}/public/countries/fr/departments/26.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json
+
+### Get undefined departements
+GET {{api_url}}/public/countries/fr/departments/undefined.json
+HttpApiAccessToken: {{api_access_token}}
+Accept: application/json

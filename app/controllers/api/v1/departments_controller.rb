@@ -71,10 +71,13 @@ module Api
 
       def set_country
         @country = Country.find_by code_country: params[:country_id]
+        head :not_found unless @country
       end
 
       def set_department
-        @department = @country.departments.find_by department_number: params[:id]
+        @department = @country&.departments&.find_by department_number: params[:id]
+
+        head :not_found unless @department
       end
     end
   end
