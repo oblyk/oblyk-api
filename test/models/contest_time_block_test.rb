@@ -36,17 +36,18 @@ class ContestTimeBlockTest < ActiveSupport::TestCase
 
   test 'normalize_attributes sets dates from contest if one day event' do
     contest = @time_block.contest
+    new_date = DateTime.current + 15.days
     contest.update(
-      start_date: '2026-07-01',
-      end_date: '2026-07-01'
+      start_date: new_date.to_date,
+      end_date: new_date.to_date
     )
     assert contest.one_day_event?
 
     new_time_block = ContestTimeBlock.new(
       contest_wave: @wave,
       contest_route_group: @route_group,
-      start_time: '2026-07-01 10:00:00',
-      end_time: '2026-07-01 12:00:00'
+      start_time: new_date.beginning_of_day + 10.hours,
+      end_time: new_date.beginning_of_day + 12.hours
     )
     new_time_block.valid?
     assert_equal contest.start_date, new_time_block.start_date
