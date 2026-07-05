@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Crag < ApplicationRecord
-  include Searchable
   include Geolocable
   include SoftDeletable
   include Slugable
@@ -9,6 +8,18 @@ class Crag < ApplicationRecord
   include RouteFigurable
   include Elevable
   include AttachmentResizable
+  include MeiliSearch::Rails
+
+  meilisearch synchronous: Rails.env.test? do
+    attribute %i[name city latitude longitude]
+    attribute :areas_name do
+      areas.map(&:name).join(' ')
+    end
+
+    searchable_attributes %i[name city areas_name]
+    filterable_attributes %i[latitude longitude]
+    sortable_attributes %i[latitude longitude]
+  end
 
   has_paper_trail only: %i[
     name
@@ -324,13 +335,6 @@ class Crag < ApplicationRecord
   end
 
   private
-
-  def search_indexes
-    [
-      { value: name, column_names: %i[name] },
-      { value: city, column_names: %i[city] }
-    ]
-  end
 
   def validate_rocks
     self.rocks ||= []

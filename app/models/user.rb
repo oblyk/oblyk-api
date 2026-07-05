@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  include Searchable
   include AttachmentResizable
   include StripTagable
   include Emailable
+  include MeiliSearch::Rails
+
+  meilisearch synchronous: Rails.env.test? do
+    attribute %i[first_name last_name]
+    searchable_attributes %i[first_name last_name]
+  end
 
   PASSWORD_FORMAT = /\A
       (?=.{8,128}) # Must contain 8 or more characters

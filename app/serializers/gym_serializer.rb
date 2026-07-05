@@ -24,6 +24,8 @@ class GymSerializer < BaseSerializer
              :region,
              :address,
              :postal_code,
+             :climbing_types,
+             :climbable_types,
              :sport_climbing,
              :bouldering,
              :pan,

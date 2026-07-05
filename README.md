@@ -65,15 +65,14 @@ Sidekiq user and password is configured in `config/local_env.yml`
 
 ## Helpers
 
-### Recreate the search base
-```shell
-bundle exec rake search_tasks:import["Crag"]
-bundle exec rake search_tasks:import["CragRoute"]
-bundle exec rake search_tasks:import["GuideBookPaper"]
-bundle exec rake search_tasks:import["Area"]
-bundle exec rake search_tasks:import["Gym"]
-bundle exec rake search_tasks:import["Word"]
-bundle exec rake search_tasks:import["User"]
+### (re)Create MeiliSearch index
+Dans une console rails `rails c`
+```ruby
+[GuideBookPaper, Area, Gym, Word, User].each do |klass|
+  klass.ms_reindex!
+end
+Crag.includes(:areas).ms_reindex!
+CragRoute.joins(:crag, :crag_sector).includes(:crag, :crag_sector).ms_reindex!
 ```
 
 ### Generate API documentation

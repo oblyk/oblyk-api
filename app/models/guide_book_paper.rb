@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
 class GuideBookPaper < ApplicationRecord
-  include Searchable
   include Slugable
   include AttachmentResizable
+  include MeiliSearch::Rails
+
+  meilisearch synchronous: Rails.env.test? do
+    searchable_attributes %i[name]
+  end
 
   has_paper_trail only: %i[
     name
@@ -188,10 +192,6 @@ class GuideBookPaper < ApplicationRecord
   end
 
   private
-
-  def search_indexes
-    [{ value: name, column_names: %i[name] }]
-  end
 
   def historize_around_towns
     cover_change = cover.attached? && cover.attachment.created_at > (Time.current - 5.minutes)

@@ -36,9 +36,6 @@ Rails.application.routes.draw do
         put 'new_password', controller: :password, action: :update
         delete 'sign_in', controller: :signin, action: :destroy
       end
-      get 'search', controller: :searches, action: :index
-      get 'search_all', controller: :searches, action: :search_all
-      get 'search_around', controller: :searches, action: :search_around
 
       get 'figures', controller: :commons, action: :figures
       get 'micro_stats', controller: :commons, action: :micro_stats

@@ -44,7 +44,8 @@ module Api
         ascents_count = AscentCragRoute.where(user_id: @current_user.id).count
         min_max = AscentCragRoute.select('MIN(min_grade_value) AS min_grade_value, MAX(max_grade_value) AS max_grade_value').find_by(user_id: @current_user.id) if ascents_count.positive?
 
-        crag_routes = CragRoute.where('EXISTS (SELECT * FROM follows WHERE followable_type = "Crag" AND followable_id = crag_routes.crag_id AND follows.user_id = :user_id)', user_id: @current_user.id)
+        crag_routes = CragRoute.includes(:crag_sector, :crag)
+                               .where('EXISTS (SELECT * FROM follows WHERE followable_type = "Crag" AND followable_id = crag_routes.crag_id AND follows.user_id = :user_id)', user_id: @current_user.id)
                                .where.not('EXISTS (SELECT * FROM ascents WHERE ascents.crag_route_id = crag_routes.id AND ascents.user_id = :user_id)', user_id: @current_user.id)
         crag_routes = crag_routes.where(max_grade_value: [min_max[:min_grade_value]..min_max[:max_grade_value] + 1]) if min_max
         crag_routes = crag_routes.order(Arel.sql('ascent_users_count DESC, note_count DESC'))
@@ -55,15 +56,38 @@ module Api
       end
 
       def search
-        query = params[:query]
-        crag_routes = if @crag_sector
-                        CragRoute.search_in_crag_sector(query, @crag_sector.id)
-                      elsif @crag
-                        CragRoute.search_in_crag(query, @crag.id)
-                      else
-                        CragRoute.search(query)
-                      end
-        render json: routes_summary(crag_routes), status: :ok
+        query = params.fetch(:query, nil)
+        head :no_content && return if query.blank?
+
+        page = params.fetch(:page, 1).to_i
+        per_page = params.fetch(:per_page, 25).to_i
+
+        hits = CragRoute.includes(:crag_sector, crag: { static_map_attachment: :blob, static_map_banner_attachment: :blob })
+        hits = if @crag_sector
+                 hits.search(query, filter: "crag_sector_id = #{@crag_sector.id}", page: page, hits_per_page: per_page)
+               elsif @crag
+                 hits.search(query, filter: "crag_id = #{@crag.id}", page: page, hits_per_page: per_page)
+               else
+                 hits.search(query, page: page, hits_per_page: per_page)
+               end
+
+        serializer = serializer(
+          CragRouteSerializer,
+          hits,
+          {
+            include: %i[crag crag_sector],
+            params: { include_attachments: { CragRoute: %i[thumbnail] } },
+            meta: {
+              query: query,
+              current_page: hits.current_page,
+              total_pages: hits.total_pages,
+              total_count: hits.total_count,
+              next_page: hits.next_page,
+              prev_page: hits.prev_page
+            }
+          }
+        )
+        render json: serializer, status: :ok
       end
 
       def search_by_grades

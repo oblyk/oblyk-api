@@ -17,11 +17,11 @@ module Api
       end
 
       test 'should search words' do
-        Search.create!(index_name: 'a-doigts', index_id: @word.id, collection: 'Word')
+        @word.index!
         get search_api_v1_words_url(query: 'doigts'), headers: @api_headers, as: :json
         assert_response :success
         json_response = JSON.parse(response.body)
-        assert(json_response.any? { |w| w['name'] == @word.name })
+        assert(json_response['data'].any? { |w| w['attributes']['name'] == @word.name })
       end
 
       test 'should show word' do

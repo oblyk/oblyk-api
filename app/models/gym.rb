@@ -3,11 +3,15 @@
 class Gym < ApplicationRecord
   include Geolocable
   include SoftDeletable
-  include Searchable
   include Slugable
   include AttachmentResizable
   include StripTagable
   include Emailable
+  include MeiliSearch::Rails
+
+  meilisearch synchronous: Rails.env.test? do
+    searchable_attributes %i[name city big_city]
+  end
 
   has_paper_trail only: %i[
     name
@@ -134,6 +138,24 @@ class Gym < ApplicationRecord
     key
   end
 
+  def climbing_types
+    types = []
+    types << 'bouldering' if bouldering?
+    types << 'sport_climbing' if sport_climbing?
+    types << 'pan' if pan?
+    types << 'fun_climbing' if fun_climbing?
+    types << 'training_space' if training_space?
+    types
+  end
+
+  def climbable_types
+    types = []
+    types << 'bouldering' if bouldering?
+    types << 'sport_climbing' if sport_climbing?
+    types << 'pan' if pan?
+    types
+  end
+
   def logo_attachment_object
     attachment_object(logo)
   end
@@ -168,6 +190,8 @@ class Gym < ApplicationRecord
         region: region,
         address: address,
         postal_code: postal_code,
+        climbing_types: climbing_types,
+        climbable_types: climbable_types,
         sport_climbing: sport_climbing,
         bouldering: bouldering,
         pan: pan,
@@ -346,14 +370,6 @@ class Gym < ApplicationRecord
       likes_count: sorts_by['has_likes']&.positive?,
       comments_count: sorts_by['has_comments']&.positive?
     }
-  end
-
-  def search_indexes
-    [
-      { value: name, column_names: %i[name] },
-      { value: city, column_names: %i[city] },
-      { value: big_city, column_names: %i[big_city] }
-    ]
   end
 
   def historize_around_towns

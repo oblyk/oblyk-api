@@ -15,4 +15,8 @@ class UserSerializer < BaseSerializer
   def self.avatar_attachment(object)
     object.attachment_object(object.avatar)
   end
+
+  def self.banner_attachment(object)
+    object.attachment_object(object.banner)
+  end
 end

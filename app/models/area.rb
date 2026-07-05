@@ -2,8 +2,12 @@
 
 class Area < ApplicationRecord
   include Slugable
-  include Searchable
   include AttachmentResizable
+  include MeiliSearch::Rails
+
+  meilisearch synchronous: Rails.env.test? do
+    searchable_attributes %i[name]
+  end
 
   belongs_to :user, optional: true
   belongs_to :photo, optional: true
@@ -81,11 +85,5 @@ class Area < ApplicationRecord
         }
       }
     )
-  end
-
-  private
-
-  def search_indexes
-    [{ value: name, column_names: %i[name] }]
   end
 end

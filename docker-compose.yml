@@ -4,7 +4,7 @@ services:
   redis:
     image: redis:5.0
     ports:
-      - 16379:6379
+      - "16379:6379"
     volumes:
       - data-redis:/data
   mysql:
@@ -16,9 +16,20 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
       - data-mysql:/var/lib/mysql
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    ports:
+      - "17700:7700"
+    environment:
+      - MEILI_ENV=development
+      - MEILI_NO_ANALYTICS=true
+    volumes:
+      - data-meilisearch:/meili_data
 
 volumes:
   data-redis:
     name: oblyk-api-data-redis
   data-mysql:
     name: oblyk-api-data-mysql
+  data-meilisearch:
+    name: oblyk-api-data-meilisearch

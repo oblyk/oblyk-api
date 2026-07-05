@@ -2,8 +2,13 @@
 
 class Word < ApplicationRecord
   include Slugable
-  include Searchable
   include StripTagable
+  include MeiliSearch::Rails
+
+  meilisearch synchronous: Rails.env.test? do
+    attribute %i[name definition]
+    searchable_attributes %i[name definition]
+  end
 
   has_paper_trail only: %i[name definition], if: proc { |_obj| ENV['PAPER_TRAIL'] == 'true' }
 

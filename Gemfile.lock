@@ -192,6 +192,9 @@ GEM
     http-accept (1.7.0)
     http-cookie (1.1.6)
       domain_name (~> 0.5)
+    httparty (0.21.0)
+      mini_mime (>= 1.0.0)
+      multi_xml (>= 0.5.2)
     httpclient (2.9.0)
       mutex_m
     i18n (1.14.8)
@@ -238,6 +241,10 @@ GEM
       net-smtp
     marcel (1.2.1)
     matrix (0.4.3)
+    meilisearch (0.26.0)
+      httparty (>= 0.17.1, < 0.22.0)
+    meilisearch-rails (0.13.1)
+      meilisearch (~> 0.26.0)
     method_source (1.1.0)
     mime-types (3.7.0)
       logger
@@ -259,6 +266,7 @@ GEM
       railties (>= 3.0)
     msgpack (1.8.3)
     multi_json (1.15.0)
+    multi_xml (0.6.0)
     mutex_m (0.3.0)
     mysql2 (0.5.7)
       bigdecimal
@@ -526,6 +534,7 @@ DEPENDENCIES
   letter_opener
   levenshtein-ffi
   listen (~> 3.2)
+  meilisearch-rails (>= 0.13.1)
   mini_magick
   money-rails
   mysql2

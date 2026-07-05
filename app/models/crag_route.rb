@@ -2,9 +2,23 @@
 
 class CragRoute < ApplicationRecord
   include SoftDeletable
-  include Searchable
   include Slugable
   include AttachmentResizable
+  include MeiliSearch::Rails
+
+  meilisearch synchronous: Rails.env.test? do
+    attribute %i[name crag_id crag_sector_id min_grade_value]
+    attribute :crag_name do
+      crag.name
+    end
+    attribute :sector_name do
+      crag_sector&.name
+    end
+
+    searchable_attributes %i[name crag_name sector_name]
+    filterable_attributes %i[crag_id crag_sector_id]
+    sortable_attributes %i[min_grade_value]
+  end
 
   attr_accessor :skip_update_gap_grade, :crag_name, :crag_slug_name
 
@@ -65,14 +79,6 @@ class CragRoute < ApplicationRecord
     else
       min_grade_text
     end
-  end
-
-  def self.search_in_crag(query, crag_id)
-    search(query, "CragRoute_in_Crag_#{crag_id}")
-  end
-
-  def self.search_in_crag_sector(query, crag_sector_id)
-    search(query, "CragRoute_in_CragSector_#{crag_sector_id}")
   end
 
   def set_location!
@@ -254,18 +260,6 @@ class CragRoute < ApplicationRecord
   end
 
   private
-
-  def search_indexes
-    secondary_bucket = crag_sector.present? ? "CragRoute_in_CragSector_#{crag_sector.id}" : nil
-    [
-      {
-        value: name,
-        bucket: "CragRoute_in_Crag_#{crag.id}",
-        secondary_bucket: secondary_bucket,
-        column_names: %i[name crag_id]
-      }
-    ]
-  end
 
   def historize_location
     self.location = [latitude, longitude]
