@@ -11,11 +11,12 @@ module Api
       end
 
       test 'should search towns' do
+        @town.index!
         get search_api_v1_towns_url(query: 'Valence'), headers: @headers
         assert_response :success
         json_response = JSON.parse(response.body)
-        assert_kind_of Array, json_response
-        assert json_response.any? { |town| town['name'] == 'Valence' }
+        assert_kind_of Hash, json_response
+        assert(json_response['data'].any? { |w| w['attributes']['name'] == 'Valence' })
       end
 
       test 'should get towns by geo search' do

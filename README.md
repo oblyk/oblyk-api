@@ -73,6 +73,7 @@ Dans une console rails `rails c`
 end
 Crag.includes(:areas).ms_reindex!
 CragRoute.joins(:crag, :crag_sector).includes(:crag, :crag_sector).ms_reindex!
+Town.includes(:department).ms_reindex!
 ```
 
 ### Generate API documentation

@@ -76,9 +76,6 @@ gem 'sitemap_generator'
 # Dalli for memcached
 gem 'dalli'
 
-# Levenshtein in C
-gem 'levenshtein-ffi', require: 'levenshtein'
-
 # MeiliSearch
 gem 'meilisearch-rails', '>= 0.13.1'
 

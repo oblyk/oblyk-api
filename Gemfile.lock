@@ -224,8 +224,6 @@ GEM
       addressable (~> 2.7)
     letter_opener (1.7.0)
       launchy (~> 2.2)
-    levenshtein-ffi (1.1.0)
-      ffi (~> 1.9)
     listen (3.5.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -532,7 +530,6 @@ DEPENDENCIES
   jwt
   kaminari
   letter_opener
-  levenshtein-ffi
   listen (~> 3.2)
   meilisearch-rails (>= 0.13.1)
   mini_magick

@@ -10,10 +10,15 @@ class Department < ApplicationRecord
   has_many :gyms
   has_many :crag_routes, through: :crags
 
+  def app_path
+    "/escalade-en/france/#{department_number}/#{slug_name}"
+  end
+
   def summary_to_json
     Rails.cache.fetch("#{cache_key_with_version}/summary_department", expires_in: 28.days) do
       {
         id: id,
+        app_path: app_path,
         name: name,
         slug_name: slug_name,
         department_number: department_number,

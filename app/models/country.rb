@@ -8,11 +8,16 @@ class Country < ApplicationRecord
   has_many :crag_routes, through: :crags
   has_many :gyms, through: :departments
 
+  def app_path
+    "/escalade-en/#{slug_name}"
+  end
+
   def summary_to_json
     Rails.cache.fetch("#{cache_key_with_version}/summary_country", expires_in: 28.days) do
       {
         id: id,
         name: name,
+        app_path: app_path,
         code_country: code_country,
         slug_name: slug_name
       }

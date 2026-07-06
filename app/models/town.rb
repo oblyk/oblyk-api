@@ -4,6 +4,21 @@ class Town < ApplicationRecord
   include Geolocable
   include RouteFigurable
   include AttachmentResizable
+  include MeiliSearch::Rails
+
+  meilisearch synchronous: Rails.env.test? do
+    attribute %i[name zipcode latitude longitude department_id]
+    attribute :department_name do
+      department&.name
+    end
+    attribute :country_id do
+      department&.country_id
+    end
+
+    searchable_attributes %i[name zipcode department_name]
+    filterable_attributes %i[latitude longitude department_id country_id]
+    sortable_attributes %i[latitude longitude]
+  end
 
   belongs_to :department
   has_one :country, through: :department
@@ -35,11 +50,16 @@ class Town < ApplicationRecord
     Gym.geo_search(latitude, longitude, dist_around)
   end
 
+  def app_path
+    "/escalade-autour-de/#{slug_name}"
+  end
+
   def summary_to_json
     Rails.cache.fetch("#{cache_key_with_version}/summary_town", expires_in: 28.days) do
       {
         id: id,
         name: name,
+        app_path: app_path,
         slug_name: slug_name,
         latitude: latitude,
         longitude: longitude,

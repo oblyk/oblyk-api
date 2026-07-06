@@ -6,29 +6,36 @@ module Api
       before_action :set_town, only: %i[show geo_json]
 
       def search
-        query = params[:query].parameterize
-        towns = Town
-        Search.ngram_splitter(query, 4).each_with_index do |word, index|
-          towns = towns.where('slug_name LIKE ?', "%#{word}%") if index.zero?
-          towns = towns.or(Town.where('slug_name LIKE ?', "%#{word}%")) if index.positive?
-        end
-        towns = towns.includes(department: :country)
+        query = params.fetch(:query, nil)
+        head :no_content && return if query.blank?
 
-        levenshtein_results = []
-        towns.each do |town|
-          levenshtein_score = Levenshtein.distance(town.slug_name, query)
+        page = params.fetch(:page, 1).to_i
+        per_page = params.fetch(:per_page, 25).to_i
+        department_id = params.fetch(:department_id, nil)
 
-          levenshtein_results << { town: town, levenshtein_score: levenshtein_score }
-        end
+        hits = Town.includes(department: :country)
+        hits = if department_id.present?
+                 hits.search(query, filter: "department_id = #{department_id}", page: page, hits_per_page: per_page)
+               else
+                 hits.search(query, page: page, hits_per_page: per_page)
+               end
 
-        levenshtein_results.sort_by! { |levenshtein_result| levenshtein_result[:levenshtein_score] }
-        results = []
-        levenshtein_results.each_with_index do |levenshtein_result, index|
-          results << levenshtein_result[:town].summary_to_json
-          break if index > 24
-        end
-
-        render json: results, status: :ok
+        serializer = serializer(
+          TownSerializer,
+          hits,
+          {
+            include: %i[department],
+            meta: {
+              query: query,
+              current_page: hits.current_page,
+              total_pages: hits.total_pages,
+              total_count: hits.total_count,
+              next_page: hits.next_page,
+              prev_page: hits.prev_page
+            }
+          }
+        )
+        render json: serializer, status: :ok
       end
 
       def geo_search
