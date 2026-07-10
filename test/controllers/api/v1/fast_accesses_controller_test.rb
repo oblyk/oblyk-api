@@ -54,6 +54,7 @@ module Api
 
         participant = ContestParticipant.new(
           user: @user,
+          contest: contest,
           contest_category: category,
           first_name: @user.first_name,
           last_name: @user.last_name,

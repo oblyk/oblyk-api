@@ -1,14 +1,17 @@
 route_1:
+  contest: contest_1
   contest_route_group: route_group_1
   number: 1
   fixed_points: 1000
 
 route_2:
+  contest: contest_1
   contest_route_group: route_group_1
   number: 2
   fixed_points: 1100
 
 route_3:
+  contest: contest_1
   contest_route_group: route_group_2
   number: 1
   fixed_points: 1000

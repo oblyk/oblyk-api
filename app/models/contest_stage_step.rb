@@ -4,13 +4,14 @@ class ContestStageStep < ApplicationRecord
   include Slugable
 
   belongs_to :contest_stage
-  has_one :contest, through: :contest_stage
+  belongs_to :contest
   has_one :gym, through: :contest
   has_many :contest_route_groups, dependent: :destroy
   has_many :contest_routes, through: :contest_route_groups
   has_many :contest_participant_steps, dependent: :destroy
   has_many :contest_participants, through: :contest_participant_steps
 
+  before_validation :set_contest
   before_validation :set_order
   after_save :delete_caches
   after_destroy :delete_caches
@@ -74,6 +75,10 @@ class ContestStageStep < ApplicationRecord
   end
 
   private
+
+  def set_contest
+    self.contest ||= contest_stage.contest
+  end
 
   def set_order
     return unless new_record?

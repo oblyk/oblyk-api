@@ -9,13 +9,14 @@ class ContestParticipant < ApplicationRecord
   belongs_to :contest_wave, optional: true
   belongs_to :user, optional: true
   belongs_to :contest_team, optional: true
+  belongs_to :contest
   has_one :gym, through: :contest_category
-  has_one :contest, through: :contest_category
 
   has_many :contest_participant_ascents, dependent: :destroy
   has_many :contest_participant_steps, dependent: :destroy
   has_many :contest_stage_steps, through: :contest_participant_steps
 
+  before_validation :set_contest
   before_validation :normalize_values
   before_validation :set_token
 
@@ -206,13 +207,17 @@ class ContestParticipant < ApplicationRecord
           next unless genre == contest_route_group.genre_type || contest_route_group.genre_type == 'unisex'
           next unless contest_route_group.contest_route_group_categories.pluck(:contest_category_id).include?(contest_category_id)
 
-          ContestParticipantStep.find_or_create_by(contest_participant_id: id, contest_stage_step_id: contest_stage_step.id)
+          ContestParticipantStep.find_or_create_by(contest_participant: self, contest_stage_step: contest_stage_step)
         end
       end
     end
   end
 
   private
+
+  def set_contest
+    self.contest ||= contest_category.contest
+  end
 
   def delete_caches
     contest.contest_categories.each(&:delete_summary_cache)

@@ -1,10 +1,12 @@
 step_1_stage_1:
+  contest: contest_1
   contest_stage: stage_1
   name: "Groupe 1"
   step_order: 1
   ranking_type: division
 
 step_2_stage_1:
+  contest: contest_1
   contest_stage: stage_1
   name: "Groupe 2"
   step_order: 2

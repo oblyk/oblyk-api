@@ -6,9 +6,9 @@ class ContestRoute < ApplicationRecord
   has_one_attached :picture
   belongs_to :gym_route, optional: true
   belongs_to :contest_route_group
+  belongs_to :contest
   has_one :contest_stage_step, through: :contest_route_group
   has_one :contest_stage, through: :contest_stage_step
-  has_one :contest, through: :contest_stage
   has_many :contest_participant_ascents, dependent: :destroy
   has_many :contest_participant_ascents, dependent: :destroy
   has_many :contest_judge_routes, dependent: :destroy
@@ -17,6 +17,7 @@ class ContestRoute < ApplicationRecord
   validates :number, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :number_of_holds, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_blank: true
 
+  before_validation :set_contest
   after_save :delete_caches
   after_destroy :delete_caches
 
@@ -74,6 +75,10 @@ class ContestRoute < ApplicationRecord
   end
 
   private
+
+  def set_contest
+    self.contest ||= contest_route_group.contest
+  end
 
   def delete_caches
     contest_stage_step.delete_summary_cache

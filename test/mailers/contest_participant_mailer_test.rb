@@ -12,16 +12,36 @@ class ContestParticipantMailerTest < ActionMailer::TestCase
       end_date: Date.current
     )
     @contest.save(validate: false)
+    contest_category = ContestCategory.create!(
+      contest: @contest,
+      auto_distribute: false,
+      name: 'Loisir'
+    )
+    contest_stage = ContestStage.create!(
+      contest: @contest,
+      climbing_type: Climb::BOULDERING
+    )
+    contest_stage_step = ContestStageStep.create!(
+      name: 'Qualification',
+      ranking_type: ContestService::Constant::DIVISION_AND_ZONE,
+      contest_stage: contest_stage
+    )
+    ContestRouteGroup.create!(
+      genre_type: 'unisex',
+      contest_stage_step: contest_stage_step,
+      contest_categories: [contest_category]
+    )
 
-    @contest_participant = ContestParticipant.new(
+    @contest_participant = ContestParticipant.create!(
       first_name: 'Lucien',
       last_name: 'Durand',
+      genre: 'male',
+      date_of_birth: Date.current - 42.years,
       email: 'lucien@durand.fr',
       token: 'fake-token-123',
-      contest: @contest,
+      contest_category: contest_category,
       skip_subscription_mail: true
     )
-    @contest_participant.save(validate: false)
 
     ENV['SEND_EMAIL_WITH'] = 'smtp'
     Rails.application.config.action_mailer.default_url_options = { host: 'localhost:3000' }

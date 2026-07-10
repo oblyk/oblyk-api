@@ -6,6 +6,7 @@ participant_1:
   contest_category: category_senior
   contest_team: team_1
   contest_wave: wave_1
+  contest: contest_1
   token: "jean.abc"
 
 participant_2:
@@ -16,4 +17,5 @@ participant_2:
   contest_category: category_u18
   contest_team: team_1
   contest_wave: wave_1
+  contest: contest_1
   token: "marie.def"

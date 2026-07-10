@@ -3,11 +3,12 @@
 class ContestParticipantAscent < ApplicationRecord
   belongs_to :contest_participant
   belongs_to :contest_route
+  belongs_to :contest
   has_one :contest_category, through: :contest_participant
-  has_one :contest, through: :contest_category
 
   self.skip_time_zone_conversion_for_attributes = [:ascent_time]
 
+  before_validation :set_contest
   before_validation :normalize_attributes
 
   before_save :set_registered_at
@@ -40,6 +41,10 @@ class ContestParticipantAscent < ApplicationRecord
   end
 
   private
+
+  def set_contest
+    self.contest ||= contest_participant.contest
+  end
 
   def delete_caches
     contest.delete_results_cache

@@ -54,21 +54,21 @@ class ContestParticipantAscentTest < ActiveSupport::TestCase
 
   test 'delete_results_cache is called after update' do
     mock_contest = Minitest::Mock.new
-    mock_contest.expect :delete_results_cache, true
+    mock_contest.expect :call, true
 
-    @ascent.stub :contest, mock_contest do
+    @ascent.contest.stub :delete_results_cache, mock_contest do
       @ascent.update(realised: false)
     end
-    assert_mock mock_contest
+    mock_contest.verify
   end
 
   test 'delete_results_cache is called after destroy' do
     mock_contest = Minitest::Mock.new
-    mock_contest.expect :delete_results_cache, true
+    mock_contest.expect :call, true
 
-    @ascent.stub :contest, mock_contest do
+    @ascent.contest.stub :delete_results_cache, mock_contest do
       @ascent.destroy
     end
-    assert_mock mock_contest
+    mock_contest.verify
   end
 end

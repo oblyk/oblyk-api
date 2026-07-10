@@ -13,21 +13,21 @@ class ContestRouteGroupCategoryTest < ActiveSupport::TestCase
 
   test 'delete_results_cache is called after save' do
     mock_contest = Minitest::Mock.new
-    mock_contest.expect :delete_results_cache, true
+    mock_contest.expect :call, true
 
-    @route_group_category.stub :contest, mock_contest do
+    @route_group_category.contest.stub :delete_results_cache, mock_contest do
       @route_group_category.save
     end
-    assert_mock mock_contest
+    mock_contest.verify
   end
 
   test 'delete_results_cache is called after destroy' do
     mock_contest = Minitest::Mock.new
-    mock_contest.expect :delete_results_cache, true
+    mock_contest.expect :call, true
 
-    @route_group_category.stub :contest, mock_contest do
+    @route_group_category.contest.stub :delete_results_cache, mock_contest do
       @route_group_category.destroy
     end
-    assert_mock mock_contest
+    mock_contest.verify
   end
 end

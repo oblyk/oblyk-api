@@ -3,8 +3,9 @@
 class ContestTimeBlock < ApplicationRecord
   belongs_to :contest_wave
   belongs_to :contest_route_group
-  has_one :contest, through: :contest_wave
+  belongs_to :contest
 
+  before_validation :set_contest
   before_validation :normalize_attributes
   after_save :delete_caches
   after_destroy :delete_caches
@@ -38,6 +39,10 @@ class ContestTimeBlock < ApplicationRecord
   end
 
   private
+
+  def set_contest
+    self.contest ||= contest_wave.contest
+  end
 
   def normalize_attributes
     return unless contest.one_day_event?

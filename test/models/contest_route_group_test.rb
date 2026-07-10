@@ -30,7 +30,12 @@ class ContestRouteGroupTest < ActiveSupport::TestCase
 
   test 'normalize_attributes sets dates if contest is one day and not waveable' do
     contest = @route_group.contest
-    contest.update(start_date: Date.current, end_date: Date.current)
+    contest.update(
+      start_date: Date.current,
+      end_date: Date.current,
+      subscription_start_date: Date.current - 10.days,
+      subscription_end_date: Date.current
+    )
 
     @route_group.start_date = nil
     @route_group.valid?

@@ -1,4 +1,5 @@
 time_block_1:
+  contest: contest_1
   contest_wave: wave_1
   contest_route_group: route_group_1
   start_time: "2026-06-05 10:00:00"

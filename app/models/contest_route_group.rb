@@ -2,8 +2,8 @@
 
 class ContestRouteGroup < ApplicationRecord
   belongs_to :contest_stage_step
+  belongs_to :contest
   has_one :contest_stage, through: :contest_stage_step
-  has_one :contest, through: :contest_stage
 
   has_many :contest_route_group_categories, dependent: :destroy
   has_many :contest_categories, through: :contest_route_group_categories
@@ -11,6 +11,7 @@ class ContestRouteGroup < ApplicationRecord
   has_many :contest_time_blocks, dependent: :destroy
   has_many :contest_waves, through: :contest_time_blocks
 
+  before_validation :set_contest
   before_validation :normalize_attributes
   after_validation :validate_categories
 
@@ -84,6 +85,10 @@ class ContestRouteGroup < ApplicationRecord
   end
 
   private
+
+  def set_contest
+    self.contest = contest_stage_step.contest
+  end
 
   def delete_caches
     contest_stage_step.delete_summary_cache
