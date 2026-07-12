@@ -15,23 +15,23 @@ class ContestStageStepTest < ActiveSupport::TestCase
   test 'contest stage step is invalid without name' do
     @contest_stage_step.name = nil
     assert_not @contest_stage_step.valid?
-    assert_includes @contest_stage_step.errors.keys, :name
+    assert_includes @contest_stage_step.errors.attribute_names, :name
   end
 
   test 'contest stage step is invalid with wrong ranking_type' do
     @contest_stage_step.ranking_type = 'random_ranking'
     assert_not @contest_stage_step.valid?
-    assert_includes @contest_stage_step.errors.keys, :ranking_type
+    assert_includes @contest_stage_step.errors.attribute_names, :ranking_type
   end
 
   test 'contest stage step is invalid with non-positive ascents_limit' do
     @contest_stage_step.ascents_limit = 0
     assert_not @contest_stage_step.valid?
-    assert_includes @contest_stage_step.errors.keys, :ascents_limit
+    assert_includes @contest_stage_step.errors.attribute_names, :ascents_limit
 
     @contest_stage_step.ascents_limit = -1
     assert_not @contest_stage_step.valid?
-    assert_includes @contest_stage_step.errors.keys, :ascents_limit
+    assert_includes @contest_stage_step.errors.attribute_names, :ascents_limit
   end
 
   test 'set_order sets step_order on create' do

@@ -16,13 +16,13 @@ class ContestTimeBlockTest < ActiveSupport::TestCase
   test 'time block is invalid without start_time' do
     @time_block.start_time = nil
     assert_not @time_block.valid?
-    assert_includes @time_block.errors.keys, :start_time
+    assert_includes @time_block.errors.attribute_names, :start_time
   end
 
   test 'time block is invalid without end_time' do
     @time_block.end_time = nil
     assert_not @time_block.valid?
-    assert_includes @time_block.errors.keys, :end_time
+    assert_includes @time_block.errors.attribute_names, :end_time
   end
 
   test 'summary_to_json returns expected keys' do

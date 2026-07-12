@@ -15,25 +15,25 @@ class ArticleTest < ActiveSupport::TestCase
   test 'article is invalid without name' do
     @article.name = nil
     assert_not @article.valid?
-    assert_includes @article.errors.keys, :name
+    assert_includes @article.errors.attribute_names, :name
   end
 
   test 'article is invalid without description' do
     @article.description = nil
     assert_not @article.valid?
-    assert_includes @article.errors.keys, :description
+    assert_includes @article.errors.attribute_names, :description
   end
 
   test 'article is invalid without body' do
     @article.body = nil
     assert_not @article.valid?
-    assert_includes @article.errors.keys, :body
+    assert_includes @article.errors.attribute_names, :body
   end
 
   test 'article is invalid without author' do
     @article.author = nil
     assert_not @article.valid?
-    assert_includes @article.errors.keys, :author
+    assert_includes @article.errors.attribute_names, :author
   end
 
   test 'view! increments views' do

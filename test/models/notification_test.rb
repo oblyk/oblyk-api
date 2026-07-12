@@ -15,19 +15,19 @@ class NotificationTest < ActiveSupport::TestCase
   test 'notification is invalid without notification_type' do
     @notification.notification_type = nil
     assert @notification.invalid?
-    assert_includes @notification.errors.keys, :notification_type
+    assert_includes @notification.errors.attribute_names, :notification_type
   end
 
   test 'notification is invalid with wrong notifiable_type' do
     @notification.notifiable_type = 'Crag'
     assert @notification.invalid?
-    assert_includes @notification.errors.keys, :notifiable_type
+    assert_includes @notification.errors.attribute_names, :notifiable_type
   end
 
   test 'notification is invalid with wrong notification_type' do
     @notification.notification_type = 'wrong_type'
     assert @notification.invalid?
-    assert_includes @notification.errors.keys, :notification_type
+    assert_includes @notification.errors.attribute_names, :notification_type
   end
 
   test 'posted_at is set before validation' do

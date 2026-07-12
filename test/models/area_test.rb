@@ -17,7 +17,7 @@ class AreaTest < ActiveSupport::TestCase
   test 'area is invalid without name' do
     @area.name = nil
     assert_not @area.valid?
-    assert_includes @area.errors.keys, :name
+    assert_includes @area.errors.attribute_names, :name
   end
 
   test 'crag_routes_count returns sum of crags routes count' do

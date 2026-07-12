@@ -37,6 +37,6 @@ class ArticleGuideBookPaperTest < ActiveSupport::TestCase
       guide_book_paper: @article_guide_book_paper.guide_book_paper
     )
     assert_not duplicate.valid?
-    assert_includes duplicate.errors.keys, :article
+    assert_includes duplicate.errors.attribute_names, :article
   end
 end

@@ -14,13 +14,13 @@ class AuthorTest < ActiveSupport::TestCase
   test 'author is invalid without name' do
     @author.name = nil
     assert_not @author.valid?
-    assert_includes @author.errors.keys, :name
+    assert_includes @author.errors.attribute_names, :name
   end
 
   test 'author is invalid without description' do
     @author.description = nil
     assert_not @author.valid?
-    assert_includes @author.errors.keys, :description
+    assert_includes @author.errors.attribute_names, :description
   end
 
   test 'author belongs to user' do

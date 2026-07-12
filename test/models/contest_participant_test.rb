@@ -18,23 +18,23 @@ class ContestParticipantTest < ActiveSupport::TestCase
   test 'participant is invalid without mandatory fields' do
     @participant_1.first_name = nil
     assert_not @participant_1.valid?
-    assert_includes @participant_1.errors.keys, :first_name
+    assert_includes @participant_1.errors.attribute_names, :first_name
 
     @participant_1.first_name = 'Jean'
     @participant_1.last_name = nil
     assert_not @participant_1.valid?
-    assert_includes @participant_1.errors.keys, :last_name
+    assert_includes @participant_1.errors.attribute_names, :last_name
 
     @participant_1.last_name = 'Dujardin'
     @participant_1.date_of_birth = nil
     assert_not @participant_1.valid?
-    assert_includes @participant_1.errors.keys, :date_of_birth
+    assert_includes @participant_1.errors.attribute_names, :date_of_birth
   end
 
   test 'participant is invalid with wrong genre' do
     @participant_1.genre = 'other'
     assert_not @participant_1.valid?
-    assert_includes @participant_1.errors.keys, :genre
+    assert_includes @participant_1.errors.attribute_names, :genre
   end
 
   test 'age returns expected value' do

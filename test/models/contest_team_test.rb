@@ -15,13 +15,13 @@ class ContestTeamTest < ActiveSupport::TestCase
   test 'contest team is invalid without name' do
     @team.name = nil
     assert_not @team.valid?
-    assert_includes @team.errors.keys, :name
+    assert_includes @team.errors.attribute_names, :name
   end
 
   test 'contest team name is unique within a contest' do
     duplicate_team = ContestTeam.new(name: @team.name, contest: @contest)
     assert_not duplicate_team.valid?
-    assert_includes duplicate_team.errors.keys, :name
+    assert_includes duplicate_team.errors.attribute_names, :name
   end
 
   test 'strip_whitespace removes leading and trailing spaces from name' do

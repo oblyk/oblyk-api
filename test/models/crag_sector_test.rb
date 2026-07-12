@@ -16,19 +16,19 @@ class CragSectorTest < ActiveSupport::TestCase
   test 'sector is invalid without name' do
     @sector.name = nil
     assert_not @sector.valid?
-    assert_includes @sector.errors.keys, :name
+    assert_includes @sector.errors.attribute_names, :name
   end
 
   test 'sector is invalid with wrong rain value' do
     @sector.rain = 'unknown'
     assert_not @sector.valid?
-    assert_includes @sector.errors.keys, :rain
+    assert_includes @sector.errors.attribute_names, :rain
   end
 
   test 'sector is invalid with wrong sun value' do
     @sector.sun = 'unknown'
     assert_not @sector.valid?
-    assert_includes @sector.errors.keys, :sun
+    assert_includes @sector.errors.attribute_names, :sun
   end
 
   test 'rich_name returns name' do

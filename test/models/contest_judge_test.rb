@@ -15,13 +15,13 @@ class ContestJudgeTest < ActiveSupport::TestCase
   test 'contest judge is invalid without name' do
     @judge.name = nil
     assert_not @judge.valid?
-    assert_includes @judge.errors.keys, :name
+    assert_includes @judge.errors.attribute_names, :name
   end
 
   test 'contest judge is invalid without code' do
     @judge.code = nil
     assert_not @judge.valid?
-    assert_includes @judge.errors.keys, :code
+    assert_includes @judge.errors.attribute_names, :code
   end
 
   test 'set_uuid is called before validation' do

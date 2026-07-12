@@ -16,25 +16,25 @@ class AlertTest < ActiveSupport::TestCase
   test 'alert is invalid without description' do
     @alert.description = nil
     assert_not @alert.valid?
-    assert_includes @alert.errors.keys, :description
+    assert_includes @alert.errors.attribute_names, :description
   end
 
   test 'alert is invalid without alert_type' do
     @alert.alert_type = nil
     assert_not @alert.valid?
-    assert_includes @alert.errors.keys, :alert_type
+    assert_includes @alert.errors.attribute_names, :alert_type
   end
 
   test 'alert is invalid with wrong alert_type' do
     @alert.alert_type = 'wrong_type'
     assert_not @alert.valid?
-    assert_includes @alert.errors.keys, :alert_type
+    assert_includes @alert.errors.attribute_names, :alert_type
   end
 
   test 'alert is invalid with wrong alertable_type' do
     @alert.alertable_type = 'User'
     assert_not @alert.valid?
-    assert_includes @alert.errors.keys, :alertable_type
+    assert_includes @alert.errors.attribute_names, :alertable_type
   end
 
   test 'alerted_at is initialized before validation' do

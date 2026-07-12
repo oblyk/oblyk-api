@@ -15,19 +15,19 @@ class ContestStageTest < ActiveSupport::TestCase
   test 'contest stage is invalid without climbing_type' do
     @contest_stage.climbing_type = nil
     assert_not @contest_stage.valid?
-    assert_includes @contest_stage.errors.keys, :climbing_type
+    assert_includes @contest_stage.errors.attribute_names, :climbing_type
   end
 
   test 'contest stage is invalid with wrong climbing_type' do
     @contest_stage.climbing_type = 'walking'
     assert_not @contest_stage.valid?
-    assert_includes @contest_stage.errors.keys, :climbing_type
+    assert_includes @contest_stage.errors.attribute_names, :climbing_type
   end
 
   test 'contest stage is invalid with wrong default_ranking_type' do
     @contest_stage.default_ranking_type = 'random_ranking'
     assert_not @contest_stage.valid?
-    assert_includes @contest_stage.errors.keys, :default_ranking_type
+    assert_includes @contest_stage.errors.attribute_names, :default_ranking_type
   end
 
   test 'set_order sets stage_order on create' do

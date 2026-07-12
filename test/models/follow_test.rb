@@ -23,7 +23,7 @@ class FollowTest < ActiveSupport::TestCase
   test 'follow is invalid with wrong followable_type' do
     follow = Follow.new(user: @user, followable_type: 'Comment', followable_id: 1)
     assert_not follow.valid?
-    assert_includes follow.errors.keys, :followable_type
+    assert_includes follow.errors.attribute_names, :followable_type
   end
 
   test 'accepted? returns true if accepted_at is present' do

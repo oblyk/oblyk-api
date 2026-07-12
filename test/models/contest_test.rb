@@ -15,25 +15,25 @@ class ContestTest < ActiveSupport::TestCase
   test 'contest is invalid without name' do
     @contest.name = nil
     assert_not @contest.valid?
-    assert_includes @contest.errors.keys, :name
+    assert_includes @contest.errors.attribute_names, :name
   end
 
   test 'contest is invalid with end_date before start_date' do
     @contest.end_date = @contest.start_date - 1.day
     assert_not @contest.valid?
-    assert_includes @contest.errors.keys, :end_date
+    assert_includes @contest.errors.attribute_names, :end_date
   end
 
   test 'contest is invalid with subscription_end_date before subscription_start_date' do
     @contest.subscription_end_date = @contest.subscription_start_date - 1.day
     assert_not @contest.valid?
-    assert_includes @contest.errors.keys, :subscription_end_date
+    assert_includes @contest.errors.attribute_names, :subscription_end_date
   end
 
   test 'contest is invalid with end_date before subscription_end_date' do
     @contest.end_date = @contest.subscription_end_date - 1.day
     assert_not @contest.valid?
-    assert_includes @contest.errors.keys, :subscription_end_date
+    assert_includes @contest.errors.attribute_names, :subscription_end_date
   end
 
   test 'remaining_places returns expected value' do

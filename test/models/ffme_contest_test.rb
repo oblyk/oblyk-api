@@ -11,14 +11,14 @@ class FfmeContestTest < ActiveSupport::TestCase
     @ffme_contest.name = nil
     @ffme_contest.contact_email = nil
     assert_not @ffme_contest.valid?
-    assert_includes @ffme_contest.errors.keys, :name
-    assert_includes @ffme_contest.errors.keys, :contact_email
+    assert_includes @ffme_contest.errors.attribute_names, :name
+    assert_includes @ffme_contest.errors.attribute_names, :contact_email
   end
 
   test 'validates status' do
     @ffme_contest.status = 'invalid_status'
     assert_not @ffme_contest.valid?
-    assert_includes @ffme_contest.errors.keys, :status
+    assert_includes @ffme_contest.errors.attribute_names, :status
 
     @ffme_contest.status = 'create_on_my_compet'
     assert @ffme_contest.valid?
@@ -27,7 +27,7 @@ class FfmeContestTest < ActiveSupport::TestCase
   test 'validates contest_type' do
     @ffme_contest.contest_type = 'invalid_type'
     assert_not @ffme_contest.valid?
-    assert_includes @ffme_contest.errors.keys, :contest_type
+    assert_includes @ffme_contest.errors.attribute_names, :contest_type
 
     @ffme_contest.contest_type = 'sport_climbing'
     assert @ffme_contest.valid?

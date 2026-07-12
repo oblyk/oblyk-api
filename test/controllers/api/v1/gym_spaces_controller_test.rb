@@ -92,7 +92,7 @@ module Api
         assert_response :success
       end
 
-      test_helper_file = 'files/image.jpg'
+      test_helper_file = 'image.jpg'
 
       test 'should add banner' do
         banner = fixture_file_upload(test_helper_file, 'image/jpeg')

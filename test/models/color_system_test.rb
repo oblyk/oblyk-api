@@ -14,13 +14,13 @@ class ColorSystemTest < ActiveSupport::TestCase
   test 'color system is invalid without colors_mark' do
     @color_system.colors_mark = nil
     assert_not @color_system.valid?
-    assert_includes @color_system.errors.keys, :colors_mark
+    assert_includes @color_system.errors.attribute_names, :colors_mark
   end
 
   test 'color system is invalid with duplicate colors_mark' do
     duplicate_system = ColorSystem.new(colors_mark: @color_system.colors_mark)
     assert_not duplicate_system.valid?
-    assert_includes duplicate_system.errors.keys, :colors_mark
+    assert_includes duplicate_system.errors.attribute_names, :colors_mark
   end
 
   test 'init_line_form_colors adds lines to color system' do

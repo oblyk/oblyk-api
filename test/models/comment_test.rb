@@ -16,13 +16,13 @@ class CommentTest < ActiveSupport::TestCase
   test 'comment is invalid without body' do
     @comment.body = nil
     assert @comment.invalid?
-    assert_includes @comment.errors.keys, :body
+    assert_includes @comment.errors.attribute_names, :body
   end
 
   test 'comment is invalid with unsupported commentable_type' do
     @comment.commentable_type = 'User'
     assert @comment.invalid?
-    assert_includes @comment.errors.keys, :commentable_type
+    assert_includes @comment.errors.attribute_names, :commentable_type
   end
 
   test 'normalize_blank_values strips and nilifies body' do

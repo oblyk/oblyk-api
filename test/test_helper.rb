@@ -21,7 +21,6 @@ ENV['APP_URL'] = 'http://localhost:3000'
 require_relative '../config/environment'
 require 'rails/test_help'
 require 'minitest/autorun'
-require 'minitest/mock'
 require 'support/auth_helpers'
 
 module ActiveSupport

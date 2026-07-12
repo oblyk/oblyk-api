@@ -17,27 +17,27 @@ class ContestCategoryTest < ActiveSupport::TestCase
   test 'category is invalid without name' do
     @category_u18.name = nil
     assert_not @category_u18.valid?
-    assert_includes @category_u18.errors.keys, :name
+    assert_includes @category_u18.errors.attribute_names, :name
   end
 
   test 'category is invalid with wrong registration_obligation' do
     @category_u18.registration_obligation = 'wrong_obligation'
     assert_not @category_u18.valid?
-    assert_includes @category_u18.errors.keys, :registration_obligation
+    assert_includes @category_u18.errors.attribute_names, :registration_obligation
   end
 
   test 'category between_age is invalid without min or max age' do
     @category_custom.min_age = nil
     @category_custom.max_age = nil
     assert_not @category_custom.valid?
-    assert_includes @category_custom.errors.keys, :registration_obligation
+    assert_includes @category_custom.errors.attribute_names, :registration_obligation
   end
 
   test 'category with parity must have even capacity' do
     @category_u18.parity = true
     @category_u18.capacity = 11
     assert_not @category_u18.valid?
-    assert_includes @category_u18.errors.keys, :capacity
+    assert_includes @category_u18.errors.attribute_names, :capacity
 
     @category_u18.capacity = 10
     assert @category_u18.valid?

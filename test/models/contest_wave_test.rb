@@ -15,7 +15,7 @@ class ContestWaveTest < ActiveSupport::TestCase
   test 'contest wave is invalid without name' do
     @wave.name = nil
     assert_not @wave.valid?
-    assert_includes @wave.errors.keys, :name
+    assert_includes @wave.errors.attribute_names, :name
   end
 
   test 'normalize_attributes sets capacity to nil if zero or blank' do

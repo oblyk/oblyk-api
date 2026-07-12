@@ -3,12 +3,12 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.7.8'
+ruby '3.2.8'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '6.0.6.1'
+gem 'rails', '6.1.7.10'
 # Pin concurrent-ruby < 1.3.0 (1.3.0+ breaks ActiveSupport 6.0.x LoggerThreadSafeLevel)
-gem 'concurrent-ruby', '1.3.4'
+gem 'concurrent-ruby', '~> 1.3'
 # Use sqlite3 as the database for Active Record
 gem 'mysql2'
 # Use Puma as the app server
@@ -25,7 +25,7 @@ gem 'redis-rails'
 gem 'redis-namespace'
 
 # Use Active Storage variant
-gem 'image_processing', '~> 1.14'
+gem 'image_processing'
 
 # Convert Video (from .mov to .mp4 by example)
 gem 'streamio-ffmpeg'
@@ -77,7 +77,7 @@ gem 'sitemap_generator'
 gem 'dalli'
 
 # MeiliSearch
-gem 'meilisearch-rails', '>= 0.13.1'
+gem 'meilisearch-rails'
 
 # Brevo email sdk
 gem 'brevo'
@@ -91,7 +91,7 @@ gem 'prawn'
 gem 'prawn-svg', '0.34.2'
 
 # Generate QrCode
-gem 'rqrcode', '~> 2.0'
+gem 'rqrcode'
 
 # Google Cloud storage
 gem 'google-cloud-storage', require: false
@@ -131,10 +131,10 @@ group :development, :test do
 end
 
 group :development do
-  gem 'listen', '~> 3.2'
+  gem 'listen'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring-watcher-listen'
 
   # Open mail in browser rather than send real email
   gem 'letter_opener'
@@ -145,7 +145,7 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
-  gem 'capistrano-sidekiq', '>= 3.0'
+  gem 'capistrano-sidekiq'
   # Deployment whit ed25519
   gem 'bcrypt_pbkdf'
   gem 'ed25519'
@@ -155,8 +155,9 @@ group :development do
 end
 
 group :test do
+  gem 'minitest', '5.14.4'
   # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '>= 2.15'
+  gem 'capybara'
   gem 'selenium-webdriver'
   # Test coverage : https://github.com/simplecov-ruby/simplecov
   gem 'simplecov', require: false

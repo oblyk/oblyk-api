@@ -42,6 +42,6 @@ class AreaCragTest < ActiveSupport::TestCase
       crag: @area_crag.crag
     )
     assert_not duplicate_area_crag.valid?
-    assert_includes duplicate_area_crag.errors.keys, :crag_id
+    assert_includes duplicate_area_crag.errors.attribute_names, :crag_id
   end
 end

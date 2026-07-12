@@ -41,8 +41,11 @@ module Api
 
       test 'should get participant details' do
         p = ContestParticipant.create!(
-          first_name: 'Test', last_name: 'Test', date_of_birth: '2000-01-01',
-          genre: 'male', contest_category: contest_categories(:category_senior),
+          first_name: 'Test',
+          last_name: 'Test',
+          date_of_birth: '2000-01-01',
+          genre: 'male',
+          contest_category: contest_categories(:category_senior),
           email: 'test@test.com'
         )
         token_param = p.token.sub('.', '-')
