@@ -5,6 +5,7 @@ require 'test_helper'
 class GymTest < ActiveSupport::TestCase
   setup do
     @gym = gyms(:my_gym)
+    @gym.historize_app_paths!
   end
 
   test 'gym is valid' do

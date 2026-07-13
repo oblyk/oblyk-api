@@ -13,6 +13,10 @@ class GuideBookWeb < ApplicationRecord
 
   after_create_commit :publication_push!
 
+  def app_path
+    "/crags/#{crag.id}/#{crag.slug_name}/guide-books"
+  end
+
   def summary_to_json
     detail_to_json
   end
@@ -21,6 +25,7 @@ class GuideBookWeb < ApplicationRecord
     {
       id: id,
       name: name,
+      app_path: app_path,
       url: url,
       publication_year: publication_year,
       crag: crag.summary_to_json,

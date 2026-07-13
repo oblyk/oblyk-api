@@ -47,6 +47,10 @@ class GuideBookPaper < ApplicationRecord
   after_save :historize_around_towns
   after_create_commit :publication_push!
 
+  def app_path
+    "/guide-book-papers/#{id}/#{slug_name}"
+  end
+
   def all_photos_count
     photos_count = 0
     crags_ids = crags.pluck(:id)
@@ -64,10 +68,6 @@ class GuideBookPaper < ApplicationRecord
 
   def cover_attachment_object
     attachment_object(cover)
-  end
-
-  def app_path
-    "/guide-book-papers/#{id}/#{slug_name}"
   end
 
   def summary_to_json

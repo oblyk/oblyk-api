@@ -77,9 +77,30 @@ class Gym < ApplicationRecord
   validates :gym_type, inclusion: { in: GYM_TYPE_LIST }, allow_nil: true
 
   before_validation :normalize_ascents_multiplier
+  before_save :set_app_paths, if: :saved_change_to_name?
   after_save :historize_around_towns
   after_save :delete_routes_caches
   after_create_commit :publication_push!
+
+  def app_path
+    app_paths.try(:[], 'base')
+  end
+
+  def admin_app_path(with_domain: false)
+    if with_domain
+      "#{ENV['OBLYK_APP_URL']}#{app_paths.try(:[], 'admin')}"
+    else
+      app_paths.try(:[], 'admin')
+    end
+  end
+
+  def optimal_spaces_path
+    app_paths.try(:[], 'public_space')
+  end
+
+  def app_first_spaces_path
+    app_paths.try(:[], 'admin_space')
+  end
 
   def all_championships
     Championship.where('gym_id = :gym_id OR id IN (SELECT championship_id FROM championship_contests INNER JOIN contests ON championship_contests.contest_id = contests.id WHERE gym_id = :gym_id)', gym_id: id)
@@ -107,10 +128,6 @@ class Gym < ApplicationRecord
     end
   end
 
-  def app_path
-    "/gyms/#{id}/#{slug_name}"
-  end
-
   def administered?
     assigned_at.present?
   end
@@ -124,10 +141,6 @@ class Gym < ApplicationRecord
     init_gym_levels
     init_ascents_multiplier
     save
-  end
-
-  def admin_app_path
-    "#{ENV['OBLYK_APP_URL']}/gyms/#{id}/#{slug_name}/admins"
   end
 
   def climbing_key
@@ -175,6 +188,7 @@ class Gym < ApplicationRecord
         name: name,
         slug_name: slug_name,
         app_path: app_path,
+        app_paths: app_paths,
         app_first_spaces_path: app_first_spaces_path,
         optimal_spaces_path: optimal_spaces_path,
         description: description,
@@ -208,7 +222,8 @@ class Gym < ApplicationRecord
         gym_type: gym_type,
         gym_billing_account_id: gym_billing_account_id,
         follows_count: follows_count,
-        have_guide_book: guide_book?,
+        have_guide_book: public_guide_book?,
+        public_guide_book: public_guide_book?,
         attachments: {
           logo: attachment_object(logo),
           banner: attachment_object(banner)
@@ -297,33 +312,6 @@ class Gym < ApplicationRecord
     'resubscribe'
   end
 
-  def guide_book?
-    spaces = gym_spaces.reject(&:draft)
-    spaces.size.positive?
-  end
-
-  def optimal_spaces_path
-    spaces = gym_spaces.reject(&:draft)
-    if spaces.size == 1
-      "/spaces/#{spaces.first.id}/#{spaces.first.slug_name}"
-    elsif spaces.size > 1
-      '/spaces'
-    else
-      ''
-    end
-  end
-
-  def app_first_spaces_path
-    gym_space_count = gym_spaces.size
-    if gym_space_count == 1
-      "#{app_path}/spaces/#{gym_spaces.first.id}/#{gym_spaces.first.slug_name}"
-    elsif gym_space_count > 1
-      "#{app_path}/spaces"
-    else
-      app_path
-    end
-  end
-
   def publication_push!(publishable_subject = :create)
     Publication.create(
       publishable_id: id,
@@ -334,6 +322,46 @@ class Gym < ApplicationRecord
       generated: true,
       author_id: user_id
     )
+  end
+
+  def set_app_paths
+    base_app_path = "/gyms/#{id}/#{slug_name}"
+    public_gym_spaces = gym_spaces.where(draft: false).reorder(:order, :id)
+    app_public_space_path = if public_gym_spaces.size == 1
+                              "#{base_app_path}/spaces/#{public_gym_spaces.first&.id}/#{public_gym_spaces.first&.slug_name}"
+                            elsif public_gym_spaces.size > 1
+                              "#{base_app_path}/spaces"
+                            else
+                              base_app_path
+                            end
+    all_gym_space = gym_spaces.reorder(:order, :id)
+    app_admin_space_path = if gym_spaces.size == 1
+                             "#{base_app_path}/spaces/#{all_gym_space.first&.id}/#{all_gym_space.first&.slug_name}"
+                           elsif all_gym_space.size > 1
+                             "#{base_app_path}/spaces"
+                           else
+                             base_app_path
+                           end
+    self.app_paths = {
+      base: base_app_path,
+      admin: "#{base_app_path}/admins",
+      public_space: app_public_space_path,
+      admin_space: app_admin_space_path
+    }
+  end
+
+  def historize_app_paths!
+    set_app_paths
+    save
+  end
+
+  def set_public_guide_book
+    self.public_guide_book = gym_spaces.where(draft: false).exists?
+  end
+
+  def historize_public_guide_book!
+    set_public_guide_book
+    save
   end
 
   private

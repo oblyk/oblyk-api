@@ -21,10 +21,15 @@ class GymLabelTemplate < ApplicationRecord
   validates :label_arrangement, inclusion: { in: LABEL_ARRANGEMENT_LIST }
   validates :grade_style, inclusion: { in: GRADE_STYLE_LIST }
 
+  def app_admin_path
+    "/gyms/#{gym_id}/#{gym.slug_name}/admins/label-templates/#{id}"
+  end
+
   def summary_to_json
     {
       id: id,
       name: name,
+      app_admin_path: app_admin_path,
       label_direction: label_direction,
       label_options: label_options,
       layout_options: layout_options,

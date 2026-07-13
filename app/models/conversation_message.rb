@@ -28,6 +28,7 @@ class ConversationMessage < ApplicationRecord
   def detail_to_json
     {
       id: id,
+      app_path: app_path,
       conversation_id: conversation_id,
       body: body,
       posted_at: posted_at,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_07_10_074402) do
+ActiveRecord::Schema.define(version: 2026_07_13_093340) do
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
@@ -1154,6 +1154,8 @@ ActiveRecord::Schema.define(version: 2026_07_10_074402) do
     t.string "gym_type"
     t.bigint "gym_billing_account_id"
     t.string "insee_code"
+    t.json "app_paths"
+    t.boolean "public_guide_book", default: false
     t.index ["created_at"], name: "index_gyms_on_created_at"
     t.index ["department_id"], name: "index_gyms_on_department_id"
     t.index ["gym_billing_account_id"], name: "index_gyms_on_gym_billing_account_id"

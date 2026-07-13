@@ -5,6 +5,7 @@ require 'test_helper'
 class EmbeddedGymSerializerTest < ActiveSupport::TestCase
   setup do
     @gym = gyms(:my_gym)
+    @gym.historize_app_paths!
     @serializer = Embedded::GymSerializer.new(@gym)
     @serialization = JSON.parse(@serializer.serializable_hash.to_json)
   end

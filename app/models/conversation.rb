@@ -7,6 +7,10 @@ class Conversation < ApplicationRecord
 
   accepts_nested_attributes_for :conversation_users
 
+  def app_path
+    "/home/messenger/#{id}"
+  end
+
   def same_conversation
     concat_user = conversation_users.sort_by(&:user_id)
     same_conversations = ConversationUser.select('conversation_id, GROUP_CONCAT(user_id ORDER BY user_id) AS concat_users')
@@ -29,6 +33,7 @@ class Conversation < ApplicationRecord
   def detail_to_json
     {
       id: id,
+      app_path: app_path,
       conversation_users: conversation_users.map do |conversation_user|
         conversation_user.user.summary_to_json.merge({ last_read_at: conversation_user.last_read_at })
       end,

@@ -23,12 +23,12 @@ class Alert < ApplicationRecord
 
   default_scope { order(alerted_at: :desc) }
 
-  def name
-    "#{alert_type} - #{alertable_type}/#{alertable_id}"
-  end
-
   def app_path
     "/alerts/#{id}"
+  end
+
+  def name
+    "#{alert_type} - #{alertable_type}/#{alertable_id}"
   end
 
   def summary_to_json

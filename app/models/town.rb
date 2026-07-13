@@ -26,6 +26,10 @@ class Town < ApplicationRecord
 
   attr_accessor :dist_around
 
+  def app_path
+    "/escalade-autour-de/#{slug_name}"
+  end
+
   def default_dist
     if population <= 10_000
       10
@@ -48,10 +52,6 @@ class Town < ApplicationRecord
 
   def gyms
     Gym.geo_search(latitude, longitude, dist_around)
-  end
-
-  def app_path
-    "/escalade-autour-de/#{slug_name}"
   end
 
   def summary_to_json

@@ -40,7 +40,7 @@ module Api
           data[:gym] = {
             name: gym.name,
             city: gym.city,
-            app_path: "#{gym.app_path}#{gym.optimal_spaces_path}",
+            app_path: gym.optimal_spaces_path,
             attachments: {
               avatar: gym.attachment_object(gym.logo)
             }

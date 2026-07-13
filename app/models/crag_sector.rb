@@ -46,6 +46,10 @@ class CragSector < ApplicationRecord
   validates :rain, inclusion: { in: Rain::LIST }, allow_nil: true
   validates :sun, inclusion: { in: Sun::LIST }, allow_nil: true
 
+  def app_path
+    "/crag-sectors/#{id}/#{slug_name}"
+  end
+
   def rich_name
     name
   end
@@ -56,6 +60,7 @@ class CragSector < ApplicationRecord
       properties: {
         type: 'CragSector',
         id: id,
+        app_path: app_path,
         icon: 'sector-marker'
       },
       geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
@@ -85,6 +90,7 @@ class CragSector < ApplicationRecord
         id: id,
         crag_id: crag_id,
         name: name,
+        app_path: app_path,
         slug_name: slug_name,
         description: description,
         rain: rain,

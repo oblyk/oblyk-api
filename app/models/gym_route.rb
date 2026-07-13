@@ -39,6 +39,18 @@ class GymRoute < ApplicationRecord
   accepts_nested_attributes_for :gym_route_cover
   attr_accessor :qrcode
 
+  def app_path
+    "#{ENV['OBLYK_APP_URL']}/gyms/#{gym.id}/#{gym.slug_name}/spaces/#{gym_sector.gym_space.id}/#{gym_sector.gym_space.slug_name}?route=#{id}"
+  end
+
+  def short_app_path
+    "#{ENV['OBLYK_APP_URL']}/gr/#{gym.id}-#{id}"
+  end
+
+  def gym_space_app_path
+    "/gyms/#{gym_id}/#{gym.slug_name}/spaces/#{gym_sector.gym_space.id}/#{gym_sector.gym_space.slug_name}?route=#{id}"
+  end
+
   def calculated_point
     if points
       point = points
@@ -118,18 +130,6 @@ class GymRoute < ApplicationRecord
   def mount!
     self.dismounted_at = nil
     save
-  end
-
-  def app_path
-    "#{ENV['OBLYK_APP_URL']}/gyms/#{gym.id}/#{gym.slug_name}/spaces/#{gym_sector.gym_space.id}/#{gym_sector.gym_space.slug_name}?route=#{id}"
-  end
-
-  def short_app_path
-    "#{ENV['OBLYK_APP_URL']}/gr/#{gym.id}-#{id}"
-  end
-
-  def gym_space_app_path
-    "/gyms/#{gym_id}/#{gym.slug_name}/spaces/#{gym_sector.gym_space.id}/#{gym_sector.gym_space.slug_name}?route=#{id}"
   end
 
   def hold_gradiant

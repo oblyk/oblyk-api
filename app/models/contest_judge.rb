@@ -9,10 +9,15 @@ class ContestJudge < ApplicationRecord
 
   validates :name, :code, presence: true
 
+  def app_path
+    "/contests/#{contest.gym_id}/#{contest_id}/#{uuid}"
+  end
+
   def summary_to_json
     {
       id: id,
       name: name,
+      app_path: app_path,
       code: code,
       uuid: uuid,
       contest_id: contest_id,

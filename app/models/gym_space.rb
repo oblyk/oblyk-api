@@ -30,9 +30,15 @@ class GymSpace < ApplicationRecord
 
   after_create :delete_gym_cache
   after_save :remove_routes_cache
+  after_save :historize_gym_app_paths_and_public_guide_book!
   after_update :remove_sectors_cache
   after_update :historize_svg_sectors!, if: :saved_change_to_representation_type?
   after_destroy :delete_gym_cache
+  after_destroy :historize_gym_app_paths_and_public_guide_book!
+
+  def app_path
+    "/gyms/#{gym_id}/#{gym.slug_name}/spaces/#{id}/#{slug_name}"
+  end
 
   def set_plan_dimension!
     return unless plan.attached?
@@ -42,10 +48,6 @@ class GymSpace < ApplicationRecord
     self.scheme_height = meta[:height]
     self.scheme_width = meta[:width]
     save
-  end
-
-  def app_path
-    "/gyms/#{gym_id}/#{gym.slug_name}/spaces/#{id}/#{slug_name}"
   end
 
   def summary_to_json(with_figures: false)
@@ -223,5 +225,13 @@ class GymSpace < ApplicationRecord
 
   def delete_gym_cache
     gym.delete_summary_cache
+  end
+
+  def historize_gym_app_paths_and_public_guide_book!
+    if saved_change_to_name? || saved_change_to_draft? || saved_change_to_deleted_at?
+      gym.set_public_guide_book
+      gym.set_app_paths
+      gym.save
+    end
   end
 end

@@ -5,6 +5,7 @@ require 'test_helper'
 class GymSerializerTest < ActiveSupport::TestCase
   setup do
     @gym = gyms(:my_gym)
+    @gym.historize_app_paths!
     @serializer = GymSerializer.new(@gym)
     @serialization = JSON.parse(@serializer.serializable_hash.to_json)
   end
@@ -17,8 +18,6 @@ class GymSerializerTest < ActiveSupport::TestCase
     assert_equal @gym.app_first_spaces_path, attributes['app_first_spaces_path']
     assert_equal @gym.optimal_spaces_path, attributes['optimal_spaces_path']
     assert_equal @gym.description, attributes['description']
-    assert_equal @gym.email, attributes['email']
-    assert_equal @gym.phone_number, attributes['phone_number']
     assert_equal @gym.web_site, attributes['web_site']
     assert_equal @gym.latitude.to_f, attributes['latitude'].to_f
     assert_equal @gym.longitude.to_f, attributes['longitude'].to_f
@@ -34,7 +33,7 @@ class GymSerializerTest < ActiveSupport::TestCase
     assert_equal @gym.representation_type, attributes['representation_type']
     assert_equal @gym.gym_billing_account_id, attributes['gym_billing_account_id']
     assert_equal @gym.administered?, attributes['administered']
-    assert_equal @gym.guide_book?, attributes['have_guide_book']
+    assert_equal @gym.public_guide_book, attributes['public_guide_book']
     assert_equal @gym.gym_spaces.size, attributes['gym_spaces_count']
   end
 

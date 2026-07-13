@@ -18,12 +18,17 @@ class GymChain < ApplicationRecord
   validates :banner, blob: { content_type: :image }, allow_nil: true
   validates :name, presence: true
 
+  def app_path
+    "/gym-chains/#{slug_name}"
+  end
+
   def summary_to_json
     Rails.cache.fetch("#{cache_key_with_version}/summary_gym_chain", expires_in: 28.days) do
       {
         id: id,
         name: name,
         slug_name: slug_name,
+        app_path: app_path,
         description: description,
         public_chain: public_chain,
         attachments: {

@@ -5,6 +5,7 @@ class CommentSerializer < BaseSerializer
   has_one :commentable, polymorphic: true
 
   attributes :id,
+             :app_path,
              :body,
              :likes_count,
              :comments_count,

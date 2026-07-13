@@ -30,6 +30,10 @@ class Video < ApplicationRecord
 
   validates :video_file, blob: { content_type: :video }, if: proc { |obj| obj.video_service == 'oblyk_video' }
 
+  def app_path
+    "/videos/#{id}"
+  end
+
   def name
     id
   end
@@ -39,10 +43,6 @@ class Video < ApplicationRecord
     return nil unless video_file.attached?
 
     video_file.blob.metadata
-  end
-
-  def app_path
-    "/videos/#{id}"
   end
 
   def valid_url?

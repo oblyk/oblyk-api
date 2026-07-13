@@ -20,6 +20,14 @@ class Championship < ApplicationRecord
   validates :combined_ranking_type, inclusion: { in: ContestService::Constant::COMBINED_RANKING_TYPE_LIST }, allow_nil: :nil
   validates :name, presence: true
 
+  def app_path
+    "/gyms/#{gym_id}/#{gym.slug_name}/championships/#{id}"
+  end
+
+  def app_admin_path
+    "/gyms/#{gym_id}/#{gym.slug_name}/admins/championships/#{id}"
+  end
+
   def results
     return nil if championship_category_matches.blank?
     return nil if contests.blank?
@@ -166,6 +174,8 @@ class Championship < ApplicationRecord
         id: id,
         name: name,
         slug_name: slug_name,
+        app_path: app_path,
+        app_admin_path: app_admin_path,
         description: description,
         gym_id: gym_id,
         combined_ranking_type: combined_ranking_type,

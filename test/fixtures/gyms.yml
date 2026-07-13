@@ -1,5 +1,6 @@
 my_gym:
   name: Ma salle
+  slug_name: ma-salle
   description: La salle de ta ville
   address: 1 rue de l'Avenue
   postal_code: 01000

@@ -7,6 +7,10 @@ class RockBar < ApplicationRecord
 
   validates :polyline, presence: true
 
+  def app_path
+    "/crags/#{crag_id}/#{crag.slug_name}/maps"
+  end
+
   def to_geo_json
     {
       type: 'Feature',
@@ -24,6 +28,7 @@ class RockBar < ApplicationRecord
   def summary_to_json
     data = {
       id: id,
+      app_path: app_path,
       polyline: polyline,
       crag_sector_id: crag_sector_id
     }

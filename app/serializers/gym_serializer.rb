@@ -11,9 +11,9 @@ class GymSerializer < BaseSerializer
              :app_path,
              :app_first_spaces_path,
              :optimal_spaces_path,
+             :app_paths,
+             :public_guide_book,
              :description,
-             :email,
-             :phone_number,
              :web_site,
              :latitude,
              :longitude,
@@ -41,7 +41,7 @@ class GymSerializer < BaseSerializer
              :follows_count
 
   attribute :administered, &:administered?
-  attribute :have_guide_book, &:guide_book?
+  attribute :have_guide_book, &:public_guide_book?
 
   attribute :gym_spaces_count do |object|
     object.gym_spaces.size

@@ -83,7 +83,7 @@ class IndoorSubscription < ApplicationRecord
       after_completion: {
         type: 'redirect',
         redirect: {
-          url: "#{gym.admin_app_path}/indoor-subscriptions"
+          url: "#{gym.admin_app_path(with_domain: true)}/indoor-subscriptions"
         }
       },
       billing_address_collection: 'required',

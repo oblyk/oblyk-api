@@ -10,9 +10,14 @@ class GymOpeningSheet < ApplicationRecord
 
   attr_accessor :gym_space_id, :gym_route_ids, :gym_sector_ids
 
+  def app_admin_path
+    "/gyms/#{gym_id}/#{gym.slug_name}/admins/opening-sheets/#{id}"
+  end
+
   def summary_to_json
     {
       id: id,
+      app_admin_path: app_admin_path,
       title: title,
       description: description,
       archived_at: archived_at,

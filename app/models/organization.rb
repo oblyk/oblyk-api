@@ -20,26 +20,29 @@ class Organization < ApplicationRecord
 
   after_create :send_email_notification
 
+  def app_path
+    "/organizations/#{id}/#{slug_name}"
+  end
+
   def refresh_api_access_token!
     regenerate_api_access_token
   end
 
   def summary_to_json
-    Rails.cache.fetch("#{cache_key_with_version}/summary_organization", expires_in: 28.days) do
-      {
-        id: id,
-        name: name,
-        slug_name: slug_name,
-        api_usage_type: api_usage_type,
-        phone: phone,
-        email: email,
-        address: address,
-        city: city,
-        zipcode: zipcode,
-        website: website,
-        company_registration_number: company_registration_number
-      }
-    end
+    {
+      id: id,
+      name: name,
+      app_path: app_path,
+      slug_name: slug_name,
+      api_usage_type: api_usage_type,
+      phone: phone,
+      email: email,
+      address: address,
+      city: city,
+      zipcode: zipcode,
+      website: website,
+      company_registration_number: company_registration_number
+    }
   end
 
   def detail_to_json

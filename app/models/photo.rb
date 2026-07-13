@@ -26,6 +26,10 @@ class Photo < ApplicationRecord
   delegate :latitude, to: :illustrable
   delegate :name, to: :illustrable
 
+  def app_path
+    "/photos/#{id}"
+  end
+
   def photo_height
     picture.blob.metadata['height']
   end
@@ -42,10 +46,6 @@ class Photo < ApplicationRecord
     Rails.cache.fetch("#{cache_key_with_version}/summary_photo", expires_in: 28.days) do
       detail_to_json
     end
-  end
-
-  def app_path
-    "/photos/#{id}"
   end
 
   def copy

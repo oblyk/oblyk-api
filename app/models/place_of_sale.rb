@@ -10,6 +10,10 @@ class PlaceOfSale < ApplicationRecord
 
   validates :name, presence: true
 
+  def app_path
+    "/guide-book-papers/#{guide_book_paper.id}/#{guide_book_paper.slug_name}/points-of-sale"
+  end
+
   def location
     [latitude, longitude]
   end

@@ -15,6 +15,10 @@ class Park < ApplicationRecord
 
   after_save :historize_static_map
 
+  def app_path
+    "/crags/#{crag_id}/#{crag.slug_name}/parks/#{id}"
+  end
+
   def location
     [latitude, longitude]
   end
@@ -48,6 +52,7 @@ class Park < ApplicationRecord
   def summary_to_json
     {
       id: id,
+      app_path: app_path,
       description: description,
       latitude: latitude,
       longitude: longitude,

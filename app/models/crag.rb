@@ -243,8 +243,8 @@ class Crag < ApplicationRecord
           paper_count: guide_book_papers.count
         },
         creator: user&.summary_to_json,
-        sectors: sectors.map { |sector| { id: sector.id, name: sector.name } },
-        areas: areas.map { |area| { id: area.id, name: area.name, slug_name: area.slug_name } },
+        sectors: sectors.map { |sector| { id: sector.id, name: sector.name, app_path: sector.app_path } },
+        areas: areas.map { |area| { id: area.id, name: area.name, slug_name: area.slug_name, app_path: area.app_path } },
         history: {
           created_at: created_at,
           updated_at: updated_at

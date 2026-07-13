@@ -19,6 +19,10 @@ class Article < ApplicationRecord
 
   validates :name, :description, :body, :author, presence: true
 
+  def app_path
+    "/articles/#{id}/#{slug_name}"
+  end
+
   def view!
     self.views ||= 0
     self.views += 1
@@ -31,10 +35,6 @@ class Article < ApplicationRecord
 
   def location
     []
-  end
-
-  def app_path
-    "/articles/#{id}/#{slug_name}"
   end
 
   def summary_to_json

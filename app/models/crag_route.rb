@@ -65,12 +65,12 @@ class CragRoute < ApplicationRecord
   after_save :update_gap_grade!
   after_create_commit :publication_push!
 
-  def rich_name
-    "#{grade_to_s} - #{name}"
-  end
-
   def app_path
     "/crag-routes/#{id}/#{slug_name}"
+  end
+
+  def rich_name
+    "#{grade_to_s} - #{name}"
   end
 
   def grade_to_s
