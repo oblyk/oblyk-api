@@ -203,7 +203,7 @@ class GuideBookPaper < ApplicationRecord
       index = 0
       crags.find_each do |crag|
         interval = 1.hour + index.minute
-        HistorizeTownsAroundJob.set(wait: interval).perform_later(crag.latitude, crag.longitude, Time.current)
+        HistorizeTownsAroundJob.set(wait: interval).perform_later(crag.latitude.to_f, crag.longitude.to_f, Time.current)
         index += 1
       end
     end

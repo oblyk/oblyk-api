@@ -10,14 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2026_07_13_093340) do
-
+ActiveRecord::Schema[7.0].define(version: 2026_07_14_095053) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -28,8 +27,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "content_type"
     t.text "metadata"
     t.bigint "byte_size", null: false
-    t.string "checksum", null: false
-    t.datetime "created_at", null: false
+    t.string "checksum"
+    t.datetime "created_at", precision: nil, null: false
     t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
@@ -46,9 +45,9 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "user_id"
     t.string "alertable_type"
     t.bigint "alertable_id"
-    t.datetime "alerted_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "alerted_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["alertable_type", "alertable_id"], name: "index_alerts_on_alertable_type_and_alertable_id"
     t.index ["user_id"], name: "index_alerts_on_user_id"
   end
@@ -61,8 +60,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "crag_id"
     t.bigint "user_id"
     t.bigint "legacy_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.json "path_metadata"
     t.boolean "from_park", default: true
     t.index ["crag_id"], name: "index_approaches_on_crag_id"
@@ -73,8 +72,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "crag_id"
     t.bigint "area_id"
     t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["area_id"], name: "index_area_crags_on_area_id"
     t.index ["crag_id", "area_id"], name: "index_area_crags_on_crag_id_and_area_id", unique: true
     t.index ["crag_id"], name: "index_area_crags_on_crag_id"
@@ -85,8 +84,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "name"
     t.bigint "user_id"
     t.bigint "legacy_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "slug_name"
     t.integer "comments_count"
     t.bigint "photo_id"
@@ -97,8 +96,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
   create_table "article_crags", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "article_id"
     t.bigint "crag_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["article_id"], name: "index_article_crags_on_article_id"
     t.index ["crag_id", "article_id"], name: "unique_crag_and_article_index", unique: true
     t.index ["crag_id"], name: "index_article_crags_on_crag_id"
@@ -107,8 +106,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
   create_table "article_guide_book_papers", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "article_id"
     t.bigint "guide_book_paper_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["article_id"], name: "index_article_guide_book_papers_on_article_id"
     t.index ["guide_book_paper_id", "article_id"], name: "unique_guide_book_and_article_index", unique: true
     t.index ["guide_book_paper_id"], name: "index_article_guide_book_papers_on_guide_book_paper_id"
@@ -122,9 +121,9 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.integer "views"
     t.integer "comments_count"
     t.bigint "author_id"
-    t.datetime "published_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "published_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "photos_count"
     t.integer "likes_count"
     t.index ["author_id"], name: "index_articles_on_author_id"
@@ -133,8 +132,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
   create_table "ascent_users", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "ascent_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["ascent_id"], name: "index_ascent_users_on_ascent_id"
     t.index ["user_id", "ascent_id"], name: "index_ascent_users_on_user_id_and_ascent_id", unique: true
     t.index ["user_id"], name: "index_ascent_users_on_user_id"
@@ -161,8 +160,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.text "min_grade_text"
     t.bigint "legacy_id"
     t.date "released_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "points"
     t.boolean "private_comment"
     t.string "hardness_status"
@@ -185,8 +184,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "name"
     t.text "description"
     t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_authors_on_user_id"
   end
 
@@ -194,16 +193,16 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "name"
     t.string "slug_name"
     t.bigint "championship_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["championship_id"], name: "index_championship_categories_on_championship_id"
   end
 
   create_table "championship_category_matches", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "championship_category_id"
     t.bigint "contest_category_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["championship_category_id"], name: "index_championship_category_matches_on_championship_category_id"
     t.index ["contest_category_id"], name: "index_championship_category_matches_on_contest_category_id"
   end
@@ -211,8 +210,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
   create_table "championship_contests", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "contest_id"
     t.bigint "championship_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["championship_id"], name: "index_championship_contests_on_championship_id"
     t.index ["contest_id"], name: "index_championship_contests_on_contest_id"
   end
@@ -223,9 +222,9 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.text "description"
     t.string "combined_ranking_type"
     t.bigint "gym_id"
-    t.datetime "archived_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "archived_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["gym_id"], name: "index_championships_on_gym_id"
   end
 
@@ -233,8 +232,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.text "description"
     t.date "session_date"
     t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["session_date"], name: "index_climbing_sessions_on_session_date"
     t.index ["user_id"], name: "index_climbing_sessions_on_user_id"
   end
@@ -243,15 +242,15 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "color_system_id"
     t.string "hex_color"
     t.integer "order"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["color_system_id"], name: "index_color_system_lines_on_color_system_id"
   end
 
   create_table "color_systems", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "colors_mark"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["colors_mark"], name: "index_color_systems_on_colors_mark", unique: true
   end
 
@@ -264,9 +263,9 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.integer "likes_count"
     t.integer "comments_count"
     t.bigint "legacy_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "moderated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "moderated_at", precision: nil
     t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id"
     t.index ["created_at"], name: "index_comments_on_created_at"
     t.index ["reply_to_comment_id"], name: "index_comments_on_reply_to_comment_id"
@@ -287,8 +286,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.boolean "waveable"
     t.integer "contest_participants_count"
     t.bigint "contest_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "parity", default: false
     t.index ["contest_id"], name: "index_contest_categories_on_contest_id"
   end
@@ -296,8 +295,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
   create_table "contest_judge_routes", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "contest_judge_id", null: false
     t.bigint "contest_route_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "contest_id"
     t.index ["contest_id"], name: "index_contest_judge_routes_on_contest_id"
     t.index ["contest_judge_id"], name: "index_contest_judge_routes_on_contest_judge_id"
@@ -309,8 +308,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "uuid"
     t.string "code"
     t.bigint "contest_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["contest_id"], name: "index_contest_judges_on_contest_id"
     t.index ["uuid"], name: "index_contest_judges_on_uuid"
   end
@@ -318,7 +317,7 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
   create_table "contest_participant_ascents", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "contest_participant_id"
     t.bigint "contest_route_id"
-    t.datetime "registered_at"
+    t.datetime "registered_at", precision: nil
     t.boolean "realised"
     t.integer "zone_1_attempt"
     t.integer "zone_2_attempt"
@@ -354,8 +353,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "user_id"
     t.bigint "contest_wave_id"
     t.boolean "tombola_winner", default: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "contest_team_id"
     t.boolean "synchronise_with_ffme_contest"
     t.bigint "contest_id"
@@ -387,8 +386,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "genre_type"
     t.integer "number_participants_for_next_step"
     t.bigint "contest_stage_step_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "contest_id"
     t.index ["contest_id"], name: "index_contest_route_groups_on_contest_id"
     t.index ["contest_stage_step_id"], name: "index_contest_route_groups_on_contest_stage_step_id"
@@ -400,11 +399,11 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.integer "number_of_holds"
     t.integer "fixed_points"
     t.boolean "additional_zone"
-    t.datetime "disabled_at"
+    t.datetime "disabled_at", precision: nil
     t.bigint "contest_route_group_id"
     t.bigint "gym_route_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "contest_id"
     t.index ["contest_id"], name: "index_contest_routes_on_contest_id"
     t.index ["contest_route_group_id"], name: "index_contest_routes_on_contest_route_group_id"
@@ -420,8 +419,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.boolean "self_reporting"
     t.integer "default_participants_for_next_step"
     t.bigint "contest_stage_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.bigint "contest_id"
     t.index ["contest_id"], name: "index_contest_stage_steps_on_contest_id"
     t.index ["contest_stage_id"], name: "index_contest_stage_steps_on_contest_stage_id"
@@ -435,16 +434,16 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "default_ranking_type"
     t.date "stage_date"
     t.bigint "contest_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["contest_id"], name: "index_contest_stages_on_contest_id"
   end
 
   create_table "contest_teams", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "contest_id"
     t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["contest_id"], name: "index_contest_teams_on_contest_id"
     t.index ["name", "contest_id"], name: "index_contest_teams_on_name_and_contest_id", unique: true
   end
@@ -466,8 +465,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
   create_table "contest_waves", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.bigint "contest_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "capacity"
     t.index ["contest_id"], name: "index_contest_waves_on_contest_id"
   end
@@ -481,14 +480,14 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.date "end_date"
     t.date "subscription_start_date"
     t.date "subscription_end_date"
-    t.datetime "subscription_closed_at"
+    t.datetime "subscription_closed_at", precision: nil
     t.integer "total_capacity"
     t.string "categorization_type"
     t.integer "contest_participants_count"
-    t.datetime "archived_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "deleted_at"
+    t.datetime "archived_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at", precision: nil
     t.boolean "draft"
     t.boolean "authorise_public_subscription", default: true
     t.boolean "private", default: false
@@ -505,9 +504,9 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "conversation_id"
     t.bigint "user_id"
     t.bigint "legacy_id"
-    t.datetime "posted_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "posted_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["conversation_id"], name: "index_conversation_messages_on_conversation_id"
     t.index ["user_id"], name: "index_conversation_messages_on_user_id"
   end
@@ -515,19 +514,19 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
   create_table "conversation_users", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "conversation_id"
     t.bigint "user_id"
-    t.datetime "last_read_at"
+    t.datetime "last_read_at", precision: nil
     t.bigint "legacy_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["conversation_id"], name: "index_conversation_users_on_conversation_id"
     t.index ["user_id"], name: "index_conversation_users_on_user_id"
   end
 
   create_table "conversations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "legacy_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "last_message_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "last_message_at", precision: nil
   end
 
   create_table "countries", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -535,8 +534,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "slug_name"
     t.string "code_country", limit: 5
     t.json "geo_polygon"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["name"], name: "index_countries_on_name"
     t.index ["slug_name"], name: "index_countries_on_slug_name", unique: true
   end
@@ -566,9 +565,9 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "crag_sector_id"
     t.bigint "user_id"
     t.bigint "legacy_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at", precision: nil
     t.bigint "photo_id"
     t.string "slug_name"
     t.integer "comments_count"
@@ -607,9 +606,9 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "max_grade_text"
     t.string "min_grade_text"
     t.bigint "legacy_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at", precision: nil
     t.bigint "photo_id"
     t.string "slug_name"
     t.integer "comments_count"
@@ -661,9 +660,9 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "max_grade_text"
     t.string "min_grade_text"
     t.bigint "legacy_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at", precision: nil
     t.bigint "photo_id"
     t.string "slug_name"
     t.integer "comments_count"
@@ -692,8 +691,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "in_sentence_prefix_type"
     t.json "geo_polygon"
     t.bigint "country_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["country_id"], name: "index_departments_on_country_id"
     t.index ["department_number"], name: "index_departments_on_department_number"
     t.index ["name"], name: "index_departments_on_name"
@@ -712,8 +711,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "contact_phone"
     t.bigint "external_ffme_contest_id"
     t.date "results_send_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["contest_id"], name: "index_ffme_contests_on_contest_id"
   end
 
@@ -721,10 +720,10 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "followable_type"
     t.bigint "followable_id"
     t.bigint "user_id"
-    t.datetime "accepted_at"
+    t.datetime "accepted_at", precision: nil
     t.bigint "legacy_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "views", default: 0
     t.index ["followable_type", "followable_id"], name: "index_follows_on_followable_type_and_followable_id"
     t.index ["user_id"], name: "index_follows_on_user_id"
@@ -734,8 +733,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "crag_id"
     t.bigint "guide_book_paper_id"
     t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["crag_id", "guide_book_paper_id"], name: "index_guide_book_paper_crags_on_crag_id_and_guide_book_paper_id", unique: true
     t.index ["crag_id"], name: "index_guide_book_paper_crags_on_crag_id"
     t.index ["guide_book_paper_id"], name: "index_guide_book_paper_crags_on_guide_book_paper_id"
@@ -754,8 +753,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.integer "weight"
     t.bigint "user_id"
     t.bigint "legacy_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "slug_name"
     t.integer "follows_count"
     t.integer "articles_count"
@@ -775,8 +774,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "crag_id"
     t.bigint "user_id"
     t.bigint "legacy_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["crag_id"], name: "index_guide_book_pdfs_on_crag_id"
     t.index ["created_at"], name: "index_guide_book_pdfs_on_created_at"
     t.index ["user_id"], name: "index_guide_book_pdfs_on_user_id"
@@ -789,8 +788,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "user_id"
     t.bigint "crag_id"
     t.bigint "legacy_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["crag_id"], name: "index_guide_book_webs_on_crag_id"
     t.index ["created_at"], name: "index_guide_book_webs_on_created_at"
     t.index ["user_id"], name: "index_guide_book_webs_on_user_id"
@@ -803,8 +802,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "email"
     t.string "first_name"
     t.string "last_name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["gym_id"], name: "index_gym_administration_requests_on_gym_id"
     t.index ["user_id"], name: "index_gym_administration_requests_on_user_id"
   end
@@ -817,9 +816,9 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.boolean "subscribe_to_comment_feed"
     t.boolean "subscribe_to_video_feed"
     t.boolean "subscribe_to_follower_feed"
-    t.datetime "last_comment_feed_read_at"
-    t.datetime "last_video_feed_read_at"
-    t.datetime "last_follower_feed_read_at"
+    t.datetime "last_comment_feed_read_at", precision: nil
+    t.datetime "last_video_feed_read_at", precision: nil
+    t.datetime "last_follower_feed_read_at", precision: nil
     t.boolean "email_report", default: true
     t.index ["gym_id"], name: "index_gym_administrators_on_gym_id"
     t.index ["user_id"], name: "index_gym_administrators_on_user_id"
@@ -829,16 +828,16 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "uuid"
     t.string "customer_stripe_id"
     t.string "email"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["uuid"], name: "index_gym_billing_accounts_on_uuid"
   end
 
   create_table "gym_chain_administrators", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "gym_chain_id"
     t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["gym_chain_id"], name: "index_gym_chain_administrators_on_gym_chain_id"
     t.index ["user_id"], name: "index_gym_chain_administrators_on_user_id"
   end
@@ -846,8 +845,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
   create_table "gym_chain_gyms", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "gym_chain_id"
     t.bigint "gym_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["gym_chain_id"], name: "index_gym_chain_gyms_on_gym_chain_id"
     t.index ["gym_id"], name: "index_gym_chain_gyms_on_gym_id"
   end
@@ -858,8 +857,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.text "description"
     t.boolean "public_chain"
     t.string "api_access_token"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["api_access_token"], name: "index_gym_chains_on_api_access_token", unique: true
     t.index ["slug_name"], name: "index_gym_chains_on_slug_name", unique: true
   end
@@ -869,9 +868,9 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "climbing_type"
     t.string "color"
     t.bigint "gym_id"
-    t.datetime "deactivated_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deactivated_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["gym_id"], name: "index_gym_climbing_styles_on_gym_id"
   end
 
@@ -899,9 +898,9 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "page_format"
     t.string "page_direction"
     t.bigint "gym_id"
-    t.datetime "archived_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "archived_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["gym_id"], name: "index_gym_label_templates_on_gym_id"
   end
 
@@ -926,9 +925,9 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "email"
     t.bigint "user_id"
     t.bigint "gym_id"
-    t.datetime "deactivated_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deactivated_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["gym_id"], name: "index_gym_openers_on_gym_id"
     t.index ["user_id"], name: "index_gym_openers_on_user_id"
   end
@@ -938,10 +937,10 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.text "description"
     t.json "row_json"
     t.integer "number_of_columns"
-    t.datetime "archived_at"
+    t.datetime "archived_at", precision: nil
     t.bigint "gym_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["gym_id"], name: "index_gym_opening_sheets_on_gym_id"
   end
 
@@ -952,21 +951,21 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.date "end_date"
     t.boolean "unlimited_unit"
     t.integer "remaining_unit"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["gym_id"], name: "index_gym_options_on_gym_id"
   end
 
   create_table "gym_route_covers", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "gym_route_openers", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "gym_opener_id"
     t.bigint "gym_route_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["gym_opener_id"], name: "index_gym_route_openers_on_gym_opener_id"
     t.index ["gym_route_id"], name: "index_gym_route_openers_on_gym_route_id"
   end
@@ -994,11 +993,11 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.integer "level_length"
     t.string "level_color"
     t.bigint "legacy_id"
-    t.datetime "archived_at"
+    t.datetime "archived_at", precision: nil
     t.date "opened_at"
-    t.datetime "dismounted_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "dismounted_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "points"
     t.integer "comments_count"
     t.integer "all_comments_count", default: 0
@@ -1025,9 +1024,9 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.text "polygon"
     t.bigint "gym_space_id"
     t.bigint "legacy_id"
-    t.datetime "deleted_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "can_be_more_than_one_pitch", default: false
     t.integer "order", default: 0
     t.integer "min_anchor_number"
@@ -1047,8 +1046,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "gym_id"
     t.string "name"
     t.integer "order"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["gym_id"], name: "index_gym_space_groups_on_gym_id"
   end
 
@@ -1064,11 +1063,11 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.decimal "longitude", precision: 10, scale: 6
     t.bigint "gym_id"
     t.bigint "legacy_id"
-    t.datetime "deleted_at"
-    t.datetime "archived_at"
+    t.datetime "deleted_at", precision: nil
+    t.datetime "archived_at", precision: nil
     t.boolean "draft", default: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "slug_name"
     t.bigint "gym_space_group_id"
     t.boolean "anchor"
@@ -1090,8 +1089,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.text "description"
     t.json "three_d_parameters"
     t.bigint "gym_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["gym_id"], name: "index_gym_three_d_assets_on_gym_id"
   end
 
@@ -1104,8 +1103,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "gym_three_d_asset_id"
     t.bigint "gym_id"
     t.bigint "gym_space_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["gym_id"], name: "index_gym_three_d_elements_on_gym_id"
     t.index ["gym_space_id"], name: "index_gym_three_d_elements_on_gym_space_id"
     t.index ["gym_three_d_asset_id"], name: "index_gym_three_d_elements_on_gym_three_d_asset_id"
@@ -1137,13 +1136,13 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.decimal "longitude", precision: 10, scale: 6
     t.bigint "user_id"
     t.string "plan"
-    t.datetime "plan_start_at"
-    t.datetime "plan_end_at"
-    t.datetime "assigned_at"
+    t.datetime "plan_start_at", precision: nil
+    t.datetime "plan_end_at", precision: nil
+    t.datetime "assigned_at", precision: nil
     t.bigint "legacy_id"
-    t.datetime "deleted_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deleted_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "slug_name"
     t.integer "follows_count"
     t.integer "comments_count"
@@ -1179,8 +1178,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "for_gym_type"
     t.integer "month_by_occurrence"
     t.string "product_stripe_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "indoor_subscriptions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1189,21 +1188,21 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.date "start_date"
     t.date "trial_end_date"
     t.date "end_date"
-    t.datetime "cancelled_at"
+    t.datetime "cancelled_at", precision: nil
     t.string "payment_link"
     t.string "payment_status"
     t.string "subscription_stripe_id"
     t.string "payment_link_stipe_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "ip_black_lists", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "ip"
     t.text "params_sent"
     t.integer "block_count"
-    t.datetime "blocked_at"
-    t.datetime "block_expired_at"
+    t.datetime "blocked_at", precision: nil
+    t.datetime "block_expired_at", precision: nil
     t.index ["block_expired_at"], name: "index_ip_black_lists_on_block_expired_at"
     t.index ["ip"], name: "index_ip_black_lists_on_ip"
   end
@@ -1212,8 +1211,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "user_id"
     t.string "likeable_type"
     t.bigint "likeable_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["likeable_type", "likeable_id"], name: "index_likes_on_likeable_type_and_likeable_id"
     t.index ["user_id"], name: "index_likes_on_user_id"
   end
@@ -1226,8 +1225,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "linkable_id"
     t.bigint "user_id"
     t.bigint "legacy_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["linkable_type", "linkable_id"], name: "index_links_on_linkable_type_and_linkable_id"
     t.index ["user_id"], name: "index_links_on_user_id"
   end
@@ -1241,8 +1240,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.integer "distinct_users_count"
     t.decimal "latitude", precision: 10, scale: 6
     t.decimal "longitude", precision: 10, scale: 6
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["latitude"], name: "index_localities_on_latitude"
     t.index ["longitude"], name: "index_localities_on_longitude"
   end
@@ -1254,9 +1253,9 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.boolean "local_sharing"
     t.text "description"
     t.integer "radius"
-    t.datetime "deactivated_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "deactivated_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["locality_id"], name: "index_locality_users_on_locality_id"
     t.index ["user_id"], name: "index_locality_users_on_user_id"
   end
@@ -1266,11 +1265,11 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "user_id"
     t.string "notifiable_type"
     t.bigint "notifiable_id"
-    t.datetime "posted_at"
-    t.datetime "read_at"
-    t.datetime "email_notification_sent_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "posted_at", precision: nil
+    t.datetime "read_at", precision: nil
+    t.datetime "email_notification_sent_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["notifiable_type", "notifiable_id"], name: "index_notifications_on_notifiable_type_and_notifiable_id"
     t.index ["posted_at"], name: "index_notifications_on_posted_at"
     t.index ["user_id"], name: "index_notifications_on_user_id"
@@ -1279,8 +1278,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
   create_table "organization_users", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "organization_id"
     t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["organization_id"], name: "index_organization_users_on_organization_id"
     t.index ["user_id"], name: "index_organization_users_on_user_id"
   end
@@ -1296,9 +1295,9 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "zipcode"
     t.string "website"
     t.string "company_registration_number"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at", precision: nil
     t.string "slug_name"
     t.index ["api_access_token"], name: "index_organizations_on_api_access_token", unique: true
     t.index ["name"], name: "index_organizations_on_name", unique: true
@@ -1311,8 +1310,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "crag_id"
     t.bigint "user_id"
     t.bigint "legacy_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.decimal "elevation", precision: 10, scale: 6
     t.index ["crag_id"], name: "index_parks_on_crag_id"
     t.index ["user_id"], name: "index_parks_on_user_id"
@@ -1332,9 +1331,9 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "illustrable_id"
     t.integer "likes_count"
     t.bigint "legacy_id"
-    t.datetime "posted_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "posted_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["created_at"], name: "index_photos_on_created_at"
     t.index ["illustrable_type", "illustrable_id"], name: "index_photos_on_illustrable_type_and_illustrable_id"
     t.index ["user_id"], name: "index_photos_on_user_id"
@@ -1354,8 +1353,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "address"
     t.bigint "guide_book_paper_id"
     t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["guide_book_paper_id"], name: "index_place_of_sales_on_guide_book_paper_id"
     t.index ["user_id"], name: "index_place_of_sales_on_user_id"
   end
@@ -1371,7 +1370,7 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
   create_table "publication_views", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "publication_id"
     t.bigint "user_id"
-    t.datetime "viewed_at"
+    t.datetime "viewed_at", precision: nil
     t.index ["publication_id"], name: "index_publication_views_on_publication_id"
     t.index ["user_id", "publication_id"], name: "index_publication_views_on_user_id_and_publication_id", unique: true
     t.index ["user_id"], name: "index_publication_views_on_user_id"
@@ -1383,18 +1382,18 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "author_id"
     t.string "publishable_subject"
     t.text "body"
-    t.datetime "published_at"
-    t.datetime "last_updated_at"
+    t.datetime "published_at", precision: nil
+    t.datetime "last_updated_at", precision: nil
     t.integer "comments_count", default: 0
     t.integer "likes_count", default: 0
     t.integer "attachables_count"
     t.json "attachable_types_count"
     t.boolean "generated", default: false
-    t.datetime "pined_at"
+    t.datetime "pined_at", precision: nil
     t.decimal "latitude", precision: 10, scale: 6
     t.decimal "longitude", precision: 10, scale: 6
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_publications_on_author_id"
     t.index ["latitude"], name: "index_publications_on_latitude"
     t.index ["longitude"], name: "index_publications_on_longitude"
@@ -1407,8 +1406,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "user_id"
     t.string "token"
     t.string "user_agent"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["token"], name: "index_refresh_tokens_on_token"
     t.index ["user_agent"], name: "index_refresh_tokens_on_user_agent"
     t.index ["user_id"], name: "index_refresh_tokens_on_user_id"
@@ -1420,9 +1419,9 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "reportable_id"
     t.text "body"
     t.bigint "user_id"
-    t.datetime "processed_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "processed_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["reportable_type", "reportable_id"], name: "index_reports_on_reportable_type_and_reportable_id"
     t.index ["user_id"], name: "index_reports_on_user_id"
   end
@@ -1432,8 +1431,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "crag_id"
     t.bigint "crag_sector_id"
     t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["crag_id"], name: "index_rock_bars_on_crag_id"
     t.index ["crag_sector_id"], name: "index_rock_bars_on_crag_sector_id"
     t.index ["user_id"], name: "index_rock_bars_on_user_id"
@@ -1441,28 +1440,28 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
 
   create_table "stripe_checkout_sessions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "checkout_session_id"
-    t.datetime "processed_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "processed_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["checkout_session_id"], name: "index_stripe_checkout_sessions_on_checkout_session_id"
   end
 
   create_table "subscribes", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "email"
-    t.datetime "subscribed_at"
+    t.datetime "subscribed_at", precision: nil
     t.integer "error"
     t.bigint "legacy_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "complained_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "complained_at", precision: nil
     t.index ["email"], name: "index_subscribes_on_email", unique: true
   end
 
   create_table "tick_lists", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "crag_route_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["crag_route_id"], name: "index_tick_lists_on_crag_route_id"
     t.index ["user_id"], name: "index_tick_lists_on_user_id"
   end
@@ -1471,9 +1470,9 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.integer "dist"
     t.bigint "town_id"
     t.json "json_object"
-    t.datetime "version_date"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "version_date", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["dist"], name: "index_town_json_objects_on_dist"
     t.index ["town_id"], name: "index_town_json_objects_on_town_id"
   end
@@ -1487,8 +1486,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "town_code", limit: 5
     t.string "zipcode", limit: 5
     t.bigint "department_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["department_id"], name: "index_towns_on_department_id"
     t.index ["latitude"], name: "index_towns_on_latitude"
     t.index ["longitude"], name: "index_towns_on_longitude"
@@ -1503,8 +1502,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "status"
     t.string "ffme_licence_number"
     t.json "meta_data"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["type", "user_id"], name: "index_user_applications_on_type_and_user_id", unique: true
     t.index ["user_application_id"], name: "index_user_applications_on_user_application_id"
     t.index ["user_id"], name: "index_user_applications_on_user_id"
@@ -1519,7 +1518,7 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "genre"
     t.text "description"
     t.boolean "partner_search"
-    t.datetime "newsletter_accepted_at"
+    t.datetime "newsletter_accepted_at", precision: nil
     t.decimal "latitude", precision: 10, scale: 6
     t.decimal "longitude", precision: 10, scale: 6
     t.boolean "bouldering", default: false
@@ -1534,14 +1533,14 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.integer "grade_min"
     t.boolean "super_admin", default: false
     t.bigint "legacy_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at", precision: nil
     t.string "slug_name"
     t.string "localization"
     t.string "language", default: "fr"
     t.string "reset_password_token"
-    t.datetime "reset_password_token_expired_at"
+    t.datetime "reset_password_token_expired_at", precision: nil
     t.integer "follows_count"
     t.string "uuid", limit: 36
     t.boolean "public_profile"
@@ -1549,10 +1548,10 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.boolean "public_indoor_ascents"
     t.decimal "partner_latitude", precision: 10, scale: 6
     t.decimal "partner_longitude", precision: 10, scale: 6
-    t.datetime "last_activity_at"
-    t.datetime "partner_search_activated_at"
-    t.datetime "last_partner_check_at"
-    t.datetime "partner_notified_at"
+    t.datetime "last_activity_at", precision: nil
+    t.datetime "partner_search_activated_at", precision: nil
+    t.datetime "last_partner_check_at", precision: nil
+    t.datetime "partner_notified_at", precision: nil
     t.json "email_notifiable_list"
     t.string "ws_token"
     t.index ["created_at"], name: "index_users_on_created_at"
@@ -1567,7 +1566,7 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.string "event", null: false
     t.string "whodunnit"
     t.text "object", size: :long
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.text "object_changes", size: :long
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
@@ -1582,8 +1581,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.bigint "viewable_id"
     t.integer "likes_count"
     t.bigint "legacy_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["created_at"], name: "index_videos_on_created_at"
     t.index ["user_id"], name: "index_videos_on_user_id"
     t.index ["viewable_type", "viewable_id"], name: "index_videos_on_viewable_type_and_viewable_id"
@@ -1594,8 +1593,8 @@ ActiveRecord::Schema.define(version: 2026_07_13_093340) do
     t.text "definition"
     t.bigint "user_id"
     t.bigint "legacy_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "slug_name"
     t.index ["name"], name: "index_words_on_name", unique: true
     t.index ["user_id"], name: "index_words_on_user_id"

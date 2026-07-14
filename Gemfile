@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.2.8'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '6.1.7.10'
+gem 'rails', '7.0.10'
 # Pin concurrent-ruby < 1.3.0 (1.3.0+ breaks ActiveSupport 6.0.x LoggerThreadSafeLevel)
 gem 'concurrent-ruby', '~> 1.3'
 # Use sqlite3 as the database for Active Record
@@ -24,9 +24,6 @@ gem 'redis-rails'
 # Adds a Redis::Namespace class which can be used to namespace Redis keys
 gem 'redis-namespace'
 
-# Use Active Storage variant
-gem 'image_processing'
-
 # Convert Video (from .mov to .mp4 by example)
 gem 'streamio-ffmpeg'
 
@@ -43,8 +40,9 @@ gem 'addressable'
 # Active storage validation
 gem 'activestorage-validator'
 
-# Analyze image
-gem 'mini_magick'
+# Active Storage variant && Analyze image
+gem 'image_processing'
+gem 'ruby-vips'
 
 # Analyze user agent
 gem 'useragent'
@@ -53,7 +51,7 @@ gem 'useragent'
 gem 'kaminari'
 
 # Sidekiq
-gem 'sidekiq', '~> 6'
+gem 'sidekiq', '~> 7'
 
 # Track changes
 gem 'paper_trail'
@@ -155,7 +153,7 @@ group :development do
 end
 
 group :test do
-  gem 'minitest', '5.14.4'
+  gem 'minitest', '5.27'
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara'
   gem 'selenium-webdriver'

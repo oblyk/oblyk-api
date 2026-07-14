@@ -1,11 +1,11 @@
 one:
   ip: 1.2.3.4
   block_count: 1
-  blocked_at: <%= 10.minutes.ago.to_s(:db) %>
-  block_expired_at: <%= 20.minutes.from_now.to_s(:db) %>
+  blocked_at: <%= 10.minutes.ago.to_fs(:db) %>
+  block_expired_at: <%= 20.minutes.from_now.to_fs(:db) %>
 
 two:
   ip: 5.6.7.8
   block_count: 5
-  blocked_at: <%= 1.hour.ago.to_s(:db) %>
-  block_expired_at: <%= 30.minutes.ago.to_s(:db) %>
+  blocked_at: <%= 1.hour.ago.to_fs(:db) %>
+  block_expired_at: <%= 30.minutes.ago.to_fs(:db) %>

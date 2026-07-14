@@ -100,7 +100,6 @@ class ClimberProximity
       ORDER BY proximity_points DESC,
                users.last_activity_at DESC,
                users.id DESC
-      LIMIT :limit OFFSET :offset
     SQL
 
     results = User.connection
@@ -110,12 +109,10 @@ class ClimberProximity
                         sql_query,
                         {
                           user_id: user.id,
-                          oblyk_user_id: 57,
-                          limit: per_page.to_i,
-                          offset: (page.to_i - 1) * per_page.to_i
+                          oblyk_user_id: 57
                         }
                       ]
-                    )
+                    ) + "LIMIT #{per_page.to_i} OFFSET #{(page.to_i - 1) * per_page.to_i}"
                   )
     users = User.includes(avatar_attachment: :blob, banner_attachment: :blob)
                 .where(id: results.map { |results| results['id'] })

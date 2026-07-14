@@ -9,7 +9,7 @@ class ImageConverterService
   end
 
   def call
-    ImageProcessing::MiniMagick.source(tempfile)
+    ImageProcessing::Vips.source(tempfile)
                                .convert(type)
                                .call
   end

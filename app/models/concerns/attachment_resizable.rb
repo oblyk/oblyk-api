@@ -30,7 +30,7 @@ module AttachmentResizable
     return unless attachment.attached?
 
     attachment.open(tmpdir: '/tmp') do |file|
-      image = ImageProcessing::MiniMagick.source(file.path)
+      image = ImageProcessing::Vips.source(file.path)
       result = image.convert!('jpg')
       attachment.attach(io: File.open(result.path), filename: "picture-#{SecureRandom.alphanumeric(12)}.jpg", content_type: 'image/jpg')
     end

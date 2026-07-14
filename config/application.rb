@@ -1,19 +1,6 @@
 require_relative "boot"
 
-require "rails"
-# Pick the frameworks you want:
-require "active_model/railtie"
-require "active_job/railtie"
-require "active_record/railtie"
-require "active_storage/engine"
-require "action_controller/railtie"
-require "action_mailer/railtie"
-require "action_mailbox/engine"
-require "action_text/engine"
-require "action_view/railtie"
-require "action_cable/engine"
-# require "sprockets/railtie"
-require "rails/test_unit/railtie"
+require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -22,14 +9,14 @@ Bundler.require(*Rails.groups)
 module OblykApi
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.1
+    config.load_defaults 7.0
 
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    # config.time_zone = "Central Time (US & Canada)"
+    config.time_zone = "Paris"
     # config.eager_load_paths << Rails.root.join("extras")
 
     # Only loads a smaller set of middleware suitable for API only apps.
@@ -37,11 +24,9 @@ module OblykApi
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    # config.assets.check_precompiled_asset = false
-
     # Load local env vars
     config.before_configuration do
-      env_file = Rails.root.join('config/local_env.yml')
+      env_file = Rails.root.join("config/local_env.yml")
       if File.exist?(env_file)
         YAML.safe_load(File.open(env_file))&.each do |key, value|
           ENV[key.to_s] = value.to_s
@@ -50,14 +35,9 @@ module OblykApi
     end
 
     # Added manually session store for sidekiq web
-    config.session_store :cookie_store, key: '_interslice_session'
+    config.session_store :cookie_store, key: "_interslice_session"
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use config.session_store, config.session_options
-
-    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
-    # Run 'rake -D time' for a list of tasks for finding time zone names. Default is UTC.
-    # config.time_zone = 'Central Time (US & Canada)'
-    config.time_zone = 'Paris'
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]

@@ -43,7 +43,7 @@ class GymSpace < ApplicationRecord
   def set_plan_dimension!
     return unless plan.attached?
 
-    meta = ActiveStorage::Analyzer::ImageAnalyzer.new(plan.blob).metadata
+    meta = ActiveStorage::Analyzer::ImageAnalyzer::Vips.new(plan.blob).metadata
 
     self.scheme_height = meta[:height]
     self.scheme_width = meta[:width]

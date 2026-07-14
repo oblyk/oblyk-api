@@ -18,6 +18,6 @@ class GuideBookPaperCrag < ApplicationRecord
   end
 
   def historize_around_towns
-    HistorizeTownsAroundJob.set(wait: 1.hour).perform_later(crag.latitude, crag.longitude, Time.current)
+    HistorizeTownsAroundJob.set(wait: 1.hour).perform_later(crag.latitude.to_f, crag.longitude.to_f, Time.current)
   end
 end

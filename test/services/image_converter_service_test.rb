@@ -29,7 +29,7 @@ class ImageConverterServiceTest < ActiveSupport::TestCase
     chain.expect :convert, chain, [@type]
     chain.expect :call, 'converted_file_mock'
 
-    ImageProcessing::MiniMagick.stub :source, lambda { |file|
+    ImageProcessing::Vips.stub :source, lambda { |file|
       assert_equal @tempfile, file
       chain
     } do

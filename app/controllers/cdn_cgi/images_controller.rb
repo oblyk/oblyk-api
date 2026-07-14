@@ -12,16 +12,15 @@ module CdnCgi
 
       case options['fit']
       when 'scale-down'
-        resize_attachement = attachment.variant(resize_to_limit: [options['width'].to_i, options['height'].to_i], quality: options['quality'].to_i).processed
-        redirect_to "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.rails_representation_url(resize_attachement, only_path: true)}"
+        resize_attachement = attachment.variant(resize_to_limit: [options['width'].to_i, options['height'].to_i], saver: { quality: options['quality'].to_i }).processed
+        redirect_to "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.rails_representation_url(resize_attachement, only_path: true)}", allow_other_host: true
 
       when 'crop'
-        size = "#{options['width']}x#{options['height']}"
-        resize_attachement = attachment.variant(gravity: 'Center', resize: "#{size}^", crop: "#{size}+0+0", quality: options['quality'].to_i).processed
-        redirect_to "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.rails_representation_url(resize_attachement, only_path: true)}"
+        resize_attachement = attachment.variant(resize_to_fill: [options['width'].to_i, options['height'].to_i], saver: { quality: options['quality'].to_i }).processed
+        redirect_to "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.rails_representation_url(resize_attachement, only_path: true)}", allow_other_host: true
 
       else
-        redirect_to "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.polymorphic_url(attachment, only_path: true)}"
+        redirect_to "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.polymorphic_url(attachment, only_path: true)}", allow_other_host: true
       end
     end
   end

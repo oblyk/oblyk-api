@@ -378,7 +378,7 @@ class Crag < ApplicationRecord
        saved_change_to_crag_routes_count? ||
        saved_change_to_min_approach_time? ||
        saved_change_to_max_approach_time?
-      HistorizeTownsAroundJob.set(wait: 1.hour).perform_later(latitude, longitude, Time.current)
+      HistorizeTownsAroundJob.set(wait: 1.hour).perform_later(latitude.to_f, longitude.to_f, Time.current)
     end
   end
 
