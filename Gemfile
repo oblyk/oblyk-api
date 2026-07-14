@@ -24,6 +24,9 @@ gem 'redis-rails'
 # Adds a Redis::Namespace class which can be used to namespace Redis keys
 gem 'redis-namespace'
 
+# Keep connection pool under version 3.0 (delete this when upgrade to Rails 8.0.5)
+gem 'connection_pool', '< 3.0'
+
 # Convert Video (from .mov to .mp4 by example)
 gem 'streamio-ffmpeg'
 
