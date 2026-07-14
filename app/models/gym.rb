@@ -80,6 +80,7 @@ class Gym < ApplicationRecord
   before_save :set_app_paths, if: :saved_change_to_name?
   after_save :historize_around_towns
   after_save :delete_routes_caches
+  after_create :historize_app_paths!
   after_create_commit :publication_push!
 
   def app_path
