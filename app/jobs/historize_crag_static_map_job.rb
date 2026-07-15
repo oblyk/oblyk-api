@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'open-uri'
 
 class HistorizeCragStaticMapJob < ApplicationJob
   queue_as :default
