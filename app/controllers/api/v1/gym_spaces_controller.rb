@@ -235,6 +235,7 @@ module Api
           if obj_name
             # Run obj2gltf shell command
             _stdout, stderr, status = Open3.capture3(
+              { 'PATH' => "#{ENV['NPM_BIN_PATH']}:#{ENV['PATH']}" },
               "#{ENV['NPM_BIN_PATH']}/obj2gltf",
               '-i',
               "#{folder.first}/#{obj_name}"
