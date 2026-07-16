@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.2.8'
+ruby '3.4.10'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '7.0.10'
@@ -156,7 +156,7 @@ group :development do
 end
 
 group :test do
-  gem 'minitest', '5.27'
+  gem 'minitest', '5.27' # unpinned minitest version when upgrade to rails 8.0.4+
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara'
   gem 'selenium-webdriver'
