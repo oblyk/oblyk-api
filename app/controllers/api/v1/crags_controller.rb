@@ -203,8 +203,8 @@ module Api
         climbing_style = params.fetch(:climbing_style, nil)
         altitude = params.fetch(:altitude, nil)
         altitude_switch = params.fetch(:altitudeSwitch, nil)
-        grade_range = params.fetch(:gradeRange, nil)
-        orientations = params.fetch(:orientations, nil)
+        grade_range = params[:gradeRange]
+        orientations = params[:orientations]
         have_filter = climbing_style.present? || (altitude.present? && altitude_switch.present?) || grade_range.present? || orientations.present?
 
         json_features = []
@@ -228,12 +228,12 @@ module Api
             min = grade_range[0].to_i
             max = grade_range[1].to_i
             if min.positive? && max == 52 # starting from
-              crags = crags.where('`crags`.`id` IN (SELECT DISTINCT c.id FROM crags c INNER JOIN crag_routes cr ON c.id = cr.crag_id WHERE cr.min_grade_value >= :min)', min: min + 1)
+              crags = crags.where('EXISTS (SELECT 1 FROM crag_routes cr WHERE cr.crag_id = crags.id AND cr.min_grade_value >= :min)', min: min + 1)
             elsif min.zero? && max < 52
-              crags = crags.where('`crags`.`id` IN (SELECT DISTINCT c.id FROM crags c INNER JOIN crag_routes cr ON c.id = cr.crag_id WHERE cr.min_grade_value <= :max OR cr.max_grade_value <= :max + 1)', max: max + 1)
+              crags = crags.where('EXISTS (SELECT 1 FROM crag_routes cr WHERE cr.crag_id = crags.id AND (cr.min_grade_value <= :max OR cr.max_grade_value <= :max + 1))', max: max + 1)
             elsif min.positive? && max < 52
-              crags = crags.where('`crags`.`id` IN (SELECT DISTINCT c.id FROM crags c INNER JOIN crag_routes cr ON c.id = cr.crag_id WHERE cr.min_grade_value BETWEEN :min - 3 AND :min + 3)', min: min + 1)
-              crags = crags.where('`crags`.`id` IN (SELECT DISTINCT c.id FROM crags c INNER JOIN crag_routes cr ON c.id = cr.crag_id WHERE cr.min_grade_value BETWEEN :max - 2 AND :max + 2)', max: max + 1)
+              crags = crags.where('EXISTS (SELECT 1 FROM crag_routes cr WHERE cr.crag_id = crags.id AND cr.min_grade_value BETWEEN :min - 3 AND :min + 3)', min: min + 1)
+              crags = crags.where('EXISTS (SELECT 1 FROM crag_routes cr WHERE cr.crag_id = crags.id AND cr.min_grade_value BETWEEN :max - 2 AND :max + 2)', max: max + 1)
             end
           end
 
@@ -447,11 +447,8 @@ module Api
       end
 
       def destroy
-        if @crag.destroy
-          render json: {}, status: :ok
-        else
-          render json: { error: @crag.errors }, status: :unprocessable_entity
-        end
+        @crag.destroy
+        head :no_content
       end
 
       private

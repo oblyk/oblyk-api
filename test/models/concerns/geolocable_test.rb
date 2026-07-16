@@ -26,7 +26,7 @@ class GeolocableTest < ActiveSupport::TestCase
   end
 
   test 'geo_search returns objects within distance' do
-    results = Crag.geo_search(44.319, 5.697, 5)
+    results = Crag.geo_search(44.319, 5.497, 5)
     assert_includes results, @crag
 
     results = Crag.geo_search(48.8566, 2.3522, 10) # Paris

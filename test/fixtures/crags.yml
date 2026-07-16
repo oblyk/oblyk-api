@@ -16,12 +16,13 @@ rocher_des_aures:
   elevation: 713
   crag_routes_count: 3
   department: drome
+  max_approach_time: 5
 
 orpierre:
   name: Orpierre - Quiquillon
   rocks: [ limestone ]
   latitude: 44.319430
-  longitude: 5.697820
+  longitude: 5.497820
   code_country: fr
   city: Orpierre
   region: Hautes-Alpes
