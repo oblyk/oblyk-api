@@ -10,6 +10,10 @@ class Author < ApplicationRecord
 
   validates :description, :name, presence: true
 
+  def app_path
+    "/authors/#{id}"
+  end
+
   def summary_to_json
     detail_to_json
   end
@@ -18,6 +22,7 @@ class Author < ApplicationRecord
     {
       id: id,
       name: name,
+      app_path: app_path,
       description: description,
       user_id: user_id,
       attachments: {
