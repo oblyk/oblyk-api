@@ -197,7 +197,7 @@ module Api
             session_refresh_token: session_refresh_token
           }, status: :created
         else
-          render json: { error: participant.errors }, status: :unprocessable_entity
+          render json: { error: participant.errors }, status: :unprocessable_content
         end
       end
 
@@ -208,14 +208,14 @@ module Api
           if contest_team.save
             contest_participant.contest_team = contest_team
           else
-            render json: { error: contest_team.errors }, status: :unprocessable_entity
+            render json: { error: contest_team.errors }, status: :unprocessable_content
             return
           end
         end
         if contest_participant.save
           render json: contest_participant.detail_to_json, status: :ok
         else
-          render json: { error: contest_participant.errors }, status: :unprocessable_entity
+          render json: { error: contest_participant.errors }, status: :unprocessable_content
         end
       end
 
@@ -224,7 +224,7 @@ module Api
           broadcast_contest @contest_participant, 'UpdateParticipant'
           render json: @contest_participant.detail_to_json, status: :ok
         else
-          render json: { error: @contest_participant.errors }, status: :unprocessable_entity
+          render json: { error: @contest_participant.errors }, status: :unprocessable_content
         end
       end
 
@@ -232,7 +232,7 @@ module Api
         if @contest_participant.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @contest_participant.errors }, status: :unprocessable_entity
+          render json: { error: @contest_participant.errors }, status: :unprocessable_content
         end
       end
 

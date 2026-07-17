@@ -51,7 +51,7 @@ module Api
              params: { word: { name: 'Nouvel mot', definition: nil } },
              headers: @api_headers,
              as: :json
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
         assert_not_empty JSON.parse(response.body)['error']
       end
 
@@ -80,7 +80,7 @@ module Api
               params: { word: { name: nil } },
               headers: @api_headers,
               as: :json
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
         assert_not_empty JSON.parse(response.body)['error']
       end
 

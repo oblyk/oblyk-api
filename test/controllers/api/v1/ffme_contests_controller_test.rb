@@ -64,7 +64,7 @@ module Api
                headers: @gym_admin_headers,
                as: :json
         end
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
       end
 
       test 'should update ffme contest' do
@@ -107,7 +107,7 @@ module Api
 
         post send_results_api_v1_gym_contest_ffme_contest_url(@gym, @contest, @ffme_contest),
              headers: @gym_admin_headers
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
         json_response = JSON.parse(response.body)
         assert_equal 'ffme_contest_is_not_sendable', json_response['error']['base'].first
       end

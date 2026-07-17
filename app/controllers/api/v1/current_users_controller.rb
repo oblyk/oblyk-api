@@ -257,7 +257,7 @@ module Api
         if @user.update(user_params)
           render json: @user.detail_to_json(current_user: true), status: :ok
         else
-          render json: { error: @user.errors }, status: :unprocessable_entity
+          render json: { error: @user.errors }, status: :unprocessable_content
         end
       end
 
@@ -265,7 +265,7 @@ module Api
         if @user.update(password_params)
           render json: @user.detail_to_json(current_user: true), status: :ok
         else
-          render json: { error: @user.errors }, status: :unprocessable_entity
+          render json: { error: @user.errors }, status: :unprocessable_content
         end
       end
 
@@ -276,7 +276,7 @@ module Api
         if @user.update(banner_params)
           render json: @user.detail_to_json(current_user: true), status: :ok
         else
-          render json: { error: @user.errors }, status: :unprocessable_entity
+          render json: { error: @user.errors }, status: :unprocessable_content
         end
       end
 
@@ -287,7 +287,7 @@ module Api
         if @user.update(avatar_params)
           render json: @user.detail_to_json(current_user: true), status: :ok
         else
-          render json: { error: @user.errors }, status: :unprocessable_entity
+          render json: { error: @user.errors }, status: :unprocessable_content
         end
       end
 

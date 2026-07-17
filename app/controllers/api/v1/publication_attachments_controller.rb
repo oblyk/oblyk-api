@@ -27,7 +27,7 @@ module Api
         if publication_attachment.save
           render json: serialized_publication_attachment(publication_attachment), status: :ok
         else
-          render json: { error: publication_attachment.errors }, status: :unprocessable_entity
+          render json: { error: publication_attachment.errors }, status: :unprocessable_content
         end
       end
 
@@ -43,7 +43,7 @@ module Api
         if @publication.save
           render json: serialized_publication(@publication), status: :ok
         else
-          render json: { error: @publication.errors }, status: :unprocessable_entity
+          render json: { error: @publication.errors }, status: :unprocessable_content
         end
       end
 
@@ -51,7 +51,7 @@ module Api
         if @publication.update publication_attachment_params
           render json: serialized_publication(@publication), status: :ok
         else
-          render json: { error: @publication.errors }, status: :unprocessable_entity
+          render json: { error: @publication.errors }, status: :unprocessable_content
         end
       end
 
@@ -60,7 +60,7 @@ module Api
           @publication.reload
           render json: serialized_publication(@publication), status: :ok
         else
-          render json: { error: @publication_attachment.errors }, status: :unprocessable_entity
+          render json: { error: @publication_attachment.errors }, status: :unprocessable_content
         end
       end
 

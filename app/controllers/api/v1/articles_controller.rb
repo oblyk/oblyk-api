@@ -59,7 +59,7 @@ module Api
         if @article.save
           render json: @article.detail_to_json, status: :ok
         else
-          render json: { error: @article.errors }, status: :unprocessable_entity
+          render json: { error: @article.errors }, status: :unprocessable_content
         end
       end
 
@@ -67,7 +67,7 @@ module Api
         if @article.update(article_params)
           render json: @article.detail_to_json, status: :ok
         else
-          render json: { error: @article.errors }, status: :unprocessable_entity
+          render json: { error: @article.errors }, status: :unprocessable_content
         end
       end
 
@@ -75,7 +75,7 @@ module Api
         if @article.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @article.errors }, status: :unprocessable_entity
+          render json: { error: @article.errors }, status: :unprocessable_content
         end
       end
 
@@ -83,7 +83,7 @@ module Api
         if @article.update(cover_params)
           render json: @article.detail_to_json, status: :ok
         else
-          render json: { error: @article.errors }, status: :unprocessable_entity
+          render json: { error: @article.errors }, status: :unprocessable_content
         end
       end
 

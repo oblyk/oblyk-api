@@ -24,7 +24,7 @@ module Api
         if @alert.save
           render json: @alert.detail_to_json, status: :ok
         else
-          render json: { error: @alert.errors }, status: :unprocessable_entity
+          render json: { error: @alert.errors }, status: :unprocessable_content
         end
       end
 
@@ -32,7 +32,7 @@ module Api
         if @alert.update(alert_params)
           render json: @alert.detail_to_json, status: :ok
         else
-          render json: { error: @alert.errors }, status: :unprocessable_entity
+          render json: { error: @alert.errors }, status: :unprocessable_content
         end
       end
 
@@ -40,7 +40,7 @@ module Api
         if @alert.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @alert.errors }, status: :unprocessable_entity
+          render json: { error: @alert.errors }, status: :unprocessable_content
         end
       end
 

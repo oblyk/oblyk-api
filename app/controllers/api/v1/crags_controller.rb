@@ -8,7 +8,8 @@ module Api
       before_action :set_crag, only: %i[show versions update guide_books_around areas_around geo_json_around destroy guides photos videos articles route_figures]
 
       def index
-        crags = params[:ids].present? ? Crag.where(id: params[:ids]) : Crag.all
+        crags = Crag.includes(static_map_attachment: :blob, static_map_banner_attachment: :blob)
+        crags = crags.where(id: params[:ids]) if params[:ids].present?
         if params[:latitude].present?
           latitude = params[:latitude].to_f
           longitude = params[:longitude].to_f
@@ -434,7 +435,7 @@ module Api
         if @crag.save
           render json: @crag.detail_to_json, status: :ok
         else
-          render json: { error: @crag.errors }, status: :unprocessable_entity
+          render json: { error: @crag.errors }, status: :unprocessable_content
         end
       end
 
@@ -442,7 +443,7 @@ module Api
         if @crag.update(crag_params)
           render json: @crag.detail_to_json, status: :ok
         else
-          render json: { error: @crag.errors }, status: :unprocessable_entity
+          render json: { error: @crag.errors }, status: :unprocessable_content
         end
       end
 

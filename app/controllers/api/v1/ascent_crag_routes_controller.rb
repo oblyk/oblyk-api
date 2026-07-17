@@ -33,7 +33,7 @@ module Api
         if @ascent_crag_route.save
           render json: @current_user.ascent_crag_routes_to_a, status: :created
         else
-          render json: { error: @ascent_crag_route.errors }, status: :unprocessable_entity
+          render json: { error: @ascent_crag_route.errors }, status: :unprocessable_content
         end
       end
 
@@ -42,7 +42,7 @@ module Api
         if ascent_user.save
           head :no_content
         else
-          render json: { error: ascent_user.errors }, status: :unprocessable_entity
+          render json: { error: ascent_user.errors }, status: :unprocessable_content
         end
       end
 
@@ -56,7 +56,7 @@ module Api
         if @ascent_crag_route.update(ascent_crag_route_params)
           render json: @current_user.ascent_crag_routes_to_a, status: :created
         else
-          render json: { error: @ascent_crag_route.errors }, status: :unprocessable_entity
+          render json: { error: @ascent_crag_route.errors }, status: :unprocessable_content
         end
       end
 
@@ -64,7 +64,7 @@ module Api
         if @ascent_crag_route.destroy
           render json: @current_user.ascent_crag_routes_to_a, status: :created
         else
-          render json: { error: @ascent_crag_route.errors }, status: :unprocessable_entity
+          render json: { error: @ascent_crag_route.errors }, status: :unprocessable_content
         end
       end
 

@@ -28,7 +28,7 @@ module Api
         if @contest_route.save
           render json: @contest_route.detail_to_json, status: :ok
         else
-          render json: { error: @contest_route.errors }, status: :unprocessable_entity
+          render json: { error: @contest_route.errors }, status: :unprocessable_content
         end
       end
 
@@ -36,7 +36,7 @@ module Api
         if @contest_route.update(contest_route_params)
           render json: @contest_route.detail_to_json, status: :ok
         else
-          render json: { error: @contest_route.errors }, status: :unprocessable_entity
+          render json: { error: @contest_route.errors }, status: :unprocessable_content
         end
       end
 
@@ -44,7 +44,7 @@ module Api
         if @contest_route.update(contest_route_link_params)
           head :no_content
         else
-          render json: { error: @contest_route.errors }, status: :unprocessable_entity
+          render json: { error: @contest_route.errors }, status: :unprocessable_content
         end
       end
 
@@ -74,14 +74,14 @@ module Api
 
       def destroy
         if @contest_route.contest_participant_ascents.count.positive?
-          render json: { error: { base: ['La ligne a des réalisations, elle ne peut pas être supprimée'] } }, status: :unprocessable_entity
+          render json: { error: { base: ['La ligne a des réalisations, elle ne peut pas être supprimée'] } }, status: :unprocessable_content
           return
         end
 
         if @contest_route.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @contest_route.errors }, status: :unprocessable_entity
+          render json: { error: @contest_route.errors }, status: :unprocessable_content
         end
       end
 

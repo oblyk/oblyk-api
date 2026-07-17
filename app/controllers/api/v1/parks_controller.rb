@@ -59,7 +59,7 @@ module Api
         if @park.save
           render json: @park.detail_to_json, status: :ok
         else
-          render json: { error: @park.errors }, status: :unprocessable_entity
+          render json: { error: @park.errors }, status: :unprocessable_content
         end
       end
 
@@ -67,7 +67,7 @@ module Api
         if @park.update(park_params)
           render json: @park.detail_to_json, status: :ok
         else
-          render json: { error: @park.errors }, status: :unprocessable_entity
+          render json: { error: @park.errors }, status: :unprocessable_content
         end
       end
 
@@ -75,7 +75,7 @@ module Api
         if @park.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @park.errors }, status: :unprocessable_entity
+          render json: { error: @park.errors }, status: :unprocessable_content
         end
       end
 

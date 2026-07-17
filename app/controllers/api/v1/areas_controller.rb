@@ -164,7 +164,7 @@ module Api
         if @area.save
           render json: @area.detail_to_json, status: :ok
         else
-          render json: { error: @area.errors }, status: :unprocessable_entity
+          render json: { error: @area.errors }, status: :unprocessable_content
         end
       end
 
@@ -172,7 +172,7 @@ module Api
         if @area.update(area_params)
           render json: @area.detail_to_json, status: :ok
         else
-          render json: { error: @area.errors }, status: :unprocessable_entity
+          render json: { error: @area.errors }, status: :unprocessable_content
         end
       end
 
@@ -180,7 +180,7 @@ module Api
         if @area.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @area.errors }, status: :unprocessable_entity
+          render json: { error: @area.errors }, status: :unprocessable_content
         end
       end
 
@@ -193,7 +193,7 @@ module Api
         if area_crag.save
           render json: @area.detail_to_json, status: :ok
         else
-          render json: { error: area_crag.errors }, status: :unprocessable_entity
+          render json: { error: area_crag.errors }, status: :unprocessable_content
         end
       end
 
@@ -203,7 +203,7 @@ module Api
         if area_crag.delete
           render json: @area.detail_to_json, status: :ok
         else
-          render json: { error: area_crag.errors }, status: :unprocessable_entity
+          render json: { error: area_crag.errors }, status: :unprocessable_content
         end
       end
 

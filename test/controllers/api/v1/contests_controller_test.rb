@@ -119,7 +119,7 @@ module Api
         assert_no_difference('Contest.count') do
           delete api_v1_gym_contest_url(@gym, @contest), headers: @admin_headers, as: :json
         end
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
       end
 
       test 'should update draft status' do

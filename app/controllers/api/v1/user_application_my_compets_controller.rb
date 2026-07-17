@@ -18,7 +18,7 @@ module Api
         application = UserApplicationMyCompet.new application_params
         application.user = @current_user
         unless application.valid?
-          render json: { error: application.errors }, status: :unprocessable_entity
+          render json: { error: application.errors }, status: :unprocessable_content
           return
         end
 
@@ -27,7 +27,7 @@ module Api
         if application.save
           render json: application.summary_to_json, status: :ok
         else
-          render json: { error: application.errors }, status: :unprocessable_entity
+          render json: { error: application.errors }, status: :unprocessable_content
         end
       end
 

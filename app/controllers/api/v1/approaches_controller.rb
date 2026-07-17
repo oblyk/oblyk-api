@@ -59,7 +59,7 @@ module Api
         if @approach.save
           render json: @approach.detail_to_json, status: :ok
         else
-          render json: { error: @approach.errors }, status: :unprocessable_entity
+          render json: { error: @approach.errors }, status: :unprocessable_content
         end
       end
 
@@ -68,7 +68,7 @@ module Api
         if @approach.update(approach_params)
           render json: @approach.detail_to_json, status: :ok
         else
-          render json: { error: @approach.errors }, status: :unprocessable_entity
+          render json: { error: @approach.errors }, status: :unprocessable_content
         end
       end
 
@@ -76,7 +76,7 @@ module Api
         if @approach.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @approach.errors }, status: :unprocessable_entity
+          render json: { error: @approach.errors }, status: :unprocessable_content
         end
       end
 

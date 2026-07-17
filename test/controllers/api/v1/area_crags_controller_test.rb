@@ -42,7 +42,7 @@ module Api
                headers: @api_headers,
                as: :json
         end
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
       end
 
       test 'should destroy area_crag if super_admin' do

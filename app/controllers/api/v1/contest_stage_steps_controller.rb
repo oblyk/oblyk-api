@@ -30,7 +30,7 @@ module Api
         if @contest_stage_step.save
           render json: @contest_stage_step.detail_to_json, status: :ok
         else
-          render json: { error: @contest_stage_step.errors }, status: :unprocessable_entity
+          render json: { error: @contest_stage_step.errors }, status: :unprocessable_content
         end
       end
 
@@ -38,7 +38,7 @@ module Api
         if @contest_stage_step.update(contest_stage_step_params)
           render json: @contest_stage_step.detail_to_json, status: :ok
         else
-          render json: { error: @contest_stage_step.errors }, status: :unprocessable_entity
+          render json: { error: @contest_stage_step.errors }, status: :unprocessable_content
         end
       end
 
@@ -46,7 +46,7 @@ module Api
         if @contest_stage_step.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @contest_stage_step.errors }, status: :unprocessable_entity
+          render json: { error: @contest_stage_step.errors }, status: :unprocessable_content
         end
       end
 

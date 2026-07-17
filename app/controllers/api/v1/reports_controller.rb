@@ -13,7 +13,7 @@ module Api
         if report.save
           render json: {}, status: :ok
         else
-          render json: { error: report.errors }, status: :unprocessable_entity
+          render json: { error: report.errors }, status: :unprocessable_content
         end
       end
 

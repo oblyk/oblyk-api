@@ -8,10 +8,10 @@ module Api
       include Gymable
       include ImageParamsConvert
 
-      skip_before_action :protected_by_session, only: %i[show index groups three_d_elements routes_by_styles]
-      skip_before_action :protected_by_gym_administrator, only: %i[show index groups three_d_elements routes_by_styles]
+      skip_before_action :protected_by_session, only: %i[show index groups three_d_elements]
+      skip_before_action :protected_by_gym_administrator, only: %i[show index groups three_d_elements]
       before_action :set_gym_space, except: %i[index create groups tree_sectors]
-      before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[index show groups three_d_elements tree_sectors routes_by_styles]
+      before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[index show groups three_d_elements tree_sectors]
 
       def index
         gym_spaces = @gym.gym_spaces
@@ -79,7 +79,7 @@ module Api
         if @gym_space.save
           render json: @gym_space.detail_to_json, status: :ok
         else
-          render json: { error: @gym_space.errors }, status: :unprocessable_entity
+          render json: { error: @gym_space.errors }, status: :unprocessable_content
         end
       end
 
@@ -87,7 +87,7 @@ module Api
         if @gym_space.update(gym_space_params)
           render json: @gym_space.detail_to_json, status: :ok
         else
-          render json: { error: @gym_space.errors }, status: :unprocessable_entity
+          render json: { error: @gym_space.errors }, status: :unprocessable_content
         end
       end
 
@@ -95,7 +95,7 @@ module Api
         if @gym_space.destroy
           head :no_content
         else
-          render json: { error: @gym_space.errors }, status: :unprocessable_entity
+          render json: { error: @gym_space.errors }, status: :unprocessable_content
         end
       end
 
@@ -103,7 +103,7 @@ module Api
         if @gym_space.archive!
           render json: @gym_space.detail_to_json, status: :ok
         else
-          render json: { error: @gym_space.errors }, status: :unprocessable_entity
+          render json: { error: @gym_space.errors }, status: :unprocessable_content
         end
       end
 
@@ -111,7 +111,7 @@ module Api
         if @gym_space.unarchive!
           render json: @gym_space.detail_to_json, status: :ok
         else
-          render json: { error: @gym_space.errors }, status: :unprocessable_entity
+          render json: { error: @gym_space.errors }, status: :unprocessable_content
         end
       end
 
@@ -120,7 +120,7 @@ module Api
         if @gym_space.update(banner_params)
           render json: @gym_space.detail_to_json, status: :ok
         else
-          render json: { error: @gym_space.errors }, status: :unprocessable_entity
+          render json: { error: @gym_space.errors }, status: :unprocessable_content
         end
       end
 
@@ -130,7 +130,7 @@ module Api
           @gym_space.set_plan_dimension!
           render json: @gym_space.detail_to_json, status: :ok
         else
-          render json: { error: @gym_space.errors }, status: :unprocessable_entity
+          render json: { error: @gym_space.errors }, status: :unprocessable_content
         end
       end
 
@@ -138,20 +138,20 @@ module Api
         if @gym_space.update(three_d_capture_params)
           render json: @gym_space.detail_to_json, status: :ok
         else
-          render json: { error: @gym_space.errors }, status: :unprocessable_entity
+          render json: { error: @gym_space.errors }, status: :unprocessable_content
         end
       end
 
       def add_three_d_file
         unless attach_three_d_file
-          render json: { error: { base: ['three_d_import_error'] } }, status: :unprocessable_entity
+          render json: { error: { base: ['three_d_import_error'] } }, status: :unprocessable_content
           return
         end
 
         if @gym_space.save
           render json: @gym_space.detail_to_json, status: :ok
         else
-          render json: { error: @gym_space.errors }, status: :unprocessable_entity
+          render json: { error: @gym_space.errors }, status: :unprocessable_content
         end
       end
 

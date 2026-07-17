@@ -24,7 +24,7 @@ module Api
         if @rock_bar.save
           render json: @rock_bar.detail_to_json, status: :ok
         else
-          render json: { error: @rock_bar.errors }, status: :unprocessable_entity
+          render json: { error: @rock_bar.errors }, status: :unprocessable_content
         end
       end
 
@@ -33,7 +33,7 @@ module Api
         if @rock_bar.update(bar_rock_params)
           render json: @rock_bar.detail_to_json, status: :ok
         else
-          render json: { error: @rock_bar.errors }, status: :unprocessable_entity
+          render json: { error: @rock_bar.errors }, status: :unprocessable_content
         end
       end
 
@@ -41,7 +41,7 @@ module Api
         if @rock_bar.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @crag.errors }, status: :unprocessable_entity
+          render json: { error: @crag.errors }, status: :unprocessable_content
         end
       end
 

@@ -22,7 +22,7 @@ module Api
         if @guide_book_web.save
           render json: @guide_book_web.detail_to_json, status: :ok
         else
-          render json: { error: @guide_book_web.errors }, status: :unprocessable_entity
+          render json: { error: @guide_book_web.errors }, status: :unprocessable_content
         end
       end
 
@@ -30,7 +30,7 @@ module Api
         if @guide_book_web.update(guide_book_web_params)
           render json: @guide_book_web.detail_to_json, status: :ok
         else
-          render json: { error: @guide_book_web.errors }, status: :unprocessable_entity
+          render json: { error: @guide_book_web.errors }, status: :unprocessable_content
         end
       end
 
@@ -38,7 +38,7 @@ module Api
         if @guide_book_web.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @guide_book_web.errors }, status: :unprocessable_entity
+          render json: { error: @guide_book_web.errors }, status: :unprocessable_content
         end
       end
 

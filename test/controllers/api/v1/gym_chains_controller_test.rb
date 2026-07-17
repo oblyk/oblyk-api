@@ -55,7 +55,7 @@ module Api
         patch api_v1_gym_chain_url(@gym_chain.slug_name),
               params: { gym_chain: { name: '' } },
               headers: @user_headers, as: :json
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
       end
 
       test 'should add banner' do

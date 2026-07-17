@@ -30,7 +30,7 @@ module Api
         if @gym_chain.update(gym_chain_params)
           render json: @gym_chain.detail_to_json, status: :ok
         else
-          render json: { error: @gym_chain.errors }, status: :unprocessable_entity
+          render json: { error: @gym_chain.errors }, status: :unprocessable_content
         end
       end
 
@@ -40,7 +40,7 @@ module Api
         if @gym_chain.update(banner_params)
           render json: @gym_chain.detail_to_json, status: :ok
         else
-          render json: { error: @gym_chain.errors }, status: :unprocessable_entity
+          render json: { error: @gym_chain.errors }, status: :unprocessable_content
         end
       end
 
@@ -50,7 +50,7 @@ module Api
         if @gym_chain.update(logo_params)
           render json: @gym_chain.detail_to_json, status: :ok
         else
-          render json: { error: @gym_chain.errors }, status: :unprocessable_entity
+          render json: { error: @gym_chain.errors }, status: :unprocessable_content
         end
       end
 

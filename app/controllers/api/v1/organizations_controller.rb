@@ -26,7 +26,7 @@ module Api
         if @organization.save
           render json: @organization.detail_to_json, status: :ok
         else
-          render json: { error: @organization.errors }, status: :unprocessable_entity
+          render json: { error: @organization.errors }, status: :unprocessable_content
         end
       end
 
@@ -39,7 +39,7 @@ module Api
         if @organization.update(organization_params)
           render json: @organization.detail_to_json, status: :ok
         else
-          render json: { error: @organization.errors }, status: :unprocessable_entity
+          render json: { error: @organization.errors }, status: :unprocessable_content
         end
       end
 

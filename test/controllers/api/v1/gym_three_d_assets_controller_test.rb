@@ -29,7 +29,7 @@ module Api
                  gym_three_d_asset: {
                    name: 'New Asset',
                    import_type: 'gltf',
-                   three_d_file: fixture_file_upload('test/fixtures/files/test.gltf', 'model/gltf+json')
+                   three_d_file: fixture_file_upload('test/fixtures/files/espace_voie.gltf', 'model/gltf+json')
                  }
                },
                headers: @admin_headers
@@ -47,7 +47,7 @@ module Api
                }
              },
              headers: @admin_headers
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
       end
 
       test 'should update gym three d asset' do
@@ -98,7 +98,7 @@ module Api
         put change_three_d_file_api_v1_gym_gym_three_d_asset_url(gym_id: @gym.id, id: @asset.id),
              params: {
                gym_three_d_asset: {
-                 three_d_gltf: fixture_file_upload('test/fixtures/files/test.gltf', 'model/gltf+json')
+                 three_d_gltf: fixture_file_upload('test/fixtures/files/espace_voie.gltf', 'model/gltf+json')
                }
              },
              headers: @admin_headers

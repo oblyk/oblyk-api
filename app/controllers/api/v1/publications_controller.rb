@@ -117,7 +117,7 @@ module Api
         if @publication.save
           render json: serialized_publication(@publication), status: :ok
         else
-          render json: { error: @publication.errors }, status: :unprocessable_entity
+          render json: { error: @publication.errors }, status: :unprocessable_content
         end
       end
 
@@ -126,7 +126,7 @@ module Api
         if @publication.update publication_params
           render json: serialized_publication(@publication), status: :ok
         else
-          render json: { error: @publication.errors }, status: :unprocessable_entity
+          render json: { error: @publication.errors }, status: :unprocessable_content
         end
       end
 
@@ -134,7 +134,7 @@ module Api
         if @publication.publish!
           head :no_content
         else
-          render json: { error: @publication.errors }, status: :unprocessable_entity
+          render json: { error: @publication.errors }, status: :unprocessable_content
         end
       end
 
@@ -142,7 +142,7 @@ module Api
         if @publication.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @publication.errors }, status: :unprocessable_entity
+          render json: { error: @publication.errors }, status: :unprocessable_content
         end
       end
 

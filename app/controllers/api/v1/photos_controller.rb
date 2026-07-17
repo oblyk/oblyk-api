@@ -25,7 +25,7 @@ module Api
         if @photo.save
           render json: @photo.detail_to_json, status: :ok
         else
-          render json: { error: @photo.errors }, status: :unprocessable_entity
+          render json: { error: @photo.errors }, status: :unprocessable_content
         end
       end
 
@@ -33,20 +33,20 @@ module Api
         if @photo.update(photo_params)
           render json: @photo.detail_to_json, status: :ok
         else
-          render json: { error: @photo.errors }, status: :unprocessable_entity
+          render json: { error: @photo.errors }, status: :unprocessable_content
         end
       end
 
       def destroy
         unless @photo.destroyable?
-          render json: { error: { base: ['un_destroyable'] } }, status: :unprocessable_entity
+          render json: { error: { base: ['un_destroyable'] } }, status: :unprocessable_content
           return
         end
 
         if @photo.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @photo.errors }, status: :unprocessable_entity
+          render json: { error: @photo.errors }, status: :unprocessable_content
         end
       end
 

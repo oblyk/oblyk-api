@@ -205,7 +205,7 @@ module Api
         if @gym_label_template.save
           render json: @gym_label_template.detail_to_json, status: :ok
         else
-          render json: { error: @gym_label_template.errors }, status: :unprocessable_entity
+          render json: { error: @gym_label_template.errors }, status: :unprocessable_content
         end
       end
 
@@ -213,7 +213,7 @@ module Api
         if @gym_label_template.update(gym_label_template_params)
           render json: @gym_label_template.detail_to_json, status: :ok
         else
-          render json: { error: @gym_label_template.errors }, status: :unprocessable_entity
+          render json: { error: @gym_label_template.errors }, status: :unprocessable_content
         end
       end
 
@@ -226,7 +226,7 @@ module Api
         if @gym_label_template.archive!
           render json: @gym_label_template.detail_to_json, status: :ok
         else
-          render json: { error: @gym_label_template.errors }, status: :unprocessable_entity
+          render json: { error: @gym_label_template.errors }, status: :unprocessable_content
         end
       end
 
@@ -234,7 +234,7 @@ module Api
         if @gym_label_template.unarchive!
           render json: @gym_label_template.detail_to_json, status: :ok
         else
-          render json: { error: @gym_label_template.errors }, status: :unprocessable_entity
+          render json: { error: @gym_label_template.errors }, status: :unprocessable_content
         end
       end
 

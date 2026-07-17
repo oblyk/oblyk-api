@@ -31,7 +31,7 @@ module Api
         if @conversation.save
           render json: @conversation.detail_to_json, status: :ok
         else
-          render json: { error: @conversation.errors }, status: :unprocessable_entity
+          render json: { error: @conversation.errors }, status: :unprocessable_content
         end
       end
 

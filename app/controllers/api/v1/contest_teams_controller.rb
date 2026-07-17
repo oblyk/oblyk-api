@@ -26,7 +26,7 @@ module Api
         if @contest_team.save
           render json: @contest_team.detail_to_json, status: :ok
         else
-          render json: { error: @contest_team.errors }, status: :unprocessable_entity
+          render json: { error: @contest_team.errors }, status: :unprocessable_content
         end
       end
 
@@ -34,7 +34,7 @@ module Api
         if @contest_team.update(contest_team_params)
           render json: @contest_team.detail_to_json, status: :ok
         else
-          render json: { error: @contest_team.errors }, status: :unprocessable_entity
+          render json: { error: @contest_team.errors }, status: :unprocessable_content
         end
       end
 
@@ -42,7 +42,7 @@ module Api
         if @contest_team.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @contest_team.errors }, status: :unprocessable_entity
+          render json: { error: @contest_team.errors }, status: :unprocessable_content
         end
       end
 

@@ -31,7 +31,7 @@ module Api
                                                 end
 
         unless attach_three_d_file
-          render json: { error: { base: ['3d_import_error'] } }, status: :unprocessable_entity
+          render json: { error: { base: ['3d_import_error'] } }, status: :unprocessable_content
           return
         end
 
@@ -39,21 +39,21 @@ module Api
         if @gym_three_d_asset.save
           render json: @gym_three_d_asset.detail_to_json, status: :ok
         else
-          render json: { error: @gym_three_d_asset.errors }, status: :unprocessable_entity
+          render json: { error: @gym_three_d_asset.errors }, status: :unprocessable_content
         end
       end
 
       def update
         import_type = params[:gym_three_d_asset].fetch(:import_type, '').to_s
         if !attach_three_d_file && import_type.present?
-          render json: { error: { base: ['three_d_import_error'] } }, status: :unprocessable_entity
+          render json: { error: { base: ['three_d_import_error'] } }, status: :unprocessable_content
           return
         end
 
         if @gym_three_d_asset.update gym_three_d_asset_params
           render json: @gym_three_d_asset.detail_to_json, status: :ok
         else
-          render json: { error: @gym_three_d_asset.errors }, status: :unprocessable_entity
+          render json: { error: @gym_three_d_asset.errors }, status: :unprocessable_content
         end
       end
 
@@ -61,7 +61,7 @@ module Api
         if @gym_three_d_asset.destroy
           head :no_content
         else
-          render json: { error: @gym_three_d_asset.errors }, status: :unprocessable_entity
+          render json: { error: @gym_three_d_asset.errors }, status: :unprocessable_content
         end
       end
 
@@ -69,7 +69,7 @@ module Api
         if @gym_three_d_asset.update(three_d_file_params)
           render json: @gym_three_d_asset.detail_to_json, status: :ok
         else
-          render json: { error: @gym_three_d_asset.errors }, status: :unprocessable_entity
+          render json: { error: @gym_three_d_asset.errors }, status: :unprocessable_content
         end
       end
 
@@ -77,7 +77,7 @@ module Api
         if @gym_three_d_asset.update(gym_asset_picture_params)
           render json: @gym_three_d_asset.detail_to_json, status: :ok
         else
-          render json: { error: @gym_three_d_asset.errors }, status: :unprocessable_entity
+          render json: { error: @gym_three_d_asset.errors }, status: :unprocessable_content
         end
       end
 

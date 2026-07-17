@@ -24,7 +24,7 @@ module Api
               refresh_token: refresh_token
             }, status: :created
           else
-            render json: { error: user.errors }, status: :unprocessable_entity
+            render json: { error: user.errors }, status: :unprocessable_content
           end
         end
 

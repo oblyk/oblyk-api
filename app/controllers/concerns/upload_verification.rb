@@ -18,7 +18,7 @@ module UploadVerification
 
     return true unless errors.size.positive?
 
-    render json: { error: { base: errors } }, status: :unprocessable_entity
+    render json: { error: { base: errors } }, status: :unprocessable_content
     false
   end
 end

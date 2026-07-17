@@ -15,7 +15,7 @@ module Api
         if @author.update(author_params)
           render json: @author.detail_to_json, status: :ok
         else
-          render json: { error: @author.errors }, status: :unprocessable_entity
+          render json: { error: @author.errors }, status: :unprocessable_content
         end
       end
 
@@ -23,7 +23,7 @@ module Api
         if @author.update(cover_params)
           render json: @author.detail_to_json, status: :ok
         else
-          render json: { error: @author.errors }, status: :unprocessable_entity
+          render json: { error: @author.errors }, status: :unprocessable_content
         end
       end
 

@@ -220,7 +220,7 @@ module Api
         if @gym.save
           render json: @gym.detail_to_json, status: :ok
         else
-          render json: { error: @gym.errors }, status: :unprocessable_entity
+          render json: { error: @gym.errors }, status: :unprocessable_content
         end
       end
 
@@ -228,7 +228,7 @@ module Api
         if @gym.update(gym_params)
           render json: @gym.detail_to_json, status: :ok
         else
-          render json: { error: @gym.errors }, status: :unprocessable_entity
+          render json: { error: @gym.errors }, status: :unprocessable_content
         end
       end
 
@@ -239,7 +239,7 @@ module Api
         if @gym.update(banner_params)
           render json: @gym.detail_to_json, status: :ok
         else
-          render json: { error: @gym.errors }, status: :unprocessable_entity
+          render json: { error: @gym.errors }, status: :unprocessable_content
         end
       end
 
@@ -250,7 +250,7 @@ module Api
         if @gym.update(logo_params)
           render json: @gym.detail_to_json, status: :ok
         else
-          render json: { error: @gym.errors }, status: :unprocessable_entity
+          render json: { error: @gym.errors }, status: :unprocessable_content
         end
       end
 
@@ -258,7 +258,7 @@ module Api
         if @gym.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @gym.errors }, status: :unprocessable_entity
+          render json: { error: @gym.errors }, status: :unprocessable_content
         end
       end
 
@@ -518,7 +518,7 @@ module Api
       def geo_json_features
         features = []
         gyms = Gym.select(%i[id name longitude latitude updated_at])
-                  .includes(banner_attachment: :blob)
+                  .includes(banner_attachment: :blob, logo_attachment: :blob)
 
         climbing_style = params.fetch(:climbing_style, nil)
         if climbing_style.present?

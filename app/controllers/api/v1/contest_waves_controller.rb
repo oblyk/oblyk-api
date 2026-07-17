@@ -26,7 +26,7 @@ module Api
         if @contest_wave.save
           render json: @contest_wave.detail_to_json, status: :ok
         else
-          render json: { error: @contest_wave.errors }, status: :unprocessable_entity
+          render json: { error: @contest_wave.errors }, status: :unprocessable_content
         end
       end
 
@@ -34,7 +34,7 @@ module Api
         if @contest_wave.update(contest_wave_params)
           render json: @contest_wave.detail_to_json, status: :ok
         else
-          render json: { error: @contest_wave.errors }, status: :unprocessable_entity
+          render json: { error: @contest_wave.errors }, status: :unprocessable_content
         end
       end
 
@@ -42,7 +42,7 @@ module Api
         if @contest_wave.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @contest_wave.errors }, status: :unprocessable_entity
+          render json: { error: @contest_wave.errors }, status: :unprocessable_content
         end
       end
 

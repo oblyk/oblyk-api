@@ -18,7 +18,7 @@ module Api
         if @subscribe.save
           render json: @subscribe.detail_to_json, status: :ok
         else
-          render json: { error: @subscribe.errors }, status: :unprocessable_entity
+          render json: { error: @subscribe.errors }, status: :unprocessable_content
         end
       end
 
@@ -29,7 +29,7 @@ module Api
         if @subscribe&.destroy
           head :no_content
         else
-          render json: { error: @subscribe.errors }, status: :unprocessable_entity
+          render json: { error: @subscribe.errors }, status: :unprocessable_content
         end
       end
 

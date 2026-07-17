@@ -226,7 +226,7 @@ module Api
         if @gym_route.save
           render json: @gym_route.detail_to_json, status: :ok
         else
-          render json: { error: @gym_route.errors }, status: :unprocessable_entity
+          render json: { error: @gym_route.errors }, status: :unprocessable_content
         end
       end
 
@@ -235,7 +235,7 @@ module Api
           @gym_route.delete_summary_cache
           render json: @gym_route.detail_to_json, status: :ok
         else
-          render json: { error: @gym_route.errors }, status: :unprocessable_entity
+          render json: { error: @gym_route.errors }, status: :unprocessable_content
         end
       end
 
@@ -269,7 +269,7 @@ module Api
         if @gym_route.save
           render json: @gym_route.detail_to_json, status: :ok
         else
-          render json: { error: @gym_route.errors }, status: :unprocessable_entity
+          render json: { error: @gym_route.errors }, status: :unprocessable_content
         end
       end
 
@@ -281,7 +281,7 @@ module Api
         if @gym_route.update(thumbnail_params)
           render json: @gym_route.detail_to_json, status: :ok
         else
-          render json: { error: @gym_route.errors }, status: :unprocessable_entity
+          render json: { error: @gym_route.errors }, status: :unprocessable_content
         end
       end
 
@@ -289,7 +289,7 @@ module Api
         if @gym_route.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @gym_route.errors }, status: :unprocessable_entity
+          render json: { error: @gym_route.errors }, status: :unprocessable_content
         end
       end
 
@@ -297,7 +297,7 @@ module Api
         if @gym_route.dismount!
           render json: {}, status: :ok
         else
-          render json: { error: @gym_route.errors }, status: :unprocessable_entity
+          render json: { error: @gym_route.errors }, status: :unprocessable_content
         end
       end
 
@@ -308,7 +308,7 @@ module Api
         if @gym_route.save
           render json: {}, status: :ok
         else
-          render json: { error: @gym_route.errors }, status: :unprocessable_entity
+          render json: { error: @gym_route.errors }, status: :unprocessable_content
         end
       end
 
@@ -316,7 +316,7 @@ module Api
         if @gym_route.mount!
           render json: {}, status: :ok
         else
-          render json: { error: @gym_route.errors }, status: :unprocessable_entity
+          render json: { error: @gym_route.errors }, status: :unprocessable_content
         end
       end
 
@@ -338,7 +338,7 @@ module Api
         if gym_opening_sheet.save
           render json: gym_opening_sheet.summary_to_json, status: :ok
         else
-          render json: { error: gym_opening_sheet.errors }, status: :unprocessable_entity
+          render json: { error: gym_opening_sheet.errors }, status: :unprocessable_content
         end
       end
 

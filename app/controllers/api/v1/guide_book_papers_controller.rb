@@ -251,7 +251,7 @@ module Api
           end
           render json: @guide_book_paper.detail_to_json, status: :ok
         else
-          render json: { error: @guide_book_paper.errors }, status: :unprocessable_entity
+          render json: { error: @guide_book_paper.errors }, status: :unprocessable_content
         end
       end
 
@@ -259,7 +259,7 @@ module Api
         if @guide_book_paper.update(guide_book_params)
           render json: @guide_book_paper.detail_to_json, status: :ok
         else
-          render json: { error: @guide_book_paper.errors }, status: :unprocessable_entity
+          render json: { error: @guide_book_paper.errors }, status: :unprocessable_content
         end
       end
 
@@ -267,7 +267,7 @@ module Api
         if @guide_book_paper.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @guide_book_paper.errors }, status: :unprocessable_entity
+          render json: { error: @guide_book_paper.errors }, status: :unprocessable_content
         end
       end
 
@@ -280,7 +280,7 @@ module Api
         if guide_book_paper_crag.save
           render json: @guide_book_paper.detail_to_json, status: :ok
         else
-          render json: { error: guide_book_paper_crag.errors }, status: :unprocessable_entity
+          render json: { error: guide_book_paper_crag.errors }, status: :unprocessable_content
         end
       end
 
@@ -290,7 +290,7 @@ module Api
         if guide_book_paper_crag.delete
           render json: @guide_book_paper.detail_to_json, status: :ok
         else
-          render json: { error: guide_book_paper_crag.errors }, status: :unprocessable_entity
+          render json: { error: guide_book_paper_crag.errors }, status: :unprocessable_content
         end
       end
 
@@ -301,7 +301,7 @@ module Api
         if @guide_book_paper.update(cover_params)
           render json: @guide_book_paper.detail_to_json, status: :ok
         else
-          render json: { error: @guide_book_paper.errors }, status: :unprocessable_entity
+          render json: { error: @guide_book_paper.errors }, status: :unprocessable_content
         end
       end
 

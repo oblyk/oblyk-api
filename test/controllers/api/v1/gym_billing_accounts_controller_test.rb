@@ -98,7 +98,7 @@ module Api
                }
              },
              headers: @subscription_admin_headers, as: :json
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
       end
 
       test 'should not update gym billing account with invalid params' do
@@ -109,7 +109,7 @@ module Api
                 }
               },
               headers: @subscription_admin_headers, as: :json
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
       end
     end
   end

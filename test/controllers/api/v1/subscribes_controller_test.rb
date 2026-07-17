@@ -44,14 +44,14 @@ module Api
         assert_response :no_content
       end
 
-      test 'should return unprocessable_entity if email is invalid' do
+      test 'should return unprocessable_content if email is invalid' do
         assert_no_difference('Subscribe.count') do
           post api_v1_subscribes_url,
                params: { subscribe: { email: 'invalid-email' } },
                headers: @guest_headers,
                as: :json
         end
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
       end
 
       test 'should destroy subscribe' do

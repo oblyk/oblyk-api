@@ -29,7 +29,7 @@ module Api
                headers: @headers,
                as: :json
 
-          assert_response :unprocessable_entity
+          assert_response :unprocessable_content
           json_response = JSON.parse(response.body)
           assert_equal ['email_or_password_suite_not_find'], json_response['error']['base']
         end
@@ -40,7 +40,7 @@ module Api
                headers: @headers,
                as: :json
 
-          assert_response :unprocessable_entity
+          assert_response :unprocessable_content
         end
 
         test 'should return no content on destroy' do

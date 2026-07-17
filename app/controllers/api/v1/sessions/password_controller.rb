@@ -36,7 +36,7 @@ module Api
               refresh_token: refresh_token
             }, status: :created
           else
-            render json: { error: user.errors }, status: :unprocessable_entity
+            render json: { error: user.errors }, status: :unprocessable_content
           end
         end
 
@@ -47,7 +47,7 @@ module Api
         end
 
         def token_is_expired
-          render json: { error: 'Reset password token is expired' }, status: :unprocessable_entity
+          render json: { error: 'Reset password token is expired' }, status: :unprocessable_content
         end
       end
     end

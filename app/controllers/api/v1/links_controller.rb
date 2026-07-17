@@ -25,7 +25,7 @@ module Api
         if @link.save
           render json: @link.detail_to_json, status: :ok
         else
-          render json: { error: @link.errors }, status: :unprocessable_entity
+          render json: { error: @link.errors }, status: :unprocessable_content
         end
       end
 
@@ -33,7 +33,7 @@ module Api
         if @link.update(link_params)
           render json: @link.detail_to_json, status: :ok
         else
-          render json: { error: @link.errors }, status: :unprocessable_entity
+          render json: { error: @link.errors }, status: :unprocessable_content
         end
       end
 
@@ -41,7 +41,7 @@ module Api
         if @link.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @link.errors }, status: :unprocessable_entity
+          render json: { error: @link.errors }, status: :unprocessable_content
         end
       end
 

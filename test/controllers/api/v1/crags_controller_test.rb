@@ -96,7 +96,7 @@ module Api
         assert_response :success
       end
 
-      test 'should return unprocessable_entity on create failure' do
+      test 'should return unprocessable_content on create failure' do
         assert_no_difference('Crag.count') do
           post api_v1_crags_url,
                params: {
@@ -107,7 +107,7 @@ module Api
                headers: @user_headers,
                as: :json
         end
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
       end
 
       test 'should update crag' do
@@ -120,12 +120,12 @@ module Api
         assert_equal 'Updated Crag Name', @crag.name
       end
 
-      test 'should return unprocessable_entity on update failure' do
+      test 'should return unprocessable_content on update failure' do
         put api_v1_crag_url(@crag),
             params: { crag: { name: '' } },
             headers: @user_headers,
             as: :json
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
       end
 
       test 'should destroy crag' do

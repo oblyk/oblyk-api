@@ -84,7 +84,7 @@ module Api
              },
              headers: @user_headers,
              as: :json
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
       end
 
       test 'should update crag_sector' do
@@ -102,7 +102,7 @@ module Api
             params: { crag_sector: { name: '' } },
             headers: @user_headers,
             as: :json
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
       end
 
       test 'should destroy crag_sector' do

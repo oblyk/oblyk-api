@@ -17,6 +17,7 @@ ENV['RAILS_ENV'] ||= 'test'
 ENV['SEND_EMAIL_WITH'] = 'smtp'
 ENV['MY_COMPET_TOKEN'] = 'oblyk-test-token'
 ENV['APP_URL'] = 'http://localhost:3000'
+ENV['PARALLEL_WORKERS'] = "5"
 
 require_relative '../config/environment'
 require 'rails/test_help'
@@ -28,7 +29,7 @@ module ActiveSupport
     include AuthHelper
 
     # Run tests in parallel with specified workers
-    number_of_processors = ENV.fetch('TEST_NUMBER_OF_PROCESSORS', 5)
+    number_of_processors = ENV.fetch('TEST_NUMBER_OF_PROCESSORS', ENV['PARALLEL_WORKERS'])
     parallelize(workers: number_of_processors)
 
     parallelize_setup do |worker|

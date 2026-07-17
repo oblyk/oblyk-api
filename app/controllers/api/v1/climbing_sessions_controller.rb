@@ -52,8 +52,8 @@ module Api
         render json: {
           sessions: climbing_sessions.map { |climbing_session| climbing_session.summary_to_json(for_current_user: @current_user == user) },
           references: {
-            crags: Crag.where(id: climbing_sessions.joins(:ascent_crag_routes).pluck(:crag_id)).map(&:summary_to_json),
-            gyms: Gym.where(id: climbing_sessions.joins(:ascents).pluck(:gym_id)).map(&:summary_to_json)
+            crags: Crag.includes(static_map_attachment: :blob, static_map_banner_attachment: :blob).where(id: climbing_sessions.joins(:ascent_crag_routes).pluck(:crag_id)).map(&:summary_to_json),
+            gyms: Gym.includes(logo_attachment: :blob).where(id: climbing_sessions.joins(:ascents).pluck(:gym_id)).map(&:summary_to_json)
           }
         }, status: :ok
       end
@@ -177,7 +177,7 @@ module Api
         if @climbing_session.update(climbing_session_params)
           head :no_content
         else
-          render json: { error: @climbing_session.errors }, status: :unprocessable_entity
+          render json: { error: @climbing_session.errors }, status: :unprocessable_content
         end
       end
 

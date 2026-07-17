@@ -23,7 +23,7 @@ module Api
           ffme_contest.create_on_my_compet!
           render json: ffme_contest.detail_to_json, status: :ok
         else
-          render json: { error: ffme_contest.errors }, status: :unprocessable_entity
+          render json: { error: ffme_contest.errors }, status: :unprocessable_content
         end
       end
 
@@ -32,7 +32,7 @@ module Api
           @ffme_contest.update_on_my_compet!
           render json: @contest.detail_to_json, status: :ok
         else
-          render json: { error: @contest.errors }, status: :unprocessable_entity
+          render json: { error: @contest.errors }, status: :unprocessable_content
         end
       end
 
@@ -45,7 +45,7 @@ module Api
           @ffme_contest.send_results!
           render json: @ffme_contest.detail_to_json, status: :ok
         else
-          render json: { error: { base: ['ffme_contest_is_not_sendable'] } }, status: :unprocessable_entity
+          render json: { error: { base: ['ffme_contest_is_not_sendable'] } }, status: :unprocessable_content
         end
       end
 

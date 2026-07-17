@@ -26,7 +26,7 @@ module Api
         if gym_climbing_style.save
           render json: gym_climbing_style.detail_to_json, status: :ok
         else
-          render json: { error: gym_climbing_style.errors }, status: :unprocessable_entity
+          render json: { error: gym_climbing_style.errors }, status: :unprocessable_content
         end
       end
 
@@ -38,7 +38,7 @@ module Api
         if gym_climbing_style.blank? || gym_climbing_style.deactivate!
           head :no_content
         else
-          render json: { error: gym_climbing_style.errors }, status: :unprocessable_entity
+          render json: { error: gym_climbing_style.errors }, status: :unprocessable_content
         end
       end
 

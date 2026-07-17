@@ -111,10 +111,15 @@ class Video < ApplicationRecord
     if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
       "#{ENV['CLOUDFLARE_R2_DOMAIN']}/cdn-cgi/media/mode=frame,time=0s,width=1000,height=1000,fit=scale-down/#{video_file.attachment.key}"
     else
-      rails_representation_url(
-        video_file.preview(resize_to_limit: [1000, 1000]).processed,
-        host: ENV['OBLYK_API_URL']
-      )
+      begin
+        rails_representation_url(
+          video_file.preview(resize_to_limit: [1000, 1000]).processed,
+          host: ENV['OBLYK_API_URL']
+        )
+      rescue StandardError => err
+        RorVsWild.record_error(err)
+        nil
+      end
     end
   end
 

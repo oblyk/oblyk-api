@@ -32,7 +32,7 @@ module Api
         if @gym_three_d_element.save
           render json: @gym_three_d_element.detail_to_json, status: :ok
         else
-          render json: { error: @gym_three_d_element.errors }, status: :unprocessable_entity
+          render json: { error: @gym_three_d_element.errors }, status: :unprocessable_content
         end
       end
 
@@ -40,7 +40,7 @@ module Api
         if @gym_three_d_element.update gym_three_d_element_params
           render json: @gym_three_d_element.detail_to_json, status: :ok
         else
-          render json: { error: @gym_three_d_element.errors }, status: :unprocessable_entity
+          render json: { error: @gym_three_d_element.errors }, status: :unprocessable_content
         end
       end
 
@@ -48,7 +48,7 @@ module Api
         if @gym_three_d_element.destroy
           head :no_content
         else
-          render json: { error: @gym_three_d_element.errors }, status: :unprocessable_entity
+          render json: { error: @gym_three_d_element.errors }, status: :unprocessable_content
         end
       end
 

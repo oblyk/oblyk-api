@@ -24,7 +24,7 @@ module Api
         if @place_of_sale.save
           render json: @place_of_sale.detail_to_json, status: :ok
         else
-          render json: { error: @place_of_sale.errors }, status: :unprocessable_entity
+          render json: { error: @place_of_sale.errors }, status: :unprocessable_content
         end
       end
 
@@ -32,7 +32,7 @@ module Api
         if @place_of_sale.update(place_of_sale_params)
           render json: @place_of_sale.detail_to_json, status: :ok
         else
-          render json: { error: @place_of_sale.errors }, status: :unprocessable_entity
+          render json: { error: @place_of_sale.errors }, status: :unprocessable_content
         end
       end
 
@@ -40,7 +40,7 @@ module Api
         if @place_of_sale.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @place_of_sale.errors }, status: :unprocessable_entity
+          render json: { error: @place_of_sale.errors }, status: :unprocessable_content
         end
       end
 

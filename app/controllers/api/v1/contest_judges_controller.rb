@@ -26,7 +26,7 @@ module Api
         if @contest_judge.save
           render json: @contest_judge.detail_to_json, status: :ok
         else
-          render json: { error: @contest_judge.errors }, status: :unprocessable_entity
+          render json: { error: @contest_judge.errors }, status: :unprocessable_content
         end
       end
 
@@ -34,7 +34,7 @@ module Api
         if @contest_judge.update(contest_judge_params)
           render json: @contest_judge.detail_to_json, status: :ok
         else
-          render json: { error: @contest_judge.errors }, status: :unprocessable_entity
+          render json: { error: @contest_judge.errors }, status: :unprocessable_content
         end
       end
 
@@ -58,7 +58,7 @@ module Api
         if @contest_judge.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @contest_judge.errors }, status: :unprocessable_entity
+          render json: { error: @contest_judge.errors }, status: :unprocessable_content
         end
       end
 

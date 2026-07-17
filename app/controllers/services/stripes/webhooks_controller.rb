@@ -7,7 +7,7 @@ module Services
         Stripe.api_key = ENV['STRIPE_API_KEY']
         endpoint_secret = ENV['STRIPE_ENDPOINT_SECRET']
 
-        payload = request.body.read
+        payload = request.raw_post
 
         begin
           event = Stripe::Event.construct_from(
@@ -15,7 +15,7 @@ module Services
           )
         rescue JSON::ParserError => e
           RorVsWild.record_error(e)
-          status 400
+          head :bad_request
           return
         end
 
@@ -29,7 +29,7 @@ module Services
             )
           rescue Stripe::SignatureVerificationError => e
             RorVsWild.record_error(e)
-            status 400
+            head :bad_request
           end
         end
 

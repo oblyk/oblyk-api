@@ -26,7 +26,7 @@ module Api
         if @contest_category.save
           render json: @contest_category.detail_to_json, status: :ok
         else
-          render json: { error: @contest_category.errors }, status: :unprocessable_entity
+          render json: { error: @contest_category.errors }, status: :unprocessable_content
         end
       end
 
@@ -34,20 +34,20 @@ module Api
         if @contest_category.update(contest_category_params)
           render json: @contest_category.detail_to_json, status: :ok
         else
-          render json: { error: @contest_category.errors }, status: :unprocessable_entity
+          render json: { error: @contest_category.errors }, status: :unprocessable_content
         end
       end
 
       def destroy
         if @contest_category.contest_participants.count.positive?
-          render json: { error: { base: ['La categorie a des participants, elle ne peut pas être supprimée'] } }, status: :unprocessable_entity
+          render json: { error: { base: ['La categorie a des participants, elle ne peut pas être supprimée'] } }, status: :unprocessable_content
           return
         end
 
         if @contest_category.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @contest_category.errors }, status: :unprocessable_entity
+          render json: { error: @contest_category.errors }, status: :unprocessable_content
         end
       end
 

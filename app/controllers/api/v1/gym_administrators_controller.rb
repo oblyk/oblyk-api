@@ -33,7 +33,7 @@ module Api
           @gym_administrator.send_invitation_email! @current_user
           render json: @gym_administrator.detail_to_json, status: :ok
         else
-          render json: { error: @gym_administrator.errors }, status: :unprocessable_entity
+          render json: { error: @gym_administrator.errors }, status: :unprocessable_content
         end
       end
 
@@ -41,7 +41,7 @@ module Api
         if @gym_administrator.update gym_administrator_params
           render json: @gym_administrator.detail_to_json, status: :ok
         else
-          render json: { error: @gym_administrator.errors }, status: :unprocessable_entity
+          render json: { error: @gym_administrator.errors }, status: :unprocessable_content
         end
       end
 
@@ -49,7 +49,7 @@ module Api
         if @gym_administrator.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @gym_administrator.errors }, status: :unprocessable_entity
+          render json: { error: @gym_administrator.errors }, status: :unprocessable_content
         end
       end
 

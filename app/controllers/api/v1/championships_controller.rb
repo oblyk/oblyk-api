@@ -58,7 +58,7 @@ module Api
         if @championship.save
           render json: @championship.detail_to_json, status: :ok
         else
-          render json: { error: @championship.errors }, status: :unprocessable_entity
+          render json: { error: @championship.errors }, status: :unprocessable_content
         end
       end
 
@@ -66,7 +66,7 @@ module Api
         if @championship.update(championship_params)
           render json: @championship.detail_to_json, status: :ok
         else
-          render json: { error: @championship.errors }, status: :unprocessable_entity
+          render json: { error: @championship.errors }, status: :unprocessable_content
         end
       end
 
@@ -74,7 +74,7 @@ module Api
         if @championship.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @championship.errors }, status: :unprocessable_entity
+          render json: { error: @championship.errors }, status: :unprocessable_content
         end
       end
 
@@ -85,7 +85,7 @@ module Api
         if @championship.update(banner_params)
           render json: @championship.detail_to_json, status: :ok
         else
-          render json: { error: @championship.errors }, status: :unprocessable_entity
+          render json: { error: @championship.errors }, status: :unprocessable_content
         end
       end
 
@@ -93,7 +93,7 @@ module Api
         if @championship.archive!
           render json: {}, status: :ok
         else
-          render json: { error: @championship.errors }, status: :unprocessable_entity
+          render json: { error: @championship.errors }, status: :unprocessable_content
         end
       end
 
@@ -101,7 +101,7 @@ module Api
         if @championship.unarchive!
           render json: {}, status: :ok
         else
-          render json: { error: @championship.errors }, status: :unprocessable_entity
+          render json: { error: @championship.errors }, status: :unprocessable_content
         end
       end
 

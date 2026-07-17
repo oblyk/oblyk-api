@@ -36,9 +36,8 @@ module Api
 
       test 'should not show another user application' do
         other_user_headers = api_headers(user: :other_user)
-        assert_raises(ActiveRecord::RecordNotFound) do
-          get api_v1_user_application_url(@user_application), headers: other_user_headers, as: :json
-        end
+        get api_v1_user_application_url(@user_application), headers: other_user_headers, as: :json
+        assert_response :not_found
       end
     end
   end

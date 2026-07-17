@@ -13,7 +13,7 @@ module Api
         if @gym_administration_request.save
           render json: {}, status: :ok
         else
-          render json: { error: @gym_administration_request.errors }, status: :unprocessable_entity
+          render json: { error: @gym_administration_request.errors }, status: :unprocessable_content
         end
       end
 

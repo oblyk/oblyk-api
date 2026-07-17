@@ -37,7 +37,7 @@ module Api
         if @gym_opener.save
           render json: @gym_opener.detail_to_json, status: :ok
         else
-          render json: { error: @gym_opener.errors }, status: :unprocessable_entity
+          render json: { error: @gym_opener.errors }, status: :unprocessable_content
         end
       end
 
@@ -45,7 +45,7 @@ module Api
         if @gym_opener.update(gym_opener_params)
           render json: @gym_opener.detail_to_json, status: :ok
         else
-          render json: { error: @gym_opener.errors }, status: :unprocessable_entity
+          render json: { error: @gym_opener.errors }, status: :unprocessable_content
         end
       end
 
@@ -53,7 +53,7 @@ module Api
         if @gym_opener.deactivate!
           render json: {}, status: :ok
         else
-          render json: { error: @gym_opener.errors }, status: :unprocessable_entity
+          render json: { error: @gym_opener.errors }, status: :unprocessable_content
         end
       end
 
@@ -61,7 +61,7 @@ module Api
         if @gym_opener.activate!
           render json: {}, status: :ok
         else
-          render json: { error: @gym_opener.errors }, status: :unprocessable_entity
+          render json: { error: @gym_opener.errors }, status: :unprocessable_content
         end
       end
 

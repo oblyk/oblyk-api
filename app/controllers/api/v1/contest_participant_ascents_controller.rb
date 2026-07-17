@@ -39,7 +39,7 @@ module Api
           broadcast_ascents
           head :no_content
         else
-          render json: { error: contest_ascent.errors }, status: :unprocessable_entity
+          render json: { error: contest_ascent.errors }, status: :unprocessable_content
         end
       end
 
@@ -66,7 +66,7 @@ module Api
         if errors.size.zero?
           head :no_content
         else
-          render json: { error: errors }, status: :unprocessable_entity
+          render json: { error: errors }, status: :unprocessable_content
         end
       end
 

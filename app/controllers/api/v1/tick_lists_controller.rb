@@ -17,7 +17,7 @@ module Api
         if @tick_list.save
           render json: @current_user.tick_list_to_a, status: :ok
         else
-          render json: { error: @tick_list.errors }, status: :unprocessable_entity
+          render json: { error: @tick_list.errors }, status: :unprocessable_content
         end
       end
 
@@ -25,7 +25,7 @@ module Api
         if @tick_list.destroy
           render json: @current_user.tick_list_to_a, status: :ok
         else
-          render json: { error: @tick_list.errors }, status: :unprocessable_entity
+          render json: { error: @tick_list.errors }, status: :unprocessable_content
         end
       end
 

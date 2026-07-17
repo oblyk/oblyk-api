@@ -14,7 +14,7 @@ module Api
         if area_crag.save
           render json: @area.detail_to_json, status: :ok
         else
-          render json: { error: area_crag.errors }, status: :unprocessable_entity
+          render json: { error: area_crag.errors }, status: :unprocessable_content
         end
       end
 
@@ -23,7 +23,7 @@ module Api
         if @area_crag.destroy
           render json: @area.detail_to_json, status: :ok
         else
-          render json: { error: @area_crag.errors }, status: :unprocessable_entity
+          render json: { error: @area_crag.errors }, status: :unprocessable_content
         end
       end
 

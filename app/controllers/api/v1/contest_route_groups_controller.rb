@@ -35,7 +35,7 @@ module Api
           end
           render json: @contest_route_group.detail_to_json, status: :ok
         else
-          render json: { error: @contest_route_group.errors }, status: :unprocessable_entity
+          render json: { error: @contest_route_group.errors }, status: :unprocessable_content
         end
       end
 
@@ -43,7 +43,7 @@ module Api
         if @contest_route_group.update(contest_route_group_params)
           render json: @contest_route_group.detail_to_json, status: :ok
         else
-          render json: { error: @contest_route_group.errors }, status: :unprocessable_entity
+          render json: { error: @contest_route_group.errors }, status: :unprocessable_content
         end
       end
 
@@ -58,7 +58,7 @@ module Api
         if @contest_route_group.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @contest_route_group.errors }, status: :unprocessable_entity
+          render json: { error: @contest_route_group.errors }, status: :unprocessable_content
         end
       end
 

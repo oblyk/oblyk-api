@@ -153,7 +153,7 @@ module Api
         if @crag_route.save
           render json: @crag_route.detail_to_json, status: :ok
         else
-          render json: { error: @crag_route.errors }, status: :unprocessable_entity
+          render json: { error: @crag_route.errors }, status: :unprocessable_content
         end
       end
 
@@ -161,7 +161,7 @@ module Api
         if @crag_route.update(crag_route_params)
           render json: @crag_route.detail_to_json, status: :ok
         else
-          render json: { error: @crag_route.errors }, status: :unprocessable_entity
+          render json: { error: @crag_route.errors }, status: :unprocessable_content
         end
       end
 
@@ -169,7 +169,7 @@ module Api
         if @crag_route.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @crag_route.errors }, status: :unprocessable_entity
+          render json: { error: @crag_route.errors }, status: :unprocessable_content
         end
       end
 

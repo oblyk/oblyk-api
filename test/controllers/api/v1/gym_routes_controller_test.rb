@@ -548,7 +548,7 @@ module Api
                }
              },
              headers: @headers, as: :json
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
         json = JSON.parse(response.body)
         assert json.key?('error')
       end

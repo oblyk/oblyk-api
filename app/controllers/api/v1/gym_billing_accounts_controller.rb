@@ -18,7 +18,7 @@ module Api
           @gym.save!
           render json: gym_billing_account.detail_to_json, status: :ok
         else
-          render json: gym_billing_account.errors, status: :unprocessable_entity
+          render json: gym_billing_account.errors, status: :unprocessable_content
         end
       end
 
@@ -26,7 +26,7 @@ module Api
         if @gym_billing_account.update(gym_billing_account_params)
           render json: @gym_billing_account.detail_to_json, status: :ok
         else
-          render json: @gym_billing_account.errors, status: :unprocessable_entity
+          render json: @gym_billing_account.errors, status: :unprocessable_content
         end
       end
 

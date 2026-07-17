@@ -58,7 +58,7 @@ module Api
             },
             headers: @user_headers,
             as: :json
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
       end
 
       test 'should add cover' do

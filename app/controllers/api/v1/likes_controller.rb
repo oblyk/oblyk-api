@@ -24,7 +24,7 @@ module Api
         if @like.save
           render json: @like.detail_to_json, status: :ok
         else
-          render json: { error: @like.errors }, status: :unprocessable_entity
+          render json: { error: @like.errors }, status: :unprocessable_content
         end
       end
 
@@ -32,7 +32,7 @@ module Api
         if @like.blank? || @like.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @like.errors }, status: :unprocessable_entity
+          render json: { error: @like.errors }, status: :unprocessable_content
         end
       end
 

@@ -25,7 +25,7 @@ module Api
         if @video.save
           render json: @video.detail_to_json, status: :ok
         else
-          render json: { error: @video.errors }, status: :unprocessable_entity
+          render json: { error: @video.errors }, status: :unprocessable_content
         end
       end
 
@@ -33,7 +33,7 @@ module Api
         if @video.update(video_params)
           render json: @video.detail_to_json, status: :ok
         else
-          render json: { error: @video.errors }, status: :unprocessable_entity
+          render json: { error: @video.errors }, status: :unprocessable_content
         end
       end
 
@@ -41,7 +41,7 @@ module Api
         if @video.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @video.errors }, status: :unprocessable_entity
+          render json: { error: @video.errors }, status: :unprocessable_content
         end
       end
 

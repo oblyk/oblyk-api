@@ -42,7 +42,7 @@ module Api
           ActionCable.server.broadcast "conversations_#{@conversation_message.conversation_id}", data
           render json: @conversation_message.detail_to_json, status: :ok
         else
-          render json: { error: @conversation_message.errors }, status: :unprocessable_entity
+          render json: { error: @conversation_message.errors }, status: :unprocessable_content
         end
       end
 
@@ -53,7 +53,7 @@ module Api
           ActionCable.server.broadcast "conversations_#{@conversation_message.conversation_id}", data
           render json: @conversation_message.detail_to_json, status: :ok
         else
-          render json: { error: @conversation_message.errors }, status: :unprocessable_entity
+          render json: { error: @conversation_message.errors }, status: :unprocessable_content
         end
       end
 
@@ -61,7 +61,7 @@ module Api
         if @conversation_message.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @conversation_message.errors }, status: :unprocessable_entity
+          render json: { error: @conversation_message.errors }, status: :unprocessable_content
         end
       end
 

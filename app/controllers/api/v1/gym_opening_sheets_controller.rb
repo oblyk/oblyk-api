@@ -45,7 +45,7 @@ module Api
         if gym_opening_sheet.save
           render json: gym_opening_sheet.detail_to_json, status: :ok
         else
-          render json: { error: gym_opening_sheet.errors }, status: :unprocessable_entity
+          render json: { error: gym_opening_sheet.errors }, status: :unprocessable_content
         end
       end
 
@@ -53,7 +53,7 @@ module Api
         if @gym_opening_sheet.update gym_opening_sheet_params
           render json: @gym_opening_sheet.detail_to_json, status: :ok
         else
-          render json: { error: @gym_opening_sheet.errors }, status: :unprocessable_entity
+          render json: { error: @gym_opening_sheet.errors }, status: :unprocessable_content
         end
       end
 
@@ -71,7 +71,7 @@ module Api
         if @gym_opening_sheet&.destroy
           head :no_content
         else
-          render json: { error: @gym_opening_sheet.errors }, status: :unprocessable_entity
+          render json: { error: @gym_opening_sheet.errors }, status: :unprocessable_content
         end
       end
 
@@ -79,7 +79,7 @@ module Api
         if @gym_opening_sheet.archive!
           render json: @gym_opening_sheet.detail_to_json, status: :ok
         else
-          render json: { error: @gym_opening_sheet.errors }, status: :unprocessable_entity
+          render json: { error: @gym_opening_sheet.errors }, status: :unprocessable_content
         end
       end
 
@@ -87,7 +87,7 @@ module Api
         if @gym_opening_sheet.unarchive!
           render json: @gym_opening_sheet.detail_to_json, status: :ok
         else
-          render json: { error: @gym_opening_sheet.errors }, status: :unprocessable_entity
+          render json: { error: @gym_opening_sheet.errors }, status: :unprocessable_content
         end
       end
 

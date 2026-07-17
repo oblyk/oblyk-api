@@ -84,7 +84,7 @@ module Api
         if @contest.save
           render json: @contest.detail_to_json, status: :ok
         else
-          render json: { error: @contest.errors }, status: :unprocessable_entity
+          render json: { error: @contest.errors }, status: :unprocessable_content
         end
       end
 
@@ -92,7 +92,7 @@ module Api
         if @contest.update(contest_params)
           render json: @contest.detail_to_json, status: :ok
         else
-          render json: { error: @contest.errors }, status: :unprocessable_entity
+          render json: { error: @contest.errors }, status: :unprocessable_content
         end
       end
 
@@ -103,13 +103,13 @@ module Api
         if @contest.update(banner_params)
           render json: @contest.detail_to_json, status: :ok
         else
-          render json: { error: @contest.errors }, status: :unprocessable_entity
+          render json: { error: @contest.errors }, status: :unprocessable_content
         end
       end
 
       def destroy
         unless @contest.draft?
-          render json: { error: { base: ['published_contest_cannot_be_deleted'] }}, status: :unprocessable_entity
+          render json: { error: { base: ['published_contest_cannot_be_deleted'] }}, status: :unprocessable_content
           return
         end
 
@@ -117,7 +117,7 @@ module Api
           @contest.championship_contests.each(&:destroy)
           render json: {}, status: :ok
         else
-          render json: { error: @contest.errors }, status: :unprocessable_entity
+          render json: { error: @contest.errors }, status: :unprocessable_content
         end
       end
 
@@ -130,7 +130,7 @@ module Api
         if @contest.archive!
           render json: {}, status: :ok
         else
-          render json: { error: @contest.errors }, status: :unprocessable_entity
+          render json: { error: @contest.errors }, status: :unprocessable_content
         end
       end
 
@@ -138,7 +138,7 @@ module Api
         if @contest.unarchive!
           render json: {}, status: :ok
         else
-          render json: { error: @contest.errors }, status: :unprocessable_entity
+          render json: { error: @contest.errors }, status: :unprocessable_content
         end
       end
 

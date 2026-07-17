@@ -50,7 +50,7 @@ module Api
             { include: %i[user commentable], params: { include_attachments: { User: %i[avatar] } } }
           ), status: :ok
         else
-          render json: { error: @comment.errors }, status: :unprocessable_entity
+          render json: { error: @comment.errors }, status: :unprocessable_content
         end
       end
 
@@ -62,7 +62,7 @@ module Api
             { include: %i[user commentable], params: { include_attachments: { User: %i[avatar] } } }
           ), status: :ok
         else
-          render json: { error: @comment.errors }, status: :unprocessable_entity
+          render json: { error: @comment.errors }, status: :unprocessable_content
         end
       end
 
@@ -70,7 +70,7 @@ module Api
         if @comment.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @comment.errors }, status: :unprocessable_entity
+          render json: { error: @comment.errors }, status: :unprocessable_content
         end
       end
 
@@ -105,7 +105,7 @@ module Api
         if @comment.save
           head :no_content
         else
-          render json: { error: @comment.errors }, status: :unprocessable_entity
+          render json: { error: @comment.errors }, status: :unprocessable_content
         end
       end
 

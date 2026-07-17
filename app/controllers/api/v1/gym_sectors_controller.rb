@@ -25,7 +25,7 @@ module Api
         if @gym_sector.save
           render json: @gym_sector.detail_to_json, status: :ok
         else
-          render json: { error: @gym_sector.errors }, status: :unprocessable_entity
+          render json: { error: @gym_sector.errors }, status: :unprocessable_content
         end
       end
 
@@ -33,7 +33,7 @@ module Api
         if @gym_sector.update(gym_sector_params)
           render json: @gym_sector.detail_to_json, status: :ok
         else
-          render json: { error: @gym_sector.errors }, status: :unprocessable_entity
+          render json: { error: @gym_sector.errors }, status: :unprocessable_content
         end
       end
 
@@ -59,7 +59,7 @@ module Api
         end
 
         if errors.size.positive?
-          render json: { error: errors }, status: :unprocessable_entity
+          render json: { error: errors }, status: :unprocessable_content
         else
           update_sectors.each(&:save)
         end
@@ -69,7 +69,7 @@ module Api
         if @gym_sector.destroy
           head :no_content
         else
-          render json: { error: @gym_sector.errors }, status: :unprocessable_entity
+          render json: { error: @gym_sector.errors }, status: :unprocessable_content
         end
       end
 

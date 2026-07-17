@@ -65,7 +65,6 @@ class Crag < ApplicationRecord
   has_many :videos, as: :viewable
   has_many :parks
   has_many :crag_sectors
-  alias_attribute :sectors, :crag_sectors
   has_many :crag_routes
   has_many :area_crags
   has_many :areas, through: :area_crags
@@ -123,7 +122,7 @@ class Crag < ApplicationRecord
   end
 
   def all_photos_count
-    sectors.sum(:photos_count) + crag_routes.sum(:photos_count) + (photos_count || 0)
+    crag_sectors.sum(:photos_count) + crag_routes.sum(:photos_count) + (photos_count || 0)
   end
 
   def all_videos_count
@@ -243,7 +242,7 @@ class Crag < ApplicationRecord
           paper_count: guide_book_papers.count
         },
         creator: user&.summary_to_json,
-        sectors: sectors.map { |sector| { id: sector.id, name: sector.name, app_path: sector.app_path } },
+        sectors: crag_sectors.map { |sector| { id: sector.id, name: sector.name, app_path: sector.app_path } },
         areas: areas.map { |area| { id: area.id, name: area.name, slug_name: area.slug_name, app_path: area.app_path } },
         history: {
           created_at: created_at,

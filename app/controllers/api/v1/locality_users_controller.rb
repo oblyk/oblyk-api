@@ -24,7 +24,7 @@ module Api
         if locality_user.create_by_reverse_geocoding!
           render json: locality_user.detail_to_json, status: :ok
         else
-          render json: { error: locality_user.errors }, status: :unprocessable_entity
+          render json: { error: locality_user.errors }, status: :unprocessable_content
         end
       end
 
@@ -32,7 +32,7 @@ module Api
         if @locality_user.update(update_locality_user_params)
           render json: @locality_user.detail_to_json, status: :ok
         else
-          render json: { error: @locality_user.errors }, status: :unprocessable_entity
+          render json: { error: @locality_user.errors }, status: :unprocessable_content
         end
       end
 

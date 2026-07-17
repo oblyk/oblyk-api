@@ -56,7 +56,7 @@ module Api
         if @word.save
           render json: @word.detail_to_json, status: :ok
         else
-          render json: { error: @word.errors }, status: :unprocessable_entity
+          render json: { error: @word.errors }, status: :unprocessable_content
         end
       end
 
@@ -64,7 +64,7 @@ module Api
         if @word.update(word_params)
           render json: @word.detail_to_json, status: :ok
         else
-          render json: { error: @word.errors }, status: :unprocessable_entity
+          render json: { error: @word.errors }, status: :unprocessable_content
         end
       end
 

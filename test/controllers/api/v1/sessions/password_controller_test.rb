@@ -70,7 +70,7 @@ module Api
               headers: @headers,
               as: :json
 
-          assert_response :unprocessable_entity
+          assert_response :unprocessable_content
           json_response = JSON.parse(response.body)
           assert_equal 'Reset password token is expired', json_response['error']
         end
@@ -103,7 +103,7 @@ module Api
               headers: @headers,
               as: :json
 
-          assert_response :unprocessable_entity
+          assert_response :unprocessable_content
           json_response = JSON.parse(response.body)
           assert_not_nil json_response['error']
         end

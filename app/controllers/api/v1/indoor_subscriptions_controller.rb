@@ -53,7 +53,7 @@ module Api
 
           render json: indoor_subscription.detail_to_json, status: :ok
         else
-          render json: { error: indoor_subscription.errors }, status: :unprocessable_entity
+          render json: { error: indoor_subscription.errors }, status: :unprocessable_content
         end
       end
 
@@ -61,7 +61,7 @@ module Api
         if @indoor_subscription.update(indoor_subscription_params)
           render json: @indoor_subscription.detail_to_json, status: :ok
         else
-          render json: { error: @indoor_subscription.errors }, status: :unprocessable_entity
+          render json: { error: @indoor_subscription.errors }, status: :unprocessable_content
         end
       end
 

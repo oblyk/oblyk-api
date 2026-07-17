@@ -101,7 +101,7 @@ module Api
         if @ascent_gym_route.save
           render json: gym_routes_ascent_response([@ascent_gym_route.gym_route_id]), status: :created
         else
-          render json: { error: @ascent_gym_route.errors }, status: :unprocessable_entity
+          render json: { error: @ascent_gym_route.errors }, status: :unprocessable_content
         end
       end
 
@@ -160,7 +160,7 @@ module Api
           new_ascents.each(&:save)
           render json: { status: 'ok' }, status: :created
         else
-          render json: { error: errors }, status: :unprocessable_entity
+          render json: { error: errors }, status: :unprocessable_content
         end
       end
 
@@ -199,7 +199,7 @@ module Api
           new_ascents.each(&:save)
           render json: gym_routes_ascent_response(new_ascents.map(&:gym_route_id)), status: :created
         else
-          render json: { error: errors.first }, status: :unprocessable_entity
+          render json: { error: errors.first }, status: :unprocessable_content
         end
       end
 
@@ -219,7 +219,7 @@ module Api
           @ascent_gym_route.ascent_comment&.save
           render json: gym_routes_ascent_response([@ascent_gym_route.gym_route_id]), status: :created
         else
-          render json: { error: @ascent_gym_route.errors }, status: :unprocessable_entity
+          render json: { error: @ascent_gym_route.errors }, status: :unprocessable_content
         end
       end
 
@@ -227,7 +227,7 @@ module Api
         if @ascent_gym_route.destroy
           render json: gym_routes_ascent_response([@ascent_gym_route.gym_route_id]), status: :created
         else
-          render json: { error: @ascent_gym_route.errors }, status: :unprocessable_entity
+          render json: { error: @ascent_gym_route.errors }, status: :unprocessable_content
         end
       end
 

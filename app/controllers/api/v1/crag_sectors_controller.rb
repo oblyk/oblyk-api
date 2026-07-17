@@ -83,7 +83,7 @@ module Api
         if @crag_sector.save
           render json: @crag_sector.detail_to_json, status: :ok
         else
-          render json: { error: @crag_sector.errors }, status: :unprocessable_entity
+          render json: { error: @crag_sector.errors }, status: :unprocessable_content
         end
       end
 
@@ -91,7 +91,7 @@ module Api
         if @crag_sector.update(crag_sector_params)
           render json: @crag_sector.detail_to_json, status: :ok
         else
-          render json: { error: @crag_sector.errors }, status: :unprocessable_entity
+          render json: { error: @crag_sector.errors }, status: :unprocessable_content
         end
       end
 
@@ -99,7 +99,7 @@ module Api
         if @crag_sector.destroy
           render json: {}, status: :ok
         else
-          render json: { error: @crag_sector.errors }, status: :unprocessable_entity
+          render json: { error: @crag_sector.errors }, status: :unprocessable_content
         end
       end
 

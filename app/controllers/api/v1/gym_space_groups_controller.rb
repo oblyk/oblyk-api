@@ -21,7 +21,7 @@ module Api
         if @gym_space_group.save
           render json: @gym_space_group.detail_to_json, status: :ok
         else
-          render json: { error: @gym_space_group.errors }, status: :unprocessable_entity
+          render json: { error: @gym_space_group.errors }, status: :unprocessable_content
         end
       end
 
@@ -29,7 +29,7 @@ module Api
         if @gym_space_group.update(gym_space_group_params)
           render json: @gym_space_group.detail_to_json, status: :ok
         else
-          render json: { error: @gym_space_group.errors }, status: :unprocessable_entity
+          render json: { error: @gym_space_group.errors }, status: :unprocessable_content
         end
       end
 
@@ -37,7 +37,7 @@ module Api
         if @gym_space_group.destroy
           head :no_content
         else
-          render json: { error: @gym_space_group.errors }, status: :unprocessable_entity
+          render json: { error: @gym_space_group.errors }, status: :unprocessable_content
         end
       end
 

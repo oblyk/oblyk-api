@@ -35,7 +35,7 @@ module Api
         if @follow.save
           render json: @current_user.subscribes_to_a, status: :ok
         else
-          render json: { error: @follow.errors }, status: :unprocessable_entity
+          render json: { error: @follow.errors }, status: :unprocessable_content
         end
       end
 
@@ -43,7 +43,7 @@ module Api
         if @follow.destroy
           render json: @current_user.subscribes_to_a, status: :ok
         else
-          render json: { error: @follow.errors }, status: :unprocessable_entity
+          render json: { error: @follow.errors }, status: :unprocessable_content
         end
       end
 

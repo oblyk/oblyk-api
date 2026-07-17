@@ -102,7 +102,7 @@ module Api
                headers: @super_admin_headers,
                as: :json
         end
-        assert_response :unprocessable_entity
+        assert_response :unprocessable_content
       end
 
       test 'should destroy alert if super admin' do

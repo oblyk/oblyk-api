@@ -33,7 +33,7 @@ module Api
         private
 
         def not_found
-          render json: { error: { base: ['email_or_password_suite_not_find'] } }, status: :unprocessable_entity
+          render json: { error: { base: ['email_or_password_suite_not_find'] } }, status: :unprocessable_content
         end
       end
     end
