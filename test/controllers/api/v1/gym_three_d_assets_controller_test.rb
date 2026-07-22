@@ -22,15 +22,31 @@ module Api
         assert_response :success
       end
 
-      test 'should create gym three d asset' do
+      test 'should create gym three d asset with gltf' do
+        assert_difference('GymThreeDAsset.count') do
+          post api_v1_gym_gym_three_d_assets_url(gym_id: @gym.id),
+               params: {
+                 gym_three_d_asset: {
+                   name: 'New Asset',
+                   import_type: 'gltf',
+                   three_d_file: fixture_file_upload('test/fixtures/files/test.gltf', 'model/gltf+json')
+                 }
+               },
+               headers: @admin_headers
+        end
+        assert_response :success
+      end
+
+      test 'should not create gym three d asset with wrong format' do
         post api_v1_gym_gym_three_d_assets_url(gym_id: @gym.id),
              params: {
                gym_three_d_asset: {
                  name: 'New Asset',
-                 import_type: 'gltf'
+                 import_type: 'gltf',
+                 three_d_file: fixture_file_upload('test/fixtures/files/image.jpg', 'image/jpeg')
                }
              },
-             headers: @admin_headers, as: :json
+             headers: @admin_headers
         assert_response :unprocessable_entity
       end
 
@@ -75,6 +91,27 @@ module Api
                }
              },
              headers: @admin_headers
+        assert_response :success
+      end
+
+      test 'should change three d file' do
+        put change_three_d_file_api_v1_gym_gym_three_d_asset_url(gym_id: @gym.id, id: @asset.id),
+             params: {
+               gym_three_d_asset: {
+                 three_d_gltf: fixture_file_upload('test/fixtures/files/test.gltf', 'model/gltf+json')
+               }
+             },
+             headers: @admin_headers
+        assert_response :success
+      end
+
+      test 'should get index without administration' do
+        get api_v1_gym_gym_three_d_assets_url(gym_id: @gym.id), headers: @user_headers
+        assert_response :success
+      end
+
+      test 'should show gym three d asset without administration' do
+        get api_v1_gym_gym_three_d_asset_url(gym_id: @gym.id, id: @asset.id), headers: @user_headers
         assert_response :success
       end
     end
