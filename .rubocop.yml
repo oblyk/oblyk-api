@@ -1,10 +1,13 @@
-require:
+plugins:
   - rubocop-performance
   - rubocop-rails
+  - rubocop-capybara
+  - rubocop-minitest
 
 AllCops:
-  TargetRubyVersion: 2.6.5
-  TargetRailsVersion: 6
+  NewCops: enable
+  TargetRubyVersion: 3.4.10
+  TargetRailsVersion: 7
   DisplayCopNames: true
   Exclude:
     - 'bin/**/*'
@@ -17,13 +20,13 @@ AllCops:
 Rails:
   Enabled: true
 
+Layout/LineLength:
+  Enabled: false
+
 Style/Documentation:
   Enabled: false
 
 Metrics/MethodLength:
-  Enabled: false
-
-Metrics/LineLength:
   Enabled: false
 
 Metrics/ClassLength:
