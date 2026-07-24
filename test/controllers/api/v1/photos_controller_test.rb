@@ -24,7 +24,7 @@ module Api
           copyright_nd: false
         )
         @photo.picture.attach(
-          io: File.open(Rails.root.join('test/fixtures/files/image.jpg')),
+          io: Rails.root.join('test/fixtures/files/image.jpg').open,
           filename: 'image.jpg',
           content_type: 'image/jpeg'
         )
@@ -33,13 +33,16 @@ module Api
       test 'should get index' do
         photo = Photo.last
         get api_v1_photos_url, params: { photo_ids: [photo.id] }, headers: @user_headers
+
         assert_response :success
       end
 
       test 'should show photo' do
         get api_v1_photo_url(@photo), headers: @user_headers, as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @photo.id, json_response['id']
       end
 
@@ -81,8 +84,10 @@ module Api
               }
             },
             headers: @user_headers, as: :json
+
         assert_response :success
         @photo.reload
+
         assert_equal 'Description mise à jour', @photo.description
       end
 
@@ -94,6 +99,7 @@ module Api
               }
             },
             headers: @other_user_headers, as: :json
+
         assert_response :forbidden
       end
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ApplicationMailer < ActionMailer::Base
-  default from: ENV['EMAIL_DEFAULT_FROM']
+  default from: ENV.fetch('EMAIL_DEFAULT_FROM', nil)
   layout 'mailer'
 
   before_action :app_url
@@ -23,12 +23,12 @@ class ApplicationMailer < ActionMailer::Base
     sid_email.html_content = html_content
     sid_email.text_content = text_content
     sid_email.sender = {
-      name: ENV['SEND_IN_BLUE_SENDER_NAME'],
-      email: ENV['SEND_IN_BLUE_SENDER_EMAIL']
+      name: ENV.fetch('SEND_IN_BLUE_SENDER_NAME', nil),
+      email: ENV.fetch('SEND_IN_BLUE_SENDER_EMAIL', nil)
     }
     sid_email.reply_to = {
-      email: ENV['SEND_IN_BLUE_REPLY_EMAIL'],
-      name: ENV['SEND_IN_BLUE_SENDER_NAME']
+      email: ENV.fetch('SEND_IN_BLUE_REPLY_EMAIL', nil),
+      name: ENV.fetch('SEND_IN_BLUE_SENDER_NAME', nil)
     }
 
     # Send email

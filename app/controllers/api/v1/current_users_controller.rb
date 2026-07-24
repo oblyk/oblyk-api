@@ -70,9 +70,8 @@ module Api
         old_guides = GuideBookPaper
                      .where(id: subscribe_guides)
                      .where.not(next_guide_book_paper_id: subscribe_guides)
-        guides = []
-        old_guides.each do |guide|
-          guides << {
+        guides = old_guides.map do |guide|
+          {
             old_guide: guide.summary_to_json,
             new_guide: guide.next_guide_book_paper.summary_to_json
           }
@@ -118,21 +117,15 @@ module Api
       end
 
       def followers
-        users = []
         page = params.fetch(:page, 1)
         followers = @user.follows.includes(user: { avatar_attachment: :blob }).accepted.order(created_at: :desc).page(page)
-        followers.each do |follower|
-          users << follower.user
-        end
+        users = followers.map(&:user)
         render json: users.map(&:summary_to_json), status: :ok
       end
 
       def waiting_followers
-        users = []
         followers = @user.follows.awaiting_acceptance.order(created_at: :desc)
-        followers.each do |follower|
-          users << follower.user
-        end
+        users = followers.map(&:user)
         render json: users.map(&:detail_to_json), status: :ok
       end
 
@@ -150,8 +143,8 @@ module Api
         contests = []
         contest_participations = @user.contest_participants
                                       .joins(contest_category: :contest)
-                                      .where('contests.end_date >= ?', Date.current)
-                                      .where('contests.subscription_start_date <= ?', Date.current)
+                                      .where(contests: { end_date: Date.current.. })
+                                      .where(contests: { subscription_start_date: ..Date.current })
         contest_participations.each do |contest_participation|
           contest = contest_participation.contest_category.contest.summary_to_json
           contest[:participant_token] = contest_participation.token
@@ -168,14 +161,14 @@ module Api
         project_crag_route_ids = @user.ascent_crag_routes.project.pluck(:crag_route_id)
         crag_route_ids = @user.ascent_crag_routes.made.pluck(:crag_route_id)
         crag_routes = CragRoute.includes(
-                                 :crag_sector,
-                                 crag: {
-                                   photo: { picture_attachment: :blob },
-                                   static_map_banner_attachment: :blob,
-                                   static_map_attachment: :blob
-                                 },
-                                 photo: { picture_attachment: :blob }
-                               )
+          :crag_sector,
+          crag: {
+            photo: { picture_attachment: :blob },
+            static_map_banner_attachment: :blob,
+            static_map_attachment: :blob
+          },
+          photo: { picture_attachment: :blob }
+        )
                                .where(id: project_crag_route_ids)
                                .where.not(id: crag_route_ids)
                                .joins(:crag)
@@ -201,11 +194,9 @@ module Api
 
       def ascended_crags_geo_json
         minimalistic = params.fetch(:minimalistic, false) != false
-        features = []
-
         crags = minimalistic ? @user.ascended_crags : @user.ascended_crags.includes(photo: { picture_attachment: :blob })
-        crags.distinct.each do |crag|
-          features << crag.to_geo_json(minimalistic: minimalistic)
+        features = crags.distinct.map do |crag|
+          crag.to_geo_json(minimalistic: minimalistic)
         end
 
         render json: {
@@ -343,7 +334,7 @@ module Api
 
         json_user_localities = user_localities.map do |user_locality|
           data = user_locality.local_to_json
-          data[:new] = new_since && data[:locality_user][:created_at] > new_since ? true : false
+          data[:new] = new_since && data[:locality_user][:created_at] > new_since
           data
         end
 
@@ -355,7 +346,7 @@ module Api
         user_ids = []
         new_partner = 0
 
-        @current_user.locality_users.includes(:locality).each do |current_user_locality|
+        @current_user.locality_users.includes(:locality).find_each do |current_user_locality|
           LocalityUser
             .joins(:user, :locality)
             .where('users.last_activity_at > ?', Date.current - 3.years)
@@ -366,7 +357,7 @@ module Api
               lat: current_user_locality.locality.latitude.to_f,
               lng: current_user_locality.locality.longitude.to_f,
               dist: current_user_locality.radius * 1000
-            ).each do |locality_user|
+            ).find_each do |locality_user|
             locality_users << locality_user
             new_partner += 1 if @current_user.last_partner_check_at && locality_user.created_at > @current_user.last_partner_check_at
             user_ids << locality_user.user_id

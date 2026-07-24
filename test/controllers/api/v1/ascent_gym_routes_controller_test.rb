@@ -17,8 +17,10 @@ module Api
 
       test 'should get index' do
         get api_v1_ascent_gym_routes_url, headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
       end
 
@@ -30,6 +32,7 @@ module Api
               climbing_types: ['bouldering']
             },
             headers: @user_headers
+
         assert_response :success
       end
 
@@ -37,11 +40,13 @@ module Api
         get gym_routes_infos_in_logbook_api_v1_ascent_gym_routes_url,
             params: { route_ids: [@gym_route.id] },
             headers: @user_headers
+
         assert_response :success
       end
 
       test 'should show ascent_gym_route' do
         get api_v1_ascent_gym_route_url(@ascent_gym_route), headers: @user_headers
+
         assert_response :success
       end
 
@@ -112,6 +117,7 @@ module Api
             params: { ascent_gym_route: { note: 5 } },
             headers: @user_headers,
             as: :json
+
         assert_response :created
       end
 
@@ -120,6 +126,7 @@ module Api
             params: { ascent_gym_route: { note: 4 } },
             headers: @other_user_headers,
             as: :json
+
         assert_response :forbidden
       end
 
@@ -138,8 +145,10 @@ module Api
               climbing_type: 'bouldering'
             },
             headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
       end
 

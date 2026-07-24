@@ -10,7 +10,7 @@ class ImageConverterService
 
   def call
     ImageProcessing::Vips.source(tempfile)
-                               .convert(type)
-                               .call
+                         .convert(type)
+                         .call
   end
 end

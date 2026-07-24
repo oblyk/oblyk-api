@@ -57,14 +57,10 @@ module Api
       private
 
       def geo_json_features
-        features = []
         gyms = @gym_chain.gyms
                          .select(%i[id name longitude latitude updated_at])
                          .includes(banner_attachment: :blob)
-        gyms.each do |gym|
-          features << gym.to_geo_json
-        end
-        features
+        gyms.map(&:to_geo_json)
       end
 
       def set_gym_chain
@@ -72,7 +68,7 @@ module Api
       end
 
       def protected_by_administrator
-        forbidden if @gym_chain.gym_chain_administrators.where(user_id: @current_user.id).count.zero?
+        forbidden if @gym_chain.gym_chain_administrators.where(user_id: @current_user.id).none?
       end
 
       def gym_chain_params

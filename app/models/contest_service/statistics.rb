@@ -2,7 +2,6 @@
 
 module ContestService
   class Statistics
-
     def initialize(contest, category_id: nil, genre: nil, exclude_without_ascents: false)
       genre = nil if genre == 'unisex'
       @contest = contest
@@ -42,7 +41,7 @@ module ContestService
       number_of_participants = participants.sum { |participant| participant[:count] }
       min_age = participants.first[:age]
       max_age = participants.last[:age]
-      ages = participants.map { |participant| participant[:age] }
+      ages = participants.pluck(:age)
       (min_age..max_age).each do |age_rank|
         participants << { age: age_rank, count: 0 } if ages.exclude?(age_rank)
       end
@@ -94,7 +93,7 @@ module ContestService
               number_of_participants: number_of_participants,
               routes: []
             }
-            route_group.contest_routes.includes(picture_attachment: :blob).each do |route|
+            route_group.contest_routes.includes(picture_attachment: :blob).find_each do |route|
               route_hash = {
                 id: route.id,
                 number: route.number,
@@ -234,8 +233,8 @@ module ContestService
                   top += 1 if ascent.hold_number >= route_number_of_holds
                   max_hold = ascent.hold_number if max_hold.blank? || ascent.hold_number > max_hold
                   min_hold = ascent.hold_number if min_hold.blank? || ascent.hold_number < min_hold
-                  holds << ascent.hold_number || 0
-                  (0..ascent.hold_number || 0).each do |index|
+                  (holds << ascent.hold_number) || 0
+                  (0..(ascent.hold_number || 0)).each do |index|
                     max_holds[index] += 1
                   end
                 end
@@ -244,7 +243,7 @@ module ContestService
                 route_hash[:min_hold] = min_hold
                 route_hash[:holds_chart] = max_holds.map(&:last)
                 route_hash[:colors_chart] = colors
-                route_hash[:average_hold] = holds.size.zero? ? 0 : (holds.sum.to_f / holds.size).round(1)
+                route_hash[:average_hold] = holds.empty? ? 0 : (holds.sum.to_f / holds.size).round(1)
                 route_hash[:top_ratio] = top.zero? ? 0 : (top.to_f / number_of_participants * 100).round(1)
               end
 
@@ -252,7 +251,6 @@ module ContestService
                 best_time = nil
                 worst_time = nil
                 times = []
-                colors = []
                 ascents.each do |ascent|
                   next if ascent.ascent_time.blank? || ascent.ascent_time.to_i <= 946_684_800
 
@@ -260,8 +258,8 @@ module ContestService
                   worst_time = ascent.ascent_time if worst_time.blank? || ascent.ascent_time > worst_time
                   times << { y: ascent.ascent_time, x: 0 }
                 end
-                times.each do |_time|
-                  colors << '#7b1fa2'
+                colors = times.map do |_time|
+                  '#7b1fa2'
                 end
                 route_hash[:best_time] = best_time
                 route_hash[:worst_time] = worst_time
@@ -271,7 +269,7 @@ module ContestService
                 end
                 route_hash[:times_chart] = times
                 route_hash[:colors_chart] = colors
-                route_hash[:average_time] = times.size.zero? ? 0 : Time.zone.at((times.sum { |time| time[:y]&.to_i }).to_f / times.size).round(0)
+                route_hash[:average_time] = times.empty? ? 0 : Time.zone.at(times.sum { |time| time[:y]&.to_i }.to_f / times.size).round(0)
               end
 
               group_hash[:routes] << route_hash

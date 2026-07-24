@@ -8,7 +8,7 @@ module AttachmentResizable
     attachment_attached = false
     attachement_type = attachement_type.presence || "#{attachment.record.class.name}_#{attachment.name}"
     if attachment.attached?
-      storage_domaine = ENV.fetch('IMAGES_STORAGE_DOMAINE', ENV['OBLYK_API_URL'])
+      storage_domaine = ENV.fetch('IMAGES_STORAGE_DOMAINE', ENV.fetch('OBLYK_API_URL', nil))
       variant_path = "#{storage_domaine}/cdn-cgi/image/:variant/#{attachment.blob.key}"
       attachment_attached = true
     end

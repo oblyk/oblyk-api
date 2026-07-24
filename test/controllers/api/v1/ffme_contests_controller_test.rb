@@ -25,8 +25,10 @@ module Api
       test 'should show ffme contest' do
         get api_v1_gym_contest_ffme_contest_url(@gym, @contest, @ffme_contest),
             headers: @gym_admin_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @ffme_contest.name, json_response['name']
       end
 
@@ -47,7 +49,8 @@ module Api
                  as: :json
           end
           assert_response :success
-          json_response = JSON.parse(response.body)
+          json_response = response.parsed_body
+
           assert_equal 'create_on_my_compet', json_response['status']
         end
       end
@@ -73,8 +76,10 @@ module Api
               params: { ffme_contest: { name: 'Nom mis à jour' } },
               headers: @gym_admin_headers,
               as: :json
+
           assert_response :success
           @ffme_contest.reload
+
           assert_equal 'Nom mis à jour', @ffme_contest.name
         end
       end
@@ -83,8 +88,10 @@ module Api
         MyCompet.stub :link, { 'urlResultats' => 'http://mycompet.fr/results' } do
           get link_api_v1_gym_contest_ffme_contest_url(@gym, @contest, @ffme_contest),
               headers: @gym_admin_headers
+
           assert_response :success
-          json_response = JSON.parse(response.body)
+          json_response = response.parsed_body
+
           assert_equal 'http://mycompet.fr/results', json_response['link']
         end
       end
@@ -95,8 +102,10 @@ module Api
         MyCompet.stub :send_results, true do
           post send_results_api_v1_gym_contest_ffme_contest_url(@gym, @contest, @ffme_contest),
                headers: @gym_admin_headers
+
           assert_response :success
           @ffme_contest.reload
+
           assert_equal 'result_sent', @ffme_contest.status
           assert_not_nil @ffme_contest.results_send_at
         end
@@ -107,14 +116,17 @@ module Api
 
         post send_results_api_v1_gym_contest_ffme_contest_url(@gym, @contest, @ffme_contest),
              headers: @gym_admin_headers
+
         assert_response :unprocessable_content
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal 'ffme_contest_is_not_sendable', json_response['error']['base'].first
       end
 
       test 'should be protected by administrator' do
         get api_v1_gym_contest_ffme_contest_url(@gym, @contest, @ffme_contest),
             headers: @user_headers
+
         assert_response :unauthorized
       end
     end

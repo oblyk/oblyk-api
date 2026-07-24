@@ -26,7 +26,8 @@ module Api
           end
 
           assert_response :created
-          json_response = JSON.parse(response.body)
+          json_response = response.parsed_body
+
           assert_not_nil json_response['token']
           assert_not_nil json_response['refresh_token']
         end
@@ -51,7 +52,8 @@ module Api
           end
 
           assert_response :unprocessable_content
-          json_response = JSON.parse(response.body)
+          json_response = response.parsed_body
+
           assert_not_nil json_response['error']
         end
 

@@ -10,17 +10,19 @@ class ContestRouteGroupTest < ActiveSupport::TestCase
   end
 
   test 'contest route group is valid' do
-    assert @route_group.valid?
+    assert_predicate @route_group, :valid?
   end
 
   test 'contest route group is invalid without categories' do
     @route_group.contest_categories = []
+
     assert_not @route_group.valid?
     assert_includes @route_group.errors.messages[:contest_categories], 'you_must_choose_one'
   end
 
   test 'contest route group is invalid with wrong genre_type' do
     @route_group.genre_type = 'other'
+
     assert_not @route_group.valid?
   end
 
@@ -69,6 +71,7 @@ class ContestRouteGroupTest < ActiveSupport::TestCase
 
   test 'summary_to_json returns expected keys' do
     json = @route_group.summary_to_json
+
     assert_equal @route_group.id, json[:id]
     assert_equal @route_group.name, json[:name]
     assert_includes json.keys, :contest_categories

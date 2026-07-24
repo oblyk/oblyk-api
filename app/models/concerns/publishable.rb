@@ -23,5 +23,4 @@ module Publishable
   def unpublish!
     update_attribute :published_at, nil
   end
-
 end

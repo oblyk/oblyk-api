@@ -19,10 +19,13 @@ module ContestService
     end
 
     def delete_cache_key
+      by_types = %w[by_team by_participant]
+      genders = %w[unisex multisex]
       last_ascent = @contest.contest_participant_ascents.maximum(:registered_at) || 'no-ascents'
+
       %w[rich simple].each do |detail|
-        %w[by_team by_participant].each do |team|
-          %w[unisex multisex].each do |gender|
+        by_types.each do |team|
+          genders.each do |gender|
             Rails.cache.delete("contest-results-#{@contest.id}-#{last_ascent}-#{detail}-#{team}-#{gender}")
           end
         end
@@ -91,7 +94,7 @@ module ContestService
       if @contest.team_contest
         # RE-MAP TEAM SCORE TO EACH PARTICIPANT STEPS
         results.each do |category_key, category|
-          category[:participants].each do |_participant_key, participant|
+          category[:participants].each_value do |participant|
             participant[:stages].each do |stage_key, stage|
               stage[:steps].each do |step|
                 step[:team_points] += points_by_team_steps[category_key][stage_key]["step-#{step[:step_id]}"][participant[:team_id]] || 0
@@ -115,7 +118,7 @@ module ContestService
       # (and give ordre of point)
       points_by_steps.each do |cat_key, category|
         category.each do |stage_key, stage|
-          stage.each do |step_key, _points|
+          stage.each_key do |step_key|
             points_by_steps[cat_key][stage_key][step_key].sort!.reverse!
           end
         end
@@ -194,7 +197,7 @@ module ContestService
                               elsif rank <= 30
                                 Constant::COMBINED_RANKING_POINT_MATRIX[rank.to_i - 1].to_f
                               else
-                                1.0 - (1.0 / (max_rank - 29)) * (rank - 29)
+                                1.0 - ((1.0 / (max_rank - 29)) * (rank - 29))
                               end
               end
             end
@@ -210,9 +213,9 @@ module ContestService
 
         # Sort participant by global rank point
         results[category_index][:participants] = if is_combined && @contest.combined_ranking_type == Constant::COMBINED_RANKING_DECREMENT_POINTS
-                                                   results[category_index][:participants].sort_by { |participant| [-participant[:global_rank_point], (participant[:team_id] || 0)] }
+                                                   results[category_index][:participants].sort_by { |participant| [-participant[:global_rank_point], participant[:team_id] || 0] }
                                                  else
-                                                   results[category_index][:participants].sort_by { |participant| [participant[:global_rank_point], (participant[:team_id] || 0)] }
+                                                   results[category_index][:participants].sort_by { |participant| [participant[:global_rank_point], participant[:team_id] || 0] }
                                                  end
 
         # Create global rank index
@@ -313,7 +316,7 @@ module ContestService
     # @return [Hash]
     def build_teams
       self.teams = {}
-      @contest.contest_teams.includes(:contest_participants).each do |team|
+      @contest.contest_teams.includes(:contest_participants).find_each do |team|
         teams[team.id] = {
           id: team.id,
           name: team.name,

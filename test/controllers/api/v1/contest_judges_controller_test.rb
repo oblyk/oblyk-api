@@ -17,11 +17,13 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_contest_contest_judges_url(@gym, @contest), headers: @admin_headers, as: :json
+
         assert_response :success
       end
 
       test 'should show contest judge' do
         get api_v1_gym_contest_contest_judge_url(@gym, @contest, @judge), headers: @admin_headers, as: :json
+
         assert_response :success
       end
 
@@ -49,8 +51,10 @@ module Api
             },
             headers: @admin_headers,
             as: :json
+
         assert_response :success
         @judge.reload
+
         assert_equal 'Updated Judge Name', @judge.name
       end
 
@@ -91,6 +95,7 @@ module Api
       test 'should not allow non-admin to manage judges' do
         other_user_headers = api_headers(user: :other_user)
         get api_v1_gym_contest_contest_judges_url(@gym, @contest), headers: other_user_headers, as: :json
+
         assert_response :unauthorized
       end
     end

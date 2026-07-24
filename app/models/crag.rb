@@ -262,7 +262,7 @@ class Crag < ApplicationRecord
           name: name,
           icon: "crag-marker-#{climbing_key}"
         },
-        geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
+        geometry: { type: 'Point', coordinates: [Float(longitude), Float(latitude), 0.0] }
       }
       unless minimalistic
         features[:properties].merge!(
@@ -292,7 +292,7 @@ class Crag < ApplicationRecord
 
   def historize_approach_times
     approaches_from_park = approaches.where(from_park: true)
-    return if approaches_from_park.count.zero?
+    return if approaches_from_park.none?
 
     min_time = nil
     max_time = nil

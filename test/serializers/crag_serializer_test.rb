@@ -11,6 +11,7 @@ class CragSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @crag.id, attributes['id']
     assert_equal @crag.name, attributes['name']
     assert_equal @crag.app_path, attributes['app_path']
@@ -19,6 +20,7 @@ class CragSerializerTest < ActiveSupport::TestCase
     else
       assert_nil attributes['slug_name']
     end
+
     assert_equal @crag.latitude.to_s, attributes['latitude'].to_s
     assert_equal @crag.longitude.to_s, attributes['longitude'].to_s
     assert_equal @crag.city, attributes['city']
@@ -28,6 +30,7 @@ class CragSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the approaches attribute' do
     attributes = @serialization['data']['attributes']
+
     assert attributes.key?('approaches')
     if @crag.min_approach_time
       assert_equal @crag.min_approach_time, attributes['approaches']['min_time']
@@ -44,10 +47,9 @@ class CragSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the routes_figures attribute' do
     attributes = @serialization['data']['attributes']
+
     assert attributes.key?('routes_figures')
-    if @crag.crag_routes_count
-      assert_equal @crag.crag_routes_count, attributes['routes_figures']['route_count']
-    end
+    assert_equal @crag.crag_routes_count, attributes['routes_figures']['route_count'] if @crag.crag_routes_count
     if @crag.min_grade_value
       assert_equal @crag.min_grade_value, attributes['routes_figures']['grade']['min_value']
     else
@@ -87,6 +89,7 @@ class CragSerializerTest < ActiveSupport::TestCase
     assert_kind_of Hash, CragSerializer.static_map_banner_attachment(@crag)
 
     cover = CragSerializer.cover_attachment(@crag)
+
     assert cover.key?(:attached)
     assert cover.key?(:attachment_type)
     assert cover.key?(:variant_path)

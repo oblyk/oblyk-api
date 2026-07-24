@@ -6,7 +6,7 @@ module Api
   module Embedded
     class EmbeddedControllerTest < ActionDispatch::IntegrationTest
       test 'should inherit from ApplicationController' do
-        assert EmbeddedController < ApplicationController
+        assert_operator EmbeddedController, :<, ApplicationController
       end
     end
   end

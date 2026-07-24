@@ -7,7 +7,7 @@ module Api
 
       def search
         query = params.fetch(:query, nil)
-        head :no_content && return if query.blank?
+        return head :no_content if query.blank?
 
         page = params.fetch(:page, 1).to_i
         per_page = params.fetch(:per_page, 25).to_i

@@ -9,27 +9,35 @@ class GeolocableTest < ActiveSupport::TestCase
 
   test 'validates latitude' do
     @crag.latitude = 91
+
     assert_not @crag.valid?
     @crag.latitude = -91
+
     assert_not @crag.valid?
     @crag.latitude = 45
-    assert @crag.valid?
+
+    assert_predicate @crag, :valid?
   end
 
   test 'validates longitude' do
     @crag.longitude = 181
+
     assert_not @crag.valid?
     @crag.longitude = -181
+
     assert_not @crag.valid?
     @crag.longitude = 5
-    assert @crag.valid?
+
+    assert_predicate @crag, :valid?
   end
 
   test 'geo_search returns objects within distance' do
     results = Crag.geo_search(44.319, 5.497, 5)
+
     assert_includes results, @crag
 
     results = Crag.geo_search(48.8566, 2.3522, 10) # Paris
+
     assert_not_includes results, @crag
   end
 end

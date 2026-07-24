@@ -45,6 +45,7 @@ module Statistics
       assert_kind_of Array, charts
       if charts.any?
         chart = charts.first
+
         assert chart.key?(:type)
         assert chart.key?(:climbing_type)
         assert chart.key?(:chart)
@@ -65,6 +66,7 @@ module Statistics
       ascent.save(validate: false)
 
       notes = @statistic.notes
+
       assert_equal 1, notes[4]
     end
 
@@ -73,6 +75,7 @@ module Statistics
       route.update(likes_count: 5)
 
       likes = @statistic.like_figures
+
       assert_equal 5, likes[:likes_count]
       assert_equal 1, likes[:liked_routes]
     end
@@ -88,6 +91,7 @@ module Statistics
                    })
 
       appreciation = @statistic.difficulty_appreciation
+
       assert_equal 2, appreciation[:easy_for_the_grade]
       assert_equal 5, appreciation[:this_grade_is_accurate]
       assert_equal 1, appreciation[:sandbagged]
@@ -106,6 +110,7 @@ module Statistics
 
       figures = stat_with_filter.figures
       expected_count = @gym.gym_routes.joins(gym_sector: :gym_space).where(gym_spaces: { id: space.id }).count
+
       assert_equal expected_count, figures[:route_count]
     end
 

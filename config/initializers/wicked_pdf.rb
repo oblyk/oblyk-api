@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # WickedPDF Global Configuration
 #
 # Use this to set up shared configuration options for your entire application.

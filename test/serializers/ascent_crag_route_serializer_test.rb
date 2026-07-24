@@ -11,6 +11,7 @@ class AscentCragRouteSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @ascent_crag_route.id, attributes['id']
     assert_equal @ascent_crag_route.ascent_status, attributes['ascent_status']
     assert_equal @ascent_crag_route.roping_status, attributes['roping_status']
@@ -33,21 +34,24 @@ class AscentCragRouteSerializerTest < ActiveSupport::TestCase
   test 'It may include crag_route if specified' do
     serializer = AscentCragRouteSerializer.new(@ascent_crag_route, { include: [:crag_route] })
     serialization = JSON.parse(serializer.serializable_hash.to_json)
+
     assert_not_nil serialization['included']
-    assert serialization['included'].any? { |inc| inc['type'] == 'crag_route' }
+    assert(serialization['included'].any? { |inc| inc['type'] == 'crag_route' })
   end
 
   test 'It may include crag if specified' do
     serializer = AscentCragRouteSerializer.new(@ascent_crag_route, { include: [:crag] })
     serialization = JSON.parse(serializer.serializable_hash.to_json)
+
     assert_not_nil serialization['included']
-    assert serialization['included'].any? { |inc| inc['type'] == 'crag' }
+    assert(serialization['included'].any? { |inc| inc['type'] == 'crag' })
   end
 
   test 'It may include user if specified' do
     serializer = AscentCragRouteSerializer.new(@ascent_crag_route, { include: [:user] })
     serialization = JSON.parse(serializer.serializable_hash.to_json)
+
     assert_not_nil serialization['included']
-    assert serialization['included'].any? { |inc| inc['type'] == 'user' }
+    assert(serialization['included'].any? { |inc| inc['type'] == 'user' })
   end
 end

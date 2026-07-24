@@ -121,10 +121,10 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 group :development, :test do
   # Ruby static code analyzer
   gem 'rubocop'
-  gem 'rubocop-faker'
-  gem 'rubocop-performance'
   gem 'rubocop-capybara'
+  gem 'rubocop-faker'
   gem 'rubocop-minitest'
+  gem 'rubocop-performance'
   gem 'rubocop-rails'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]

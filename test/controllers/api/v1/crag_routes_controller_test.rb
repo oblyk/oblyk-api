@@ -14,16 +14,19 @@ module Api
 
       test 'should get index' do
         get api_v1_crag_crag_routes_url(@crag), headers: @user_headers
+
         assert_response :success
       end
 
       test 'should show crag_route' do
         get api_v1_crag_route_url(@crag_route), headers: @user_headers
+
         assert_response :success
       end
 
       test 'should search crag_routes' do
         get search_api_v1_crag_routes_url, params: { query: 'Route' }, headers: @user_headers
+
         assert_response :success
       end
 
@@ -49,8 +52,10 @@ module Api
             params: { crag_route: { name: 'Updated Route Name' } },
             headers: @user_headers,
             as: :json
+
         assert_response :success
         @crag_route.reload
+
         assert_equal 'Updated Route Name', @crag_route.name
       end
 

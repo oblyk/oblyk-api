@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 namespace :migrate_gym_route_pictures do
-
   desc 'Create GymRouteCover form gym route picture attachments'
   task :exec, %i[out] => :environment do |_t, args|
     out = args[:out] || $stdout

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 
 class GuideBookWebTest < ActiveSupport::TestCase
@@ -7,17 +8,19 @@ class GuideBookWebTest < ActiveSupport::TestCase
   end
 
   test 'guide_book_web is valid' do
-    assert @guide_book_web.valid?
+    assert_predicate @guide_book_web, :valid?
   end
 
   test 'guide_book_web is invalid without name' do
     @guide_book_web.name = nil
-    assert @guide_book_web.invalid?
+
+    assert_predicate @guide_book_web, :invalid?
   end
 
   test 'guide_book_web is invalid without url' do
     @guide_book_web.url = nil
-    assert @guide_book_web.invalid?
+
+    assert_predicate @guide_book_web, :invalid?
   end
 
   test 'delegates latitude and longitude to crag' do
@@ -27,6 +30,7 @@ class GuideBookWebTest < ActiveSupport::TestCase
 
   test 'detail_to_json returns correct keys' do
     json = @guide_book_web.detail_to_json
+
     assert_equal @guide_book_web.id, json[:id]
     assert_equal @guide_book_web.name, json[:name]
     assert_equal @guide_book_web.url, json[:url]
@@ -44,10 +48,12 @@ class GuideBookWebTest < ActiveSupport::TestCase
     end
 
     publication = Publication.last
+
     assert_equal @guide_book_web.crag_id, publication.publishable_id
     assert_equal 'Crag', publication.publishable_type
 
     attachment = PublicationAttachment.last
+
     assert_equal 'GuideBookWeb', attachment.attachable_type
     assert_equal @guide_book_web.id, attachment.attachable_id
   end

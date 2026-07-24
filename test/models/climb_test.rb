@@ -4,7 +4,7 @@ require 'test_helper'
 
 class ClimbTest < ActiveSupport::TestCase
   test 'Climb::ALL_LIST is an array' do
-    assert Climb::ALL_LIST.is_a?(Array)
+    assert_kind_of Array, Climb::ALL_LIST
   end
 
   test 'Climb::ALL_LIST contains expected values' do
@@ -19,11 +19,12 @@ class ClimbTest < ActiveSupport::TestCase
       pan
       speed_climbing
     ]
+
     assert_equal expected_anchors.sort, Climb::ALL_LIST.sort
   end
 
   test 'Climb::ALL_LIST is frozen' do
-    assert Climb::ALL_LIST.frozen?
+    assert_predicate Climb::ALL_LIST, :frozen?
   end
 
   test 'Climb::ALL_LIST has 9 elements' do

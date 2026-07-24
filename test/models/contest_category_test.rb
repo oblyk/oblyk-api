@@ -11,17 +11,19 @@ class ContestCategoryTest < ActiveSupport::TestCase
   end
 
   test 'category is valid' do
-    assert @category_u18.valid?
+    assert_predicate @category_u18, :valid?
   end
 
   test 'category is invalid without name' do
     @category_u18.name = nil
+
     assert_not @category_u18.valid?
     assert_includes @category_u18.errors.attribute_names, :name
   end
 
   test 'category is invalid with wrong registration_obligation' do
     @category_u18.registration_obligation = 'wrong_obligation'
+
     assert_not @category_u18.valid?
     assert_includes @category_u18.errors.attribute_names, :registration_obligation
   end
@@ -29,6 +31,7 @@ class ContestCategoryTest < ActiveSupport::TestCase
   test 'category between_age is invalid without min or max age' do
     @category_custom.min_age = nil
     @category_custom.max_age = nil
+
     assert_not @category_custom.valid?
     assert_includes @category_custom.errors.attribute_names, :registration_obligation
   end
@@ -36,11 +39,13 @@ class ContestCategoryTest < ActiveSupport::TestCase
   test 'category with parity must have even capacity' do
     @category_u18.parity = true
     @category_u18.capacity = 11
+
     assert_not @category_u18.valid?
     assert_includes @category_u18.errors.attribute_names, :capacity
 
     @category_u18.capacity = 10
-    assert @category_u18.valid?
+
+    assert_predicate @category_u18, :valid?
   end
 
   test 'under_age returns expected value' do
@@ -55,11 +60,13 @@ class ContestCategoryTest < ActiveSupport::TestCase
     assert_equal 18, @category_senior.over_age
 
     @category_u18.min_age = 15
+
     assert_equal 15, @category_u18.over_age
   end
 
   test 'summary_to_json returns expected keys' do
     json = @category_u18.summary_to_json
+
     assert_equal @category_u18.id, json[:id]
     assert_equal @category_u18.name, json[:name]
     assert_includes json.keys, :under_age
@@ -76,6 +83,7 @@ class ContestCategoryTest < ActiveSupport::TestCase
       registration_obligation: ''
     )
     category.valid?
+
     assert_nil category.description
     assert_nil category.registration_obligation
   end
@@ -85,6 +93,7 @@ class ContestCategoryTest < ActiveSupport::TestCase
       name: 'New Category',
       contest: @contest
     )
+
     assert_equal 5, category.order
   end
 end

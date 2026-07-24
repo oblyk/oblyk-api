@@ -14,11 +14,13 @@ module Api
       test 'should get assigned gyms' do
         @gym.administered!
         get assigned_api_v1_gym_administrations_url, headers: @super_admin_headers
+
         assert_response :success
       end
 
       test 'should get requested gyms' do
         get requested_api_v1_gym_administrations_url, headers: @super_admin_headers
+
         assert_response :success
       end
 
@@ -65,6 +67,7 @@ module Api
 
       test 'should not be accessible by normal user' do
         get requested_api_v1_gym_administrations_url, headers: @user_headers
+
         assert_response :forbidden
       end
     end

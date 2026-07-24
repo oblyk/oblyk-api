@@ -37,7 +37,7 @@ namespace :disc_charts do
     output_path = Rails.root.join('tmp', "#{basename}.pdf")
     File.binwrite(output_path, pdf_io.string)
     puts "PDF written to #{output_path} (#{File.size(output_path)} bytes)"
-    puts "#{routes.size} routes across #{routes.map { |r| r[:sheet_reference] }.uniq.size} anchors"
+    puts "#{routes.size} routes across #{routes.pluck(:sheet_reference).uniq.size} anchors"
   end
 
   desc 'Generate disc chart PDF for a gym space (routes fetched from the database)'
@@ -69,7 +69,7 @@ namespace :disc_charts do
     output_path = Rails.root.join('tmp', "disc_charts_#{slug}.pdf")
     File.binwrite(output_path, pdf_io.string)
     puts "PDF written to #{output_path} (#{File.size(output_path)} bytes)"
-    puts "#{routes.size} routes across #{routes.map { |r| r[:sheet_reference] }.uniq.size} anchors"
+    puts "#{routes.size} routes across #{routes.pluck(:sheet_reference).uniq.size} anchors"
     puts "Gym space: #{space.name} (ID: #{space.id})"
   end
 end

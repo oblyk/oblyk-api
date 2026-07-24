@@ -14,48 +14,54 @@ module Api
 
       test 'should get index' do
         get api_v1_crag_crag_sectors_url(@crag), headers: @user_headers
+
         assert_response :success
       end
 
       test 'should show crag_sector' do
         get api_v1_crag_sector_url(@crag_sector), headers: @user_headers
+
         assert_response :success
       end
 
       test 'should get versions' do
         get versions_api_v1_crag_sector_url(@crag_sector), headers: @user_headers
+
         assert_response :success
       end
 
       test 'should get photos' do
         get photos_api_v1_crag_sector_url(@crag_sector), headers: @user_headers
+
         assert_response :success
       end
 
       test 'should get videos' do
         get videos_api_v1_crag_sector_url(@crag_sector), headers: @user_headers
+
         assert_response :success
       end
 
       test 'should get route_figures' do
         get route_figures_api_v1_crag_sector_url(@crag_sector), headers: @user_headers
+
         assert_response :success
       end
 
       test 'should get geo_json_around' do
         get geo_json_around_api_v1_crag_crag_sectors_url(@crag), headers: @user_headers
+
         assert_response :success
       end
 
       test 'should get geo_json_around with exclusion' do
         get geo_json_around_api_v1_crag_crag_sectors_url(@crag), params: { exclude_id: @crag_sector.id }, headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
         features = json_response['features']
         features.each do |feature|
-          if feature['properties']['type'] == 'CragSector'
-            assert_not_equal @crag_sector.id, feature['properties']['id']
-          end
+          assert_not_equal @crag_sector.id, feature['properties']['id'] if feature['properties']['type'] == 'CragSector'
         end
       end
 
@@ -84,6 +90,7 @@ module Api
              },
              headers: @user_headers,
              as: :json
+
         assert_response :unprocessable_content
       end
 
@@ -92,8 +99,10 @@ module Api
             params: { crag_sector: { name: 'Updated Sector Name' } },
             headers: @user_headers,
             as: :json
+
         assert_response :success
         @crag_sector.reload
+
         assert_equal 'Updated Sector Name', @crag_sector.name
       end
 
@@ -102,6 +111,7 @@ module Api
             params: { crag_sector: { name: '' } },
             headers: @user_headers,
             as: :json
+
         assert_response :unprocessable_content
       end
 
@@ -138,6 +148,7 @@ module Api
             params: { crag_sector: { name: 'Updated Sector Name' } },
             headers: api_access_token_headers,
             as: :json
+
         assert_response :unauthorized
       end
     end

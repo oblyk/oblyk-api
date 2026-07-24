@@ -7,8 +7,8 @@ class ContestTimeBlock < ApplicationRecord
 
   before_validation :set_contest
   before_validation :normalize_attributes
-  after_save :delete_caches
   after_destroy :delete_caches
+  after_save :delete_caches
 
   delegate :name, to: :contest_wave
 

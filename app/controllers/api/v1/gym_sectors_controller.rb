@@ -4,6 +4,7 @@ module Api
   module V1
     class GymSectorsController < ApiController
       include Gymable
+
       skip_before_action :protected_by_session, only: %i[show index]
       skip_before_action :protected_by_gym_administrator, only: %i[show index]
       before_action :set_gym_space
@@ -80,14 +81,11 @@ module Api
       end
 
       def last_routes_with_pictures
-        json_data = []
-        gym_route_cover_ids = GymRoute.distinct.select(:gym_route_cover_id).mounted.where(gym_sector_id: @gym_sector.id).map(&:gym_route_cover_id)
-        GymRouteCover.where(id: gym_route_cover_ids)
-                     .order(created_at: :desc)
-                     .limit(params.fetch(:limit, 5))
-                     .each do |gym_route_cover|
-          json_data << gym_route_cover.detail_to_json
-        end
+        gym_route_cover_ids = GymRoute.distinct.mounted.where(gym_sector_id: @gym_sector.id).pluck(:gym_route_cover_id)
+        json_data = GymRouteCover.where(id: gym_route_cover_ids)
+                                 .order(created_at: :desc)
+                                 .limit(params.fetch(:limit, 5))
+                                 .map(&:detail_to_json)
         render json: json_data, status: :ok
       end
 

@@ -50,8 +50,8 @@ module Api
         data[:contests] = []
         contest_participations = @current_user.contest_participants
                                               .joins(contest_category: :contest)
-                                              .where('contests.end_date >= ?', Date.current)
-                                              .where('contests.subscription_start_date <= ?', Date.current)
+                                              .where(contests: { end_date: Date.current.. })
+                                              .where(contests: { subscription_start_date: ..Date.current })
         contest_participations.each do |contest_participation|
           contest = contest_participation.contest_category.contest.summary_to_json
           contest[:participant_token] = contest_participation.token

@@ -3,7 +3,7 @@
 module JwtToken
   class Token
     # By default, the token is valid for 24 hours
-    def self.generate(data, exp = Time.now.to_i + 24 * 3600)
+    def self.generate(data, exp = Time.now.to_i + (24 * 3600))
       JWT.encode({ data: data, exp: exp }, api_secret)
     end
 

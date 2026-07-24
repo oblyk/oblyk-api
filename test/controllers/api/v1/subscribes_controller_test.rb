@@ -14,13 +14,16 @@ module Api
 
       test 'should get index if super_admin' do
         get api_v1_subscribes_url, headers: @super_admin_headers, as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal Subscribe.count, json_response.size
       end
 
       test 'should not get index if not super_admin' do
         get api_v1_subscribes_url, headers: @user_headers, as: :json
+
         assert_response :forbidden
       end
 

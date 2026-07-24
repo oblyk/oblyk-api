@@ -18,7 +18,8 @@ module Api
                as: :json
 
           assert_response :created
-          json_response = JSON.parse(response.body)
+          json_response = response.parsed_body
+
           assert_not_nil json_response['token']
           assert_not_nil json_response['refresh_token']
         end
@@ -30,7 +31,8 @@ module Api
                as: :json
 
           assert_response :unprocessable_content
-          json_response = JSON.parse(response.body)
+          json_response = response.parsed_body
+
           assert_equal ['email_or_password_suite_not_find'], json_response['error']['base']
         end
 
@@ -47,6 +49,7 @@ module Api
           delete api_v1_sessions_sign_in_url,
                  headers: @headers,
                  as: :json
+
           assert_response :no_content
         end
       end

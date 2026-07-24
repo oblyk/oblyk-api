@@ -3,7 +3,6 @@
 module LogBook
   module Indoor
     class Chart
-
       def initialize(user)
         @user = user
       end
@@ -33,13 +32,13 @@ module LogBook
               label: 'number'
             }
           ],
-          labels: grades.map { |grade| grade[0] }
+          labels: grades.pluck(0)
         }
       end
 
       def self.by_levels(ascents)
         charts = []
-        ascents.group_by { |ascent| ascent.color_system_line&.color_system&.id }.each do |_key, ascents_in_level|
+        ascents.group_by { |ascent| ascent.color_system_line&.color_system&.id }.each_value do |ascents_in_level|
           next unless ascents_in_level.first.color_system_line
 
           color_system = ascents_in_level.first.color_system_line.color_system
@@ -124,7 +123,7 @@ module LogBook
               label: 'number'
             }
           ],
-          labels: years.map { |year| year[0] }
+          labels: years.pluck(0)
         }
       end
 
@@ -151,7 +150,7 @@ module LogBook
               label: 'number'
             }
           ],
-          labels: dates.map { |date| date[0] }
+          labels: dates.pluck(0)
         }
       end
     end

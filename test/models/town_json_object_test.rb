@@ -8,7 +8,7 @@ class TownJsonObjectTest < ActiveSupport::TestCase
   end
 
   test 'town_json_object is valid' do
-    assert @town_json_object.valid?
+    assert_predicate @town_json_object, :valid?
   end
 
   test 'town_json_object belongs to town' do

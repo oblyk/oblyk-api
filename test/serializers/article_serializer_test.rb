@@ -13,6 +13,7 @@ class ArticleSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @article.id, attributes['id']
     assert_equal @article.name, attributes['name']
     assert_equal @article.slug_name, attributes['slug_name']
@@ -31,6 +32,7 @@ class ArticleSerializerTest < ActiveSupport::TestCase
 
     serializer = ArticleSerializer.new(@article, { params: { with_body: true } })
     serialization = JSON.parse(serializer.serializable_hash.to_json)
+
     assert_equal @article.body, serialization['data']['attributes']['body']
   end
 
@@ -52,14 +54,17 @@ class ArticleSerializerTest < ActiveSupport::TestCase
     @article.stub :author, users(:lulu) do
       serializer = ArticleSerializer.new(@article, { include: [:author] })
       serialization = JSON.parse(serializer.serializable_hash.to_json)
+
       assert_not_nil serialization['included']
       author_include = serialization['included'].find { |inc| inc['type'] == 'user' }
+
       assert_not_nil author_include
     end
   end
 
   test 'cover_attachment returns correct structure' do
     cover = ArticleSerializer.cover_attachment(@article)
+
     assert_kind_of Hash, cover
     assert cover.key?(:attached)
     assert cover.key?(:attachment_type)
@@ -70,6 +75,7 @@ class ArticleSerializerTest < ActiveSupport::TestCase
   test 'avatar_attachment returns same as cover_attachment' do
     avatar = ArticleSerializer.avatar_attachment(@article)
     cover = ArticleSerializer.cover_attachment(@article)
+
     assert_equal cover, avatar
   end
 end

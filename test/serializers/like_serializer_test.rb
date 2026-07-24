@@ -11,6 +11,7 @@ class LikeSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @like.id, attributes['id']
     assert_equal @like.likeable_type, attributes['likeable_type']
     assert_equal @like.likeable_id, attributes['likeable_id']
@@ -23,6 +24,7 @@ class LikeSerializerTest < ActiveSupport::TestCase
 
   test 'It contains relationships' do
     relationships = @serialization['data']['relationships']
+
     assert_not_nil relationships['likeable']
     assert_equal @like.likeable_id, relationships['likeable']['data']['id'].to_i
     assert_equal @like.likeable_type, relationships['likeable']['data']['type'].underscore.camelize

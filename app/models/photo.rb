@@ -39,7 +39,7 @@ class Photo < ApplicationRecord
   end
 
   def destroyable?
-    crag_routes.count.zero? && crag_sectors.count.zero? && crags.count.zero? && areas.count.zero?
+    crag_routes.none? && crag_sectors.none? && crags.none? && areas.none?
   end
 
   def summary_to_json
@@ -110,7 +110,7 @@ class Photo < ApplicationRecord
       publishable_id: crag_id,
       publishable_type: 'Crag',
       publishable_subject: publishable_subject,
-      published_at: [posted_at.beginning_of_day..posted_at.end_of_day],
+      published_at: [posted_at.all_day],
       author_id: user_id
     )
 

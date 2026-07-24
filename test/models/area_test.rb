@@ -11,11 +11,12 @@ class AreaTest < ActiveSupport::TestCase
   end
 
   test 'area is valid' do
-    assert @area.valid?
+    assert_predicate @area, :valid?
   end
 
   test 'area is invalid without name' do
     @area.name = nil
+
     assert_not @area.valid?
     assert_includes @area.errors.attribute_names, :name
   end
@@ -79,6 +80,7 @@ class AreaTest < ActiveSupport::TestCase
   test 'summary_to_json returns expected keys' do
     @area.save
     json = @area.summary_to_json
+
     assert_equal @area.id, json[:id]
     assert_equal @area.name, json[:name]
     assert_not_nil json[:slug_name]

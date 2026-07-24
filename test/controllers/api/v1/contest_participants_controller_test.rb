@@ -24,8 +24,10 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_contest_contest_participants_url(@gym, @contest), headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
       end
 
@@ -36,6 +38,7 @@ module Api
           email: 'test@test.com'
         )
         get api_v1_gym_contest_contest_participant_url(@gym, @contest, p), headers: @user_headers
+
         assert_response :success
       end
 
@@ -50,13 +53,16 @@ module Api
         )
         token_param = p.token.sub('.', '-')
         get participant_api_v1_gym_contest_contest_participant_url(@gym, @contest, token_param), headers: @public_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal 'Test', json_response['first_name']
       end
 
       test 'should return 404 if participant is not found by token' do
         get participant_api_v1_gym_contest_contest_participant_url(@gym, @contest, 'invalid-token'), headers: @public_headers
+
         assert_response :not_found
         assert_equal 'no_found', response.body
       end
@@ -105,7 +111,8 @@ module Api
           end
         end
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_not_nil json_response['contest_team_id']
         assert_equal 'New Awesome Team', ContestTeam.find(json_response['contest_team_id']).name
       end
@@ -135,7 +142,8 @@ module Api
           end
         end
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal existing_team.id, json_response['contest_team_id']
       end
 
@@ -157,6 +165,7 @@ module Api
              },
              headers: @admin_headers,
              as: :json
+
         assert_response :unprocessable_content
       end
 
@@ -182,6 +191,7 @@ module Api
              },
              headers: other_headers,
              as: :json
+
         assert_response :unauthorized
       end
 
@@ -209,8 +219,10 @@ module Api
             params: { contest_participant: { first_name: 'UpdatedName' } },
             headers: @admin_headers,
             as: :json
+
         assert_response :success
         @participant.reload
+
         assert_equal 'UpdatedName', @participant.first_name
       end
 
@@ -235,6 +247,7 @@ module Api
              },
              headers: @admin_headers,
              as: :json
+
         assert_response :unprocessable_content
       end
 
@@ -243,37 +256,45 @@ module Api
             params: { contest_participant: { first_name: '' } },
             headers: @admin_headers,
             as: :json
+
         assert_response :unprocessable_content
       end
 
       test 'should export participants' do
         get export_api_v1_gym_contest_contest_participants_url(@gym, @contest), headers: @admin_headers
+
         assert_response :success
         assert_equal 'text/csv', response.content_type
       end
 
       test 'should get import template' do
         get import_template_api_v1_gym_contest_contest_participants_url(@gym, @contest), headers: @admin_headers
+
         assert_response :success
         assert_equal 'text/csv', response.content_type
       end
 
       test 'should link to current user' do
         put link_to_current_user_api_v1_gym_contest_contest_participant_url(@gym, @contest, @participant), headers: @user_headers
+
         assert_response :no_content
         @participant.reload
+
         assert_equal @user.id, @participant.user_id
       end
 
       test 'should synchronise with ffme contest' do
         put synchronise_participant_with_ffme_contest_api_v1_gym_contest_contest_participant_url(@gym, @contest, @participant), headers: @user_headers
+
         assert_response :no_content
         @participant.reload
+
         assert @participant.synchronise_with_ffme_contest
       end
 
       test 'should get tombola winners' do
         get tombola_winners_api_v1_gym_contest_contest_participants_url(@gym, @contest), headers: @user_headers
+
         assert_response :success
       end
 
@@ -282,6 +303,7 @@ module Api
              params: { type: 'launch', filters: {} },
              headers: @admin_headers,
              as: :json
+
         assert_response :success
       end
 
@@ -298,7 +320,8 @@ module Api
         end
 
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal 2, json_response['created_count']
         assert_equal 0, json_response['errors_count']
       end
@@ -311,6 +334,7 @@ module Api
                }
              },
              headers: @admin_headers
+
         assert_response :unprocessable_content
       end
 
@@ -327,7 +351,8 @@ module Api
              headers: @admin_headers
 
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal 0, json_response['created_count']
         assert_equal 4, json_response['errors_count']
       end
@@ -351,7 +376,8 @@ module Api
         end
 
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal 1, json_response['created_count']
         assert_equal 1, json_response['already_imported_count']
       end

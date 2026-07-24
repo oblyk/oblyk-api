@@ -92,11 +92,9 @@ class GymLabelTemplate < ApplicationRecord
     font_families << label_options['grade']['font_family'].to_sym
     font_families << label_options['information']['font_family'].to_sym
     font_families = font_families.uniq
-    fonts = []
-    font_families.each do |font|
-      fonts << GymLabelFont::FONTS[font.to_sym]
+    font_families.map do |font|
+      GymLabelFont::FONTS[font.to_sym]
     end
-    fonts
   end
 
   def self.default_footer_options

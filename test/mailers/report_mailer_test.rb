@@ -30,7 +30,7 @@ class ReportMailerTest < ActionMailer::TestCase
     end
 
     assert_equal ['admin@oblyk.org'], email.to
-    assert_match /#{@report.id}/, email.subject
+    assert_match(/#{@report.id}/, email.subject)
   end
 
   test 'new_report with send_in_blue' do

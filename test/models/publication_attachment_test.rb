@@ -20,6 +20,7 @@ class PublicationAttachmentTest < ActiveSupport::TestCase
     attachment.refresh_count_or_destroy_publication!
 
     pub.reload
+
     assert_equal 0, pub.attachables_count
     assert_equal({}, pub.attachable_types_count)
   end
@@ -33,12 +34,14 @@ class PublicationAttachmentTest < ActiveSupport::TestCase
     attachment.refresh_count_or_destroy_publication!
 
     pub.reload
+
     assert_equal 0, pub.attachables_count
 
     attachment.destroy
     attachment.refresh_count_or_destroy_publication!
 
     pub.reload
+
     assert_equal 0, pub.attachables_count
   end
 

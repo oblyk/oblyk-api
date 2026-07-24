@@ -8,17 +8,19 @@ class GuideBookPaperTest < ActiveSupport::TestCase
   end
 
   test 'guide_book_paper is valid' do
-    assert @guide_book_paper.valid?
+    assert_predicate @guide_book_paper, :valid?
   end
 
   test 'guide_book_paper is invalid without name' do
     @guide_book_paper.name = nil
-    assert @guide_book_paper.invalid?
+
+    assert_predicate @guide_book_paper, :invalid?
   end
 
   test 'guide_book_paper is invalid with wrong funding_status' do
     @guide_book_paper.funding_status = 'wrong_status'
-    assert @guide_book_paper.invalid?
+
+    assert_predicate @guide_book_paper, :invalid?
   end
 
   test 'app_path returns correct path' do
@@ -27,16 +29,19 @@ class GuideBookPaperTest < ActiveSupport::TestCase
 
   test 'location returns coordinates of crags' do
     crag = crags(:rocher_des_aures)
+
     assert_equal [crag.latitude, crag.longitude], @guide_book_paper.location
   end
 
   test 'location returns nil if no crags' do
     @guide_book_paper.guide_book_paper_crags.destroy_all
+
     assert_equal [nil, nil], @guide_book_paper.location
   end
 
   test 'summary_to_json returns correct keys' do
     summary = @guide_book_paper.summary_to_json
+
     assert_equal @guide_book_paper.id, summary[:id]
     assert_equal @guide_book_paper.name, summary[:name]
     assert_equal @guide_book_paper.author, summary[:author]
@@ -45,6 +50,7 @@ class GuideBookPaperTest < ActiveSupport::TestCase
 
   test 'detail_to_json returns summary merged with more keys' do
     detail = @guide_book_paper.detail_to_json
+
     assert_equal @guide_book_paper.id, detail[:id]
     assert_includes detail.keys, :photos_count
     assert_includes detail.keys, :crags_count

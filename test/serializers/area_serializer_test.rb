@@ -13,6 +13,7 @@ class AreaSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @area.id, attributes['id']
     assert_equal @area.name, attributes['name']
     assert_equal @area.slug_name, attributes['slug_name']
@@ -20,6 +21,7 @@ class AreaSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the history attribute' do
     history = @serialization['data']['attributes']['history']
+
     assert_equal @area.created_at.as_json, history['created_at']
     assert_equal @area.updated_at.as_json, history['updated_at']
   end
@@ -30,6 +32,7 @@ class AreaSerializerTest < ActiveSupport::TestCase
 
     assert_not_nil serialization['included']
     crag_include = serialization['included'].find { |inc| inc['type'] == 'crag' }
+
     assert_not_nil crag_include
   end
 
@@ -43,6 +46,7 @@ class AreaSerializerTest < ActiveSupport::TestCase
 
   test 'avatar_attachment returns correct structure' do
     avatar = AreaSerializer.avatar_attachment(@area)
+
     assert_kind_of Hash, avatar
     assert avatar.key?(:attached)
     assert avatar.key?(:attachment_type)

@@ -14,16 +14,19 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_gym_openers_url(gym_id: @gym.id), headers: @user_headers
+
         assert_response :success
       end
 
       test 'should get index with activate true' do
         get api_v1_gym_gym_openers_url(gym_id: @gym.id), params: { activate: 'true' }, headers: @user_headers
+
         assert_response :success
       end
 
       test 'should show gym opener' do
         get api_v1_gym_gym_opener_url(gym_id: @gym.id, id: @opener.id), headers: @user_headers
+
         assert_response :success
       end
 
@@ -51,16 +54,20 @@ module Api
                 }
               },
               headers: @admin_headers, as: :json
+
         assert_response :success
         @opener.reload
+
         assert_equal 'Updated Name', @opener.name
       end
 
       test 'should deactivate gym opener' do
         put deactivate_api_v1_gym_gym_opener_url(gym_id: @gym.id, id: @opener.id),
             headers: @admin_headers, as: :json
+
         assert_response :success
         @opener.reload
+
         assert_not_nil @opener.deactivated_at
       end
 
@@ -68,8 +75,10 @@ module Api
         @opener.deactivate!
         put activate_api_v1_gym_gym_opener_url(gym_id: @gym.id, id: @opener.id),
             headers: @admin_headers, as: :json
+
         assert_response :success
         @opener.reload
+
         assert_nil @opener.deactivated_at
       end
 
@@ -81,6 +90,7 @@ module Api
                }
              },
              headers: @user_headers, as: :json
+
         assert_response :forbidden
       end
     end

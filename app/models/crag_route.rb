@@ -153,7 +153,7 @@ class CragRoute < ApplicationRecord
   def public_ascents
     ascents = []
     last_ascents_by_user = {}
-    ascent_crag_routes.where.not(private_comment: true).where('ascents.comment IS NOT NULL OR ascents.note IS NOT NULL').each do |ascent|
+    ascent_crag_routes.where.not(private_comment: true).where('ascents.comment IS NOT NULL OR ascents.note IS NOT NULL').find_each do |ascent|
       if ascent.comment.present?
         ascents << ascent
       else
@@ -243,7 +243,7 @@ class CragRoute < ApplicationRecord
       publishable_id: crag_id,
       publishable_type: 'Crag',
       publishable_subject: publishable_subject,
-      published_at: [created_at.beginning_of_week..created_at.end_of_week]
+      published_at: [created_at.all_week]
     )
 
     publication ||= Publication.new(
@@ -273,12 +273,12 @@ class CragRoute < ApplicationRecord
     receptionable = Climb.receptionable?(climbing_type)
     startable = Climb.startable?(climbing_type)
     sections.each do |section|
-      section_height = section['height'].blank? ? nil : section['height'].to_i
-      section_bolt_count = section['bolt_count'].blank? ? nil : section['bolt_count'].to_i
+      section_height = section['height'].presence&.to_i
+      section_bolt_count = section['bolt_count'].presence&.to_i
       grade = Grade.clean_grade(section['grade'])
       new_sections << {
         climbing_type: single_pitch ? climbing_type : section['climbing_type'] || climbing_type,
-        description: !single_pitch ? section['description'] : nil,
+        description: single_pitch ? nil : section['description'],
         grade: grade,
         grade_value: grade.present? ? Grade.to_value(grade) : nil,
         height: single_pitch ? height : section_height,

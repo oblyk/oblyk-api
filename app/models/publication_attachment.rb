@@ -27,7 +27,7 @@ class PublicationAttachment < ApplicationRecord
   validates :attachable_type, inclusion: { in: ATTACHABLE_TYPES }
 
   def refresh_count_or_destroy_publication!
-    if publication.publication_attachments.count.zero? && publication.generated? && publication.body.blank?
+    if publication.publication_attachments.none? && publication.generated? && publication.body.blank?
       publication.destroy
     else
       publication.refresh_attachment_types_count

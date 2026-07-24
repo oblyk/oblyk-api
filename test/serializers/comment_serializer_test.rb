@@ -11,6 +11,7 @@ class CommentSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @comment.id, attributes['id']
     assert_equal @comment.body, attributes['body']
     if @comment.likes_count.nil?
@@ -28,6 +29,7 @@ class CommentSerializerTest < ActiveSupport::TestCase
     else
       assert_equal @comment.reply_to_comment_id, attributes['reply_to_comment_id']
     end
+
     assert_equal @comment.commentable_type, attributes['commentable_type']
     assert_equal @comment.commentable_id, attributes['commentable_id']
     if @comment.moderated_at.nil?
@@ -35,6 +37,7 @@ class CommentSerializerTest < ActiveSupport::TestCase
     else
       assert_equal @comment.moderated_at, attributes['moderated_at']
     end
+
     assert_equal @comment.created_at.as_json, attributes['history']['created_at']
     assert_equal @comment.updated_at.as_json, attributes['history']['updated_at']
     assert_not attributes['moderated']
@@ -53,14 +56,16 @@ class CommentSerializerTest < ActiveSupport::TestCase
   test 'It includes user if specified' do
     serializer = CommentSerializer.new(@comment, { include: [:user] })
     serialization = JSON.parse(serializer.serializable_hash.to_json)
+
     assert_not_nil serialization['included']
-    assert serialization['included'].any? { |inc| inc['type'] == 'user' }
+    assert(serialization['included'].any? { |inc| inc['type'] == 'user' })
   end
 
   test 'It includes commentable if specified' do
     serializer = CommentSerializer.new(@comment, { include: [:commentable] })
     serialization = JSON.parse(serializer.serializable_hash.to_json)
+
     assert_not_nil serialization['included']
-    assert serialization['included'].any? { |inc| inc['type'] == 'crag' }
+    assert(serialization['included'].any? { |inc| inc['type'] == 'crag' })
   end
 end

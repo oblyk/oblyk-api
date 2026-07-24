@@ -8,7 +8,7 @@ class ContestRouteGroupCategoryTest < ActiveSupport::TestCase
   end
 
   test 'contest_route_group_category is valid' do
-    assert @route_group_category.valid?
+    assert_predicate @route_group_category, :valid?
   end
 
   test 'delete_results_cache is called after save' do

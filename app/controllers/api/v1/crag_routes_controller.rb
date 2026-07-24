@@ -47,7 +47,7 @@ module Api
         crag_routes = CragRoute.includes(:crag_sector, :crag)
                                .where('EXISTS (SELECT * FROM follows WHERE followable_type = "Crag" AND followable_id = crag_routes.crag_id AND follows.user_id = :user_id)', user_id: @current_user.id)
                                .where.not('EXISTS (SELECT * FROM ascents WHERE ascents.crag_route_id = crag_routes.id AND ascents.user_id = :user_id)', user_id: @current_user.id)
-        crag_routes = crag_routes.where(max_grade_value: [min_max[:min_grade_value]..min_max[:max_grade_value] + 1]) if min_max
+        crag_routes = crag_routes.where(max_grade_value: [min_max[:min_grade_value]..(min_max[:max_grade_value] + 1)]) if min_max
         crag_routes = crag_routes.order(Arel.sql('ascent_users_count DESC, note_count DESC'))
                                  .page(params.fetch(:page, 1))
                                  .per(params.fetch(:page_limit, 25))
@@ -57,7 +57,7 @@ module Api
 
       def search
         query = params.fetch(:query, nil)
-        head :no_content && return if query.blank?
+        return head :no_content if query.blank?
 
         page = params.fetch(:page, 1).to_i
         per_page = params.fetch(:per_page, 25).to_i
@@ -95,7 +95,7 @@ module Api
         (1..9).each do |level|
           grade_params = "#{level}a #{level}c+" if grade_params == level.to_s
         end
-        grades = grade_params.split ' '
+        grades = grade_params.split
         min_grade = Grade.to_value grades.first
         max_grade = grades[1] ? Grade.to_value(grades[1]) : min_grade
         sql_query = '(crag_routes.min_grade_value BETWEEN :min AND :max) OR (crag_routes.max_grade_value BETWEEN :min AND :max)'

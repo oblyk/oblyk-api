@@ -21,7 +21,7 @@ module LogBook
         stats = figure.figures
 
         assert_equal 1, stats[:ascents]
-        assert_equal 10.0, stats[:meters]
+        assert_in_delta(10.0, stats[:meters])
         assert_equal 32, stats[:max_grade_value]
         assert_kind_of Hash, stats[:last_28_days]
         assert_equal 1, stats[:last_28_days][:ascents]

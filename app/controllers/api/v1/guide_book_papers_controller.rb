@@ -31,7 +31,7 @@ module Api
 
         case group
         when 'publication_year'
-          guides = GuideBookPaper.includes(cover_attachment: :blob).all.order(publication_year: direction)
+          guides = GuideBookPaper.includes(cover_attachment: :blob).order(publication_year: direction)
           guides.each do |guide|
             groups["year-#{guide.publication_year}"] ||= { title: guide.publication_year, guides: [] }
             groups["year-#{guide.publication_year}"][:guides] << guide.summary_to_json
@@ -41,13 +41,11 @@ module Api
             direction == 'desc' ? key : -key
           end.to_h
         when 'alphabetic'
-          guides = GuideBookPaper.includes(cover_attachment: :blob).all.order(name: direction)
+          guides = GuideBookPaper.includes(cover_attachment: :blob).order(name: direction)
           guides.each do |guide|
             groups[guide.name.first] ||= { title: guide.name.first, guides: [] }
             groups[guide.name.first][:guides] << guide.summary_to_json
           end
-        else
-          {}
         end
 
         render json: groups, status: :ok
@@ -115,7 +113,7 @@ module Api
 
       def search
         query = params.fetch(:query, nil)
-        head :no_content && return if query.blank?
+        return head :no_content if query.blank?
 
         page = params.fetch(:page, 1).to_i
         per_page = params.fetch(:per_page, 25).to_i
@@ -146,15 +144,15 @@ module Api
 
       def geo_json
         minimalistic = params.fetch(:minimalistic, false) != false
-        features = []
-
         crags = minimalistic ? @guide_book_paper.crags : @guide_book_paper.crags.includes(photo: { picture_attachment: :blob })
-        crags.each do |crag|
-          features << crag.to_geo_json(minimalistic: minimalistic)
+        features = crags.map do |crag|
+          crag.to_geo_json(minimalistic: minimalistic)
         end
 
         place_of_sales = minimalistic ? @guide_book_paper.place_of_sales : @guide_book_paper.place_of_sales.includes(:user)
-        place_of_sales.where.not(latitude: nil, longitude: nil).each do |place_of_sale|
+        place_of_sales.where.not(latitude: nil)
+                      .where.not(longitude: nil)
+                      .find_each do |place_of_sale|
           features << place_of_sale.to_geo_json(minimalistic: minimalistic)
         end
 
@@ -171,15 +169,12 @@ module Api
       end
 
       def geo_index
-        features = []
-        GuideBookPaper.select('guide_book_papers.*, crags.latitude, crags.longitude')
-                      .where(next_guide_book_paper_id: nil)
-                      .includes(:crags, cover_attachment: :blob)
-                      .references(:crags)
-                      .all
-                      .each do |guide_book|
-          features << guide_book.to_geo_json
-        end
+        features = GuideBookPaper.select('guide_book_papers.*, crags.latitude, crags.longitude')
+                                 .where(next_guide_book_paper_id: nil)
+                                 .includes(:crags, cover_attachment: :blob)
+                                 .references(:crags)
+                                 .all
+                                 .map(&:to_geo_json)
         render json: {
           type: 'FeatureCollection',
           crs: {
@@ -217,7 +212,7 @@ module Api
 
       def alternatives
         alternatives = []
-        @guide_book_paper.crags.includes(photo: :picture_attachment).each do |crag|
+        @guide_book_paper.crags.includes(photo: :picture_attachment).find_each do |crag|
           crag_guide = {
             crag: crag.summary_to_json,
             guides: []

@@ -11,9 +11,11 @@ module Api
 
       test 'should get index' do
         get api_v1_suns_url, headers: @api_headers, as: :json
+
         assert_response :success
 
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal Sun::LIST, json_response
       end
     end

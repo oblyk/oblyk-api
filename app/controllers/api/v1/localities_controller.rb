@@ -31,7 +31,6 @@ module Api
 
       def climbers
         page = params.fetch(:page, 1)
-        json = []
         localities = @locality.locality_users
                               .joins(:user)
                               .activated
@@ -52,14 +51,12 @@ module Api
         end
 
         climbing_type = params.fetch(:climbing_type, nil)
-        climbing_type = Climb::ALL_LIST.include?(climbing_type.to_s) ? climbing_type : nil
+        climbing_type = nil unless Climb::ALL_LIST.include?(climbing_type.to_s)
         localities = localities.where(users: { climbing_type => true }) if climbing_type
 
-        localities.page(page)
-                  .order(Arel.sql('users.last_activity_at DESC, id'))
-                  .each do |locality_user|
-          json << locality_user.local_to_json
-        end
+        json = localities.page(page)
+                         .order(Arel.sql('users.last_activity_at DESC, id'))
+                         .map(&:local_to_json)
         render json: json, status: :ok
       end
 

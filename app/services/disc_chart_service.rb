@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# rubocop:disable Naming/MethodParameterName
+# rubocop:disable Metrics/ParameterLists
+
 # Generates A4 PDFs containing one circular disc per anchor (relay), where each
 # slice represents one climbing route. Inspired by the Python tool at
 # https://github.com/hleroy/climbing_route_chart but rewritten in Ruby to
@@ -103,11 +106,11 @@ class DiscChartService
     r = hex[1..2].to_i(16)
     g = hex[3..4].to_i(16)
     b = hex[5..6].to_i(16)
-    (0.299 * r + 0.587 * g + 0.114 * b) / 255.0 < 0.5
+    ((0.299 * r) + (0.587 * g) + (0.114 * b)) / 255.0 < 0.5
   end
 
   def linear_interpolation(start_value, end_value, ratio)
-    (start_value + (end_value - start_value) * ratio).round
+    (start_value + ((end_value - start_value) * ratio)).round
   end
 
   def interpolate_middle_color(colors)
@@ -115,13 +118,13 @@ class DiscChartService
 
     n   = colors.length - 1
     seg = [(0.5 / (1.0 / n)).to_i, n - 1].min
-    t   = (0.5 - seg * (1.0 / n)) / (1.0 / n)
+    t   = (0.5 - (seg * (1.0 / n))) / (1.0 / n)
     c1  = colors[seg]
     c2  = colors[seg + 1]
     r   = linear_interpolation(c1[1..2].to_i(16), c2[1..2].to_i(16), t)
     g   = linear_interpolation(c1[3..4].to_i(16), c2[3..4].to_i(16), t)
     b   = linear_interpolation(c1[5..6].to_i(16), c2[5..6].to_i(16), t)
-    format('#%02x%02x%02x', r, g, b)
+    format('#%<r>02x%<g>02x%<b>02x', r: r, g: g, b: b)
   end
 
   def text_color_for(hold_colors)
@@ -152,7 +155,7 @@ class DiscChartService
   # --- Opener formatting ----
 
   def openers_to_s(openers)
-    names = openers.map { |o| o[:name] }
+    names = openers.pluck(:name)
     return '' if names.empty?
     return names[0] if names.length == 1
 
@@ -189,12 +192,12 @@ class DiscChartService
     cy          = CENTER_Y
     relay_text  = relay.to_s
     font_size   = 14
-    rect_width  = relay_text.length * 12 + 8 # 4 px padding each side at ~12px/char
+    rect_width  = (relay_text.length * 12) + 8 # 4 px padding each side at ~12px/char
     rect_height = 18
-    rect_x      = cx - rect_width / 2.0
+    rect_x      = cx - (rect_width / 2.0)
     rect_y      = cy - @radius + 4
     # Baseline at ~78% of box height vertically centres capital letters.
-    label_y     = rect_y + rect_height * 0.78
+    label_y     = rect_y + (rect_height * 0.78)
 
     <<~XML
       <rect x="#{rect_x}" y="#{rect_y}" width="#{rect_width}" height="#{rect_height}"
@@ -214,8 +217,8 @@ class DiscChartService
     grad         = gradient_def(grad_id, cx - @radius, cy, cx + @radius, cy, hold_colors)
     fill         = fill_attr(grad_id, hold_colors)
     text_color   = text_color_for(hold_colors)
-    grade_y      = cy - @radius / 2.0
-    setter_y     = grade_y + @grade_fs * 0.7
+    grade_y      = cy - (@radius / 2.0)
+    setter_y     = grade_y + (@grade_fs * 0.7)
     grade_to_s   = route[:grade_to_s]
     openers      = openers_to_s(route[:openers])
 
@@ -224,7 +227,7 @@ class DiscChartService
               stroke="black" stroke-width="1"/>
     XML
 
-    grade_y  = cy - @radius + 44
+    grade_y = cy - @radius + 44
     setter_fs = 10
     texts = <<~XML
       <text x="#{cx}" y="#{grade_y}" font-size="#{@grade_fs}" text-anchor="middle" dominant-baseline="central"
@@ -236,8 +239,8 @@ class DiscChartService
     qr_element = ''
     if route[:qr_svg]
       qr_size    = QR_SIZE_SINGLE
-      qr_x       = cx - qr_size / 2.0
-      qr_y       = cy + @radius * 0.25
+      qr_x       = cx - (qr_size / 2.0)
+      qr_y       = cy + (@radius * 0.25)
       qr_element = qr_nested_svg(route[:qr_svg], qr_x, qr_y, qr_size)
     end
 
@@ -258,16 +261,16 @@ class DiscChartService
     body = []
 
     group.each_with_index do |route, i|
-      start_angle = offset + i * sweep
+      start_angle = offset + (i * sweep)
       end_angle   = start_angle + sweep
-      mid_angle   = start_angle + sweep / 2.0
+      mid_angle   = start_angle + (sweep / 2.0)
       mid_rad     = mid_angle * Math::PI / 180.0
 
       # Arc endpoints
-      x1 = cx + @radius * Math.cos(start_angle * Math::PI / 180)
-      y1 = cy + @radius * Math.sin(start_angle * Math::PI / 180)
-      x2 = cx + @radius * Math.cos(end_angle * Math::PI / 180)
-      y2 = cy + @radius * Math.sin(end_angle * Math::PI / 180)
+      x1 = cx + (@radius * Math.cos(start_angle * Math::PI / 180))
+      y1 = cy + (@radius * Math.sin(start_angle * Math::PI / 180))
+      x2 = cx + (@radius * Math.cos(end_angle * Math::PI / 180))
+      y2 = cy + (@radius * Math.sin(end_angle * Math::PI / 180))
       large_arc = sweep > 180 ? 1 : 0
 
       # Gradient
@@ -284,24 +287,24 @@ class DiscChartService
       text_color = text_color_for(route[:hold_colors])
 
       # Text anchor point along bisector, then stack grade above / setter below
-      anchor_x = (cx + cfg[:text_d] * @radius * Math.cos(mid_rad)).round(2)
-      anchor_y = (cy + cfg[:text_d] * @radius * Math.sin(mid_rad)).round(2)
+      (cx + (cfg[:text_d] * @radius * Math.cos(mid_rad))).round(2)
+      anchor_y = (cy + (cfg[:text_d] * @radius * Math.sin(mid_rad))).round(2)
       half_gap = cfg[:grade_fs] * 0.4
-      grade_y = (anchor_y - half_gap).round(2)
-      setter_y = (anchor_y + half_gap).round(2)
+      (anchor_y - half_gap).round(2)
+      (anchor_y + half_gap).round(2)
 
       # QR code — mid-zone along bisector
       qr_element = ''
       texts = ''
       if route[:qr_svg]
-        qr_cx = cx + cfg[:qr_d] * @radius * Math.cos(mid_rad)
-        qr_cy = cy + cfg[:qr_d] * @radius * Math.sin(mid_rad)
-        qr_element = qr_nested_svg(route[:qr_svg], qr_cx - cfg[:qr_size] / 2.0, qr_cy - cfg[:qr_size] / 2.0, cfg[:qr_size])
+        qr_cx = cx + (cfg[:qr_d] * @radius * Math.cos(mid_rad))
+        qr_cy = cy + (cfg[:qr_d] * @radius * Math.sin(mid_rad))
+        qr_element = qr_nested_svg(route[:qr_svg], qr_cx - (cfg[:qr_size] / 2.0), qr_cy - (cfg[:qr_size] / 2.0), cfg[:qr_size])
 
         grade_x = qr_cx.round(2)
-        grade_y = (qr_cy - cfg[:qr_size] / 2.0 - cfg[:grade_gap]).round(2)
+        grade_y = (qr_cy - (cfg[:qr_size] / 2.0) - cfg[:grade_gap]).round(2)
         setter_x = qr_cx.round(2)
-        setter_y = (qr_cy + cfg[:qr_size] / 2.0 + cfg[:setter_gap]).round(2)
+        setter_y = (qr_cy + (cfg[:qr_size] / 2.0) + cfg[:setter_gap]).round(2)
         texts = <<~XML
           <text x="#{grade_x}" y="#{grade_y}" font-size="#{cfg[:grade_fs]}" text-anchor="middle" dominant-baseline="central"
                 fill="#{text_color}" font-family="DejaVu Sans, sans-serif">#{route[:grade_to_s]}</text>
@@ -310,7 +313,7 @@ class DiscChartService
         XML
       end
 
-      body << path + texts + qr_element
+      body << (path + texts + qr_element)
     end
 
     { defs: defs.join, body: body.join }
@@ -347,3 +350,6 @@ class DiscChartService
     StringIO.new(pdf.render)
   end
 end
+
+# rubocop:enable Naming/MethodParameterName
+# rubocop:enable Metrics/ParameterLists

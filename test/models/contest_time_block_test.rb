@@ -10,23 +10,26 @@ class ContestTimeBlockTest < ActiveSupport::TestCase
   end
 
   test 'time block is valid' do
-    assert @time_block.valid?
+    assert_predicate @time_block, :valid?
   end
 
   test 'time block is invalid without start_time' do
     @time_block.start_time = nil
+
     assert_not @time_block.valid?
     assert_includes @time_block.errors.attribute_names, :start_time
   end
 
   test 'time block is invalid without end_time' do
     @time_block.end_time = nil
+
     assert_not @time_block.valid?
     assert_includes @time_block.errors.attribute_names, :end_time
   end
 
   test 'summary_to_json returns expected keys' do
     json = @time_block.summary_to_json
+
     assert_equal @time_block.id, json[:id]
     assert_equal @time_block.name, json[:name]
     assert_equal @time_block.start_time, json[:start_time]
@@ -41,7 +44,8 @@ class ContestTimeBlockTest < ActiveSupport::TestCase
       start_date: new_date.to_date,
       end_date: new_date.to_date
     )
-    assert contest.one_day_event?
+
+    assert_predicate contest, :one_day_event?
 
     new_time_block = ContestTimeBlock.new(
       contest_wave: @wave,
@@ -50,6 +54,7 @@ class ContestTimeBlockTest < ActiveSupport::TestCase
       end_time: new_date.beginning_of_day + 12.hours
     )
     new_time_block.valid?
+
     assert_equal contest.start_date, new_time_block.start_date
     assert_equal contest.end_date, new_time_block.end_date
   end

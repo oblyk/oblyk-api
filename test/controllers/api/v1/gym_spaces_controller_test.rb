@@ -15,28 +15,33 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_gym_spaces_url(gym_id: @gym.id), headers: @user_headers
+
         assert_response :success
       end
 
       test 'should get groups' do
         get groups_api_v1_gym_gym_spaces_url(gym_id: @gym.id), headers: @user_headers
+
         assert_response :success
       end
 
       test 'should show gym space' do
         get api_v1_gym_gym_space_url(gym_id: @gym.id, id: @gym_space.id), headers: @user_headers
+
         assert_response :success
       end
 
       test 'should forbidden show gym space draft for visitor' do
         @gym_space.update_column :draft, true
         get api_v1_gym_gym_space_url(gym_id: @gym.id, id: @gym_space.id), headers: @visitor_headers
+
         assert_response :forbidden
       end
 
       test 'should show gym space draft for gym team user' do
         @gym_space.update_column :draft, true
         get api_v1_gym_gym_space_url(gym_id: @gym.id, id: @gym_space.id), headers: @user_headers
+
         assert_response :success
       end
 
@@ -77,8 +82,10 @@ module Api
                 }
               },
               headers: @user_headers, as: :json
+
         assert_response :success
         @gym_space.reload
+
         assert_equal 'Updated Space Name', @gym_space.name
       end
 
@@ -90,6 +97,7 @@ module Api
                 }
               },
               headers: @user_headers, as: :json
+
         assert_response :unprocessable_content
       end
 
@@ -104,8 +112,10 @@ module Api
       test 'should archive gym space' do
         put archived_api_v1_gym_gym_space_url(gym_id: @gym.id, id: @gym_space.id),
             headers: @user_headers, as: :json
+
         assert_response :success
         @gym_space.reload
+
         assert_not_nil @gym_space.archived_at
       end
 
@@ -113,20 +123,24 @@ module Api
         @gym_space.archive!
         put unarchived_api_v1_gym_gym_space_url(gym_id: @gym.id, id: @gym_space.id),
             headers: @user_headers, as: :json
+
         assert_response :success
         @gym_space.reload
+
         assert_nil @gym_space.archived_at
       end
 
       test 'should get three_d_elements' do
         get three_d_elements_api_v1_gym_gym_space_url(gym_id: @gym.id, id: @gym_space.id),
             headers: @user_headers
+
         assert_response :success
       end
 
       test 'should get tree_sectors' do
         get tree_sectors_api_v1_gym_gym_spaces_url(gym_id: @gym.id),
             headers: @user_headers
+
         assert_response :success
       end
 
@@ -137,6 +151,7 @@ module Api
         post add_banner_api_v1_gym_gym_space_url(gym_id: @gym.id, id: @gym_space.id),
              params: { gym_space: { banner: banner } },
              headers: @user_headers
+
         assert_response :success
       end
 
@@ -145,6 +160,7 @@ module Api
         post add_banner_api_v1_gym_gym_space_url(gym_id: @gym.id, id: @gym_space.id),
              params: { gym_space: { banner: invalid_banner } },
              headers: @user_headers
+
         assert_response :unprocessable_content
       end
 
@@ -153,6 +169,7 @@ module Api
         post add_plan_api_v1_gym_gym_space_url(gym_id: @gym.id, id: @gym_space.id),
              params: { gym_space: { plan: plan } },
              headers: @user_headers
+
         assert_response :success
       end
 
@@ -161,6 +178,7 @@ module Api
         post add_plan_api_v1_gym_gym_space_url(gym_id: @gym.id, id: @gym_space.id),
              params: { gym_space: { plan: invalid_plan } },
              headers: @user_headers
+
         assert_response :unprocessable_content
       end
 
@@ -175,6 +193,7 @@ module Api
                }
              },
              headers: @user_headers
+
         assert_response :success
       end
 
@@ -187,6 +206,7 @@ module Api
                }
              },
              headers: @user_headers
+
         assert_response :unprocessable_content
       end
 
@@ -200,6 +220,7 @@ module Api
                }
              },
              headers: @user_headers
+
         assert_response :success
       end
 
@@ -212,6 +233,7 @@ module Api
                }
              },
              headers: @user_headers
+
         assert_response :unprocessable_content
       end
 
@@ -225,6 +247,7 @@ module Api
                }
              },
              headers: @other_user_headers
+
         assert_response :forbidden
       end
 
@@ -238,6 +261,7 @@ module Api
                }
              },
              headers: @user_headers
+
         assert_includes [200, 422], response.status
       end
 
@@ -253,6 +277,7 @@ module Api
                }
              },
              headers: @user_headers
+
         assert_includes [200, 422], response.status
       end
 
@@ -266,6 +291,7 @@ module Api
                }
              },
              headers: @user_headers
+
         assert_response :unprocessable_content
       end
 
@@ -277,6 +303,7 @@ module Api
                }
              },
              headers: @user_headers, as: :json
+
         assert_response :unprocessable_content
       end
 
@@ -289,6 +316,7 @@ module Api
                }
              },
              headers: @other_user_headers
+
         assert_response :forbidden
       end
 
@@ -300,6 +328,7 @@ module Api
                }
              },
              headers: @other_user_headers, as: :json
+
         assert_response :forbidden
       end
     end

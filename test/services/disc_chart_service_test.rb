@@ -33,6 +33,7 @@ class DiscChartServiceTest < ActiveSupport::TestCase
 
   test 'should allow overriding defaults in initialize' do
     service = DiscChartService.new(@routes, radius: 100, title_fs: 20)
+
     assert_equal 100, service.instance_variable_get(:@radius)
     assert_equal 20, service.instance_variable_get(:@title_fs)
   end
@@ -80,7 +81,7 @@ class DiscChartServiceTest < ActiveSupport::TestCase
     assert_match(/6a/, svg)
     assert_match(/6b/, svg)
     assert_match(/Alice/, svg)
-    assert_match(/Bob \/ Charlie/, svg)
+    assert_match(%r{Bob / Charlie}, svg)
     assert_match(/<path/, svg)
     assert_match(/linearGradient id="grad_1_1"/, svg)
   end

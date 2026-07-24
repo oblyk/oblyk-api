@@ -11,6 +11,7 @@ class ContestSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @contest.id, attributes['id']
     assert_equal @contest.name, attributes['name']
 
@@ -58,11 +59,12 @@ class ContestSerializerTest < ActiveSupport::TestCase
   end
 
   test 'It includes associations if specified' do
-    serializer = ContestSerializer.new(@contest, { include: [:gym, :contest_categories, :contest_stages] })
+    serializer = ContestSerializer.new(@contest, { include: %i[gym contest_categories contest_stages] })
     serialization = JSON.parse(serializer.serializable_hash.to_json)
+
     assert_not_nil serialization['included']
-    assert serialization['included'].any? { |inc| inc['type'] == 'gym' }
-    assert serialization['included'].any? { |inc| inc['type'] == 'contest_category' }
-    assert serialization['included'].any? { |inc| inc['type'] == 'contest_stage' }
+    assert(serialization['included'].any? { |inc| inc['type'] == 'gym' })
+    assert(serialization['included'].any? { |inc| inc['type'] == 'contest_category' })
+    assert(serialization['included'].any? { |inc| inc['type'] == 'contest_stage' })
   end
 end

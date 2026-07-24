@@ -6,8 +6,8 @@ class ContestRouteGroupCategory < ApplicationRecord
   belongs_to :contest
 
   before_validation :set_contest
-  after_save :delete_caches
   after_destroy :delete_caches
+  after_save :delete_caches
 
   private
 

@@ -14,16 +14,19 @@ module Api
 
       test 'should get index' do
         get api_v1_crag_parks_url(crag_id: @crag.id), headers: api_access_token_headers
+
         assert_response :success
       end
 
       test 'should show park' do
         get api_v1_crag_park_url(crag_id: @crag.id, id: @park.id), headers: api_access_token_headers
+
         assert_response :success
       end
 
       test 'should get geo_json_around' do
         get geo_json_around_api_v1_crag_parks_url(crag_id: @crag.id), headers: api_access_token_headers
+
         assert_response :success
       end
 
@@ -50,8 +53,10 @@ module Api
                 }
               },
               headers: @user_headers, as: :json
+
         assert_response :success
         @park.reload
+
         assert_equal 'Parking mis à jour', @park.description
       end
 

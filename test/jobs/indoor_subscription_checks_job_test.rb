@@ -24,6 +24,7 @@ class IndoorSubscriptionChecksJobTest < ActiveJob::TestCase
     end
 
     @gym.reload
+
     assert_equal 'free', @gym.plan
   end
 
@@ -47,6 +48,7 @@ class IndoorSubscriptionChecksJobTest < ActiveJob::TestCase
     IndoorSubscriptionChecksJob.perform_now
 
     next_run = Date.tomorrow.beginning_of_day + 7.hours
+
     assert_enqueued_with(job: IndoorSubscriptionChecksJob, at: next_run)
   end
 end

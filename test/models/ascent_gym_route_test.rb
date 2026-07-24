@@ -8,11 +8,12 @@ class AscentGymRouteTest < ActiveSupport::TestCase
   end
 
   test 'ascent_gym_route is valid' do
-    assert @ascent.valid?
+    assert_predicate @ascent, :valid?
   end
 
   test 'ascent_gym_route is invalid with wrong climbing_type' do
     @ascent.climbing_type = 'wrong_type'
+
     assert_not @ascent.valid?
   end
 
@@ -20,11 +21,13 @@ class AscentGymRouteTest < ActiveSupport::TestCase
     @ascent.ascent_status = 'project'
     @ascent.roping_status = 'lead_climb'
     @ascent.valid?
+
     assert_nil @ascent.roping_status
   end
 
   test 'points calculation' do
     @ascent.gym_route = nil
+
     assert_nil @ascent.points
   end
 end

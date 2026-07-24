@@ -63,7 +63,7 @@ class CragSector < ApplicationRecord
         app_path: app_path,
         icon: 'sector-marker'
       },
-      geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
+      geometry: { type: 'Point', coordinates: [Float(longitude), Float(latitude), 0.0] }
     }
   end
 

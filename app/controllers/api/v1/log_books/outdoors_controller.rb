@@ -6,7 +6,7 @@ module Api
       class OutdoorsController < ApiController
         before_action :protected_by_session
         before_action :set_user
-        before_action :set_ascents, only: [:stats, :ascended_crag_routes]
+        before_action :set_ascents, only: %i[stats ascended_crag_routes]
         before_action :set_stats_list, only: [:stats]
 
         def stats
@@ -42,9 +42,9 @@ module Api
             dates_range.each do |year|
               dates << Date.new(year, today.month, today.day)
             end
-            dates << today - 1.week # one week ago
-            dates << today - 1.month # one month ago
-            dates << today - 6.months # 6 months ago
+            dates << (today - 1.week) # one week ago
+            dates << (today - 1.month) # one month ago
+            dates << (today - 6.months) # 6 months ago
 
             ascents = @user.ascent_crag_routes.made.where('DATE(released_at) IN(?)', dates).order(:released_at)
             ascents.each do |ascent|

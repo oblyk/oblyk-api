@@ -4,6 +4,7 @@ module Api
   module V1
     class GymSpaceGroupsController < ApiController
       include Gymable
+
       before_action :set_gym_space_group, except: %i[index create]
       before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[index show]
 

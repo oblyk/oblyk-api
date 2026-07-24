@@ -33,7 +33,7 @@ module Api
 
         trial_end_date = nil
         number_of_trials_days = nil
-        if @gym.indoor_subscriptions.count.zero?
+        if @gym.indoor_subscriptions.none?
           number_of_trials_days = 28
           trial_end_date = Date.current + number_of_trials_days
         end
@@ -69,7 +69,7 @@ module Api
         current_subscription = @gym.indoor_subscriptions.where('indoor_subscriptions.start_date >= :date AND (indoor_subscriptions.end_date IS NULL OR indoor_subscriptions.end_date <= :date)', date: Date.current).first
         render json: {
           end_date: current_subscription&.end_date,
-          free_trial_is_available: !IndoorSubscription.joins(:gyms).where(gyms: { id: @gym.id }).exists?
+          free_trial_is_available: !IndoorSubscription.joins(:gyms).exists?(gyms: { id: @gym.id })
         }, status: :ok
       end
 

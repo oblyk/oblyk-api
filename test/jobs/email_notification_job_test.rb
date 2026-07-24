@@ -4,6 +4,7 @@ require 'test_helper'
 
 class EmailNotificationJobTest < ActiveJob::TestCase
   include ActionMailer::TestHelper
+
   setup do
     @new_message_notif = notifications(:new_message_notif)
     @new_follower_notif = notifications(:new_follower_notif)

@@ -16,8 +16,10 @@ module Api
 
       test 'should get index' do
         get api_v1_ascent_crag_routes_url, headers: @user_headers, as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
       end
 
@@ -28,21 +30,26 @@ module Api
           roping_status: 'lead_climb',
           released_at: '2024-06-06'
         }, headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
       end
 
       test 'should export ascents' do
         get export_api_v1_ascent_crag_routes_url, params: { type: 'ascents' }, headers: @user_headers
+
         assert_response :success
         assert_equal 'text/csv', response.content_type
       end
 
       test 'should show ascent_crag_route' do
         get api_v1_ascent_crag_route_url(@ascent_crag_route), headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @ascent_crag_route.id, json_response['id']
       end
 
@@ -74,8 +81,10 @@ module Api
             },
             headers: @user_headers,
             as: :json
+
         assert_response :created
         @ascent_crag_route.reload
+
         assert_equal 5, @ascent_crag_route.note
       end
 
@@ -84,6 +93,7 @@ module Api
             params: { ascent_crag_route: { note: 4 } },
             headers: @other_user_headers,
             as: :json
+
         assert_response :forbidden
       end
 
@@ -99,6 +109,7 @@ module Api
              params: { ascent_user: { user_id: @other_user.id } },
              headers: @user_headers,
              as: :json
+
         assert_response :no_content
       end
 
@@ -109,6 +120,7 @@ module Api
                params: { ascent_user: { user_id: @other_user.id } },
                headers: @user_headers,
                as: :json
+
         assert_response :no_content
       end
     end

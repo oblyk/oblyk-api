@@ -8,7 +8,7 @@ class ContestParticipantAscentTest < ActiveSupport::TestCase
   end
 
   test 'contest_participant_ascent is valid' do
-    assert @ascent.valid?
+    assert_predicate @ascent, :valid?
   end
 
   test 'registered_at is set before save' do
@@ -17,8 +17,10 @@ class ContestParticipantAscentTest < ActiveSupport::TestCase
       contest_route: contest_routes(:route_2),
       realised: true
     )
+
     assert_nil new_ascent.registered_at
     new_ascent.save
+
     assert_not_nil new_ascent.registered_at
   end
 
@@ -39,6 +41,7 @@ class ContestParticipantAscentTest < ActiveSupport::TestCase
 
   test 'summary_to_json returns expected keys' do
     json = @ascent.summary_to_json
+
     assert_equal @ascent.id, json[:id]
     assert_equal @ascent.contest_participant_id, json[:contest_participant_id]
     assert_equal @ascent.contest_route_id, json[:contest_route_id]
@@ -48,6 +51,7 @@ class ContestParticipantAscentTest < ActiveSupport::TestCase
 
   test 'detail_to_json returns expected keys including associations' do
     json = @ascent.detail_to_json
+
     assert_equal @ascent.id, json[:id]
     assert_includes json.keys, :contest_participant
   end

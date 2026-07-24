@@ -11,6 +11,7 @@ class ColorSystemSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @color_system.id, attributes['id']
     assert_equal @color_system.colors_mark, attributes['colors_mark']
   end
@@ -18,7 +19,8 @@ class ColorSystemSerializerTest < ActiveSupport::TestCase
   test 'It includes color_system_lines if specified' do
     serializer = ColorSystemSerializer.new(@color_system, { include: [:color_system_lines] })
     serialization = JSON.parse(serializer.serializable_hash.to_json)
+
     assert_not_nil serialization['included']
-    assert serialization['included'].any? { |inc| inc['type'] == 'color_system_line' }
+    assert(serialization['included'].any? { |inc| inc['type'] == 'color_system_line' })
   end
 end

@@ -10,9 +10,9 @@ class GymMailer < ApplicationMailer
     subject = t('mailer.gym.administration_request.title', gym_name: @gym.name)
 
     if use_send_in_blue?
-      send_with_send_in_blue(ENV['SEND_IN_BLUE_REPLY_EMAIL'], subject, 'gym_mailer/new_request')
+      send_with_send_in_blue(ENV.fetch('SEND_IN_BLUE_REPLY_EMAIL', nil), subject, 'gym_mailer/new_request')
     else
-      mail(to: ENV['SMTP_USER_NAME'], subject: subject)
+      mail(to: ENV.fetch('SMTP_USER_NAME', nil), subject: subject)
     end
   end
 

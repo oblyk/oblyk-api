@@ -9,17 +9,19 @@ class AscentCragRouteTest < ActiveSupport::TestCase
   end
 
   test 'ascent_crag_route is valid' do
-    assert @ascent.valid?
+    assert_predicate @ascent, :valid?
   end
 
   test 'ascent_crag_route is invalid with wrong roping_status' do
     @ascent.roping_status = 'wrong_status'
+
     assert_not @ascent.valid?
   end
 
   test 'ascent_crag_route climbing_type is historized' do
     @ascent.climbing_type = 'bouldering'
     @ascent.valid?
+
     assert_equal 'sport_climbing', @ascent.climbing_type
   end
 
@@ -32,7 +34,8 @@ class AscentCragRouteTest < ActiveSupport::TestCase
       roping_status: 'lead_climb',
       selected_sections: [0]
     )
-    assert new_ascent.valid?
+
+    assert_predicate new_ascent, :valid?
     assert_equal 20, new_ascent.height
     assert_equal 'sport_climbing', new_ascent.climbing_type
     assert_equal 1, new_ascent.sections.count

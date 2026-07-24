@@ -25,6 +25,7 @@ class AttachmentsSerializerHelperTest < ActiveSupport::TestCase
 
     assert serialization['data']['attributes']['attachments'].key?('avatar')
     avatar = serialization['data']['attributes']['attachments']['avatar']
+
     assert_kind_of Hash, avatar
     assert avatar.key?('attached')
     assert avatar.key?('attachment_type')
@@ -34,10 +35,12 @@ class AttachmentsSerializerHelperTest < ActiveSupport::TestCase
   test 'It handles missing or empty include_attachments param' do
     serializer = AreaSerializer.new(@area, { params: {} })
     serialization = JSON.parse(serializer.serializable_hash.to_json)
+
     assert_equal({}, serialization['data']['attributes']['attachments'])
 
     serializer = AreaSerializer.new(@area, { params: { include_attachments: {} } })
     serialization = JSON.parse(serializer.serializable_hash.to_json)
+
     assert_equal({}, serialization['data']['attributes']['attachments'])
   end
 

@@ -47,9 +47,9 @@ class GymThreeDAsset < ApplicationRecord
     return nil unless three_d_gltf.attached?
 
     if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
-      "#{ENV['CLOUDFLARE_R2_DOMAIN']}/#{three_d_gltf.attachment.key}"
+      "#{ENV.fetch('CLOUDFLARE_R2_DOMAIN', nil)}/#{three_d_gltf.attachment.key}"
     else
-      "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.polymorphic_url(three_d_gltf.attachment, only_path: true)}"
+      "#{ENV.fetch('OBLYK_API_URL', nil)}#{Rails.application.routes.url_helpers.polymorphic_url(three_d_gltf.attachment, only_path: true)}"
     end
   end
 end

@@ -19,6 +19,7 @@ module Api
         get api_v1_likes_url,
             params: { likeable_type: 'GymRoute', likeable_id: @gym_route.id },
             headers: @user_headers
+
         assert_response :success
       end
 

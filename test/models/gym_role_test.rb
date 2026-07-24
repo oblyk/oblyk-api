@@ -4,7 +4,7 @@ require 'test_helper'
 
 class GymRoleTest < ActiveSupport::TestCase
   test 'GymRole::LIST is an array' do
-    assert GymRole::LIST.is_a?(Array)
+    assert_kind_of Array, GymRole::LIST
   end
 
   test 'GymRole::LIST contains expected values' do
@@ -16,11 +16,12 @@ class GymRoleTest < ActiveSupport::TestCase
       manage_gym
       manage_subscription
     ]
+
     assert_equal expected_anchors.sort, GymRole::LIST.sort
   end
 
   test 'GymRole::LIST is frozen' do
-    assert GymRole::LIST.frozen?
+    assert_predicate GymRole::LIST, :frozen?
   end
 
   test 'GymRole::LIST has 6 elements' do

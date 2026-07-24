@@ -43,7 +43,7 @@ module Api
           date_of_birth = row[2]&.strip || ''
           case date_of_birth
           when /^\d{1,2}\s[a-zéû]+\s\d{4}$/
-            dates = date_of_birth.split ' '
+            dates = date_of_birth.split
             months = %w[janvier février mars avril mai juin juillet août septembre octobre novembre decembre]
             month = months.find_index(dates[1]) + 1
             date_of_birth = Date.new(dates[2].to_i, month, dates[0].to_i)
@@ -135,7 +135,7 @@ module Api
       end
 
       def import_template
-        header = CSV.generate(headers: true, encoding: 'utf-8', col_sep: ";") do |csv|
+        header = CSV.generate(headers: true, encoding: 'utf-8', col_sep: ';') do |csv|
           head = [
             'Prénom',
             'Nom de famille',
@@ -144,9 +144,7 @@ module Api
             'Genre (homme, femme)'
           ]
           head << "Catégorie (#{@contest.contest_categories.pluck(:name).join(', ')})"
-          if @contest.contest_waves.count.positive?
-            head << "Vague (#{@contest.contest_waves.pluck(:name).join(', ')})"
-          end
+          head << "Vague (#{@contest.contest_waves.pluck(:name).join(', ')})" if @contest.contest_waves.any?
           csv << head
         end
         send_data header, filename: "template-import-participant-#{@contest.slug_name}.csv"
@@ -301,7 +299,7 @@ module Api
 
         return unless @gym.administered?
 
-        not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).count.zero?
+        not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).none?
       end
 
       def broadcast_contest(participant, type = 'NewParticipant')

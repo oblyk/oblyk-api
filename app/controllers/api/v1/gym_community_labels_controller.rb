@@ -4,6 +4,7 @@ module Api
   module V1
     class GymCommunityLabelsController < ApiController
       include Gymable
+
       before_action -> { can? GymRole::MANAGE_OPENING }
 
       def disc_chart

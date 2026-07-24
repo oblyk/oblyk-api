@@ -60,7 +60,7 @@ class IndoorSubscription < ApplicationRecord
   end
 
   def create_payment_link!(indoor_subscription_product, gym, number_of_trials_days = nil)
-    Stripe.api_key = ENV['STRIPE_API_KEY']
+    Stripe.api_key = ENV.fetch('STRIPE_API_KEY', nil)
 
     plan = Stripe::Plan.create(
       amount: indoor_subscription_product.price_cents,
@@ -77,8 +77,10 @@ class IndoorSubscription < ApplicationRecord
 
     payment_link = Stripe::PaymentLink.create(
       line_items: [
-        price: plan,
-        quantity: 1
+        {
+          price: plan,
+          quantity: 1
+        }
       ],
       after_completion: {
         type: 'redirect',

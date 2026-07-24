@@ -18,8 +18,8 @@ class UserMailerTest < ActionMailer::TestCase
 
     assert_equal [@user.email], email.to
     assert_equal "Bienvenue #{@user.first_name}", email.subject
-    assert_match /Bienvenue #{@user.first_name} !/, email.html_part.body.to_s
-    assert_match /Bienvenue #{@user.first_name} !/, email.text_part.body.to_s
+    assert_match(/Bienvenue #{@user.first_name} !/, email.html_part.body.to_s)
+    assert_match(/Bienvenue #{@user.first_name} !/, email.text_part.body.to_s)
   end
 
   test 'reset_password' do
@@ -32,8 +32,8 @@ class UserMailerTest < ActionMailer::TestCase
 
     assert_equal [@user.email], email.to
     assert_equal 'Mot de passe oublié', email.subject
-    assert_match /#{token}/, email.html_part.body.to_s
-    assert_match /#{token}/, email.text_part.body.to_s
+    assert_match(/#{token}/, email.html_part.body.to_s)
+    assert_match(/#{token}/, email.text_part.body.to_s)
   end
 
   test 'welcome in english' do

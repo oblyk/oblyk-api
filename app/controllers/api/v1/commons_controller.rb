@@ -19,15 +19,15 @@ module Api
               videos_count: Video.count
             },
             latest: {
-              crags_count: Crag.where('created_at >= ?', last_date).count,
-              users_count: User.where('created_at >= ?', last_date).count,
-              gyms_count: Gym.where('created_at >= ?', last_date).count,
-              routes_count: GymRoute.where('created_at >= ?', last_date).count + CragRoute.where('created_at >= ?', last_date).count,
-              ascents_count: Ascent.where('created_at >= ?', last_date).count,
-              photos_count: Photo.where('created_at >= ?', last_date).count,
-              guides_count: GuideBookPaper.where('created_at >= ?', last_date).count + GuideBookPdf.where('created_at >= ?', last_date).count + GuideBookWeb.where('created_at >= ?', last_date).count,
-              comments_count: Comment.where('created_at >= ?', last_date).count + Ascent.where.not(comment: nil).where(private_comment: false).where('created_at >= ?', last_date).count,
-              videos_count: Video.where('created_at >= ?', last_date).count
+              crags_count: Crag.where(created_at: last_date..).count,
+              users_count: User.where(created_at: last_date..).count,
+              gyms_count: Gym.where(created_at: last_date..).count,
+              routes_count: GymRoute.where(created_at: last_date..).count + CragRoute.where(created_at: last_date..).count,
+              ascents_count: Ascent.where(created_at: last_date..).count,
+              photos_count: Photo.where(created_at: last_date..).count,
+              guides_count: GuideBookPaper.where(created_at: last_date..).count + GuideBookPdf.where(created_at: last_date..).count + GuideBookWeb.where(created_at: last_date..).count,
+              comments_count: Comment.where(created_at: last_date..).count + Ascent.where.not(comment: nil).where(private_comment: false).where(created_at: last_date..).count,
+              videos_count: Video.where(created_at: last_date..).count
             }
           }
         end
@@ -76,7 +76,6 @@ module Api
       end
 
       def active_gyms
-        data = []
         results = ActiveRecord::Base.connection.execute(
           'SELECT gyms.id,
                      COUNT(gym_routes.id),
@@ -92,8 +91,8 @@ module Api
               ORDER BY 3 DESC'
         )
         gyms = Gym.where(id: results.map(&:first))
-        results.each do |result|
-          data << gyms.find(result.first).summary_to_json
+        data = results.map do |result|
+          gyms.find(result.first).summary_to_json
         end
         render json: data, status: :ok
       end

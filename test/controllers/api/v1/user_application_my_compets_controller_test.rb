@@ -12,8 +12,10 @@ module Api
 
       test 'should get index when my_compet exists' do
         get api_v1_user_application_my_compets_url, headers: @api_headers, as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal 'UserApplicationMyCompet', json_response['type']
         assert_equal '123456', json_response['ffme_licence_number']
       end
@@ -21,6 +23,7 @@ module Api
       test 'should get 404 on index when my_compet does not exist' do
         other_user_headers = api_headers(user: :other_user)
         get api_v1_user_application_my_compets_url, headers: other_user_headers, as: :json
+
         assert_response :not_found
       end
 
@@ -37,7 +40,8 @@ module Api
                  as: :json
           end
           assert_response :success
-          json_response = JSON.parse(response.body)
+          json_response = response.parsed_body
+
           assert_equal 'IN_REVIEW', json_response['status']
           assert_equal '654321', json_response['ffme_licence_number']
         end
@@ -48,6 +52,7 @@ module Api
              params: { application: { ffme_licence_number: '' } },
              headers: @api_headers,
              as: :json
+
         assert_response :unprocessable_content
       end
     end

@@ -10,7 +10,7 @@ class ContestParticipantStepTest < ActiveSupport::TestCase
   end
 
   test 'participant step is valid' do
-    assert @participant_step.valid?
+    assert_predicate @participant_step, :valid?
   end
 
   test 'belongs to contest_participant' do

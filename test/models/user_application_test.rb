@@ -9,27 +9,31 @@ class UserApplicationTest < ActiveSupport::TestCase
   end
 
   test 'should be valid' do
-    assert @user_application.valid?
+    assert_predicate @user_application, :valid?
   end
 
   test 'should have a user' do
     @user_application.user = nil
+
     assert_not @user_application.valid?
   end
 
   test 'should set user_application_id before validation' do
     new_app = UserApplication.new(user: users(:super_admin_user), type: 'UserApplicationMyCompet')
     new_app.send(:set_user_application_id)
+
     assert_not_nil new_app.user_application_id
   end
 
   test 'user should have unique application per type' do
     duplicate_app = @user_application.dup
+
     assert_not duplicate_app.valid?
   end
 
   test 'summary_to_json should return correct data' do
     summary = @user_application.summary_to_json
+
     assert_equal @user_application.id, summary[:id]
     assert_equal 'UserApplicationMyCompet', summary[:type]
     assert_equal 'active', summary[:status]

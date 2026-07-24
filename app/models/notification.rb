@@ -47,16 +47,10 @@ class Notification < ApplicationRecord
   end
 
   def app_path
-    if notification_type == 'new_message'
-      notifiable.app_path
-    elsif %w[new_follower subscribe_accepted request_for_follow_up].include? notification_type
+    if %w[new_follower subscribe_accepted request_for_follow_up new_reply new_publication new_message].include? notification_type
       notifiable.app_path
     elsif notification_type == 'new_like'
       notifiable.likeable.app_path
-    elsif notification_type == 'new_reply'
-      notifiable.app_path
-    elsif notification_type == 'new_publication'
-      notifiable.app_path
     end
   end
 
@@ -97,6 +91,6 @@ class Notification < ApplicationRecord
   end
 
   def broadcast_notification
-    ActionCable.server.broadcast "notification_#{user.id}", user.notifications.unread.count.positive?
+    ActionCable.server.broadcast "notification_#{user.id}", user.notifications.unread.any?
   end
 end

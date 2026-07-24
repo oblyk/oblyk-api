@@ -10,8 +10,8 @@ class ContestWave < ApplicationRecord
 
   before_validation :normalize_attributes
 
-  after_save :delete_caches
   after_destroy :delete_caches
+  after_save :delete_caches
 
   default_scope { order(:name) }
 

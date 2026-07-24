@@ -27,11 +27,12 @@ module CdnCgi
       get "/cdn-cgi/image/quality=90/#{@blob.key}"
 
       assert_response :redirect
-      assert_redirected_to "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.polymorphic_url(@attachment, only_path: true)}"
+      assert_redirected_to "#{ENV.fetch('OBLYK_API_URL', nil)}#{Rails.application.routes.url_helpers.polymorphic_url(@attachment, only_path: true)}"
     end
 
     test 'should handle multiple options and use quality' do
       get "/cdn-cgi/image/fit=scale-down,width=50,height=50,quality=75/#{@blob.key}"
+
       assert_response :redirect
       assert_match %r{rails/active_storage/representations}, response.redirect_url
     end
@@ -52,6 +53,7 @@ module CdnCgi
 
     test 'should use default quality if not provided' do
       get "/cdn-cgi/image/fit=scale-down,width=100,height=100/#{@blob.key}"
+
       assert_response :redirect
     end
 

@@ -180,7 +180,7 @@ module Api
         if @gym_label_template.page_qr_code?
           pages.each_with_index do |page, index|
             routes_query = page[:routes].map { |route| "r[]=#{route[:id]}" }.join('&')
-            uri = "#{ENV['OBLYK_APP_URL']}/grs/#{@gym.id}?#{routes_query}"
+            uri = "#{ENV.fetch('OBLYK_APP_URL', nil)}/grs/#{@gym.id}?#{routes_query}"
             pages[index][:footer_qrcode] = RQRCode::QRCode.new(
               uri,
               level: :l
@@ -276,14 +276,18 @@ module Api
             }
           ],
           label_options: [
-            grade: %i[width font_size font_family text_transform],
-            visual: %i[width],
-            information: %i[font_size font_family],
-            rectangular_horizontal: %i[height],
-            rectangular_vertical: [
-              top: %i[height vertical_align],
-              bottom: %i[height]
-            ]
+            {
+              grade: %i[width font_size font_family text_transform],
+              visual: %i[width],
+              information: %i[font_size font_family],
+              rectangular_horizontal: %i[height],
+              rectangular_vertical: [
+                {
+                  top: %i[height vertical_align],
+                  bottom: %i[height]
+                }
+              ]
+            }
           ],
           header_options: [
             :display,
@@ -397,12 +401,12 @@ module Api
       end
 
       def preview_short_path(id)
-        "#{ENV['OBLYK_APP_URL']}/gr/#{@gym.id}-#{id}"
+        "#{ENV.fetch('OBLYK_APP_URL', nil)}/gr/#{@gym.id}-#{id}"
       end
 
       def replace_tags(body, group_type, group_value)
         body = body&.gsub('%type_de_groupe%', group_type || '')
-        body = body&.gsub('%reference%', group_value&.to_s || '')
+        body = body&.gsub('%reference%', group_value.to_s)
         body = body&.gsub('%salle%', @gym&.name || '')
         body = body&.gsub('****', '')
         body = body&.gsub('__', '')

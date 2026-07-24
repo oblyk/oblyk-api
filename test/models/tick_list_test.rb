@@ -8,7 +8,7 @@ class TickListTest < ActiveSupport::TestCase
   end
 
   test 'tick list is valid' do
-    assert @tick_list.valid?
+    assert_predicate @tick_list, :valid?
   end
 
   test 'tick list belongs to user' do
@@ -25,6 +25,7 @@ class TickListTest < ActiveSupport::TestCase
 
   test 'detail_to_json returns the correct format' do
     json = @tick_list.detail_to_json
+
     assert_equal @tick_list.id, json[:id]
     assert_equal @tick_list.crag_route.id, json[:crag_route][:id]
     assert_equal @tick_list.crag_route.name, json[:crag_route][:name]
@@ -34,11 +35,13 @@ class TickListTest < ActiveSupport::TestCase
 
   test 'tick list is invalid without user' do
     tick_list = TickList.new(crag_route: crag_routes(:route_one))
+
     assert_not tick_list.valid?
   end
 
   test 'tick list is invalid without crag_route' do
     tick_list = TickList.new(user: users(:normal_user))
+
     assert_not tick_list.valid?
   end
 end

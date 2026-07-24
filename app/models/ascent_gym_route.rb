@@ -13,8 +13,8 @@ class AscentGymRoute < Ascent
   before_validation :historize_ascents
   before_validation :historize_grade_gap
 
-  after_save :update_gym_route!
   after_destroy :update_gym_route!
+  after_save :update_gym_route!
 
   def logbook_summary_to_json
     {
@@ -59,7 +59,7 @@ class AscentGymRoute < Ascent
       released_at: released_at,
       private_comment: private_comment,
       sections_done: sections_done,
-      gym_route: gym_route ? gym_route.summary_to_json : nil,
+      gym_route: gym_route&.summary_to_json,
       gym: gym.summary_to_json,
       climbing_type: climbing_type,
       points: points,

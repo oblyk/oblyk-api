@@ -11,10 +11,10 @@ class SendPublicationsEmailsJob < ApplicationJob
                                         .where("JSON_SEARCH(users.email_notifiable_list, 'one', 'new_publication')")
                                         .where(read_at: nil)
                                         .where(email_notification_sent_at: nil)
-                                        .where(posted_at: [yesterday.beginning_of_day..yesterday.end_of_day])
+                                        .where(posted_at: [yesterday.all_day])
                                         .group_by(&:user_id)
 
-    notification_by_users.each do |_user_id, notifications|
+    notification_by_users.each_value do |notifications|
       publications = notifications.map(&:notifiable)
       user = notifications.first.user
       NotificationMailer.with(user: user, publications: publications).new_publications.deliver_now

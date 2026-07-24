@@ -19,6 +19,7 @@ module Api
         get api_v1_follows_url,
             params: { followable_type: 'Crag', followable_id: @crag.id },
             headers: @user_headers
+
         assert_response :success
       end
 
@@ -26,6 +27,7 @@ module Api
         get followers_api_v1_follows_url,
             params: { followable_type: 'Crag', followable_id: @crag.id },
             headers: @user_headers
+
         assert_response :success
       end
 
@@ -53,16 +55,19 @@ module Api
         put increment_api_v1_follows_url,
             params: { followable_type: 'Crag', followable_id: @crag.id },
             headers: @user_headers, as: :json
+
         assert_response :success
         follow.reload
       end
 
       test 'should get my follows by types' do
         get my_follows_by_types_api_v1_follows_url,
-            params: { followable_types: ['Crag', 'Gym'] },
+            params: { followable_types: %w[Crag Gym] },
             headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert json_response.key?('Crag')
         assert json_response.key?('Gym')
       end
@@ -71,6 +76,7 @@ module Api
         delete api_v1_follows_url,
                params: { followable_type: 'User', followable_id: @user.id },
                headers: @user_headers, as: :json
+
         assert_response :forbidden
       end
     end

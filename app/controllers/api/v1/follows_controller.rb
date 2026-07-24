@@ -59,8 +59,7 @@ module Api
                                       banner_attachment: :blob,
                                       logo_attachment: :blob,
                                       static_map_attachment: :blob,
-                                      static_map_banner_attachment: :blob
-                                    })
+                                      static_map_banner_attachment: :blob })
                         .where(
                           followable_type: params[:followable_types],
                           user: @current_user

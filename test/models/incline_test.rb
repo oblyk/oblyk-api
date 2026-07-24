@@ -4,7 +4,7 @@ require 'test_helper'
 
 class InclineTest < ActiveSupport::TestCase
   test 'Incline::LIST is an array' do
-    assert Incline::LIST.is_a?(Array)
+    assert_kind_of Array, Incline::LIST
   end
 
   test 'Incline::LIST contains expected values' do
@@ -15,11 +15,12 @@ class InclineTest < ActiveSupport::TestCase
       overhang
       roof
     ]
+
     assert_equal expected_anchors.sort, Incline::LIST.sort
   end
 
   test 'Incline::LIST is frozen' do
-    assert Incline::LIST.frozen?
+    assert_predicate Incline::LIST, :frozen?
   end
 
   test 'Incline::LIST has 5 elements' do

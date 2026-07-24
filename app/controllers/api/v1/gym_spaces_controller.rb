@@ -50,9 +50,8 @@ module Api
       end
 
       def three_d_elements
-        sector = []
-        @gym_space.gym_sectors.each do |gym_sector|
-          sector << {
+        sector = @gym_space.gym_sectors.map do |gym_sector|
+          {
             id: gym_sector.id,
             name: gym_sector.name,
             three_d_path: gym_sector.three_d_path,
@@ -148,7 +147,7 @@ module Api
 
       def tree_sectors
         tree = []
-        @gym.gym_spaces.unarchived.includes(:gym_sectors).each do |gym_space|
+        @gym.gym_spaces.unarchived.includes(:gym_sectors).find_each do |gym_space|
           space = {
             id: gym_space.id,
             name: gym_space.name,
@@ -210,12 +209,12 @@ module Api
             # write obj file
             obj_name = obj_file_params.original_filename
             f_path_obj = File.join(folder, obj_name)
-            File.open(f_path_obj, 'wb') { |f| f.write obj_file_params.read }
+            File.binwrite(f_path_obj, obj_file_params.read)
 
             # write mtl file
             mtl_name = mtl_file_params.original_filename
             f_path_mtl = File.join(folder, mtl_name)
-            File.open(f_path_mtl, 'wb') { |f| f.write mtl_file_params.read }
+            File.binwrite(f_path_mtl, mtl_file_params.read)
           else
             @gym_space.errors.add(:base, 'wrong_file_format')
             FileUtils.remove_dir folder.first
@@ -226,16 +225,16 @@ module Api
           if obj_name
             # Run obj2gltf shell command
             _stdout, stderr, status = Open3.capture3(
-              { 'PATH' => "#{ENV['NPM_BIN_PATH']}:#{ENV['PATH']}" },
-              "#{ENV['NPM_BIN_PATH']}/obj2gltf",
+              { 'PATH' => "#{ENV.fetch('NPM_BIN_PATH', nil)}:#{ENV.fetch('PATH', nil)}" },
+              "#{ENV.fetch('NPM_BIN_PATH', nil)}/obj2gltf",
               '-i',
               "#{folder.first}/#{obj_name}"
             )
             if status.success?
               gltf_file_name = "#{obj_name.split('.').first}.gltf"
-              file = File.open("#{folder.first}/#{gltf_file_name}", 'r')
+              file_content = File.binread("#{folder.first}/#{gltf_file_name}")
               @gym_space.three_d_gltf.attach(
-                io: file,
+                io: StringIO.new(file_content),
                 filename: gltf_file_name,
                 content_type: 'model/gltf+json'
               )
@@ -256,12 +255,12 @@ module Api
 
             file_name = file.original_filename
             f_path = File.join(folder, file_name)
-            File.open(f_path, 'wb') { |f| f.write file.read }
+            File.binwrite(f_path, file.read)
 
-            gltf_file = File.open("#{folder.first}/#{file_name}", 'r')
+            file_content = File.binread("#{folder.first}/#{file_name}")
 
             @gym_space.three_d_gltf.attach(
-              io: gltf_file,
+              io: StringIO.new(file_content),
               filename: file_name,
               content_type: 'model/gltf+json'
             )

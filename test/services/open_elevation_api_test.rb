@@ -24,6 +24,7 @@ class OpenElevationApiTest < ActiveSupport::TestCase
 
     RestClient.stub :post, mock_response, [expected_url, expected_payload, expected_headers] do
       results = OpenElevationApi.elevations(coordinates)
+
       assert_equal 2, results.size
       assert_equal 100, results[0]['elevation']
       assert_equal 200, results[1]['elevation']
@@ -40,6 +41,7 @@ class OpenElevationApiTest < ActiveSupport::TestCase
 
     RestClient.stub :post, mock_response do
       results = OpenElevationApi.elevations(coordinates)
+
       assert_nil results
     end
 
@@ -51,7 +53,8 @@ class OpenElevationApiTest < ActiveSupport::TestCase
 
     RestClient.stub :post, ->(_url, _payload, _headers) { raise StandardError } do
       results = OpenElevationApi.elevations(coordinates)
-      assert_equal false, results
+
+      assert_not results
     end
   end
 end

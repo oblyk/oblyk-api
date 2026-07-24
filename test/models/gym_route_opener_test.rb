@@ -8,7 +8,7 @@ class GymRouteOpenerTest < ActiveSupport::TestCase
   end
 
   test 'gym_route_opener is valid' do
-    assert @gym_route_opener.valid?
+    assert_predicate @gym_route_opener, :valid?
   end
 
   test 'gym_route_opener belongs to a gym_opener' do

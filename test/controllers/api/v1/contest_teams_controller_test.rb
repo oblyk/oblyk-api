@@ -21,15 +21,19 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_contest_contest_teams_url(@gym, @contest), headers: @public_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
       end
 
       test 'should show contest_team' do
         get api_v1_gym_contest_contest_team_url(@gym, @contest, @team), headers: @public_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @team.name, json_response['name']
       end
 
@@ -47,14 +51,15 @@ module Api
         assert_response :success
       end
 
-
       test 'should update contest_team' do
         put api_v1_gym_contest_contest_team_url(@gym, @contest, @team),
             params: { contest_team: { name: 'Updated Team Name' } },
             headers: @admin_headers,
             as: :json
+
         assert_response :success
         @team.reload
+
         assert_equal 'Updated Team Name', @team.name
       end
 
@@ -63,6 +68,7 @@ module Api
             params: { contest_team: { name: 'Unauthorized Update' } },
             headers: @user_headers,
             as: :json
+
         assert_response :forbidden
       end
 

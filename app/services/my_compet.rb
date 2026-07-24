@@ -3,14 +3,14 @@
 class MyCompet
   def self.association_request(ffme_application)
     request = RestClient.post(
-      "#{ENV['MY_COMPET_BASE_URL']}/demandeAssociation",
+      "#{ENV.fetch('MY_COMPET_BASE_URL', nil)}/demandeAssociation",
       {
         idPersonne: ffme_application.user.uuid,
         nom: ffme_application.user.full_name,
         numeroFFME: ffme_application.ffme_licence_number
       }.to_json,
       content_type: :json,
-      authorization: ENV['MY_COMPET_TOKEN']
+      authorization: ENV.fetch('MY_COMPET_TOKEN', nil)
     )
     JSON.parse(request.body)
   rescue RestClient::ExceptionWithResponse => e
@@ -28,12 +28,12 @@ class MyCompet
 
   def self.link(ffme_contest)
     request = RestClient.post(
-      "#{ENV['MY_COMPET_BASE_URL']}/urlCompetition",
+      "#{ENV.fetch('MY_COMPET_BASE_URL', nil)}/urlCompetition",
       {
         idCompetition: ffme_contest.contest_id
       }.to_json,
       content_type: :json,
-      authorization: ENV['MY_COMPET_TOKEN']
+      authorization: ENV.fetch('MY_COMPET_TOKEN', nil)
     )
     JSON.parse(request.body)
   rescue RestClient::ExceptionWithResponse => e
@@ -67,13 +67,13 @@ class MyCompet
     end
 
     request = RestClient.post(
-      "#{ENV['MY_COMPET_BASE_URL']}/envoiResultats",
+      "#{ENV.fetch('MY_COMPET_BASE_URL', nil)}/envoiResultats",
       {
         idCompetition: ffme_contest.contest_id,
         resultats: results
       }.to_json,
       content_type: :json,
-      authorization: ENV['MY_COMPET_TOKEN']
+      authorization: ENV.fetch('MY_COMPET_TOKEN', nil)
     )
     JSON.parse(request.body)
   rescue RestClient::ExceptionWithResponse => e
@@ -101,10 +101,10 @@ class MyCompet
       visuel: banner_url
     }
     request = RestClient.post(
-      "#{ENV['MY_COMPET_BASE_URL']}/#{url_mode}",
+      "#{ENV.fetch('MY_COMPET_BASE_URL', nil)}/#{url_mode}",
       data.to_json,
       content_type: :json,
-      authorization: ENV['MY_COMPET_TOKEN']
+      authorization: ENV.fetch('MY_COMPET_TOKEN', nil)
     )
     JSON.parse(request.body)
   rescue RestClient::ExceptionWithResponse => e

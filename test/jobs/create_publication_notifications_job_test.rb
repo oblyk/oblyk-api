@@ -24,6 +24,7 @@ class CreatePublicationNotificationsJobTest < ActiveSupport::TestCase
     end
 
     notification = Notification.where(notifiable: @publication).last
+
     assert_equal 'new_publication', notification.notification_type
     assert_equal 'Publication', notification.notifiable_type
     assert_equal @publication.id, notification.notifiable_id

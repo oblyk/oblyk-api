@@ -24,15 +24,15 @@ class OrganizationMailerTest < ActionMailer::TestCase
       email.deliver_now
     end
 
-    assert_equal [ENV['SMTP_USER_NAME']], email.to
-    assert_equal "[admin] Nouvelle organisation 1", email.subject
-    assert_match /Oblyk Organization/, email.html_part.body.to_s
-    assert_match /ekip@oblyk.org/, email.html_part.body.to_s
-    assert_match /commercial/, email.html_part.body.to_s
+    assert_equal [ENV.fetch('SMTP_USER_NAME', nil)], email.to
+    assert_equal '[admin] Nouvelle organisation 1', email.subject
+    assert_match(/Oblyk Organization/, email.html_part.body.to_s)
+    assert_match(/ekip@oblyk.org/, email.html_part.body.to_s)
+    assert_match(/commercial/, email.html_part.body.to_s)
 
-    assert_match /Oblyk Organization/, email.text_part.body.to_s
-    assert_match /ekip@oblyk.org/, email.text_part.body.to_s
-    assert_match /commercial/, email.text_part.body.to_s
+    assert_match(/Oblyk Organization/, email.text_part.body.to_s)
+    assert_match(/ekip@oblyk.org/, email.text_part.body.to_s)
+    assert_match(/commercial/, email.text_part.body.to_s)
   end
 
   test 'new_organization sends email with SendInBlue' do

@@ -11,6 +11,7 @@ class PublicationSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @publication.id, attributes['id']
     assert_equal @publication.app_path, attributes['app_path']
     assert_equal @publication.body, attributes['body']
@@ -40,6 +41,7 @@ class PublicationSerializerTest < ActiveSupport::TestCase
     else
       assert_equal @publication.attachable_types_count, attributes['attachable_types_count']
     end
+
     assert_equal @publication.generated, attributes['generated']
     if @publication.pined_at.nil?
       assert_nil attributes['pined_at']
@@ -56,11 +58,13 @@ class PublicationSerializerTest < ActiveSupport::TestCase
     assert_equal @publication.updated_at.as_json, attributes['history']['updated_at']
 
     expected_add_this_week = @publication.published_at.present? && @publication.published_at > Time.current.beginning_of_week
+
     assert_equal expected_add_this_week, attributes['add_this_week']
   end
 
   test 'It contains relationships' do
     relationships = @serialization['data']['relationships']
+
     assert_not_nil relationships['publication_attachments']
     assert_not_nil relationships['publishable']
     assert_not_nil relationships['author']

@@ -27,8 +27,8 @@ class ClimberProximityTest < ActiveSupport::TestCase
     match = results.find { |r| r[:id] == @other_user.id }
 
     assert_not_nil match
-    assert match[:proximity][:ascent_crags] >= 1
-    assert match[:proximity][:proximity_points] >= 1
+    assert_operator match[:proximity][:ascent_crags], :>=, 1
+    assert_operator match[:proximity][:proximity_points], :>=, 1
   end
 
   test 'returns users with proximity points from common gym ascents' do
@@ -42,8 +42,8 @@ class ClimberProximityTest < ActiveSupport::TestCase
     match = results.find { |r| r[:id] == @other_user.id }
 
     assert_not_nil match
-    assert match[:proximity][:ascent_gyms] >= 1
-    assert match[:proximity][:proximity_points] >= 1
+    assert_operator match[:proximity][:ascent_gyms], :>=, 1
+    assert_operator match[:proximity][:proximity_points], :>=, 1
   end
 
   test 'returns users with proximity points from common friends' do
@@ -81,7 +81,7 @@ class ClimberProximityTest < ActiveSupport::TestCase
 
     assert_not_nil match
     assert_equal 1, match[:proximity][:followed_crags]
-    assert_equal 0.1, match[:proximity][:proximity_points].to_f
+    assert_in_delta(0.1, match[:proximity][:proximity_points].to_f)
   end
 
   test 'returns users with proximity points from followed gyms' do
@@ -95,7 +95,7 @@ class ClimberProximityTest < ActiveSupport::TestCase
 
     assert_not_nil match
     assert_equal 1, match[:proximity][:followed_gyms]
-    assert_equal 0.1, match[:proximity][:proximity_points].to_f
+    assert_in_delta(0.1, match[:proximity][:proximity_points].to_f)
   end
 
   test 'excludes users already followed' do
@@ -103,20 +103,20 @@ class ClimberProximityTest < ActiveSupport::TestCase
     Follow.create!(user: @user, followable: crag, accepted_at: Time.current)
     Follow.create!(user: @other_user, followable: crag, accepted_at: Time.current)
 
-    assert @proximity.results.any? { |r| r[:id] == @other_user.id }
+    assert(@proximity.results.any? { |r| r[:id] == @other_user.id })
 
     Follow.create!(user: @user, followable: @other_user, accepted_at: Time.current)
 
-    assert_not @proximity.results.any? { |r| r[:id] == @other_user.id }
+    assert_not(@proximity.results.any? { |r| r[:id] == @other_user.id })
   end
 
   test 'respects limit and offset' do
     3.times do |i|
       u = User.new(
         first_name: "User#{i}",
-        last_name: "Test",
+        last_name: 'Test',
         email: "user#{i}@test.com",
-        password: "password123",
+        password: 'password123',
         uuid: SecureRandom.uuid
       )
       u.save(validate: false)
@@ -125,12 +125,15 @@ class ClimberProximityTest < ActiveSupport::TestCase
     Follow.create!(user: @user, followable: crags(:rocher_des_aures), accepted_at: Time.current)
 
     full_results = @proximity.results(per_page: 10)
-    assert full_results.size >= 4
+
+    assert_operator full_results.size, :>=, 4
 
     paged_results = @proximity.results(page: 1, per_page: 2)
+
     assert_equal 2, paged_results.size
 
     paged_results_2 = @proximity.results(page: 2, per_page: 2)
+
     assert_equal 2, paged_results_2.size
 
     assert_not_equal paged_results.first[:id], paged_results_2.first[:id]

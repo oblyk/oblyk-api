@@ -16,15 +16,19 @@ module Api
 
       test 'should get index' do
         get api_v1_alerts_url(alertable_type: 'Crag', alertable_id: @crag.id), headers: @api_headers, as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
       end
 
       test 'should show alert' do
         get api_v1_alert_url(@alert), headers: @api_headers, as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @alert.id, json_response['id']
       end
 
@@ -71,8 +75,10 @@ module Api
               },
               headers: @super_admin_headers,
               as: :json
+
         assert_response :success
         @alert.reload
+
         assert_equal 'Updated description', @alert.description
       end
 
@@ -85,6 +91,7 @@ module Api
               },
               headers: @api_headers,
               as: :json
+
         assert_response :forbidden
       end
 

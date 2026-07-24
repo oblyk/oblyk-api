@@ -1,6 +1,8 @@
-require_relative "boot"
+# frozen_string_literal: true
 
-require "rails/all"
+require_relative 'boot'
+
+require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -14,14 +16,14 @@ module OblykApi
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
-    config.autoload_lib(ignore: %w(assets tasks))
+    config.autoload_lib(ignore: %w[assets tasks])
 
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    config.time_zone = "Paris"
+    config.time_zone = 'Paris'
     # config.eager_load_paths << Rails.root.join("extras")
 
     # Only loads a smaller set of middleware suitable for API only apps.
@@ -31,7 +33,7 @@ module OblykApi
 
     # Load local env vars
     config.before_configuration do
-      env_file = Rails.root.join("config/local_env.yml")
+      env_file = Rails.root.join('config/local_env.yml')
       if File.exist?(env_file)
         YAML.safe_load(File.open(env_file))&.each do |key, value|
           ENV[key.to_s] = value.to_s
@@ -40,7 +42,7 @@ module OblykApi
     end
 
     # Added manually session store for sidekiq web
-    config.session_store :cookie_store, key: "_interslice_session"
+    config.session_store :cookie_store, key: '_interslice_session'
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use config.session_store, config.session_options
 

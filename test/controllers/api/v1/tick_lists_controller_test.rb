@@ -14,9 +14,11 @@ module Api
 
       test 'should get index' do
         get api_v1_tick_lists_url, headers: @auth_headers, as: :json
+
         assert_response :success
 
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @user.tick_lists.count, json_response.count
       end
 
@@ -29,7 +31,8 @@ module Api
         end
         assert_response :success
 
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_includes json_response, @crag_route.id
       end
 
@@ -42,12 +45,14 @@ module Api
         end
         assert_response :success
 
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_not_includes json_response, @tick_list_one.crag_route_id
       end
 
       test 'should not access without session' do
         get api_v1_tick_lists_url, as: :json
+
         assert_response :forbidden
       end
 
@@ -55,6 +60,7 @@ module Api
         get api_v1_tick_lists_url,
             headers: api_access_token_headers,
             as: :json
+
         assert_response :unauthorized
       end
     end

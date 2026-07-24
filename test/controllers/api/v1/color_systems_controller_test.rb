@@ -14,23 +14,29 @@ module Api
 
       test 'should get index' do
         get api_v1_color_systems_url, headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
-        assert json_response.length >= 2
+        assert_operator json_response.length, :>=, 2
       end
 
       test 'should get index with gym_id' do
         get api_v1_color_systems_url, params: { gym_id: @gym.id }, headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
       end
 
       test 'should show color_system' do
         get api_v1_color_system_url(@color_system), headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @color_system.id, json_response['id']
         assert_equal @color_system.colors_mark, json_response['colors_mark']
       end
@@ -47,7 +53,8 @@ module Api
                as: :json
         end
         assert_response :ok
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal '#111111#222222', json_response['colors_mark']
       end
 
@@ -63,7 +70,8 @@ module Api
                as: :json
         end
         assert_response :ok
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @color_system.id, json_response['id']
       end
 

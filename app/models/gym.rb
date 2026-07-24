@@ -78,9 +78,9 @@ class Gym < ApplicationRecord
 
   before_validation :normalize_ascents_multiplier
   before_save :set_app_paths, if: :saved_change_to_name?
+  after_create :historize_app_paths!
   after_save :historize_around_towns
   after_save :delete_routes_caches
-  after_create :historize_app_paths!
   after_create_commit :publication_push!
 
   def app_path
@@ -89,7 +89,7 @@ class Gym < ApplicationRecord
 
   def admin_app_path(with_domain: false)
     if with_domain
-      "#{ENV['OBLYK_APP_URL']}#{app_paths.try(:[], 'admin')}"
+      "#{ENV.fetch('OBLYK_APP_URL', nil)}#{app_paths.try(:[], 'admin')}"
     else
       app_paths.try(:[], 'admin')
     end
@@ -124,7 +124,7 @@ class Gym < ApplicationRecord
             logo: attachment_object(logo)
           }
         },
-        geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
+        geometry: { type: 'Point', coordinates: [Float(longitude), Float(latitude), 0.0] }
       }
     end
   end
@@ -249,7 +249,7 @@ class Gym < ApplicationRecord
         gym_spaces_with_anchor: gym_spaces_with_anchor?,
         upcoming_contests: contests.upcoming.map(&:summary_to_json),
         gym_label_templates: gym_label_templates.unarchived.map { |label| { name: label.name, id: label.id } },
-        have_indoor_subscriptions: indoor_subscriptions.count.positive?,
+        have_indoor_subscriptions: indoor_subscriptions.any?,
         subscription_possibility: subscription_possibility,
         levels: levels,
         last_publication_at: Publication.where(publishable_type: 'Gym', publishable_id: id).maximum(:published_at),
@@ -304,7 +304,7 @@ class Gym < ApplicationRecord
   end
 
   def subscription_possibility
-    return 'start_a_free_trial' if indoor_subscriptions.count.zero?
+    return 'start_a_free_trial' if indoor_subscriptions.none?
 
     indoor_subscriptions.each do |subscription|
       return 'reactivate_my_subscription' if subscription.payment_status == 'waiting_first_payment' && subscription.end_date.present? && subscription.end_date <= Date.current
@@ -357,7 +357,7 @@ class Gym < ApplicationRecord
   end
 
   def set_public_guide_book
-    self.public_guide_book = gym_spaces.where(draft: false).exists?
+    self.public_guide_book = gym_spaces.exists?(draft: false)
   end
 
   def historize_public_guide_book!
@@ -402,7 +402,7 @@ class Gym < ApplicationRecord
   end
 
   def historize_around_towns
-    logo_change = logo.attached? && logo.attachment.created_at > (Time.current - 5.minutes)
+    logo_change = logo.attached? && logo.attachment.created_at > 5.minutes.ago
 
     if saved_change_to_name? ||
        saved_change_to_latitude? ||
@@ -421,7 +421,7 @@ class Gym < ApplicationRecord
   def normalize_ascents_multiplier
     return unless ascents_multiplier_changed?
 
-    ascents_multiplier&.each do |k, _v|
+    ascents_multiplier&.each_key do |k|
       ascents_multiplier[k].each do |k2, v2|
         ascents_multiplier[k][k2] = v2.to_f
       end

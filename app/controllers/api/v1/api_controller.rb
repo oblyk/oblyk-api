@@ -34,7 +34,7 @@ module Api
       def check_honeypot_params
         return unless request_can_write?
 
-        honeypot_params = params.fetch(ENV['HONEYPOT_PARAMS'], false)
+        honeypot_params = params.fetch(ENV.fetch('HONEYPOT_PARAMS', nil), false)
         return unless honeypot_params
         return if honeypot_params.blank?
 
@@ -55,7 +55,7 @@ module Api
 
       # Extract login (/authorization) token
       def authorization_token
-        request.headers['Authorization'].split(' ').last
+        request.headers['Authorization'].split.last
       end
 
       # Verify jwt and set current user

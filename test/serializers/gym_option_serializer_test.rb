@@ -11,6 +11,7 @@ class GymOptionSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @gym_option.id, attributes['id']
     assert_equal @gym_option.option_type, attributes['option_type']
     assert_equal @gym_option.start_date.as_json, attributes['start_date']

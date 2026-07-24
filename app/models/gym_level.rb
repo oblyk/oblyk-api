@@ -36,11 +36,12 @@ class GymLevel < ApplicationRecord
           name: gym.name,
           slug_name: gym.slug_name
         }
-      })
+      }
+    )
   end
 
   def colors_system_mark
-    levels.map { |level| level['color'] }.join
+    levels.pluck('color').join
   end
 
   private

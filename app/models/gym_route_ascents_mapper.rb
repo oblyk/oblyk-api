@@ -20,7 +20,7 @@ class GymRouteAscentsMapper
   private
 
   def mapper
-    user_ascents = AscentGymRoute.where(user_id: user.id, gym_route_id: routes.map { |route| route[:id] })
+    user_ascents = AscentGymRoute.where(user_id: user.id, gym_route_id: routes.pluck(:id))
                                  .order(Arel.sql('FIELD(ascent_status, "onsight", "flash", "red_point", "sent", "repetition", "project")'))
 
     return routes unless user_ascents.size.positive?

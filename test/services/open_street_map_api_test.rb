@@ -20,12 +20,13 @@ class OpenStreetMapApiTest < ActiveSupport::TestCase
       }
     }
 
-    RestClient.stub :get, ->(url, options) {
+    RestClient.stub :get, lambda { |url, options|
       assert_equal "#{OpenStreetMapApi::BASE_URL}/search", url
       assert_equal expected_params, options
       mock_response
     } do
       result = OpenStreetMapApi.search(query)
+
       assert_equal 'Grenoble, Isère, France', result.first['display_name']
     end
   end
@@ -41,7 +42,7 @@ class OpenStreetMapApiTest < ActiveSupport::TestCase
 
   test 'search returns false when an error occurs' do
     RestClient.stub :get, ->(_url, _params) { raise StandardError } do
-      assert_equal false, OpenStreetMapApi.search('Error')
+      assert_not OpenStreetMapApi.search('Error')
     end
   end
 
@@ -65,12 +66,13 @@ class OpenStreetMapApiTest < ActiveSupport::TestCase
       }
     }
 
-    RestClient.stub :get, ->(url, options) {
+    RestClient.stub :get, lambda { |url, options|
       assert_equal "#{OpenStreetMapApi::BASE_URL}/reverse", url
       assert_equal expected_params, options
       mock_response
     } do
       result = OpenStreetMapApi.reverse_geocoding(lat, lon)
+
       assert_equal 'Grenoble', result['address']['city']
     end
   end
@@ -86,7 +88,7 @@ class OpenStreetMapApiTest < ActiveSupport::TestCase
 
   test 'reverse_geocoding returns false when an error occurs' do
     RestClient.stub :get, ->(_url, _params) { raise StandardError } do
-      assert_equal false, OpenStreetMapApi.reverse_geocoding(0, 0)
+      assert_not OpenStreetMapApi.reverse_geocoding(0, 0)
     end
   end
 end

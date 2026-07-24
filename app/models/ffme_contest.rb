@@ -12,8 +12,8 @@ class FfmeContest < ApplicationRecord
   validates :name, :contact_email, presence: true
   validates :status, inclusion: { in: STATUS_LIST }
   validates :contest_type, inclusion: { in: CONTEST_TYPES_LIST }
-  after_save :delete_caches
   after_destroy :delete_caches
+  after_save :delete_caches
 
   def summary_to_json
     {

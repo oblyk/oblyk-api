@@ -8,7 +8,7 @@ class ContestJudgeRouteTest < ActiveSupport::TestCase
   end
 
   test 'contest judge route is valid' do
-    assert @judge_route.valid?
+    assert_predicate @judge_route, :valid?
   end
 
   test 'belongs to contest judge' do

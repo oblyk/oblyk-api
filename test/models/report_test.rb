@@ -12,7 +12,7 @@ class ReportTest < ActiveSupport::TestCase
   end
 
   test 'report is valid' do
-    assert @report_on_crag.valid?
+    assert_predicate @report_on_crag, :valid?
   end
 
   test 'validates reportable type inclusion' do
@@ -22,7 +22,8 @@ class ReportTest < ActiveSupport::TestCase
       body: 'Test body',
       user: @user
     )
-    assert report.valid?
+
+    assert_predicate report, :valid?
 
     report.reportable_type = 'NotAModel'
     begin
@@ -30,6 +31,7 @@ class ReportTest < ActiveSupport::TestCase
     rescue NameError, RuntimeError
       is_invalid = true
     end
+
     assert is_invalid
   end
 
@@ -57,6 +59,7 @@ class ReportTest < ActiveSupport::TestCase
       user: @user
     )
     report.validate
+
     assert_equal 'I have a link', report.body
   end
 end

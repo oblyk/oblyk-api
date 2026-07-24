@@ -15,9 +15,9 @@ class ContestRouteGroup < ApplicationRecord
   before_validation :normalize_attributes
   after_validation :validate_categories
 
-  after_save :delete_caches
   after_create :create_participant_step
   after_destroy :delete_caches
+  after_save :delete_caches
 
   validates :genre_type, inclusion: { in: %w[unisex male female] }
   validates :contest_categories, length: { minimum: 1, message: 'you_must_choose_one' }
@@ -111,7 +111,7 @@ class ContestRouteGroup < ApplicationRecord
 
   def validate_categories
     contest_categories.each do |category|
-      contest_stage_step.contest_route_groups.where.not(id: id).each do |contest_route_group|
+      contest_stage_step.contest_route_groups.where.not(id: id).find_each do |contest_route_group|
         route_group_category = ContestRouteGroupCategory.find_by contest_category_id: category.id, contest_route_group_id: contest_route_group.id
 
         next if route_group_category.blank? || route_group_category.contest_route_group.genre_type != genre_type

@@ -26,6 +26,15 @@ Layout/LineLength:
 Style/Documentation:
   Enabled: false
 
+Style/SafeNavigationChainLength:
+  Enabled: false
+
+Naming/PredicateMethod:
+  Enabled: false
+
+Naming/VariableNumber:
+  Enabled: false
+
 Metrics/MethodLength:
   Enabled: false
 
@@ -57,4 +66,10 @@ Rails/HasManyOrHasOneDependent:
   Enabled: false
 
 Rails/InverseOf:
+  Enabled: false
+
+Rails/I18nLocaleTexts:
+  Enabled: false
+
+Minitest/MultipleAssertions:
   Enabled: false

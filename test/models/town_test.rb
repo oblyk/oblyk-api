@@ -8,20 +8,24 @@ class TownTest < ActiveSupport::TestCase
   end
 
   test 'town is valid' do
-    assert @town.valid?
+    assert_predicate @town, :valid?
   end
 
   test 'default_dist depends on population' do
     @town.population = 5000
+
     assert_equal 10, @town.default_dist
 
     @town.population = 15_000
+
     assert_equal 15, @town.default_dist
 
     @town.population = 35_000
+
     assert_equal 20, @town.default_dist
 
     @town.population = 60_000
+
     assert_equal 30, @town.default_dist
   end
 
@@ -32,6 +36,7 @@ class TownTest < ActiveSupport::TestCase
 
   test 'summary_to_json returns correct structure' do
     json = @town.summary_to_json
+
     assert_equal @town.id, json[:id]
     assert_equal @town.name, json[:name]
     assert_equal @town.slug_name, json[:slug_name]
@@ -44,6 +49,7 @@ class TownTest < ActiveSupport::TestCase
 
   test 'detail_to_json returns a hash with crags and gyms' do
     json = @town.detail_to_json(20)
+
     assert_equal 20, json[:dist]
     assert json.key?(:crags)
     assert json.key?(:gyms)
@@ -61,6 +67,7 @@ class TownTest < ActiveSupport::TestCase
     end
 
     town_json = TownJsonObject.find_by(town: beaufort)
+
     assert_not_nil town_json
     assert_equal beaufort.default_dist, town_json.dist
   end

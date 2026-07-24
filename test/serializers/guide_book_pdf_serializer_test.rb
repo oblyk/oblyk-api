@@ -13,6 +13,7 @@ class GuideBookPdfSerializerTest < ActiveSupport::TestCase
       @serialization = JSON.parse(@serializer.serializable_hash.to_json)
 
       attributes = @serialization['data']['attributes']
+
       assert_equal @guide_book_pdf.id, attributes['id']
       assert_equal @guide_book_pdf.name, attributes['name']
       assert_equal @guide_book_pdf.description, attributes['description']
@@ -30,6 +31,7 @@ class GuideBookPdfSerializerTest < ActiveSupport::TestCase
       @serialization = JSON.parse(@serializer.serializable_hash.to_json)
 
       relationships = @serialization['data']['relationships']
+
       assert_not_nil relationships['user']
       assert_not_nil relationships['crag']
       assert_equal @guide_book_pdf.user_id, relationships['user']['data']['id'].to_i

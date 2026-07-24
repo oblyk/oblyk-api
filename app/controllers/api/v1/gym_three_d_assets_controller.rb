@@ -123,12 +123,12 @@ module Api
             # write obj file
             obj_name = obj_file_params.original_filename
             f_path_obj = File.join(folder, obj_name)
-            File.open(f_path_obj, 'wb') { |f| f.write obj_file_params.read }
+            File.binwrite(f_path_obj, obj_file_params.read)
 
             # write mtl file
             mtl_name = mtl_file_params.original_filename
             f_path_mtl = File.join(folder, mtl_name)
-            File.open(f_path_mtl, 'wb') { |f| f.write mtl_file_params.read }
+            File.binwrite(f_path_mtl, mtl_file_params.read)
           else
             @gym_three_d_asset.errors.add(:base, 'wrong_file_format')
             FileUtils.remove_dir folder.first
@@ -139,15 +139,15 @@ module Api
           if obj_name
             # Run obj2gltf shell command
             _stdout, stderr, status = Open3.capture3(
-              "#{ENV['NPM_BIN_PATH']}/obj2gltf",
+              "#{ENV.fetch('NPM_BIN_PATH', nil)}/obj2gltf",
               '-i',
               "#{folder.first}/#{obj_name}"
             )
             if status.success?
               gltf_file_name = "#{obj_name.split('.').first}.gltf"
-              file = File.open("#{folder.first}/#{gltf_file_name}", 'r')
+              file_content = File.binread("#{folder.first}/#{gltf_file_name}")
               @gym_three_d_asset.three_d_gltf.attach(
-                io: file,
+                io: StringIO.new(file_content),
                 filename: gltf_file_name,
                 content_type: 'model/gltf+json'
               )
@@ -166,12 +166,11 @@ module Api
             folder = FileUtils.mkdir_p "tmp/obj2gltf_folder/#{random_file_name}"
             file_name = file.original_filename
             f_path = File.join(folder, file_name)
-            File.open(f_path, 'wb') { |f| f.write file.read }
-
-            gltf_file = File.open("#{folder.first}/#{file_name}", 'r')
+            File.binwrite(f_path, file.read)
+            file_content = File.binread("#{folder.first}/#{file_name}")
 
             @gym_three_d_asset.three_d_gltf.attach(
-              io: gltf_file,
+              io: StringIO.new(file_content),
               filename: file_name,
               content_type: 'model/gltf+json'
             )

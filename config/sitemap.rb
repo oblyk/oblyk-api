@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Set the host name for URL creation
-SitemapGenerator::Sitemap.default_host = ENV['OBLYK_APP_URL']
+SitemapGenerator::Sitemap.default_host = ENV.fetch('OBLYK_APP_URL', nil)
 SitemapGenerator::Sitemap.compress = false
 
 # possible changefreq : 'always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly' or 'never'

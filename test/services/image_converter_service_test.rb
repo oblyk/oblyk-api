@@ -21,6 +21,7 @@ class ImageConverterServiceTest < ActiveSupport::TestCase
 
   test 'should use default type if not provided' do
     service = ImageConverterService.new(tempfile: @tempfile)
+
     assert_equal 'jpg', service.type
   end
 
@@ -34,6 +35,7 @@ class ImageConverterServiceTest < ActiveSupport::TestCase
       chain
     } do
       result = @service.call
+
       assert_equal 'converted_file_mock', result
     end
 

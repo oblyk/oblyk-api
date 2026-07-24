@@ -4,9 +4,9 @@ namespace :refresh_data do
   task :crag, %i[out] => :environment do |_t, args|
     out = args[:out] || $stdout
 
-    crag_count = Crag.all.count
+    crag_count = Crag.count
 
-    Crag.all.find_each do |crag|
+    Crag.find_each do |crag|
       out.puts ''
       out.puts "#{crag.id} / #{crag_count} : Refresh crag #{crag.name}"
 
@@ -23,9 +23,9 @@ namespace :refresh_data do
   task :crag_sector, %i[out] => :environment do |_t, args|
     out = args[:out] || $stdout
 
-    crag_sector_count = CragSector.all.count
+    crag_sector_count = CragSector.count
 
-    CragSector.all.find_each do |crag_sector|
+    CragSector.find_each do |crag_sector|
       out.puts ''
       out.puts "#{crag_sector.id} / #{crag_sector_count} : Refresh crag sector #{crag_sector.name}"
 
@@ -39,9 +39,9 @@ namespace :refresh_data do
   task :crag_route, %i[out] => :environment do |_t, args|
     out = args[:out] || $stdout
 
-    crag_route_count = CragRoute.all.count
+    crag_route_count = CragRoute.count
 
-    CragRoute.all.find_each do |crag_route|
+    CragRoute.find_each do |crag_route|
       out.puts ''
       out.puts "#{crag_route.id} / #{crag_route_count} : Refresh crag route #{crag_route.name}"
 

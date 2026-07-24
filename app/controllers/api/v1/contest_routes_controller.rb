@@ -73,7 +73,7 @@ module Api
       end
 
       def destroy
-        if @contest_route.contest_participant_ascents.count.positive?
+        if @contest_route.contest_participant_ascents.any?
           render json: { error: { base: ['La ligne a des réalisations, elle ne peut pas être supprimée'] } }, status: :unprocessable_content
           return
         end
@@ -110,7 +110,7 @@ module Api
 
         return unless @gym.administered?
 
-        not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).count.zero?
+        not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).none?
       end
 
       def contest_route_params

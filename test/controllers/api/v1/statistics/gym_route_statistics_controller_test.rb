@@ -18,6 +18,7 @@ module Api
                params: @filters,
                headers: @headers,
                as: :json
+
           assert_response :success
         end
 
@@ -26,6 +27,7 @@ module Api
                params: @filters,
                headers: @headers,
                as: :json
+
           assert_response :success
         end
 
@@ -34,6 +36,7 @@ module Api
                params: @filters,
                headers: @headers,
                as: :json
+
           assert_response :success
         end
 
@@ -42,6 +45,7 @@ module Api
                params: @filters,
                headers: @headers,
                as: :json
+
           assert_response :success
         end
 
@@ -50,6 +54,7 @@ module Api
                params: @filters,
                headers: @headers,
                as: :json
+
           assert_response :success
         end
 
@@ -58,6 +63,7 @@ module Api
                params: @filters,
                headers: @headers,
                as: :json
+
           assert_response :success
         end
 
@@ -66,6 +72,7 @@ module Api
                params: @filters,
                headers: @headers,
                as: :json
+
           assert_response :success
         end
 
@@ -74,6 +81,7 @@ module Api
                params: @filters,
                headers: @headers,
                as: :json
+
           assert_response :success
         end
 
@@ -84,6 +92,7 @@ module Api
                params: filters,
                headers: @headers,
                as: :json
+
           assert_response :success
         end
       end

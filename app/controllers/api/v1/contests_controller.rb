@@ -109,7 +109,7 @@ module Api
 
       def destroy
         unless @contest.draft?
-          render json: { error: { base: ['published_contest_cannot_be_deleted'] }}, status: :unprocessable_content
+          render json: { error: { base: ['published_contest_cannot_be_deleted'] } }, status: :unprocessable_content
           return
         end
 
@@ -157,7 +157,7 @@ module Api
 
         return unless @gym.administered?
 
-        not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).count.zero?
+        not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).none?
       end
 
       def contest_params

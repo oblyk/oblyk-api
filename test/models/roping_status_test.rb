@@ -4,7 +4,7 @@ require 'test_helper'
 
 class RopingStatusTest < ActiveSupport::TestCase
   test 'RopingStatus::LIST is an array' do
-    assert RopingStatus::LIST.is_a?(Array)
+    assert_kind_of Array, RopingStatus::LIST
   end
 
   test 'RopingStatus::LIST contains expected values' do
@@ -15,11 +15,12 @@ class RopingStatusTest < ActiveSupport::TestCase
       multi_pitch_second
       multi_pitch_alternate_lead
     ]
+
     assert_equal expected_anchors.sort, RopingStatus::LIST.sort
   end
 
   test 'RopingStatus::LIST is frozen' do
-    assert RopingStatus::LIST.frozen?
+    assert_predicate RopingStatus::LIST, :frozen?
   end
 
   test 'RopingStatus::LIST has 5 elements' do

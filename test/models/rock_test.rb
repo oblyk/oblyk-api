@@ -4,7 +4,7 @@ require 'test_helper'
 
 class RockTest < ActiveSupport::TestCase
   test 'Rock::LIST is an array' do
-    assert Rock::LIST.is_a?(Array)
+    assert_kind_of Array, Rock::LIST
   end
 
   test 'Rock::LIST contains expected values' do
@@ -28,11 +28,12 @@ class RockTest < ActiveSupport::TestCase
       phonolite
       resin
     ]
+
     assert_equal expected_anchors.sort, Rock::LIST.sort
   end
 
   test 'Rock::LIST is frozen' do
-    assert Rock::LIST.frozen?
+    assert_predicate Rock::LIST, :frozen?
   end
 
   test 'Rock::LIST has 18 elements' do

@@ -149,7 +149,7 @@ module Api
           end
         end
 
-        if errors.size.zero?
+        if errors.empty?
           if ascent_bulk_params[:description].present?
             climbing_session = ClimbingSession.find_or_initialize_by(user: @current_user, session_date: released_at)
             ascent_description = climbing_session.description.present? ? "\n#{ascent_bulk_params[:description]}" : ascent_bulk_params[:description]
@@ -195,7 +195,7 @@ module Api
           end
         end
 
-        if errors.size.zero?
+        if errors.empty?
           new_ascents.each(&:save)
           render json: gym_routes_ascent_response(new_ascents.map(&:gym_route_id)), status: :created
         else
@@ -211,7 +211,7 @@ module Api
             @ascent_gym_route.ascent_comment = Comment.new(body: ascent_comment_params[:ascent_comment][:body])
             @ascent_gym_route.ascent_comment.user = @current_user
           end
-        elsif @ascent_gym_route.ascent_comment && params[:ascent_gym_route] && params[:ascent_gym_route].key?(:ascent_comment)
+        elsif @ascent_gym_route.ascent_comment && params[:ascent_gym_route]&.key?(:ascent_comment)
           @ascent_gym_route.ascent_comment = nil if @ascent_gym_route.ascent_comment.destroy
         end
 

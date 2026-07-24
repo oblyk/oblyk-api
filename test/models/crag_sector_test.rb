@@ -10,23 +10,26 @@ class CragSectorTest < ActiveSupport::TestCase
   end
 
   test 'sector is valid' do
-    assert @sector.valid?
+    assert_predicate @sector, :valid?
   end
 
   test 'sector is invalid without name' do
     @sector.name = nil
+
     assert_not @sector.valid?
     assert_includes @sector.errors.attribute_names, :name
   end
 
   test 'sector is invalid with wrong rain value' do
     @sector.rain = 'unknown'
+
     assert_not @sector.valid?
     assert_includes @sector.errors.attribute_names, :rain
   end
 
   test 'sector is invalid with wrong sun value' do
     @sector.sun = 'unknown'
+
     assert_not @sector.valid?
     assert_includes @sector.errors.attribute_names, :sun
   end
@@ -37,6 +40,7 @@ class CragSectorTest < ActiveSupport::TestCase
 
   test 'to_geo_json returns expected format' do
     geo_json = @sector.to_geo_json
+
     assert_equal 'Feature', geo_json[:type]
     assert_equal 'CragSector', geo_json[:properties][:type]
     assert_equal @sector.id, geo_json[:properties][:id]
@@ -51,6 +55,7 @@ class CragSectorTest < ActiveSupport::TestCase
       latitude: 45.0,
       longitude: 5.0
     )
+
     assert_nil sector.location
     sector.valid?
     expected = [45.0, 5.0]
@@ -78,6 +83,7 @@ class CragSectorTest < ActiveSupport::TestCase
 
   test 'summary_to_json returns expected keys' do
     json = @sector.summary_to_json
+
     assert_equal @sector.id, json[:id]
     assert_equal @sector.name, json[:name]
     assert_includes json.keys, :crag
@@ -86,11 +92,13 @@ class CragSectorTest < ActiveSupport::TestCase
 
   test 'summary_to_json without crag' do
     json = @sector.summary_to_json(with_crag: false)
+
     assert_not_includes json.keys, :crag
   end
 
   test 'detail_to_json returns expected keys' do
     json = @sector.detail_to_json
+
     assert_includes json.keys, :versions_count
     assert_includes json.keys, :photo_count
     assert_includes json.keys, :creator

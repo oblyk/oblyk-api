@@ -27,8 +27,8 @@ class GymMailerTest < ActionMailer::TestCase
       email.deliver_now
     end
 
-    assert_equal [ENV['SMTP_USER_NAME']], email.to
-    assert_match /#{@gym.name}/, email.subject
+    assert_equal [ENV.fetch('SMTP_USER_NAME', nil)], email.to
+    assert_match(/#{@gym.name}/, email.subject)
   end
 
   test 'new_request with send_in_blue' do
@@ -67,7 +67,7 @@ class GymMailerTest < ActionMailer::TestCase
     end
 
     assert_equal ['test@example.com'], email.to
-    assert_match /#{@gym.name}/, email.subject
+    assert_match(/#{@gym.name}/, email.subject)
   end
 
   test 'new_request_confirmation with send_in_blue' do
@@ -104,7 +104,7 @@ class GymMailerTest < ActionMailer::TestCase
     end
 
     assert_equal ['admin@gym.com'], email.to
-    assert_match /#{@gym.name}/, email.subject
+    assert_match(/#{@gym.name}/, email.subject)
   end
 
   test 'new_administrator with send_in_blue' do
@@ -141,7 +141,7 @@ class GymMailerTest < ActionMailer::TestCase
     end
 
     assert_equal ['admin@gym.com'], email.to
-    assert_match /#{@gym.name}/, email.subject
+    assert_match(/#{@gym.name}/, email.subject)
   end
 
   test 'accept_administrator with send_in_blue' do
@@ -178,7 +178,7 @@ class GymMailerTest < ActionMailer::TestCase
     end
 
     assert_equal [@user.email], email.to
-    assert_match /rapport/, email.subject
+    assert_match(/rapport/, email.subject)
   end
 
   test 'email_report with send_in_blue' do

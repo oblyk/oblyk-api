@@ -28,7 +28,7 @@ class Approach < ApplicationRecord
         crag_id: crag_id,
         icon: nil
       },
-      geometry: { type: 'LineString', "coordinates": revers_lat_lng }
+      geometry: { type: 'LineString', coordinates: revers_lat_lng }
     }
     unless minimalistic
       features[:properties].merge!(
@@ -57,9 +57,8 @@ class Approach < ApplicationRecord
   def elevations_form_api
     return unless polyline
 
-    coordinates = []
-    polyline.each do |point|
-      coordinates << {
+    coordinates = polyline.map do |point|
+      {
         latitude: point[0],
         longitude: point[1]
       }
@@ -208,11 +207,9 @@ class Approach < ApplicationRecord
   end
 
   def revers_lat_lng
-    reverse_polyline = []
-    polyline.each do |coordinates|
-      reverse_polyline << [coordinates[1], coordinates[0]]
+    polyline.map do |coordinates|
+      [coordinates[1], coordinates[0]]
     end
-    reverse_polyline
   end
 
   def distance(loc1, loc2, elevation = 0)
@@ -223,17 +220,17 @@ class Approach < ApplicationRecord
     dlat_rad = (loc2[0] - loc1[0]) * rad_per_deg # Delta, converted to rad
     dlon_rad = (loc2[1] - loc1[1]) * rad_per_deg
 
-    lat1_rad, lon1_rad = loc1.map { |i| i * rad_per_deg }
-    lat2_rad, lon2_rad = loc2.map { |i| i * rad_per_deg }
+    lat1_rad, = loc1.map { |i| i * rad_per_deg }
+    lat2_rad, = loc2.map { |i| i * rad_per_deg }
 
-    a = Math.sin(dlat_rad / 2)**2 + Math.cos(lat1_rad) * Math.cos(lat2_rad) * Math.sin(dlon_rad / 2)**2
+    a = (Math.sin(dlat_rad / 2)**2) + (Math.cos(lat1_rad) * Math.cos(lat2_rad) * (Math.sin(dlon_rad / 2)**2))
     c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 
     meters = rm * c # Delta in meters
     if elevation.zero?
       meters
     else
-      Math.sqrt(meters**2 + elevation.abs**2)
+      Math.sqrt((meters**2) + (elevation.abs**2))
     end
   end
 

@@ -4,8 +4,8 @@ module Services
   module Stripes
     class WebhooksController < ApplicationController
       def index
-        Stripe.api_key = ENV['STRIPE_API_KEY']
-        endpoint_secret = ENV['STRIPE_ENDPOINT_SECRET']
+        Stripe.api_key = ENV.fetch('STRIPE_API_KEY', nil)
+        endpoint_secret = ENV.fetch('STRIPE_ENDPOINT_SECRET', nil)
 
         payload = request.raw_post
 
@@ -39,8 +39,6 @@ module Services
           StripeService.fulfill_checkout(event.data.object.id)
         when 'customer.subscription.updated'
           StripeService.customer_subscription_update(event)
-        else
-          true
         end
 
         head :ok

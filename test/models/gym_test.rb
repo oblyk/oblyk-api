@@ -9,36 +9,42 @@ class GymTest < ActiveSupport::TestCase
   end
 
   test 'gym is valid' do
-    assert @gym.valid?
+    assert_predicate @gym, :valid?
   end
 
   test 'gym is invalid without name' do
     @gym.name = nil
+
     assert_not @gym.valid?
   end
 
   test 'gym is invalid without latitude' do
     @gym.latitude = nil
+
     assert_not @gym.valid?
   end
 
   test 'gym is invalid without longitude' do
     @gym.longitude = nil
+
     assert_not @gym.valid?
   end
 
   test 'gym is invalid without address' do
     @gym.address = nil
+
     assert_not @gym.valid?
   end
 
   test 'gym is invalid without country' do
     @gym.country = nil
+
     assert_not @gym.valid?
   end
 
   test 'gym is invalid without city' do
     @gym.city = nil
+
     assert_not @gym.valid?
   end
 
@@ -52,6 +58,7 @@ class GymTest < ActiveSupport::TestCase
 
   test 'gym summary_to_json returns correct keys' do
     summary = @gym.summary_to_json
+
     assert_equal @gym.id, summary[:id]
     assert_equal @gym.name, summary[:name]
     assert_includes summary.keys, :attachments

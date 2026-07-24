@@ -10,12 +10,12 @@ module Api
         @crag = crags(:rocher_des_aures)
         @guide_book_pdf = guide_book_pdfs(:guide_book_pdf_1)
         @guide_book_pdf.pdf_file.attach(
-          io: File.open(Rails.root.join('test/fixtures/files/test.pdf')),
+          io: Rails.root.join('test/fixtures/files/test.pdf').open,
           filename: 'test.pdf',
           content_type: 'application/pdf'
         )
         guide_book_pdfs(:guide_book_pdf_without_user).pdf_file.attach(
-          io: File.open(Rails.root.join('test/fixtures/files/test.pdf')),
+          io: Rails.root.join('test/fixtures/files/test.pdf').open,
           filename: 'test.pdf',
           content_type: 'application/pdf'
         )
@@ -25,11 +25,13 @@ module Api
 
       test 'should get index' do
         get api_v1_guide_book_pdfs_url, params: { crag_id: @crag.id }, headers: @user_headers
+
         assert_response :success
       end
 
       test 'should show guide_book_pdf' do
         get api_v1_guide_book_pdf_url(@guide_book_pdf), headers: @user_headers
+
         assert_response :success
       end
 
@@ -48,8 +50,10 @@ module Api
         patch api_v1_guide_book_pdf_url(@guide_book_pdf),
               params: { guide_book_pdf: { name: 'Updated Topo PDF', pdf_file: pdf_file } },
               headers: @user_headers
+
         assert_response :success
         @guide_book_pdf.reload
+
         assert_equal 'Updated Topo PDF', @guide_book_pdf.name
       end
 

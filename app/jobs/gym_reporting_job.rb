@@ -11,7 +11,7 @@ class GymReportingJob < ApplicationJob
     assigned_gyms = Gym.where.not(assigned_at: nil).pluck(:id)
 
     follower_by_gyms = Follow.select('COUNT(*) AS count, followable_id')
-                             .where('follows.created_at <= ?', end_date.end_of_day)
+                             .where(follows: { created_at: ..end_date.end_of_day })
                              .where(followable_type: 'Gym')
                              .where(followable_id: assigned_gyms)
                              .group('followable_id')

@@ -11,8 +11,10 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_label_fonts_url, headers: @headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_not_empty json_response
         assert_includes json_response.keys, 'lato'
       end

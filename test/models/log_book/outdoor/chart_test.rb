@@ -14,6 +14,7 @@ module LogBook
 
       test 'climb_type returns correct structure' do
         data = @chart.climb_type
+
         assert_includes data.keys, :datasets
         assert_includes data.keys, :labels
         assert_equal Climb::CRAG_LIST, data[:labels]
@@ -21,6 +22,7 @@ module LogBook
 
       test 'grade returns correct structure' do
         data = @chart.grade
+
         assert_includes data.keys, :datasets
         assert_includes data.keys, :labels
         assert_equal 27, data[:labels].size
@@ -28,18 +30,21 @@ module LogBook
 
       test 'years returns correct structure' do
         data = @chart.years
+
         assert_includes data.keys, :datasets
         assert_includes data.keys, :labels
       end
 
       test 'months returns correct structure' do
         data = @chart.months
+
         assert_includes data.keys, :datasets
         assert_includes data.keys, :labels
       end
 
       test 'evolution_by_year returns correct structure' do
         data = @chart.evolution_by_year
+
         assert_includes data.keys, :datasets
         assert_includes data.keys, :labels
       end

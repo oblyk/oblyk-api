@@ -11,6 +11,7 @@ class AlertSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @alert.id, attributes['id']
     assert_equal @alert.app_path, attributes['app_path']
     assert_equal @alert.description, attributes['description']
@@ -22,6 +23,7 @@ class AlertSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the history attribute' do
     history = @serialization['data']['attributes']['history']
+
     assert_equal @alert.created_at.as_json, history['created_at']
     assert_equal @alert.updated_at.as_json, history['updated_at']
   end
@@ -32,6 +34,7 @@ class AlertSerializerTest < ActiveSupport::TestCase
 
     assert_not_nil serialization['included']
     alertable_include = serialization['included'].find { |inc| inc['type'] == 'crag' }
+
     assert_not_nil alertable_include
     assert_equal @alert.alertable_id.to_s, alertable_include['id']
   end

@@ -12,7 +12,7 @@ module Api
 
       def create
         already_subscribe = Subscribe.find_by email: subscribe_params[:email]
-        head :no_content && return if already_subscribe
+        return head :no_content if already_subscribe
 
         @subscribe = Subscribe.new(subscribe_params)
         if @subscribe.save
@@ -24,7 +24,7 @@ module Api
 
       def destroy
         @subscribe = Subscribe.find_by email: subscribe_params[:email]
-        head :no_content && return unless @subscribe
+        return head :no_content unless @subscribe
 
         if @subscribe&.destroy
           head :no_content

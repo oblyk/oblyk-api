@@ -11,6 +11,7 @@ class NotificationSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @notification.id, attributes['id']
     assert_equal @notification.notification_type, attributes['notification_type']
     assert_equal @notification.notifiable_type, attributes['notifiable_type']
@@ -21,6 +22,7 @@ class NotificationSerializerTest < ActiveSupport::TestCase
     else
       assert_equal @notification.read_at.as_json, attributes['read_at']
     end
+
     assert_equal @notification.name, attributes['name']
     assert_equal @notification.app_path, attributes['app_path']
     assert_equal @notification.created_at.as_json, attributes['history']['created_at']
@@ -29,6 +31,7 @@ class NotificationSerializerTest < ActiveSupport::TestCase
 
   test 'It contains relationships' do
     relationships = @serialization['data']['relationships']
+
     assert_not_nil relationships['notifiable']
     assert_equal @notification.notifiable_id, relationships['notifiable']['data']['id'].to_i
     assert_equal @notification.notifiable_type, relationships['notifiable']['data']['type'].underscore.camelize

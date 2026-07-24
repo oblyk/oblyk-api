@@ -12,44 +12,51 @@ class ContestParticipantTest < ActiveSupport::TestCase
   end
 
   test 'participant is valid' do
-    assert @participant_1.valid?
+    assert_predicate @participant_1, :valid?
   end
 
   test 'participant is invalid without mandatory fields' do
     @participant_1.first_name = nil
+
     assert_not @participant_1.valid?
     assert_includes @participant_1.errors.attribute_names, :first_name
 
     @participant_1.first_name = 'Jean'
     @participant_1.last_name = nil
+
     assert_not @participant_1.valid?
     assert_includes @participant_1.errors.attribute_names, :last_name
 
     @participant_1.last_name = 'Dujardin'
     @participant_1.date_of_birth = nil
+
     assert_not @participant_1.valid?
     assert_includes @participant_1.errors.attribute_names, :date_of_birth
   end
 
   test 'participant is invalid with wrong genre' do
     @participant_1.genre = 'other'
+
     assert_not @participant_1.valid?
     assert_includes @participant_1.errors.attribute_names, :genre
   end
 
   test 'age returns expected value' do
     @participant_1.date_of_birth = 20.years.ago.to_date
+
     assert_equal 20, @participant_1.age
   end
 
   test 'slug_name returns parameterized name' do
     @participant_1.first_name = 'Jean-Luc'
     @participant_1.last_name = 'D-Humieres'
+
     assert_equal 'jean-luc-d-humieres', @participant_1.slug_name
   end
 
   test 'participant is invalid if too young' do
     @participant_1.date_of_birth = 2.years.ago.to_date
+
     assert_not @participant_1.valid?
     assert_includes @participant_1.errors.full_messages.to_s, '3 ans ou plus'
   end
@@ -62,6 +69,7 @@ class ContestParticipantTest < ActiveSupport::TestCase
       genre: 'male',
       contest_category: @category_senior
     )
+
     assert_not participant.valid?
     assert_includes participant.errors.full_messages.to_s, "pas s'inscrire en Senior"
   end
@@ -75,6 +83,7 @@ class ContestParticipantTest < ActiveSupport::TestCase
       genre: 'female',
       contest_category: @category_senior
     )
+
     assert_not participant.valid?
     assert_includes participant.errors.full_messages.to_s, 'contest_is_complete'
   end
@@ -88,6 +97,7 @@ class ContestParticipantTest < ActiveSupport::TestCase
       contest_category: @category_senior,
       skip_subscription_mail: true
     )
+
     assert_not_nil participant.token
     assert participant.token.start_with?('nouveau.')
   end
@@ -99,12 +109,14 @@ class ContestParticipantTest < ActiveSupport::TestCase
       date_of_birth: @participant_1.date_of_birth,
       contest_category: @category_senior
     )
+
     assert_not participant.valid?
     assert_includes participant.errors.full_messages.to_s, 'participant_is_already_registered'
   end
 
   test 'summary_to_json returns expected keys' do
     json = @participant_1.summary_to_json
+
     assert_equal @participant_1.id, json[:id]
     assert_equal @participant_1.first_name, json[:first_name]
     assert_includes json.keys, :token

@@ -10,7 +10,6 @@ class ContestRoute < ApplicationRecord
   has_one :contest_stage_step, through: :contest_route_group
   has_one :contest_stage, through: :contest_stage_step
   has_many :contest_participant_ascents, dependent: :destroy
-  has_many :contest_participant_ascents, dependent: :destroy
   has_many :contest_judge_routes, dependent: :destroy
   has_many :contest_judges, through: :contest_judge_routes
 
@@ -18,8 +17,8 @@ class ContestRoute < ApplicationRecord
   validates :number_of_holds, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_blank: true
 
   before_validation :set_contest
-  after_save :delete_caches
   after_destroy :delete_caches
+  after_save :delete_caches
 
   default_scope { order(:number) }
 

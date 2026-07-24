@@ -8,16 +8,18 @@ class LocalityTest < ActiveSupport::TestCase
   end
 
   test 'locality is valid' do
-    assert @locality.valid?
+    assert_predicate @locality, :valid?
   end
 
   test 'locality is invalid without name' do
     @locality.name = nil
-    assert @locality.invalid?
+
+    assert_predicate @locality, :invalid?
   end
 
   test 'summary_to_json returns expected keys' do
     json = @locality.summary_to_json
+
     assert_equal @locality.id, json[:id]
     assert_equal @locality.name, json[:name]
     assert_equal @locality.code_country, json[:code_country]
@@ -25,6 +27,7 @@ class LocalityTest < ActiveSupport::TestCase
 
   test 'to_geo_json returns GeoJSON format' do
     geo_json = @locality.to_geo_json
+
     assert_equal 'Feature', geo_json[:type]
     assert_equal 'Point', geo_json[:geometry][:type]
     assert_equal @locality.longitude.to_f, geo_json[:geometry][:coordinates][0]

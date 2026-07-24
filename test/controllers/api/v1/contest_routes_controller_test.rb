@@ -19,11 +19,13 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_contest_contest_routes_url(@gym, @contest), headers: @public_headers
+
         assert_response :success
       end
 
       test 'should show contest_route' do
         get api_v1_gym_contest_contest_route_url(@gym, @contest, @contest_route), headers: @public_headers
+
         assert_response :success
       end
 
@@ -32,16 +34,20 @@ module Api
             params: { contest_route: { name: 'Updated Route Name' } },
             headers: @admin_headers,
             as: :json
+
         assert_response :success
         @contest_route.reload
+
         assert_equal 'Updated Route Name', @contest_route.name
       end
 
       test 'should disable contest_route' do
         put disable_api_v1_gym_contest_contest_route_url(@gym, @contest, @contest_route),
             headers: @admin_headers, as: :json
+
         assert_response :no_content
         @contest_route.reload
+
         assert_not_nil @contest_route.disabled_at
       end
 
@@ -49,8 +55,10 @@ module Api
         @contest_route.disable!
         put enable_api_v1_gym_contest_contest_route_url(@gym, @contest, @contest_route),
             headers: @admin_headers, as: :json
+
         assert_response :no_content
         @contest_route.reload
+
         assert_nil @contest_route.disabled_at
       end
 
@@ -59,12 +67,14 @@ module Api
         post add_picture_api_v1_gym_contest_contest_route_url(@gym, @contest, @contest_route),
              params: { contest_route: { picture: dummy_file } },
              headers: @admin_headers
+
         assert_response :no_content
       end
 
       test 'should delete picture' do
         delete delete_picture_api_v1_gym_contest_contest_route_url(@gym, @contest, @contest_route),
                headers: @admin_headers, as: :json
+
         assert_response :no_content
       end
 

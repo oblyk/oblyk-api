@@ -19,7 +19,7 @@ module LogBook
         params = { ascent_filter: ['sent'] }
         filtered_ascents = CragFilteredAscents.new(@user, params)
 
-        assert filtered_ascents.ascents.all? { |a| a.ascent_status == 'sent' }
+        assert(filtered_ascents.ascents.all? { |a| a.ascent_status == 'sent' })
       end
     end
   end

@@ -8,16 +8,18 @@ class GymSpaceTest < ActiveSupport::TestCase
   end
 
   test 'gym_space is valid' do
-    assert @gym_space.valid?
+    assert_predicate @gym_space, :valid?
   end
 
   test 'gym_space is invalid without name' do
     @gym_space.name = nil
+
     assert_not @gym_space.valid?
   end
 
   test 'gym_space is invalid with incorrect climbing_type' do
     @gym_space.climbing_type = 'invalid_type'
+
     assert_not @gym_space.valid?
   end
 
@@ -27,6 +29,7 @@ class GymSpaceTest < ActiveSupport::TestCase
 
   test 'gym_space summary_to_json returns correct keys' do
     summary = @gym_space.summary_to_json
+
     assert_equal @gym_space.id, summary[:id]
     assert_equal @gym_space.name, summary[:name]
     assert_includes summary.keys, :gym

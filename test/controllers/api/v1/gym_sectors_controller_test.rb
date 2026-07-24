@@ -15,11 +15,13 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_gym_space_gym_sectors_url(gym_id: @gym.id, gym_space_id: @gym_space.id), headers: @headers
+
         assert_response :success
       end
 
       test 'should show gym sector' do
         get api_v1_gym_gym_space_gym_sector_url(gym_id: @gym.id, gym_space_id: @gym_space.id, id: @gym_sector.id), headers: @headers
+
         assert_response :success
       end
 
@@ -47,8 +49,10 @@ module Api
                 }
               },
               headers: @headers, as: :json
+
         assert_response :success
         @gym_sector.reload
+
         assert_equal 'Updated Sector Name', @gym_sector.name
       end
 
@@ -65,8 +69,10 @@ module Api
               ]
             },
             headers: @headers, as: :json
+
         assert_response :success
         @gym_sector.reload
+
         assert_equal 'Bulk Updated Name', @gym_sector.name
         assert_equal 10, @gym_sector.order
       end
@@ -80,10 +86,11 @@ module Api
       end
 
       test 'should dismount routes in sector' do
-        assert @gym_sector.gym_routes.mounted.count.positive?
+        assert_predicate @gym_sector.gym_routes.mounted.count, :positive?
 
         delete dismount_routes_api_v1_gym_gym_space_gym_sector_url(gym_id: @gym.id, gym_space_id: @gym_space.id, id: @gym_sector.id),
                headers: @headers, as: :json
+
         assert_response :success
         assert_equal 0, @gym_sector.gym_routes.mounted.count
       end
@@ -91,14 +98,17 @@ module Api
       test 'should get last routes with pictures' do
         get last_routes_with_pictures_api_v1_gym_gym_space_gym_sector_url(gym_id: @gym.id, gym_space_id: @gym_space.id, id: @gym_sector.id),
             headers: @headers
+
         assert_response :success
       end
 
       test 'should delete three d path' do
         delete delete_three_d_path_api_v1_gym_gym_space_gym_sector_url(gym_id: @gym.id, gym_space_id: @gym_space.id, id: @gym_sector.id),
                headers: @headers, as: :json
+
         assert_response :no_content
         @gym_sector.reload
+
         assert_nil @gym_sector.three_d_path
       end
     end

@@ -11,6 +11,7 @@ class ColorSystemLineSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @color_system_line.id, attributes['id']
     assert_equal @color_system_line.hex_color, attributes['hex_color']
     assert_equal @color_system_line.order, attributes['order']
@@ -19,7 +20,8 @@ class ColorSystemLineSerializerTest < ActiveSupport::TestCase
   test 'It includes color_system if specified' do
     serializer = ColorSystemLineSerializer.new(@color_system_line, { include: [:color_system] })
     serialization = JSON.parse(serializer.serializable_hash.to_json)
+
     assert_not_nil serialization['included']
-    assert serialization['included'].any? { |inc| inc['type'] == 'color_system' }
+    assert(serialization['included'].any? { |inc| inc['type'] == 'color_system' })
   end
 end

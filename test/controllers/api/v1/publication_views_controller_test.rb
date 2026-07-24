@@ -14,6 +14,7 @@ module Api
         get unread_count_api_v1_publication_views_url,
             params: { publishable_type: 'Crag', publishable_id: crags(:rocher_des_aures).id },
             headers: @user_headers
+
         assert_response :success
       end
 
@@ -21,12 +22,14 @@ module Api
         get unread_count_api_v1_publication_views_url,
             params: { publishable_type: 'User', publishable_id: users(:super_admin_user).id },
             headers: @user_headers
+
         assert_response :success
       end
 
       test 'should get my unread count' do
         get my_unread_count_api_v1_publication_views_url,
             headers: @user_headers
+
         assert_response :success
       end
 
@@ -34,8 +37,9 @@ module Api
         get unread_count_api_v1_publication_views_url,
             params: { publishable_type: 'Crag', publishable_id: crags(:rocher_des_aures).id },
             headers: api_access_token_headers
+
         assert_response :success
-        assert_equal 0, JSON.parse(response.body)
+        assert_equal 0, response.parsed_body
       end
     end
   end

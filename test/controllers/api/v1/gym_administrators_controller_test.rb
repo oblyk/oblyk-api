@@ -16,11 +16,13 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_gym_administrators_url(gym_id: @gym.id), headers: @admin_headers
+
         assert_response :success
       end
 
       test 'should show gym administrator' do
         get api_v1_gym_gym_administrator_url(gym_id: @gym.id, id: @gym_admin.id), headers: @admin_headers
+
         assert_response :success
       end
 
@@ -46,8 +48,10 @@ module Api
                 }
               },
               headers: @admin_headers, as: :json
+
         assert_response :success
         @gym_admin.reload
+
         assert_includes @gym_admin.roles, 'manage_space'
       end
 
@@ -63,6 +67,7 @@ module Api
         put update_feed_last_read_api_v1_gym_gym_administrators_url(gym_id: @gym.id),
             params: { feed_type: 'comment' },
             headers: @user_headers, as: :json
+
         assert_response :no_content
       end
 
@@ -70,6 +75,7 @@ module Api
         get new_in_feeds_api_v1_gym_gym_administrators_url(gym_id: @gym.id),
             params: { feeds: %w[comment video] },
             headers: @user_headers
+
         assert_response :success
       end
 
@@ -82,6 +88,7 @@ module Api
                }
              },
              headers: @user_headers, as: :json
+
         assert_response :forbidden
       end
     end

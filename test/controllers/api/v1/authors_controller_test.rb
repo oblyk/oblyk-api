@@ -16,8 +16,10 @@ module Api
 
       test 'should show author' do
         get api_v1_author_url(@author), headers: @public_headers, as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @author.id, json_response['id']
         assert_equal @author.name, json_response['name']
       end
@@ -32,8 +34,10 @@ module Api
             },
             headers: @user_headers,
             as: :json
+
         assert_response :success
         @author.reload
+
         assert_equal 'Lucien Updated', @author.name
       end
 
@@ -46,6 +50,7 @@ module Api
             },
             headers: @other_user_headers,
             as: :json
+
         assert_response :forbidden
       end
 
@@ -58,6 +63,7 @@ module Api
             },
             headers: @user_headers,
             as: :json
+
         assert_response :unprocessable_content
       end
 
@@ -69,6 +75,7 @@ module Api
                }
              },
              headers: @user_headers
+
         assert_response :success
       end
 
@@ -80,6 +87,7 @@ module Api
                }
              },
              headers: @other_user_headers
+
         assert_response :forbidden
       end
     end

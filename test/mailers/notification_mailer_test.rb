@@ -18,7 +18,7 @@ class NotificationMailerTest < ActionMailer::TestCase
     end
 
     assert_equal [@user.email], email.to
-    assert_match /nouveau message/, email.subject.downcase
+    assert_match(/nouveau message/, email.subject.downcase)
   end
 
   test 'new_message should not send if user has not new_message in email_notifiable_list' do
@@ -58,7 +58,7 @@ class NotificationMailerTest < ActionMailer::TestCase
     end
 
     assert_equal [@user.email], email.to
-    assert_match /nouvelle publication/, email.subject.downcase
+    assert_match(/nouvelle publication/, email.subject.downcase)
   end
 
   test 'new_publications with send_in_blue' do
@@ -90,7 +90,7 @@ class NotificationMailerTest < ActionMailer::TestCase
     end
 
     assert_equal [@user.email], email.to
-    assert_match /souhaite vous suivre/, email.subject.downcase
+    assert_match(/souhaite vous suivre/, email.subject.downcase)
   end
 
   test 'request_for_follow_up with send_in_blue' do
@@ -119,7 +119,7 @@ class NotificationMailerTest < ActionMailer::TestCase
     end
 
     assert_equal [@user.email], email.to
-    assert_match /nouvel article/, email.subject.downcase
+    assert_match(/nouvel article/, email.subject.downcase)
   end
 
   test 'new_article with send_in_blue' do

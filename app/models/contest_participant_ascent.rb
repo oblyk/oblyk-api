@@ -13,8 +13,8 @@ class ContestParticipantAscent < ApplicationRecord
 
   before_save :set_registered_at
 
-  after_destroy :delete_caches
   after_update :delete_caches
+  after_destroy :delete_caches
 
   def summary_to_json
     {

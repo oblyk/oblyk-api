@@ -17,8 +17,10 @@ module Api
       test 'should show gym billing account' do
         get api_v1_gym_gym_billing_account_url(gym_id: @gym.id, id: @billing_account.id),
             headers: @subscription_admin_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @billing_account.email, json_response['email']
       end
 
@@ -52,6 +54,7 @@ module Api
         end
         assert_response :success
         new_gym.reload
+
         assert_not_nil new_gym.gym_billing_account_id
       end
 
@@ -63,14 +66,17 @@ module Api
                 }
               },
               headers: @subscription_admin_headers, as: :json
+
         assert_response :success
         @billing_account.reload
+
         assert_equal 'updated@account.com', @billing_account.email
       end
 
       test 'should not show gym billing account if not authorized' do
         get api_v1_gym_gym_billing_account_url(gym_id: @gym.id, id: @billing_account.id),
             headers: @normal_admin_headers
+
         assert_response :forbidden
       end
 
@@ -82,12 +88,14 @@ module Api
                 }
               },
               headers: @normal_admin_headers, as: :json
+
         assert_response :forbidden
       end
 
       test 'super admin should have access' do
         get api_v1_gym_gym_billing_account_url(gym_id: @gym.id, id: @billing_account.id),
             headers: @super_admin_headers
+
         assert_response :success
       end
       test 'should not create gym billing account with invalid params' do
@@ -98,6 +106,7 @@ module Api
                }
              },
              headers: @subscription_admin_headers, as: :json
+
         assert_response :unprocessable_content
       end
 
@@ -109,6 +118,7 @@ module Api
                 }
               },
               headers: @subscription_admin_headers, as: :json
+
         assert_response :unprocessable_content
       end
     end

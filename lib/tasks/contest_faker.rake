@@ -9,7 +9,7 @@ namespace :contest_faker do
     genres = %w[male female]
     contest = Contest.find args[:contest_id]
     nb_participants = args[:nb_participants].to_i
-    gym_names = Gym.all.pluck(:name)
+    gym_names = Gym.pluck(:name)
     gyms_count = gym_names.size
     categories = contest.contest_categories
     waves = contest.contest_waves
@@ -25,9 +25,9 @@ namespace :contest_faker do
       last_name = Faker::Name.last_name
       affiliation = nil
       wave = nil
-      affiliation = gym_names[rand(0..gyms_count - 1)] if chance(30) # ~30% fo chance to have affiliation
-      category = categories[rand(0..categories.size - 1)]
-      wave = waves[rand(0..waves.size - 1)] if category.waveable
+      affiliation = gym_names[rand(0..(gyms_count - 1))] if chance?(30) # ~30% fo chance? to have affiliation
+      category = categories[rand(0..(categories.size - 1))]
+      wave = waves[rand(0..(waves.size - 1))] if category.waveable
       participant = ContestParticipant.new(
         first_name: first_name,
         last_name: last_name,
@@ -73,9 +73,9 @@ namespace :contest_faker do
       step.contest_route_groups
           .joins(:contest_categories)
           .where(contest_categories: { id: participant.contest_category_id })
-          .each do |contest_route_group|
+          .find_each do |contest_route_group|
         contest_route_group.contest_routes.each do |contest_route|
-          realised = chance(stronger)
+          realised = chance?(stronger)
           ascent = ContestParticipantAscent.find_or_initialize_by contest_participant: participant, contest_route: contest_route
           ascent.realised = realised
           out.puts "  -> #{contest_route.number} : #{realised ? 'fait!' : 'raté ...'}"
@@ -85,7 +85,7 @@ namespace :contest_faker do
     end
   end
 
-  def chance(percent)
+  def chance?(percent)
     rand(1..100) <= percent
   end
 end

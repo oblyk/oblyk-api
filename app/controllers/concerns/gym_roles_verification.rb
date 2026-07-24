@@ -15,7 +15,7 @@ module GymRolesVerification
 
   def can?(role)
     roles = @current_user.gym_administrators.find_by(gym: @gym)&.roles || []
-    return if roles.include?(role)
+    return false if roles.include?(role)
 
     render json: {
       error: 'You do not have the necessary rights to access this resource',

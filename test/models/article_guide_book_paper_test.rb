@@ -8,7 +8,7 @@ class ArticleGuideBookPaperTest < ActiveSupport::TestCase
   end
 
   test 'article_guide_book_paper is valid' do
-    assert @article_guide_book_paper.valid?
+    assert_predicate @article_guide_book_paper, :valid?
   end
 
   test 'article_guide_book_paper has article' do
@@ -23,11 +23,13 @@ class ArticleGuideBookPaperTest < ActiveSupport::TestCase
 
   test 'article_guide_book_paper is invalid without article' do
     @article_guide_book_paper.article = nil
+
     assert_not @article_guide_book_paper.valid?
   end
 
   test 'article_guide_book_paper is invalid without guide_book_paper' do
     @article_guide_book_paper.guide_book_paper = nil
+
     assert_not @article_guide_book_paper.valid?
   end
 
@@ -36,6 +38,7 @@ class ArticleGuideBookPaperTest < ActiveSupport::TestCase
       article: @article_guide_book_paper.article,
       guide_book_paper: @article_guide_book_paper.guide_book_paper
     )
+
     assert_not duplicate.valid?
     assert_includes duplicate.errors.attribute_names, :article
   end

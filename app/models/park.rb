@@ -32,7 +32,7 @@ class Park < ApplicationRecord
         crag_id: crag_id,
         icon: 'park-marker'
       },
-      geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
+      geometry: { type: 'Point', coordinates: [Float(longitude), Float(latitude), 0.0] }
     }
     unless minimalistic
       features[:properties].merge!(

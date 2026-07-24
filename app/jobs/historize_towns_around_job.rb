@@ -5,7 +5,7 @@ class HistorizeTownsAroundJob < ApplicationJob
 
   def perform(latitude, longitude, request_date)
     Town
-      .where('updated_at < ?', request_date)
+      .where(updated_at: ...request_date)
       .where(
         '(population BETWEEN 0 AND 10000 AND ST_DISTANCE_SPHERE(POINT(towns.longitude, towns.latitude), POINT(:longitude, :latitude)) < 10000)
         OR (population BETWEEN 10001 AND 25000 AND ST_DISTANCE_SPHERE(POINT(towns.longitude, towns.latitude), POINT(:longitude, :latitude)) < 15000)

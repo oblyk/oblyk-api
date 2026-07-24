@@ -15,6 +15,7 @@ class PublicationViewsMapperTest < ActiveSupport::TestCase
   test 'returns publications as is if user is nil' do
     publications = [@pub_user, @pub_crag]
     mapper = PublicationViewsMapper.new(publications, nil)
+
     assert_equal publications, mapper.map_publications
   end
 
@@ -37,6 +38,7 @@ class PublicationViewsMapperTest < ActiveSupport::TestCase
   test 'returns the same object when mapping single publication' do
     mapper = PublicationViewsMapper.new(@pub_user, @user)
     result = mapper.map_publications
+
     assert_equal @pub_user.id, result.id
     assert result.viewed
   end

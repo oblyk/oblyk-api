@@ -8,26 +8,31 @@ class LocalityUserTest < ActiveSupport::TestCase
   end
 
   test 'locality user is valid' do
-    assert @locality_user.valid?
+    assert_predicate @locality_user, :valid?
   end
 
   test 'radius is set by default' do
     lu = LocalityUser.new(user: users(:normal_user), locality: localities(:locality_lyon))
     lu.valid?
+
     assert_equal 20, lu.radius
   end
 
   test 'radius must be between 1 and 100' do
     @locality_user.radius = 0
-    assert @locality_user.invalid?
+
+    assert_predicate @locality_user, :invalid?
     @locality_user.radius = 101
-    assert @locality_user.invalid?
+
+    assert_predicate @locality_user, :invalid?
     @locality_user.radius = 50
-    assert @locality_user.valid?
+
+    assert_predicate @locality_user, :valid?
   end
 
   test 'detail_to_json returns expected keys' do
     json = @locality_user.detail_to_json
+
     assert_equal @locality_user.id, json[:id]
     assert_equal @locality_user.user.id, json[:user][:id]
     assert_equal @locality_user.locality_id, json[:locality_id]
@@ -41,6 +46,7 @@ class LocalityUserTest < ActiveSupport::TestCase
     LocalityUser.create!(user: users(:super_admin_user), locality: locality, partner_search: true)
 
     locality.reload
+
     assert_equal initial_count + 1, locality.distinct_users_count
   end
 

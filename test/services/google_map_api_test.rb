@@ -23,6 +23,7 @@ class GoogleMapApiTest < ActiveSupport::TestCase
 
     RestClient.stub :get, mock_response, [expected_url, expected_params] do
       result = GoogleMapApi.elevations(coordinates)
+
       assert_equal [{ 'elevation' => 100 }, { 'elevation' => 200 }], result
     end
 
@@ -37,6 +38,7 @@ class GoogleMapApiTest < ActiveSupport::TestCase
 
     RestClient.stub :get, mock_response do
       result = GoogleMapApi.elevations(coordinates)
+
       assert_nil result
     end
 
@@ -48,7 +50,8 @@ class GoogleMapApiTest < ActiveSupport::TestCase
 
     RestClient.stub :get, ->(_url, _params) { raise StandardError } do
       result = GoogleMapApi.elevations(coordinates)
-      assert_equal false, result
+
+      assert_not result
     end
   end
 
@@ -71,6 +74,7 @@ class GoogleMapApiTest < ActiveSupport::TestCase
 
     RestClient.stub :get, mock_response, [expected_url, expected_params] do
       result = GoogleMapApi.places(query)
+
       assert_equal [{ 'name' => 'Grenoble' }], result
     end
 
@@ -83,6 +87,7 @@ class GoogleMapApiTest < ActiveSupport::TestCase
 
     RestClient.stub :get, mock_response do
       result = GoogleMapApi.places('Grenoble')
+
       assert_nil result
     end
 
@@ -92,7 +97,8 @@ class GoogleMapApiTest < ActiveSupport::TestCase
   test 'places returns false if an error occurs' do
     RestClient.stub :get, ->(_url, _params) { raise StandardError } do
       result = GoogleMapApi.places('Grenoble')
-      assert_equal false, result
+
+      assert_not result
     end
   end
 
@@ -115,6 +121,7 @@ class GoogleMapApiTest < ActiveSupport::TestCase
 
     RestClient.stub :get, mock_response, [expected_url, expected_params] do
       result = GoogleMapApi.reverse_geocoding(lat, lng)
+
       assert_equal [{ 'formatted_address' => 'Grenoble' }], result
     end
 
@@ -127,6 +134,7 @@ class GoogleMapApiTest < ActiveSupport::TestCase
 
     RestClient.stub :get, mock_response do
       result = GoogleMapApi.reverse_geocoding(45.1, 5.1)
+
       assert_nil result
     end
 
@@ -136,7 +144,8 @@ class GoogleMapApiTest < ActiveSupport::TestCase
   test 'reverse_geocoding returns false if an error occurs' do
     RestClient.stub :get, ->(_url, _params) { raise StandardError } do
       result = GoogleMapApi.reverse_geocoding(45.1, 5.1)
-      assert_equal false, result
+
+      assert_not result
     end
   end
 end
