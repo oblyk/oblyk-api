@@ -4,11 +4,11 @@ require 'test_helper'
 
 class GymLabelFontTest < ActiveSupport::TestCase
   test 'GymLabelFont::FONTS is a hash' do
-    assert GymLabelFont::FONTS.is_a?(Hash)
+    assert_kind_of Hash, GymLabelFont::FONTS
   end
 
   test 'GymLabelFont::FONTS is frozen' do
-    assert GymLabelFont::FONTS.frozen?
+    assert_predicate GymLabelFont::FONTS, :frozen?
   end
 
   test 'GymLabelFont::FONTS contains expected keys' do
@@ -23,11 +23,12 @@ class GymLabelFontTest < ActiveSupport::TestCase
       unbounded
       black_ops_one
     ]
+
     assert_equal expected_keys.sort, GymLabelFont::FONTS.keys.sort
   end
 
   test 'each font in GymLabelFont::FONTS has required attributes' do
-    GymLabelFont::FONTS.each do |_key, font|
+    GymLabelFont::FONTS.each_value do |font|
       assert font.key?(:name)
       assert font.key?(:query)
       assert font.key?(:ref)
@@ -38,8 +39,8 @@ class GymLabelFontTest < ActiveSupport::TestCase
   end
 
   test 'each font svg_preview is a string starting with <svg' do
-    GymLabelFont::FONTS.each do |_key, font|
-      assert font[:svg_preview].is_a?(String)
+    GymLabelFont::FONTS.each_value do |font|
+      assert_kind_of String, font[:svg_preview]
       assert font[:svg_preview].start_with?('<svg')
     end
   end

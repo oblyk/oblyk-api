@@ -7,7 +7,7 @@ class HistorizeParkStaticMapJob < ApplicationJob
     park = Park.find park_id
 
     # static map
-    url = "https://api.mapbox.com/styles/v1/#{ENV['MAPBOX_STATIC_MAP_STYLE']}/static/pin-l+2e3436(#{park.longitude},#{park.latitude})/#{park.longitude},#{park.latitude},13/200x200?access_token=#{ENV['MAPBOX_TOKEN']}"
+    url = "https://api.mapbox.com/styles/v1/#{ENV.fetch('MAPBOX_STATIC_MAP_STYLE', nil)}/static/pin-l+2e3436(#{park.longitude},#{park.latitude})/#{park.longitude},#{park.latitude},13/200x200?access_token=#{ENV.fetch('MAPBOX_TOKEN', nil)}"
     mapbox_static_map = URI.open(url)
     park.static_map.attach(io: mapbox_static_map, filename: "#{park.id}-static-park-map.png", content_type: 'image/png')
 

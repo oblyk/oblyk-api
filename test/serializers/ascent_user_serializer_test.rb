@@ -11,6 +11,7 @@ class AscentUserSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @ascent_user.id, attributes['id']
 
     assert_not_nil attributes['history']
@@ -21,7 +22,8 @@ class AscentUserSerializerTest < ActiveSupport::TestCase
   test 'It may include user if specified' do
     serializer = AscentUserSerializer.new(@ascent_user, { include: [:user] })
     serialization = JSON.parse(serializer.serializable_hash.to_json)
+
     assert_not_nil serialization['included']
-    assert serialization['included'].any? { |inc| inc['type'] == 'user' }
+    assert(serialization['included'].any? { |inc| inc['type'] == 'user' })
   end
 end

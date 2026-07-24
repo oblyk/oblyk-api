@@ -78,7 +78,7 @@ module Api
             end
           end
 
-          render json: stats_by_gyms.map { |stats_by_gyms| stats_by_gyms[1] }, status: :ok
+          render json: stats_by_gyms.pluck(1), status: :ok
         end
 
         private

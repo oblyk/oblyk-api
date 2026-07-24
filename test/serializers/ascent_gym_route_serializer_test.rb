@@ -11,6 +11,7 @@ class AscentGymRouteSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @ascent_gym_route.id, attributes['id']
     assert_equal @ascent_gym_route.ascent_status, attributes['ascent_status']
     assert_equal @ascent_gym_route.gym_route_id, attributes['gym_route_id']
@@ -27,6 +28,7 @@ class AscentGymRouteSerializerTest < ActiveSupport::TestCase
     assert_equal @ascent_gym_route.climbing_type, attributes['climbing_type']
 
     expected_points = JSON.parse(@ascent_gym_route.points.to_json)
+
     assert_equal expected_points, attributes['points']
 
     assert_not_nil attributes['history']
@@ -40,6 +42,7 @@ class AscentGymRouteSerializerTest < ActiveSupport::TestCase
       serializer = AscentGymRouteSerializer.new(@ascent_gym_route)
       serialization = JSON.parse(serializer.serializable_hash.to_json)
       ascent_comment_attr = serialization['data']['attributes']['ascent_comment']
+
       assert_not_nil ascent_comment_attr
       assert_equal comment.id, ascent_comment_attr['id']
       assert_equal comment.body, ascent_comment_attr['body']
@@ -49,21 +52,24 @@ class AscentGymRouteSerializerTest < ActiveSupport::TestCase
   test 'It may include gym_route if specified' do
     serializer = AscentGymRouteSerializer.new(@ascent_gym_route, { include: [:gym_route] })
     serialization = JSON.parse(serializer.serializable_hash.to_json)
+
     assert_not_nil serialization['included']
-    assert serialization['included'].any? { |inc| inc['type'] == 'gym_route' }
+    assert(serialization['included'].any? { |inc| inc['type'] == 'gym_route' })
   end
 
   test 'It may include gym if specified' do
     serializer = AscentGymRouteSerializer.new(@ascent_gym_route, { include: [:gym] })
     serialization = JSON.parse(serializer.serializable_hash.to_json)
+
     assert_not_nil serialization['included']
-    assert serialization['included'].any? { |inc| inc['type'] == 'gym' }
+    assert(serialization['included'].any? { |inc| inc['type'] == 'gym' })
   end
 
   test 'It may include user if specified' do
     serializer = AscentGymRouteSerializer.new(@ascent_gym_route, { include: [:user] })
     serialization = JSON.parse(serializer.serializable_hash.to_json)
+
     assert_not_nil serialization['included']
-    assert serialization['included'].any? { |inc| inc['type'] == 'user' }
+    assert(serialization['included'].any? { |inc| inc['type'] == 'user' })
   end
 end

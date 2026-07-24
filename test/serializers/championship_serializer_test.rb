@@ -11,6 +11,7 @@ class ChampionshipSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @championship.id, attributes['id']
     assert_equal @championship.name, attributes['name']
     if @championship.slug_name.nil?
@@ -23,6 +24,7 @@ class ChampionshipSerializerTest < ActiveSupport::TestCase
     else
       assert_equal @championship.description, attributes['description']
     end
+
     assert_equal @championship.gym_id, attributes['gym_id']
     assert_equal @championship.combined_ranking_type, attributes['combined_ranking_type']
     if @championship.archived_at.nil?
@@ -34,11 +36,13 @@ class ChampionshipSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the contests_count attribute' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @championship.contests.size, attributes['contests_count']
   end
 
   test 'It contains the history attribute' do
     history = @serialization['data']['attributes']['history']
+
     assert_equal @championship.created_at.as_json, history['created_at']
     assert_equal @championship.updated_at.as_json, history['updated_at']
   end
@@ -46,12 +50,14 @@ class ChampionshipSerializerTest < ActiveSupport::TestCase
   test 'It may include contests if specified' do
     serializer = ChampionshipSerializer.new(@championship, { include: [:contests] })
     serialization = JSON.parse(serializer.serializable_hash.to_json)
+
     assert_not_nil serialization['included']
-    assert serialization['included'].any? { |inc| inc['type'] == 'contest' }
+    assert(serialization['included'].any? { |inc| inc['type'] == 'contest' })
   end
 
   test 'banner_attachment returns correct structure' do
     banner = ChampionshipSerializer.banner_attachment(@championship)
+
     assert_kind_of Hash, banner
     assert banner.key?(:attached)
   end
@@ -59,6 +65,7 @@ class ChampionshipSerializerTest < ActiveSupport::TestCase
   test 'avatar_attachment returns same as banner_attachment' do
     avatar = ChampionshipSerializer.avatar_attachment(@championship)
     banner = ChampionshipSerializer.banner_attachment(@championship)
+
     assert_equal banner, avatar
   end
 

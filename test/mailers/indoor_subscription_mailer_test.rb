@@ -25,7 +25,7 @@ class IndoorSubscriptionMailerTest < ActionMailer::TestCase
     end
 
     assert_equal ['contact@oblyk.org'], email.to
-    assert_match /#{@gym.name}/, email.subject
+    assert_match(/#{@gym.name}/, email.subject)
   end
 
   test 'start_trial_period with send_in_blue' do
@@ -50,7 +50,7 @@ class IndoorSubscriptionMailerTest < ActionMailer::TestCase
     end
 
     assert_equal ['contact@oblyk.org'], email.to
-    assert_match /#{@gym.name}/, email.subject
+    assert_match(/#{@gym.name}/, email.subject)
   end
 
   test 'trial_period_ends_soon with send_in_blue' do
@@ -75,7 +75,7 @@ class IndoorSubscriptionMailerTest < ActionMailer::TestCase
     end
 
     assert_equal ['contact@oblyk.org'], email.to
-    assert_match /#{@gym.name}/, email.subject
+    assert_match(/#{@gym.name}/, email.subject)
   end
 
   test 'trial_period_ends_tomorrow with send_in_blue' do
@@ -100,7 +100,7 @@ class IndoorSubscriptionMailerTest < ActionMailer::TestCase
     end
 
     assert_equal ['contact@oblyk.org'], email.to
-    assert_match /#{@gym.name}/, email.subject
+    assert_match(/#{@gym.name}/, email.subject)
   end
 
   test 'start_indoor_subscription with send_in_blue' do
@@ -125,7 +125,7 @@ class IndoorSubscriptionMailerTest < ActionMailer::TestCase
     end
 
     assert_equal ['contact@oblyk.org'], email.to
-    assert_match /#{@gym.name}/, email.subject
+    assert_match(/#{@gym.name}/, email.subject)
   end
 
   test 'cancel_indoor_subscription with send_in_blue' do
@@ -150,7 +150,7 @@ class IndoorSubscriptionMailerTest < ActionMailer::TestCase
     end
 
     assert_equal ['contact@oblyk.org'], email.to
-    assert_match /#{@gym.name}/, email.subject
+    assert_match(/#{@gym.name}/, email.subject)
   end
 
   test 'un_cancel_indoor_subscription with send_in_blue' do
@@ -175,7 +175,7 @@ class IndoorSubscriptionMailerTest < ActionMailer::TestCase
     end
 
     assert_equal ['contact@oblyk.org'], email.to
-    assert_match /#{@gym.name}/, email.subject
+    assert_match(/#{@gym.name}/, email.subject)
   end
 
   test 'end_indoor_subscription with send_in_blue' do

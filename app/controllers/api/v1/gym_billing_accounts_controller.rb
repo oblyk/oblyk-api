@@ -4,6 +4,7 @@ module Api
   module V1
     class GymBillingAccountsController < ApiController
       include Gymable
+
       before_action -> { can? GymRole::MANAGE_SUBSCRIPTION }
       before_action :set_gym_billing_account, only: %i[show update]
 

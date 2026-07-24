@@ -14,7 +14,7 @@ class MyCompetTest < ActiveSupport::TestCase
     mock_response = Minitest::Mock.new
     mock_response.expect :body, { 'success' => true }.to_json
 
-    expected_url = "#{ENV['MY_COMPET_BASE_URL']}/demandeAssociation"
+    expected_url = "#{ENV.fetch('MY_COMPET_BASE_URL', nil)}/demandeAssociation"
     expected_payload = {
       idPersonne: @user_application.user.uuid,
       nom: @user_application.user.full_name,
@@ -22,11 +22,12 @@ class MyCompetTest < ActiveSupport::TestCase
     }.to_json
     expected_headers = {
       content_type: :json,
-      authorization: ENV['MY_COMPET_TOKEN']
+      authorization: ENV.fetch('MY_COMPET_TOKEN', nil)
     }
 
     RestClient.stub :post, mock_response, [expected_url, expected_payload, expected_headers] do
       result = MyCompet.association_request(@user_application)
+
       assert_equal({ 'success' => true }, result)
     end
     assert_mock mock_response
@@ -35,7 +36,8 @@ class MyCompetTest < ActiveSupport::TestCase
   test 'association_request returns false when RestClient raises ExceptionWithResponse' do
     RestClient.stub :post, ->(_url, _payload, _headers) { raise RestClient::ExceptionWithResponse } do
       result = MyCompet.association_request(@user_application)
-      assert_equal false, result
+
+      assert_not result
     end
   end
 
@@ -43,15 +45,16 @@ class MyCompetTest < ActiveSupport::TestCase
     mock_response = Minitest::Mock.new
     mock_response.expect :body, { 'url' => 'http://example.com' }.to_json
 
-    expected_url = "#{ENV['MY_COMPET_BASE_URL']}/urlCompetition"
+    expected_url = "#{ENV.fetch('MY_COMPET_BASE_URL', nil)}/urlCompetition"
     expected_payload = { idCompetition: @ffme_contest.contest_id }.to_json
     expected_headers = {
       content_type: :json,
-      authorization: ENV['MY_COMPET_TOKEN']
+      authorization: ENV.fetch('MY_COMPET_TOKEN', nil)
     }
 
     RestClient.stub :post, mock_response, [expected_url, expected_payload, expected_headers] do
       result = MyCompet.link(@ffme_contest)
+
       assert_equal({ 'url' => 'http://example.com' }, result)
     end
     assert_mock mock_response
@@ -63,6 +66,7 @@ class MyCompetTest < ActiveSupport::TestCase
 
     RestClient.stub :post, mock_response do
       result = MyCompet.create_contest(@ffme_contest)
+
       assert_equal({ 'idFFME' => 123 }, result)
     end
     assert_mock mock_response
@@ -74,6 +78,7 @@ class MyCompetTest < ActiveSupport::TestCase
 
     RestClient.stub :post, mock_response do
       result = MyCompet.update_contest(@ffme_contest)
+
       assert_equal({ 'success' => true }, result)
     end
     assert_mock mock_response
@@ -102,9 +107,11 @@ class MyCompetTest < ActiveSupport::TestCase
     ContestService::Result.stub :new, mock_result_service do
       RestClient.stub :post, mock_response do
         result = MyCompet.send_results(@ffme_contest)
+
         assert_equal({ 'success' => true }, result)
       end
     end
+
     assert_mock mock_response
     assert_mock mock_result_service
   end
@@ -113,10 +120,11 @@ class MyCompetTest < ActiveSupport::TestCase
     mock_response = Minitest::Mock.new
     mock_response.expect :body, { 'idFFME' => 123 }.to_json
 
-    expected_url = "#{ENV['MY_COMPET_BASE_URL']}/creationCompetition"
+    expected_url = "#{ENV.fetch('MY_COMPET_BASE_URL', nil)}/creationCompetition"
     RestClient.stub :post, lambda { |url, payload, _headers|
       assert_equal expected_url, url
       data = JSON.parse(payload)
+
       assert_equal @ffme_contest.contest_id, data['idCompetition']
       assert_equal @ffme_contest.name, data['complement']
       assert_equal @ffme_contest.ffme_contest_type, data['type']
@@ -125,6 +133,7 @@ class MyCompetTest < ActiveSupport::TestCase
     } do
       MyCompet.update_or_create_contest(@ffme_contest, mode: :create)
     end
+
     assert_mock mock_response
   end
 end

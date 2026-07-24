@@ -8,17 +8,19 @@ class AuthorTest < ActiveSupport::TestCase
   end
 
   test 'author is valid' do
-    assert @author.valid?
+    assert_predicate @author, :valid?
   end
 
   test 'author is invalid without name' do
     @author.name = nil
+
     assert_not @author.valid?
     assert_includes @author.errors.attribute_names, :name
   end
 
   test 'author is invalid without description' do
     @author.description = nil
+
     assert_not @author.valid?
     assert_includes @author.errors.attribute_names, :description
   end
@@ -30,6 +32,7 @@ class AuthorTest < ActiveSupport::TestCase
 
   test 'summary_to_json returns expected keys' do
     json = @author.summary_to_json
+
     assert_equal @author.id, json[:id]
     assert_equal @author.name, json[:name]
     assert_equal @author.description, json[:description]
@@ -39,6 +42,7 @@ class AuthorTest < ActiveSupport::TestCase
 
   test 'detail_to_json returns expected keys' do
     json = @author.detail_to_json
+
     assert_equal @author.id, json[:id]
     assert_equal @author.name, json[:name]
     assert_equal @author.description, json[:description]
@@ -50,6 +54,7 @@ class AuthorTest < ActiveSupport::TestCase
   test 'description is stripped of tags before validation' do
     @author.description = '<b>Grimpant</b>'
     @author.save
+
     assert_equal 'Grimpant', @author.description
   end
 end

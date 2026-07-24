@@ -8,16 +8,18 @@ class GymThreeDAssetTest < ActiveSupport::TestCase
   end
 
   test 'gym_three_d_asset is valid' do
-    assert @gym_three_d_asset.valid?
+    assert_predicate @gym_three_d_asset, :valid?
   end
 
   test 'gym_three_d_asset is invalid without name' do
     @gym_three_d_asset.name = nil
+
     assert_not @gym_three_d_asset.valid?
   end
 
   test 'summary_to_json returns correct keys' do
     summary = @gym_three_d_asset.summary_to_json
+
     assert_equal @gym_three_d_asset.id, summary[:id]
     assert_equal @gym_three_d_asset.name, summary[:name]
     assert_includes summary.keys, :three_d_gltf_url

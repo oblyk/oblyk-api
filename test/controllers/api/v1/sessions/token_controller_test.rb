@@ -23,7 +23,8 @@ module Api
                as: :json
 
           assert_response :created
-          json_response = JSON.parse(response.body)
+          json_response = response.parsed_body
+
           assert_not_nil json_response['token']
           assert_not_nil json_response['refresh_token']
         end

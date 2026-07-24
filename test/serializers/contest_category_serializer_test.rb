@@ -11,6 +11,7 @@ class ContestCategorySerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @category.id, attributes['id']
     assert_equal @category.name, attributes['name']
 
@@ -29,7 +30,8 @@ class ContestCategorySerializerTest < ActiveSupport::TestCase
   test 'It includes contest if specified' do
     serializer = ContestCategorySerializer.new(@category, { include: [:contest] })
     serialization = JSON.parse(serializer.serializable_hash.to_json)
+
     assert_not_nil serialization['included']
-    assert serialization['included'].any? { |inc| inc['type'] == 'contest' }
+    assert(serialization['included'].any? { |inc| inc['type'] == 'contest' })
   end
 end

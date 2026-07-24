@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class MapQuestElevationApi
-
   # @param [Array] coordinates
   def self.elevations(coordinates)
     float_coordinates = []

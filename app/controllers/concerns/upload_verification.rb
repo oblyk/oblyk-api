@@ -14,7 +14,7 @@ module UploadVerification
                     end
     errors = []
     errors << 'no_file' if file.class&.name != 'ActionDispatch::Http::UploadedFile'
-    errors << 'file_wrong_format' if !defined?(file.content_type) || !content_types.include?(file.content_type)
+    errors << 'file_wrong_format' if !defined?(file.content_type) || content_types.exclude?(file.content_type)
 
     return true unless errors.size.positive?
 

@@ -11,6 +11,7 @@ class VideoSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @video.id, attributes['id']
     assert_equal @video.url, attributes['url']
     assert_equal @video.description, attributes['description']
@@ -62,6 +63,7 @@ class VideoSerializerTest < ActiveSupport::TestCase
 
   test 'It contains relationships' do
     relationships = @serialization['data']['relationships']
+
     assert_not_nil relationships['viewable']
     assert_not_nil relationships['user']
   end

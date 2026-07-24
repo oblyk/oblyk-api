@@ -15,11 +15,13 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_gym_space_groups_url(gym_id: @gym.id), headers: @user_headers
+
         assert_response :success
       end
 
       test 'should show gym space group' do
         get api_v1_gym_gym_space_group_url(gym_id: @gym.id, id: @gym_space_group.id), headers: @user_headers
+
         assert_response :success
       end
 
@@ -45,8 +47,10 @@ module Api
                 }
               },
               headers: @user_headers, as: :json
+
         assert_response :success
         @gym_space_group.reload
+
         assert_equal 'Updated Name', @gym_space_group.name
       end
 
@@ -66,6 +70,7 @@ module Api
                }
              },
              headers: @other_user_headers, as: :json
+
         assert_response :forbidden
       end
     end

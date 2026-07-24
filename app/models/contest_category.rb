@@ -50,8 +50,8 @@ class ContestCategory < ApplicationRecord
 
   before_validation :set_order
   before_validation :normalize_attributes
-  after_save :delete_caches
   after_destroy :delete_caches
+  after_save :delete_caches
 
   validates :name, presence: true
   validates :registration_obligation, inclusion: { in: OBLIGATION_LIST }, allow_nil: true
@@ -202,6 +202,6 @@ class ContestCategory < ApplicationRecord
 
   def validate_capacity
     errors.add(:capacity, 'must_be_specified') if capacity.blank?
-    errors.add(:capacity, 'cannot_be_odd') if capacity.present? && !capacity&.even?
+    errors.add(:capacity, 'cannot_be_odd') if capacity.present? && capacity&.odd?
   end
 end

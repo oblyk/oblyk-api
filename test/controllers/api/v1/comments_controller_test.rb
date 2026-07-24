@@ -20,24 +20,30 @@ module Api
 
       test 'should get index' do
         get api_v1_comments_url, params: { commentable_type: 'Crag', commentable_id: @crag.id }, headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Hash, json_response
         assert json_response.key?('data')
       end
 
       test 'should get comments for a comment (replies)' do
         get comments_api_v1_comment_url(@comment), headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Hash, json_response
         assert json_response.key?('data')
       end
 
       test 'should show comment' do
         get api_v1_comment_url(@comment), headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @comment.body, json_response['data']['attributes']['body']
       end
 
@@ -62,8 +68,10 @@ module Api
             params: { comment: { body: 'Updated body' } },
             headers: @user_headers,
             as: :json
+
         assert_response :success
         @comment.reload
+
         assert_equal 'Updated body', @comment.body
       end
 
@@ -73,6 +81,7 @@ module Api
             params: { comment: { body: 'Try to update' } },
             headers: other_user_headers,
             as: :json
+
         assert_response :forbidden
       end
 
@@ -101,6 +110,7 @@ module Api
 
         assert_response :no_content
         gym_comment.reload
+
         assert_not_nil gym_comment.moderated_at
       end
 

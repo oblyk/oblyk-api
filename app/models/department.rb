@@ -107,7 +107,7 @@ class Department < ApplicationRecord
         country_code: country.code_country,
         country_slug_name: country.slug_name
       },
-      geometry: { type: 'Polygon', "coordinates": geo_polygon }
+      geometry: { type: 'Polygon', coordinates: geo_polygon }
     }
   end
 end

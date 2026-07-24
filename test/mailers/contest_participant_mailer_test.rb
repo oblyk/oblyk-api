@@ -56,15 +56,15 @@ class ContestParticipantMailerTest < ActionMailer::TestCase
 
     assert_equal [@contest_participant.email], email.to
     assert_equal "#{@contest.name}, votre inscription", email.subject
-    assert_match /Bonjour #{@contest_participant.first_name}/, email.html_part.body.to_s
-    assert_match /votre inscription/i, email.html_part.body.to_s
-    assert_match /#{@contest.name}/, email.html_part.body.to_s
-    assert_match /#{@contest_participant.token}/, email.html_part.body.to_s
-    assert_match /#{Regexp.escape(@gym.name.titleize)}/, email.html_part.body.to_s
+    assert_match(/Bonjour #{@contest_participant.first_name}/, email.html_part.body.to_s)
+    assert_match(/votre inscription/i, email.html_part.body.to_s)
+    assert_match(/#{@contest.name}/, email.html_part.body.to_s)
+    assert_match(/#{@contest_participant.token}/, email.html_part.body.to_s)
+    assert_match(/#{Regexp.escape(@gym.name.titleize)}/, email.html_part.body.to_s)
 
-    assert_match /Bonjour #{@contest_participant.first_name}/, email.text_part.body.to_s
-    assert_match /#{@contest_participant.token}/, email.text_part.body.to_s
-    assert_match /#{Regexp.escape(@gym.name.titleize)}/, email.text_part.body.to_s
+    assert_match(/Bonjour #{@contest_participant.first_name}/, email.text_part.body.to_s)
+    assert_match(/#{@contest_participant.token}/, email.text_part.body.to_s)
+    assert_match(/#{Regexp.escape(@gym.name.titleize)}/, email.text_part.body.to_s)
   end
 
   test 'subscribe sends email with SendInBlue' do

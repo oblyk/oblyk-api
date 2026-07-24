@@ -31,6 +31,7 @@ class SendPublicationsEmailsJobTest < ActiveJob::TestCase
     end
 
     @notification.reload
+
     assert_not_nil @notification.email_notification_sent_at
   end
 

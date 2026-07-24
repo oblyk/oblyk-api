@@ -8,72 +8,86 @@ class CragTest < ActiveSupport::TestCase
   end
 
   test 'crag is valid' do
-    assert @crag.valid?
+    assert_predicate @crag, :valid?
   end
 
   test 'crag is invalid without name' do
     @crag.name = nil
-    assert @crag.invalid?
+
+    assert_predicate @crag, :invalid?
     assert_includes @crag.errors[:name], 'is_mandatory'
   end
 
   test 'crag is invalid without latitude' do
     @crag.latitude = nil
-    assert @crag.invalid?
+
+    assert_predicate @crag, :invalid?
   end
 
   test 'crag is invalid without longitude' do
     @crag.longitude = nil
-    assert @crag.invalid?
+
+    assert_predicate @crag, :invalid?
   end
 
   test 'crag is invalid without city' do
     @crag.city = nil
-    assert @crag.invalid?
+
+    assert_predicate @crag, :invalid?
   end
 
   test 'crag is invalid with wrong rain value' do
     @crag.rain = 'invalid_rain'
-    assert @crag.invalid?
+
+    assert_predicate @crag, :invalid?
   end
 
   test 'crag is valid with correct rain value' do
     @crag.rain = Rain::LIST.first
-    assert @crag.valid?
+
+    assert_predicate @crag, :valid?
   end
 
   test 'crag is invalid with wrong sun value' do
     @crag.sun = 'invalid_sun'
-    assert @crag.invalid?
+
+    assert_predicate @crag, :invalid?
   end
 
   test 'crag is valid with correct sun value' do
     @crag.sun = Sun::LIST.first
-    assert @crag.valid?
+
+    assert_predicate @crag, :valid?
   end
 
   test 'crag is invalid with wrong rock value' do
     @crag.rocks = ['invalid_rock']
-    assert @crag.invalid?
+
+    assert_predicate @crag, :invalid?
   end
 
   test 'crag is valid with correct rock value' do
     @crag.rocks = [Rock::LIST.first]
-    assert @crag.valid?
+
+    assert_predicate @crag, :valid?
   end
 
   test 'crag is invalid with out of range latitude' do
     @crag.latitude = 91
-    assert @crag.invalid?
+
+    assert_predicate @crag, :invalid?
     @crag.latitude = -91
-    assert @crag.invalid?
+
+    assert_predicate @crag, :invalid?
   end
 
   test 'crag is invalid with out of range longitude' do
     @crag.longitude = 181
-    assert @crag.invalid?
+
+    assert_predicate @crag, :invalid?
     @crag.longitude = -181
-    assert @crag.invalid?
+
+    assert_predicate @crag, :invalid?
   end
 
   test 'location returns latitude and longitude' do
@@ -96,30 +110,37 @@ class CragTest < ActiveSupport::TestCase
     @crag.bouldering = false
     @crag.deep_water = false
     @crag.via_ferrata = false
+
     assert_equal '10000', @crag.climbing_key
 
     @crag.bouldering = true
+
     assert_equal '10100', @crag.climbing_key
 
     @crag.sport_climbing = false
     @crag.multi_pitch = true
     @crag.bouldering = false
+
     assert_equal '01000', @crag.climbing_key
 
     @crag.multi_pitch = false
     @crag.trad_climbing = true
+
     assert_equal '01000', @crag.climbing_key
 
     @crag.trad_climbing = false
     @crag.aid_climbing = true
+
     assert_equal '01000', @crag.climbing_key
 
     @crag.aid_climbing = false
     @crag.deep_water = true
+
     assert_equal '00010', @crag.climbing_key
 
     @crag.deep_water = false
     @crag.via_ferrata = true
+
     assert_equal '00001', @crag.climbing_key
   end
 
@@ -127,6 +148,7 @@ class CragTest < ActiveSupport::TestCase
     assert_equal 0, @crag.all_photos_count
 
     @crag.photos_count = 5
+
     assert_equal 5, @crag.all_photos_count
   end
 
@@ -134,11 +156,13 @@ class CragTest < ActiveSupport::TestCase
     assert_equal 0, @crag.all_videos_count
 
     @crag.videos_count = 3
+
     assert_equal 3, @crag.all_videos_count
   end
 
   test 'summary_to_json returns correct keys' do
     summary = @crag.summary_to_json
+
     assert_equal @crag.id, summary[:id]
     assert_equal @crag.name, summary[:name]
     assert_nil summary[:slug_name]
@@ -149,6 +173,7 @@ class CragTest < ActiveSupport::TestCase
 
   test 'detail_to_json returns summary merged with more keys' do
     detail = @crag.detail_to_json
+
     assert_equal @crag.id, detail[:id]
     assert_includes detail.keys, :comment_count
     assert_includes detail.keys, :link_count
@@ -158,6 +183,7 @@ class CragTest < ActiveSupport::TestCase
 
   test 'to_geo_json returns geojson format' do
     geo_json = @crag.to_geo_json
+
     assert_equal 'Feature', geo_json[:type]
     assert_equal 'Point', geo_json[:geometry][:type]
     assert_equal [@crag.longitude.to_f, @crag.latitude.to_f, 0.0], geo_json[:geometry][:coordinates]
@@ -166,6 +192,7 @@ class CragTest < ActiveSupport::TestCase
 
   test 'to_geo_json with minimalistic option' do
     geo_json = @crag.to_geo_json(minimalistic: true)
+
     assert_equal 'Feature', geo_json[:type]
     assert_nil geo_json[:properties][:sport_climbing]
   end
@@ -197,6 +224,7 @@ class CragTest < ActiveSupport::TestCase
 
     @crag.update_climbing_type!
     @crag.reload
+
     assert @crag.sport_climbing
     assert @crag.bouldering
   end

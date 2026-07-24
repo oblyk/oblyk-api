@@ -9,27 +9,31 @@ class ContestStageStepTest < ActiveSupport::TestCase
   end
 
   test 'contest stage step is valid' do
-    assert @contest_stage_step.valid?
+    assert_predicate @contest_stage_step, :valid?
   end
 
   test 'contest stage step is invalid without name' do
     @contest_stage_step.name = nil
+
     assert_not @contest_stage_step.valid?
     assert_includes @contest_stage_step.errors.attribute_names, :name
   end
 
   test 'contest stage step is invalid with wrong ranking_type' do
     @contest_stage_step.ranking_type = 'random_ranking'
+
     assert_not @contest_stage_step.valid?
     assert_includes @contest_stage_step.errors.attribute_names, :ranking_type
   end
 
   test 'contest stage step is invalid with non-positive ascents_limit' do
     @contest_stage_step.ascents_limit = 0
+
     assert_not @contest_stage_step.valid?
     assert_includes @contest_stage_step.errors.attribute_names, :ascents_limit
 
     @contest_stage_step.ascents_limit = -1
+
     assert_not @contest_stage_step.valid?
     assert_includes @contest_stage_step.errors.attribute_names, :ascents_limit
   end
@@ -40,12 +44,14 @@ class ContestStageStepTest < ActiveSupport::TestCase
       name: 'New Step',
       ranking_type: ContestService::Constant::DIVISION
     )
+
     assert_not_nil new_step.step_order
     assert_equal 3, new_step.step_order
   end
 
   test 'summary_to_json returns expected keys' do
     json = @contest_stage_step.summary_to_json
+
     assert_equal @contest_stage_step.id, json[:id]
     assert_equal @contest_stage_step.name, json[:name]
     assert_includes json.keys, :gym
@@ -55,6 +61,7 @@ class ContestStageStepTest < ActiveSupport::TestCase
 
   test 'detail_to_json returns expected keys including associations' do
     json = @contest_stage_step.detail_to_json
+
     assert_equal @contest_stage_step.id, json[:id]
     assert_includes json.keys, :contest_routes
   end

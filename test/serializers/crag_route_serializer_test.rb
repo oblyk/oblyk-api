@@ -11,6 +11,7 @@ class CragRouteSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @crag_route.id, attributes['id']
     assert_equal @crag_route.name, attributes['name']
     if @crag_route.slug_name
@@ -18,6 +19,7 @@ class CragRouteSerializerTest < ActiveSupport::TestCase
     else
       assert_nil attributes['slug_name']
     end
+
     assert_equal @crag_route.height, attributes['height']
     assert_equal @crag_route.climbing_type, attributes['climbing_type']
     assert_equal @crag_route.sections_count, attributes['sections_count']
@@ -28,6 +30,7 @@ class CragRouteSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the grade_gap attribute' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @crag_route.max_grade_value, attributes['grade_gap']['max_grade_value']
     assert_equal @crag_route.min_grade_value, attributes['grade_gap']['min_grade_value']
     assert_equal @crag_route.max_grade_text, attributes['grade_gap']['max_grade_text']
@@ -36,6 +39,7 @@ class CragRouteSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the photo attribute' do
     attributes = @serialization['data']['attributes']
+
     assert attributes.key?('photo')
     assert attributes['photo'].key?('id')
     assert attributes['photo'].key?('attachments')
@@ -43,6 +47,7 @@ class CragRouteSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the relationships' do
     relationships = @serialization['data']['relationships']
+
     assert_not_nil relationships['crag']
     assert_equal @crag_route.crag_id, relationships['crag']['data']['id'].to_i
   end

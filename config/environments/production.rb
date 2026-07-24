@@ -1,4 +1,6 @@
-require "active_support/core_ext/integer/time"
+# frozen_string_literal: true
+
+require 'active_support/core_ext/integer/time'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -20,7 +22,7 @@ Rails.application.configure do
   # config.require_master_key = true
 
   # Disable serving static files from `public/`, relying on NGINX/Apache to do so instead.
-  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
+  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
@@ -34,7 +36,7 @@ Rails.application.configure do
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
-  config.action_cable.url = "wss://#{ENV["OBLYK_API_DOMAIN"]}/cable"
+  config.action_cable.url = "wss://#{ENV.fetch('OBLYK_API_DOMAIN', nil)}/cable"
   config.action_cable.allowed_request_origins = %w[https://next.oblyk.org https://oblyk.org https://www.oblyk.org]
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
@@ -45,27 +47,27 @@ Rails.application.configure do
   config.force_ssl = true
 
   # Log to STDOUT by default
-  config.logger = ActiveSupport::Logger.new(STDOUT)
-    .tap  { |logger| logger.formatter = ::Logger::Formatter.new }
-    .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
+  config.logger = ActiveSupport::Logger.new($stdout)
+                                       .tap { |logger| logger.formatter = Logger::Formatter.new }
+                                       .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [ :request_id ]
+  config.log_tags = [:request_id]
 
   # "info" includes generic and useful information about system operation, but avoids logging too much
   # information to avoid inadvertent exposure of personally identifiable information (PII). If you
   # want to log everything, set the level to "debug".
-  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
+  config.log_level = ENV.fetch('RAILS_LOG_LEVEL', 'info')
 
   # Use a different cache store in production.
-  config.cache_store = :mem_cache_store, "127.0.0.1:11211", { pool_size: 16, protocol: :meta }
+  config.cache_store = :mem_cache_store, '127.0.0.1:11211', { pool_size: 16, protocol: :meta }
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   config.active_job.queue_adapter     = :sidekiq
-  config.active_job.queue_name_prefix = ""
+  config.active_job.queue_name_prefix = ''
 
   config.action_mailer.perform_caching = false
-  config.action_mailer.default_url_options = { host: ENV["OBLYK_API_URL"] }
+  config.action_mailer.default_url_options = { host: ENV.fetch('OBLYK_API_URL', nil) }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.

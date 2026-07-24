@@ -22,7 +22,7 @@ module Api
 
       def search
         query = params.fetch(:query, nil)
-        head :no_content && return if query.blank?
+        return head :no_content if query.blank?
 
         page = params.fetch(:page, 1).to_i
         per_page = params.fetch(:per_page, 25).to_i
@@ -178,7 +178,7 @@ module Api
         guide_ids = []
         crags_around = Crag.geo_search(@crag.latitude, @crag.longitude, 50)
         crags_around.each do |crag|
-          guide_ids.concat(crag.guide_book_papers.pluck(:id)) if crag.guide_book_papers.count.positive?
+          guide_ids.concat(crag.guide_book_papers.pluck(:id)) if crag.guide_book_papers.any?
         end
         other_guides = guide_ids - guides_already_have
         guide_book_papers = GuideBookPaper.where(id: other_guides)
@@ -190,7 +190,7 @@ module Api
         area_ids = []
         crags_around = Crag.geo_search(@crag.latitude, @crag.longitude, 50)
         crags_around.each do |crag|
-          area_ids.concat(crag.areas.pluck(:id)) if crag.areas.count.positive?
+          area_ids.concat(crag.areas.pluck(:id)) if crag.areas.any?
         end
         other_areas = area_ids - areas_already_have
         areas = Area.where(id: other_areas)
@@ -209,20 +209,16 @@ module Api
         have_filter = climbing_style.present? || (altitude.present? && altitude_switch.present?) || grade_range.present? || orientations.present?
 
         json_features = []
-        if !have_filter
-          json_features = Rails.cache.fetch("#{last_updated_crag.cache_key_with_version}/#{'minimalistic_' if minimalistic}crags_geo_json", expires_in: 1.day) do
-            geo_json_features(minimalistic)
-          end
-        else
+        if have_filter
           crags = Crag.all
 
           # Climbing Type filter
-          climbing_style = %w[sport_climbing bouldering multi_pitch trad_climbing aid_climbing deep_water via_ferrata].include?(climbing_style) ? climbing_style : nil
+          climbing_style = nil unless %w[sport_climbing bouldering multi_pitch trad_climbing aid_climbing deep_water via_ferrata].include?(climbing_style)
           crags = crags.where(climbing_style => true) if climbing_style.present?
 
           if altitude.present? && altitude_switch.present?
-            crags = crags.where('crags.elevation >= ?', altitude.to_i) if altitude_switch == 'above'
-            crags = crags.where('crags.elevation <= ?', altitude.to_i) if altitude_switch == 'below'
+            crags = crags.where(crags: { elevation: altitude.to_i.. }) if altitude_switch == 'above'
+            crags = crags.where(crags: { elevation: ..altitude.to_i }) if altitude_switch == 'below'
           end
 
           if grade_range.present?
@@ -250,6 +246,10 @@ module Api
           crags.each do |crag|
             json_features << crag.to_geo_json(minimalistic: true)
           end
+        else
+          json_features = Rails.cache.fetch("#{last_updated_crag.cache_key_with_version}/#{'minimalistic_' if minimalistic}crags_geo_json", expires_in: 1.day) do
+            geo_json_features(minimalistic)
+          end
         end
 
         json = {
@@ -267,18 +267,15 @@ module Api
 
       def geo_json_around
         minimalistic = params.fetch(:minimalistic, false) != false
-        features = []
-
         crags_around = if minimalistic
                          Crag.includes(photo: { picture_attachment: :blob }).geo_search(@crag.latitude, @crag.longitude, 50)
                        else
                          Crag.geo_search(@crag.latitude, @crag.longitude, 50)
                        end
 
-
         # Crags around this crag
-        crags_around.each do |crag|
-          features << crag.to_geo_json(minimalistic: minimalistic)
+        features = crags_around.map do |crag|
+          crag.to_geo_json(minimalistic: minimalistic)
         end
 
         # Crag sectors
@@ -371,10 +368,8 @@ module Api
         papers = @crag.guide_book_papers.includes(cover_attachment: :blob).order(publication_year: :desc)
         pdfs = @crag.guide_book_pdfs.includes(:user, pdf_file_attachment: :blob)
         webs = @crag.guide_book_webs
-        guides = []
-
-        papers.each do |paper|
-          guides << {
+        guides = papers.map do |paper|
+          {
             guide_type: 'GuideBookPaper',
             guide: paper.summary_to_json
           }
@@ -458,11 +453,11 @@ module Api
         features = []
 
         if minimalistic
-          Crag.select(:id, :name, :sport_climbing, :multi_pitch, :trad_climbing, :aid_climbing, :bouldering, :deep_water, :via_ferrata, :longitude, :latitude, :updated_at).all.find_each do |crag|
+          Crag.select(:id, :name, :sport_climbing, :multi_pitch, :trad_climbing, :aid_climbing, :bouldering, :deep_water, :via_ferrata, :longitude, :latitude, :updated_at).find_each do |crag|
             features << crag.to_geo_json(minimalistic: true)
           end
         else
-          Crag.includes(photo: { picture_attachment: :blob }).all.each do |crag|
+          Crag.includes(photo: { picture_attachment: :blob }).find_each do |crag|
             features << crag.to_geo_json
           end
         end

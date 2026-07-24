@@ -10,7 +10,7 @@ namespace :reset_counters_cache do
     out.puts "Cache selected : #{cache}"
     out.puts ''
 
-    index_count = Crag.all.count
+    index_count = Crag.count
     index = 0
     Crag.find_each do |crag|
       index += 1
@@ -35,7 +35,7 @@ namespace :reset_counters_cache do
     out.puts "Cache selected : #{cache}"
     out.puts ''
 
-    index_count = CragSector.all.count
+    index_count = CragSector.count
     index = 0
     CragSector.find_each do |crag_sector|
       index += 1
@@ -57,7 +57,7 @@ namespace :reset_counters_cache do
     out.puts "Cache selected : #{cache}"
     out.puts ''
 
-    index_count = CragRoute.all.count
+    index_count = CragRoute.count
     index = 0
     CragRoute.find_each do |crag_route|
       index += 1
@@ -80,7 +80,7 @@ namespace :reset_counters_cache do
     out.puts "Cache selected : #{cache}"
     out.puts ''
 
-    index_count = Gym.all.count
+    index_count = Gym.count
     index = 0
     Gym.find_each do |gym|
       index += 1
@@ -103,7 +103,7 @@ namespace :reset_counters_cache do
     out.puts "Cache selected : #{cache}"
     out.puts ''
 
-    index_count = GymRoute.all.count
+    index_count = GymRoute.count
     index = 0
     GymRoute.find_each do |gym_route|
       index += 1
@@ -125,7 +125,7 @@ namespace :reset_counters_cache do
     out.puts "Cache selected : #{cache}"
     out.puts ''
 
-    index_count = User.all.count
+    index_count = User.count
     index = 0
     User.find_each do |user|
       index += 1
@@ -146,7 +146,7 @@ namespace :reset_counters_cache do
     out.puts "Cache selected : #{cache}"
     out.puts ''
 
-    index_count = Article.all.count
+    index_count = Article.count
     index = 0
     Article.find_each do |article|
       index += 1

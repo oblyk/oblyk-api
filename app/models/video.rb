@@ -18,7 +18,7 @@ class Video < ApplicationRecord
 
   after_create_commit :publication_push!
 
-  URL_REGEXP = /(youtu\.be|youtube\.com|vimeo\.com|dai\.ly|dailymotion\.com|instagram\.com|tiktok.com)/.freeze
+  URL_REGEXP = /(youtu\.be|youtube\.com|vimeo\.com|dai\.ly|dailymotion\.com|instagram\.com|tiktok.com)/
   VIDEO_SERVICES = %w[youtube vimeo dailymotion instagram tiktok oblyk_video].freeze
 
   before_validation :init_embedded_code
@@ -56,14 +56,14 @@ class Video < ApplicationRecord
     if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
       # Use CLOUDFLARE R2 CDN, AND CONVERT VIDEO IF IS VIDEO/QUICKTIME
       if needs_be_converted?
-        "#{ENV['CLOUDFLARE_R2_DOMAIN']}/cdn-cgi/media/mode=video,fit=scale-down,height=1920,width=1920/#{video_file.attachment.key}"
+        "#{ENV.fetch('CLOUDFLARE_R2_DOMAIN', nil)}/cdn-cgi/media/mode=video,fit=scale-down,height=1920,width=1920/#{video_file.attachment.key}"
       else
-        "#{ENV['CLOUDFLARE_R2_DOMAIN']}/#{video_file.attachment.key}"
+        "#{ENV.fetch('CLOUDFLARE_R2_DOMAIN', nil)}/#{video_file.attachment.key}"
       end
 
     else
       # Use local active storage
-      "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.rails_blob_path(video_file, only_path: true)}"
+      "#{ENV.fetch('OBLYK_API_URL', nil)}#{Rails.application.routes.url_helpers.rails_blob_path(video_file, only_path: true)}"
     end
   end
 
@@ -109,15 +109,15 @@ class Video < ApplicationRecord
     return nil unless video_file.attached?
 
     if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
-      "#{ENV['CLOUDFLARE_R2_DOMAIN']}/cdn-cgi/media/mode=frame,time=0s,width=1000,height=1000,fit=scale-down/#{video_file.attachment.key}"
+      "#{ENV.fetch('CLOUDFLARE_R2_DOMAIN', nil)}/cdn-cgi/media/mode=frame,time=0s,width=1000,height=1000,fit=scale-down/#{video_file.attachment.key}"
     else
       begin
         rails_representation_url(
           video_file.preview(resize_to_limit: [1000, 1000]).processed,
-          host: ENV['OBLYK_API_URL']
+          host: ENV.fetch('OBLYK_API_URL', nil)
         )
-      rescue StandardError => err
-        RorVsWild.record_error(err)
+      rescue StandardError => e
+        RorVsWild.record_error(e)
         nil
       end
     end
@@ -146,10 +146,7 @@ class Video < ApplicationRecord
     return if viewable_type == 'GymRoute' && video_service != 'oblyk_video'
 
     case viewable_type
-    when 'CragRoute'
-      publishable_type = 'Crag'
-      publishable_id = viewable.crag_id
-    when 'CragSector'
+    when 'CragRoute', 'CragSector'
       publishable_type = 'Crag'
       publishable_id = viewable.crag_id
     when 'GymRoute'
@@ -166,7 +163,7 @@ class Video < ApplicationRecord
       publishable_id: publishable_id,
       publishable_type: publishable_type,
       publishable_subject: publishable_subject,
-      published_at: [created_at.beginning_of_day..created_at.end_of_day]
+      published_at: [created_at.all_day]
     )
 
     publication ||= Publication.new(
@@ -204,8 +201,6 @@ class Video < ApplicationRecord
                            'instagram'
                          when /(tiktok\.com)/
                            'tiktok'
-                         else
-                           nil
                          end
     return unless video_service
 
@@ -213,7 +208,7 @@ class Video < ApplicationRecord
       host: 'iframe.ly',
       path: '/api/oembed',
       query: {
-        api_key: ENV['IFRAMELY_API_KEY'],
+        api_key: ENV.fetch('IFRAMELY_API_KEY', nil),
         url: url
       }.to_query
     )

@@ -29,7 +29,7 @@ module LogBook
 
       def ascents_count(since_28_days: false)
         ascents = @user.ascent_gym_routes.made
-        ascents = ascents.where('ascents.released_at >= ?', Date.current - 28.days) if since_28_days
+        ascents = ascents.where(ascents: { released_at: (Date.current - 28.days).. }) if since_28_days
         ascents.sum(:quantity)
       end
 
@@ -51,16 +51,15 @@ module LogBook
 
       def climbing_sessions_count(since_28_days: false)
         climbing_sessions = @user.climbing_sessions.where('EXISTS(SELECT * FROM ascents WHERE gym_id IS NOT NULL AND climbing_session_id = climbing_sessions.id)')
-        climbing_sessions = climbing_sessions.where('climbing_sessions.session_date >= ?', Date.current - 28.days) if since_28_days
+        climbing_sessions = climbing_sessions.where(climbing_sessions: { session_date: (Date.current - 28.days).. }) if since_28_days
         climbing_sessions.count
       end
 
       def gyms_count(since_28_days: false)
         gyms = @user.ascended_gyms
-        gyms = gyms.where('ascents.released_at >= ?', Date.current - 28.days) if since_28_days
+        gyms = gyms.where(ascents: { released_at: (Date.current - 28.days).. }) if since_28_days
         gyms.distinct.count
       end
     end
   end
 end
-

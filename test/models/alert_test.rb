@@ -10,29 +10,33 @@ class AlertTest < ActiveSupport::TestCase
   end
 
   test 'alert is valid' do
-    assert @alert.valid?
+    assert_predicate @alert, :valid?
   end
 
   test 'alert is invalid without description' do
     @alert.description = nil
+
     assert_not @alert.valid?
     assert_includes @alert.errors.attribute_names, :description
   end
 
   test 'alert is invalid without alert_type' do
     @alert.alert_type = nil
+
     assert_not @alert.valid?
     assert_includes @alert.errors.attribute_names, :alert_type
   end
 
   test 'alert is invalid with wrong alert_type' do
     @alert.alert_type = 'wrong_type'
+
     assert_not @alert.valid?
     assert_includes @alert.errors.attribute_names, :alert_type
   end
 
   test 'alert is invalid with wrong alertable_type' do
     @alert.alertable_type = 'User'
+
     assert_not @alert.valid?
     assert_includes @alert.errors.attribute_names, :alertable_type
   end
@@ -44,8 +48,10 @@ class AlertTest < ActiveSupport::TestCase
       alertable: @crag,
       user: @user
     )
+
     assert_nil alert.alerted_at
     alert.valid?
+
     assert_not_nil alert.alerted_at
   end
 
@@ -59,6 +65,7 @@ class AlertTest < ActiveSupport::TestCase
 
   test 'detail_to_json returns expected keys' do
     json = @alert.detail_to_json
+
     assert_equal @alert.id, json[:id]
     assert_equal @alert.description, json[:description]
     assert_equal @alert.alert_type, json[:alert_type]
@@ -76,6 +83,7 @@ class AlertTest < ActiveSupport::TestCase
       end
     end
     publication = Publication.last
+
     assert_equal 'Crag', publication.publishable_type
     assert_equal @crag.id, publication.publishable_id
     assert_equal 'new_alert', publication.publishable_subject

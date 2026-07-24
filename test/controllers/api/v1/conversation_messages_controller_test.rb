@@ -16,25 +16,31 @@ module Api
 
       test 'should get index' do
         get api_v1_conversation_conversation_messages_url(@conversation), headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
         assert_not_empty json_response
       end
 
       test 'should get last messages' do
         get last_messages_api_v1_conversation_conversation_messages_url(@conversation),
-            params: { posted_after_at: (Time.current - 2.hours).to_s },
+            params: { posted_after_at: 2.hours.ago.to_s },
             headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
       end
 
       test 'should show message' do
         get api_v1_conversation_conversation_message_url(@conversation, @message), headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @message.id, json_response['id']
       end
 
@@ -53,8 +59,10 @@ module Api
             params: { conversation_message: { body: 'Updated message' } },
             headers: @user_headers,
             as: :json
+
         assert_response :success
         @message.reload
+
         assert_equal 'Updated message', @message.body
       end
 
@@ -63,6 +71,7 @@ module Api
             params: { conversation_message: { body: 'Try to update' } },
             headers: @other_user_headers,
             as: :json
+
         assert_response :forbidden
       end
 
@@ -89,6 +98,7 @@ module Api
         ConversationUser.create!(conversation: new_conversation, user: other_user_2)
 
         get api_v1_conversation_conversation_messages_url(new_conversation), headers: @user_headers
+
         assert_response :forbidden
       end
     end

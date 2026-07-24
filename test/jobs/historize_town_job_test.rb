@@ -26,6 +26,7 @@ class HistorizeTownJobTest < ActiveJob::TestCase
     end
 
     town_json_object = TownJsonObject.last
+
     assert_equal @town.id, town_json_object.town_id
     assert_not_nil town_json_object.json_object
   end

@@ -8,7 +8,7 @@ module ApplicationCable
       token = request.params['token']
       reject_unauthorized_connection if token.blank?
 
-      self.current_user = find_verified_user(token.split(' ').last)
+      self.current_user = find_verified_user(token.split.last)
       logger.add_tags 'ActionCable', current_user.id
     end
 

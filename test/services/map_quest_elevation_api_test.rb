@@ -17,6 +17,7 @@ class MapQuestElevationApiTest < ActiveSupport::TestCase
 
     RestClient.stub :get, mock_response, [expected_url] do
       result = MapQuestElevationApi.elevations(coordinates)
+
       assert_equal [{ 'height' => 100 }, { 'height' => 200 }], result
     end
 
@@ -31,6 +32,7 @@ class MapQuestElevationApiTest < ActiveSupport::TestCase
 
     RestClient.stub :get, mock_response do
       result = MapQuestElevationApi.elevations(coordinates)
+
       assert_nil result
     end
 
@@ -42,7 +44,8 @@ class MapQuestElevationApiTest < ActiveSupport::TestCase
 
     RestClient.stub :get, ->(_url) { raise StandardError } do
       result = MapQuestElevationApi.elevations(coordinates)
-      assert_equal false, result
+
+      assert_not result
     end
   end
 end

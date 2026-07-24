@@ -16,8 +16,10 @@ module Api
 
       test 'should get index of my organizations' do
         get api_v1_organizations_url, headers: @headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
         assert_equal 1, json_response.size
         assert_equal @organization.id, json_response.first['id']
@@ -25,13 +27,16 @@ module Api
 
       test 'should show my organization' do
         get api_v1_organization_url(@organization), headers: @headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @organization.id, json_response['id']
       end
 
       test 'should not show an organization I do not own' do
         get api_v1_organization_url(@other_organization), headers: @headers
+
         assert_response :forbidden
       end
 
@@ -48,10 +53,12 @@ module Api
                headers: @headers, as: :json
         end
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal 'New Organization', json_response['name']
 
         new_orga = Organization.find(json_response['id'])
+
         assert_includes new_orga.users, @user
       end
 
@@ -63,8 +70,10 @@ module Api
                 }
               },
               headers: @headers, as: :json
+
         assert_response :success
         @organization.reload
+
         assert_equal 'Updated Name', @organization.name
       end
 
@@ -76,6 +85,7 @@ module Api
                 }
               },
               headers: @headers, as: :json
+
         assert_response :forbidden
       end
 
@@ -95,23 +105,29 @@ module Api
 
       test 'should get api access token' do
         get api_access_token_api_v1_organization_url(@organization), headers: @headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @organization.api_access_token, json_response['api_access_token']
       end
 
       test 'should refresh api access token' do
         old_token = @organization.api_access_token
         put refresh_api_access_token_api_v1_organization_url(@organization), headers: @headers
+
         assert_response :success
         @organization.reload
+
         assert_not_equal old_token, @organization.api_access_token
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @organization.api_access_token, json_response['api_access_token']
       end
 
       test 'should not access any action if not logged in' do
         get api_v1_organizations_url, headers: api_access_token_headers
+
         assert_response :unauthorized
       end
     end

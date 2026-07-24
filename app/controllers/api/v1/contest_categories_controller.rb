@@ -39,7 +39,7 @@ module Api
       end
 
       def destroy
-        if @contest_category.contest_participants.count.positive?
+        if @contest_category.contest_participants.any?
           render json: { error: { base: ['La categorie a des participants, elle ne peut pas être supprimée'] } }, status: :unprocessable_content
           return
         end
@@ -70,7 +70,7 @@ module Api
 
         return unless @gym.administered?
 
-        not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).count.zero?
+        not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).none?
       end
 
       def contest_category_params

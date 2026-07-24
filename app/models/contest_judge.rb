@@ -46,7 +46,7 @@ class ContestJudge < ApplicationRecord
         id: contest_route_group.id,
         genre_type: contest_route_group.genre_type
       }
-      data[:contest_categories] = contest_route_group.contest_categories.map { |category| { name: category.name, id: category.id }}
+      data[:contest_categories] = contest_route_group.contest_categories.map { |category| { name: category.name, id: category.id } }
       routes_table << data
     end
     summary_to_json.merge(

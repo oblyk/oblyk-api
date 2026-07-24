@@ -8,11 +8,12 @@ class ChampionshipCategoryTest < ActiveSupport::TestCase
   end
 
   test 'should be valid' do
-    assert @category.valid?
+    assert_predicate @category, :valid?
   end
 
   test 'should be invalid without name' do
     @category.name = nil
+
     assert_not @category.valid?
   end
 
@@ -21,15 +22,16 @@ class ChampionshipCategoryTest < ActiveSupport::TestCase
   end
 
   test 'should have many championship_category_matches' do
-    assert @category.championship_category_matches.count >= 1
+    assert_operator @category.championship_category_matches.count, :>=, 1
   end
 
   test 'should have many contest_categories' do
-    assert @category.contest_categories.count >= 1
+    assert_operator @category.contest_categories.count, :>=, 1
   end
 
   test 'summary_to_json returns expected structure' do
     json = @category.summary_to_json
+
     assert_equal @category.id, json[:id]
     assert_equal @category.name, json[:name]
     assert_equal @category.championship_id, json[:championship_id]

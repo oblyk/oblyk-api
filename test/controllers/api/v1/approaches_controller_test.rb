@@ -19,16 +19,19 @@ module Api
         get api_v1_crag_approaches_url(crag_id: @crag.id),
             headers: @public_headers,
             as: :json
+
         assert_response :success
-        assert_equal @crag.approaches.count, JSON.parse(response.body).size
+        assert_equal @crag.approaches.count, response.parsed_body.size
       end
 
       test 'should get geo_json_around' do
         get geo_json_around_api_v1_crag_approaches_url(crag_id: @crag.id, id: @approach.id),
             headers: @public_headers,
             as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal 'FeatureCollection', json_response['type']
         assert_kind_of Array, json_response['features']
       end
@@ -37,8 +40,10 @@ module Api
         get api_v1_crag_approach_url(crag_id: @crag.id, id: @approach.id),
             headers: @public_headers,
             as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @approach.id, json_response['id']
       end
 
@@ -70,8 +75,10 @@ module Api
             },
             headers: @auth_headers,
             as: :json
+
         assert_response :success
         @approach.reload
+
         assert_equal 'Updated description', @approach.description
       end
 

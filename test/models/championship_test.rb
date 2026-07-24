@@ -8,11 +8,12 @@ class ChampionshipTest < ActiveSupport::TestCase
   end
 
   test 'should be valid' do
-    assert @championship.valid?
+    assert_predicate @championship, :valid?
   end
 
   test 'should be invalid without name' do
     @championship.name = nil
+
     assert_not @championship.valid?
   end
 
@@ -21,19 +22,20 @@ class ChampionshipTest < ActiveSupport::TestCase
   end
 
   test 'should have many championship_contests' do
-    assert @championship.championship_contests.count >= 1
+    assert_operator @championship.championship_contests.count, :>=, 1
   end
 
   test 'should have many contests' do
-    assert @championship.contests.count >= 1
+    assert_operator @championship.contests.count, :>=, 1
   end
 
   test 'should have many championship_categories' do
-    assert @championship.championship_categories.count >= 1
+    assert_operator @championship.championship_categories.count, :>=, 1
   end
 
   test 'summary_to_json returns expected structure' do
     json = @championship.summary_to_json
+
     assert_equal @championship.id, json[:id]
     assert_equal @championship.name, json[:name]
     assert json.key?(:contests_count)
@@ -42,6 +44,7 @@ class ChampionshipTest < ActiveSupport::TestCase
 
   test 'detail_to_json returns expected structure' do
     json = @championship.detail_to_json
+
     assert_equal @championship.id, json[:id]
     assert json.key?(:contests)
     assert json.key?(:gym)
@@ -63,6 +66,7 @@ class ChampionshipTest < ActiveSupport::TestCase
 
     ContestService::Result.stub :new, mock_service do
       results = @championship.results
+
       assert results.key?(:championship_results)
       assert results.key?(:contests)
       assert_instance_of Array, results[:championship_results]

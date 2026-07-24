@@ -11,6 +11,7 @@ class EmbeddedVideoSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @video.id, attributes['id']
     assert_equal @video.url, attributes['url']
     assert_equal @video.video_service, attributes['video_service']
@@ -20,6 +21,7 @@ class EmbeddedVideoSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the history attribute' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @video.created_at.as_json, attributes['history']['created_at']
     assert_equal @video.updated_at.as_json, attributes['history']['updated_at']
   end

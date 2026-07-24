@@ -11,6 +11,7 @@ module Api
 
       test 'should get qr_coder' do
         get qr_coder_api_v1_tools_url(message: 'https://oblyk.org'), headers: @api_headers
+
         assert_response :success
         assert_equal 'image/svg+xml', response.content_type
         assert_match(/<svg/, response.body)
@@ -18,6 +19,7 @@ module Api
 
       test 'should get qr_coder with empty message' do
         get qr_coder_api_v1_tools_url, headers: @api_headers
+
         assert_response :success
         assert_equal 'image/svg+xml', response.content_type
         assert_match(/<svg/, response.body)
@@ -25,6 +27,7 @@ module Api
 
       test 'should return forbidden without api access token' do
         get qr_coder_api_v1_tools_url(message: 'https://oblyk.org')
+
         assert_response :forbidden
       end
     end

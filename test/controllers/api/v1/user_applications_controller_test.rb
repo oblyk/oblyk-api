@@ -13,8 +13,10 @@ module Api
 
       test 'should get index' do
         get api_v1_user_applications_url, headers: @api_headers, as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
         assert_equal 1, json_response.size
         assert_equal @user_application.id, json_response.first['id']
@@ -22,8 +24,10 @@ module Api
 
       test 'should show user application' do
         get api_v1_user_application_url(@user_application), headers: @api_headers, as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @user_application.id, json_response['id']
       end
 
@@ -37,6 +41,7 @@ module Api
       test 'should not show another user application' do
         other_user_headers = api_headers(user: :other_user)
         get api_v1_user_application_url(@user_application), headers: other_user_headers, as: :json
+
         assert_response :not_found
       end
     end

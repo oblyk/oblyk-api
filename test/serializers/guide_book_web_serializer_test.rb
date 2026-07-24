@@ -11,6 +11,7 @@ class GuideBookWebSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @guide_book_web.id, attributes['id']
     assert_equal @guide_book_web.name, attributes['name']
     assert_equal @guide_book_web.url, attributes['url']
@@ -21,6 +22,7 @@ class GuideBookWebSerializerTest < ActiveSupport::TestCase
 
   test 'It contains relationships' do
     relationships = @serialization['data']['relationships']
+
     assert_not_nil relationships['user']
     assert_not_nil relationships['crag']
     assert_equal @guide_book_web.user_id, relationships['user']['data']['id'].to_i

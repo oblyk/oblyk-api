@@ -97,9 +97,8 @@ class GuideBookPaper < ApplicationRecord
 
   def to_geo_json
     Rails.cache.fetch("#{cache_key_with_version}/geo_json_guide_book_paper", expires_in: 28.days) do
-      crags_coordinates = []
-      crags.each do |crag|
-        crags_coordinates << [crag.latitude, crag.longitude]
+      crags_coordinates = crags.map do |crag|
+        [crag.latitude, crag.longitude]
       end
       geo_center = GeoHelper.point_central crags_coordinates
       {
@@ -138,9 +137,8 @@ class GuideBookPaper < ApplicationRecord
   end
 
   def crags_to_geo_json(minimalistic: false)
-    features = []
-    crags.each do |crag|
-      features << crag.to_geo_json(minimalistic: minimalistic)
+    features = crags.map do |crag|
+      crag.to_geo_json(minimalistic: minimalistic)
     end
     {
       type: 'FeatureCollection',
@@ -163,13 +161,10 @@ class GuideBookPaper < ApplicationRecord
   end
 
   def location
-    crags_coordinates = []
-    if crags.size.zero?
-      return [nil, nil]
-    end
+    return [nil, nil] if crags.empty?
 
-    crags.each do |crag|
-      crags_coordinates << [crag.latitude, crag.longitude]
+    crags_coordinates = crags.map do |crag|
+      [crag.latitude, crag.longitude]
     end
     GeoHelper.point_central crags_coordinates
   end
@@ -194,7 +189,7 @@ class GuideBookPaper < ApplicationRecord
   private
 
   def historize_around_towns
-    cover_change = cover.attached? && cover.attachment.created_at > (Time.current - 5.minutes)
+    cover_change = cover.attached? && cover.attachment.created_at > 5.minutes.ago
 
     if saved_change_to_name? ||
        saved_change_to_author? ||

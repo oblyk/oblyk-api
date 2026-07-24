@@ -17,8 +17,10 @@ module Api
 
       test 'should get figures' do
         get api_v1_partners_figures_url, headers: @headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_includes json_response.keys, 'count_global'
         assert_includes json_response.keys, 'count_last_week'
         assert_operator json_response['count_global'], :>=, 0
@@ -29,10 +31,12 @@ module Api
           latitude: 48.8566,
           longitude: 2.3522
         }, headers: @headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
-        assert_includes json_response.map { |u| u['id'] }, @user.id
+        assert_includes json_response.pluck('id'), @user.id
       end
     end
   end

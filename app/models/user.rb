@@ -16,7 +16,7 @@ class User < ApplicationRecord
       (?=.*\d)     # Must contain a digit
       (?=.*[a-z])  # Must contain a lower case character
       (?=.*[A-Z])  # Must contain an upper case character
-    /x.freeze
+    /x
 
   mattr_accessor :current, instance_accessor: false
 
@@ -25,7 +25,7 @@ class User < ApplicationRecord
   has_one_attached :banner
   has_one :user_application_my_compet
   has_many :follows, as: :followable
-  has_many :subscribes, class_name: 'Follow', foreign_key: :user_id
+  has_many :subscribes, class_name: 'Follow'
   has_many :conversation_messages
   has_many :conversation_users
   has_many :conversations, through: :conversation_users
@@ -38,7 +38,7 @@ class User < ApplicationRecord
   has_many :gym_chain_administrators
   has_many :gym_chains, through: :gym_chain_administrators
   has_many :gyms
-  has_many :reports, as: :reportable
+  has_many :reports
   has_many :ascent_crag_routes
   has_many :ascended_crag_routes, through: :ascent_crag_routes, source: :crag_route
   has_many :ascended_crags, through: :ascended_crag_routes, source: :crag
@@ -67,7 +67,6 @@ class User < ApplicationRecord
   has_many :parks
   has_many :place_of_sales
   has_many :refresh_tokens
-  has_many :reports
   has_many :words
   has_many :climbing_sessions
   has_many :gym_openers
@@ -84,8 +83,8 @@ class User < ApplicationRecord
   before_validation :set_ws_token
   before_validation :init_last_activity_at
   before_validation :uncheck_partner_if_minor
-  before_create :init_email_notifiable_list
   before_validation :init_partner_search_activated_at
+  before_create :init_email_notifiable_list
   after_create :link_gym_administrators
   after_update :update_user_localities
 
@@ -129,49 +128,45 @@ class User < ApplicationRecord
   def send_reset_password_instructions
     token = SecureRandom.base36
     self.reset_password_token = token
-    self.reset_password_token_expired_at = Time.zone.now + 30.minutes
+    self.reset_password_token_expired_at = 30.minutes.from_now
     save!
 
     UserMailer.with(user: self, token: token).reset_password.deliver_now
   end
 
   def subscribes_to_a
-    json_follows = []
-    subscribes.each do |follow|
-      json_follows << {
+    subscribes.map do |follow|
+      {
         id: follow.id,
         followable_type: follow.followable_type,
         followable_id: follow.followable_id,
         accepted: follow.accepted?
       }
     end
-    json_follows
   end
 
   def ascent_crag_routes_to_a
-    json_ascents = []
-    ascent_crag_routes.each do |ascent|
-      json_ascents << {
+    ascent_crag_routes.map do |ascent|
+      {
         crag_route_id: ascent.crag_route_id,
         ascent_status: ascent.ascent_status,
         roping_status: ascent.roping_status,
         released_at: ascent.released_at
       }
     end
-    json_ascents
   end
 
   def ascent_gym_routes_to_a
-    json_ascents = []
-    ascent_gym_routes.where.not(gym_route_id: nil, ascent_status: 'repetition').each do |ascent|
-      json_ascents << {
+    ascent_gym_routes.where.not(gym_route_id: nil)
+                     .where.not(ascent_status: 'repetition')
+                     .map do |ascent|
+      {
         gym_route_id: ascent.gym_route_id,
         ascent_status: ascent.ascent_status,
         roping_status: ascent.roping_status,
         released_at: ascent.released_at
       }
     end
-    json_ascents
   end
 
   def tick_list_to_a
@@ -197,7 +192,7 @@ class User < ApplicationRecord
     subscribes.accepted.where(followable_type: 'User')
   end
 
-  def other_user_can?(other_user, request: :see_publications)
+  def other_user_can?(other_user, request: :see_publications) # rubocop:disable Lint/UnusedMethodArgument
     return true if public_profile
 
     follows.where(user: other_user).where.not(accepted_at: nil).exists?

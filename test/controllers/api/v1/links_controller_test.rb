@@ -10,7 +10,7 @@ module Api
         @other_user = users(:other_user)
         @link = links(:link_1)
         @crag = crags(:orpierre)
-        
+
         @user_headers = api_headers(user: :normal_user)
         @other_user_headers = api_headers(user: :other_user)
       end
@@ -19,12 +19,14 @@ module Api
         get api_v1_links_url,
             params: { linkable_type: 'Crag', linkable_id: @crag.id },
             headers: @user_headers
+
         assert_response :success
       end
 
       test 'should show link' do
         get api_v1_link_url(@link),
             headers: @user_headers
+
         assert_response :success
       end
 
@@ -52,8 +54,10 @@ module Api
               }
             },
             headers: @user_headers, as: :json
+
         assert_response :success
         @link.reload
+
         assert_equal 'Updated Name', @link.name
       end
 
@@ -73,6 +77,7 @@ module Api
               }
             },
             headers: @other_user_headers, as: :json
+
         assert_response :forbidden
       end
 

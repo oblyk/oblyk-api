@@ -8,11 +8,12 @@ class GymThreeDElementTest < ActiveSupport::TestCase
   end
 
   test 'gym_three_d_element is valid' do
-    assert @gym_three_d_element.valid?
+    assert_predicate @gym_three_d_element, :valid?
   end
 
   test 'summary_to_json returns correct keys' do
     summary = @gym_three_d_element.summary_to_json
+
     assert_equal @gym_three_d_element.id, summary[:id]
     assert_equal @gym_three_d_element.gym_id, summary[:gym_id]
     assert_includes summary.keys, :gym_three_d_asset

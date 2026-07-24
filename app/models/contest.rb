@@ -43,10 +43,10 @@ class Contest < ApplicationRecord
             presence: true
   validate :validate_dates
 
-  scope :upcoming, -> { where(draft: false, private: false).where('contests.end_date >= ?', Date.current) }
+  scope :upcoming, -> { where(draft: false, private: false).where(contests: { end_date: Date.current.. }) }
 
   def public_app_path
-    "#{ENV['OBLYK_APP_URL']}/gyms/#{gym.id}/#{gym.slug_name}/contests/#{id}/#{slug_name}"
+    "#{ENV.fetch('OBLYK_APP_URL', nil)}/gyms/#{gym.id}/#{gym.slug_name}/contests/#{id}/#{slug_name}"
   end
 
   def app_path
@@ -66,11 +66,11 @@ class Contest < ApplicationRecord
   end
 
   def subscription_opened?
-    Date.current >= subscription_start_date && Date.current <= subscription_end_date
+    Date.current.between?(subscription_start_date, subscription_end_date)
   end
 
   def authentification_opened?
-    Date.current >= subscription_start_date && Date.current <= end_date
+    Date.current.between?(subscription_start_date, end_date)
   end
 
   def finished?
@@ -82,7 +82,7 @@ class Contest < ApplicationRecord
   end
 
   def ongoing?
-    start_date <= Date.current && Date.current <= end_date
+    Date.current.between?(start_date, end_date)
   end
 
   def coming?
@@ -144,7 +144,7 @@ class Contest < ApplicationRecord
         contest_categories: contest_categories.map(&:summary_to_json),
         contest_stages: contest_stages.map(&:summary_to_json),
         championships: championships.map(&:summary_to_json),
-        contest_waves: contest_waves.map { |wave| { id: wave.id, name: wave.name, capacity: wave.capacity }},
+        contest_waves: contest_waves.map { |wave| { id: wave.id, name: wave.name, capacity: wave.capacity } },
         ffme_contest_id: ffme_contest&.id,
         ffme_contest: ffme_contest&.summary_to_json,
         history: {

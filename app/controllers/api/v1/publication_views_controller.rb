@@ -14,15 +14,14 @@ module Api
                                     .where.not(publishable_type: %w[Gym])
                                     .where('publications.publishable_subject IS NULL OR publications.publishable_subject NOT IN ("new_crag_routes", "new_video", "new_alert")')
                                     .where.not(published_at: nil)
-                                    .where('publications.published_at >= ?', Time.current - 3.months)
+                                    .where(publications: { published_at: 3.months.ago.. })
                                     .where('NOT EXISTS(SELECT * FROM publication_views WHERE publication_id = publications.id AND publication_views.user_id = :user_id)', user_id: @current_user.id)
                        else
                          Publication.where(publishable_type: params[:publishable_type], publishable_id: params[:publishable_id])
                                     .where.not(published_at: nil)
-                                    .where('publications.published_at >= ?', Time.current - 3.months)
+                                    .where(publications: { published_at: 3.months.ago.. })
                                     .where('NOT EXISTS(SELECT * FROM publication_views WHERE publication_id = publications.id AND publication_views.user_id = :user_id)', user_id: @current_user.id)
                        end
-
 
         render json: publications.count, status: :ok
       end
@@ -46,7 +45,7 @@ module Api
                                                 )',
                                     current_user_id: @current_user.id
                                   )
-                                  .where('publications.published_at >= ?', Time.current - 3.months)
+                                  .where(publications: { published_at: 3.months.ago.. })
                                   .where('NOT EXISTS(SELECT * FROM publication_views WHERE publication_id = publications.id AND publication_views.user_id = :user_id)', user_id: @current_user.id)
         render json: publications.count, status: :ok
       end

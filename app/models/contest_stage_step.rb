@@ -13,8 +13,8 @@ class ContestStageStep < ApplicationRecord
 
   before_validation :set_contest
   before_validation :set_order
-  after_save :delete_caches
   after_destroy :delete_caches
+  after_save :delete_caches
 
   validates :name,
             :step_order,

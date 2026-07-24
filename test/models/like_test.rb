@@ -10,12 +10,13 @@ class LikeTest < ActiveSupport::TestCase
   end
 
   test 'like is valid' do
-    assert @gym_route_like.valid?
-    assert @comment_like.valid?
+    assert_predicate @gym_route_like, :valid?
+    assert_predicate @comment_like, :valid?
   end
 
   test 'summary_to_json returns a hash' do
     summary = @gym_route_like.summary_to_json
+
     assert_kind_of Hash, summary
     assert_equal @gym_route_like.id, summary[:id]
     assert_equal 'GymRoute', summary[:likeable_type]
@@ -38,6 +39,7 @@ class LikeTest < ActiveSupport::TestCase
     end
 
     notification = Notification.where(notifiable: @like).last
+
     assert_equal 'new_like', notification.notification_type
     assert_equal 'Like', notification.notifiable_type
     assert_equal comment.user_id, notification.user_id

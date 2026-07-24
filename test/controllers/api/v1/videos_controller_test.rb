@@ -17,17 +17,20 @@ module Api
 
       test 'should get index' do
         get api_v1_videos_url, params: { viewable_type: 'Crag', viewable_id: @crag.id }, headers: @api_headers, as: :json
+
         assert_response :success
       end
 
       test 'should show video' do
         get api_v1_video_url(@video_youtube), headers: @api_headers, as: :json
+
         assert_response :success
       end
 
       test 'should create video' do
         mock_response = Minitest::Mock.new
         mock_response.expect :body, '{"html": "<iframe></iframe>"}'
+
         Net::HTTP.stub :get_response, mock_response do
           assert_difference('Video.count') do
             post api_v1_videos_url,
@@ -59,8 +62,10 @@ module Api
               headers: @api_headers,
               as: :json
         end
+
         assert_response :success
         @video_youtube.reload
+
         assert_equal 'Updated description', @video_youtube.description
       end
 
@@ -74,6 +79,7 @@ module Api
             },
             headers: api_headers_user_two,
             as: :json
+
         assert_response :forbidden
       end
 
@@ -125,10 +131,12 @@ module Api
         api_headers_not_admin = api_headers(user: :other_user)
 
         delete moderate_by_gym_administrator_api_v1_video_url(@video), headers: api_headers_not_admin, as: :json
+
         assert_response :forbidden
       end
       test 'should not moderate video if viewable is not a gym route' do
         delete moderate_by_gym_administrator_api_v1_video_url(@video_youtube), headers: @api_headers, as: :json
+
         assert_response :forbidden
       end
     end

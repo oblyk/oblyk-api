@@ -27,7 +27,7 @@ class PlaceOfSale < ApplicationRecord
         guide_book_paper_id: guide_book_paper_id,
         icon: 'place-of-sale-marker'
       },
-      geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
+      geometry: { type: 'Point', coordinates: [Float(longitude), Float(latitude), 0.0] }
     }
     unless minimalistic
       features[:properties].merge!(

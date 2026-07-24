@@ -23,6 +23,7 @@ module Api
         get api_v1_gym_contest_contest_stage_contest_stage_step_contest_route_groups_url(
           @gym, @contest, @contest_stage, @contest_stage_step
         ), headers: @public_headers
+
         assert_response :success
       end
 
@@ -30,6 +31,7 @@ module Api
         get api_v1_gym_contest_contest_stage_contest_stage_step_contest_route_group_url(
           @gym, @contest, @contest_stage, @contest_stage_step, @contest_route_group
         ), headers: @public_headers
+
         assert_response :success
       end
 
@@ -72,8 +74,10 @@ module Api
             genre_type: 'male'
           }
         }, headers: @admin_headers, as: :json
+
         assert_response :success
         @contest_route_group.reload
+
         assert_equal 'male', @contest_route_group.genre_type
       end
 

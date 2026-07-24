@@ -15,7 +15,7 @@ module Api
       end
 
       def show
-        if @conversation.conversation_users.includes(:user).where(user: @current_user).count.zero?
+        if @conversation.conversation_users.includes(:user).where(user: @current_user).none?
           render json: {}, status: :forbidden
         else
           render json: @conversation.detail_to_json, status: :ok

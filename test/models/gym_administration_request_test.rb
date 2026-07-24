@@ -10,16 +10,18 @@ class GymAdministrationRequestTest < ActiveSupport::TestCase
   end
 
   test 'gym_administration_request is valid' do
-    assert @request.valid?
+    assert_predicate @request, :valid?
   end
 
   test 'gym_administration_request is invalid without first_name' do
     @request.first_name = nil
+
     assert_not @request.valid?
   end
 
   test 'gym_administration_request is invalid with bad email' do
     @request.email = 'bad-email'
+
     assert_not @request.valid?
   end
 
@@ -29,6 +31,7 @@ class GymAdministrationRequestTest < ActiveSupport::TestCase
     end
 
     administrator = GymAdministrator.last
+
     assert_equal @request.user_id, administrator.user_id
     assert_equal @request.gym_id, administrator.gym_id
     assert_equal GymRole::LIST, administrator.roles
@@ -36,11 +39,13 @@ class GymAdministrationRequestTest < ActiveSupport::TestCase
 
   test 'deal returns true if gym is administered' do
     @request.gym.administered!
+
     assert @request.deal
   end
 
   test 'summary_to_json returns expected keys' do
     json = @request.summary_to_json
+
     assert_equal @request.id, json[:id]
     assert_equal @request.justification, json[:justification]
     assert_includes json.keys, :gym

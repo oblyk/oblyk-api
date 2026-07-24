@@ -15,12 +15,14 @@ module Api
       test 'should get index' do
         get api_v1_publication_publication_attachments_url(publication_id: @publication.id),
             headers: @user_headers
+
         assert_response :success
       end
 
       test 'should show publication attachment' do
         get api_v1_publication_publication_attachment_url(publication_id: @publication.id, id: @attachment.id),
             headers: @user_headers
+
         assert_response :success
       end
 
@@ -70,6 +72,7 @@ module Api
                }
              },
              headers: other_user_headers, as: :json
+
         assert_response :forbidden
       end
     end

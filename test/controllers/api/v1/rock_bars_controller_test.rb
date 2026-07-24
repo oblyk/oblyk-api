@@ -16,15 +16,19 @@ module Api
 
       test 'should get index' do
         get api_v1_crag_rock_bars_url(crag_id: @crag.id), headers: @api_headers, as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @crag.rock_bars.count, json_response.size
       end
 
       test 'should show rock_bar' do
         get api_v1_crag_rock_bar_url(crag_id: @crag.id, id: @rock_bar.id), headers: @api_headers, as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @rock_bar.id, json_response['id']
       end
 
@@ -52,8 +56,10 @@ module Api
               },
               headers: @api_headers,
               as: :json
+
         assert_response :success
         @rock_bar.reload
+
         assert_equal [[44.3, 5.3], [44.4, 5.4]], @rock_bar.polyline
       end
 

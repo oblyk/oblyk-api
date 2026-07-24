@@ -18,6 +18,7 @@ class ContestRankersChannelTest < ActionCable::Channel::TestCase
 
   test 'subscribes to a contest rankers stream' do
     subscribe contest_id: @contest.id
+
     assert_has_stream "contest_rankers_#{@contest.id}"
   end
 
@@ -29,9 +30,11 @@ class ContestRankersChannelTest < ActionCable::Channel::TestCase
 
   test 'unsubscribed stops all streams' do
     subscribe contest_id: @contest.id
+
     assert_has_stream "contest_rankers_#{@contest.id}"
 
     unsubscribe
+
     assert_no_streams
   end
 end

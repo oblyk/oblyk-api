@@ -10,7 +10,7 @@ class ClimberProximity
   end
 
   def results(page: 1, per_page: 25)
-    sql_query = <<-SQL
+    sql_query = <<~SQL.squish
       WITH t_ascent_crags AS (
           SELECT ascents.user_id,
                  COUNT(DISTINCT ascents.released_at) AS count
@@ -112,20 +112,18 @@ class ClimberProximity
                           oblyk_user_id: 57
                         }
                       ]
-                    ) + "LIMIT #{per_page.to_i} OFFSET #{(page.to_i - 1) * per_page.to_i}"
+                    ) + " LIMIT #{per_page.to_i} OFFSET #{(page.to_i - 1) * per_page.to_i}"
                   )
     users = User.includes(avatar_attachment: :blob, banner_attachment: :blob)
-                .where(id: results.map { |results| results['id'] })
+                .where(id: results.pluck('id'))
                 .group_by(&:id)
 
-    rich_results = []
-    results.each do |result|
-      rich_results << build_user(
+    results.map do |result|
+      build_user(
         result,
         users[result['id']].first
       )
     end
-    rich_results
   end
 
   private

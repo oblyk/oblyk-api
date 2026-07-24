@@ -10,27 +10,31 @@ class CragRouteTest < ActiveSupport::TestCase
   end
 
   test 'crag_route is valid' do
-    assert @route_one.valid?
+    assert_predicate @route_one, :valid?
   end
 
   test 'crag_route is invalid without name' do
     @route_one.name = nil
-    assert @route_one.invalid?
+
+    assert_predicate @route_one, :invalid?
   end
 
   test 'crag_route is invalid without climbing_type' do
     @route_one.climbing_type = nil
-    assert @route_one.invalid?
+
+    assert_predicate @route_one, :invalid?
   end
 
   test 'crag_route is invalid with wrong climbing_type' do
     @route_one.climbing_type = 'invalid_type'
-    assert @route_one.invalid?
+
+    assert_predicate @route_one, :invalid?
   end
 
   test 'crag_route is invalid with negative height' do
     @route_one.height = -1
-    assert @route_one.invalid?
+
+    assert_predicate @route_one, :invalid?
   end
 
   test 'rich_name returns grade and name' do
@@ -67,6 +71,7 @@ class CragRouteTest < ActiveSupport::TestCase
       sections: [{ grade: '6a', climbing_type: 'sport_climbing' }]
     )
     route.valid?
+
     assert_equal [route.crag.latitude.to_s, route.crag.longitude.to_s], route.location
   end
 
@@ -81,6 +86,7 @@ class CragRouteTest < ActiveSupport::TestCase
       ]
     )
     route.save
+
     assert_equal '5c', route.min_grade_text
     assert_equal '6a', route.max_grade_text
     assert_equal Grade.to_value('5c'), route.min_grade_value
@@ -89,12 +95,14 @@ class CragRouteTest < ActiveSupport::TestCase
 
   test 'validate_sections ensures grade is present' do
     @route_one.sections = [{ climbing_type: 'sport_climbing' }]
-    assert @route_one.invalid?
+
+    assert_predicate @route_one, :invalid?
   end
 
   test 'validate_sections ensures grade is valid if present' do
     @route_one.sections = [{ grade: '12z', climbing_type: 'sport_climbing' }]
-    assert @route_one.invalid?
+
+    assert_predicate @route_one, :invalid?
     assert_includes @route_one.errors[:grade], I18n.t('activerecord.errors.messages.inclusion')
   end
 end

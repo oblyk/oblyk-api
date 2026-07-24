@@ -14,8 +14,10 @@ module Api
 
       test 'should show judge interface data' do
         get api_v1_gym_contest_contest_judge_interface_url(@gym, @contest, @judge.uuid), headers: @public_headers, as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @judge.name, json_response['contest_judge']['name']
         assert_equal @contest.name, json_response['contest']['name']
       end
@@ -29,8 +31,10 @@ module Api
              },
              headers: @public_headers,
              as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert json_response['unlocked']
         assert_not_nil json_response['token']
       end
@@ -44,8 +48,10 @@ module Api
              },
              headers: @public_headers,
              as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_not json_response['unlocked']
         assert_nil json_response['token']
       end
@@ -59,8 +65,10 @@ module Api
         get participants_api_v1_gym_contest_contest_judge_interface_url(@gym, @contest, @judge.uuid),
             headers: headers,
             as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
       end
 
@@ -68,6 +76,7 @@ module Api
         get participants_api_v1_gym_contest_contest_judge_interface_url(@gym, @contest, @judge.uuid),
             headers: @public_headers,
             as: :json
+
         assert_equal 419, response.status
       end
     end

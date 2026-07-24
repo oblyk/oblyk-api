@@ -15,6 +15,7 @@ module Api
         get api_v1_publications_url,
             params: { publishable_type: 'User', publishable_id: @user.id },
             headers: @user_headers
+
         assert_response :success
       end
 
@@ -22,18 +23,21 @@ module Api
         get drafts_api_v1_publications_url,
             params: { publishable_type: 'User', publishable_id: @user.id },
             headers: @user_headers
+
         assert_response :success
       end
 
       test 'should get my publication feed' do
         get my_publication_feed_api_v1_publications_url,
             headers: @user_headers
+
         assert_response :success
       end
 
       test 'should show publication' do
         get api_v1_publication_url(@publication),
             headers: @user_headers
+
         assert_response :success
       end
 
@@ -60,8 +64,10 @@ module Api
               }
             },
             headers: @user_headers, as: :json
+
         assert_response :success
         @publication.reload
+
         assert_equal 'Publication mise à jour', @publication.body
       end
 
@@ -80,8 +86,10 @@ module Api
 
         put publish_api_v1_publication_url(draft),
             headers: lulu_headers
+
         assert_response :success
         draft.reload
+
         assert_not_nil draft.published_at
       end
 

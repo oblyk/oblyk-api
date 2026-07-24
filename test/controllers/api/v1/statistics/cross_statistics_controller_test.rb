@@ -18,7 +18,8 @@ module Api
               as: :json
 
           assert_response :success
-          json_response = JSON.parse(response.body)
+          json_response = response.parsed_body
+
           assert_not_nil json_response['results']
           assert_not_nil json_response['column_headers']
           assert_not_nil json_response['params']
@@ -30,7 +31,8 @@ module Api
               as: :json
 
           assert_response :success
-          json_response = JSON.parse(response.body)
+          json_response = response.parsed_body
+
           assert_equal 'grade', json_response['params']['by']
           assert_equal 'level', json_response['params']['number_of']
         end

@@ -26,7 +26,7 @@ class PublicationViewsMapper
     publication_views = PublicationView.where(user_id: user.id, publication_id: publication_ids)
 
     # If no publication is already viewed, save and return publications
-    if publication_views.size.zero?
+    if publication_views.empty?
       save_views(publication_ids)
       return publications
     end
@@ -50,9 +50,8 @@ class PublicationViewsMapper
   end
 
   def save_views(publication_ids)
-    publication_views = []
-    publication_ids.each do |publication_id|
-      publication_views << PublicationView.new(publication_id: publication_id, user: user, viewed_at: Time.current)
+    publication_views = publication_ids.map do |publication_id|
+      PublicationView.new(publication_id: publication_id, user: user, viewed_at: Time.current)
     end
     publication_views.each(&:save)
 

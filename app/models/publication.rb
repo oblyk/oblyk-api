@@ -85,7 +85,7 @@ class Publication < ApplicationRecord
       generated: false,
       publishable_type: publishable_type,
       publishable_id: publishable_id,
-      published_at: [DateTime.current.beginning_of_day..DateTime.current.end_of_day]
+      published_at: [DateTime.current.all_day]
     )
     today_publications = today_publications.where(author: author) if %w[Crag GuideBookPaper].include? publishable_type
 
@@ -111,9 +111,9 @@ class Publication < ApplicationRecord
 
     attachements_count = publication_attachments.size
 
-    if publishable_type == 'Crag' && %w[new_alert new_photo].include?(publishable_subject) && attachements_count.zero?
-      destroy
-    end
+    return unless publishable_type == 'Crag' && %w[new_alert new_photo].include?(publishable_subject) && attachements_count.zero?
+
+    destroy
   end
 
   def create_notification!
@@ -140,7 +140,7 @@ class Publication < ApplicationRecord
 
   def set_view_if_to_old
     return unless published_at
-    return if published_at >= Time.zone.now - 3.months
+    return if published_at >= 3.months.ago
 
     self.viewed = true
   end

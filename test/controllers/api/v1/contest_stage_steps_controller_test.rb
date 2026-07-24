@@ -22,8 +22,10 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_contest_contest_stage_contest_stage_steps_url(@gym, @contest, @contest_stage), headers: @public_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
       end
 
@@ -31,13 +33,16 @@ module Api
         get api_v1_gym_contest_contest_stage_contest_stage_steps_url(@gym, @contest, @contest_stage),
             params: { with_routes: 'true' },
             headers: @public_headers
+
         assert_response :success
       end
 
       test 'should show contest_stage_step' do
         get api_v1_gym_contest_contest_stage_contest_stage_step_url(@gym, @contest, @contest_stage, @contest_stage_step), headers: @public_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @contest_stage_step.name, json_response['name']
       end
 
@@ -79,8 +84,10 @@ module Api
             params: { contest_stage_step: { name: 'Updated Step Name' } },
             headers: @admin_headers,
             as: :json
+
         assert_response :success
         @contest_stage_step.reload
+
         assert_equal 'Updated Step Name', @contest_stage_step.name
       end
 

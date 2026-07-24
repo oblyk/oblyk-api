@@ -9,17 +9,19 @@ class ContestTeamTest < ActiveSupport::TestCase
   end
 
   test 'contest team is valid' do
-    assert @team.valid?
+    assert_predicate @team, :valid?
   end
 
   test 'contest team is invalid without name' do
     @team.name = nil
+
     assert_not @team.valid?
     assert_includes @team.errors.attribute_names, :name
   end
 
   test 'contest team name is unique within a contest' do
     duplicate_team = ContestTeam.new(name: @team.name, contest: @contest)
+
     assert_not duplicate_team.valid?
     assert_includes duplicate_team.errors.attribute_names, :name
   end
@@ -27,11 +29,13 @@ class ContestTeamTest < ActiveSupport::TestCase
   test 'strip_whitespace removes leading and trailing spaces from name' do
     @team.name = '  Team name with spaces  '
     @team.valid?
+
     assert_equal 'Team name with spaces', @team.name
   end
 
   test 'summary_to_json returns expected keys' do
     json = @team.summary_to_json
+
     assert_equal @team.id, json[:id]
     assert_equal @team.name, json[:name]
     assert_equal @team.contest_id, json[:contest_id]
@@ -42,6 +46,7 @@ class ContestTeamTest < ActiveSupport::TestCase
 
   test 'detail_to_json returns expected keys' do
     json = @team.detail_to_json
+
     assert_equal @team.id, json[:id]
     assert_includes json.keys, :contest_participants
     assert_includes json.keys, :history
@@ -59,11 +64,13 @@ class ContestTeamTest < ActiveSupport::TestCase
     assert_equal 0, @team.remaining_places
 
     @team.contest_participants.first.update_column(:contest_team_id, nil)
+
     assert_equal 1, @team.reload.remaining_places
   end
 
   test 'un_team_participants sets participant contest_team_id to nil on destroy' do
     participants = @team.contest_participants.to_a
+
     assert_not_empty participants
 
     @team.destroy

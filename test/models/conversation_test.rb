@@ -15,7 +15,7 @@ class ConversationTest < ActiveSupport::TestCase
 
   test 'update_last_message_at! updates last_message_at attribute' do
     last_message = @conversation.conversation_messages.order(:posted_at).last
-    new_date = Time.current + 1.day
+    new_date = 1.day.from_now
     last_message.update_column(:posted_at, new_date)
 
     @conversation.update_last_message_at!
@@ -30,11 +30,13 @@ class ConversationTest < ActiveSupport::TestCase
     new_conversation.conversation_users.build(user: users(:super_admin_user))
 
     found_conversation = new_conversation.same_conversation
+
     assert_equal @conversation.id, found_conversation.id
   end
 
   test 'detail_to_json returns expected structure' do
     json = @conversation.detail_to_json
+
     assert_equal @conversation.id, json[:id]
     assert_equal 2, json[:conversation_users].size
     assert_not_nil json[:last_message]

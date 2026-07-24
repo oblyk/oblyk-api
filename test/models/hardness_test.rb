@@ -4,7 +4,7 @@ require 'test_helper'
 
 class HardnessTest < ActiveSupport::TestCase
   test 'Hardness::LIST is an array' do
-    assert Hardness::LIST.is_a?(Array)
+    assert_kind_of Array, Hardness::LIST
   end
 
   test 'Hardness::LIST contains expected values' do
@@ -13,11 +13,12 @@ class HardnessTest < ActiveSupport::TestCase
       this_grade_is_accurate
       sandbagged
     ]
+
     assert_equal expected_anchors.sort, Hardness::LIST.sort
   end
 
   test 'Hardness::LIST is frozen' do
-    assert Hardness::LIST.frozen?
+    assert_predicate Hardness::LIST, :frozen?
   end
 
   test 'Hardness::LIST has 3 elements' do

@@ -15,26 +15,31 @@ module Api
 
       test 'should get index' do
         get api_v1_guide_book_papers_url, headers: @user_headers
+
         assert_response :success
       end
 
       test 'should get grouped' do
         get grouped_api_v1_guide_book_papers_url, params: { group: 'publication_year' }, headers: @user_headers
+
         assert_response :success
       end
 
       test 'should get crags' do
         get crags_api_v1_guide_book_paper_url(@guide_book_paper), headers: @user_headers
+
         assert_response :success
       end
 
       test 'should get crags_figures' do
         get crags_figures_api_v1_guide_book_paper_url(@guide_book_paper), headers: @user_headers
+
         assert_response :success
       end
 
       test 'should show guide_book_paper' do
         get api_v1_guide_book_paper_url(@guide_book_paper), headers: @user_headers
+
         assert_response :success
       end
 
@@ -51,8 +56,10 @@ module Api
         patch api_v1_guide_book_paper_url(@guide_book_paper),
               params: { guide_book_paper: { name: 'Updated Guide Book' } },
               headers: @user_headers, as: :json
+
         assert_response :success
         @guide_book_paper.reload
+
         assert_equal 'Updated Guide Book', @guide_book_paper.name
       end
 
@@ -95,6 +102,7 @@ module Api
         get around_api_v1_guide_book_papers_url,
             params: { lat: 44.44, lng: 5.14, dist: 20 },
             headers: @user_headers
+
         assert_response :success
       end
     end

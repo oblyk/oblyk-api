@@ -23,7 +23,7 @@ class Ascent < ApplicationRecord
   scope :by_roping_statuses, ->(roping_filter) { where(roping_status: roping_filter) }
   scope :by_climbing_types, ->(climbing_type_filter) { joins(:crag_route).where(crag_routes: { climbing_type: climbing_type_filter }) }
   # Combine all filters in the `filtered` scope
-  scope :filtered, ->(filters) {
+  scope :filtered, lambda { |filters|
     scoped_results = self
     scoped_results = scoped_results.by_ascent_statuses(filters[:ascent_filter])
     scoped_results = scoped_results.by_roping_statuses(filters[:roping_filter])
@@ -31,8 +31,8 @@ class Ascent < ApplicationRecord
     scoped_results
   }
 
-  after_save :attache_to_climbing_session
   after_destroy :purge_climbing_session
+  after_save :attache_to_climbing_session
 
   def hardness_value
     return -1 if hardness_status == 'easy_for_the_grade'
@@ -42,7 +42,7 @@ class Ascent < ApplicationRecord
   end
 
   def sections_done
-    sections.map { |section| section['index'] }
+    sections.pluck('index')
   end
 
   private

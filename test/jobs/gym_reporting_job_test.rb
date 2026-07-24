@@ -23,6 +23,7 @@ class GymReportingJobTest < ActiveJob::TestCase
     end
 
     next_month = Date.current.next_month.beginning_of_month.beginning_of_day + 9.hours
+
     assert_enqueued_with(job: GymReportingJob, at: next_month)
   end
 

@@ -11,6 +11,7 @@ class PublicationAuthorSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @user.id, attributes['id']
     assert_equal @user.uuid, attributes['uuid']
     assert_equal @user.slug_name, attributes['slug_name']

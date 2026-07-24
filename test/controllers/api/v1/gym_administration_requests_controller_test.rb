@@ -38,6 +38,7 @@ module Api
                }
              },
              as: :json
+
         assert_response :forbidden
       end
 
@@ -52,6 +53,7 @@ module Api
                }
              },
              headers: @user_headers, as: :json
+
         assert_response :unprocessable_content
       end
     end

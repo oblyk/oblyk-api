@@ -8,7 +8,7 @@ class ChampionshipContestTest < ActiveSupport::TestCase
   end
 
   test 'should be valid' do
-    assert @championship_contest.valid?
+    assert_predicate @championship_contest, :valid?
   end
 
   test 'should belong to championship' do
@@ -28,7 +28,8 @@ class ChampionshipContestTest < ActiveSupport::TestCase
                                              .joins(:contest_category)
                                              .where(contest_categories: { contest_id: contest.id })
                                              .count
-    assert matches_count.positive?
+
+    assert_predicate matches_count, :positive?
 
     @championship_contest.destroy
 
@@ -37,6 +38,7 @@ class ChampionshipContestTest < ActiveSupport::TestCase
                                                    .joins(:contest_category)
                                                    .where(contest_categories: { contest_id: contest.id })
                                                    .count
+
     assert_equal 0, matches_count_after
   end
 end

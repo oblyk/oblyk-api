@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 
 module Services
@@ -27,6 +28,7 @@ module Services
         Stripe::Webhook.stub :construct_event, event do
           StripeService.stub :fulfill_checkout, true do
             post services_stripes_webhook_path, params: payload, headers: { 'HTTP_STRIPE_SIGNATURE' => 'valid_signature' }
+
             assert_response :success
           end
         end
@@ -47,6 +49,7 @@ module Services
         Stripe::Webhook.stub :construct_event, event do
           StripeService.stub :customer_subscription_update, true do
             post services_stripes_webhook_path, params: payload, headers: { 'HTTP_STRIPE_SIGNATURE' => 'valid_signature' }
+
             assert_response :success
           end
         end
@@ -64,6 +67,7 @@ module Services
         event = Stripe::Event.construct_from(JSON.parse(payload, symbolize_names: true))
         Stripe::Webhook.stub :construct_event, event do
           post services_stripes_webhook_path, params: payload, headers: { 'HTTP_STRIPE_SIGNATURE' => 'valid_signature' }
+
           assert_response :success
         end
       end

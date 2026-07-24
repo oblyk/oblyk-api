@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Grade
-  GRADE_VALIDATION = %r(^((([1-9][abc]?)|(B[0-9]|B1[0-6])|(E[0-9]|E1[0-1])|(PD|AD|D|TD|ED|ABO)|([I]{1,3}|IV|V[III]{0,3}|IX|X[III]{0,3})|(M|D|VD|S|HS|VS|HVS)|(VB|V[0-9]|V1[0-9]|V20)|(A[0-6])|(5\.[0-9]|5\.1[0-5][abcd]))(\+|-|/-|/\+|\?|\+/\?|-/\?|\+/b|\+/c|a/b|b/c|/[456789][abc]|/A[0123456])?|\?)$).freeze
+  GRADE_VALIDATION = %r(^((([1-9][abc]?)|(B[0-9]|B1[0-6])|(E[0-9]|E1[0-1])|(PD|AD|D|TD|ED|ABO)|(I{1,3}|IV|VI{0,3}|IX|XI{0,3})|(M|D|VD|S|HS|VS|HVS)|(VB|V[0-9]|V1[0-9]|V20)|(A[0-6])|(5\.[0-9]|5\.1[0-5][abcd]))(\+|-|/-|/\+|\?|\+/\?|-/\?|\+/b|\+/c|a/b|b/c|/[456789][abc]|/A[0123456])?|\?)$)
   GRADE_STYLES = %w[french england usa_lead usa_bouldering deutsch_lead pick_district french_multi_pitch aid].freeze
   MIN_GRADE = 0
   MAX_GRADE = 54
@@ -148,7 +148,8 @@ class Grade
     return '6' if (31..36).cover? value
     return '7' if (37..42).cover? value
     return '8' if (43..48).cover? value
-    return '9' if (49..54).cover? value
+
+    '9' if (49..54).cover? value
   end
 
   def self.level(value)
@@ -186,7 +187,8 @@ class Grade
 
     return '9a' if (49..50).cover? value
     return '9b' if (51..52).cover? value
-    return '9c' if (53..54).cover? value
+
+    '9c' if (53..54).cover? value
   end
 
   def self.degree_colors

@@ -38,4 +38,3 @@ module LogBook
     end
   end
 end
-

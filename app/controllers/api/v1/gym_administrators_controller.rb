@@ -80,7 +80,7 @@ module Api
                                              commentable_type: 'GymRoute',
                                              gym_spaces: { gym_id: @gym.id }
                                            )
-                                           .where('comments.created_at >= ?', administrator.last_comment_feed_read_at)
+                                           .where(comments: { created_at: administrator.last_comment_feed_read_at.. })
                                            .count
             ascent_comments_count = Comment.joins('INNER JOIN ascents ON commentable_id = ascents.id')
                                            .joins('INNER JOIN gym_routes ON gym_route_id = gym_routes.id')
@@ -89,7 +89,7 @@ module Api
                                              gym_routes: { dismounted_at: nil },
                                              ascents: { gym_id: @gym.id }
                                            )
-                                           .where('comments.created_at >= ?', administrator.last_comment_feed_read_at)
+                                           .where(comments: { created_at: administrator.last_comment_feed_read_at.. })
                                            .count
             count_by_feeds[feed] = {
               type: feed,
@@ -100,7 +100,7 @@ module Api
 
           if feed == 'video'
             count = Video.where(viewable_type: 'GymRoute', viewable_id: @gym.gym_routes.mounted.pluck(:id))
-                         .where('videos.created_at >= ?', administrator.last_video_feed_read_at)
+                         .where(videos: { created_at: administrator.last_video_feed_read_at.. })
                          .count
             count_by_feeds[feed] = {
               type: feed,
@@ -112,7 +112,7 @@ module Api
           next unless feed == 'follower'
 
           count = Follow.where(followable_type: 'Gym', followable_id: @gym.id)
-                        .where('follows.created_at >= ?', administrator.last_follower_feed_read_at)
+                        .where(follows: { created_at: administrator.last_follower_feed_read_at.. })
                         .count
           count_by_feeds[feed] = {
             type: feed,

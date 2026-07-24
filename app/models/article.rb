@@ -17,7 +17,7 @@ class Article < ApplicationRecord
   has_many :photos, as: :illustrable
   has_many :publications, as: :publishable
 
-  validates :name, :description, :body, :author, presence: true
+  validates :name, :description, :body, presence: true
 
   def app_path
     "/articles/#{id}/#{slug_name}"
@@ -76,7 +76,7 @@ class Article < ApplicationRecord
   def publication_push!
     return unless published?
 
-    return if Publication.where(publishable_type: 'Article', publishable_id: id, publishable_subject: :create).exists?
+    return if Publication.exists?(publishable_type: 'Article', publishable_id: id, publishable_subject: :create)
 
     Publication.create(
       publishable_id: id,

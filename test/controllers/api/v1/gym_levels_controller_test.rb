@@ -14,23 +14,29 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_gym_levels_url(gym_id: @gym.id), headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_instance_of Array, json_response
       end
 
       test 'should get index with average_for_sector_id' do
         sector = gym_sectors(:my_gym_sector)
         get api_v1_gym_gym_levels_url(gym_id: @gym.id, average_for_sector_id: sector.id), headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_instance_of Array, json_response
 
         bouldering_level = json_response.find { |l| l['climbing_type'] == 'bouldering' }
-        assert bouldering_level.present?
+
+        assert_predicate bouldering_level, :present?
 
         level_with_average = bouldering_level['levels'].find { |l| l['order'] == 1 }
-        assert_equal 34.0, level_with_average['average_grade'].to_f
+
+        assert_in_delta(34.0, level_with_average['average_grade'].to_f)
       end
 
       test 'should update all gym levels' do
@@ -53,8 +59,10 @@ module Api
               }
             },
             headers: @user_headers, as: :json
+
         assert_response :no_content
         @gym_level.reload
+
         assert_equal '5a', @gym_level.levels.first['default_grade']
         assert_equal 150, @gym_level.levels.first['default_point']
       end
@@ -70,6 +78,7 @@ module Api
               }
             },
             headers: other_user_headers, as: :json
+
         assert_response :no_content
       end
     end

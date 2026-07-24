@@ -15,15 +15,19 @@ module Api
 
       test 'should get gyms geo json' do
         get gyms_geo_json_api_v1_gym_chain_url(@gym_chain.slug_name), headers: @public_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal 'FeatureCollection', json_response['type']
       end
 
       test 'should show gym chain' do
         get api_v1_gym_chain_url(@gym_chain.slug_name), headers: @public_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @gym_chain.name, json_response['name']
       end
 
@@ -31,8 +35,10 @@ module Api
         patch api_v1_gym_chain_url(@gym_chain.slug_name),
               params: { gym_chain: { name: 'Arkose New Name' } },
               headers: @user_headers, as: :json
+
         assert_response :success
         @gym_chain.reload
+
         assert_equal 'Arkose New Name', @gym_chain.name
       end
 
@@ -40,6 +46,7 @@ module Api
         patch api_v1_gym_chain_url(@gym_chain.slug_name),
               params: { gym_chain: { name: 'Hacker Name' } },
               headers: @other_user_headers, as: :json
+
         assert_response :forbidden
       end
 
@@ -48,6 +55,7 @@ module Api
               params: { gym_chain: { name: 'Anonymous Name' } },
               headers: @public_headers,
               as: :json
+
         assert_response :unauthorized
       end
 
@@ -55,6 +63,7 @@ module Api
         patch api_v1_gym_chain_url(@gym_chain.slug_name),
               params: { gym_chain: { name: '' } },
               headers: @user_headers, as: :json
+
         assert_response :unprocessable_content
       end
 
@@ -63,9 +72,11 @@ module Api
         post add_banner_api_v1_gym_chain_url(@gym_chain.slug_name),
              params: { gym_chain: { banner: banner_file } },
              headers: @user_headers
+
         assert_response :success
         @gym_chain.reload
-        assert @gym_chain.banner.attached?
+
+        assert_predicate @gym_chain.banner, :attached?
       end
 
       test 'should add logo' do
@@ -73,9 +84,11 @@ module Api
         post add_logo_api_v1_gym_chain_url(@gym_chain.slug_name),
              params: { gym_chain: { logo: logo_file } },
              headers: @user_headers
+
         assert_response :success
         @gym_chain.reload
-        assert @gym_chain.logo.attached?
+
+        assert_predicate @gym_chain.logo, :attached?
       end
     end
   end

@@ -20,23 +20,29 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_gym_opening_sheets_url(gym_id: @gym.id), headers: @admin_headers
+
         assert_response :success
-        json = JSON.parse(response.body)
+        json = response.parsed_body
+
         assert_kind_of Array, json
       end
 
       test 'should get index unarchived' do
         get api_v1_gym_gym_opening_sheets_url(gym_id: @gym.id, archived: 'false'), headers: @admin_headers
+
         assert_response :success
-        json = JSON.parse(response.body)
+        json = response.parsed_body
+
         assert_equal 1, json.count
         assert_equal @sheet.id, json.first['id']
       end
 
       test 'should show gym opening sheet' do
         get api_v1_gym_gym_opening_sheet_url(gym_id: @gym.id, id: @sheet.id), headers: @admin_headers
+
         assert_response :success
-        json = JSON.parse(response.body)
+        json = response.parsed_body
+
         assert_equal @sheet.id, json['id']
       end
 
@@ -63,8 +69,10 @@ module Api
                 }
               },
               headers: @admin_headers, as: :json
+
         assert_response :success
         @sheet.reload
+
         assert_equal 'Titre modifié', @sheet.title
       end
 
@@ -86,8 +94,10 @@ module Api
               }
             },
             headers: @admin_headers, as: :json
+
         assert_response :no_content
         @sheet.reload
+
         assert_equal '6a', @sheet.row_json[0]['routes'][1]['grade']
         assert_equal '#FF0000', @sheet.row_json[0]['routes'][1]['hold_color']
         assert_equal ['slab'], @sheet.row_json[0]['routes'][1]['climbing_styles']
@@ -95,15 +105,19 @@ module Api
 
       test 'should archive gym opening sheet' do
         put archived_api_v1_gym_gym_opening_sheet_url(gym_id: @gym.id, id: @sheet.id), headers: @admin_headers, as: :json
+
         assert_response :success
         @sheet.reload
+
         assert_not_nil @sheet.archived_at
       end
 
       test 'should unarchive gym opening sheet' do
         put unarchived_api_v1_gym_gym_opening_sheet_url(gym_id: @gym.id, id: @archived_sheet.id), headers: @admin_headers, as: :json
+
         assert_response :success
         @archived_sheet.reload
+
         assert_nil @archived_sheet.archived_at
       end
 
@@ -124,6 +138,7 @@ module Api
 
           ActionController::Base.stub :new, base_mock do
             get print_api_v1_gym_gym_opening_sheet_url(gym_id: @gym.id, id: @sheet.id), headers: @admin_headers
+
             assert_response :success
             assert_equal 'application/pdf', response.content_type
             assert_equal 'PDF DATA', response.body

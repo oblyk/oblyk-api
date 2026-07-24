@@ -19,7 +19,7 @@ module Api
 
       def search
         query = params.fetch(:query, nil)
-        head :no_content && return if query.blank?
+        return head :no_content if query.blank?
 
         page = params.fetch(:page, 1).to_i
         per_page = params.fetch(:per_page, 25).to_i
@@ -52,11 +52,10 @@ module Api
       end
 
       def followers
-        users = []
         page = params.fetch(:page, 1)
         followers = @user.follows.order(created_at: :desc).page(page)
-        followers.each do |follower|
-          users << follower.user.summary_to_json
+        users = followers.map do |follower|
+          follower.user.summary_to_json
         end
         render json: users, status: :ok
       end
@@ -169,7 +168,7 @@ module Api
       end
 
       def current_user_is_subscribed?
-        login? && User.current.subscribes.accepted.where(followable_type: 'User', followable_id: @user.id).exists?
+        login? && User.current.subscribes.accepted.exists?(followable_type: 'User', followable_id: @user.id)
       end
 
       def set_user

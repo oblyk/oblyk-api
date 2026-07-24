@@ -14,6 +14,7 @@ module LogBook
 
       test 'figures returns correct keys' do
         figs = @figure.figures
+
         assert_includes figs.keys, :countries
         assert_includes figs.keys, :regions
         assert_includes figs.keys, :crags

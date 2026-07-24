@@ -11,6 +11,7 @@ class GymSectorSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @gym_sector.id, attributes['id']
     assert_equal @gym_sector.name, attributes['name']
     assert_equal @gym_sector.app_path, attributes['app_path']
@@ -27,6 +28,7 @@ class GymSectorSerializerTest < ActiveSupport::TestCase
 
   test 'It contains relationships' do
     relationships = @serialization['data']['relationships']
+
     assert_not_nil relationships['gym_space']
     assert_not_nil relationships['gym']
     assert_equal @gym_sector.gym_space_id, relationships['gym_space']['data']['id'].to_i

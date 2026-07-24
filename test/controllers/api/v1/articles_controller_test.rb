@@ -18,37 +18,46 @@ module Api
 
       test 'should get index' do
         get api_v1_articles_url, headers: @public_headers, as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
       end
 
       test 'should show article' do
         get api_v1_article_url(@article), headers: @public_headers, as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @article.name, json_response['name']
       end
 
       test 'should view article' do
         post view_api_v1_article_url(@article), headers: @public_headers, as: :json
+
         assert_response :no_content
         @article.reload
+
         assert_equal 11, @article.views
       end
 
       test 'should get crags' do
         get crags_api_v1_article_url(@article), headers: @public_headers, as: :json
+
         assert_response :success
       end
 
       test 'should get guide_book_papers' do
         get guide_book_papers_api_v1_article_url(@article), headers: @public_headers, as: :json
+
         assert_response :success
       end
 
       test 'should get photos' do
         get photos_api_v1_article_url(@article), headers: @public_headers, as: :json
+
         assert_response :success
       end
 
@@ -84,8 +93,10 @@ module Api
             params: { article: { name: 'Updated Name' } },
             headers: @admin_headers,
             as: :json
+
         assert_response :success
         @article.reload
+
         assert_equal 'Updated Name', @article.name
       end
 
@@ -98,15 +109,19 @@ module Api
 
       test 'should publish article as super admin' do
         put publish_api_v1_article_url(@unpublished_article), headers: @admin_headers, as: :json
+
         assert_response :no_content
         @unpublished_article.reload
-        assert @unpublished_article.published?
+
+        assert_predicate @unpublished_article, :published?
       end
 
       test 'should unpublish article as super admin' do
         put un_publish_api_v1_article_url(@article), headers: @admin_headers, as: :json
+
         assert_response :no_content
         @article.reload
+
         assert_not @article.published?
       end
 
@@ -116,6 +131,7 @@ module Api
              params: { article: { crag_id: crag.id } },
              headers: @admin_headers,
              as: :json
+
         assert_response :no_content
         assert_includes @article.crags, crag
       end
@@ -126,6 +142,7 @@ module Api
              params: { article: { guide_book_paper_id: guide_book.id } },
              headers: @admin_headers,
              as: :json
+
         assert_response :no_content
         assert_includes @article.guide_book_papers, guide_book
       end

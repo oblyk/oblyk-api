@@ -21,7 +21,7 @@ class RockBar < ApplicationRecord
         sector_id: crag_sector_id,
         icon: nil
       },
-      geometry: { type: 'LineString', "coordinates": revers_lat_lng }
+      geometry: { type: 'LineString', coordinates: revers_lat_lng }
     }
   end
 
@@ -66,10 +66,8 @@ class RockBar < ApplicationRecord
   private
 
   def revers_lat_lng
-    reverse_polyline = []
-    polyline.each do |coordinates|
-      reverse_polyline << [coordinates[1], coordinates[0]]
+    polyline.map do |coordinates|
+      [coordinates[1], coordinates[0]]
     end
-    reverse_polyline
   end
 end

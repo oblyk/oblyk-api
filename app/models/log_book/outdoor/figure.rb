@@ -34,14 +34,14 @@ module LogBook
       def sum_meters
         @ascents.sum do |ascent|
           # Extract the section heights, ignoring nil values
-          sections_heights = ascent.sections.map { |section| section['height'] }.compact
+          sections_heights = ascent.sections.filter_map { |section| section['height'] }
           # If sections have heights, sum them, otherwise fallback to the ascent's height
           sections_heights.any? ? sections_heights.sum : (ascent.height || 0)
         end
       end
 
       def max_grad_value
-        @ascents.map(&:max_grade_value).compact.max
+        @ascents.filter_map(&:max_grade_value).max
       end
 
       def countries_count
@@ -58,4 +58,3 @@ module LogBook
     end
   end
 end
-

@@ -46,11 +46,13 @@ module Api
               as: :json
 
           assert_response :created
-          json_response = JSON.parse(response.body)
+          json_response = response.parsed_body
+
           assert_not_nil json_response['token']
           assert_not_nil json_response['refresh_token']
 
           @user.reload
+
           assert @user.authenticate('NewPassword@123')
           assert_nil @user.reset_password_token
         end
@@ -71,7 +73,8 @@ module Api
               as: :json
 
           assert_response :unprocessable_content
-          json_response = JSON.parse(response.body)
+          json_response = response.parsed_body
+
           assert_equal 'Reset password token is expired', json_response['error']
         end
 
@@ -104,7 +107,8 @@ module Api
               as: :json
 
           assert_response :unprocessable_content
-          json_response = JSON.parse(response.body)
+          json_response = response.parsed_body
+
           assert_not_nil json_response['error']
         end
       end

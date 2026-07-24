@@ -4,7 +4,7 @@ class RefreshToken < ApplicationRecord
   belongs_to :user
 
   validates :token, :user_agent, presence: true
-  validates :token, uniqueness: { scope: :user_agent, case_sensitive: true }
+  validates :token, uniqueness: { scope: :user_agent, case_sensitive: true } # rubocop:disable Rails/UniqueValidationWithoutIndex
 
   def unused_token
     token_attempt = SecureRandom.base36

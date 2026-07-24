@@ -47,7 +47,7 @@ class Locality < ApplicationRecord
         local_sharing_users_count: local_sharing_users_count,
         distinct_users_count: distinct_users_count
       },
-      geometry: { type: 'Point', "coordinates": [Float(longitude), Float(latitude), 0.0] }
+      geometry: { type: 'Point', coordinates: [Float(longitude), Float(latitude), 0.0] }
     }
   end
 

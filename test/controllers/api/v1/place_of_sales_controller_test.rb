@@ -14,11 +14,13 @@ module Api
 
       test 'should get index' do
         get api_v1_guide_book_paper_place_of_sales_url(guide_book_paper_id: @guide_book_paper.id), headers: api_access_token_headers
+
         assert_response :success
       end
 
       test 'should show place_of_sale' do
         get api_v1_guide_book_paper_place_of_sale_url(guide_book_paper_id: @guide_book_paper.id, id: @place_of_sale.id), headers: api_access_token_headers
+
         assert_response :success
       end
 
@@ -45,8 +47,10 @@ module Api
                 }
               },
               headers: @owner_headers, as: :json
+
         assert_response :success
         @place_of_sale.reload
+
         assert_equal 'Nom modifié', @place_of_sale.name
       end
 
@@ -58,6 +62,7 @@ module Api
                 }
               },
               headers: @other_user_headers, as: :json
+
         assert_response :forbidden
       end
 

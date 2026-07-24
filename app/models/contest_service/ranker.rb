@@ -60,7 +60,7 @@ module ContestService
                 else
                   0
                 end
-        zone = !current_ascent.top_attempt&.positive? && current_ascent.zone_1_attempt&.positive? || false
+        zone = (!current_ascent.top_attempt&.positive? && current_ascent.zone_1_attempt&.positive?) || false
         point_with_zone = point
         point_with_zone += 0.5 if zone
         {
@@ -183,7 +183,11 @@ module ContestService
             details[0] += ascent_scores[:details].first
             details[1] += 1 if ascent_scores[:details].second
           end
-        elsif [Constant::DIVISION_AND_ATTEMPT].include? step.ranking_type
+        elsif [
+          Constant::DIVISION_AND_ATTEMPT,
+          Constant::HIGHEST_HOLD,
+          Constant::POINT_RELATIVE_TO_HIGHEST_HOLD
+        ].include? step.ranking_type
           details ||= [0, 0]
           if ascent_value.present?
             details[0] += ascent_scores[:details].first
@@ -197,18 +201,6 @@ module ContestService
           if ascent_value.present?
             details[0] += 1 if ascent_scores[:details].first
             details[1] += 1 if ascent_scores[:details].second
-          end
-        elsif [Constant::HIGHEST_HOLD].include? step.ranking_type
-          details ||= [0, 0]
-          if ascent_value.present?
-            details[0] += ascent_scores[:details].first
-            details[1] += ascent_scores[:details].second
-          end
-        elsif [Constant::POINT_RELATIVE_TO_HIGHEST_HOLD].include? step.ranking_type
-          details ||= [0, 0]
-          if ascent_value.present?
-            details[0] += ascent_scores[:details].first
-            details[1] += ascent_scores[:details].second
           end
         elsif [Constant::BEST_TIMES].include? step.ranking_type
           value = ascent_value if ascent_value.present? && ascent_value != 0 && value < ascent_value

@@ -13,20 +13,23 @@ class VideoTest < ActiveSupport::TestCase
   test 'video is valid' do
     mock_response = Minitest::Mock.new
     mock_response.expect :body, '{"html": "<iframe></iframe>"}'
+
     Net::HTTP.stub :get_response, mock_response do
-      assert @video_youtube.valid?
+      assert_predicate @video_youtube, :valid?
     end
 
     mock_response = Minitest::Mock.new
     mock_response.expect :body, '{"html": "<iframe></iframe>"}'
+
     Net::HTTP.stub :get_response, mock_response do
-      assert @video_vimeo.valid?
+      assert_predicate @video_vimeo, :valid?
     end
   end
 
   test 'validates video service inclusion' do
     video = Video.new(viewable: @crag, url: nil)
     video.url = 'https://google.com'
+
     assert_not video.valid?
     assert_not_empty video.errors[:video_service]
   end
@@ -37,7 +40,7 @@ class VideoTest < ActiveSupport::TestCase
     mock_response.expect :body, '{"html": "<iframe></iframe>"}'
 
     Net::HTTP.stub :get_response, mock_response do
-      assert video.valid?
+      assert_predicate video, :valid?
     end
 
     video.viewable_type = 'User'
@@ -47,6 +50,7 @@ class VideoTest < ActiveSupport::TestCase
     Net::HTTP.stub :get_response, mock_response do
       video.valid?
     end
+
     assert_not_empty video.errors[:viewable_type]
   end
 
@@ -58,6 +62,7 @@ class VideoTest < ActiveSupport::TestCase
       url: 'https://invalid-url.com'
     )
     video.valid?
+
     assert_not_empty video.errors[:url]
 
     video.url = 'https://www.youtube.com/watch?v=valid'
@@ -65,7 +70,7 @@ class VideoTest < ActiveSupport::TestCase
     mock_response.expect :body, '{"html": "<iframe></iframe>"}'
 
     Net::HTTP.stub :get_response, mock_response do
-      assert video.valid?
+      assert_predicate video, :valid?
     end
   end
 
@@ -79,9 +84,11 @@ class VideoTest < ActiveSupport::TestCase
 
   test 'valid_url? checks URL regexp' do
     @video_youtube.url = 'https://youtu.be/123'
-    assert @video_youtube.valid_url?
+
+    assert_predicate @video_youtube, :valid_url?
 
     @video_youtube.url = 'https://google.com'
+
     assert_not @video_youtube.valid_url?
   end
 
@@ -97,6 +104,7 @@ class VideoTest < ActiveSupport::TestCase
 
     Net::HTTP.stub :get_response, mock_response do
       video.valid?
+
       assert_equal 'youtube', video.video_service
       assert_equal '<iframe src="https://www.youtube.com/embed/123"></iframe>', video.embedded_code
     end
@@ -119,6 +127,7 @@ class VideoTest < ActiveSupport::TestCase
     end
 
     publication = Publication.last
+
     assert_equal @crag.id, publication.publishable_id
     assert_equal 'Crag', publication.publishable_type
     assert_equal 'new_video', publication.publishable_subject

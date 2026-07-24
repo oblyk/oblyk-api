@@ -16,11 +16,13 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_gym_three_d_elements_url(gym_id: @gym.id), headers: @user_headers
+
         assert_response :success
       end
 
       test 'should show gym three d element' do
         get api_v1_gym_gym_three_d_element_url(gym_id: @gym.id, id: @element.id), headers: @user_headers
+
         assert_response :success
       end
 
@@ -47,8 +49,10 @@ module Api
                 }
               },
               headers: @admin_headers, as: :json
+
         assert_response :success
         @element.reload
+
         assert_equal 'New message', @element.message
       end
 
@@ -68,6 +72,7 @@ module Api
                }
              },
              headers: @user_headers, as: :json
+
         assert_response :forbidden
       end
     end

@@ -40,11 +40,11 @@ class GymRoute < ApplicationRecord
   attr_accessor :qrcode
 
   def app_path
-    "#{ENV['OBLYK_APP_URL']}/gyms/#{gym.id}/#{gym.slug_name}/spaces/#{gym_sector.gym_space.id}/#{gym_sector.gym_space.slug_name}?route=#{id}"
+    "#{ENV.fetch('OBLYK_APP_URL', nil)}/gyms/#{gym.id}/#{gym.slug_name}/spaces/#{gym_sector.gym_space.id}/#{gym_sector.gym_space.slug_name}?route=#{id}"
   end
 
   def short_app_path
-    "#{ENV['OBLYK_APP_URL']}/gr/#{gym.id}-#{id}"
+    "#{ENV.fetch('OBLYK_APP_URL', nil)}/gr/#{gym.id}-#{id}"
   end
 
   def gym_space_app_path
@@ -68,7 +68,7 @@ class GymRoute < ApplicationRecord
                 ascents_count = self.ascents_count&.positive? ? self.ascents_count : 1
                 1000 / ascents_count
               when 'point_by_grade'
-                min_grade_value ? (2000 * 0.85**(49 - min_grade_value)).round : 0
+                min_grade_value ? (2000 * (0.85**(49 - min_grade_value))).round : 0
               else
                 points
               end
@@ -84,10 +84,7 @@ class GymRoute < ApplicationRecord
     return '' unless grade_system
 
     if sections_count > 1
-      sections_array = []
-      sections.each do |section|
-        sections_array << section['grade']
-      end
+      sections_array = sections.pluck('grade')
       sections_array.join(', ')
     else
       min_grade_text
@@ -240,7 +237,7 @@ class GymRoute < ApplicationRecord
         short_app_path: short_app_path,
         thumbnail_position: thumbnail_position,
         calculated_thumbnail_position: calculated_thumbnail_position,
-        cover_metadata: gym_route_cover&.picture ? gym_route_cover.picture.metadata : nil,
+        cover_metadata: gym_route_cover&.picture&.metadata,
         votes: votes,
         updated_at: updated_at,
         all_comments_count: all_comments_count,
@@ -249,7 +246,7 @@ class GymRoute < ApplicationRecord
         sub_level_max: sub_level_max,
         gym_space_app_path: gym_space_app_path,
         gym_route_cover: {
-          metadata: gym_route_cover&.picture ? gym_route_cover.picture.metadata : nil,
+          metadata: gym_route_cover&.picture&.metadata,
           original_file_path: gym_route_cover&.picture ? gym_route_cover.original_file_path : nil,
           attachments: {
             picture: attachment_object(gym_route_cover&.picture, 'GymRouteCover_picture')
@@ -312,8 +309,8 @@ class GymRoute < ApplicationRecord
       img_w: tp[:img_w].to_d,
       h: tp[:thb_h].to_d / tp[:img_h].to_d * 100,
       w: tp[:thb_w].to_d / tp[:img_w].to_d * 100,
-      delta_y: (tp[:img_h].to_d / 2 - tp[:thb_y].to_d) / tp[:img_h].to_d * 100,
-      delta_x: (tp[:img_w].to_d / 2 - tp[:thb_x].to_d) / tp[:img_w].to_d * 100
+      delta_y: ((tp[:img_h].to_d / 2) - tp[:thb_y].to_d) / tp[:img_h].to_d * 100,
+      delta_x: ((tp[:img_w].to_d / 2) - tp[:thb_x].to_d) / tp[:img_w].to_d * 100
     }
   end
 
@@ -325,14 +322,14 @@ class GymRoute < ApplicationRecord
 
   def format_route_section
     new_sections = []
-    single_pitch = sections.count == 1
+    single_pitch = sections.one?
 
     sections.each do |section|
       section_height = section['height'].present? ? Integer(section['height']) : nil
       grade = Grade.clean_grade(section['grade'])
       new_sections << {
         climbing_type: single_pitch ? climbing_type : section['climbing_type'] || climbing_type,
-        description: !single_pitch ? section['description'] : nil,
+        description: single_pitch ? nil : section['description'],
         grade: grade,
         grade_value: grade.present? ? Grade.to_value(grade) : nil,
         height: single_pitch ? height : section_height,

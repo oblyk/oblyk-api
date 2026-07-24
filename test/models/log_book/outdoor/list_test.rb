@@ -13,6 +13,7 @@ module LogBook
 
       test 'ascended_crag_routes returns an array' do
         result = @list.ascended_crag_routes(1, 'released_at')
+
         assert_kind_of Array, result
       end
 

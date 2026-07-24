@@ -11,6 +11,7 @@ class EmbeddedGymThreeDAssetSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @gym_three_d_asset.id, attributes['id']
     assert_equal @gym_three_d_asset.name, attributes['name']
     assert_equal @gym_three_d_asset.slug_name, attributes['slug_name']

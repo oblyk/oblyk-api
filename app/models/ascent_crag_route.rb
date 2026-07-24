@@ -16,11 +16,11 @@ class AscentCragRoute < Ascent
   before_validation :historize_ascents
   before_validation :historize_grade_gap
 
-  after_save :update_crag_route!
   after_create :delete_tick_in_list
   after_create :update_ascents_count!
-  after_destroy :update_crag_route!
   before_destroy :update_ascents_count!
+  after_destroy :update_crag_route!
+  after_save :update_crag_route!
 
   def summary_to_json(with_user: false, for_current_user: true)
     detail_to_json(with_user: with_user, for_current_user: for_current_user)
@@ -87,7 +87,7 @@ class AscentCragRoute < Ascent
         crag = route.crag
         grade = route.sections.map { |section| section['grade'] }.join(', ')
         roping = Climb.ropable?(route.climbing_type) ? ascent.roping_status : nil
-        released_at = ascent.ascent_status != 'project' ? ascent.released_at : nil
+        released_at = ascent.ascent_status == 'project' ? nil : ascent.released_at
         grad_value = route.sections.map { |section| section['grade_value'] }.join(', ')
         csv << [
           route.name,

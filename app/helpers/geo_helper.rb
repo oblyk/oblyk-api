@@ -9,7 +9,7 @@ module GeoHelper
       rad_latitude_to = Math::PI * latitude_to / 180
       ta = longitude_from - longitude_to
       rad_ta = Math::PI * ta / 180
-      dist = Math.sin(rad_latitude_from) * Math.sin(rad_latitude_to) + Math.cos(rad_latitude_from) * Math.cos(rad_latitude_to) * Math.cos(rad_ta)
+      dist = (Math.sin(rad_latitude_from) * Math.sin(rad_latitude_to)) + (Math.cos(rad_latitude_from) * Math.cos(rad_latitude_to) * Math.cos(rad_ta))
       dist = 1 if dist > 1
       dist = Math.acos(dist)
       dist = dist * 180 / Math::PI
@@ -36,7 +36,7 @@ module GeoHelper
     b_n = wgs84_b * wgs84_b * Math.sin(lat)
     a_d = wgs84_a * Math.cos(lat)
     b_d = wgs84_b * Math.sin(lat)
-    Math.sqrt((a_n * a_n + b_n * b_n) / (a_d * a_d + b_d * b_d))
+    Math.sqrt(((a_n * a_n) + (b_n * b_n)) / ((a_d * a_d) + (b_d * b_d)))
   end
 
   def self.bounding_box(latitude_in_degrees, longitude_in_degrees, half_side_in_km)
@@ -47,10 +47,10 @@ module GeoHelper
     radius = GeoHelper.wgs84_earth_radius lat
     p_radius = radius * Math.cos(lat)
 
-    lat_min = lat - half_side / radius
-    lat_max = lat + half_side / radius
-    lng_min = lon - half_side / p_radius
-    lng_max = lon + half_side / p_radius
+    lat_min = lat - (half_side / radius)
+    lat_max = lat + (half_side / radius)
+    lng_min = lon - (half_side / p_radius)
+    lng_max = lon + (half_side / p_radius)
 
     {
       latitude_min: GeoHelper.rad2deg(lat_min),
@@ -63,8 +63,8 @@ module GeoHelper
   def self.point_central(coordinates)
     n = coordinates.length
 
-    sum_lat = coordinates.map { |coord| coord[0] }.sum
-    sum_long = coordinates.map { |coord| coord[1] }.sum
+    sum_lat = coordinates.sum { |coord| coord[0] }
+    sum_long = coordinates.sum { |coord| coord[1] }
 
     # Calcul des moyennes
     avg_lat = sum_lat / n.to_f

@@ -11,6 +11,7 @@ class EmbeddedGymSpaceSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @gym_space.id, attributes['id']
     assert_equal @gym_space.name, attributes['name']
     assert_equal @gym_space.climbing_type, attributes['climbing_type']
@@ -18,6 +19,7 @@ class EmbeddedGymSpaceSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the relationships' do
     relationships = @serialization['data']['relationships']
+
     assert_not_nil relationships['gym_sectors']
   end
 end

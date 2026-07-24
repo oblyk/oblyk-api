@@ -58,7 +58,7 @@ module Embedded
     attribute :gym_route_cover do |object, params|
       if params.fetch(:include_gym_route_cover, false) == true
         {
-          metadata: object.gym_route_cover&.picture ? object.gym_route_cover.picture.metadata : nil,
+          metadata: object.gym_route_cover&.picture&.metadata,
           original_file_path: object.gym_route_cover&.picture ? object.gym_route_cover.original_file_path : nil,
           attachments: {
             picture: object.attachment_object(object.gym_route_cover&.picture, 'GymRouteCover_picture')
@@ -68,9 +68,7 @@ module Embedded
     end
 
     attribute :cover_metadata do |object, params|
-      if params.fetch(:include_cover_metadata, false) == true
-        object.gym_route_cover&.picture ? object.gym_route_cover.picture.metadata : nil
-      end
+      object.gym_route_cover&.picture&.metadata if params.fetch(:include_cover_metadata, false) == true
     end
 
     attribute :grade_gap do |object|

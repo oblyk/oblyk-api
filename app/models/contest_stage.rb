@@ -9,8 +9,8 @@ class ContestStage < ApplicationRecord
 
   before_validation :set_order
   before_validation :normalize_attributes
-  after_save :delete_caches
   after_destroy :delete_caches
+  after_save :delete_caches
 
   validates :climbing_type,
             :stage_order,

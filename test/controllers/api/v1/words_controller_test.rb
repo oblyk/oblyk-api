@@ -13,26 +13,32 @@ module Api
 
       test 'should get index' do
         get api_v1_words_url, headers: @api_headers, as: :json
+
         assert_response :success
       end
 
       test 'should search words' do
         @word.index!
         get search_api_v1_words_url(query: 'doigts'), headers: @api_headers, as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert(json_response['data'].any? { |w| w['attributes']['name'] == @word.name })
       end
 
       test 'should show word' do
         get api_v1_word_url(@word), headers: @api_headers, as: :json
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @word.name, json_response['name']
       end
 
       test 'should get word versions' do
         get versions_api_v1_word_url(@word), headers: @api_headers, as: :json
+
         assert_response :success
       end
 
@@ -51,8 +57,9 @@ module Api
              params: { word: { name: 'Nouvel mot', definition: nil } },
              headers: @api_headers,
              as: :json
+
         assert_response :unprocessable_content
-        assert_not_empty JSON.parse(response.body)['error']
+        assert_not_empty response.parsed_body['error']
       end
 
       test 'should not create word when not logged in' do
@@ -70,8 +77,10 @@ module Api
               params: { word: { name: 'Nom modifié' } },
               headers: @api_headers,
               as: :json
+
         assert_response :success
         @word.reload
+
         assert_equal 'Nom modifié', @word.name
       end
 
@@ -80,8 +89,9 @@ module Api
               params: { word: { name: nil } },
               headers: @api_headers,
               as: :json
+
         assert_response :unprocessable_content
-        assert_not_empty JSON.parse(response.body)['error']
+        assert_not_empty response.parsed_body['error']
       end
 
       test 'should not update word when not logged in' do
@@ -89,6 +99,7 @@ module Api
               params: { word: { name: 'Nom modifié' } },
               headers: @api_access_token_headers,
               as: :json
+
         assert_response :unauthorized
       end
 

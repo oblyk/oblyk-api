@@ -15,11 +15,13 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_gym_three_d_assets_url(gym_id: @gym.id), headers: @user_headers
+
         assert_response :success
       end
 
       test 'should show gym three d asset' do
         get api_v1_gym_gym_three_d_asset_url(gym_id: @gym.id, id: @asset.id), headers: @user_headers
+
         assert_response :success
       end
 
@@ -44,8 +46,8 @@ module Api
           FileUtils.cp('test/fixtures/files/espace_voie.gltf', gltf_path)
           Api::V1::GymThreeDAssetsController.alias_method :original_attach_three_d_file, :attach_three_d_file
           Api::V1::GymThreeDAssetsController.define_method(:attach_three_d_file) do
-            file = File.open(gltf_path, 'r')
-            @gym_three_d_asset.three_d_gltf.attach(io: file, filename: 'test.gltf', content_type: 'model/gltf+json')
+            file_content = File.binread(gltf_path)
+            @gym_three_d_asset.three_d_gltf.attach(io: StringIO.new(file_content), filename: 'test.gltf', content_type: 'model/gltf+json')
             true
           end
           begin
@@ -75,8 +77,8 @@ module Api
           FileUtils.cp('test/fixtures/files/espace_voie.gltf', gltf_path)
           Api::V1::GymThreeDAssetsController.alias_method :original_attach_three_d_file, :attach_three_d_file
           Api::V1::GymThreeDAssetsController.define_method(:attach_three_d_file) do
-            file = File.open(gltf_path, 'r')
-            @gym_three_d_asset.three_d_gltf.attach(io: file, filename: 'test.gltf', content_type: 'model/gltf+json')
+            file_content = File.binread(gltf_path)
+            @gym_three_d_asset.three_d_gltf.attach(io: StringIO.new(file_content), filename: 'test.gltf', content_type: 'model/gltf+json')
             true
           end
 
@@ -114,6 +116,7 @@ module Api
                    }
                  },
                  headers: @admin_headers
+
             assert_response :unprocessable_content
           end
         end
@@ -129,6 +132,7 @@ module Api
                }
              },
              headers: @admin_headers
+
         assert_response :unprocessable_content
       end
 
@@ -140,8 +144,10 @@ module Api
                 }
               },
               headers: @admin_headers, as: :json
+
         assert_response :success
         @asset.reload
+
         assert_equal 'Updated Name', @asset.name
       end
 
@@ -162,6 +168,7 @@ module Api
                }
              },
              headers: @user_headers, as: :json
+
         assert_response :forbidden
       end
 
@@ -173,27 +180,31 @@ module Api
                }
              },
              headers: @admin_headers
+
         assert_response :success
       end
 
       test 'should change three d file' do
         put change_three_d_file_api_v1_gym_gym_three_d_asset_url(gym_id: @gym.id, id: @asset.id),
-             params: {
-               gym_three_d_asset: {
-                 three_d_gltf: fixture_file_upload('espace_voie.gltf', 'model/gltf+json')
-               }
-             },
-             headers: @admin_headers
+            params: {
+              gym_three_d_asset: {
+                three_d_gltf: fixture_file_upload('espace_voie.gltf', 'model/gltf+json')
+              }
+            },
+            headers: @admin_headers
+
         assert_response :success
       end
 
       test 'should get index without administration' do
         get api_v1_gym_gym_three_d_assets_url(gym_id: @gym.id), headers: @user_headers
+
         assert_response :success
       end
 
       test 'should show gym three d asset without administration' do
         get api_v1_gym_gym_three_d_asset_url(gym_id: @gym.id, id: @asset.id), headers: @user_headers
+
         assert_response :success
       end
     end

@@ -8,17 +8,19 @@ class GuideBookPaperCragTest < ActiveSupport::TestCase
   end
 
   test 'guide_book_paper_crag is valid' do
-    assert @guide_book_paper_crag.valid?
+    assert_predicate @guide_book_paper_crag, :valid?
   end
 
   test 'guide_book_paper_crag is invalid without crag' do
     @guide_book_paper_crag.crag = nil
-    assert @guide_book_paper_crag.invalid?
+
+    assert_predicate @guide_book_paper_crag, :invalid?
   end
 
   test 'guide_book_paper_crag is invalid without guide_book_paper' do
     @guide_book_paper_crag.guide_book_paper = nil
-    assert @guide_book_paper_crag.invalid?
+
+    assert_predicate @guide_book_paper_crag, :invalid?
   end
 
   test 'guide_book_paper_crag is invalid if crag is already linked to the guide book' do
@@ -26,7 +28,8 @@ class GuideBookPaperCragTest < ActiveSupport::TestCase
       guide_book_paper: @guide_book_paper_crag.guide_book_paper,
       crag: @guide_book_paper_crag.crag
     )
-    assert duplicate.invalid?
+
+    assert_predicate duplicate, :invalid?
     assert_includes duplicate.errors[:crag], 'is_already_taken'
   end
 

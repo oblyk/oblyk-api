@@ -14,7 +14,7 @@ module Api
         older_than = older_than.present? ? DateTime.parse(older_than) : DateTime.current
         messages = @conversation.conversation_messages
                                 .includes(:user)
-                                .where('posted_at < ?', older_than)
+                                .where(posted_at: ...older_than)
                                 .order(posted_at: :desc)
                                 .limit(25)
         conversation_messages = messages.reverse || []
@@ -23,7 +23,7 @@ module Api
 
       def last_messages
         date = DateTime.parse params[:posted_after_at]
-        messages = @conversation.conversation_messages.where('posted_at >= ?', date).includes(:user).order(posted_at: :desc)
+        messages = @conversation.conversation_messages.where(posted_at: date..).includes(:user).order(posted_at: :desc)
         conversation_messages = messages.reverse || []
         render json: conversation_messages.map(&:summary_to_json), status: :ok
       end
@@ -68,7 +68,7 @@ module Api
       private
 
       def protected_by_conversation_owner
-        render json: {}, status: :forbidden if @conversation.conversation_users.where(user: @current_user).count.zero?
+        render json: {}, status: :forbidden if @conversation.conversation_users.where(user: @current_user).none?
       end
 
       def protected_by_message_owner

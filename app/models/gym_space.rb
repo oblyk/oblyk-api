@@ -29,12 +29,12 @@ class GymSpace < ApplicationRecord
   validates :three_d_gltf, blob: { content_type: 'model/gltf+json' }, allow_nil: true
 
   after_create :delete_gym_cache
-  after_save :remove_routes_cache
-  after_save :historize_gym_app_paths_and_public_guide_book!
   after_update :remove_sectors_cache
   after_update :historize_svg_sectors!, if: :saved_change_to_representation_type?
   after_destroy :delete_gym_cache
   after_destroy :historize_gym_app_paths_and_public_guide_book!
+  after_save :remove_routes_cache
+  after_save :historize_gym_app_paths_and_public_guide_book!
 
   def app_path
     "/gyms/#{gym_id}/#{gym.slug_name}/spaces/#{id}/#{slug_name}"
@@ -73,7 +73,7 @@ class GymSpace < ApplicationRecord
         three_d_parameters: three_d_parameters,
         three_d_label_options: three_d_label_options,
         attachments: {
-          avatar: representation_type == '3d' ? attachment_object(three_d_picture) :  attachment_object(plan),
+          avatar: representation_type == '3d' ? attachment_object(three_d_picture) : attachment_object(plan),
           banner: attachment_object(banner),
           plan: attachment_object(plan),
           three_d_picture: attachment_object(three_d_picture)
@@ -166,9 +166,9 @@ class GymSpace < ApplicationRecord
     return nil unless three_d_gltf.attached?
 
     if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
-      "#{ENV['CLOUDFLARE_R2_DOMAIN']}/#{three_d_gltf.attachment.key}"
+      "#{ENV.fetch('CLOUDFLARE_R2_DOMAIN', nil)}/#{three_d_gltf.attachment.key}"
     else
-      "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.polymorphic_url(three_d_gltf.attachment, only_path: true)}"
+      "#{ENV.fetch('OBLYK_API_URL', nil)}#{Rails.application.routes.url_helpers.polymorphic_url(three_d_gltf.attachment, only_path: true)}"
     end
   end
 
@@ -228,10 +228,10 @@ class GymSpace < ApplicationRecord
   end
 
   def historize_gym_app_paths_and_public_guide_book!
-    if saved_change_to_name? || saved_change_to_draft? || saved_change_to_deleted_at?
-      gym.set_public_guide_book
-      gym.set_app_paths
-      gym.save
-    end
+    return unless saved_change_to_name? || saved_change_to_draft? || saved_change_to_deleted_at?
+
+    gym.set_public_guide_book
+    gym.set_app_paths
+    gym.save
   end
 end

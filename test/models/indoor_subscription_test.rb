@@ -13,21 +13,22 @@ class IndoorSubscriptionTest < ActiveSupport::TestCase
 
   test 'scope active' do
     active_subscriptions = IndoorSubscription.active
+
     assert_includes active_subscriptions, @active
     assert_includes active_subscriptions, @trial
     assert_not_includes active_subscriptions, @expired
   end
 
   test 'active? and expired?' do
-    assert @active.active?
+    assert_predicate @active, :active?
     assert_not @active.expired?
 
-    assert @expired.expired?
+    assert_predicate @expired, :expired?
     assert_not @expired.active?
   end
 
   test 'in_free_trial?' do
-    assert @trial.in_free_trial?
+    assert_predicate @trial, :in_free_trial?
     assert_not @active.in_free_trial?
   end
 
@@ -40,7 +41,7 @@ class IndoorSubscriptionTest < ActiveSupport::TestCase
     mock_payment_link.expect :id, 'plink_123'
     mock_payment_link.expect :url, 'https://stripe.com/pay'
 
-    plan_struct = OpenStruct.new(id: plan_id)
+    plan_struct = Struct.new(:id).new(plan_id)
 
     Stripe::Plan.stub :create, plan_struct do
       Stripe::PaymentLink.stub :create, mock_payment_link do
@@ -49,7 +50,7 @@ class IndoorSubscriptionTest < ActiveSupport::TestCase
     end
 
     assert_equal 'plink_123', @active.payment_link_stipe_id
-    assert_match /https:\/\/stripe.com\/pay/, @active.payment_link
+    assert_match(%r{https://stripe.com/pay}, @active.payment_link)
     assert_mock mock_payment_link
   end
 
@@ -60,7 +61,7 @@ class IndoorSubscriptionTest < ActiveSupport::TestCase
     mock_mailer.expect :cancel_indoor_subscription, mock_mail
     mock_mail.expect :deliver_later, nil
 
-    IndoorSubscriptionMailer.stub :with, mock_mailer, [indoor_subscription: @active] do
+    IndoorSubscriptionMailer.stub :with, mock_mailer, [{ indoor_subscription: @active }] do
       @active.cancel!(Time.current, Date.current + 1.month)
     end
 
@@ -78,7 +79,7 @@ class IndoorSubscriptionTest < ActiveSupport::TestCase
     mock_mailer.expect :un_cancel_indoor_subscription, mock_mail
     mock_mail.expect :deliver_later, nil
 
-    IndoorSubscriptionMailer.stub :with, mock_mailer, [indoor_subscription: @active] do
+    IndoorSubscriptionMailer.stub :with, mock_mailer, [{ indoor_subscription: @active }] do
       @active.un_cancel!
     end
 
@@ -90,6 +91,7 @@ class IndoorSubscriptionTest < ActiveSupport::TestCase
 
   test 'detail_to_json' do
     json = @active.detail_to_json
+
     assert_equal @active.id, json[:id]
     assert_equal @active.for_gym_type, json[:for_gym_type]
     assert_equal @active.active?, json[:active_subscription]

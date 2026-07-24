@@ -23,7 +23,8 @@ class HistorizeParkStaticMapJobTest < ActiveJob::TestCase
     end
 
     @park.reload
-    assert @park.static_map.attached?
+
+    assert_predicate @park.static_map, :attached?
     assert_equal "#{@park.id}-static-park-map.png", @park.static_map.blob.filename.to_s
   end
 

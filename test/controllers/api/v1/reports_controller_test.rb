@@ -43,6 +43,7 @@ module Api
         assert_response :success
 
         report = Report.last
+
         assert_equal 'Organization', report.reportable_type
         assert_equal @organization.id, report.reportable_id
       end
@@ -71,6 +72,7 @@ module Api
              },
              headers: @user_headers,
              as: :json
+
         assert_response :unprocessable_content
       end
     end

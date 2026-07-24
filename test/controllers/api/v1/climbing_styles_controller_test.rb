@@ -11,9 +11,11 @@ module Api
 
       test 'should get index' do
         get api_v1_climbing_styles_url, headers: @api_headers, as: :json
+
         assert_response :success
 
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal ClimbingStyle::STYLE_LIST.sort, json_response.sort
       end
     end

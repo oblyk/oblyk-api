@@ -31,7 +31,7 @@ module Api
 
       def search
         query = params.fetch(:query, nil)
-        head :no_content && return if query.blank?
+        return head :no_content if query.blank?
 
         page = params.fetch(:page, 1).to_i
         per_page = params.fetch(:per_page, 25).to_i
@@ -106,8 +106,8 @@ module Api
         ascents = if start_date || end_date
                     ascents.where(released_at: [start_date..end_date])
                            .where('gym_routes.opened_at <= :end_date AND (gym_routes.dismounted_at IS NULL OR gym_routes.dismounted_at >= :start_date)', end_date: end_date, start_date: start_date)
-                           .where('ascents.created_at >= ?', start_date.beginning_of_day)
-                           .where('ascents.created_at <= ?', (end_date + 1.day).end_of_day)
+                           .where(ascents: { created_at: start_date.beginning_of_day.. })
+                           .where(ascents: { created_at: ..(end_date + 1.day).end_of_day })
                   else
                     ascents.where(gym_routes: { dismounted_at: nil })
                   end
@@ -140,11 +140,11 @@ module Api
           when 'senior'
             ascents = ascents.joins(:user).where(users: { date_of_birth: (Date.current - 39.years)..(Date.current - 20.years) })
           when 'A40'
-            ascents = ascents.joins(:user).where('users.date_of_birth <= ?', Date.current - 40.years)
+            ascents = ascents.joins(:user).where(users: { date_of_birth: ..(Date.current - 40.years) })
           when 'A50'
-            ascents = ascents.joins(:user).where('users.date_of_birth <= ?', Date.current - 50.years)
+            ascents = ascents.joins(:user).where(users: { date_of_birth: ..(Date.current - 50.years) })
           when 'A60'
-            ascents = ascents.joins(:user).where('users.date_of_birth <= ?', Date.current - 60.years)
+            ascents = ascents.joins(:user).where(users: { date_of_birth: ..(Date.current - 60.years) })
           end
         end
 
@@ -292,7 +292,7 @@ module Api
 
       def tree_routes
         tree = []
-        @gym.gym_spaces.unarchived.includes(:gym_sectors).each do |gym_space|
+        @gym.gym_spaces.unarchived.includes(:gym_sectors).find_each do |gym_space|
           space = {
             id: gym_space.id,
             name: gym_space.name,
@@ -345,30 +345,21 @@ module Api
             gym_spaces: []
           }
           gym_space_group.gym_spaces.unarchived.each do |gym_space|
-            sectors = []
-            gym_space.gym_sectors.each do |gym_sector|
-              sectors << gym_sector.summary_to_json
-            end
+            sectors = gym_space.gym_sectors.map(&:summary_to_json)
             space = tree_structure_space_json gym_space, sectors
             space_group[:gym_spaces] << space
           end
           tree[:gym][:gym_space_groups] << space_group
         end
-        @gym.gym_spaces.unarchived.where(gym_space_group_id: nil).each do |gym_space|
-          sectors = []
-          gym_space.gym_sectors.each do |gym_sector|
-            sectors << gym_sector.summary_to_json
-          end
+        @gym.gym_spaces.unarchived.where(gym_space_group_id: nil).find_each do |gym_space|
+          sectors = gym_space.gym_sectors.map(&:summary_to_json)
           space = tree_structure_space_json gym_space, sectors
           tree[:gym][:gym_spaces] << space
         end
 
         # Archived spaces
         @gym.gym_spaces.archived.each do |gym_space|
-          sectors = []
-          gym_space.gym_sectors.each do |gym_sector|
-            sectors << gym_sector.summary_to_json
-          end
+          sectors = gym_space.gym_sectors.map(&:summary_to_json)
           space = tree_structure_space_json gym_space, sectors
           tree[:gym][:archived_gym_spaces] << space
         end
@@ -525,13 +516,12 @@ module Api
       private
 
       def geo_json_features
-        features = []
         gyms = Gym.select(%i[id name longitude latitude updated_at])
                   .includes(banner_attachment: :blob, logo_attachment: :blob)
 
         climbing_style = params.fetch(:climbing_style, nil)
         if climbing_style.present?
-          climbing_style = %w[sport_climbing bouldering fun_climbing].include?(climbing_style) ? climbing_style : nil
+          climbing_style = nil unless %w[sport_climbing bouldering fun_climbing].include?(climbing_style)
           gyms = gyms.where(climbing_style => true) if climbing_style.present?
         end
 
@@ -542,10 +532,7 @@ module Api
         with_guide_book = params.fetch(:with_guide_book, nil) == 'true'
         gyms = gyms.where('EXISTS(SELECT * FROM gym_routes INNER JOIN gym_sectors ON gym_routes.gym_sector_id = gym_sectors.id INNER JOIN gym_spaces ON gym_sectors.gym_space_id = gym_spaces.id WHERE gym_routes.dismounted_at IS NULL AND gym_spaces.draft IS FALSE AND gym_spaces.gym_id = gyms.id AND gym_routes.opened_at > NOW() - INTERVAL 400 DAY)') if with_guide_book
 
-        gyms.each do |gym|
-          features << gym.to_geo_json
-        end
-        features
+        gyms.map(&:to_geo_json)
       end
 
       def tree_structure_space_json(gym_space, sectors)
@@ -565,7 +552,7 @@ module Api
 
         return unless @gym.administered?
 
-        not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).count.zero?
+        not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).none?
       end
 
       def gym_params

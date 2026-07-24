@@ -7,6 +7,7 @@ module ApplicationCable
     test 'connects with valid token' do
       user = users(:normal_user)
       connect params: { token: "Bearer #{user.ws_token}" }
+
       assert_equal user.id, connection.current_user.id
     end
 

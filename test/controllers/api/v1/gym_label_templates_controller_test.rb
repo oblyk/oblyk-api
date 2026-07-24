@@ -20,11 +20,13 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_gym_label_templates_url(gym_id: @gym.id), headers: @admin_headers
+
         assert_response :success
       end
 
       test 'should show template' do
         get api_v1_gym_gym_label_template_url(gym_id: @gym.id, id: @template.id), headers: @admin_headers
+
         assert_response :success
       end
 
@@ -58,23 +60,29 @@ module Api
               params: { gym_label_template: { name: 'Updated Name' } },
               as: :json,
               headers: @admin_headers
+
         assert_response :success
         @template.reload
+
         assert_equal 'Updated Name', @template.name
       end
 
       test 'should archive template' do
         put archived_api_v1_gym_gym_label_template_url(gym_id: @gym.id, id: @template.id), headers: @admin_headers
+
         assert_response :success
         @template.reload
+
         assert_not_nil @template.archived_at
       end
 
       test 'should unarchive template' do
         @template.archive!
         put unarchived_api_v1_gym_gym_label_template_url(gym_id: @gym.id, id: @template.id), headers: @admin_headers
+
         assert_response :success
         @template.reload
+
         assert_nil @template.archived_at
       end
 
@@ -90,6 +98,7 @@ module Api
         get print_api_v1_gym_gym_label_template_url(gym_id: @gym.id, id: @template.id),
             params: { sector_id: sector.id },
             headers: @admin_headers
+
         assert_response :success
       end
     end

@@ -34,9 +34,11 @@ class ConversationChannelTest < ActionCable::Channel::TestCase
 
     stub_connection current_user: user
     subscribe conversation_id: conversation.id
+
     assert_has_stream "conversations_#{conversation.id}"
 
     unsubscribe
+
     assert_no_streams
   end
 end

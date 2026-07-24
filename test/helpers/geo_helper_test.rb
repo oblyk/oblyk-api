@@ -9,6 +9,7 @@ class GeoHelperTest < ActiveSupport::TestCase
 
   test 'geo_range returns correct distance between Lyon and Paris' do
     distance = GeoHelper.geo_range(45.75, 4.85, 48.85, 2.35)
+
     assert_in_delta 392, distance, 5
   end
 
@@ -35,10 +36,10 @@ class GeoHelperTest < ActiveSupport::TestCase
     assert box.key?(:latitude_max)
     assert box.key?(:longitude_max)
 
-    assert box[:latitude_min] < 45.75
-    assert box[:latitude_max] > 45.75
-    assert box[:longitude_min] < 4.85
-    assert box[:longitude_max] > 4.85
+    assert_operator box[:latitude_min], :<, 45.75
+    assert_operator box[:latitude_max], :>, 45.75
+    assert_operator box[:longitude_min], :<, 4.85
+    assert_operator box[:longitude_max], :>, 4.85
   end
 
   test 'point_central returns the average of coordinates' do
@@ -47,6 +48,7 @@ class GeoHelperTest < ActiveSupport::TestCase
       [20, 40],
       [30, 60]
     ]
+
     assert_equal [20.0, 40.0], GeoHelper.point_central(coordinates)
   end
 end

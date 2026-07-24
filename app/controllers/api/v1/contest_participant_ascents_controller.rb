@@ -63,7 +63,7 @@ module Api
 
         broadcast_ascents
 
-        if errors.size.zero?
+        if errors.empty?
           head :no_content
         else
           render json: { error: errors }, status: :unprocessable_content
@@ -131,7 +131,7 @@ module Api
 
         return unless @gym.administered?
 
-        not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).count.zero?
+        not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).none?
       end
 
       def user_can_manage_contest

@@ -83,12 +83,7 @@ module ContestService
         when ContestService::Constant::DIVISION, ContestService::Constant::FIXED_POINTS
           assert_includes route_stats.keys, :top
           assert_includes route_stats.keys, :top_ratio
-        when ContestService::Constant::DIVISION_AND_ZONE
-          assert_includes route_stats.keys, :top
-          assert_includes route_stats.keys, :zone
-          assert_includes route_stats.keys, :top_ratio
-          assert_includes route_stats.keys, :zone_ratio
-        when ContestService::Constant::ZONE_AND_TOP_REALISED
+        when ContestService::Constant::DIVISION_AND_ZONE, ContestService::Constant::ZONE_AND_TOP_REALISED
           assert_includes route_stats.keys, :top
           assert_includes route_stats.keys, :zone
           assert_includes route_stats.keys, :top_ratio

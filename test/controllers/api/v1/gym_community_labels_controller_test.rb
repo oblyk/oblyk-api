@@ -25,6 +25,7 @@ module Api
         get disc_chart_api_v1_gym_gym_community_labels_url(gym_id: @gym.id),
             params: { sector_id: @sector.id },
             headers: @admin_headers
+
         assert_response :success
         assert_equal 'application/pdf', response.content_type
       end
@@ -33,6 +34,7 @@ module Api
         get disc_chart_api_v1_gym_gym_community_labels_url(gym_id: @gym.id),
             params: { ids: [@route_1.id, @route_2.id] },
             headers: @admin_headers
+
         assert_response :success
         assert_equal 'application/pdf', response.content_type
       end
@@ -42,6 +44,7 @@ module Api
         get disc_chart_api_v1_gym_gym_community_labels_url(gym_id: @gym.id),
             params: { sector_id: @sector.id },
             headers: user_headers
+
         assert_response :forbidden
       end
     end

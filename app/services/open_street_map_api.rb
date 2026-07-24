@@ -2,7 +2,7 @@
 
 class OpenStreetMapApi
   BASE_URL = 'https://nominatim.openstreetmap.org'
-  EMAIL = ENV['SMTP_USER_NAME']
+  EMAIL = ENV.fetch('SMTP_USER_NAME', nil)
 
   def self.search(query)
     request = RestClient.get(

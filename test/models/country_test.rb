@@ -8,11 +8,12 @@ class CountryTest < ActiveSupport::TestCase
   end
 
   test 'country is valid' do
-    assert @country.valid?
+    assert_predicate @country, :valid?
   end
 
   test 'summary_to_json returns correct keys' do
     summary = @country.summary_to_json
+
     assert_equal @country.id, summary[:id]
     assert_equal @country.name, summary[:name]
     assert_equal @country.code_country, summary[:code_country]
@@ -24,17 +25,18 @@ class CountryTest < ActiveSupport::TestCase
   end
 
   test 'has_many departments' do
-    assert @country.departments.count >= 1
+    assert_operator @country.departments.count, :>=, 1
     assert_includes @country.departments, departments(:drome)
   end
 
   test 'has_many crags' do
-    assert @country.crags.count >= 1
+    assert_operator @country.crags.count, :>=, 1
     assert_includes @country.crags, crags(:rocher_des_aures)
   end
 
   test 'route_figures returns figures for the country' do
     figures = @country.route_figures
+
     assert_kind_of Hash, figures
     assert_includes figures.keys, :route_count
     assert_includes figures.keys, :grade

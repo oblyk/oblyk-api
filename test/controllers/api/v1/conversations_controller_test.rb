@@ -15,16 +15,20 @@ module Api
 
       test 'should get index' do
         get api_v1_conversations_url, headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
-        assert_includes json_response.map { |c| c['id'] }, @conversation.id
+        assert_includes json_response.pluck('id'), @conversation.id
       end
 
       test 'should show conversation' do
         get api_v1_conversation_url(@conversation), headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @conversation.id, json_response['id']
       end
 
@@ -32,6 +36,7 @@ module Api
         new_conversation = Conversation.create!
 
         get api_v1_conversation_url(new_conversation), headers: @user_headers
+
         assert_response :forbidden
       end
 
@@ -75,14 +80,17 @@ module Api
                as: :json
         end
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @conversation.id, json_response['id']
       end
 
       test 'should mark conversation as read' do
         post read_api_v1_conversation_url(@conversation), headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert json_response.key?('last_read_at')
       end
     end

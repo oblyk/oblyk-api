@@ -12,6 +12,7 @@ class ConversationMessageTest < ActiveSupport::TestCase
   test 'init_posted_at before validation' do
     message = ConversationMessage.new(body: 'test', conversation: @conversation, user: @jean)
     message.valid?
+
     assert_not_nil message.posted_at
   end
 
@@ -25,7 +26,8 @@ class ConversationMessageTest < ActiveSupport::TestCase
     )
 
     @conversation.reload
-    assert @conversation.last_message_at > previous_last_message_at
+
+    assert_operator @conversation.last_message_at, :>, previous_last_message_at
   end
 
   test 'after_create update_last_read! on conversation_user' do
@@ -39,7 +41,8 @@ class ConversationMessageTest < ActiveSupport::TestCase
     )
 
     conv_user.reload
-    assert conv_user.last_read_at > 1.hour.ago
+
+    assert_operator conv_user.last_read_at, :>, 1.hour.ago
   end
 
   test 'after_create notify! other users' do
@@ -52,6 +55,7 @@ class ConversationMessageTest < ActiveSupport::TestCase
     end
 
     notification = Notification.where(notifiable: @conversation_message).last
+
     assert_equal 'new_message', notification.notification_type
     assert_equal @super_jean.id, notification.user_id
   end
@@ -75,6 +79,7 @@ class ConversationMessageTest < ActiveSupport::TestCase
   test 'detail_to_json returns expected structure' do
     message = conversation_messages(:message_1)
     json = message.detail_to_json
+
     assert_equal message.id, json[:id]
     assert_equal message.body, json[:body]
     assert_not_nil json[:creator]

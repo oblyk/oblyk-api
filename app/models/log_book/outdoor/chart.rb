@@ -27,7 +27,7 @@ module LogBook
       end
 
       def grade
-        grades = Hash[(1..54).step(2).map { |grade_value| [grade_value, { count: 0 }] }]
+        grades = (1..54).step(2).index_with { |_grade_value| { count: 0 } }
 
         @ascents.each do |ascent|
           next if ascent.max_grade_value.blank? || ascent.max_grade_value.zero?
@@ -46,7 +46,7 @@ module LogBook
               label: 'number'
             }
           ],
-          labels: grades.map { |grade| grade[0] }
+          labels: grades.pluck(0)
         }
       end
 
@@ -82,6 +82,7 @@ module LogBook
 
         @ascents.each do |ascent|
           next if ascent.released_at.blank?
+
           dates[ascent.released_at.strftime('%Y-%m')] += 1
         end
 
@@ -134,4 +135,3 @@ module LogBook
     end
   end
 end
-

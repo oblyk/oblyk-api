@@ -4,7 +4,7 @@ require 'test_helper'
 
 class ApplicationRecordTest < ActiveSupport::TestCase
   test 'ApplicationRecord is an abstract class' do
-    assert ApplicationRecord.abstract_class?
+    assert_predicate ApplicationRecord, :abstract_class?
   end
 
   test 'ApplicationRecord inherits from ActiveRecord::Base' do

@@ -22,8 +22,10 @@ module Api
 
       test 'should get opens' do
         get opens_api_v1_contests_url, headers: @public_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert json_response.key?('is_coming')
         assert json_response.key?('ongoing')
         assert json_response.key?('past')
@@ -31,31 +33,38 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_contests_url(@gym), headers: @public_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
       end
 
       test 'should get index with active filter' do
         get api_v1_gym_contests_url(@gym), params: { active: 'true' }, headers: @public_headers
+
         assert_response :success
       end
 
       test 'should show contest' do
         get api_v1_gym_contest_url(@gym, @contest), headers: @public_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @contest.name, json_response['name']
       end
 
       test 'should get time_line' do
         get time_line_api_v1_gym_contest_url(@gym, @contest), headers: @admin_headers
+
         assert_response :success
       end
 
       test 'should not get time_line for non admin' do
         # On utilise un utilisateur qui n'a pas de compte (pas de token valide)
         get time_line_api_v1_gym_contest_url(@gym, @contest), headers: @public_headers
+
         assert_response :unauthorized
       end
 
@@ -65,16 +74,19 @@ module Api
         post add_banner_api_v1_gym_contest_url(@gym, @contest),
              params: { contest: { banner: dummy_file } },
              headers: @admin_headers
+
         assert_response :success
       end
 
       test 'should get results' do
         get results_api_v1_gym_contest_url(@gym, @ongoing_contest), headers: @public_headers
+
         assert_response :success
       end
 
       test 'should get statistics' do
         get statistics_api_v1_gym_contest_url(@gym, @contest), headers: @admin_headers
+
         assert_response :success
       end
 
@@ -102,8 +114,10 @@ module Api
             params: { contest: { name: 'Updated Contest Name' } },
             headers: @admin_headers,
             as: :json
+
         assert_response :success
         @contest.reload
+
         assert_equal 'Updated Contest Name', @contest.name
       end
 
@@ -127,23 +141,29 @@ module Api
             params: { contest: { draft: true } },
             headers: @admin_headers,
             as: :json
+
         assert_response :no_content
         @contest.reload
+
         assert @contest.draft
       end
 
       test 'should archive contest' do
         put archived_api_v1_gym_contest_url(@gym, @contest), headers: @admin_headers, as: :json
+
         assert_response :success
         @contest.reload
+
         assert_not_nil @contest.archived_at
       end
 
       test 'should unarchive contest' do
         @contest.archive!
         put unarchived_api_v1_gym_contest_url(@gym, @contest), headers: @admin_headers, as: :json
+
         assert_response :success
         @contest.reload
+
         assert_nil @contest.archived_at
       end
     end

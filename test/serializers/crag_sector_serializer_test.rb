@@ -11,6 +11,7 @@ class CragSectorSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @crag_sector.id, attributes['id']
     assert_equal @crag_sector.name, attributes['name']
   end

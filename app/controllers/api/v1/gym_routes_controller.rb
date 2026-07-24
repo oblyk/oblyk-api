@@ -247,7 +247,7 @@ module Api
         if new_gym_route_cover_id
           route_with_same_covers = GymRoute.where(gym_route_cover_id: new_gym_route_cover_id)
           # if route already has a picture
-          if @gym_route.gym_route_cover_id && route_with_same_covers.count == 1 && @gym_route.gym_route_cover_id != new_gym_route_cover_id.to_i
+          if @gym_route.gym_route_cover_id && route_with_same_covers.one? && @gym_route.gym_route_cover_id != new_gym_route_cover_id.to_i
             @gym_route.gym_route_cover.picture.purge # delete attachment
             @gym_route.gym_route_cover.destroy
           end
@@ -257,7 +257,7 @@ module Api
           # if route already has a picture
           if @gym_route.gym_route_cover_id
             route_with_same_covers = GymRoute.where(gym_route_cover_id: @gym_route.gym_route_cover_id)
-            if route_with_same_covers.count == 1 # if the route is the only one to use this picture
+            if route_with_same_covers.one? # if the route is the only one to use this picture
               @gym_route.gym_route_cover.picture.purge # delete attachment
               @gym_route.gym_route_cover.destroy
             end
@@ -303,7 +303,7 @@ module Api
 
       def delete_picture
         @gym_route.thumbnail = nil
-        @gym_route.gym_route_cover.destroy if @gym_route.gym_route_cover && @gym_route.gym_route_cover.gym_routes.count == 1
+        @gym_route.gym_route_cover.destroy if @gym_route.gym_route_cover&.gym_routes&.one?
         @gym_route.gym_route_cover = nil
         if @gym_route.save
           render json: {}, status: :ok
@@ -321,12 +321,12 @@ module Api
       end
 
       def dismount_collection
-        @gym.gym_routes.where(id: params[:route_ids]).each(&:dismount!)
+        @gym.gym_routes.where(id: params[:route_ids]).find_each(&:dismount!)
         head :no_content
       end
 
       def mount_collection
-        @gym.gym_routes.where(id: params[:route_ids]).each(&:mount!)
+        @gym.gym_routes.where(id: params[:route_ids]).find_each(&:mount!)
         head :no_content
       end
 
@@ -343,11 +343,10 @@ module Api
       end
 
       def comments
-        comments = []
-        @gym_route.comments.each do |comment|
-          comments << comment
+        comments = @gym_route.comments.map do |comment|
+          comment
         end
-        @gym_route.ascent_gym_routes.where('comments_count > 0').each do |ascent|
+        @gym_route.ascent_gym_routes.where('comments_count > 0').find_each do |ascent|
           comments << ascent.ascent_comment
         end
         comments = comments.sort_by(&:created_at)

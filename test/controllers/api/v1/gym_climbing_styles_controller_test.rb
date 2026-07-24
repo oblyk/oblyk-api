@@ -14,8 +14,10 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_gym_climbing_styles_url(gym_id: @gym.id), headers: @user_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_includes json_response.keys, 'bouldering'
       end
 
@@ -49,6 +51,7 @@ module Api
         end
         assert_response :success
         @climbing_style.reload
+
         assert_nil @climbing_style.deactivated_at
         assert_equal '#000000', @climbing_style.color
       end
@@ -62,8 +65,10 @@ module Api
               }
             },
             headers: @user_headers, as: :json
+
         assert_response :no_content
         @climbing_style.reload
+
         assert_not_nil @climbing_style.deactivated_at
       end
 
@@ -78,6 +83,7 @@ module Api
                }
              },
              headers: other_user_headers, as: :json
+
         assert_response :forbidden
       end
     end

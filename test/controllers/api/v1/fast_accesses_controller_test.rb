@@ -13,15 +13,18 @@ module Api
 
       test 'should get index' do
         get api_v1_fast_accesses_url, headers: @user_headers, as: :json
+
         assert_response :success
 
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_includes json_response, 'follows_count'
         assert_includes json_response, 'contests'
       end
 
       test 'should be protected by session' do
         get api_v1_fast_accesses_url, headers: @public_headers, as: :json
+
         assert_response :unauthorized
       end
 
@@ -33,9 +36,11 @@ module Api
         Follow.create!(user: @user, followable: gym)
 
         get api_v1_fast_accesses_url, headers: @user_headers, as: :json
+
         assert_response :success
 
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_not_nil json_response['crag']
         assert_equal crag.name, json_response['crag']['name']
         assert_not_nil json_response['gym']
@@ -69,9 +74,11 @@ module Api
         end
 
         get api_v1_fast_accesses_url, headers: @user_headers, as: :json
+
         assert_response :success
 
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_not_empty json_response['contests']
         assert_equal contest.name, json_response['contests'].first['name']
         assert_not_nil json_response['contests'].first['participant_token']

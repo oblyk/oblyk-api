@@ -9,10 +9,6 @@ module ContestService
       @result_service = ContestService::Result.new(@contest)
     end
 
-    test 'initialize sets correct attributes' do
-      assert_equal @contest, @contest
-    end
-
     test 'results returns a hash of results' do
       results = @result_service.results
 
@@ -21,11 +17,12 @@ module ContestService
       category = contest_categories(:category_senior)
       cat_results = results.find { |r| r[:category_id] == category.id }
 
-      assert_not_nil cat_results, "Results should contain data for category senior"
+      assert_not_nil cat_results, 'Results should contain data for category senior'
       assert_kind_of Array, cat_results[:participants]
 
       participant = contest_participants(:participant_1)
       participant_found = cat_results[:participants].find { |p| p[:participant_id] == participant.id }
+
       assert_not_nil participant_found
     end
 

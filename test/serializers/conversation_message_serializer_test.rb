@@ -11,6 +11,7 @@ class ConversationMessageSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @conversation_message.id, attributes['id']
     assert_equal @conversation_message.conversation_id, attributes['conversation_id']
     assert_equal @conversation_message.body, attributes['body']
@@ -21,6 +22,7 @@ class ConversationMessageSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the user relationship' do
     relationships = @serialization['data']['relationships']
+
     assert_not_nil relationships['user']
     assert_equal @conversation_message.user_id, relationships['user']['data']['id'].to_i
   end

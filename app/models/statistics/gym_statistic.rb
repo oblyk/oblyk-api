@@ -72,7 +72,7 @@ module Statistics
             label: 'number'
           }
         ],
-        labels: grades.map { |grade| grade[0] }
+        labels: grades.pluck(0)
       }
     end
 
@@ -164,7 +164,7 @@ module Statistics
         harness_status[:sandbagged] += difficulty_appreciations['sandbagged'].try(:[], 'count') || 0
       end
       appreciation_count = harness_status[:easy_for_the_grade] + harness_status[:this_grade_is_accurate] + harness_status[:sandbagged]
-      difficulty_average = harness_status[:easy_for_the_grade] * -1 + harness_status[:sandbagged]
+      difficulty_average = (harness_status[:easy_for_the_grade] * -1) + harness_status[:sandbagged]
       harness_status[:difficulty_average] = appreciation_count.positive? ? difficulty_average.to_d / appreciation_count.to_d : 0
       harness_status
     end
@@ -172,7 +172,7 @@ module Statistics
     def opening_frequencies
       self.routes ||= gym_routes
 
-      if routes.size.zero?
+      if routes.empty?
         return {
           datasets: [{}],
           labels: []
@@ -198,7 +198,7 @@ module Statistics
             label: 'number'
           }
         ],
-        labels: dates.map { |date| date[0] }
+        labels: dates.pluck(0)
       }
     end
 

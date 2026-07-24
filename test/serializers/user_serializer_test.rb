@@ -12,6 +12,7 @@ class UserSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @user.id, attributes['id']
     assert_equal @user.uuid, attributes['uuid']
     assert_equal @user.slug_name, attributes['slug_name']
@@ -22,6 +23,7 @@ class UserSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the "name" attribute, which corresponds to "full_name"' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @user.full_name, attributes['name']
   end
 

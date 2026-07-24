@@ -11,6 +11,7 @@ class GuideBookPaperSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @guide_book_paper.id, attributes['id']
     assert_equal @guide_book_paper.name, attributes['name']
     assert_equal_or_nil @guide_book_paper.slug_name, attributes['slug_name']
@@ -26,6 +27,13 @@ class GuideBookPaperSerializerTest < ActiveSupport::TestCase
     assert_equal_or_nil @guide_book_paper.follows_count, attributes['follows_count']
   end
 
+  test 'It contains the calculated price' do
+    attributes = @serialization['data']['attributes']
+    expected_price = @guide_book_paper.price_cents.to_d / 100
+
+    assert_equal expected_price.to_s, attributes['price']
+  end
+
   private
 
   def assert_equal_or_nil(expected, actual)
@@ -34,11 +42,5 @@ class GuideBookPaperSerializerTest < ActiveSupport::TestCase
     else
       assert_equal expected, actual
     end
-  end
-
-  test 'It contains the calculated price' do
-    attributes = @serialization['data']['attributes']
-    expected_price = @guide_book_paper.price_cents.to_d / 100
-    assert_equal expected_price.to_s, attributes['price']
   end
 end

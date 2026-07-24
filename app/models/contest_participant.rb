@@ -22,7 +22,7 @@ class ContestParticipant < ApplicationRecord
 
   validates :first_name, :last_name, :date_of_birth, presence: true
   validates :genre, inclusion: { in: %w[male female] }, unless: proc { |record| record.contest.optional_gender }
-  validates :token, uniqueness: { scope: :contest, case_sensitive: false }, on: :create
+  validates :token, uniqueness: { scope: :contest, case_sensitive: false }, on: :create # rubocop:disable Rails/UniqueValidationWithoutIndex
   validate :unique_participant
   validate :validate_age
   validate :validate_category_obligations
@@ -30,10 +30,10 @@ class ContestParticipant < ApplicationRecord
 
   before_create :auto_distribute
 
-  after_save :delete_caches
   after_create :create_participant_step
   after_create :send_subscription_mail, unless: :skip_subscription_mail
   after_destroy :delete_caches
+  after_save :delete_caches
 
   scope :with_ascents, -> { where('EXISTS(SELECT * FROM contest_participant_ascents WHERE contest_participants.id = contest_participant_ascents.contest_participant_id)') }
 
@@ -106,7 +106,7 @@ class ContestParticipant < ApplicationRecord
         'Vague',
         'Catégorie'
       ]
-      all.includes(:contest_wave, :contest_category).find_each do |participant|
+      includes(:contest_wave, :contest_category).find_each do |participant|
         csv << [
           participant.last_name,
           participant.first_name,
@@ -124,7 +124,7 @@ class ContestParticipant < ApplicationRecord
 
   def steps
     steps = []
-    contest_stage_steps.includes(:contest_route_groups).each do |step|
+    contest_stage_steps.includes(:contest_route_groups).find_each do |step|
       start_time = nil
       end_time = nil
       start_date = nil
@@ -253,14 +253,14 @@ class ContestParticipant < ApplicationRecord
       random_letters_number = 6 if loop > 75
       random_letters = (0...random_letters_number).map { letters[rand(26)] }.join
       token_suggestion = "#{first_part}.#{random_letters}"
-      find = !contest.contest_participants.where(token: token_suggestion).exists?
+      find = !contest.contest_participants.exists?(token: token_suggestion)
       raise if loop == 100
     end
     self.token = token_suggestion
   end
 
   def auto_distribute
-    return unless contest_category.auto_distribute && contest_category.waveable && contest.contest_waves.count.positive?
+    return unless contest_category.auto_distribute && contest_category.waveable && contest.contest_waves.any?
 
     waves = contest.contest_waves.map do |wave|
       {

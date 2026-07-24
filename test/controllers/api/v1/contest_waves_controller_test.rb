@@ -18,15 +18,19 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_contest_contest_waves_url(@gym, @contest), headers: @public_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
       end
 
       test 'should show contest wave' do
         get api_v1_gym_contest_contest_wave_url(@gym, @contest, @wave), headers: @public_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @wave.name, json_response['name']
       end
 
@@ -50,8 +54,10 @@ module Api
             params: { contest_wave: { name: 'Updated Wave Name' } },
             headers: @admin_headers,
             as: :json
+
         assert_response :success
         @wave.reload
+
         assert_equal 'Updated Wave Name', @wave.name
       end
 

@@ -11,6 +11,7 @@ class ContestWaveSerializerTest < ActiveSupport::TestCase
 
   test 'It contains the basic attributes' do
     attributes = @serialization['data']['attributes']
+
     assert_equal @wave.id, attributes['id']
     assert_equal @wave.name, attributes['name']
     assert_equal @wave.capacity, attributes['capacity']

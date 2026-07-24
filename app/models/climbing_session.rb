@@ -71,9 +71,9 @@ class ClimbingSession < ApplicationRecord
       gyms: gym_ids,
       stats: {
         count: ascents.size,
-        by_grades: by_grade.map { |grade| grade[1] },
-        by_colors: by_colors.map { |color| color[1] },
-        project_by_grades: project_by_grade.map { |grade| grade[1] },
+        by_grades: by_grade.pluck(1),
+        by_colors: by_colors.pluck(1),
+        project_by_grades: project_by_grade.pluck(1)
       },
       user: {
         uuid: user.uuid,
@@ -87,7 +87,7 @@ class ClimbingSession < ApplicationRecord
   def detail_to_json(for_current_user: true)
     previous_climbing_session = ClimbingSession
                                 .where(user: user)
-                                .where('climbing_sessions.session_date < ?', session_date)
+                                .where(climbing_sessions: { session_date: ...session_date })
                                 .maximum(:session_date)
     next_climbing_session = ClimbingSession
                             .where(user: user)
@@ -130,7 +130,7 @@ class ClimbingSession < ApplicationRecord
 
   def remove_if_empty!
     return if description.present?
-    return if ascents.count.positive?
+    return if ascents.any?
 
     destroy
   end

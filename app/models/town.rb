@@ -89,7 +89,7 @@ class Town < ApplicationRecord
       }
     end
 
-    if around_gyms.size.zero?
+    if around_gyms.empty?
       first_nearest_gym = Gym.select(%i[id slug_name name country city latitude longitude])
                              .order(Arel.sql(Gym.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(gyms.longitude, gyms.latitude), POINT(?, ?))', longitude.to_f, latitude.to_f])))
                              .first
@@ -148,7 +148,7 @@ class Town < ApplicationRecord
       end
     end
 
-    if around_crags.size.zero?
+    if around_crags.empty?
       first_nearest_crag = Crag.order(
         Arel.sql(Crag.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(crags.longitude, crags.latitude), POINT(?, ?))', longitude.to_f, latitude.to_f]))
       ).first

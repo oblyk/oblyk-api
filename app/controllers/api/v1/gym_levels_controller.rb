@@ -4,6 +4,7 @@ module Api
   module V1
     class GymLevelsController < ApiController
       include Gymable
+
       before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[index update_all]
 
       def index

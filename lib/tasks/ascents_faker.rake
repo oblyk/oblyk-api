@@ -18,7 +18,7 @@ namespace :ascents_faker do
       stronger = rand(10..90)
       out.puts "    Stronger rate #{stronger}"
       gym.gym_routes.mounted.find_each do |gym_route|
-        realised = chance(stronger)
+        realised = chance?(stronger)
         if realised
           ascent_status = AscentStatus::LIST.sample
           hardness_status = Hardness::LIST.dup
@@ -39,7 +39,7 @@ namespace :ascents_faker do
     end
   end
 
-  def chance(percent)
+  def chance?(percent)
     rand(1..100) <= percent
   end
 end

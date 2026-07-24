@@ -108,7 +108,7 @@ module Api
             :cellIndex,
             :grade,
             :hold_color,
-            climbing_styles: []
+            { climbing_styles: [] }
           ]
         )
       end

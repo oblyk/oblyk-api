@@ -8,16 +8,18 @@ class ArticleCragTest < ActiveSupport::TestCase
   end
 
   test 'is valid' do
-    assert @article_crag.valid?
+    assert_predicate @article_crag, :valid?
   end
 
   test 'is invalid if it has no crag' do
     @article_crag.crag = nil
+
     assert_not @article_crag.valid?
   end
 
   test 'is invalid if it has no article' do
     @article_crag.article = nil
+
     assert_not @article_crag.valid?
   end
 
@@ -26,6 +28,7 @@ class ArticleCragTest < ActiveSupport::TestCase
       article: @article_crag.article,
       crag: @article_crag.crag
     )
+
     assert_not duplicate_article_crag.valid?
   end
 
@@ -34,7 +37,8 @@ class ArticleCragTest < ActiveSupport::TestCase
       article: articles(:article_2),
       crag: @article_crag.crag
     )
-    assert new_article_crag.valid?
+
+    assert_predicate new_article_crag, :valid?
   end
 
   test "updates the crag's route counter" do
@@ -44,6 +48,7 @@ class ArticleCragTest < ActiveSupport::TestCase
       article: articles(:article_1),
       crag: crag
     )
+
     assert_equal initial_count + 1, crag.reload.articles_count
   end
 
@@ -54,6 +59,7 @@ class ArticleCragTest < ActiveSupport::TestCase
       article: articles(:article_1),
       crag: crag
     )
-    assert crag.reload.updated_at > old_updated_at
+
+    assert_operator crag.reload.updated_at, :>, old_updated_at
   end
 end

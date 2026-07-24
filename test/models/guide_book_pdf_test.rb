@@ -1,28 +1,31 @@
 # frozen_string_literal: true
+
 require 'test_helper'
 
 class GuideBookPdfTest < ActiveSupport::TestCase
   setup do
     @guide_book_pdf = guide_book_pdfs(:guide_book_pdf_1)
     @guide_book_pdf.pdf_file.attach(
-      io: File.open(Rails.root.join('test/fixtures/files/test.pdf')),
+      io: Rails.root.join('test/fixtures/files/test.pdf').open,
       filename: 'test.pdf',
       content_type: 'application/pdf'
     )
   end
 
   test 'guide_book_pdf is valid' do
-    assert @guide_book_pdf.valid?
+    assert_predicate @guide_book_pdf, :valid?
   end
 
   test 'guide_book_pdf is invalid without name' do
     @guide_book_pdf.name = nil
-    assert @guide_book_pdf.invalid?
+
+    assert_predicate @guide_book_pdf, :invalid?
   end
 
   test 'guide_book_pdf is invalid without pdf_file' do
     @guide_book_pdf.pdf_file.detach
-    assert @guide_book_pdf.invalid?
+
+    assert_predicate @guide_book_pdf, :invalid?
   end
 
   test 'delegates latitude and longitude to crag' do
@@ -32,6 +35,7 @@ class GuideBookPdfTest < ActiveSupport::TestCase
 
   test 'detail_to_json returns correct keys' do
     json = @guide_book_pdf.detail_to_json
+
     assert_equal @guide_book_pdf.id, json[:id]
     assert_equal @guide_book_pdf.name, json[:name]
     assert_equal @guide_book_pdf.description, json[:description]
@@ -55,10 +59,12 @@ class GuideBookPdfTest < ActiveSupport::TestCase
     end
 
     publication = Publication.last
+
     assert_equal @guide_book_pdf.crag_id, publication.publishable_id
     assert_equal 'Crag', publication.publishable_type
 
     attachment = PublicationAttachment.last
+
     assert_equal 'GuideBookPdf', attachment.attachable_type
     assert_equal @guide_book_pdf.id, attachment.attachable_id
   end

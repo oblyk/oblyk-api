@@ -18,15 +18,19 @@ module Api
 
       test 'should get index' do
         get api_v1_gym_contest_contest_categories_url(@gym, @contest), headers: @public_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_kind_of Array, json_response
       end
 
       test 'should show contest category' do
         get api_v1_gym_contest_contest_category_url(@gym, @contest, @category), headers: @public_headers
+
         assert_response :success
-        json_response = JSON.parse(response.body)
+        json_response = response.parsed_body
+
         assert_equal @category.name, json_response['name']
       end
 
@@ -52,8 +56,10 @@ module Api
             params: { contest_category: { name: 'Updated Category Name' } },
             headers: @admin_headers,
             as: :json
+
         assert_response :success
         @category.reload
+
         assert_equal 'Updated Category Name', @category.name
       end
 

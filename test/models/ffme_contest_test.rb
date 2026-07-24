@@ -10,6 +10,7 @@ class FfmeContestTest < ActiveSupport::TestCase
   test 'validates presence of name and contact_email' do
     @ffme_contest.name = nil
     @ffme_contest.contact_email = nil
+
     assert_not @ffme_contest.valid?
     assert_includes @ffme_contest.errors.attribute_names, :name
     assert_includes @ffme_contest.errors.attribute_names, :contact_email
@@ -17,30 +18,36 @@ class FfmeContestTest < ActiveSupport::TestCase
 
   test 'validates status' do
     @ffme_contest.status = 'invalid_status'
+
     assert_not @ffme_contest.valid?
     assert_includes @ffme_contest.errors.attribute_names, :status
 
     @ffme_contest.status = 'create_on_my_compet'
-    assert @ffme_contest.valid?
+
+    assert_predicate @ffme_contest, :valid?
   end
 
   test 'validates contest_type' do
     @ffme_contest.contest_type = 'invalid_type'
+
     assert_not @ffme_contest.valid?
     assert_includes @ffme_contest.errors.attribute_names, :contest_type
 
     @ffme_contest.contest_type = 'sport_climbing'
-    assert @ffme_contest.valid?
+
+    assert_predicate @ffme_contest, :valid?
   end
 
   test 'summary_to_json returns correct keys' do
     json = @ffme_contest.summary_to_json
+
     assert_equal @ffme_contest.id, json[:id]
     assert_equal @ffme_contest.contest_id, json[:contest_id]
   end
 
   test 'detail_to_json returns detailed keys' do
     json = @ffme_contest.detail_to_json
+
     assert_equal @ffme_contest.status, json[:status]
     assert_equal @ffme_contest.contest_type, json[:contest_type]
     assert_equal @ffme_contest.name, json[:name]
@@ -50,9 +57,11 @@ class FfmeContestTest < ActiveSupport::TestCase
 
   test 'ffme_contest_type returns correct labels' do
     @ffme_contest.contest_type = 'boulder'
+
     assert_equal 'BLOC', @ffme_contest.ffme_contest_type
 
     @ffme_contest.contest_type = 'sport_climbing'
+
     assert_equal 'DIFFICULTE', @ffme_contest.ffme_contest_type
   end
 
@@ -64,10 +73,12 @@ class FfmeContestTest < ActiveSupport::TestCase
   test 'sendable? returns correct boolean' do
     @ffme_contest.start_date = Date.current - 1.day
     @ffme_contest.end_date = Date.current + 1.day
-    assert @ffme_contest.sendable?
+
+    assert_predicate @ffme_contest, :sendable?
 
     @ffme_contest.start_date = Date.current + 1.day
     @ffme_contest.end_date = Date.current + 2.days
+
     assert_not @ffme_contest.sendable?
   end
 
@@ -101,6 +112,7 @@ class FfmeContestTest < ActiveSupport::TestCase
 
     MyCompet.stub :link, mock do
       result = @ffme_contest.link_on_my_compet
+
       assert_equal 'http://example.com', result['url']
     end
 

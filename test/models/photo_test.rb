@@ -21,24 +21,26 @@ class PhotoTest < ActiveSupport::TestCase
       copyright_nd: true
     )
     @photo.picture.attach(
-      io: File.open(Rails.root.join('test/fixtures/files/image.jpg')),
+      io: Rails.root.join('test/fixtures/files/image.jpg').open,
       filename: 'image.jpg',
       content_type: 'image/jpeg'
     )
   end
 
   test 'photo is valid' do
-    assert @photo.valid?
+    assert_predicate @photo, :valid?
   end
 
   test 'photo without illustrable is invalid' do
     @photo.illustrable = nil
+
     assert_not @photo.valid?
   end
 
   test 'photo with invalid illustrable type is invalid' do
     gym = gyms(:my_gym)
     @photo.illustrable = gym
+
     assert_not @photo.valid?
     assert_includes @photo.errors[:illustrable_type], 'is_not_a_permitted_value'
   end
@@ -46,6 +48,7 @@ class PhotoTest < ActiveSupport::TestCase
   test 'init_posted_at before validation' do
     new_photo = Photo.new(user: users(:normal_user), illustrable: crags(:orpierre))
     new_photo.valid?
+
     assert_not_nil new_photo.posted_at
   end
 
@@ -61,16 +64,18 @@ class PhotoTest < ActiveSupport::TestCase
   test 'photo_height and photo_width return metadata values' do
     @photo.picture.blob.metadata = { 'height' => 100, 'width' => 200 }
     @photo.picture.blob.save!
+
     assert_equal 100, @photo.photo_height
     assert_equal 200, @photo.photo_width
   end
 
   test 'destroyable? returns true if not used' do
-    assert @photo.destroyable?
+    assert_predicate @photo, :destroyable?
   end
 
   test 'summary_to_json returns correct keys' do
     json = @photo.summary_to_json
+
     assert_equal @photo.id, json[:id]
     assert_equal @photo.description, json[:description]
     assert_equal @photo.app_path, json[:app_path]
@@ -85,6 +90,7 @@ class PhotoTest < ActiveSupport::TestCase
       @photo.publication_push!
     end
     publication = Publication.last
+
     assert_equal 'Crag', publication.publishable_type
     assert_equal @photo.illustrable_id, publication.publishable_id
     assert_equal 'new_photo', publication.publishable_subject

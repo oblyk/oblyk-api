@@ -19,6 +19,7 @@ module Api
       test 'should get index' do
         get api_v1_gym_contest_contest_participant_ascents_url(@gym, @contest),
             headers: @admin_headers
+
         assert_response :success
       end
 

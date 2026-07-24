@@ -33,8 +33,9 @@ class Championship < ApplicationRecord
     return nil if contests.blank?
 
     championship_results = {}
+    genders = %w[male female]
     championship_categories.each do |championship_category|
-      %w[male female].each do |genre|
+      genders.each do |genre|
         key = "#{championship_category.id}-#{genre}"
         championship_results[key] ||= {
           genre: genre,
@@ -51,7 +52,7 @@ class Championship < ApplicationRecord
     contests.order(:start_date).each do |contest|
       results = ContestService::Result.new(contest, rich_data: true).results
       results.each do |category|
-        championship_results.each do |_k, v|
+        championship_results.each_value do |v|
           next unless v[:matches_contest_categories].include?(category[:category_id]) && v[:genre] == category[:genre]
 
           last_ranks << { contest_id: contest.id, championship_category_id: v[:category_id], genre: v[:genre], last_rank: category[:participants].last[:global_rank] }
@@ -115,28 +116,28 @@ class Championship < ApplicationRecord
         case combined_ranking_type
         when ContestService::Constant::COMBINED_RANKING_ADDITION
           rank_point = 0
-          participant[:contests].each do |_k, v|
+          participant[:contests].each_value do |v|
             rank_point += v[:present] ? v[:rank] : max_number_of_participant
           end
         when ContestService::Constant::COMBINED_RANKING_MULTIPLICATION
           rank_point = 1
-          participant[:contests].each do |_k, v|
+          participant[:contests].each_value do |v|
             rank_point *= v[:present] ? v[:rank] : max_number_of_participant
           end
         when ContestService::Constant::COMBINED_RANKING_DECREMENT_POINTS
           rank_point = 0
-          participant[:contests].each do |_k, v|
+          participant[:contests].each_value do |v|
             rank_point += if !v[:present]
                             0
                           elsif v[:rank] <= 30
                             ContestService::Constant::COMBINED_RANKING_POINT_MATRIX[v[:rank] - 1]
                           else
-                            1.0 - (1.0 / (number_of_participant - 29)) * (v[:rank] - 29)
+                            1.0 - ((1.0 / (number_of_participant - 29)) * (v[:rank] - 29))
                           end
           end
-        else
+        else # rubocop:disable Lint/DuplicateBranch
           rank_point = 0
-          participant[:contests].each do |_k, v|
+          participant[:contests].each_value do |v|
             rank_point += v[:present] ? v[:rank] : max_number_of_participant
           end
         end

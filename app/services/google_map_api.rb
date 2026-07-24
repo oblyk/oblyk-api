@@ -2,13 +2,12 @@
 
 class GoogleMapApi
   BASE_URL = 'https://maps.googleapis.com/maps/api'
-  GOOGLE_KEY = ENV['GOOGLE_MAP_KEY']
+  GOOGLE_KEY = ENV.fetch('GOOGLE_MAP_KEY', nil)
 
   # @param [Array] coordinates
   def self.elevations(coordinates)
-    float_coordinates = []
-    coordinates.each do |coordinate|
-      float_coordinates << "#{coordinate[:latitude].to_f},#{coordinate[:longitude].to_f}"
+    float_coordinates = coordinates.map do |coordinate|
+      "#{coordinate[:latitude].to_f},#{coordinate[:longitude].to_f}"
     end
     float_coordinates = float_coordinates.join('|')
     request = RestClient.get(

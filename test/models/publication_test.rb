@@ -18,7 +18,7 @@ class PublicationTest < ActiveSupport::TestCase
       copyright_nd: false
     )
     @photo.picture.attach(
-      io: File.open(Rails.root.join('test/fixtures/files/image.jpg')),
+      io: Rails.root.join('test/fixtures/files/image.jpg').open,
       filename: 'image.jpg',
       content_type: 'image/jpeg'
     )
@@ -26,18 +26,22 @@ class PublicationTest < ActiveSupport::TestCase
 
   test 'validates publishable type' do
     pub = Publication.new(publishable: @user, author: @user, body: 'test', published_at: Time.zone.now)
-    assert pub.valid?
+
+    assert_predicate pub, :valid?
 
     pub.publishable_type = 'Area'
-    assert pub.invalid?
+
+    assert_predicate pub, :invalid?
   end
 
   test 'validates body if published and no subject' do
     pub = Publication.new(publishable: @user, author: @user, published_at: Time.zone.now)
-    assert pub.invalid?
+
+    assert_predicate pub, :invalid?
 
     pub.publishable_subject = 'new_photo'
-    assert pub.valid?
+
+    assert_predicate pub, :valid?
   end
 
   test 'app_path returns correct path' do
@@ -48,6 +52,7 @@ class PublicationTest < ActiveSupport::TestCase
     assert_equal @user.full_name, @publication_user.publishable_name
 
     pub_crag = publications(:publication_crag)
+
     assert_equal @crag.name, pub_crag.publishable_name
   end
 
@@ -57,7 +62,7 @@ class PublicationTest < ActiveSupport::TestCase
   end
 
   test 'published? returns true if published' do
-    assert @publication_user.published?
+    assert_predicate @publication_user, :published?
     assert_not @publication_draft.published?
   end
 
@@ -72,12 +77,14 @@ class PublicationTest < ActiveSupport::TestCase
     new_user.save(validate: false)
 
     pub = Publication.new(publishable: new_user, author: new_user, body: 'New pub unique')
+
     assert_nil pub.published_at
 
     result = pub.publish!
+
     assert result, 'Publication should be published'
     assert_not_nil pub.published_at
-    assert pub.published?
+    assert_predicate pub, :published?
   end
 
   test 'posting limit for today' do
@@ -96,6 +103,7 @@ class PublicationTest < ActiveSupport::TestCase
     pub2 = Publication.new(publishable: new_user, author: new_user, body: 'Pub 2')
     assert_no_difference 'Publication.count' do
       result = pub2.publish!
+
       assert_not result
       assert_includes pub2.errors[:base], 'posting_limit_for_today'
     end
@@ -110,6 +118,7 @@ class PublicationTest < ActiveSupport::TestCase
 
     pub.publication_attachments.create!(attachable: @photo)
     pub.refresh_attachment_types_count
+
     assert_equal 1, pub.attachables_count
     assert_equal({ 'Photo' => 1 }, pub.attachable_types_count)
   end

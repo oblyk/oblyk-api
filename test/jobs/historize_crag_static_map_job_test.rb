@@ -21,6 +21,7 @@ class HistorizeCragStaticMapJobTest < ActiveJob::TestCase
     mock_io_banner = StringIO.new('fake-banner-content')
 
     calls = 0
+
     URI.stub :open, ->(_url) { (calls += 1) == 1 ? mock_io : mock_io_banner } do
       assert_difference 'ActiveStorage::Attachment.count', 2 do
         HistorizeCragStaticMapJob.perform_now(@crag.id)
@@ -28,10 +29,11 @@ class HistorizeCragStaticMapJobTest < ActiveJob::TestCase
     end
 
     @crag.reload
-    assert @crag.static_map.attached?
-    assert @crag.static_map_banner.attached?
-    assert_equal "rocher-des-aures-static-map.png", @crag.static_map.blob.filename.to_s
-    assert_equal "rocher-des-aures-static-banner-map.png", @crag.static_map_banner.blob.filename.to_s
+
+    assert_predicate @crag.static_map, :attached?
+    assert_predicate @crag.static_map_banner, :attached?
+    assert_equal 'rocher-des-aures-static-map.png', @crag.static_map.blob.filename.to_s
+    assert_equal 'rocher-des-aures-static-banner-map.png', @crag.static_map_banner.blob.filename.to_s
   end
 
   test 'it calls the correct mapbox urls' do

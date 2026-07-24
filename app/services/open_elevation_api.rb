@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
 class OpenElevationApi
-
   # @param [Array] coordinates
   def self.elevations(coordinates)
-    float_coordinates = []
-    coordinates.each do |coordinate|
-      float_coordinates << {
+    float_coordinates = coordinates.map do |coordinate|
+      {
         latitude: coordinate[:latitude].to_f,
         longitude: coordinate[:longitude].to_f
       }

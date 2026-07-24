@@ -7,7 +7,7 @@ namespace :create_publications do
     model = args[:model]
 
     klass = Object.const_get model
-    count = klass.all.count
+    count = klass.count
     start_time = Time.current
 
     out.puts ''
@@ -27,7 +27,7 @@ namespace :create_publications do
              end
 
     loop = 0
-    object.all.find_each do |record|
+    object.find_each do |record|
       loop += 1
       out.puts "--> #{(loop.to_d / count.to_d * 100.0).round(2)}% create publication for #{record.id} #{record.name}"
       record.publication_push!
@@ -52,7 +52,7 @@ namespace :create_publications do
     out.puts "create publication for #{crags_count} crags"
 
     loop = 0
-    crags.all.find_each do |crag|
+    crags.find_each do |crag|
       loop += 1
       out.puts "--> #{(loop.to_d / crags_count.to_d * 100.0).round(2)}% create publication for #{crag.id} #{crag.name}"
 
@@ -62,7 +62,7 @@ namespace :create_publications do
         route_by_dates[created_at] ||= []
         route_by_dates[created_at] << route
       end
-      route_by_dates.each do |_date, routes|
+      route_by_dates.each_value do |routes|
         publication = Publication.new(
           publishable_id: crag.id,
           publishable_type: 'Crag',

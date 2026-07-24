@@ -4,7 +4,7 @@ require 'test_helper'
 
 class ReceptionTest < ActiveSupport::TestCase
   test 'Reception::LIST is an array' do
-    assert Reception::LIST.is_a?(Array)
+    assert_kind_of Array, Reception::LIST
   end
 
   test 'Reception::LIST contains expected values' do
@@ -14,11 +14,12 @@ class ReceptionTest < ActiveSupport::TestCase
       bad
       dangerous
     ]
+
     assert_equal expected_anchors.sort, Reception::LIST.sort
   end
 
   test 'Reception::LIST is frozen' do
-    assert Reception::LIST.frozen?
+    assert_predicate Reception::LIST, :frozen?
   end
 
   test 'Reception::LIST has 4 elements' do

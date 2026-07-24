@@ -8,16 +8,18 @@ class IndoorSubscriptionGymTest < ActiveSupport::TestCase
   end
 
   test 'indoor subscription gym is valid' do
-    assert @indoor_subscription_gym.valid?
+    assert_predicate @indoor_subscription_gym, :valid?
   end
 
   test 'indoor subscription gym is invalid without indoor_subscription' do
     @indoor_subscription_gym.indoor_subscription = nil
+
     assert_not @indoor_subscription_gym.valid?
   end
 
   test 'indoor subscription gym is invalid without gym' do
     @indoor_subscription_gym.gym = nil
+
     assert_not @indoor_subscription_gym.valid?
   end
 

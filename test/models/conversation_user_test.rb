@@ -12,7 +12,8 @@ class ConversationUserTest < ActiveSupport::TestCase
   test 'read! updates last_read_at' do
     previous_read_at = @conversation_user.last_read_at
     @conversation_user.read!
-    assert @conversation_user.last_read_at > previous_read_at
+
+    assert_operator @conversation_user.last_read_at, :>, previous_read_at
   end
 
   test 'read! marks notifications as read' do
@@ -29,6 +30,7 @@ class ConversationUserTest < ActiveSupport::TestCase
     @conversation_user.read!
 
     notification.reload
-    assert notification.read?
+
+    assert_predicate notification, :read?
   end
 end

@@ -8,7 +8,7 @@ class AreaCragTest < ActiveSupport::TestCase
   end
 
   test 'area_crag is valid' do
-    assert @area_crag.valid?
+    assert_predicate @area_crag, :valid?
   end
 
   test 'area_crag has area' do
@@ -28,11 +28,13 @@ class AreaCragTest < ActiveSupport::TestCase
 
   test 'area_crag is invalid without area' do
     @area_crag.area = nil
+
     assert_not @area_crag.valid?
   end
 
   test 'area_crag is invalid without crag' do
     @area_crag.crag = nil
+
     assert_not @area_crag.valid?
   end
 
@@ -41,6 +43,7 @@ class AreaCragTest < ActiveSupport::TestCase
       area: @area_crag.area,
       crag: @area_crag.crag
     )
+
     assert_not duplicate_area_crag.valid?
     assert_includes duplicate_area_crag.errors.attribute_names, :crag_id
   end

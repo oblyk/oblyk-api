@@ -16,41 +16,49 @@ module Api
 
       test 'should get index' do
         get api_v1_areas_url, headers: @api_headers, as: :json
+
         assert_response :success
       end
 
       test 'should search areas' do
         get search_api_v1_areas_url(query: 'Saoû'), headers: @api_headers, as: :json
+
         assert_response :success
       end
 
       test 'should show area' do
         get api_v1_area_url(@area), headers: @api_headers, as: :json
+
         assert_response :success
       end
 
       test 'should get crags' do
         get crags_api_v1_area_url(@area), headers: @api_headers, as: :json
+
         assert_response :success
       end
 
       test 'should get crags figures' do
         get crags_figures_api_v1_area_url(@area), headers: @api_headers, as: :json
+
         assert_response :success
       end
 
       test 'should get guide book papers' do
         get guide_book_papers_api_v1_area_url(@area), headers: @api_headers, as: :json
+
         assert_response :success
       end
 
       test 'should get geo json' do
         get geo_json_api_v1_area_url(@area), headers: @api_headers, as: :json
+
         assert_response :success
       end
 
       test 'should get photos' do
         get photos_api_v1_area_url(@area), headers: @api_headers, as: :json
+
         assert_response :success
       end
 
@@ -69,8 +77,10 @@ module Api
               params: { area: { name: 'Updated Name' } },
               headers: @api_headers,
               as: :json
+
         assert_response :success
         @area.reload
+
         assert_equal 'Updated Name', @area.name
       end
 
@@ -79,6 +89,7 @@ module Api
              params: { area: { crag_id: @crag_orpierre.id } },
              headers: @api_headers,
              as: :json
+
         assert_response :success
       end
 
@@ -89,11 +100,13 @@ module Api
                params: { area: { crag_id: @crag.id } },
                headers: @api_headers,
                as: :json
+
         assert_response :success
       end
 
       test 'should not destroy area if not super admin' do
         delete api_v1_area_url(@area), headers: @api_headers, as: :json
+
         assert_response :forbidden
       end
 

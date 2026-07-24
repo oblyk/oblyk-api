@@ -8,7 +8,7 @@ class ChampionshipCategoryMatchTest < ActiveSupport::TestCase
   end
 
   test 'should be valid' do
-    assert @match.valid?
+    assert_predicate @match, :valid?
   end
 
   test 'should belong to championship_category' do

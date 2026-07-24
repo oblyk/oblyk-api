@@ -8,16 +8,18 @@ class PlaceOfSaleTest < ActiveSupport::TestCase
   end
 
   test 'place of sale is valid' do
-    assert @place_of_sale.valid?
+    assert_predicate @place_of_sale, :valid?
   end
 
   test 'place of sale is invalid without name' do
     @place_of_sale.name = nil
+
     assert_not @place_of_sale.valid?
   end
 
   test 'place of sale is invalid without guide_book_paper' do
     @place_of_sale.guide_book_paper = nil
+
     assert_not @place_of_sale.valid?
   end
 
@@ -27,6 +29,7 @@ class PlaceOfSaleTest < ActiveSupport::TestCase
 
   test 'to_geo_json returns expected format' do
     geo_json = @place_of_sale.to_geo_json
+
     assert_equal 'Feature', geo_json[:type]
     assert_equal 'PlaceOfSale', geo_json[:properties][:type]
     assert_equal @place_of_sale.id, geo_json[:properties][:id]
@@ -36,6 +39,7 @@ class PlaceOfSaleTest < ActiveSupport::TestCase
 
   test 'to_geo_json with minimalistic option' do
     geo_json = @place_of_sale.to_geo_json(minimalistic: true)
+
     assert_equal 'Feature', geo_json[:type]
     assert_nil geo_json[:properties][:name]
     assert_equal @place_of_sale.id, geo_json[:properties][:id]
@@ -43,6 +47,7 @@ class PlaceOfSaleTest < ActiveSupport::TestCase
 
   test 'detail_to_json returns expected keys' do
     json = @place_of_sale.detail_to_json
+
     assert_equal @place_of_sale.id, json[:id]
     assert_equal 'Vieux Campeur', json[:name]
     assert_equal @place_of_sale.guide_book_paper_id, json[:guide_book_paper_id]

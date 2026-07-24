@@ -15,11 +15,13 @@ module Api
 
       test 'should get index' do
         get api_v1_guide_book_webs_url, params: { crag_id: @crag.id }, headers: @user_headers
+
         assert_response :success
       end
 
       test 'should show guide_book_web' do
         get api_v1_guide_book_web_url(@guide_book_web), headers: @user_headers
+
         assert_response :success
       end
 
@@ -36,8 +38,10 @@ module Api
         patch api_v1_guide_book_web_url(@guide_book_web),
               params: { guide_book_web: { name: 'Updated Topo Web' } },
               headers: @user_headers, as: :json
+
         assert_response :success
         @guide_book_web.reload
+
         assert_equal 'Updated Topo Web', @guide_book_web.name
       end
 

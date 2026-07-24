@@ -8,14 +8,14 @@ class OrganizationUserTest < ActiveSupport::TestCase
   end
 
   test 'valid organization user' do
-    assert @organization_user.valid?
+    assert_predicate @organization_user, :valid?
   end
 
   test 'belongs to user' do
-    assert @organization_user.user.is_a?(User)
+    assert_kind_of User, @organization_user.user
   end
 
   test 'belongs to organization' do
-    assert @organization_user.organization.is_a?(Organization)
+    assert_kind_of Organization, @organization_user.organization
   end
 end

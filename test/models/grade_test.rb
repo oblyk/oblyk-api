@@ -40,6 +40,7 @@ class GradeTest < ActiveSupport::TestCase
 
   test 'grade_color returns expected color' do
     expected_color = Grade.value_color(31)
+
     assert_equal expected_color, Grade.grade_color('6a')
   end
 
@@ -65,7 +66,8 @@ class GradeTest < ActiveSupport::TestCase
 
   test 'degree_colors returns array of colors' do
     colors = Grade.degree_colors
-    assert colors.is_a?(Array)
+
+    assert_kind_of Array, colors
     assert_equal Grade::GRADES_COLOR.size / 2, colors.size
     assert_equal Grade::GRADES_COLOR[0], colors[0]
     assert_equal Grade::GRADES_COLOR[2], colors[1]
@@ -73,7 +75,7 @@ class GradeTest < ActiveSupport::TestCase
 
   test 'range_values returns expected ranges' do
     assert_equal (0..53), Grade.range_values(:french)
-    assert Grade.range_values(:usa_lead).is_a?(Array)
+    assert_kind_of Array, Grade.range_values(:usa_lead)
     assert_includes Grade.range_values(:usa_lead), 31 # 6a
   end
 end

@@ -46,11 +46,11 @@ class GuideBookPdf < ApplicationRecord
   def pdf_url
     if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
       # Use CLOUDFLARE R2 CDN
-      "#{ENV['CLOUDFLARE_R2_DOMAIN']}/#{pdf_file.attachment.key}"
+      "#{ENV.fetch('CLOUDFLARE_R2_DOMAIN', nil)}/#{pdf_file.attachment.key}"
 
     else
       # Use local active storage
-      "#{ENV['OBLYK_API_URL']}#{Rails.application.routes.url_helpers.polymorphic_url(pdf_file, only_path: true)}"
+      "#{ENV.fetch('OBLYK_API_URL', nil)}#{Rails.application.routes.url_helpers.polymorphic_url(pdf_file, only_path: true)}"
     end
   end
 

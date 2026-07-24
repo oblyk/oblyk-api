@@ -61,7 +61,6 @@ module Api
             opener_ids: filter_params[:opener_ids]
           )
         end
-
       end
     end
   end
