@@ -43,10 +43,6 @@ module Api
 
       private
 
-      def set_gym_level
-        @gym_level = GymLevel.find params[:id]
-      end
-
       def gym_levels_params
         params.require(:gym_levels).permit(
           sport_climbing: [

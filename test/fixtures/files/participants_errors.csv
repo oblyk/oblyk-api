@@ -1,0 +1,5 @@
+Prénom;Nom;Date de naissance;Email;Genre;Catégorie;Vague
+No;Birthdate;;no-birth@test.com;homme;Senior;
+No;Genre;1990-01-01;no-genre@test.com;;Senior;
+Wrong;Category;1990-01-01;wrong-cat@test.com;homme;Inexistante;
+Missing;Wave;1990-01-01;missing-wave@test.com;homme;Senior;

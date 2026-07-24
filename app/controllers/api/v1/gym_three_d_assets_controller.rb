@@ -58,11 +58,8 @@ module Api
       end
 
       def destroy
-        if @gym_three_d_asset.destroy
-          head :no_content
-        else
-          render json: { error: @gym_three_d_asset.errors }, status: :unprocessable_content
-        end
+        @gym_three_d_asset.destroy
+        head :no_content
       end
 
       def change_three_d_file

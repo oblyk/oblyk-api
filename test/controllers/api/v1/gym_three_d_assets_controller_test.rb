@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'minitest/mock'
 
 module Api
   module V1
@@ -29,12 +30,93 @@ module Api
                  gym_three_d_asset: {
                    name: 'New Asset',
                    import_type: 'gltf',
-                   three_d_file: fixture_file_upload('test/fixtures/files/espace_voie.gltf', 'model/gltf+json')
+                   three_d_file: fixture_file_upload('espace_voie.gltf', 'model/gltf+json')
                  }
                },
                headers: @admin_headers
         end
         assert_response :success
+      end
+
+      test 'should create gym three d asset with obj_zip' do
+        Open3.stub :capture3, [nil, nil, Minitest::Mock.new.expect(:success?, true)] do
+          gltf_path = Rails.root.join('tmp/test_asset.gltf').to_s
+          FileUtils.cp('test/fixtures/files/espace_voie.gltf', gltf_path)
+          Api::V1::GymThreeDAssetsController.alias_method :original_attach_three_d_file, :attach_three_d_file
+          Api::V1::GymThreeDAssetsController.define_method(:attach_three_d_file) do
+            file = File.open(gltf_path, 'r')
+            @gym_three_d_asset.three_d_gltf.attach(io: file, filename: 'test.gltf', content_type: 'model/gltf+json')
+            true
+          end
+          begin
+            assert_difference('GymThreeDAsset.count') do
+              post api_v1_gym_gym_three_d_assets_url(gym_id: @gym.id),
+                   params: {
+                     gym_three_d_asset: {
+                       name: 'New Asset Zip',
+                       import_type: 'obj_zip',
+                       three_d_file: fixture_file_upload('test.obj.zip', 'application/zip')
+                     }
+                   },
+                   headers: @admin_headers
+            end
+            assert_response :success
+          ensure
+            Api::V1::GymThreeDAssetsController.alias_method :attach_three_d_file, :original_attach_three_d_file
+            Api::V1::GymThreeDAssetsController.remove_method :original_attach_three_d_file
+            FileUtils.rm_f(gltf_path)
+          end
+        end
+      end
+
+      test 'should create gym three d asset with obj_mtl' do
+        Open3.stub :capture3, [nil, nil, Minitest::Mock.new.expect(:success?, true)] do
+          gltf_path = Rails.root.join('tmp/test_asset_mtl.gltf').to_s
+          FileUtils.cp('test/fixtures/files/espace_voie.gltf', gltf_path)
+          Api::V1::GymThreeDAssetsController.alias_method :original_attach_three_d_file, :attach_three_d_file
+          Api::V1::GymThreeDAssetsController.define_method(:attach_three_d_file) do
+            file = File.open(gltf_path, 'r')
+            @gym_three_d_asset.three_d_gltf.attach(io: file, filename: 'test.gltf', content_type: 'model/gltf+json')
+            true
+          end
+
+          begin
+            assert_difference('GymThreeDAsset.count') do
+              post api_v1_gym_gym_three_d_assets_url(gym_id: @gym.id),
+                   params: {
+                     gym_three_d_asset: {
+                       name: 'New Asset Obj Mtl',
+                       import_type: 'obj_mtl',
+                       three_d_file_obj: fixture_file_upload('test.obj/e5230e1b-0345-4195-9f18-95cad10e8c94.obj', 'text/plain'),
+                       three_d_file_mtl: fixture_file_upload('test.obj/e5230e1b-0345-4195-9f18-95cad10e8c94.mtl', 'text/plain')
+                     }
+                   },
+                   headers: @admin_headers
+            end
+            assert_response :success
+          ensure
+            Api::V1::GymThreeDAssetsController.alias_method :attach_three_d_file, :original_attach_three_d_file
+            Api::V1::GymThreeDAssetsController.remove_method :original_attach_three_d_file
+            FileUtils.rm_f(gltf_path)
+          end
+        end
+      end
+
+      test 'should handle obj2gltf failure' do
+        Open3.stub :capture3, [nil, 'error', Minitest::Mock.new.expect(:success?, false)] do
+          RorVsWild.stub :record_error, true do
+            post api_v1_gym_gym_three_d_assets_url(gym_id: @gym.id),
+                 params: {
+                   gym_three_d_asset: {
+                     name: 'Fail Asset',
+                     import_type: 'obj_zip',
+                     three_d_file: fixture_file_upload('test.obj.zip', 'application/zip')
+                   }
+                 },
+                 headers: @admin_headers
+            assert_response :unprocessable_content
+          end
+        end
       end
 
       test 'should not create gym three d asset with wrong format' do
@@ -43,7 +125,7 @@ module Api
                gym_three_d_asset: {
                  name: 'New Asset',
                  import_type: 'gltf',
-                 three_d_file: fixture_file_upload('test/fixtures/files/image.jpg', 'image/jpeg')
+                 three_d_file: fixture_file_upload('image.jpg', 'image/jpeg')
                }
              },
              headers: @admin_headers
@@ -87,7 +169,7 @@ module Api
         post add_picture_api_v1_gym_gym_three_d_asset_url(gym_id: @gym.id, id: @asset.id),
              params: {
                gym_three_d_asset: {
-                 picture: fixture_file_upload('test/fixtures/files/image.jpg', 'image/jpeg')
+                 picture: fixture_file_upload('image.jpg', 'image/jpeg')
                }
              },
              headers: @admin_headers
@@ -98,7 +180,7 @@ module Api
         put change_three_d_file_api_v1_gym_gym_three_d_asset_url(gym_id: @gym.id, id: @asset.id),
              params: {
                gym_three_d_asset: {
-                 three_d_gltf: fixture_file_upload('test/fixtures/files/espace_voie.gltf', 'model/gltf+json')
+                 three_d_gltf: fixture_file_upload('espace_voie.gltf', 'model/gltf+json')
                }
              },
              headers: @admin_headers

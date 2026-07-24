@@ -92,27 +92,18 @@ module Api
       end
 
       def destroy
-        if @gym_space.destroy
-          head :no_content
-        else
-          render json: { error: @gym_space.errors }, status: :unprocessable_content
-        end
+        @gym_space.destroy
+        head :no_content
       end
 
       def archived
-        if @gym_space.archive!
-          render json: @gym_space.detail_to_json, status: :ok
-        else
-          render json: { error: @gym_space.errors }, status: :unprocessable_content
-        end
+        @gym_space.archive!
+        head :no_content
       end
 
       def unarchived
-        if @gym_space.unarchive!
-          render json: @gym_space.detail_to_json, status: :ok
-        else
-          render json: { error: @gym_space.errors }, status: :unprocessable_content
-        end
+        @gym_space.unarchive!
+        head :no_content
       end
 
       def add_banner

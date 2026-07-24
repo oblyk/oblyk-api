@@ -120,20 +120,32 @@ module Api
 
         # Age filter
         if age.present?
-          date_of_birth = nil
-          date_of_birth = "users.date_of_birth > '#{Date.current - 6.years}'" if age == 'U6'
-          date_of_birth = "users.date_of_birth > '#{Date.current - 8.years}'" if age == 'U8'
-          date_of_birth = "users.date_of_birth > '#{Date.current - 10.years}'" if age == 'U10'
-          date_of_birth = "users.date_of_birth > '#{Date.current - 12.years}'" if age == 'U12'
-          date_of_birth = "users.date_of_birth > '#{Date.current - 14.years}'" if age == 'U14'
-          date_of_birth = "users.date_of_birth > '#{Date.current - 16.years}'" if age == 'U16'
-          date_of_birth = "users.date_of_birth > '#{Date.current - 18.years}'" if age == 'U18'
-          date_of_birth = "users.date_of_birth > '#{Date.current - 20.years}'" if age == 'U20'
-          date_of_birth = "users.date_of_birth BETWEEN '#{Date.current - 39.years}' AND '#{Date.current - 20.years}'" if age == 'senior'
-          date_of_birth = "users.date_of_birth <= '#{Date.current - 40.years}'" if age == 'A40'
-          date_of_birth = "users.date_of_birth <= '#{Date.current - 50.years}'" if age == 'A50'
-          date_of_birth = "users.date_of_birth <= '#{Date.current - 60.years}'" if age == 'A60'
-          ascents = ascents.joins(:user).where(date_of_birth) if date_of_birth
+          case age
+          when 'U6'
+            ascents = ascents.joins(:user).where('users.date_of_birth > ?', Date.current - 6.years)
+          when 'U8'
+            ascents = ascents.joins(:user).where('users.date_of_birth > ?', Date.current - 8.years)
+          when 'U10'
+            ascents = ascents.joins(:user).where('users.date_of_birth > ?', Date.current - 10.years)
+          when 'U12'
+            ascents = ascents.joins(:user).where('users.date_of_birth > ?', Date.current - 12.years)
+          when 'U14'
+            ascents = ascents.joins(:user).where('users.date_of_birth > ?', Date.current - 14.years)
+          when 'U16'
+            ascents = ascents.joins(:user).where('users.date_of_birth > ?', Date.current - 16.years)
+          when 'U18'
+            ascents = ascents.joins(:user).where('users.date_of_birth > ?', Date.current - 18.years)
+          when 'U20'
+            ascents = ascents.joins(:user).where('users.date_of_birth > ?', Date.current - 20.years)
+          when 'senior'
+            ascents = ascents.joins(:user).where(users: { date_of_birth: (Date.current - 39.years)..(Date.current - 20.years) })
+          when 'A40'
+            ascents = ascents.joins(:user).where('users.date_of_birth <= ?', Date.current - 40.years)
+          when 'A50'
+            ascents = ascents.joins(:user).where('users.date_of_birth <= ?', Date.current - 50.years)
+          when 'A60'
+            ascents = ascents.joins(:user).where('users.date_of_birth <= ?', Date.current - 60.years)
+          end
         end
 
         # Get limite of grade
@@ -255,11 +267,8 @@ module Api
       end
 
       def destroy
-        if @gym.destroy
-          render json: {}, status: :ok
-        else
-          render json: { error: @gym.errors }, status: :unprocessable_content
-        end
+        @gym.destroy
+        head :no_content
       end
 
       def routes_count

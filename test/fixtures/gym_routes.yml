@@ -7,6 +7,7 @@ gym_route_one:
   max_grade_value: 32
   min_grade_text: '6a'
   max_grade_text: '6a'
+  level_index: 1
   hold_colors: ["#FF0000"]
   tag_colors: ["#000000"]
   opened_at: <%= Date.current %>
@@ -22,6 +23,7 @@ gym_route_two:
   max_grade_value: 36
   min_grade_text: '6b'
   max_grade_text: '6b'
+  level_index: 1
   hold_colors: ["#00FF00"]
   tag_colors: ["#FFFFFF"]
   opened_at: <%= Date.current %>

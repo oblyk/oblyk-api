@@ -229,11 +229,8 @@ module Api
       end
 
       def destroy
-        if @contest_participant.destroy
-          render json: {}, status: :ok
-        else
-          render json: { error: @contest_participant.errors }, status: :unprocessable_content
-        end
+        @contest_participant.destroy
+        head :no_content
       end
 
       def tombola
