@@ -152,7 +152,9 @@ module Api
                              .order(:min_grade_value)
 
         pdf_html = ActionController::Base.new.render_to_string(
-          template: 'api/v1/gym_routes/print.pdf.erb',
+          template: 'api/v1/gym_routes/print',
+          formats: [:pdf],
+          handlers: [:erb],
           locals: { gym_routes: gym_routes }
         )
         pdf = WickedPdf.new.pdf_from_string(pdf_html)
@@ -358,18 +360,6 @@ module Api
 
       private
 
-      def group_by_sector(sectors, dismount)
-        groups = []
-        sectors.each do |sector|
-          routes = dismount ? sector.gym_routes.dismounted : sector.gym_routes.mounted
-          groups << {
-            sector: sector,
-            routes: routes
-          }
-        end
-        groups
-      end
-
       def group_by_opened_at(routes)
         dates = {}
         routes.each do |route|
@@ -404,7 +394,7 @@ module Api
             hold_color: false,
             routes: []
           }
-          levels[level][:routes] << route
+          levels[route.level_index][:routes] << route
         end
         levels
       end
