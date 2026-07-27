@@ -52,7 +52,7 @@ module Api
           return
         end
 
-        if @video.viewable_type == 'GymRoute' && gym_ids.include?(@video.viewable.gym_sector.gym_space.gym_id)
+        if @video.viewable_type == "GymRoute" && gym_ids.include?(@video.viewable.gym_sector.gym_space.gym_id)
           @video.destroy
           head :no_content
         else

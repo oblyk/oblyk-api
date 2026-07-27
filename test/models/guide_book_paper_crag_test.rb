@@ -1,39 +1,39 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class GuideBookPaperCragTest < ActiveSupport::TestCase
   setup do
     @guide_book_paper_crag = guide_book_paper_crags(:one)
   end
 
-  test 'guide_book_paper_crag is valid' do
+  test "guide_book_paper_crag is valid" do
     assert_predicate @guide_book_paper_crag, :valid?
   end
 
-  test 'guide_book_paper_crag is invalid without crag' do
+  test "guide_book_paper_crag is invalid without crag" do
     @guide_book_paper_crag.crag = nil
 
     assert_predicate @guide_book_paper_crag, :invalid?
   end
 
-  test 'guide_book_paper_crag is invalid without guide_book_paper' do
+  test "guide_book_paper_crag is invalid without guide_book_paper" do
     @guide_book_paper_crag.guide_book_paper = nil
 
     assert_predicate @guide_book_paper_crag, :invalid?
   end
 
-  test 'guide_book_paper_crag is invalid if crag is already linked to the guide book' do
+  test "guide_book_paper_crag is invalid if crag is already linked to the guide book" do
     duplicate = GuideBookPaperCrag.new(
       guide_book_paper: @guide_book_paper_crag.guide_book_paper,
       crag: @guide_book_paper_crag.crag
     )
 
     assert_predicate duplicate, :invalid?
-    assert_includes duplicate.errors[:crag], 'is_already_taken'
+    assert_includes duplicate.errors[:crag], "is_already_taken"
   end
 
-  test 'touch_guide_book callback touches the guide book paper' do
+  test "touch_guide_book callback touches the guide book paper" do
     guide_book = @guide_book_paper_crag.guide_book_paper
     last_update = guide_book.updated_at
 

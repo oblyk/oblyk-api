@@ -11,36 +11,36 @@ module Api
       before_action :set_guide_book_paper, only: %i[crags crags_figures photos links versions geo_json alternatives show update destroy add_crag remove_crag add_cover remove_cover articles]
 
       def index
-        order = params.fetch(:order, 'publication_year')
+        order = params.fetch(:order, "publication_year")
         crag_id = params.fetch :crag_id, nil
         guide_book_papers = GuideBookPaper.includes(cover_attachment: :blob)
         guide_book_papers = guide_book_papers.where(guide_book_paper_crags: { crag_id: params[:crag_id] }) if crag_id
 
-        guide_book_papers = guide_book_papers.order(publication_year: :desc, id: :asc) if order == 'publication_year'
-        guide_book_papers = guide_book_papers.order(follows_count: :desc, id: :asc) if order == 'popularity'
-        guide_book_papers = guide_book_papers.order(name: :asc, id: :asc) if order == 'name'
+        guide_book_papers = guide_book_papers.order(publication_year: :desc, id: :asc) if order == "publication_year"
+        guide_book_papers = guide_book_papers.order(follows_count: :desc, id: :asc) if order == "popularity"
+        guide_book_papers = guide_book_papers.order(name: :asc, id: :asc) if order == "name"
         guide_book_papers = guide_book_papers.page(params[:page]).per(params.fetch(:per_page, 25)) if params[:page].present?
 
         render json: guide_book_papers.map(&:summary_to_json), status: :ok
       end
 
       def grouped
-        group = params.fetch(:group, 'publication_year')
-        direction = params.fetch(:direction, 'desc')
+        group = params.fetch(:group, "publication_year")
+        direction = params.fetch(:direction, "desc")
         groups = {}
 
         case group
-        when 'publication_year'
+        when "publication_year"
           guides = GuideBookPaper.includes(cover_attachment: :blob).order(publication_year: direction)
           guides.each do |guide|
             groups["year-#{guide.publication_year}"] ||= { title: guide.publication_year, guides: [] }
             groups["year-#{guide.publication_year}"][:guides] << guide.summary_to_json
           end
           groups.sort_by do |k, _v|
-            key = k || ''
-            direction == 'desc' ? key : -key
+            key = k || ""
+            direction == "desc" ? key : -key
           end.to_h
-        when 'alphabetic'
+        when "alphabetic"
           guides = GuideBookPaper.includes(cover_attachment: :blob).order(name: direction)
           guides.each do |guide|
             groups[guide.name.first] ||= { title: guide.name.first, guides: [] }
@@ -157,11 +157,11 @@ module Api
         end
 
         render json: {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           crs: {
-            type: 'name',
+            type: "name",
             properties: {
-              name: 'urn'
+              name: "urn"
             }
           },
           features: features
@@ -169,18 +169,18 @@ module Api
       end
 
       def geo_index
-        features = GuideBookPaper.select('guide_book_papers.*, crags.latitude, crags.longitude')
+        features = GuideBookPaper.select("guide_book_papers.*, crags.latitude, crags.longitude")
                                  .where(next_guide_book_paper_id: nil)
                                  .includes(:crags, cover_attachment: :blob)
                                  .references(:crags)
                                  .all
                                  .map(&:to_geo_json)
         render json: {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           crs: {
-            type: 'name',
+            type: "name",
             properties: {
-              name: 'urn'
+              name: "urn"
             }
           },
           features: features
@@ -309,7 +309,7 @@ module Api
         minimalistic_geo_json = params.fetch(:minimalistic_geo_json, false) != false
         lat = params[:lat]
         lng = params[:lng]
-        dist = params.fetch(:dist, '20').to_i
+        dist = params.fetch(:dist, "20").to_i
         dist = 100 if dist > 100
         guide_ids = []
         crags_around = Crag.includes(:guide_book_papers).geo_search(lat, lng, dist)

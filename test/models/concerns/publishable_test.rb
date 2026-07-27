@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class PublishableTest < ActiveSupport::TestCase
   setup do
     @article = articles(:article_1)
   end
 
-  test 'published scope returns only published objects' do
+  test "published scope returns only published objects" do
     @article.publish!
 
     assert_includes Article.published, @article
@@ -17,7 +17,7 @@ class PublishableTest < ActiveSupport::TestCase
     assert_not_includes Article.published, @article
   end
 
-  test 'unpublished scope returns only unpublished objects' do
+  test "unpublished scope returns only unpublished objects" do
     @article.unpublish!
 
     assert_includes Article.unpublished, @article
@@ -27,7 +27,7 @@ class PublishableTest < ActiveSupport::TestCase
     assert_not_includes Article.unpublished, @article
   end
 
-  test 'publish! sets published_at' do
+  test "publish! sets published_at" do
     @article.unpublish!
 
     assert_nil @article.published_at
@@ -36,7 +36,7 @@ class PublishableTest < ActiveSupport::TestCase
     assert_not_nil @article.published_at
   end
 
-  test 'unpublish! clears published_at' do
+  test "unpublish! clears published_at" do
     @article.publish!
 
     assert_not_nil @article.published_at
@@ -45,7 +45,7 @@ class PublishableTest < ActiveSupport::TestCase
     assert_nil @article.published_at
   end
 
-  test 'published? returns true if published_at is present' do
+  test "published? returns true if published_at is present" do
     @article.published_at = Time.current
 
     assert_predicate @article, :published?
@@ -55,7 +55,7 @@ class PublishableTest < ActiveSupport::TestCase
     assert_not @article.published?
   end
 
-  test 'unpublished? returns true if published_at is nil' do
+  test "unpublished? returns true if published_at is nil" do
     @article.published_at = nil
 
     assert_predicate @article, :unpublished?

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -12,7 +12,7 @@ module Api
         @tick_list_one = tick_lists(:one)
       end
 
-      test 'should get index' do
+      test "should get index" do
         get api_v1_tick_lists_url, headers: @auth_headers, as: :json
 
         assert_response :success
@@ -22,8 +22,8 @@ module Api
         assert_equal @user.tick_lists.count, json_response.count
       end
 
-      test 'should create tick_list' do
-        assert_difference('TickList.count', 1) do
+      test "should create tick_list" do
+        assert_difference("TickList.count", 1) do
           post api_v1_tick_lists_url,
                params: { crag_route_id: @crag_route.id },
                headers: @auth_headers,
@@ -36,8 +36,8 @@ module Api
         assert_includes json_response, @crag_route.id
       end
 
-      test 'should destroy tick_list' do
-        assert_difference('TickList.count', -1) do
+      test "should destroy tick_list" do
+        assert_difference("TickList.count", -1) do
           delete api_v1_tick_lists_url,
                  params: { crag_route_id: @tick_list_one.crag_route_id },
                  headers: @auth_headers,
@@ -50,13 +50,13 @@ module Api
         assert_not_includes json_response, @tick_list_one.crag_route_id
       end
 
-      test 'should not access without session' do
+      test "should not access without session" do
         get api_v1_tick_lists_url, as: :json
 
         assert_response :forbidden
       end
 
-      test 'should not access without token' do
+      test "should not access without token" do
         get api_v1_tick_lists_url,
             headers: api_access_token_headers,
             as: :json

@@ -34,7 +34,7 @@ module LogBook
       end
 
       def sum_meters
-        @user.ascent_gym_routes.made.sum('height * quantity')
+        @user.ascent_gym_routes.made.sum("height * quantity")
       end
 
       def max_grad_value
@@ -50,7 +50,7 @@ module LogBook
       end
 
       def climbing_sessions_count(since_28_days: false)
-        climbing_sessions = @user.climbing_sessions.where('EXISTS(SELECT * FROM ascents WHERE gym_id IS NOT NULL AND climbing_session_id = climbing_sessions.id)')
+        climbing_sessions = @user.climbing_sessions.where("EXISTS(SELECT * FROM ascents WHERE gym_id IS NOT NULL AND climbing_session_id = climbing_sessions.id)")
         climbing_sessions = climbing_sessions.where(climbing_sessions: { session_date: (Date.current - 28.days).. }) if since_28_days
         climbing_sessions.count
       end

@@ -21,7 +21,7 @@ module Api
                               followable_type: params[:followable_type],
                               followable_id: params[:followable_id]
                             )
-                            .order(Arel.sql('users.last_activity_at DESC, id'))
+                            .order(Arel.sql("users.last_activity_at DESC, id"))
                             .page(params.fetch(:page, 1))
         render json: subscribers.map { |follow| follow.user.summary_to_json }, status: :ok
       end
@@ -67,7 +67,7 @@ module Api
                         .order(updated_at: :desc)
         follows = follows.group_by(&:followable_type)
         follows.each do |type, follows_in_type|
-          serializers = { 'Crag' => CragSerializer, 'Gym' => GymSerializer }
+          serializers = { "Crag" => CragSerializer, "Gym" => GymSerializer }
           records = follows_in_type.map(&:followable)
           items[type] = serializers[type].new(records).serializable_hash[:data].map { |data| data[:attributes] }
         end

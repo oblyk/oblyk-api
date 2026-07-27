@@ -1,34 +1,34 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class GeoHelperTest < ActiveSupport::TestCase
-  test 'geo_range returns 0 for same coordinates' do
+  test "geo_range returns 0 for same coordinates" do
     assert_equal 0, GeoHelper.geo_range(45.75, 4.85, 45.75, 4.85)
   end
 
-  test 'geo_range returns correct distance between Lyon and Paris' do
+  test "geo_range returns correct distance between Lyon and Paris" do
     distance = GeoHelper.geo_range(45.75, 4.85, 48.85, 2.35)
 
     assert_in_delta 392, distance, 5
   end
 
-  test 'deg2rad converts degrees to radians' do
+  test "deg2rad converts degrees to radians" do
     assert_in_delta Math::PI, GeoHelper.deg2rad(180), 0.0001
     assert_in_delta Math::PI / 2, GeoHelper.deg2rad(90), 0.0001
   end
 
-  test 'rad2deg converts radians to degrees' do
+  test "rad2deg converts radians to degrees" do
     assert_in_delta 180, GeoHelper.rad2deg(Math::PI), 0.0001
     assert_in_delta 90, GeoHelper.rad2deg(Math::PI / 2), 0.0001
   end
 
-  test 'wgs84_earth_radius returns radius for a given latitude' do
+  test "wgs84_earth_radius returns radius for a given latitude" do
     assert_in_delta 6_378_137.0, GeoHelper.wgs84_earth_radius(0), 1
     assert_in_delta 6_356_752.3142, GeoHelper.wgs84_earth_radius(Math::PI / 2), 1
   end
 
-  test 'bounding_box returns correct coordinates' do
+  test "bounding_box returns correct coordinates" do
     box = GeoHelper.bounding_box(45.75, 4.85, 10)
 
     assert box.key?(:latitude_min)
@@ -42,13 +42,13 @@ class GeoHelperTest < ActiveSupport::TestCase
     assert_operator box[:longitude_max], :>, 4.85
   end
 
-  test 'point_central returns the average of coordinates' do
+  test "point_central returns the average of coordinates" do
     coordinates = [
-      [10, 20],
-      [20, 40],
-      [30, 60]
+      [ 10, 20 ],
+      [ 20, 40 ],
+      [ 30, 60 ]
     ]
 
-    assert_equal [20.0, 40.0], GeoHelper.point_central(coordinates)
+    assert_equal [ 20.0, 40.0 ], GeoHelper.point_central(coordinates)
   end
 end

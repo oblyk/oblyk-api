@@ -2,17 +2,17 @@
 
 module ContestService
   class Constant
-    DIVISION = 'division'
-    DIVISION_AND_ZONE = 'division_and_zone'
-    DIVISION_AND_ATTEMPT = 'division_and_attempt'
-    ATTEMPTS_TO_TOP = 'attempts_to_top'
-    ZONE_AND_TOP_REALISED = 'zone_and_top_realised'
-    ATTEMPTS_TO_ONE_ZONE_AND_TOP = 'attempts_to_one_zone_and_top'
-    ATTEMPTS_TO_TWO_ZONES_AND_TOP = 'attempts_to_two_zones_and_top'
-    FIXED_POINTS = 'fixed_points'
-    HIGHEST_HOLD = 'highest_hold'
-    BEST_TIMES = 'best_times'
-    POINT_RELATIVE_TO_HIGHEST_HOLD = 'point_relative_to_highest_hold'
+    DIVISION = "division"
+    DIVISION_AND_ZONE = "division_and_zone"
+    DIVISION_AND_ATTEMPT = "division_and_attempt"
+    ATTEMPTS_TO_TOP = "attempts_to_top"
+    ZONE_AND_TOP_REALISED = "zone_and_top_realised"
+    ATTEMPTS_TO_ONE_ZONE_AND_TOP = "attempts_to_one_zone_and_top"
+    ATTEMPTS_TO_TWO_ZONES_AND_TOP = "attempts_to_two_zones_and_top"
+    FIXED_POINTS = "fixed_points"
+    HIGHEST_HOLD = "highest_hold"
+    BEST_TIMES = "best_times"
+    POINT_RELATIVE_TO_HIGHEST_HOLD = "point_relative_to_highest_hold"
 
     RANKING_TYPE_LIST = [
       DIVISION,
@@ -35,15 +35,15 @@ module ContestService
       ATTEMPTS_TO_TOP => %w[pts],
       FIXED_POINTS => %w[pts],
       ZONE_AND_TOP_REALISED => %w[top zone(s)],
-      ATTEMPTS_TO_ONE_ZONE_AND_TOP => 'zone_and_top_blocks',
+      ATTEMPTS_TO_ONE_ZONE_AND_TOP => "zone_and_top_blocks",
       HIGHEST_HOLD => %w[prise(s) +],
       BEST_TIMES => %w[],
       POINT_RELATIVE_TO_HIGHEST_HOLD => %w[pts prise(s)]
     }.freeze
 
-    COMBINED_RANKING_ADDITION = 'addition'
-    COMBINED_RANKING_MULTIPLICATION = 'multiplication'
-    COMBINED_RANKING_DECREMENT_POINTS = 'decrement_points'
+    COMBINED_RANKING_ADDITION = "addition"
+    COMBINED_RANKING_MULTIPLICATION = "multiplication"
+    COMBINED_RANKING_DECREMENT_POINTS = "decrement_points"
     COMBINED_RANKING_TYPE_LIST = [
       COMBINED_RANKING_ADDITION,
       COMBINED_RANKING_MULTIPLICATION,

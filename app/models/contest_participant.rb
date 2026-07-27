@@ -35,7 +35,7 @@ class ContestParticipant < ApplicationRecord
   after_destroy :delete_caches
   after_save :delete_caches
 
-  scope :with_ascents, -> { where('EXISTS(SELECT * FROM contest_participant_ascents WHERE contest_participants.id = contest_participant_ascents.contest_participant_id)') }
+  scope :with_ascents, -> { where("EXISTS(SELECT * FROM contest_participant_ascents WHERE contest_participants.id = contest_participant_ascents.contest_participant_id)") }
 
   def age
     date_of_birth.present? ? ((Time.zone.now - Time.zone.parse(date_of_birth.to_s)) / 1.year.seconds).floor : nil
@@ -94,17 +94,17 @@ class ContestParticipant < ApplicationRecord
   end
 
   def self.to_csv
-    CSV.generate(headers: true, encoding: 'utf-8', col_sep: "\t") do |csv|
+    CSV.generate(headers: true, encoding: "utf-8", col_sep: "\t") do |csv|
       csv << [
-        'Nom',
-        'Prénom',
-        'Date de naissance',
-        'Genre',
-        'Email',
-        'Affiliation',
-        'Token',
-        'Vague',
-        'Catégorie'
+        "Nom",
+        "Prénom",
+        "Date de naissance",
+        "Genre",
+        "Email",
+        "Affiliation",
+        "Token",
+        "Vague",
+        "Catégorie"
       ]
       includes(:contest_wave, :contest_category).find_each do |participant|
         csv << [
@@ -204,7 +204,7 @@ class ContestParticipant < ApplicationRecord
     contest.contest_stages.each do |contest_stage|
       contest_stage.contest_stage_steps.order(:step_order).limit(1).each do |contest_stage_step|
         contest_stage_step.contest_route_groups.each do |contest_route_group|
-          next unless genre == contest_route_group.genre_type || contest_route_group.genre_type == 'unisex'
+          next unless genre == contest_route_group.genre_type || contest_route_group.genre_type == "unisex"
           next unless contest_route_group.contest_route_group_categories.pluck(:contest_category_id).include?(contest_category_id)
 
           ContestParticipantStep.find_or_create_by(contest_participant: self, contest_stage_step: contest_stage_step)
@@ -244,7 +244,7 @@ class ContestParticipant < ApplicationRecord
     find = false
     loop = 0
     token_suggestion = nil
-    letters = ('a'..'z').to_a
+    letters = ("a".."z").to_a
     until find
       loop += 1
       random_letters_number = 3
@@ -307,14 +307,14 @@ class ContestParticipant < ApplicationRecord
   def validate_capacity
     return unless contest
 
-    errors.add(:base, 'contest_is_complete') if new_record? && contest.total_capacity.present? && (contest.contest_participants.count || 0) >= contest.total_capacity
-    errors.add(:base, 'category_is_complete') if contest_category_id_changed? && contest_category.capacity.present? && (contest_category.contest_participants.count || 0) >= contest_category.capacity
+    errors.add(:base, "contest_is_complete") if new_record? && contest.total_capacity.present? && (contest.contest_participants.count || 0) >= contest.total_capacity
+    errors.add(:base, "category_is_complete") if contest_category_id_changed? && contest_category.capacity.present? && (contest_category.contest_participants.count || 0) >= contest_category.capacity
   end
 
   def unique_participant
     return unless contest
 
-    errors.add(:base, 'participant_is_already_registered') if contest.contest_participants.where.not(id: id).exists?(first_name: first_name, last_name: last_name, date_of_birth: date_of_birth)
+    errors.add(:base, "participant_is_already_registered") if contest.contest_participants.where.not(id: id).exists?(first_name: first_name, last_name: last_name, date_of_birth: date_of_birth)
   end
 
   def send_subscription_mail

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -14,8 +14,8 @@ module Api
         @super_admin_headers = api_headers(user: :super_admin_user)
       end
 
-      test 'should get index' do
-        get api_v1_alerts_url(alertable_type: 'Crag', alertable_id: @crag.id), headers: @api_headers, as: :json
+      test "should get index" do
+        get api_v1_alerts_url(alertable_type: "Crag", alertable_id: @crag.id), headers: @api_headers, as: :json
 
         assert_response :success
         json_response = response.parsed_body
@@ -23,23 +23,23 @@ module Api
         assert_kind_of Array, json_response
       end
 
-      test 'should show alert' do
+      test "should show alert" do
         get api_v1_alert_url(@alert), headers: @api_headers, as: :json
 
         assert_response :success
         json_response = response.parsed_body
 
-        assert_equal @alert.id, json_response['id']
+        assert_equal @alert.id, json_response["id"]
       end
 
-      test 'should create alert if super admin' do
-        assert_difference('Alert.count') do
+      test "should create alert if super admin" do
+        assert_difference("Alert.count") do
           post api_v1_alerts_url,
                params: {
                  alert: {
-                   description: 'New alert description',
-                   alert_type: 'warning',
-                   alertable_type: 'Crag',
+                   description: "New alert description",
+                   alert_type: "warning",
+                   alertable_type: "Crag",
                    alertable_id: @crag.id
                  }
                },
@@ -49,14 +49,14 @@ module Api
         assert_response :success
       end
 
-      test 'should not create alert if not super admin' do
-        assert_no_difference('Alert.count') do
+      test "should not create alert if not super admin" do
+        assert_no_difference("Alert.count") do
           post api_v1_alerts_url,
                params: {
                  alert: {
-                   description: 'New alert description',
-                   alert_type: 'warning',
-                   alertable_type: 'Crag',
+                   description: "New alert description",
+                   alert_type: "warning",
+                   alertable_type: "Crag",
                    alertable_id: @crag.id
                  }
                },
@@ -66,11 +66,11 @@ module Api
         assert_response :forbidden
       end
 
-      test 'should update alert if super admin' do
+      test "should update alert if super admin" do
         patch api_v1_alert_url(@alert),
               params: {
                 alert: {
-                  description: 'Updated description'
+                  description: "Updated description"
                 }
               },
               headers: @super_admin_headers,
@@ -79,14 +79,14 @@ module Api
         assert_response :success
         @alert.reload
 
-        assert_equal 'Updated description', @alert.description
+        assert_equal "Updated description", @alert.description
       end
 
-      test 'should not update alert if not super admin' do
+      test "should not update alert if not super admin" do
         patch api_v1_alert_url(@alert),
               params: {
                 alert: {
-                  description: 'Updated description'
+                  description: "Updated description"
                 }
               },
               headers: @api_headers,
@@ -95,14 +95,14 @@ module Api
         assert_response :forbidden
       end
 
-      test 'should not create alert if invalid' do
-        assert_no_difference('Alert.count') do
+      test "should not create alert if invalid" do
+        assert_no_difference("Alert.count") do
           post api_v1_alerts_url,
                params: {
                  alert: {
-                   description: '',
-                   alert_type: 'invalid_type',
-                   alertable_type: 'Crag',
+                   description: "",
+                   alert_type: "invalid_type",
+                   alertable_type: "Crag",
                    alertable_id: @crag.id
                  }
                },
@@ -112,15 +112,15 @@ module Api
         assert_response :unprocessable_content
       end
 
-      test 'should destroy alert if super admin' do
-        assert_difference('Alert.count', -1) do
+      test "should destroy alert if super admin" do
+        assert_difference("Alert.count", -1) do
           delete api_v1_alert_url(@alert), headers: @super_admin_headers, as: :json
         end
         assert_response :success
       end
 
-      test 'should not destroy alert if not super admin' do
-        assert_no_difference('Alert.count') do
+      test "should not destroy alert if not super admin" do
+        assert_no_difference("Alert.count") do
           delete api_v1_alert_url(@alert), headers: @api_headers, as: :json
         end
         assert_response :forbidden

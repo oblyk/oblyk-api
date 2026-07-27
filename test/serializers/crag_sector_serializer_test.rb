@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class CragSectorSerializerTest < ActiveSupport::TestCase
   setup do
@@ -9,10 +9,10 @@ class CragSectorSerializerTest < ActiveSupport::TestCase
     @serialization = JSON.parse(@serializer.serializable_hash.to_json)
   end
 
-  test 'It contains the basic attributes' do
-    attributes = @serialization['data']['attributes']
+  test "It contains the basic attributes" do
+    attributes = @serialization["data"]["attributes"]
 
-    assert_equal @crag_sector.id, attributes['id']
-    assert_equal @crag_sector.name, attributes['name']
+    assert_equal @crag_sector.id, attributes["id"]
+    assert_equal @crag_sector.name, attributes["name"]
   end
 end

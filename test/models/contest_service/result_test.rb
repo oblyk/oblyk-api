@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module ContestService
   class ResultTest < ActiveSupport::TestCase
@@ -9,7 +9,7 @@ module ContestService
       @result_service = ContestService::Result.new(@contest)
     end
 
-    test 'results returns a hash of results' do
+    test "results returns a hash of results" do
       results = @result_service.results
 
       assert_kind_of Array, results
@@ -17,7 +17,7 @@ module ContestService
       category = contest_categories(:category_senior)
       cat_results = results.find { |r| r[:category_id] == category.id }
 
-      assert_not_nil cat_results, 'Results should contain data for category senior'
+      assert_not_nil cat_results, "Results should contain data for category senior"
       assert_kind_of Array, cat_results[:participants]
 
       participant = contest_participants(:participant_1)
@@ -26,13 +26,13 @@ module ContestService
       assert_not_nil participant_found
     end
 
-    test 'delete_cache_key runs without error' do
+    test "delete_cache_key runs without error" do
       assert_nothing_raised do
         @result_service.delete_cache_key
       end
     end
 
-    test 'results with category_id filter' do
+    test "results with category_id filter" do
       category = contest_categories(:category_senior)
       filtered_service = ContestService::Result.new(@contest, category_id: category.id)
       results = filtered_service.results

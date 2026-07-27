@@ -7,18 +7,18 @@ module Api
         before_action :protected_by_session
         before_action :set_user
         before_action :set_ascents, only: %i[stats ascended_crag_routes]
-        before_action :set_stats_list, only: [:stats]
+        before_action :set_stats_list, only: [ :stats ]
 
         def stats
           # set all stats charts, figures and lists from filtered ascents
           charts = LogBook::Outdoor::Chart.new(@ascents)
           stats = {}
-          stats[:figures] = LogBook::Outdoor::Figure.new(@ascents).figures if @stats_list.include?('figures')
-          stats[:climb_types_chart] = charts.climb_type if @stats_list.include?('climb_types_chart')
-          stats[:grades_chart] = charts.grade if @stats_list.include?('grades_chart')
-          stats[:years_chart] = charts.years if @stats_list.include?('years_chart')
-          stats[:months_chart] = charts.months if @stats_list.include?('months_chart')
-          stats[:evolution_chart] = charts.evolution_by_year if @stats_list.include?('evolution_chart')
+          stats[:figures] = LogBook::Outdoor::Figure.new(@ascents).figures if @stats_list.include?("figures")
+          stats[:climb_types_chart] = charts.climb_type if @stats_list.include?("climb_types_chart")
+          stats[:grades_chart] = charts.grade if @stats_list.include?("grades_chart")
+          stats[:years_chart] = charts.years if @stats_list.include?("years_chart")
+          stats[:months_chart] = charts.months if @stats_list.include?("months_chart")
+          stats[:evolution_chart] = charts.evolution_by_year if @stats_list.include?("evolution_chart")
           render json: stats, status: :ok
         end
 
@@ -46,7 +46,7 @@ module Api
             dates << (today - 1.month) # one month ago
             dates << (today - 6.months) # 6 months ago
 
-            ascents = @user.ascent_crag_routes.made.where('DATE(released_at) IN(?)', dates).order(:released_at)
+            ascents = @user.ascent_crag_routes.made.where("DATE(released_at) IN(?)", dates).order(:released_at)
             ascents.each do |ascent|
               ascents_by_days[ascent.released_at.to_date] ||= {}
               ascents_by_days[ascent.released_at.to_date]["crag-#{ascent.crag.id}"] ||= {

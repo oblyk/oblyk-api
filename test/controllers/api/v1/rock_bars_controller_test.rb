@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -14,7 +14,7 @@ module Api
         @admin_headers = api_headers(user: :super_admin_user)
       end
 
-      test 'should get index' do
+      test "should get index" do
         get api_v1_crag_rock_bars_url(crag_id: @crag.id), headers: @api_headers, as: :json
 
         assert_response :success
@@ -23,21 +23,21 @@ module Api
         assert_equal @crag.rock_bars.count, json_response.size
       end
 
-      test 'should show rock_bar' do
+      test "should show rock_bar" do
         get api_v1_crag_rock_bar_url(crag_id: @crag.id, id: @rock_bar.id), headers: @api_headers, as: :json
 
         assert_response :success
         json_response = response.parsed_body
 
-        assert_equal @rock_bar.id, json_response['id']
+        assert_equal @rock_bar.id, json_response["id"]
       end
 
-      test 'should create rock_bar' do
-        assert_difference('RockBar.count') do
+      test "should create rock_bar" do
+        assert_difference("RockBar.count") do
           post api_v1_crag_rock_bars_url(crag_id: @crag.id),
                params: {
                  rock_bar: {
-                   polyline: [[44.1, 5.1], [44.2, 5.2]],
+                   polyline: [ [ 44.1, 5.1 ], [ 44.2, 5.2 ] ],
                    crag_sector_id: crag_sectors(:sector_one).id
                  }
                },
@@ -47,11 +47,11 @@ module Api
         assert_response :success
       end
 
-      test 'should update rock_bar' do
+      test "should update rock_bar" do
         patch api_v1_crag_rock_bar_url(crag_id: @crag.id, id: @rock_bar.id),
               params: {
                 rock_bar: {
-                  polyline: [[44.3, 5.3], [44.4, 5.4]]
+                  polyline: [ [ 44.3, 5.3 ], [ 44.4, 5.4 ] ]
                 }
               },
               headers: @api_headers,
@@ -60,18 +60,18 @@ module Api
         assert_response :success
         @rock_bar.reload
 
-        assert_equal [[44.3, 5.3], [44.4, 5.4]], @rock_bar.polyline
+        assert_equal [ [ 44.3, 5.3 ], [ 44.4, 5.4 ] ], @rock_bar.polyline
       end
 
-      test 'should destroy rock_bar if super_admin' do
-        assert_difference('RockBar.count', -1) do
+      test "should destroy rock_bar if super_admin" do
+        assert_difference("RockBar.count", -1) do
           delete api_v1_crag_rock_bar_url(crag_id: @crag.id, id: @rock_bar.id), headers: @admin_headers, as: :json
         end
         assert_response :success
       end
 
-      test 'should not destroy rock_bar if not super_admin' do
-        assert_no_difference('RockBar.count') do
+      test "should not destroy rock_bar if not super_admin" do
+        assert_no_difference("RockBar.count") do
           delete api_v1_crag_rock_bar_url(crag_id: @crag.id, id: @rock_bar.id), headers: @api_headers, as: :json
         end
         assert_response :forbidden

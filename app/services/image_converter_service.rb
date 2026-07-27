@@ -3,7 +3,7 @@
 class ImageConverterService
   attr_accessor :type, :tempfile
 
-  def initialize(tempfile:, type: 'jpg')
+  def initialize(tempfile:, type: "jpg")
     self.tempfile = tempfile
     self.type = type
   end

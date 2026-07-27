@@ -1,5 +1,6 @@
 rocher_des_aures:
   name: Rocher des Aures
+  slug_name: rocher-des-aures
   rocks: [limestone]
   rain: exposed
   sun: sunny_all_day
@@ -20,6 +21,7 @@ rocher_des_aures:
 
 orpierre:
   name: Orpierre - Quiquillon
+  slug_name: orpierre-quiquillon
   rocks: [ limestone ]
   latitude: 44.319430
   longitude: 5.497820

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -18,43 +18,43 @@ module Api
         @admin_headers = api_headers(user: :super_admin_user)
       end
 
-      test 'should get index' do
-        get api_v1_comments_url, params: { commentable_type: 'Crag', commentable_id: @crag.id }, headers: @user_headers
+      test "should get index" do
+        get api_v1_comments_url, params: { commentable_type: "Crag", commentable_id: @crag.id }, headers: @user_headers
 
         assert_response :success
         json_response = response.parsed_body
 
         assert_kind_of Hash, json_response
-        assert json_response.key?('data')
+        assert json_response.key?("data")
       end
 
-      test 'should get comments for a comment (replies)' do
+      test "should get comments for a comment (replies)" do
         get comments_api_v1_comment_url(@comment), headers: @user_headers
 
         assert_response :success
         json_response = response.parsed_body
 
         assert_kind_of Hash, json_response
-        assert json_response.key?('data')
+        assert json_response.key?("data")
       end
 
-      test 'should show comment' do
+      test "should show comment" do
         get api_v1_comment_url(@comment), headers: @user_headers
 
         assert_response :success
         json_response = response.parsed_body
 
-        assert_equal @comment.body, json_response['data']['attributes']['body']
+        assert_equal @comment.body, json_response["data"]["attributes"]["body"]
       end
 
-      test 'should create comment' do
-        assert_difference('Comment.count') do
+      test "should create comment" do
+        assert_difference("Comment.count") do
           post api_v1_comments_url,
                params: {
                  comment: {
-                   commentable_type: 'Crag',
+                   commentable_type: "Crag",
                    commentable_id: @crag.id,
-                   body: 'New comment'
+                   body: "New comment"
                  }
                },
                headers: @user_headers,
@@ -63,45 +63,45 @@ module Api
         assert_response :success
       end
 
-      test 'should update comment' do
+      test "should update comment" do
         put api_v1_comment_url(@comment),
-            params: { comment: { body: 'Updated body' } },
+            params: { comment: { body: "Updated body" } },
             headers: @user_headers,
             as: :json
 
         assert_response :success
         @comment.reload
 
-        assert_equal 'Updated body', @comment.body
+        assert_equal "Updated body", @comment.body
       end
 
-      test 'should not update comment of another user' do
+      test "should not update comment of another user" do
         other_user_headers = api_headers(user: :super_admin_user)
         put api_v1_comment_url(@comment),
-            params: { comment: { body: 'Try to update' } },
+            params: { comment: { body: "Try to update" } },
             headers: other_user_headers,
             as: :json
 
         assert_response :forbidden
       end
 
-      test 'should destroy comment' do
+      test "should destroy comment" do
         comment_to_destroy = Comment.create!(
           user: @user,
           commentable: @crag,
-          body: 'To be destroyed'
+          body: "To be destroyed"
         )
-        assert_difference('Comment.count', -1) do
+        assert_difference("Comment.count", -1) do
           delete api_v1_comment_url(comment_to_destroy), headers: @user_headers, as: :json
         end
         assert_response :success
       end
 
-      test 'should moderate comment by gym administrator' do
+      test "should moderate comment by gym administrator" do
         gym_comment = Comment.create!(
           user: @user,
           commentable: @gym_route,
-          body: 'Comment to moderate'
+          body: "Comment to moderate"
         )
 
         delete moderate_by_gym_administrator_api_v1_comment_url(gym_comment),
@@ -114,27 +114,27 @@ module Api
         assert_not_nil gym_comment.moderated_at
       end
 
-      test 'should not moderate comment if not gym administrator' do
+      test "should not moderate comment if not gym administrator" do
         gym_comment = Comment.create!(
           user: @admin,
           commentable: @gym_route,
-          body: 'Comment to moderate'
+          body: "Comment to moderate"
         )
 
         non_admin_user = User.create!(
-          first_name: 'No',
-          last_name: 'Admin',
-          email: 'no-admin@test.com',
-          password: 'Password123!',
+          first_name: "No",
+          last_name: "Admin",
+          email: "no-admin@test.com",
+          password: "Password123!",
           uuid: SecureRandom.uuid,
-          slug_name: 'no-admin'
+          slug_name: "no-admin"
         )
 
         token = generate_token(non_admin_user)
         non_admin_headers = {
-          'Authorization' => token,
-          'HttpApiAccessToken' => organizations(:oblyk_orga).api_access_token,
-          'Content-Type' => 'application/json'
+          "Authorization" => token,
+          "HttpApiAccessToken" => organizations(:oblyk_orga).api_access_token,
+          "Content-Type" => "application/json"
         }
 
         delete moderate_by_gym_administrator_api_v1_comment_url(gym_comment),

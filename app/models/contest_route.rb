@@ -51,7 +51,7 @@ class ContestRoute < ApplicationRecord
         ),
         ranking_type: contest_stage_step.ranking_type,
         attachments: {
-          gym_route_thumbnail: attachment_object(gym_route&.thumbnail, 'GymRoute_thumbnail'),
+          gym_route_thumbnail: attachment_object(gym_route&.thumbnail, "GymRoute_thumbnail"),
           picture: attachment_object(picture)
         }
       }

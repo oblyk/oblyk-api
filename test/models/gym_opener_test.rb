@@ -1,23 +1,23 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class GymOpenerTest < ActiveSupport::TestCase
   setup do
     @opener = gym_openers(:opener_one)
   end
 
-  test 'gym_opener is valid' do
+  test "gym_opener is valid" do
     assert_predicate @opener, :valid?
   end
 
-  test 'gym_opener is invalid without name' do
+  test "gym_opener is invalid without name" do
     @opener.name = nil
 
     assert_not @opener.valid?
   end
 
-  test 'summary_to_json returns expected structure' do
+  test "summary_to_json returns expected structure" do
     json = @opener.summary_to_json
 
     assert_equal @opener.id, json[:id]
@@ -26,7 +26,7 @@ class GymOpenerTest < ActiveSupport::TestCase
     assert_not_nil json[:user] if @opener.user
   end
 
-  test 'detail_to_json returns expected structure' do
+  test "detail_to_json returns expected structure" do
     json = @opener.detail_to_json
 
     assert_equal @opener.id, json[:id]

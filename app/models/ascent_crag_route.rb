@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'csv'
+require "csv"
 
 class AscentCragRoute < Ascent
   belongs_to :crag_route
@@ -60,35 +60,35 @@ class AscentCragRoute < Ascent
   end
 
   def self.to_csv
-    CSV.generate(headers: true, encoding: 'utf-8', col_sep: "\t") do |csv|
+    CSV.generate(headers: true, encoding: "utf-8", col_sep: "\t") do |csv|
       csv << [
-        'Crag Route : Name',
-        'Crag Route : Grade',
-        'Crag Route : Height',
-        'Crag Route : Climbing type',
-        'Ascent : Status',
-        'Ascent - Roping status',
-        'Ascent - Attempt',
-        'Ascent - Released at',
-        'Ascent - My note',
-        'Ascent - My comment',
-        'Ascent - Grade value',
-        'Crag - Name',
-        'Crag - City',
-        'Crag - Region',
-        'Crag - Country',
-        'Crag - Latitude',
-        'Crag - Longitude',
-        'Crag - Rocks',
-        'Crag Sector - Name'
+        "Crag Route : Name",
+        "Crag Route : Grade",
+        "Crag Route : Height",
+        "Crag Route : Climbing type",
+        "Ascent : Status",
+        "Ascent - Roping status",
+        "Ascent - Attempt",
+        "Ascent - Released at",
+        "Ascent - My note",
+        "Ascent - My comment",
+        "Ascent - Grade value",
+        "Crag - Name",
+        "Crag - City",
+        "Crag - Region",
+        "Crag - Country",
+        "Crag - Latitude",
+        "Crag - Longitude",
+        "Crag - Rocks",
+        "Crag Sector - Name"
       ]
       all.includes(crag_route: :crag_sector).includes(crag_route: :crag).find_each do |ascent|
         route = ascent.crag_route
         crag = route.crag
-        grade = route.sections.map { |section| section['grade'] }.join(', ')
+        grade = route.sections.map { |section| section["grade"] }.join(", ")
         roping = Climb.ropable?(route.climbing_type) ? ascent.roping_status : nil
-        released_at = ascent.ascent_status == 'project' ? nil : ascent.released_at
-        grad_value = route.sections.map { |section| section['grade_value'] }.join(', ')
+        released_at = ascent.ascent_status == "project" ? nil : ascent.released_at
+        grad_value = route.sections.map { |section| section["grade_value"] }.join(", ")
         csv << [
           route.name,
           grade,
@@ -131,9 +131,9 @@ class AscentCragRoute < Ascent
 
       sections << {
         index: index,
-        height: section['height'],
-        grade: section['grade'],
-        grade_value: section['grade_value']
+        height: section["height"],
+        grade: section["grade"],
+        grade_value: section["grade_value"]
       }
     end
     self.sections = sections
@@ -141,16 +141,16 @@ class AscentCragRoute < Ascent
 
   def historize_grade_gap
     max_grade_value = Grade::MIN_GRADE
-    max_grade_text = ''
+    max_grade_text = ""
     min_grade_value = Grade::MAX_GRADE
-    min_grade_text = ''
+    min_grade_text = ""
 
     sections.each do |section|
-      max_grade_text = section['grade'] if section['grade_value'] > max_grade_value
-      max_grade_value = section['grade_value'] if section['grade_value'] > max_grade_value
+      max_grade_text = section["grade"] if section["grade_value"] > max_grade_value
+      max_grade_value = section["grade_value"] if section["grade_value"] > max_grade_value
 
-      min_grade_text = section['grade'] if section['grade_value'] < min_grade_value
-      min_grade_value = section['grade_value'] if section['grade_value'] < min_grade_value
+      min_grade_text = section["grade"] if section["grade_value"] < min_grade_value
+      min_grade_value = section["grade_value"] if section["grade_value"] < min_grade_value
     end
 
     self.max_grade_text = max_grade_text

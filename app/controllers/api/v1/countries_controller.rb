@@ -26,11 +26,11 @@ module Api
         end
 
         render json: {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           crs: {
-            type: 'name',
+            type: "name",
             properties: {
-              name: 'urn'
+              name: "urn"
             }
           },
           features: features

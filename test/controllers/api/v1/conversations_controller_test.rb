@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -13,26 +13,26 @@ module Api
         @other_user_headers = api_headers(user: :super_admin_user)
       end
 
-      test 'should get index' do
+      test "should get index" do
         get api_v1_conversations_url, headers: @user_headers
 
         assert_response :success
         json_response = response.parsed_body
 
         assert_kind_of Array, json_response
-        assert_includes json_response.pluck('id'), @conversation.id
+        assert_includes json_response.pluck("id"), @conversation.id
       end
 
-      test 'should show conversation' do
+      test "should show conversation" do
         get api_v1_conversation_url(@conversation), headers: @user_headers
 
         assert_response :success
         json_response = response.parsed_body
 
-        assert_equal @conversation.id, json_response['id']
+        assert_equal @conversation.id, json_response["id"]
       end
 
-      test 'should not show conversation if user is not part of it' do
+      test "should not show conversation if user is not part of it" do
         new_conversation = Conversation.create!
 
         get api_v1_conversation_url(new_conversation), headers: @user_headers
@@ -40,16 +40,16 @@ module Api
         assert_response :forbidden
       end
 
-      test 'should create conversation' do
+      test "should create conversation" do
         third_user = User.create!(
-          first_name: 'Third',
-          last_name: 'User',
-          email: 'third@test.com',
-          password: 'Password123!',
+          first_name: "Third",
+          last_name: "User",
+          email: "third@test.com",
+          password: "Password123!",
           uuid: SecureRandom.uuid,
-          slug_name: 'third-user'
+          slug_name: "third-user"
         )
-        assert_difference('Conversation.count') do
+        assert_difference("Conversation.count") do
           post api_v1_conversations_url,
                params: {
                  conversation: {
@@ -65,8 +65,8 @@ module Api
         assert_response :success
       end
 
-      test 'should return existing conversation if it already exists' do
-        assert_no_difference('Conversation.count') do
+      test "should return existing conversation if it already exists" do
+        assert_no_difference("Conversation.count") do
           post api_v1_conversations_url,
                params: {
                  conversation: {
@@ -82,16 +82,16 @@ module Api
         assert_response :success
         json_response = response.parsed_body
 
-        assert_equal @conversation.id, json_response['id']
+        assert_equal @conversation.id, json_response["id"]
       end
 
-      test 'should mark conversation as read' do
+      test "should mark conversation as read" do
         post read_api_v1_conversation_url(@conversation), headers: @user_headers
 
         assert_response :success
         json_response = response.parsed_body
 
-        assert json_response.key?('last_read_at')
+        assert json_response.key?("last_read_at")
       end
     end
   end

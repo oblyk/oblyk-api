@@ -70,6 +70,6 @@ module GeoHelper
     avg_lat = sum_lat / n.to_f
     avg_long = sum_long / n.to_f
 
-    [avg_lat, avg_long]
+    [ avg_lat, avg_long ]
   end
 end

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class RopingStatusTest < ActiveSupport::TestCase
-  test 'RopingStatus::LIST is an array' do
+  test "RopingStatus::LIST is an array" do
     assert_kind_of Array, RopingStatus::LIST
   end
 
-  test 'RopingStatus::LIST contains expected values' do
+  test "RopingStatus::LIST contains expected values" do
     expected_anchors = %w[
       lead_climb
       top_rope
@@ -19,11 +19,11 @@ class RopingStatusTest < ActiveSupport::TestCase
     assert_equal expected_anchors.sort, RopingStatus::LIST.sort
   end
 
-  test 'RopingStatus::LIST is frozen' do
+  test "RopingStatus::LIST is frozen" do
     assert_predicate RopingStatus::LIST, :frozen?
   end
 
-  test 'RopingStatus::LIST has 5 elements' do
+  test "RopingStatus::LIST has 5 elements" do
     assert_equal 5, RopingStatus::LIST.size
   end
 end

@@ -13,9 +13,9 @@ module Api
         if params[:latitude].present?
           latitude = params[:latitude].to_f
           longitude = params[:longitude].to_f
-          crags = crags.order(Arel.sql(Crag.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(crags.longitude, crags.latitude), POINT(?, ?)), crags.id', longitude, latitude])))
+          crags = crags.order(Arel.sql(Crag.sanitize_sql([ "ST_DISTANCE_SPHERE(POINT(crags.longitude, crags.latitude), POINT(?, ?)), crags.id", longitude, latitude ])))
         end
-        crags = crags.order(Arel.sql('crags.ascent_users_count DESC, crags.ascents_count DESC, id')) if params[:order].present? && params[:order] == 'popularity'
+        crags = crags.order(Arel.sql("crags.ascent_users_count DESC, crags.ascents_count DESC, id")) if params[:order].present? && params[:order] == "popularity"
         crags = crags.page(params[:page]).per(params.fetch(:per_page, 25)) if params[:page].present?
         render json: crags.map(&:summary_to_json), status: :ok
       end
@@ -75,7 +75,7 @@ module Api
         # Approach time
         if max_approach_time.present?
           crag_object = crag_object.where(
-            'max_approach_time <= :max_approach_time',
+            "max_approach_time <= :max_approach_time",
             max_approach_time: max_approach_time.to_i
           )
         end
@@ -84,55 +84,55 @@ module Api
         if orientation.present?
           orientations = []
 
-          orientations << 'north OR north_east OR north_west' if orientation[:north]
-          orientations << 'south OR south_east OR south_west' if orientation[:south]
-          orientations << 'east OR south_east OR south_east' if orientation[:east]
-          orientations << 'west OR north_west OR south_west' if orientation[:west]
+          orientations << "north OR north_east OR north_west" if orientation[:north]
+          orientations << "south OR south_east OR south_west" if orientation[:south]
+          orientations << "east OR south_east OR south_east" if orientation[:east]
+          orientations << "west OR north_west OR south_west" if orientation[:west]
 
-          crag_object = crag_object.where(orientations.join(' OR '))
+          crag_object = crag_object.where(orientations.join(" OR "))
         end
 
         # Climbing type
         if climbing_type.present?
           climbing_types = []
-          climbing_types << 'sport_climbing' if climbing_type[:sport_climbing]
-          climbing_types << 'bouldering' if climbing_type[:bouldering]
-          climbing_types << 'multi_pitch' if climbing_type[:multi_pitch]
-          climbing_types << 'trad_climbing' if climbing_type[:trad_climbing]
-          climbing_types << 'aid_climbing' if climbing_type[:aid_climbing]
-          climbing_types << 'deep_water' if climbing_type[:deep_water]
-          climbing_types << 'via_ferrata' if climbing_type[:via_ferrata]
+          climbing_types << "sport_climbing" if climbing_type[:sport_climbing]
+          climbing_types << "bouldering" if climbing_type[:bouldering]
+          climbing_types << "multi_pitch" if climbing_type[:multi_pitch]
+          climbing_types << "trad_climbing" if climbing_type[:trad_climbing]
+          climbing_types << "aid_climbing" if climbing_type[:aid_climbing]
+          climbing_types << "deep_water" if climbing_type[:deep_water]
+          climbing_types << "via_ferrata" if climbing_type[:via_ferrata]
 
-          crag_object = crag_object.where(climbing_types.join(' OR '))
+          crag_object = crag_object.where(climbing_types.join(" OR "))
         end
 
         # Season
         if season.present?
           seasons = []
-          seasons << 'summer' if season[:summer]
-          seasons << 'autumn' if season[:autumn]
-          seasons << 'winter' if season[:winter]
-          seasons << 'spring' if season[:spring]
+          seasons << "summer" if season[:summer]
+          seasons << "autumn" if season[:autumn]
+          seasons << "winter" if season[:winter]
+          seasons << "spring" if season[:spring]
 
-          crag_object = crag_object.where(seasons.join(' OR '))
+          crag_object = crag_object.where(seasons.join(" OR "))
         end
 
         if grade.present?
           min_grade_value = Grade.to_value grade[:min]
           max_grade_value = Grade.to_value grade[:max]
-          crag_object = crag_object.where('`crags`.`id` IN (SELECT DISTINCT c.id FROM crags c INNER JOIN crag_routes cr ON c.id = cr.crag_id WHERE cr.min_grade_value BETWEEN :min AND :max)', min: min_grade_value, max: max_grade_value)
+          crag_object = crag_object.where("`crags`.`id` IN (SELECT DISTINCT c.id FROM crags c INNER JOIN crag_routes cr ON c.id = cr.crag_id WHERE cr.min_grade_value BETWEEN :min AND :max)", min: min_grade_value, max: max_grade_value)
         end
 
         # Localisation
         if latitude.present? && longitude.present?
           crag_object = crag_object.where(
-            'ST_DISTANCE_SPHERE(POINT(crags.longitude, crags.latitude), POINT(:longitude, :latitude)) <= :limit',
+            "ST_DISTANCE_SPHERE(POINT(crags.longitude, crags.latitude), POINT(:longitude, :latitude)) <= :limit",
             latitude: latitude.to_f,
             longitude: longitude.to_f,
             limit: distance
           )
           crag_object = crag_object.order(
-            Arel.sql(Crag.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(crags.longitude, crags.latitude), POINT(?, ?))', longitude, latitude]))
+            Arel.sql(Crag.sanitize_sql([ "ST_DISTANCE_SPHERE(POINT(crags.longitude, crags.latitude), POINT(?, ?))", longitude, latitude ]))
           )
         else
           crag_object = crag_object.limit(params.fetch(:limit, 20))
@@ -169,7 +169,7 @@ module Api
       end
 
       def random
-        crag = Crag.order(Arel.sql('RAND()')).first
+        crag = Crag.order(Arel.sql("RAND()")).first
         render json: crag.detail_to_json, status: :ok
       end
 
@@ -217,30 +217,30 @@ module Api
           crags = crags.where(climbing_style => true) if climbing_style.present?
 
           if altitude.present? && altitude_switch.present?
-            crags = crags.where(crags: { elevation: altitude.to_i.. }) if altitude_switch == 'above'
-            crags = crags.where(crags: { elevation: ..altitude.to_i }) if altitude_switch == 'below'
+            crags = crags.where(crags: { elevation: altitude.to_i.. }) if altitude_switch == "above"
+            crags = crags.where(crags: { elevation: ..altitude.to_i }) if altitude_switch == "below"
           end
 
           if grade_range.present?
             min = grade_range[0].to_i
             max = grade_range[1].to_i
             if min.positive? && max == 52 # starting from
-              crags = crags.where('EXISTS (SELECT 1 FROM crag_routes cr WHERE cr.crag_id = crags.id AND cr.min_grade_value >= :min)', min: min + 1)
+              crags = crags.where("EXISTS (SELECT 1 FROM crag_routes cr WHERE cr.crag_id = crags.id AND cr.min_grade_value >= :min)", min: min + 1)
             elsif min.zero? && max < 52
-              crags = crags.where('EXISTS (SELECT 1 FROM crag_routes cr WHERE cr.crag_id = crags.id AND (cr.min_grade_value <= :max OR cr.max_grade_value <= :max + 1))', max: max + 1)
+              crags = crags.where("EXISTS (SELECT 1 FROM crag_routes cr WHERE cr.crag_id = crags.id AND (cr.min_grade_value <= :max OR cr.max_grade_value <= :max + 1))", max: max + 1)
             elsif min.positive? && max < 52
-              crags = crags.where('EXISTS (SELECT 1 FROM crag_routes cr WHERE cr.crag_id = crags.id AND cr.min_grade_value BETWEEN :min - 3 AND :min + 3)', min: min + 1)
-              crags = crags.where('EXISTS (SELECT 1 FROM crag_routes cr WHERE cr.crag_id = crags.id AND cr.min_grade_value BETWEEN :max - 2 AND :max + 2)', max: max + 1)
+              crags = crags.where("EXISTS (SELECT 1 FROM crag_routes cr WHERE cr.crag_id = crags.id AND cr.min_grade_value BETWEEN :min - 3 AND :min + 3)", min: min + 1)
+              crags = crags.where("EXISTS (SELECT 1 FROM crag_routes cr WHERE cr.crag_id = crags.id AND cr.min_grade_value BETWEEN :max - 2 AND :max + 2)", max: max + 1)
             end
           end
 
           if orientations.present?
             orientations_filter = []
-            orientations_filter << 'north OR north_east OR north_west' if orientations.include?('north')
-            orientations_filter << 'south OR south_east OR south_west' if orientations.include?('south')
-            orientations_filter << 'east OR south_east OR south_east' if orientations.include?('east')
-            orientations_filter << 'west OR north_west OR south_west' if orientations.include?('west')
-            crags = crags.where(orientations_filter.join(' OR '))
+            orientations_filter << "north OR north_east OR north_west" if orientations.include?("north")
+            orientations_filter << "south OR south_east OR south_west" if orientations.include?("south")
+            orientations_filter << "east OR south_east OR south_east" if orientations.include?("east")
+            orientations_filter << "west OR north_west OR south_west" if orientations.include?("west")
+            crags = crags.where(orientations_filter.join(" OR "))
           end
           # Create geo json
           crags.each do |crag|
@@ -253,11 +253,11 @@ module Api
         end
 
         json = {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           crs: {
-            type: 'name',
+            type: "name",
             properties: {
-              name: 'urn'
+              name: "urn"
             }
           },
           features: json_features
@@ -306,11 +306,11 @@ module Api
         end
 
         render json: {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           crs: {
-            type: 'name',
+            type: "name",
             properties: {
-              name: 'urn'
+              name: "urn"
             }
           },
           features: features
@@ -349,11 +349,11 @@ module Api
         end
 
         render json: {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           crs: {
-            type: 'name',
+            type: "name",
             properties: {
-              name: 'urn'
+              name: "urn"
             }
           },
           features: features
@@ -370,21 +370,21 @@ module Api
         webs = @crag.guide_book_webs
         guides = papers.map do |paper|
           {
-            guide_type: 'GuideBookPaper',
+            guide_type: "GuideBookPaper",
             guide: paper.summary_to_json
           }
         end
 
         pdfs.each do |pdf|
           guides << {
-            guide_type: 'GuideBookPdf',
+            guide_type: "GuideBookPdf",
             guide: pdf.summary_to_json
           }
         end
 
         webs.each do |web|
           guides << {
-            guide_type: 'GuideBookWeb',
+            guide_type: "GuideBookWeb",
             guide: web.summary_to_json
           }
         end

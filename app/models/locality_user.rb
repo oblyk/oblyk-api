@@ -41,7 +41,7 @@ class LocalityUser < ApplicationRecord
   def local_to_json
     {
       locality_user: {
-        description: description ? Markdown.new(description, :hard_wrap).to_html.html_safe : '',
+        description: description ? Markdown.new(description, :hard_wrap).to_html.html_safe : "",
         partner_search: partner_search,
         local_sharing: local_sharing,
         created_at: created_at
@@ -54,23 +54,23 @@ class LocalityUser < ApplicationRecord
   def create_by_reverse_geocoding!
     reverse_place = OpenStreetMapApi.reverse_geocoding(latitude, longitude)
 
-    place = reverse_place['address']
+    place = reverse_place["address"]
 
     if place.blank?
-      errors.add(:base, I18n.t('activerecord.errors.messages.invalid'))
+      errors.add(:base, I18n.t("activerecord.errors.messages.invalid"))
       return false
     end
 
-    city = place['city'] || place['town'] || place['village'] || place['municipality']
-    code_country = place['country_code']
-    region = place['state_district'] || place['county'] || place['state']
+    city = place["city"] || place["town"] || place["village"] || place["municipality"]
+    code_country = place["country_code"]
+    region = place["state_district"] || place["county"] || place["state"]
 
     existing_locality = Locality.where(name: city).geo_search(latitude, longitude, 50).first
 
     if existing_locality
       already_in_this_locality = LocalityUser.find_by user: user, locality: existing_locality
       if already_in_this_locality
-        errors.add(:base, I18n.t('activerecord.errors.messages.exist'))
+        errors.add(:base, I18n.t("activerecord.errors.messages.exist"))
         return false
       end
     end
@@ -79,8 +79,8 @@ class LocalityUser < ApplicationRecord
       name: city,
       code_country: code_country,
       region: region,
-      latitude: reverse_place['lat'],
-      longitude: reverse_place['lon']
+      latitude: reverse_place["lat"],
+      longitude: reverse_place["lon"]
     ))
     save
   end

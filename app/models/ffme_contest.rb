@@ -42,10 +42,10 @@ class FfmeContest < ApplicationRecord
 
   def ffme_contest_type
     labels = {
-      boulder: 'BLOC',
-      sport_climbing: 'DIFFICULTE',
-      speed_climbing: 'VITESSE',
-      combined: 'COMBINE,'
+      boulder: "BLOC",
+      sport_climbing: "DIFFICULTE",
+      speed_climbing: "VITESSE",
+      combined: "COMBINE,"
     }
     labels[contest_type&.to_sym]
   end
@@ -56,8 +56,8 @@ class FfmeContest < ApplicationRecord
 
   def create_on_my_compet!
     resp = MyCompet.create_contest self
-    self.external_ffme_contest_id = resp['idFFME']
-    self.status = 'create_on_my_compet'
+    self.external_ffme_contest_id = resp["idFFME"]
+    self.status = "create_on_my_compet"
     save
   end
 
@@ -85,13 +85,13 @@ class FfmeContest < ApplicationRecord
   def send_results!
     MyCompet.send_results self
     self.results_send_at = Time.zone.now
-    self.status = status == 'result_sent' ? 'result_resent' : 'result_sent'
+    self.status = status == "result_sent" ? "result_resent" : "result_sent"
     save
   end
 
   private
 
   def set_attributes
-    self.status ||= 'draft'
+    self.status ||= "draft"
   end
 end

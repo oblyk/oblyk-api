@@ -44,7 +44,7 @@ module Embedded
     attribute :dismounted, &:dismounted?
 
     attribute :text_contrast_color do |object|
-      object.gym_openers.map(&:name).join(', ')
+      object.gym_openers.map(&:name).join(", ")
     end
 
     attribute :likes_count do |object|
@@ -61,7 +61,7 @@ module Embedded
           metadata: object.gym_route_cover&.picture&.metadata,
           original_file_path: object.gym_route_cover&.picture ? object.gym_route_cover.original_file_path : nil,
           attachments: {
-            picture: object.attachment_object(object.gym_route_cover&.picture, 'GymRouteCover_picture')
+            picture: object.attachment_object(object.gym_route_cover&.picture, "GymRouteCover_picture")
           }
         }
       end

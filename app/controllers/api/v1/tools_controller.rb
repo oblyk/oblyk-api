@@ -6,9 +6,9 @@ module Api
       def qr_coder
         qr = RQRCode::QRCode.new params[:message].to_s
         send_data qr.as_svg(viewbox: true),
-                  type: 'image/svg+xml',
-                  disposition: 'attachment',
-                  filename: 'qr-code.svg'
+                  type: "image/svg+xml",
+                  disposition: "attachment",
+                  filename: "qr-code.svg"
       end
     end
   end

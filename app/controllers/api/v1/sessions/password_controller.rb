@@ -43,11 +43,11 @@ module Api
         private
 
         def not_found
-          render json: { error: 'Cannot find email associated with account' }, status: :not_found
+          render json: { error: "Cannot find email associated with account" }, status: :not_found
         end
 
         def token_is_expired
-          render json: { error: 'Reset password token is expired' }, status: :unprocessable_content
+          render json: { error: "Reset password token is expired" }, status: :unprocessable_content
         end
       end
     end

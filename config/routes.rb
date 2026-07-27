@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'sidekiq/web'
+require "sidekiq/web"
 
 Rails.application.routes.draw do
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
@@ -9,41 +9,41 @@ Rails.application.routes.draw do
     # - See https://thisdata.com/blog/timing-attacks-against-string-comparison/
     # - Use & (do not use &&) so that it doesn't short circuit.
     # - Use digests to stop length information leaking (see also ActiveSupport::SecurityUtils.variable_size_secure_compare)
-    ActiveSupport::SecurityUtils.secure_compare(Digest::SHA256.hexdigest(username), Digest::SHA256.hexdigest(ENV.fetch('SIDEKIQ_USERNAME', nil))) &
-      ActiveSupport::SecurityUtils.secure_compare(Digest::SHA256.hexdigest(password), Digest::SHA256.hexdigest(ENV.fetch('SIDEKIQ_PASSWORD', nil)))
+    ActiveSupport::SecurityUtils.secure_compare(Digest::SHA256.hexdigest(username), Digest::SHA256.hexdigest(ENV.fetch("SIDEKIQ_USERNAME", nil))) &
+      ActiveSupport::SecurityUtils.secure_compare(Digest::SHA256.hexdigest(password), Digest::SHA256.hexdigest(ENV.fetch("SIDEKIQ_PASSWORD", nil)))
   end
-  mount Sidekiq::Web => '/sidekiq'
+  mount Sidekiq::Web => "/sidekiq"
 
-  mount ActionCable.server => '/cable'
+  mount ActionCable.server => "/cable"
 
   # equivalent of cloudflare "Transform via URL" for the development environment
   # see : https://developers.cloudflare.com/images/transform-images/transform-via-url/
   # only a few options are supported (fit=crop or fit=scale-down and quality)
-  get 'cdn-cgi/image/:options/:key', controller: 'cdn_cgi/images', action: :variante_path
+  get "cdn-cgi/image/:options/:key", controller: "cdn_cgi/images", action: :variante_path
   namespace :services do
     namespace :stripes do
-      post :webhook, to: 'webhooks#index'
+      post :webhook, to: "webhooks#index"
     end
   end
 
   namespace :api do
     namespace :v1 do
       namespace :sessions do
-        post 'tokens', controller: :token, action: :refresh
-        post 'sign_in', controller: :signin, action: :create
-        post 'sign_up', controller: :signup, action: :create
-        post 'reset_password', controller: :password, action: :create
-        put 'new_password', controller: :password, action: :update
-        delete 'sign_in', controller: :signin, action: :destroy
+        post "tokens", controller: :token, action: :refresh
+        post "sign_in", controller: :signin, action: :create
+        post "sign_up", controller: :signup, action: :create
+        post "reset_password", controller: :password, action: :create
+        put "new_password", controller: :password, action: :update
+        delete "sign_in", controller: :signin, action: :destroy
       end
 
-      get 'figures', controller: :commons, action: :figures
-      get 'micro_stats', controller: :commons, action: :micro_stats
-      get 'last_added', controller: :commons, action: :last_added
-      get 'active_gyms', controller: :commons, action: :active_gyms
-      get 'last_contributions', controller: :commons, action: :last_contributions
-      get 'partners/figures', controller: :partners, action: :figures
-      get 'partners/partners_around', controller: :partners, actions: :partners_around
+      get "figures", controller: :commons, action: :figures
+      get "micro_stats", controller: :commons, action: :micro_stats
+      get "last_added", controller: :commons, action: :last_added
+      get "active_gyms", controller: :commons, action: :active_gyms
+      get "last_contributions", controller: :commons, action: :last_contributions
+      get "partners/figures", controller: :partners, action: :figures
+      get "partners/partners_around", controller: :partners, actions: :partners_around
       resources :tools, only: %i[] do
         get :qr_coder, on: :collection
       end
@@ -106,9 +106,9 @@ Rails.application.routes.draw do
 
       resources :current_users, only: %i[] do
         collection do
-          get '', action: :show
-          put '', action: :update
-          delete '', action: :destroy
+          get "", action: :show
+          put "", action: :update
+          delete "", action: :destroy
           get :library
           get :library_figures
           get :ascents_without_guides
@@ -196,7 +196,7 @@ Rails.application.routes.draw do
         delete :moderate_by_gym_administrator, on: :member
       end
       resources :likes, only: %i[index create] do
-        delete '/:likeable_type/:likeable_id', action: :destroy, on: :collection
+        delete "/:likeable_type/:likeable_id", action: :destroy, on: :collection
       end
       resources :links
       resources :follows, only: %i[index create] do
@@ -204,7 +204,7 @@ Rails.application.routes.draw do
         get :my_follows_by_types, on: :collection
         put :increment, on: :collection
       end
-      delete 'follows', controller: :follows, action: :destroy
+      delete "follows", controller: :follows, action: :destroy
       resources :alerts
       resources :conversations, only: %i[index show create] do
         post :read, on: :member
@@ -431,21 +431,21 @@ Rails.application.routes.draw do
       resources :reports, only: %i[create]
 
       scope :public do
-        get 'rocks', controller: :rocks, action: :index
-        get 'suns', controller: :suns, action: :index
-        get 'rains', controller: :rains, action: :index
-        get 'inclines', controller: :inclines, action: :index
-        get 'climbs', controller: :climbs, action: :index
-        get 'climbing_styles', controller: :climbing_styles, action: :index
-        get 'receptions', controller: :receptions, action: :index
-        get 'starts', controller: :starts, action: :index
-        get 'bolts', controller: :bolts, action: :index
-        get 'anchors', controller: :anchors, action: :index
-        get 'approach-types', controller: :approach_types, action: :index
-        get 'alert-types', controller: :alert_types, action: :index
+        get "rocks", controller: :rocks, action: :index
+        get "suns", controller: :suns, action: :index
+        get "rains", controller: :rains, action: :index
+        get "inclines", controller: :inclines, action: :index
+        get "climbs", controller: :climbs, action: :index
+        get "climbing_styles", controller: :climbing_styles, action: :index
+        get "receptions", controller: :receptions, action: :index
+        get "starts", controller: :starts, action: :index
+        get "bolts", controller: :bolts, action: :index
+        get "anchors", controller: :anchors, action: :index
+        get "approach-types", controller: :approach_types, action: :index
+        get "alert-types", controller: :alert_types, action: :index
 
-        get 'grade', controller: :grades, action: :grade
-        get 'grade-types', controller: :grades, action: :types
+        get "grade", controller: :grades, action: :grade
+        get "grade-types", controller: :grades, action: :types
 
         resources :area_crags
         resources :areas do

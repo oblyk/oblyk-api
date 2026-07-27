@@ -21,7 +21,7 @@ module Api
 
       def comments
         page = params.fetch(:page, 1)
-        comments = Comment.where(commentable_type: 'Comment', commentable_id: @comment.id)
+        comments = Comment.where(commentable_type: "Comment", commentable_id: @comment.id)
                           .order(created_at: :asc)
                           .page(page)
                           .per(5)
@@ -86,14 +86,14 @@ module Api
         type = @comment.commentable_type
         commentable = @comment.commentable
 
-        authorize = true if type == 'GymRoute' && gym_ids.include?(commentable.gym_sector.gym_space.gym_id)
-        authorize = true if type == 'Ascent' && gym_ids.include?(commentable.gym_id)
+        authorize = true if type == "GymRoute" && gym_ids.include?(commentable.gym_sector.gym_space.gym_id)
+        authorize = true if type == "Ascent" && gym_ids.include?(commentable.gym_id)
 
-        if type == 'Comment'
-          authorize = true if commentable.commentable_type == 'GymRoute' && gym_ids.include?(commentable.commentable.gym_sector.gym_space.gym_id)
-          authorize = true if commentable.commentable_type == 'Ascent' && gym_ids.include?(commentable.commentable.gym_id)
-          authorize = true if commentable.commentable_type == 'Comment' && commentable.commentable.commentable_type == 'Ascent' && gym_ids.include?(commentable.commentable.commentable.gym_id)
-          authorize = true if commentable.commentable_type == 'Comment' && commentable.commentable.commentable_type == 'GymRoute' && gym_ids.include?(commentable.commentable.commentable.gym_sector.gym_space.gym_id)
+        if type == "Comment"
+          authorize = true if commentable.commentable_type == "GymRoute" && gym_ids.include?(commentable.commentable.gym_sector.gym_space.gym_id)
+          authorize = true if commentable.commentable_type == "Ascent" && gym_ids.include?(commentable.commentable.gym_id)
+          authorize = true if commentable.commentable_type == "Comment" && commentable.commentable.commentable_type == "Ascent" && gym_ids.include?(commentable.commentable.commentable.gym_id)
+          authorize = true if commentable.commentable_type == "Comment" && commentable.commentable.commentable_type == "GymRoute" && gym_ids.include?(commentable.commentable.commentable.gym_sector.gym_space.gym_id)
         end
 
         unless authorize

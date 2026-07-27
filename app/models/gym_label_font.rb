@@ -3,11 +3,11 @@
 class GymLabelFont
   FONTS = {
     lato: {
-      name: 'Lato',
-      query: 'Lato',
-      ref: 'lato',
-      size: '12pt',
-      line_height: 'inherit',
+      name: "Lato",
+      query: "Lato",
+      ref: "lato",
+      size: "12pt",
+      line_height: "inherit",
       svg_preview: '<svg viewBox="0 0 39.6629 15.99996">
                       <g transform="translate(-140.49375,-129.91042)">
                         <path
@@ -18,11 +18,11 @@ class GymLabelFont
                     </svg>'
     },
     overpass: {
-      name: 'Overpass',
-      query: 'Overpass',
-      ref: 'overpass',
-      size: '12pt',
-      line_height: 'inherit',
+      name: "Overpass",
+      query: "Overpass",
+      ref: "overpass",
+      size: "12pt",
+      line_height: "inherit",
       svg_preview: '<svg viewBox="0 0 15.091096 3.3835695">
                       <g transform="translate(-126.73542,-88.106246)">
                         <path
@@ -32,11 +32,11 @@ class GymLabelFont
                     </svg>'
     },
     raleway: {
-      name: 'Raleway',
-      query: 'Raleway',
-      ref: 'raleway',
-      size: '12pt',
-      line_height: 'inherit',
+      name: "Raleway",
+      query: "Raleway",
+      ref: "raleway",
+      size: "12pt",
+      line_height: "inherit",
       svg_preview: '<svg viewBox="0 0 14.042626 3.5259382" >
                       <g transform="translate(-121.97292,-131.49791)">
                         <path
@@ -46,11 +46,11 @@ class GymLabelFont
                     </svg>'
     },
     roboto_serif: {
-      name: 'Roboto Serif',
-      query: 'Roboto+Serif',
-      ref: 'roboto_serif',
-      size: '12pt',
-      line_height: 'inherit',
+      name: "Roboto Serif",
+      query: "Roboto+Serif",
+      ref: "roboto_serif",
+      size: "12pt",
+      line_height: "inherit",
       svg_preview: '<svg viewBox="0 0 127.34893 16.000019" >
                       <g transform="translate(-101.94704,-99.081362)">
                         <path
@@ -61,11 +61,11 @@ class GymLabelFont
                     </svg>'
     },
     yeseva_one: {
-      name: 'Yeseva One',
-      query: 'Yeseva+One',
-      ref: 'yeseva_one',
-      size: '12pt',
-      line_height: 'inherit',
+      name: "Yeseva One",
+      query: "Yeseva+One",
+      ref: "yeseva_one",
+      size: "12pt",
+      line_height: "inherit",
       svg_preview: '<svg viewBox="0 0 122.73949 15.999993">
                       <g transform="translate(-147.10834,-91.016669)">
                         <path
@@ -76,11 +76,11 @@ class GymLabelFont
                     </svg>'
     },
     shadows_into_light: {
-      name: 'Shadows Into Light',
-      query: 'Shadows+Into+Light',
-      ref: 'shadows_into_light',
-      size: '16pt',
-      line_height: '1.2',
+      name: "Shadows Into Light",
+      query: "Shadows+Into+Light",
+      ref: "shadows_into_light",
+      size: "16pt",
+      line_height: "1.2",
       svg_preview: '<svg viewBox="0 0 83.617195 15.999996" >
                       <g transform="translate(-117.82533,-97.847692)">
                         <path
@@ -92,11 +92,11 @@ class GymLabelFont
     },
 
     sue_ellen_francisco: {
-      name: 'Sue Ellen Francisco',
-      query: 'Sue+Ellen+Francisco',
-      ref: 'sue_ellen_francisco',
-      size: '15pt',
-      line_height: '1.3',
+      name: "Sue Ellen Francisco",
+      query: "Sue+Ellen+Francisco",
+      ref: "sue_ellen_francisco",
+      size: "15pt",
+      line_height: "1.3",
       svg_preview: '<svg viewBox="0 0 87.235993 15.99997">
                       <g transform="translate(-105.83335,-126.47084)">
                         <path
@@ -107,11 +107,11 @@ class GymLabelFont
                     </svg>'
     },
     unbounded: {
-      name: 'Unbounded',
-      query: 'Unbounded',
-      ref: 'unbounded',
-      size: '12pt',
-      line_height: 'inherit',
+      name: "Unbounded",
+      query: "Unbounded",
+      ref: "unbounded",
+      size: "12pt",
+      line_height: "inherit",
       svg_preview: '<svg viewBox="0 0 138.77046 16">
                       <g transform="translate(-74.612499,-123.5603)">
                         <path
@@ -122,11 +122,11 @@ class GymLabelFont
                     </svg>'
     },
     black_ops_one: {
-      name: 'Black Ops One',
-      query: 'Black+Ops+One',
-      ref: 'black_ops_one',
-      size: '12pt',
-      line_height: 'inherit',
+      name: "Black Ops One",
+      query: "Black+Ops+One",
+      ref: "black_ops_one",
+      size: "12pt",
+      line_height: "inherit",
       svg_preview: '<svg viewBox="0 0 134.74786 15.999986">
                       <g transform="translate(-86.783331,-92.074993)">
                         <path

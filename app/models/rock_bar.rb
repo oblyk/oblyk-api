@@ -13,15 +13,15 @@ class RockBar < ApplicationRecord
 
   def to_geo_json
     {
-      type: 'Feature',
+      type: "Feature",
       properties: {
-        type: 'RockBar',
+        type: "RockBar",
         id: id,
         crag_id: crag_id,
         sector_id: crag_sector_id,
         icon: nil
       },
-      geometry: { type: 'LineString', coordinates: revers_lat_lng }
+      geometry: { type: "LineString", coordinates: revers_lat_lng }
     }
   end
 
@@ -67,7 +67,7 @@ class RockBar < ApplicationRecord
 
   def revers_lat_lng
     polyline.map do |coordinates|
-      [coordinates[1], coordinates[0]]
+      [ coordinates[1], coordinates[0] ]
     end
   end
 end

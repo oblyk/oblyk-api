@@ -11,18 +11,18 @@ module Api
       before_action :set_area, only: %i[index search_by_grades]
 
       def index
-        order_by = params.fetch(:order_by, 'difficulty_desc')
+        order_by = params.fetch(:order_by, "difficulty_desc")
         order = case order_by
-                when 'difficulty_desc'
-                  'crag_routes.max_grade_value DESC, crag_routes.name, crag_routes.id'
-                when 'difficulty_asc'
-                  'crag_routes.max_grade_value ASC, crag_routes.name, crag_routes.id'
-                when 'note'
-                  'crag_routes.note DESC, crag_routes.name, crag_routes.id'
-                when 'popularity'
-                  'crag_routes.ascent_users_count DESC, crag_routes.ascents_count DESC, crag_routes.name, crag_routes.id'
+                when "difficulty_desc"
+                  "crag_routes.max_grade_value DESC, crag_routes.name, crag_routes.id"
+                when "difficulty_asc"
+                  "crag_routes.max_grade_value ASC, crag_routes.name, crag_routes.id"
+                when "note"
+                  "crag_routes.note DESC, crag_routes.name, crag_routes.id"
+                when "popularity"
+                  "crag_routes.ascent_users_count DESC, crag_routes.ascents_count DESC, crag_routes.name, crag_routes.id"
                 else
-                  'crag_routes.name, crag_routes.id'
+                  "crag_routes.name, crag_routes.id"
                 end
 
         crag_routes = if @crag
@@ -35,20 +35,20 @@ module Api
                         CragRoute.includes(:crag_sector).where(crag_id: params[:crag_id]).order(order)
                       end
 
-        crag_routes = crag_routes.page(params.fetch(:page, 1)).per(params.fetch(:page_limit, 25)) if params[:page] != 'all'
+        crag_routes = crag_routes.page(params.fetch(:page, 1)).per(params.fetch(:page_limit, 25)) if params[:page] != "all"
 
         render json: routes_summary(crag_routes), status: :ok
       end
 
       def suggested_routes
         ascents_count = AscentCragRoute.where(user_id: @current_user.id).count
-        min_max = AscentCragRoute.select('MIN(min_grade_value) AS min_grade_value, MAX(max_grade_value) AS max_grade_value').find_by(user_id: @current_user.id) if ascents_count.positive?
+        min_max = AscentCragRoute.select("MIN(min_grade_value) AS min_grade_value, MAX(max_grade_value) AS max_grade_value").find_by(user_id: @current_user.id) if ascents_count.positive?
 
         crag_routes = CragRoute.includes(:crag_sector, :crag)
                                .where('EXISTS (SELECT * FROM follows WHERE followable_type = "Crag" AND followable_id = crag_routes.crag_id AND follows.user_id = :user_id)', user_id: @current_user.id)
-                               .where.not('EXISTS (SELECT * FROM ascents WHERE ascents.crag_route_id = crag_routes.id AND ascents.user_id = :user_id)', user_id: @current_user.id)
-        crag_routes = crag_routes.where(max_grade_value: [min_max[:min_grade_value]..(min_max[:max_grade_value] + 1)]) if min_max
-        crag_routes = crag_routes.order(Arel.sql('ascent_users_count DESC, note_count DESC'))
+                               .where.not("EXISTS (SELECT * FROM ascents WHERE ascents.crag_route_id = crag_routes.id AND ascents.user_id = :user_id)", user_id: @current_user.id)
+        crag_routes = crag_routes.where(max_grade_value: [ min_max[:min_grade_value]..(min_max[:max_grade_value] + 1) ]) if min_max
+        crag_routes = crag_routes.order(Arel.sql("ascent_users_count DESC, note_count DESC"))
                                  .page(params.fetch(:page, 1))
                                  .per(params.fetch(:page_limit, 25))
 
@@ -98,7 +98,7 @@ module Api
         grades = grade_params.split
         min_grade = Grade.to_value grades.first
         max_grade = grades[1] ? Grade.to_value(grades[1]) : min_grade
-        sql_query = '(crag_routes.min_grade_value BETWEEN :min AND :max) OR (crag_routes.max_grade_value BETWEEN :min AND :max)'
+        sql_query = "(crag_routes.min_grade_value BETWEEN :min AND :max) OR (crag_routes.max_grade_value BETWEEN :min AND :max)"
 
         crag_routes = if @crag_sector
                         CragRoute.where(crag_sector: @crag_sector)
@@ -139,7 +139,7 @@ module Api
       end
 
       def random
-        crag_route = CragRoute.order(Arel.sql('RAND()')).first
+        crag_route = CragRoute.order(Arel.sql("RAND()")).first
         render json: crag_route.detail_to_json, status: :ok
       end
 
@@ -179,7 +179,7 @@ module Api
         user_is_login = login?
         routes.map do |crag_route|
           summary = crag_route.summary_to_json(with_crag_in_sector: false)
-          summary[:name] = summary[:name].gsub(/\S/, '•') unless user_is_login
+          summary[:name] = summary[:name].gsub(/\S/, "•") unless user_is_login
           summary
         end
       end

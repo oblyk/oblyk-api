@@ -14,7 +14,7 @@ class ConversationUser < ApplicationRecord
   def mark_as_read_notifications!
     notifications = user.notifications
                         .unread
-                        .where(notifiable_type: 'ConversationMessage')
+                        .where(notifiable_type: "ConversationMessage")
     notifications.each do |notification|
       notification.read! if notification.notifiable.conversation == conversation
     end

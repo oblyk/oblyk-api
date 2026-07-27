@@ -8,7 +8,7 @@ module AttachmentResizable
     attachment_attached = false
     attachement_type = attachement_type.presence || "#{attachment.record.class.name}_#{attachment.name}"
     if attachment.attached?
-      storage_domaine = ENV.fetch('IMAGES_STORAGE_DOMAINE', ENV.fetch('OBLYK_API_URL', nil))
+      storage_domaine = ENV.fetch("IMAGES_STORAGE_DOMAINE", ENV.fetch("OBLYK_API_URL", nil))
       variant_path = "#{storage_domaine}/cdn-cgi/image/:variant/#{attachment.blob.key}"
       attachment_attached = true
     end
@@ -29,10 +29,10 @@ module AttachmentResizable
   def convert_image(attachment)
     return unless attachment.attached?
 
-    attachment.open(tmpdir: '/tmp') do |file|
+    attachment.open(tmpdir: "/tmp") do |file|
       image = ImageProcessing::Vips.source(file.path)
-      result = image.convert!('jpg')
-      attachment.attach(io: File.open(result.path), filename: "picture-#{SecureRandom.alphanumeric(12)}.jpg", content_type: 'image/jpg')
+      result = image.convert!("jpg")
+      attachment.attach(io: File.open(result.path), filename: "picture-#{SecureRandom.alphanumeric(12)}.jpg", content_type: "image/jpg")
     end
   end
 end

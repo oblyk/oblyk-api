@@ -38,7 +38,7 @@ module Api
         @conversation_message.user = @current_user
         if @conversation_message.save
           data = @conversation_message.summary_to_json
-          data[:message_status] = 'new_message'
+          data[:message_status] = "new_message"
           ActionCable.server.broadcast "conversations_#{@conversation_message.conversation_id}", data
           render json: @conversation_message.detail_to_json, status: :ok
         else
@@ -49,7 +49,7 @@ module Api
       def update
         if @conversation_message.update(conversation_message_params)
           data = @conversation_message.summary_to_json
-          data[:message_status] = 'edit_message'
+          data[:message_status] = "edit_message"
           ActionCable.server.broadcast "conversations_#{@conversation_message.conversation_id}", data
           render json: @conversation_message.detail_to_json, status: :ok
         else

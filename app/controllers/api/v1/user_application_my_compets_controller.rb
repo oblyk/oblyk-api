@@ -23,7 +23,7 @@ module Api
         end
 
         my_compet_response = MyCompet.association_request application
-        application.status = my_compet_response.try(:[], 'status') || 'ERROR'
+        application.status = my_compet_response.try(:[], "status") || "ERROR"
         if application.save
           render json: application.summary_to_json, status: :ok
         else

@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 class GoogleMapApi
-  BASE_URL = 'https://maps.googleapis.com/maps/api'
-  GOOGLE_KEY = ENV.fetch('GOOGLE_MAP_KEY', nil)
+  BASE_URL = "https://maps.googleapis.com/maps/api"
+  GOOGLE_KEY = ENV.fetch("GOOGLE_MAP_KEY", nil)
 
   # @param [Array] coordinates
   def self.elevations(coordinates)
     float_coordinates = coordinates.map do |coordinate|
       "#{coordinate[:latitude].to_f},#{coordinate[:longitude].to_f}"
     end
-    float_coordinates = float_coordinates.join('|')
+    float_coordinates = float_coordinates.join("|")
     request = RestClient.get(
       "#{BASE_URL}/elevation/json",
       params: {
@@ -20,7 +20,7 @@ class GoogleMapApi
 
     return if request.code != 200
 
-    JSON.parse(request.body)['results']
+    JSON.parse(request.body)["results"]
   rescue StandardError
     false
   end
@@ -30,15 +30,15 @@ class GoogleMapApi
       "#{BASE_URL}/place/findplacefromtext/json",
       params: {
         input: query,
-        inputtype: 'textquery',
-        fields: 'formatted_address,name,geometry',
+        inputtype: "textquery",
+        fields: "formatted_address,name,geometry",
         key: GOOGLE_KEY
       }
     )
 
     return if request.code != 200
 
-    JSON.parse(request.body)['candidates']
+    JSON.parse(request.body)["candidates"]
   rescue StandardError
     false
   end
@@ -49,12 +49,12 @@ class GoogleMapApi
       params: {
         latlng: "#{lat},#{lng}",
         key: GOOGLE_KEY,
-        result_type: 'locality|postal_code'
+        result_type: "locality|postal_code"
       }
     )
     return if request.code != 200
 
-    JSON.parse(request.body)['results']
+    JSON.parse(request.body)["results"]
   rescue StandardError
     false
   end

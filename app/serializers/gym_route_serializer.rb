@@ -68,7 +68,7 @@ class GymRouteSerializer < BaseSerializer
         metadata: object.gym_route_cover&.picture&.metadata,
         original_file_path: object.gym_route_cover&.picture ? object.gym_route_cover.original_file_path : nil,
         attachments: {
-          picture: object.attachment_object(object.gym_route_cover&.picture, 'GymRouteCover_picture')
+          picture: object.attachment_object(object.gym_route_cover&.picture, "GymRouteCover_picture")
         }
       }
     end

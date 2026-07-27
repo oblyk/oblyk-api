@@ -60,7 +60,7 @@ class ConversationMessage < ApplicationRecord
       next if have_been_notified
 
       Notification.create(
-        notification_type: 'new_message',
+        notification_type: "new_message",
         user: conversation_user.user,
         notifiable: self
       )

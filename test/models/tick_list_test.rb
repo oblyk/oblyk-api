@@ -1,29 +1,29 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class TickListTest < ActiveSupport::TestCase
   setup do
     @tick_list = tick_lists(:one)
   end
 
-  test 'tick list is valid' do
+  test "tick list is valid" do
     assert_predicate @tick_list, :valid?
   end
 
-  test 'tick list belongs to user' do
+  test "tick list belongs to user" do
     assert_equal users(:normal_user), @tick_list.user
   end
 
-  test 'tick list belongs to crag_route' do
+  test "tick list belongs to crag_route" do
     assert_equal crag_routes(:route_one), @tick_list.crag_route
   end
 
-  test 'summary_to_json returns the same as detail_to_json' do
+  test "summary_to_json returns the same as detail_to_json" do
     assert_equal @tick_list.detail_to_json, @tick_list.summary_to_json
   end
 
-  test 'detail_to_json returns the correct format' do
+  test "detail_to_json returns the correct format" do
     json = @tick_list.detail_to_json
 
     assert_equal @tick_list.id, json[:id]
@@ -33,13 +33,13 @@ class TickListTest < ActiveSupport::TestCase
     assert_equal @tick_list.updated_at, json[:history][:updated_at]
   end
 
-  test 'tick list is invalid without user' do
+  test "tick list is invalid without user" do
     tick_list = TickList.new(crag_route: crag_routes(:route_one))
 
     assert_not tick_list.valid?
   end
 
-  test 'tick list is invalid without crag_route' do
+  test "tick list is invalid without crag_route" do
     tick_list = TickList.new(user: users(:normal_user))
 
     assert_not tick_list.valid?

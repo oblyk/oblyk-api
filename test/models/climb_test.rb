@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ClimbTest < ActiveSupport::TestCase
-  test 'Climb::ALL_LIST is an array' do
+  test "Climb::ALL_LIST is an array" do
     assert_kind_of Array, Climb::ALL_LIST
   end
 
-  test 'Climb::ALL_LIST contains expected values' do
+  test "Climb::ALL_LIST contains expected values" do
     expected_anchors = %w[
       sport_climbing
       bouldering
@@ -23,35 +23,35 @@ class ClimbTest < ActiveSupport::TestCase
     assert_equal expected_anchors.sort, Climb::ALL_LIST.sort
   end
 
-  test 'Climb::ALL_LIST is frozen' do
+  test "Climb::ALL_LIST is frozen" do
     assert_predicate Climb::ALL_LIST, :frozen?
   end
 
-  test 'Climb::ALL_LIST has 9 elements' do
+  test "Climb::ALL_LIST has 9 elements" do
     assert_equal 9, Climb::ALL_LIST.size
   end
 
-  test 'should sport_climbing route be single_pitch?' do
-    assert Climb.single_pitch?('sport_climbing')
+  test "should sport_climbing route be single_pitch?" do
+    assert Climb.single_pitch?("sport_climbing")
   end
 
-  test 'should multi_pitch route be boltable?' do
-    assert Climb.boltable?('multi_pitch')
+  test "should multi_pitch route be boltable?" do
+    assert Climb.boltable?("multi_pitch")
   end
 
-  test 'should trad_climbing route be anchorable?' do
-    assert Climb.anchorable?('trad_climbing')
+  test "should trad_climbing route be anchorable?" do
+    assert Climb.anchorable?("trad_climbing")
   end
 
-  test 'should aid_climbing route be ropable?' do
-    assert Climb.ropable?('aid_climbing')
+  test "should aid_climbing route be ropable?" do
+    assert Climb.ropable?("aid_climbing")
   end
 
-  test 'should bouldering route be startable?' do
-    assert Climb.startable?('bouldering')
+  test "should bouldering route be startable?" do
+    assert Climb.startable?("bouldering")
   end
 
-  test 'should bouldering route be receptionable?' do
-    assert Climb.receptionable?('bouldering')
+  test "should bouldering route be receptionable?" do
+    assert Climb.receptionable?("bouldering")
   end
 end

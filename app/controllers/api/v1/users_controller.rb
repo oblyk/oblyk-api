@@ -11,7 +11,7 @@ module Api
       before_action :protected_indoor_log_book, only: %i[indoor_figures indoor_climb_types_chart indoor_grade_chart indoor_by_level_chart]
       before_action :set_indoor_ascents, only: %i[indoor_grade_chart indoor_by_level_chart]
       before_action :set_outdoor_ascents, only: %i[stats ascended_crag_routes]
-      before_action :set_stats_list, only: [:stats]
+      before_action :set_stats_list, only: [ :stats ]
 
       def show
         render json: @user.detail_to_json, status: :ok
@@ -88,12 +88,12 @@ module Api
         # set all stats charts, figures and lists from filtered ascents
         charts = LogBook::Outdoor::Chart.new(@ascents)
         stats = {}
-        stats[:figures] = LogBook::Outdoor::Figure.new(@ascents).figures if @stats_list.include?('figures')
-        stats[:climb_types_chart] = charts.climb_type if @stats_list.include?('climb_types_chart')
-        stats[:grades_chart] = charts.grade if @stats_list.include?('grades_chart')
-        stats[:years_chart] = charts.years if @stats_list.include?('years_chart')
-        stats[:months_chart] = charts.months if @stats_list.include?('months_chart')
-        stats[:evolution_chart] = charts.evolution_by_year if @stats_list.include?('evolution_chart')
+        stats[:figures] = LogBook::Outdoor::Figure.new(@ascents).figures if @stats_list.include?("figures")
+        stats[:climb_types_chart] = charts.climb_type if @stats_list.include?("climb_types_chart")
+        stats[:grades_chart] = charts.grade if @stats_list.include?("grades_chart")
+        stats[:years_chart] = charts.years if @stats_list.include?("years_chart")
+        stats[:months_chart] = charts.months if @stats_list.include?("months_chart")
+        stats[:evolution_chart] = charts.evolution_by_year if @stats_list.include?("evolution_chart")
         render json: stats, status: :ok
       end
 
@@ -168,7 +168,7 @@ module Api
       end
 
       def current_user_is_subscribed?
-        login? && User.current.subscribes.accepted.exists?(followable_type: 'User', followable_id: @user.id)
+        login? && User.current.subscribes.accepted.exists?(followable_type: "User", followable_id: @user.id)
       end
 
       def set_user

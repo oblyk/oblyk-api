@@ -15,8 +15,8 @@ module Api
       def index
         gym_ids = params.fetch(:gym_ids, nil)
         crag_ids = params.fetch(:crag_ids, nil)
-        only_crag = params.fetch(:only_crag, 'false') == 'true'
-        only_gym = params.fetch(:only_gym, nil) == 'true'
+        only_crag = params.fetch(:only_crag, "false") == "true"
+        only_gym = params.fetch(:only_gym, nil) == "true"
         user_uuid = params.fetch(:user_uuid, nil)
         user = if user_uuid
                  other_user = User.where('EXISTS(SELECT followable_id
@@ -35,16 +35,16 @@ module Api
         climbing_sessions = user.climbing_sessions.includes(ascents: %i[color_system_line crag_route])
 
         # Climbing session with gym_ids
-        climbing_sessions = climbing_sessions.where('EXISTS(SELECT * FROM ascents WHERE gym_id IN(:gym_id) AND climbing_session_id = climbing_sessions.id)', gym_id: gym_ids) if gym_ids
+        climbing_sessions = climbing_sessions.where("EXISTS(SELECT * FROM ascents WHERE gym_id IN(:gym_id) AND climbing_session_id = climbing_sessions.id)", gym_id: gym_ids) if gym_ids
 
         # Climbing session with crag_ids
-        climbing_sessions = climbing_sessions.where('EXISTS(SELECT * FROM ascents INNER JOIN crag_routes ON crag_routes.id = ascents.crag_route_id WHERE crag_routes.crag_id IN(:crag_id) AND climbing_session_id = climbing_sessions.id)', crag_id: crag_ids) if crag_ids
+        climbing_sessions = climbing_sessions.where("EXISTS(SELECT * FROM ascents INNER JOIN crag_routes ON crag_routes.id = ascents.crag_route_id WHERE crag_routes.crag_id IN(:crag_id) AND climbing_session_id = climbing_sessions.id)", crag_id: crag_ids) if crag_ids
 
         # Climbing session with only crags
-        climbing_sessions = climbing_sessions.where('EXISTS(SELECT * FROM ascents WHERE crag_route_id IS NOT NULL AND climbing_session_id = climbing_sessions.id)') if only_crag
+        climbing_sessions = climbing_sessions.where("EXISTS(SELECT * FROM ascents WHERE crag_route_id IS NOT NULL AND climbing_session_id = climbing_sessions.id)") if only_crag
 
         # Climbing session with only gyms
-        climbing_sessions = climbing_sessions.where('EXISTS(SELECT * FROM ascents WHERE gym_id IS NOT NULL AND climbing_session_id = climbing_sessions.id)') if only_gym
+        climbing_sessions = climbing_sessions.where("EXISTS(SELECT * FROM ascents WHERE gym_id IS NOT NULL AND climbing_session_id = climbing_sessions.id)") if only_gym
 
         # Pagination and ordering
         climbing_sessions = climbing_sessions.order(session_date: :desc).page(params.fetch(:page, 1))
@@ -91,16 +91,16 @@ module Api
                                      AND follows.user_id = :user_id)',
                            user_id: @current_user.id)
                     .includes(avatar_attachment: :blob, banner_attachment: :blob)
-                    .order(Arel.sql('last_released_at DESC, users.id'))
+                    .order(Arel.sql("last_released_at DESC, users.id"))
                     .page(params.fetch(:page, 1))
                     .per(10)
 
         # Get last hardest ascents by users
         user_ids = users.map(&:id)
-        from_ascents = Ascent.select('*, ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY released_at DESC, min_grade_value DESC, gym_grade_level DESC) AS rn')
+        from_ascents = Ascent.select("*, ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY released_at DESC, min_grade_value DESC, gym_grade_level DESC) AS rn")
                              .where(user_id: user_ids)
                              .where.not(ascent_status: :project)
-        max_ascent_by_users = Ascent.from("(#{from_ascents.to_sql}) AS ascents").where('rn = 1')
+        max_ascent_by_users = Ascent.from("(#{from_ascents.to_sql}) AS ascents").where("rn = 1")
 
         max_ascent_by_users = max_ascent_by_users.map do |ascent|
           ascent_text, ascent_background_color = nil
@@ -114,11 +114,11 @@ module Api
           end
           ascent_text_color = Color.black_or_white_rgb(ascent_background_color) if ascent_background_color.present?
           released_at_is = if ascent.released_at.today?
-                             'today'
+                             "today"
                            elsif ascent.released_at == Date.current.yesterday
-                             'yesterday'
+                             "yesterday"
                            elsif ascent.released_at > Date.current.beginning_of_week
-                             'this_week'
+                             "this_week"
                            end
           {
             user_id: ascent.user_id,

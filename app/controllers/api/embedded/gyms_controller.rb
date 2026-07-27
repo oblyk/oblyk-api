@@ -6,13 +6,13 @@ module Api
       before_action :set_gym
 
       def show
-        gym = Gym.includes(gym_spaces: [:gym_sectors, { plan_attachment: :blob, three_d_picture_attachment: :blob }])
+        gym = Gym.includes(gym_spaces: [ :gym_sectors, { plan_attachment: :blob, three_d_picture_attachment: :blob } ])
                  .where(gym_spaces: { draft: false, archived_at: nil })
                  .references(:gym_spaces)
                  .find_by(id: @gym.id)
 
         unless gym
-          render json: { error: 'Gym not found' }, status: :not_found
+          render json: { error: "Gym not found" }, status: :not_found
           return
         end
 
@@ -21,9 +21,9 @@ module Api
           {
             include: [
               :gym_spaces,
-              'gym_spaces.gym_sectors',
+              "gym_spaces.gym_sectors",
               :gym_three_d_elements,
-              'gym_three_d_elements.gym_three_d_asset'
+              "gym_three_d_elements.gym_three_d_asset"
             ],
             params: {
               include_attachments: {
@@ -42,7 +42,7 @@ module Api
       def set_gym
         @gym = Gym.where.not(assigned_at: nil).find_by id: params[:id]
 
-        render json: { error: 'Gym not found' }, status: :not_found unless @gym
+        render json: { error: "Gym not found" }, status: :not_found unless @gym
       end
     end
   end

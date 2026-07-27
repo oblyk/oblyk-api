@@ -4,6 +4,9 @@ plugins:
   - rubocop-capybara
   - rubocop-minitest
 
+inherit_gem:
+  rubocop-rails-omakase: rubocop.yml
+
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.4.10
@@ -22,6 +25,9 @@ Rails:
 
 Layout/LineLength:
   Enabled: false
+
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: keyword
 
 Style/Documentation:
   Enabled: false

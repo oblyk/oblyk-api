@@ -35,14 +35,14 @@ class Ascent < ApplicationRecord
   after_save :attache_to_climbing_session
 
   def hardness_value
-    return -1 if hardness_status == 'easy_for_the_grade'
-    return 0 if hardness_status == 'this_grade_is_accurate'
+    return -1 if hardness_status == "easy_for_the_grade"
+    return 0 if hardness_status == "this_grade_is_accurate"
 
-    1 if hardness_status == 'sandbagged'
+    1 if hardness_status == "sandbagged"
   end
 
   def sections_done
-    sections.pluck('index')
+    sections.pluck("index")
   end
 
   private

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ClimbingSessionTest < ActiveSupport::TestCase
   setup do
@@ -8,50 +8,50 @@ class ClimbingSessionTest < ActiveSupport::TestCase
     @climbing_session = ClimbingSession.create!(
       user: @user,
       session_date: Date.current,
-      description: 'Super séance'
+      description: "Super séance"
     )
   end
 
-  test 'should be valid' do
+  test "should be valid" do
     assert_predicate @climbing_session, :valid?
   end
 
-  test 'belongs to user' do
+  test "belongs to user" do
     assert_equal @user, @climbing_session.user
   end
 
-  test 'has many ascents' do
+  test "has many ascents" do
     assert_respond_to @climbing_session, :ascents
     assert_respond_to @climbing_session, :ascent_gym_routes
     assert_respond_to @climbing_session, :ascent_crag_routes
   end
 
-  test 'remove_if_empty! should destroy session if no description and no ascents' do
+  test "remove_if_empty! should destroy session if no description and no ascents" do
     session = ClimbingSession.create!(user: @user, session_date: Date.yesterday)
-    assert_difference 'ClimbingSession.count', -1 do
+    assert_difference "ClimbingSession.count", -1 do
       session.remove_if_empty!
     end
   end
 
-  test 'remove_if_empty! should NOT destroy session if it has a description' do
-    @climbing_session.description = 'Une description'
+  test "remove_if_empty! should NOT destroy session if it has a description" do
+    @climbing_session.description = "Une description"
     @climbing_session.save
-    assert_no_difference 'ClimbingSession.count' do
+    assert_no_difference "ClimbingSession.count" do
       @climbing_session.remove_if_empty!
     end
   end
 
-  test 'remove_if_empty! should NOT destroy session if it has ascents' do
+  test "remove_if_empty! should NOT destroy session if it has ascents" do
     session = ClimbingSession.create!(user: @user, session_date: Date.yesterday)
 
-    session.stub :ascents, [1] do
-      assert_no_difference 'ClimbingSession.count' do
+    session.stub :ascents, [ 1 ] do
+      assert_no_difference "ClimbingSession.count" do
         session.remove_if_empty!
       end
     end
   end
 
-  test 'summary_to_json returns correct structure' do
+  test "summary_to_json returns correct structure" do
     json = @climbing_session.summary_to_json
 
     assert_equal @climbing_session.id, json[:id]
@@ -62,13 +62,13 @@ class ClimbingSessionTest < ActiveSupport::TestCase
     assert_kind_of Hash, json[:stats]
   end
 
-  test 'summary_to_json for other user hides description' do
+  test "summary_to_json for other user hides description" do
     json = @climbing_session.summary_to_json(for_current_user: false)
 
     assert_nil json[:description]
   end
 
-  test 'detail_to_json returns correct structure' do
+  test "detail_to_json returns correct structure" do
     json = @climbing_session.detail_to_json
 
     assert_equal @climbing_session.id, json[:id]
@@ -77,10 +77,10 @@ class ClimbingSessionTest < ActiveSupport::TestCase
     assert_includes json, :gym_ascents
     assert_includes json, :crag_ascents
     assert_includes json, :users
-    assert_equal 'Super séance', json[:description]
+    assert_equal "Super séance", json[:description]
   end
 
-  test 'previous and next climbing sessions' do
+  test "previous and next climbing sessions" do
     ClimbingSession.create!(user: @user, session_date: Date.current - 2.days)
     ClimbingSession.create!(user: @user, session_date: Date.current + 2.days)
 

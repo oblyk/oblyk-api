@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class PublicationTest < ActiveSupport::TestCase
   setup do
@@ -12,43 +12,43 @@ class PublicationTest < ActiveSupport::TestCase
     @photo = Photo.create!(
       user: users(:normal_user),
       illustrable: crags(:rocher_des_aures),
-      description: 'Une belle vue du Rocher des Aures',
+      description: "Une belle vue du Rocher des Aures",
       copyright_by: true,
       copyright_nc: false,
       copyright_nd: false
     )
     @photo.picture.attach(
-      io: Rails.root.join('test/fixtures/files/image.jpg').open,
-      filename: 'image.jpg',
-      content_type: 'image/jpeg'
+      io: Rails.root.join("test/fixtures/files/image.jpg").open,
+      filename: "image.jpg",
+      content_type: "image/jpeg"
     )
   end
 
-  test 'validates publishable type' do
-    pub = Publication.new(publishable: @user, author: @user, body: 'test', published_at: Time.zone.now)
+  test "validates publishable type" do
+    pub = Publication.new(publishable: @user, author: @user, body: "test", published_at: Time.zone.now)
 
     assert_predicate pub, :valid?
 
-    pub.publishable_type = 'Area'
+    pub.publishable_type = "Area"
 
     assert_predicate pub, :invalid?
   end
 
-  test 'validates body if published and no subject' do
+  test "validates body if published and no subject" do
     pub = Publication.new(publishable: @user, author: @user, published_at: Time.zone.now)
 
     assert_predicate pub, :invalid?
 
-    pub.publishable_subject = 'new_photo'
+    pub.publishable_subject = "new_photo"
 
     assert_predicate pub, :valid?
   end
 
-  test 'app_path returns correct path' do
+  test "app_path returns correct path" do
     assert_equal "/publications/#{@publication_user.id}", @publication_user.app_path
   end
 
-  test 'publishable_name returns correct name' do
+  test "publishable_name returns correct name" do
     assert_equal @user.full_name, @publication_user.publishable_name
 
     pub_crag = publications(:publication_crag)
@@ -56,61 +56,61 @@ class PublicationTest < ActiveSupport::TestCase
     assert_equal @crag.name, pub_crag.publishable_name
   end
 
-  test 'draft? returns true if not published' do
+  test "draft? returns true if not published" do
     assert @publication_draft.draft
     assert_not @publication_user.draft
   end
 
-  test 'published? returns true if published' do
+  test "published? returns true if published" do
     assert_predicate @publication_user, :published?
     assert_not @publication_draft.published?
   end
 
-  test 'publish! sets published_at and creates notification' do
+  test "publish! sets published_at and creates notification" do
     new_user = User.new(
-      first_name: 'New',
-      last_name: 'User',
-      email: 'new.user@test.com',
-      password: 'password123',
-      slug_name: 'new-user'
+      first_name: "New",
+      last_name: "User",
+      email: "new.user@test.com",
+      password: "password123",
+      slug_name: "new-user"
     )
     new_user.save(validate: false)
 
-    pub = Publication.new(publishable: new_user, author: new_user, body: 'New pub unique')
+    pub = Publication.new(publishable: new_user, author: new_user, body: "New pub unique")
 
     assert_nil pub.published_at
 
     result = pub.publish!
 
-    assert result, 'Publication should be published'
+    assert result, "Publication should be published"
     assert_not_nil pub.published_at
     assert_predicate pub, :published?
   end
 
-  test 'posting limit for today' do
+  test "posting limit for today" do
     new_user = User.new(
-      first_name: 'Limit',
-      last_name: 'User',
-      email: 'limit.user@test.com',
-      password: 'password123',
-      slug_name: 'limit-user'
+      first_name: "Limit",
+      last_name: "User",
+      email: "limit.user@test.com",
+      password: "password123",
+      slug_name: "limit-user"
     )
     new_user.save(validate: false)
 
-    pub1 = Publication.new(publishable: new_user, author: new_user, body: 'Pub 1')
+    pub1 = Publication.new(publishable: new_user, author: new_user, body: "Pub 1")
     pub1.publish!
 
-    pub2 = Publication.new(publishable: new_user, author: new_user, body: 'Pub 2')
-    assert_no_difference 'Publication.count' do
+    pub2 = Publication.new(publishable: new_user, author: new_user, body: "Pub 2")
+    assert_no_difference "Publication.count" do
       result = pub2.publish!
 
       assert_not result
-      assert_includes pub2.errors[:base], 'posting_limit_for_today'
+      assert_includes pub2.errors[:base], "posting_limit_for_today"
     end
   end
 
-  test 'refresh_attachment_types_count updates counts' do
-    pub = Publication.new(publishable: @user, author: @user, body: 'test')
+  test "refresh_attachment_types_count updates counts" do
+    pub = Publication.new(publishable: @user, author: @user, body: "test")
     pub.save(validate: false)
 
     assert_equal 0, pub.attachables_count
@@ -120,6 +120,6 @@ class PublicationTest < ActiveSupport::TestCase
     pub.refresh_attachment_types_count
 
     assert_equal 1, pub.attachables_count
-    assert_equal({ 'Photo' => 1 }, pub.attachable_types_count)
+    assert_equal({ "Photo" => 1 }, pub.attachable_types_count)
   end
 end

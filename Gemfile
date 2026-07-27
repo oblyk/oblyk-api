@@ -1,169 +1,170 @@
 # frozen_string_literal: true
 
-source 'https://rubygems.org'
+source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.4.10'
+ruby "3.4.10"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '7.1.6'
+gem "rails", ">= 7.2"
 # Pin concurrent-ruby < 1.3.0 (1.3.0+ breaks ActiveSupport 6.0.x LoggerThreadSafeLevel)
-gem 'concurrent-ruby', '~> 1.3'
+gem "concurrent-ruby", "~> 1.3"
 # Use sqlite3 as the database for Active Record
-gem 'mysql2'
+gem "mysql2"
 # Use Puma as the app server
-gem 'puma'
+gem "puma"
 # Use Redis adapter to run Action Cable in production
-gem 'redis'
+gem "redis"
 # Redis gem for cache
-gem 'hiredis'
+gem "hiredis"
 # Use Active Model has_secure_password
-gem 'bcrypt'
+gem "bcrypt"
 # provides a full set of stores (Cache, Session, HTTP Cache) for Ruby on Rails
-gem 'redis-rails'
+gem "redis-rails"
 # Adds a Redis::Namespace class which can be used to namespace Redis keys
-gem 'redis-namespace'
+gem "redis-namespace"
 
 # Keep connection pool under version 3.0 (delete this when upgrade to Rails 8.0.5)
-gem 'connection_pool', '< 3.0'
+gem "connection_pool", "< 3.0"
 
 # Convert Video (from .mov to .mp4 by example)
-gem 'streamio-ffmpeg'
+gem "streamio-ffmpeg"
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', require: false
+gem "bootsnap", require: false
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-gem 'jwt'
-gem 'rack-cors'
+gem "jwt"
+gem "rack-cors"
 
 # Addressable is an alternative implementation to the URI implementation
-gem 'addressable'
+gem "addressable"
 
 # Active storage validation
-gem 'activestorage-validator'
+gem "activestorage-validator"
 
 # Active Storage variant && Analyze image
-gem 'image_processing'
-gem 'ruby-vips'
+gem "image_processing"
+gem "ruby-vips"
 
 # Analyze user agent
-gem 'useragent'
+gem "useragent"
 
 # Pagination
-gem 'kaminari'
+gem "kaminari"
 
 # Sidekiq
-gem 'sidekiq', '~> 7'
+gem "sidekiq", "~> 7"
 
 # Track changes
-gem 'paper_trail'
+gem "paper_trail"
 
 # Simple Rest Client
-gem 'rest-client'
+gem "rest-client"
 
 # Monitoring rails performance with RoR vs Wild
-gem 'rorvswild'
+gem "rorvswild"
 
 # Gem for export to csv
-gem 'csv'
+gem "csv"
 
 # Gem for markdown
-gem 'redcarpet'
+gem "redcarpet"
 
 # Sitemap gem
-gem 'sitemap_generator'
+gem "sitemap_generator"
 
 # Dalli for memcached
-gem 'dalli'
+gem "dalli"
 
 # MeiliSearch
-gem 'meilisearch-rails'
+gem "meilisearch-rails"
 
 # Brevo email sdk
-gem 'brevo'
+gem "brevo"
 
 # Generate PDF from html
-gem 'wicked_pdf'
-gem 'wkhtmltopdf-binary'
+gem "wicked_pdf"
+gem "wkhtmltopdf-binary"
 
 # Generate circular chart PDFs
-gem 'prawn'
-gem 'prawn-svg', '0.34.2'
+gem "prawn"
+gem "prawn-svg", "0.34.2"
 
 # Generate QrCode
-gem 'rqrcode'
+gem "rqrcode"
 
 # Google Cloud storage
-gem 'google-cloud-storage', require: false
+gem "google-cloud-storage", require: false
 
 # Aws sdk s3 for Cloudflare R2 object storage
-gem 'aws-sdk-s3', '1.142.0'
+gem "aws-sdk-s3", "1.142.0"
 
 # A fast JSON parser and Object marshaller as a Ruby gem.
-gem 'oj'
+gem "oj"
 
 # Zip gen
-gem 'rubyzip'
+gem "rubyzip"
 
 # Manage money with rails
-gem 'money-rails'
+gem "money-rails"
 
 # Stripe (payment webhook)
-gem 'stripe'
+gem "stripe"
 
 # JSON API serializer https://github.com/jsonapi-serializer/jsonapi-serializer
-gem 'jsonapi-serializer'
+gem "jsonapi-serializer"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
 group :development, :test do
   # Ruby static code analyzer
-  gem 'rubocop'
-  gem 'rubocop-capybara'
-  gem 'rubocop-faker'
-  gem 'rubocop-minitest'
-  gem 'rubocop-performance'
-  gem 'rubocop-rails'
+  gem "rubocop"
+  gem "rubocop-capybara"
+  gem "rubocop-faker"
+  gem "rubocop-minitest"
+  gem "rubocop-performance"
+  gem "rubocop-rails"
+  gem "rubocop-rails-omakase"
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem "byebug", platforms: %i[mri mingw x64_mingw]
   # Small gem which causes rails console to open pry
-  gem 'pry-doc'
-  gem 'pry-rails'
+  gem "pry-doc"
+  gem "pry-rails"
 end
 
 group :development do
-  gem 'listen'
+  gem "listen"
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-  gem 'spring-watcher-listen'
+  gem "spring"
+  gem "spring-watcher-listen"
 
   # Open mail in browser rather than send real email
-  gem 'letter_opener'
+  gem "letter_opener"
 
   # Capistrano
-  gem 'capistrano'
-  gem 'capistrano3-puma'
-  gem 'capistrano-bundler'
-  gem 'capistrano-rails'
-  gem 'capistrano-rbenv'
-  gem 'capistrano-sidekiq'
+  gem "capistrano"
+  gem "capistrano3-puma"
+  gem "capistrano-bundler"
+  gem "capistrano-rails"
+  gem "capistrano-rbenv"
+  gem "capistrano-sidekiq"
   # Deployment whit ed25519
-  gem 'bcrypt_pbkdf'
-  gem 'ed25519'
+  gem "bcrypt_pbkdf"
+  gem "ed25519"
 
   # Bundler leak memory
-  gem 'bundler-leak'
+  gem "bundler-leak"
 end
 
 group :test do
-  gem 'minitest', '5.27' # unpinned minitest version when upgrade to rails 8.0.4+
+  gem "minitest", "5.27" # unpinned minitest version when upgrade to rails 8.0.4+
   # Adds support for Capybara system testing and selenium driver
-  gem 'capybara'
-  gem 'selenium-webdriver'
+  gem "capybara"
+  gem "selenium-webdriver"
   # Test coverage : https://github.com/simplecov-ruby/simplecov
-  gem 'simplecov', require: false
+  gem "simplecov", require: false
   # Easy installation and use of web drivers to run system tests with browsers
-  gem 'webdrivers'
+  gem "webdrivers"
 end

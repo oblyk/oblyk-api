@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -19,7 +19,7 @@ module Api
         @admin_headers = api_headers(user: :super_admin_user)
       end
 
-      test 'should get index' do
+      test "should get index" do
         get api_v1_gym_contest_contest_teams_url(@gym, @contest), headers: @public_headers
 
         assert_response :success
@@ -28,21 +28,21 @@ module Api
         assert_kind_of Array, json_response
       end
 
-      test 'should show contest_team' do
+      test "should show contest_team" do
         get api_v1_gym_contest_contest_team_url(@gym, @contest, @team), headers: @public_headers
 
         assert_response :success
         json_response = response.parsed_body
 
-        assert_equal @team.name, json_response['name']
+        assert_equal @team.name, json_response["name"]
       end
 
-      test 'should create contest_team' do
-        assert_difference('ContestTeam.count') do
+      test "should create contest_team" do
+        assert_difference("ContestTeam.count") do
           post api_v1_gym_contest_contest_teams_url(@gym, @contest),
                params: {
                  contest_team: {
-                   name: 'New Team'
+                   name: "New Team"
                  }
                },
                headers: @user_headers,
@@ -51,36 +51,36 @@ module Api
         assert_response :success
       end
 
-      test 'should update contest_team' do
+      test "should update contest_team" do
         put api_v1_gym_contest_contest_team_url(@gym, @contest, @team),
-            params: { contest_team: { name: 'Updated Team Name' } },
+            params: { contest_team: { name: "Updated Team Name" } },
             headers: @admin_headers,
             as: :json
 
         assert_response :success
         @team.reload
 
-        assert_equal 'Updated Team Name', @team.name
+        assert_equal "Updated Team Name", @team.name
       end
 
-      test 'should not update contest_team for non admin' do
+      test "should not update contest_team for non admin" do
         put api_v1_gym_contest_contest_team_url(@gym, @contest, @team),
-            params: { contest_team: { name: 'Unauthorized Update' } },
+            params: { contest_team: { name: "Unauthorized Update" } },
             headers: @user_headers,
             as: :json
 
         assert_response :forbidden
       end
 
-      test 'should destroy contest_team' do
-        assert_difference('ContestTeam.count', -1) do
+      test "should destroy contest_team" do
+        assert_difference("ContestTeam.count", -1) do
           delete api_v1_gym_contest_contest_team_url(@gym, @contest, @team), headers: @admin_headers, as: :json
         end
         assert_response :success
       end
 
-      test 'should not destroy contest_team for non admin' do
-        assert_no_difference('ContestTeam.count') do
+      test "should not destroy contest_team for non admin" do
+        assert_no_difference("ContestTeam.count") do
           delete api_v1_gym_contest_contest_team_url(@gym, @contest, @team), headers: @user_headers, as: :json
         end
         assert_response :forbidden

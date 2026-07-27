@@ -12,7 +12,7 @@ class GymRouteAscentsMapper
     if routes.is_a?(Array)
       mapper
     else
-      self.routes = [routes]
+      self.routes = [ routes ]
       mapper.first
     end
   end

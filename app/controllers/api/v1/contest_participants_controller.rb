@@ -29,9 +29,9 @@ module Api
         created_count = 0
         already_imported_count = 0
         errors = []
-        send_email = params[:contest_participant][:send_email] == 'true'
+        send_email = params[:contest_participant][:send_email] == "true"
 
-        CSV.foreach(params[:contest_participant][:file].path, col_sep: ';') do |row|
+        CSV.foreach(params[:contest_participant][:file].path, col_sep: ";") do |row|
           if first_row
             first_row = false
             next
@@ -40,7 +40,7 @@ module Api
 
           first_name = row[0]&.strip
           last_name = row[1]&.strip
-          date_of_birth = row[2]&.strip || ''
+          date_of_birth = row[2]&.strip || ""
           case date_of_birth
           when /^\d{1,2}\s[a-zéû]+\s\d{4}$/
             dates = date_of_birth.split
@@ -54,8 +54,8 @@ module Api
           end
           email = row[3]&.strip
           genre = row[4]&.strip
-          genre = 'male' if genre == 'homme'
-          genre = 'female' if genre == 'femme'
+          genre = "male" if genre == "homme"
+          genre = "female" if genre == "femme"
           category_name = row[5]&.strip
           wave_name = row[6]&.strip
 
@@ -135,13 +135,13 @@ module Api
       end
 
       def import_template
-        header = CSV.generate(headers: true, encoding: 'utf-8', col_sep: ';') do |csv|
+        header = CSV.generate(headers: true, encoding: "utf-8", col_sep: ";") do |csv|
           head = [
-            'Prénom',
-            'Nom de famille',
-            'Date de naissance',
-            'Email',
-            'Genre (homme, femme)'
+            "Prénom",
+            "Nom de famille",
+            "Date de naissance",
+            "Email",
+            "Genre (homme, femme)"
           ]
           head << "Catégorie (#{@contest.contest_categories.pluck(:name).join(', ')})"
           head << "Vague (#{@contest.contest_waves.pluck(:name).join(', ')})" if @contest.contest_waves.any?
@@ -160,7 +160,7 @@ module Api
         token = params[:id].sub(/(.*)-/, '\1.')
         participant = @contest.contest_participants.find_by token: token
         unless participant
-          render json: 'no_found', status: :not_found
+          render json: "no_found", status: :not_found
           return
         end
 
@@ -219,7 +219,7 @@ module Api
 
       def update
         if @contest_participant.update(contest_participant_params)
-          broadcast_contest @contest_participant, 'UpdateParticipant'
+          broadcast_contest @contest_participant, "UpdateParticipant"
           render json: @contest_participant.detail_to_json, status: :ok
         else
           render json: { error: @contest_participant.errors }, status: :unprocessable_content
@@ -233,20 +233,20 @@ module Api
 
       def tombola
         types = {
-          open: 'OpenTombolaModal',
-          close: 'CloseTombolaModal',
-          launch: 'LaunchTombola'
+          open: "OpenTombolaModal",
+          close: "CloseTombolaModal",
+          launch: "LaunchTombola"
         }
         broadcast_type = types[params[:type].to_sym]
         participant = nil
 
-        if broadcast_type == 'LaunchTombola'
+        if broadcast_type == "LaunchTombola"
           contest_waves = params[:filters].fetch(:contest_wave_ids, [])
           contest_categories = params[:filters].fetch(:contest_category_ids, [])
           participant = @contest.contest_participants.where(tombola_winner: false)
           participant = participant.where(contest_wave_id: contest_waves) if contest_waves.present?
           participant = participant.where(contest_category_id: contest_categories) if contest_categories.present?
-          participant = participant.order(Arel.sql('RAND()')).first
+          participant = participant.order(Arel.sql("RAND()")).first
           if participant
             participant.update_column :tombola_winner, true
             ActionCable.server.broadcast "contest_rankers_#{@contest.id}", {
@@ -302,8 +302,8 @@ module Api
         not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).none?
       end
 
-      def broadcast_contest(participant, type = 'NewParticipant')
-        return if ENV['ACTIVE_CONTEST_BROADCAST'] == 'false'
+      def broadcast_contest(participant, type = "NewParticipant")
+        return if ENV["ACTIVE_CONTEST_BROADCAST"] == "false"
 
         ActionCable.server.broadcast "contest_rankers_#{@contest.id}", {
           type: type,

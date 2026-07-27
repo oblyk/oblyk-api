@@ -4,7 +4,7 @@ module Deactivable
   extend ActiveSupport::Concern
 
   included do
-    scope :activated, -> { where('`deactivated_at` IS NULL OR `deactivated_at` > ?', Time.current) }
+    scope :activated, -> { where("`deactivated_at` IS NULL OR `deactivated_at` > ?", Time.current) }
     scope :deactivated, -> { where.not(deactivated_at: nil) }
   end
 

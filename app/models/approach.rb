@@ -21,14 +21,14 @@ class Approach < ApplicationRecord
 
   def to_geo_json(minimalistic: false)
     features = {
-      type: 'Feature',
+      type: "Feature",
       properties: {
-        type: 'Approach',
+        type: "Approach",
         id: id,
         crag_id: crag_id,
         icon: nil
       },
-      geometry: { type: 'LineString', coordinates: revers_lat_lng }
+      geometry: { type: "LineString", coordinates: revers_lat_lng }
     }
     unless minimalistic
       features[:properties].merge!(
@@ -51,7 +51,7 @@ class Approach < ApplicationRecord
   def walking_time
     return if path_metadata.blank?
 
-    path_metadata.last['cumulative_time']
+    path_metadata.last["cumulative_time"]
   end
 
   def elevations_form_api
@@ -70,13 +70,13 @@ class Approach < ApplicationRecord
   def elevation_start
     return if path_metadata.blank?
 
-    path_metadata.first['elevation']
+    path_metadata.first["elevation"]
   end
 
   def elevation_end
     return if path_metadata.blank?
 
-    path_metadata.last['elevation']
+    path_metadata.last["elevation"]
   end
 
   def positive_drop
@@ -132,8 +132,8 @@ class Approach < ApplicationRecord
     path_metadata.each_with_index do |point, index|
       next if index.zero?
 
-      previous_elevation = path_metadata[index - 1]['elevation']
-      elevation = point['elevation']
+      previous_elevation = path_metadata[index - 1]["elevation"]
+      elevation = point["elevation"]
       drop += elevation - previous_elevation if elevation > previous_elevation && type == :positive
       drop += elevation - previous_elevation if elevation < previous_elevation && type == :negative
     end
@@ -153,16 +153,16 @@ class Approach < ApplicationRecord
 
     elevations.each_with_index do |elevation, index|
       if index != 0
-        location = elevation['location']
-        previous_location = elevations[index - 1]['location']
-        elevation_drop = elevation['elevation'] - elevations[index - 1]['elevation']
+        location = elevation["location"]
+        previous_location = elevations[index - 1]["location"]
+        elevation_drop = elevation["elevation"] - elevations[index - 1]["elevation"]
         distance_bwt = distance(
-          [location['lat'], location['lng']],
-          [previous_location['lat'], previous_location['lng']]
+          [ location["lat"], location["lng"] ],
+          [ previous_location["lat"], previous_location["lng"] ]
         )
         developed_distance_bwt = distance(
-          [location['lat'], location['lng']],
-          [previous_location['lat'], previous_location['lng']],
+          [ location["lat"], location["lng"] ],
+          [ previous_location["lat"], previous_location["lng"] ],
           elevation_drop
         )
         cumulative_distance += distance_bwt
@@ -170,9 +170,9 @@ class Approach < ApplicationRecord
         developed_distance += developed_distance_bwt
       end
       metadata << {
-        latitude: elevation['location']['lat'],
-        longitude: elevation['location']['lng'],
-        elevation: elevation['elevation'].round,
+        latitude: elevation["location"]["lat"],
+        longitude: elevation["location"]["lng"],
+        elevation: elevation["elevation"].round,
         cumulative_distance: cumulative_distance.round,
         cumulative_time: cumulative_time.round
       }
@@ -208,7 +208,7 @@ class Approach < ApplicationRecord
 
   def revers_lat_lng
     polyline.map do |coordinates|
-      [coordinates[1], coordinates[0]]
+      [ coordinates[1], coordinates[0] ]
     end
   end
 

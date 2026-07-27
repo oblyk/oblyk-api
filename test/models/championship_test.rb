@@ -1,39 +1,39 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ChampionshipTest < ActiveSupport::TestCase
   setup do
     @championship = championships(:championship_1)
   end
 
-  test 'should be valid' do
+  test "should be valid" do
     assert_predicate @championship, :valid?
   end
 
-  test 'should be invalid without name' do
+  test "should be invalid without name" do
     @championship.name = nil
 
     assert_not @championship.valid?
   end
 
-  test 'should belong to gym' do
+  test "should belong to gym" do
     assert_instance_of Gym, @championship.gym
   end
 
-  test 'should have many championship_contests' do
+  test "should have many championship_contests" do
     assert_operator @championship.championship_contests.count, :>=, 1
   end
 
-  test 'should have many contests' do
+  test "should have many contests" do
     assert_operator @championship.contests.count, :>=, 1
   end
 
-  test 'should have many championship_categories' do
+  test "should have many championship_categories" do
     assert_operator @championship.championship_categories.count, :>=, 1
   end
 
-  test 'summary_to_json returns expected structure' do
+  test "summary_to_json returns expected structure" do
     json = @championship.summary_to_json
 
     assert_equal @championship.id, json[:id]
@@ -42,7 +42,7 @@ class ChampionshipTest < ActiveSupport::TestCase
     assert json.key?(:gym)
   end
 
-  test 'detail_to_json returns expected structure' do
+  test "detail_to_json returns expected structure" do
     json = @championship.detail_to_json
 
     assert_equal @championship.id, json[:id]
@@ -50,13 +50,13 @@ class ChampionshipTest < ActiveSupport::TestCase
     assert json.key?(:gym)
   end
 
-  test 'results returns expected structure' do
+  test "results returns expected structure" do
     mock_results = [
       {
         category_id: contest_categories(:category_senior).id,
-        genre: 'male',
+        genre: "male",
         participants: [
-          { first_name: 'John', last_name: 'Doe', date_of_birth: '1990-01-01', global_rank: 1 }
+          { first_name: "John", last_name: "Doe", date_of_birth: "1990-01-01", global_rank: 1 }
         ]
       }
     ]

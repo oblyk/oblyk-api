@@ -15,7 +15,7 @@ class UserApplication < ApplicationRecord
       type: type,
       status: status
     }
-    data[:ffme_licence_number] = ffme_licence_number if type == 'UserApplicationMyCompet'
+    data[:ffme_licence_number] = ffme_licence_number if type == "UserApplicationMyCompet"
     data
   end
 

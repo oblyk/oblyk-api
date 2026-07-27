@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -14,7 +14,7 @@ module Api
         @user_headers = api_headers(user: :gym_route_setter_user)
       end
 
-      test 'should get index' do
+      test "should get index" do
         get api_v1_gym_indoor_subscriptions_url(gym_id: @gym.id), headers: @admin_headers
 
         assert_response :success
@@ -23,24 +23,24 @@ module Api
         assert_kind_of Array, json_response
       end
 
-      test 'should show indoor subscription' do
+      test "should show indoor subscription" do
         get api_v1_gym_indoor_subscription_url(gym_id: @gym.id, id: @indoor_subscription.id), headers: @admin_headers
 
         assert_response :success
         json_response = response.parsed_body
 
-        assert_equal @indoor_subscription.id, json_response['id']
+        assert_equal @indoor_subscription.id, json_response["id"]
       end
 
-      test 'should create indoor subscription' do
-        Stripe::Plan.stub :create, Struct.new(:id).new('plan_123') do
-          Stripe::PaymentLink.stub :create, Struct.new(:id, :url).new('pl_123', 'https://stripe.com/pay') do
-            assert_difference('IndoorSubscription.count', 1) do
+      test "should create indoor subscription" do
+        Stripe::Plan.stub :create, Struct.new(:id).new("plan_123") do
+          Stripe::PaymentLink.stub :create, Struct.new(:id, :url).new("pl_123", "https://stripe.com/pay") do
+            assert_difference("IndoorSubscription.count", 1) do
               post api_v1_gym_indoor_subscriptions_url(gym_id: @gym.id),
                    params: {
                      indoor_subscription: {
                        indoor_subscription_product_id: @product.id,
-                       billing_account_email: 'billing@test.com'
+                       billing_account_email: "billing@test.com"
                      }
                    },
                    headers: @admin_headers, as: :json
@@ -50,7 +50,7 @@ module Api
         end
       end
 
-      test 'should update indoor subscription' do
+      test "should update indoor subscription" do
         patch api_v1_gym_indoor_subscription_url(gym_id: @gym.id, id: @indoor_subscription.id),
               params: {
                 gym: {
@@ -65,23 +65,23 @@ module Api
         assert_equal 6, @indoor_subscription.month_by_occurrence
       end
 
-      test 'should get figures' do
+      test "should get figures" do
         get figures_api_v1_gym_indoor_subscriptions_url(gym_id: @gym.id), headers: @admin_headers
 
         assert_response :success
         json_response = response.parsed_body
 
-        assert json_response.key?('free_trial_is_available')
+        assert json_response.key?("free_trial_is_available")
       end
 
-      test 'should not access if not authorized' do
+      test "should not access if not authorized" do
         other_headers = api_headers(user: :other_user)
         get api_v1_gym_indoor_subscriptions_url(gym_id: @gym.id), headers: other_headers
 
         assert_response :unauthorized
       end
 
-      test 'should not access if user does not have manage_subscription role' do
+      test "should not access if user does not have manage_subscription role" do
         get api_v1_gym_indoor_subscriptions_url(gym_id: @gym.id), headers: @user_headers
 
         assert_response :forbidden

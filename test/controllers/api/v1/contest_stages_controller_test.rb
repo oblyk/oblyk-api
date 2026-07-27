@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -19,7 +19,7 @@ module Api
         @user_headers = api_headers(user: :gym_route_setter_user)
       end
 
-      test 'should get index' do
+      test "should get index" do
         get api_v1_gym_contest_contest_stages_url(@gym, @contest), headers: @public_headers
 
         assert_response :success
@@ -28,25 +28,25 @@ module Api
         assert_kind_of Array, json_response
       end
 
-      test 'should show contest_stage' do
+      test "should show contest_stage" do
         get api_v1_gym_contest_contest_stage_url(@gym, @contest, @contest_stage), headers: @public_headers
 
         assert_response :success
         json_response = response.parsed_body
 
-        assert_equal @contest_stage.name, json_response['name']
+        assert_equal @contest_stage.name, json_response["name"]
       end
 
-      test 'should create contest_stage' do
-        assert_difference('ContestStage.count') do
+      test "should create contest_stage" do
+        assert_difference("ContestStage.count") do
           post api_v1_gym_contest_contest_stages_url(@gym, @contest),
                params: {
                  contest_stage: {
-                   climbing_type: 'bouldering',
-                   name: 'Nouveau Stage',
-                   description: 'Description du stage',
+                   climbing_type: "bouldering",
+                   name: "Nouveau Stage",
+                   description: "Description du stage",
                    stage_order: 4,
-                   default_ranking_type: 'division'
+                   default_ranking_type: "division"
                  }
                },
                headers: @admin_headers,
@@ -55,13 +55,13 @@ module Api
         assert_response :success
       end
 
-      test 'should not create contest_stage for non admin' do
-        assert_no_difference('ContestStage.count') do
+      test "should not create contest_stage for non admin" do
+        assert_no_difference("ContestStage.count") do
           post api_v1_gym_contest_contest_stages_url(@gym, @contest),
                params: {
                  contest_stage: {
-                   climbing_type: 'bouldering',
-                   name: 'Nouveau Stage'
+                   climbing_type: "bouldering",
+                   name: "Nouveau Stage"
                  }
                },
                headers: @user_headers,
@@ -70,20 +70,20 @@ module Api
         assert_response :forbidden
       end
 
-      test 'should update contest_stage' do
+      test "should update contest_stage" do
         put api_v1_gym_contest_contest_stage_url(@gym, @contest, @contest_stage),
-            params: { contest_stage: { name: 'Updated Stage Name' } },
+            params: { contest_stage: { name: "Updated Stage Name" } },
             headers: @admin_headers,
             as: :json
 
         assert_response :success
         @contest_stage.reload
 
-        assert_equal 'Updated Stage Name', @contest_stage.name
+        assert_equal "Updated Stage Name", @contest_stage.name
       end
 
-      test 'should destroy contest_stage' do
-        assert_difference('ContestStage.count', -1) do
+      test "should destroy contest_stage" do
+        assert_difference("ContestStage.count", -1) do
           delete api_v1_gym_contest_contest_stage_url(@gym, @contest, @contest_stage), headers: @admin_headers, as: :json
         end
         assert_response :success

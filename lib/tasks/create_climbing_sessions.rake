@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 namespace :create_climbing_sessions do
-  desc 'Create missing climbing sessions'
+  desc "Create missing climbing sessions"
   task :run, %i[dry_run out] => :environment do |_t, args|
     out = args[:out] || $stdout
-    dry_run = args[:dry_run] != 'false'
+    dry_run = args[:dry_run] != "false"
 
-    out.puts '(dry_run)' if dry_run
+    out.puts "(dry_run)" if dry_run
 
     ascents = Ascent.where(climbing_session_id: nil)
     out.puts "#{ascents.count} to process"
@@ -23,6 +23,6 @@ namespace :create_climbing_sessions do
       end
     end
 
-    out.puts 'End'
+    out.puts "End"
   end
 end

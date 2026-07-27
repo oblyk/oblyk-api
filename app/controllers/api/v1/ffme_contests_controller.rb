@@ -37,7 +37,7 @@ module Api
       end
 
       def link
-        render json: { link: @ffme_contest.link_on_my_compet['urlResultats'] }, status: :ok
+        render json: { link: @ffme_contest.link_on_my_compet["urlResultats"] }, status: :ok
       end
 
       def send_results
@@ -45,7 +45,7 @@ module Api
           @ffme_contest.send_results!
           render json: @ffme_contest.detail_to_json, status: :ok
         else
-          render json: { error: { base: ['ffme_contest_is_not_sendable'] } }, status: :unprocessable_content
+          render json: { error: { base: [ "ffme_contest_is_not_sendable" ] } }, status: :unprocessable_content
         end
       end
 

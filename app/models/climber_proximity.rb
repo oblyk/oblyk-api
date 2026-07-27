@@ -115,13 +115,13 @@ class ClimberProximity
                     ) + " LIMIT #{per_page.to_i} OFFSET #{(page.to_i - 1) * per_page.to_i}"
                   )
     users = User.includes(avatar_attachment: :blob, banner_attachment: :blob)
-                .where(id: results.pluck('id'))
+                .where(id: results.pluck("id"))
                 .group_by(&:id)
 
     results.map do |result|
       build_user(
         result,
-        users[result['id']].first
+        users[result["id"]].first
       )
     end
   end
@@ -140,12 +140,12 @@ class ClimberProximity
         banner: attachment_object(user.banner)
       },
       proximity: {
-        ascent_crags: data['ascent_crags'],
-        ascent_gyms: data['ascent_gyms'],
-        common_friends: data['common_friends'],
-        followed_crags: data['followed_crags'],
-        followed_gyms: data['followed_gyms'],
-        proximity_points: data['proximity_points']
+        ascent_crags: data["ascent_crags"],
+        ascent_gyms: data["ascent_gyms"],
+        common_friends: data["common_friends"],
+        followed_crags: data["followed_crags"],
+        followed_gyms: data["followed_gyms"],
+        proximity_points: data["proximity_points"]
       }
     }
   end

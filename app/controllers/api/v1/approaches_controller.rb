@@ -30,17 +30,17 @@ module Api
 
         # Crag approaches
         @crag.approaches.each do |approach|
-          next if approach.id.to_s == params.fetch('exclude_id', nil)
+          next if approach.id.to_s == params.fetch("exclude_id", nil)
 
           features << approach.to_geo_json
         end
 
         render json: {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           crs: {
-            type: 'name',
+            type: "name",
             properties: {
-              name: 'urn'
+              name: "urn"
             }
           },
           features: features

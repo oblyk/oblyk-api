@@ -71,9 +71,9 @@ module Api
             # Get max grand value
             ascent.sections.each do |section|
               max_grade_value = stats_by_gyms[gym_key][:max_grade][:value]
-              if section['grade_value'].present? && (max_grade_value.blank? || max_grade_value < section['grade_value'])
-                stats_by_gyms[gym_key][:max_grade][:value] = section['grade_value']
-                stats_by_gyms[gym_key][:max_grade][:text] = section['grade']
+              if section["grade_value"].present? && (max_grade_value.blank? || max_grade_value < section["grade_value"])
+                stats_by_gyms[gym_key][:max_grade][:value] = section["grade_value"]
+                stats_by_gyms[gym_key][:max_grade][:text] = section["grade"]
               end
             end
           end
@@ -87,8 +87,8 @@ module Api
           gym_ids = params.fetch(:gym_id, [])
           ascent_status = params.fetch(:ascent_status, [])
           climbing_types = params.fetch(:climbing_types, [])
-          start_date = params.fetch(:start_date, '')
-          end_date = params.fetch(:end_date, '')
+          start_date = params.fetch(:start_date, "")
+          end_date = params.fetch(:end_date, "")
 
           @ascents = @current_user.ascent_gym_routes.made.includes(color_system_line: :color_system)
 
@@ -102,7 +102,7 @@ module Api
           @ascents = @ascents.where(climbing_types: climbing_types) if climbing_types.size.positive?
 
           # Select ascent between dates
-          @ascents = @ascents.where(released_at: [Date.parse(start_date), Date.parse(end_date)]) if start_date.present? && end_date.present?
+          @ascents = @ascents.where(released_at: [ Date.parse(start_date), Date.parse(end_date) ]) if start_date.present? && end_date.present?
         end
       end
     end

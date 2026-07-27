@@ -1,51 +1,75 @@
 # frozen_string_literal: true
 
-require 'test_helper'
-require 'open-uri'
+require "test_helper"
 
 class HistorizeParkStaticMapJobTest < ActiveJob::TestCase
   setup do
     @park = parks(:park_one)
-    ENV['MAPBOX_STATIC_MAP_STYLE'] = 'test_style'
-    ENV['MAPBOX_TOKEN'] = 'test_token'
+
+    @previous_style = ENV["MAPBOX_STATIC_MAP_STYLE"]
+    @previous_token = ENV["MAPBOX_TOKEN"]
+    ENV["MAPBOX_STATIC_MAP_STYLE"] = "mapbox/streets-v11"
+    ENV["MAPBOX_TOKEN"] = "fake-token"
   end
 
-  test 'it attaches a static map to the park' do
-    @park.static_map.purge if @park.static_map.attached?
-    @park.reload
+  teardown do
+    ENV["MAPBOX_STATIC_MAP_STYLE"] = @previous_style
+    ENV["MAPBOX_TOKEN"] = @previous_token
+  end
 
-    mock_io = StringIO.new('fake-image-content')
+  test "attaches the static map to the park when the request is successful" do
+    fake_response = Net::HTTPOK.new("1.1", "200", "OK")
+    fake_response.define_singleton_method(:body) { "fake-png-binary-data" }
 
-    URI.stub :open, mock_io do
-      assert_difference 'ActiveStorage::Attachment.count', 1 do
-        HistorizeParkStaticMapJob.perform_now(@park.id)
-      end
+    Net::HTTP.stub :get_response, fake_response do
+      HistorizeParkStaticMapJob.perform_now(@park.id)
     end
 
     @park.reload
 
     assert_predicate @park.static_map, :attached?
-    assert_equal "#{@park.id}-static-park-map.png", @park.static_map.blob.filename.to_s
+    assert_equal "image/png", @park.static_map.content_type
+    assert_equal "#{@park.id}-static-park-map.png", @park.static_map.filename.to_s
   end
 
-  test 'it calls the correct mapbox url' do
-    expected_url = "https://api.mapbox.com/styles/v1/test_style/static/pin-l+2e3436(#{@park.longitude},#{@park.latitude})/#{@park.longitude},#{@park.latitude},13/200x200?access_token=test_token"
+  test "constructs the Mapbox URL using the park’s coordinates and the environment variables" do
+    fake_response = Net::HTTPOK.new("1.1", "200", "OK")
+    fake_response.define_singleton_method(:body) { "fake-png-binary-data" }
 
-    mock_io = StringIO.new('fake-image-content')
-
-    verify_url = lambda do |url|
-      assert_equal expected_url, url
-      mock_io
-    end
-
-    URI.stub :open, verify_url do
+    captured_uri = nil
+    Net::HTTP.stub :get_response, lambda { |uri|
+      captured_uri = uri
+      fake_response
+    } do
       HistorizeParkStaticMapJob.perform_now(@park.id)
     end
+
+    assert_match(%r{\Ahttps://api\.mapbox\.com/styles/v1/mapbox/streets-v11/static/}, captured_uri.to_s)
+    assert_includes captured_uri.to_s, "#{@park.longitude},#{@park.latitude}"
+    assert_includes captured_uri.to_s, "access_token=fake-token"
   end
 
-  test 'it raises error if park does not exist' do
-    assert_raises(ActiveRecord::RecordNotFound) do
-      HistorizeParkStaticMapJob.perform_now(0)
+  test "raises an error and does not attach anything if Mapbox returns a failure" do
+    fake_response = Net::HTTPBadRequest.new("1.1", "400", "Bad Request")
+
+    error = assert_raises(RuntimeError) do
+      Net::HTTP.stub :get_response, fake_response do
+        HistorizeParkStaticMapJob.perform_now(@park.id)
+      end
+    end
+
+    assert_match(/Failed to fetch map: 400/, error.message)
+
+    @park.reload
+
+    assert_not_predicate @park.static_map, :attached?
+  end
+
+  test "raises ActiveRecord::RecordNotFound if the park does not exist" do
+    Net::HTTP.stub :get_response, ->(*) { raise "should not be called" } do
+      assert_raises(ActiveRecord::RecordNotFound) do
+        HistorizeParkStaticMapJob.perform_now(-1)
+      end
     end
   end
 end

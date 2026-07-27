@@ -33,7 +33,7 @@ class Gym < ApplicationRecord
     training_space
     latitude
     longitude
-  ], if: proc { |_obj| ENV['PAPER_TRAIL'] == 'true' }
+  ], if: proc { |_obj| ENV["PAPER_TRAIL"] == "true" }
 
   RANKING_TYPES = %w[division fixed_points point_by_grade].freeze
   PLAN_LIST = %w[free free_trial full_package].freeze
@@ -84,47 +84,47 @@ class Gym < ApplicationRecord
   after_create_commit :publication_push!
 
   def app_path
-    app_paths.try(:[], 'base')
+    app_paths.try(:[], "base")
   end
 
   def admin_app_path(with_domain: false)
     if with_domain
       "#{ENV.fetch('OBLYK_APP_URL', nil)}#{app_paths.try(:[], 'admin')}"
     else
-      app_paths.try(:[], 'admin')
+      app_paths.try(:[], "admin")
     end
   end
 
   def optimal_spaces_path
-    app_paths.try(:[], 'public_space')
+    app_paths.try(:[], "public_space")
   end
 
   def app_first_spaces_path
-    app_paths.try(:[], 'admin_space')
+    app_paths.try(:[], "admin_space")
   end
 
   def all_championships
-    Championship.where('gym_id = :gym_id OR id IN (SELECT championship_id FROM championship_contests INNER JOIN contests ON championship_contests.contest_id = contests.id WHERE gym_id = :gym_id)', gym_id: id)
+    Championship.where("gym_id = :gym_id OR id IN (SELECT championship_id FROM championship_contests INNER JOIN contests ON championship_contests.contest_id = contests.id WHERE gym_id = :gym_id)", gym_id: id)
   end
 
   def location
-    [latitude, longitude]
+    [ latitude, longitude ]
   end
 
   def to_geo_json
     Rails.cache.fetch("#{cache_key_with_version}/geo_json_gym", expires_in: 28.days) do
       {
-        type: 'Feature',
+        type: "Feature",
         properties: {
-          type: 'Gym',
+          type: "Gym",
           id: id,
           name: name,
-          icon: 'gym-marker',
+          icon: "gym-marker",
           attachments: {
             logo: attachment_object(logo)
           }
         },
-        geometry: { type: 'Point', coordinates: [Float(longitude), Float(latitude), 0.0] }
+        geometry: { type: "Point", coordinates: [ Float(longitude), Float(latitude), 0.0 ] }
       }
     end
   end
@@ -134,39 +134,39 @@ class Gym < ApplicationRecord
   end
 
   def administered!
-    self.boulder_ranking ||= 'division'
-    self.sport_climbing_ranking ||= 'point_by_grade'
-    self.pan_ranking ||= 'division'
+    self.boulder_ranking ||= "division"
+    self.sport_climbing_ranking ||= "point_by_grade"
+    self.pan_ranking ||= "division"
     self.assigned_at ||= Time.current
-    self.plan ||= 'free'
+    self.plan ||= "free"
     init_gym_levels
     init_ascents_multiplier
     save
   end
 
   def climbing_key
-    key = ''
-    key += bouldering || pan ? '1' : '0'
-    key += sport_climbing ? '1' : '0'
-    key += fun_climbing ? '1' : '0'
+    key = ""
+    key += bouldering || pan ? "1" : "0"
+    key += sport_climbing ? "1" : "0"
+    key += fun_climbing ? "1" : "0"
     key
   end
 
   def climbing_types
     types = []
-    types << 'bouldering' if bouldering?
-    types << 'sport_climbing' if sport_climbing?
-    types << 'pan' if pan?
-    types << 'fun_climbing' if fun_climbing?
-    types << 'training_space' if training_space?
+    types << "bouldering" if bouldering?
+    types << "sport_climbing" if sport_climbing?
+    types << "pan" if pan?
+    types << "fun_climbing" if fun_climbing?
+    types << "training_space" if training_space?
     types
   end
 
   def climbable_types
     types = []
-    types << 'bouldering' if bouldering?
-    types << 'sport_climbing' if sport_climbing?
-    types << 'pan' if pan?
+    types << "bouldering" if bouldering?
+    types << "sport_climbing" if sport_climbing?
+    types << "pan" if pan?
     types
   end
 
@@ -252,7 +252,7 @@ class Gym < ApplicationRecord
         have_indoor_subscriptions: indoor_subscriptions.any?,
         subscription_possibility: subscription_possibility,
         levels: levels,
-        last_publication_at: Publication.where(publishable_type: 'Gym', publishable_id: id).maximum(:published_at),
+        last_publication_at: Publication.where(publishable_type: "Gym", publishable_id: id).maximum(:published_at),
         history: {
           created_at: created_at,
           updated_at: updated_at
@@ -267,13 +267,13 @@ class Gym < ApplicationRecord
 
   def init_gym_levels
     gym_levels << GymLevel.new(climbing_type: Climb::BOULDERING, grade_system: nil, level_representation: GymLevel::TAG_AND_HOLD_REPRESENTATION) unless GymLevel.exists?(gym_id: id, climbing_type: Climb::BOULDERING)
-    gym_levels << GymLevel.new(climbing_type: Climb::SPORT_CLIMBING, grade_system: 'french', level_representation: GymLevel::HOLD_REPRESENTATION) unless GymLevel.exists?(gym_id: id, climbing_type: Climb::SPORT_CLIMBING)
-    gym_levels << GymLevel.new(climbing_type: Climb::PAN, grade_system: 'french', level_representation: GymLevel::TAG_REPRESENTATION) unless GymLevel.exists?(gym_id: id, climbing_type: Climb::PAN)
+    gym_levels << GymLevel.new(climbing_type: Climb::SPORT_CLIMBING, grade_system: "french", level_representation: GymLevel::HOLD_REPRESENTATION) unless GymLevel.exists?(gym_id: id, climbing_type: Climb::SPORT_CLIMBING)
+    gym_levels << GymLevel.new(climbing_type: Climb::PAN, grade_system: "french", level_representation: GymLevel::TAG_REPRESENTATION) unless GymLevel.exists?(gym_id: id, climbing_type: Climb::PAN)
   end
 
   def init_ascents_multiplier
     ascents_multiplier = {}
-    [Climb::BOULDERING, Climb::SPORT_CLIMBING, Climb::PAN].each do |type|
+    [ Climb::BOULDERING, Climb::SPORT_CLIMBING, Climb::PAN ].each do |type|
       ascents_multiplier[type] = {
         onsight: 1.1,
         flash: 1.05,
@@ -288,9 +288,9 @@ class Gym < ApplicationRecord
   end
 
   def update_plan!
-    plan = 'free'
+    plan = "free"
     active_subscription = indoor_subscriptions.active.order(created_at: :desc).first
-    plan = active_subscription.in_free_trial? ? 'free_trial' : 'full_package' if active_subscription.present?
+    plan = active_subscription.in_free_trial? ? "free_trial" : "full_package" if active_subscription.present?
     self.plan = plan
     save
   end
@@ -304,19 +304,19 @@ class Gym < ApplicationRecord
   end
 
   def subscription_possibility
-    return 'start_a_free_trial' if indoor_subscriptions.none?
+    return "start_a_free_trial" if indoor_subscriptions.none?
 
     indoor_subscriptions.each do |subscription|
-      return 'reactivate_my_subscription' if subscription.payment_status == 'waiting_first_payment' && subscription.end_date.present? && subscription.end_date <= Date.current
-      return 'manage_my_subscription' if subscription.payment_status == 'paid' && (subscription.end_date.blank? || subscription.end_date <= Date.current)
+      return "reactivate_my_subscription" if subscription.payment_status == "waiting_first_payment" && subscription.end_date.present? && subscription.end_date <= Date.current
+      return "manage_my_subscription" if subscription.payment_status == "paid" && (subscription.end_date.blank? || subscription.end_date <= Date.current)
     end
-    'resubscribe'
+    "resubscribe"
   end
 
   def publication_push!(publishable_subject = :create)
     Publication.create(
       publishable_id: id,
-      publishable_type: 'Gym',
+      publishable_type: "Gym",
       publishable_subject: publishable_subject,
       published_at: created_at,
       last_updated_at: created_at,
@@ -382,22 +382,22 @@ class Gym < ApplicationRecord
                        .where(gym_sectors: { gym_spaces: { gym_id: id } })
     calculated_point_system = false
     sorts_by = sorts_by&.first
-    if sorts_by['has_fixed_point']&.zero?
-      climbing_types = sorts_by['climbing_types'].split(',')
+    if sorts_by["has_fixed_point"]&.zero?
+      climbing_types = sorts_by["climbing_types"].split(",")
       climbing_types.each do |climbing_type|
-        calculated_point_system = true if %w[division point_by_grade].include?(sport_climbing_ranking) && climbing_type == 'sport_climbing'
-        calculated_point_system = true if %w[division point_by_grade].include?(pan_ranking) && climbing_type == 'pan'
-        calculated_point_system = true if %w[division point_by_grade].include?(boulder_ranking) && climbing_type == 'boulder'
+        calculated_point_system = true if %w[division point_by_grade].include?(sport_climbing_ranking) && climbing_type == "sport_climbing"
+        calculated_point_system = true if %w[division point_by_grade].include?(pan_ranking) && climbing_type == "pan"
+        calculated_point_system = true if %w[division point_by_grade].include?(boulder_ranking) && climbing_type == "boulder"
       end
     end
 
     {
-      difficulty_by_level: sorts_by['has_level']&.positive?,
-      difficulty_by_grade: sorts_by['has_grade']&.positive?,
-      difficulty_by_point: sorts_by['has_fixed_point']&.positive? || calculated_point_system,
-      ascents_count: sorts_by['has_ascents']&.positive?,
-      likes_count: sorts_by['has_likes']&.positive?,
-      comments_count: sorts_by['has_comments']&.positive?
+      difficulty_by_level: sorts_by["has_level"]&.positive?,
+      difficulty_by_grade: sorts_by["has_grade"]&.positive?,
+      difficulty_by_point: sorts_by["has_fixed_point"]&.positive? || calculated_point_system,
+      ascents_count: sorts_by["has_ascents"]&.positive?,
+      likes_count: sorts_by["has_likes"]&.positive?,
+      comments_count: sorts_by["has_comments"]&.positive?
     }
   end
 

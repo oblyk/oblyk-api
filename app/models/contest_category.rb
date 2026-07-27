@@ -3,18 +3,18 @@
 class ContestCategory < ApplicationRecord
   include StripTagable
 
-  U6 = 'u6'
-  U8 = 'u8'
-  U10 = 'u10'
-  U12 = 'u12'
-  U14 = 'u14'
-  U16 = 'u16'
-  U18 = 'u18'
-  U20 = 'u20'
-  SENIOR = 'senior'
-  VETERAN_1 = 'veteran_1'
-  VETERAN_2 = 'veteran_2'
-  BETWEEN_AGE = 'between_age'
+  U6 = "u6"
+  U8 = "u8"
+  U10 = "u10"
+  U12 = "u12"
+  U14 = "u14"
+  U16 = "u16"
+  U18 = "u18"
+  U20 = "u20"
+  SENIOR = "senior"
+  VETERAN_1 = "veteran_1"
+  VETERAN_2 = "veteran_2"
+  BETWEEN_AGE = "between_age"
 
   OBLIGATION_LIST = [
     U6, U8, U10, U12, U14, U16, U18, U20, SENIOR, VETERAN_1, VETERAN_2, BETWEEN_AGE
@@ -145,7 +145,7 @@ class ContestCategory < ApplicationRecord
         else
           times << {
             id: route_group.id,
-            name: 'Mono vague',
+            name: "Mono vague",
             start_time: route_group.start_time,
             end_time: route_group.end_time
           }
@@ -197,11 +197,11 @@ class ContestCategory < ApplicationRecord
   def age_limit_when_between_age
     return unless registration_obligation == BETWEEN_AGE
 
-    errors.add(:registration_obligation, 'must_have_a_minimum_or_maximum_age_specified') if min_age.blank? && max_age.blank?
+    errors.add(:registration_obligation, "must_have_a_minimum_or_maximum_age_specified") if min_age.blank? && max_age.blank?
   end
 
   def validate_capacity
-    errors.add(:capacity, 'must_be_specified') if capacity.blank?
-    errors.add(:capacity, 'cannot_be_odd') if capacity.present? && capacity&.odd?
+    errors.add(:capacity, "must_be_specified") if capacity.blank?
+    errors.add(:capacity, "cannot_be_odd") if capacity.present? && capacity&.odd?
   end
 end

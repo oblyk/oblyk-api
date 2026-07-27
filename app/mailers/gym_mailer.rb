@@ -7,12 +7,12 @@ class GymMailer < ApplicationMailer
     @email = params[:email]
     @justification = params[:justification]
     @name = "#{params[:first_name]} #{params[:last_name]}"
-    subject = t('mailer.gym.administration_request.title', gym_name: @gym.name)
+    subject = t("mailer.gym.administration_request.title", gym_name: @gym.name)
 
     if use_send_in_blue?
-      send_with_send_in_blue(ENV.fetch('SEND_IN_BLUE_REPLY_EMAIL', nil), subject, 'gym_mailer/new_request')
+      send_with_send_in_blue(ENV.fetch("SEND_IN_BLUE_REPLY_EMAIL", nil), subject, "gym_mailer/new_request")
     else
-      mail(to: ENV.fetch('SMTP_USER_NAME', nil), subject: subject)
+      mail(to: ENV.fetch("SMTP_USER_NAME", nil), subject: subject)
     end
   end
 
@@ -21,10 +21,10 @@ class GymMailer < ApplicationMailer
     @email = params[:email]
     @first_name = params[:first_name]
 
-    subject = t('mailer.gym.new_request_confirmation.title', gym_name: @gym.name)
+    subject = t("mailer.gym.new_request_confirmation.title", gym_name: @gym.name)
 
     if use_send_in_blue?
-      send_with_send_in_blue(@email, subject, 'gym_mailer/new_request_confirmation')
+      send_with_send_in_blue(@email, subject, "gym_mailer/new_request_confirmation")
     else
       mail(to: @email, subject: subject)
     end
@@ -36,10 +36,10 @@ class GymMailer < ApplicationMailer
     @gym = params[:gym]
     @email = params[:requested_email]
 
-    subject = t('mailer.gym.new_administrator.title', gym_name: @gym.name)
+    subject = t("mailer.gym.new_administrator.title", gym_name: @gym.name)
 
     if use_send_in_blue?
-      send_with_send_in_blue(@email, subject, 'gym_mailer/new_administrator')
+      send_with_send_in_blue(@email, subject, "gym_mailer/new_administrator")
     else
       mail(to: @email, subject: subject)
     end
@@ -53,7 +53,7 @@ class GymMailer < ApplicationMailer
     subject = "#{@gym.name} & Oblyk"
 
     if use_send_in_blue?
-      send_with_send_in_blue(@email, subject, 'gym_mailer/accept_administrator')
+      send_with_send_in_blue(@email, subject, "gym_mailer/accept_administrator")
     else
       mail(to: @email, subject: subject)
     end
@@ -67,7 +67,7 @@ class GymMailer < ApplicationMailer
 
     subject = "Oblyk, rapport de #{I18n.l(@start_date, format: :month_and_year)}"
     if use_send_in_blue?
-      send_with_send_in_blue(@user.email, subject, 'gym_mailer/email_report')
+      send_with_send_in_blue(@user.email, subject, "gym_mailer/email_report")
     else
       mail(to: @user.email, subject: subject)
     end

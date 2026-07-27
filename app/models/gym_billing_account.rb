@@ -27,7 +27,7 @@ class GymBillingAccount < ApplicationRecord
   def create_strip_portal!(gym)
     return if customer_stripe_id.blank?
 
-    Stripe.api_key = ENV.fetch('STRIPE_API_KEY', nil)
+    Stripe.api_key = ENV.fetch("STRIPE_API_KEY", nil)
     Stripe::BillingPortal::Session.create(
       customer: customer_stripe_id,
       return_url: "#{gym.admin_app_path(with_domain: true)}/indoor-subscriptions"

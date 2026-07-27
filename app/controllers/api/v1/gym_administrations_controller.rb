@@ -10,23 +10,23 @@ module Api
       def assigned
         gyms = []
         spaces_count = GymSpace.unscoped
-                               .select('COUNT(*) AS count, gym_spaces.gym_id')
+                               .select("COUNT(*) AS count, gym_spaces.gym_id")
                                .where(deleted_at: nil)
                                .group(:gym_id)
                                .group_by(&:gym_id)
 
         routes_count = GymRoute.unscoped
                                .joins(gym_sector: :gym_space)
-                               .select('COUNT(*) AS count, gym_spaces.gym_id')
+                               .select("COUNT(*) AS count, gym_spaces.gym_id")
                                .where(dismounted_at: nil, gym_spaces: { deleted_at: nil })
-                               .group('gym_spaces.gym_id')
+                               .group("gym_spaces.gym_id")
                                .group_by(&:gym_id)
 
         max_opened = GymRoute.unscoped
                              .joins(gym_sector: :gym_space)
-                             .select('MAX(opened_at) AS max, gym_spaces.gym_id')
+                             .select("MAX(opened_at) AS max, gym_spaces.gym_id")
                              .where(dismounted_at: nil, gym_spaces: { deleted_at: nil })
-                             .group('gym_spaces.gym_id')
+                             .group("gym_spaces.gym_id")
                              .group_by(&:gym_id)
 
         Gym.includes(:gym_spaces, :gym_options, banner_attachment: :blob, logo_attachment: :blob)

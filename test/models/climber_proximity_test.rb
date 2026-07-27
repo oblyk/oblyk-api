@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ClimberProximityTest < ActiveSupport::TestCase
   setup do
@@ -12,16 +12,16 @@ class ClimberProximityTest < ActiveSupport::TestCase
     Follow.delete_all
   end
 
-  test 'initializes with a user' do
+  test "initializes with a user" do
     assert_equal @user, @proximity.user
   end
 
-  test 'returns users with proximity points from common crag ascents' do
+  test "returns users with proximity points from common crag ascents" do
     route = crag_routes(:route_one)
     today = Date.current
 
-    Ascent.create!(user: @user, crag_route: route, released_at: today, ascent_status: 'sent')
-    Ascent.create!(user: @other_user, crag_route: route, released_at: today, ascent_status: 'sent')
+    Ascent.create!(user: @user, crag_route: route, released_at: today, ascent_status: "sent")
+    Ascent.create!(user: @other_user, crag_route: route, released_at: today, ascent_status: "sent")
 
     results = @proximity.results
     match = results.find { |r| r[:id] == @other_user.id }
@@ -31,12 +31,12 @@ class ClimberProximityTest < ActiveSupport::TestCase
     assert_operator match[:proximity][:proximity_points], :>=, 1
   end
 
-  test 'returns users with proximity points from common gym ascents' do
+  test "returns users with proximity points from common gym ascents" do
     gym = gyms(:my_gym)
     today = Date.current
 
-    Ascent.create!(user: @user, gym_id: gym.id, released_at: today, ascent_status: 'sent')
-    Ascent.create!(user: @other_user, gym_id: gym.id, released_at: today, ascent_status: 'sent')
+    Ascent.create!(user: @user, gym_id: gym.id, released_at: today, ascent_status: "sent")
+    Ascent.create!(user: @other_user, gym_id: gym.id, released_at: today, ascent_status: "sent")
 
     results = @proximity.results
     match = results.find { |r| r[:id] == @other_user.id }
@@ -46,12 +46,12 @@ class ClimberProximityTest < ActiveSupport::TestCase
     assert_operator match[:proximity][:proximity_points], :>=, 1
   end
 
-  test 'returns users with proximity points from common friends' do
+  test "returns users with proximity points from common friends" do
     friend = User.new(
-      first_name: 'Common',
-      last_name: 'Friend',
-      email: 'friend@test.com',
-      password: 'password123',
+      first_name: "Common",
+      last_name: "Friend",
+      email: "friend@test.com",
+      password: "password123",
       uuid: SecureRandom.uuid
     )
     friend.save(validate: false)
@@ -70,7 +70,7 @@ class ClimberProximityTest < ActiveSupport::TestCase
     assert_equal 2, match[:proximity][:proximity_points]
   end
 
-  test 'returns users with proximity points from followed crags' do
+  test "returns users with proximity points from followed crags" do
     crag = crags(:rocher_des_aures)
 
     Follow.create!(user: @user, followable: crag, accepted_at: Time.current)
@@ -84,7 +84,7 @@ class ClimberProximityTest < ActiveSupport::TestCase
     assert_in_delta(0.1, match[:proximity][:proximity_points].to_f)
   end
 
-  test 'returns users with proximity points from followed gyms' do
+  test "returns users with proximity points from followed gyms" do
     gym = gyms(:my_gym)
 
     Follow.create!(user: @user, followable: gym, accepted_at: Time.current)
@@ -98,7 +98,7 @@ class ClimberProximityTest < ActiveSupport::TestCase
     assert_in_delta(0.1, match[:proximity][:proximity_points].to_f)
   end
 
-  test 'excludes users already followed' do
+  test "excludes users already followed" do
     crag = crags(:rocher_des_aures)
     Follow.create!(user: @user, followable: crag, accepted_at: Time.current)
     Follow.create!(user: @other_user, followable: crag, accepted_at: Time.current)
@@ -110,13 +110,13 @@ class ClimberProximityTest < ActiveSupport::TestCase
     assert_not(@proximity.results.any? { |r| r[:id] == @other_user.id })
   end
 
-  test 'respects limit and offset' do
+  test "respects limit and offset" do
     3.times do |i|
       u = User.new(
         first_name: "User#{i}",
-        last_name: 'Test',
+        last_name: "Test",
         email: "user#{i}@test.com",
-        password: 'password123',
+        password: "password123",
         uuid: SecureRandom.uuid
       )
       u.save(validate: false)

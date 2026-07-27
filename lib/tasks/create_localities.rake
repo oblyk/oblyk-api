@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 namespace :create_localities do
-  desc 'Create new localities'
+  desc "Create new localities"
   task :exec, %i[dry_run out] => :environment do |_t, args|
     out = args[:out] || $stdout
-    dry_run = args[:dry_run] != 'false'
+    dry_run = args[:dry_run] != "false"
 
-    out.puts '(dry_run)' if dry_run
+    out.puts "(dry_run)" if dry_run
 
     users = User.where(deleted_at: nil).where.not(partner_latitude: nil)
     users_count = users.count
@@ -20,7 +20,7 @@ namespace :create_localities do
       locality_user.create_by_reverse_geocoding! unless dry_run
     end
 
-    out.puts 'End'
+    out.puts "End"
   end
 
   task :update_last_check, %i[out] => :environment do |_t, args|
@@ -37,6 +37,6 @@ namespace :create_localities do
       user.update_column :last_partner_check_at, user.last_activity_at
     end
 
-    out.puts 'End'
+    out.puts "End"
   end
 end

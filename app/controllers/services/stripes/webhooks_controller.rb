@@ -4,8 +4,8 @@ module Services
   module Stripes
     class WebhooksController < ApplicationController
       def index
-        Stripe.api_key = ENV.fetch('STRIPE_API_KEY', nil)
-        endpoint_secret = ENV.fetch('STRIPE_ENDPOINT_SECRET', nil)
+        Stripe.api_key = ENV.fetch("STRIPE_API_KEY", nil)
+        endpoint_secret = ENV.fetch("STRIPE_ENDPOINT_SECRET", nil)
 
         payload = request.raw_post
 
@@ -22,7 +22,7 @@ module Services
         # Check if webhook signing is configured.
         if endpoint_secret
           # Retrieve the event by verifying the signature using the raw body and secret.
-          signature = request.env['HTTP_STRIPE_SIGNATURE']
+          signature = request.env["HTTP_STRIPE_SIGNATURE"]
           begin
             event = Stripe::Webhook.construct_event(
               payload, signature, endpoint_secret
@@ -35,9 +35,9 @@ module Services
 
         # Handle the event
         case event.type
-        when 'checkout.session.completed'
+        when "checkout.session.completed"
           StripeService.fulfill_checkout(event.data.object.id)
-        when 'customer.subscription.updated'
+        when "customer.subscription.updated"
           StripeService.customer_subscription_update(event)
         end
 

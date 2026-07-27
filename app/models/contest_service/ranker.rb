@@ -16,34 +16,34 @@ module ContestService
                                              .where(contest_route_groups: { contest_stage_step_id: step.id })
 
       self.ascents = ascents.where(contest_participants: { genre: genre }) unless unisex
-      self.ascents = ascents.where(realised: true) if [Constant::DIVISION, Constant::DIVISION_AND_ATTEMPT, Constant::FIXED_POINTS].include?(step.ranking_type)
-      self.ascents = ascents.select(:id, :contest_participant_id, :contest_route_id) if [Constant::DIVISION].include?(step.ranking_type)
-      self.ascents = ascents.select(:id, :contest_participant_id, :contest_route_id, :top_attempt, :zone_1_attempt) if [Constant::DIVISION_AND_ZONE].include?(step.ranking_type)
-      self.ascents = ascents.joins(contest_route: { contest_route_group: :contest_stage_step }).order(Arel.sql('contest_routes.fixed_points DESC')) if [Constant::FIXED_POINTS].include?(step.ranking_type)
-      self.ascents = ascents.joins(contest_route: { contest_route_group: :contest_stage_step }).order(Arel.sql('(contest_participant_ascents.hold_number / contest_routes.number_of_holds * contest_routes.fixed_points) DESC')) if [Constant::POINT_RELATIVE_TO_HIGHEST_HOLD].include?(step.ranking_type)
+      self.ascents = ascents.where(realised: true) if [ Constant::DIVISION, Constant::DIVISION_AND_ATTEMPT, Constant::FIXED_POINTS ].include?(step.ranking_type)
+      self.ascents = ascents.select(:id, :contest_participant_id, :contest_route_id) if [ Constant::DIVISION ].include?(step.ranking_type)
+      self.ascents = ascents.select(:id, :contest_participant_id, :contest_route_id, :top_attempt, :zone_1_attempt) if [ Constant::DIVISION_AND_ZONE ].include?(step.ranking_type)
+      self.ascents = ascents.joins(contest_route: { contest_route_group: :contest_stage_step }).order(Arel.sql("contest_routes.fixed_points DESC")) if [ Constant::FIXED_POINTS ].include?(step.ranking_type)
+      self.ascents = ascents.joins(contest_route: { contest_route_group: :contest_stage_step }).order(Arel.sql("(contest_participant_ascents.hold_number / contest_routes.number_of_holds * contest_routes.fixed_points) DESC")) if [ Constant::POINT_RELATIVE_TO_HIGHEST_HOLD ].include?(step.ranking_type)
       self.ascents_by_participants = {}
 
-      limited = [Constant::FIXED_POINTS, Constant::POINT_RELATIVE_TO_HIGHEST_HOLD].include?(step.ranking_type) && step.ascents_limit.present?
+      limited = [ Constant::FIXED_POINTS, Constant::POINT_RELATIVE_TO_HIGHEST_HOLD ].include?(step.ranking_type) && step.ascents_limit.present?
       ascents.each do |ascent|
         ascents_by_participants[ascent.contest_participant_id] ||= []
         ascents_by_participants[ascent.contest_participant_id] << ascent if !limited || ascents_by_participants[ascent.contest_participant_id].count < step.ascents_limit
       end
 
-      if [Constant::DIVISION, Constant::DIVISION_AND_ATTEMPT, Constant::DIVISION_AND_ZONE].include?(step.ranking_type)
+      if [ Constant::DIVISION, Constant::DIVISION_AND_ATTEMPT, Constant::DIVISION_AND_ZONE ].include?(step.ranking_type)
         self.count_by_routes = ContestParticipantAscent.joins(:contest_participant, contest_route: :contest_route_group)
                                                        .where(contest_participants: { contest_category_id: category.id })
                                                        .where(contest_routes: { disabled_at: nil })
                                                        .where(contest_route_groups: { contest_stage_step_id: step.id })
-        self.count_by_routes = count_by_routes.where(realised: true) if [Constant::DIVISION, Constant::DIVISION_AND_ATTEMPT].include?(step.ranking_type)
-        self.count_by_routes = count_by_routes.where('contest_participant_ascents.top_attempt > 0') if [Constant::DIVISION_AND_ZONE].include?(step.ranking_type)
+        self.count_by_routes = count_by_routes.where(realised: true) if [ Constant::DIVISION, Constant::DIVISION_AND_ATTEMPT ].include?(step.ranking_type)
+        self.count_by_routes = count_by_routes.where("contest_participant_ascents.top_attempt > 0") if [ Constant::DIVISION_AND_ZONE ].include?(step.ranking_type)
         self.count_by_routes = count_by_routes.where(contest_participants: { genre: genre }) unless unisex
-        self.count_by_routes = count_by_routes.group('contest_participant_ascents.contest_route_id').count
+        self.count_by_routes = count_by_routes.group("contest_participant_ascents.contest_route_id").count
       end
       self.score_by_routes = {}
     end
 
     def scores(current_ascent)
-      no_score = { value: nil, details: ['NR'] }
+      no_score = { value: nil, details: [ "NR" ] }
 
       return no_score if current_ascent.blank?
 
@@ -52,7 +52,7 @@ module ContestService
         point = 1000 / count_by_routes[current_ascent.contest_route_id]
         {
           value: point,
-          details: [point]
+          details: [ point ]
         }
       when Constant::DIVISION_AND_ZONE
         point = if current_ascent.top_attempt&.positive?
@@ -65,7 +65,7 @@ module ContestService
         point_with_zone += 0.5 if zone
         {
           value: point_with_zone,
-          details: [point, zone]
+          details: [ point, zone ]
         }
       when Constant::DIVISION_AND_ATTEMPT
         point = if current_ascent.realised?
@@ -81,19 +81,19 @@ module ContestService
         end
         {
           value: value,
-          details: [point, attempt]
+          details: [ point, attempt ]
         }
       when Constant::FIXED_POINTS
         point = current_ascent.contest_route.fixed_points || 0
         {
           value: point,
-          details: [point]
+          details: [ point ]
         }
       when Constant::ATTEMPTS_TO_TOP
         point = 10 - (current_ascent.top_attempt - 1)
         {
           value: point,
-          details: [point]
+          details: [ point ]
         }
       when Constant::ZONE_AND_TOP_REALISED
         top = current_ascent.top_attempt&.positive? || false
@@ -103,7 +103,7 @@ module ContestService
         value = 0.001 if !top && zone
         {
           value: value,
-          details: [top, zone]
+          details: [ top, zone ]
         }
       when Constant::ATTEMPTS_TO_ONE_ZONE_AND_TOP
         top = current_ascent.top_attempt || 0
@@ -115,7 +115,7 @@ module ContestService
         value -= zone / 1000.0
         {
           value: value,
-          details: [top, zone]
+          details: [ top, zone ]
         }
       when Constant::HIGHEST_HOLD
         point = current_ascent.hold_number || 0
@@ -123,7 +123,7 @@ module ContestService
         plus = current_ascent.hold_number_plus ? 1 : 0
         {
           value: point,
-          details: [current_ascent.hold_number || 0, plus]
+          details: [ current_ascent.hold_number || 0, plus ]
         }
       when Constant::POINT_RELATIVE_TO_HIGHEST_HOLD
         hold_number = current_ascent.hold_number || 0
@@ -136,12 +136,12 @@ module ContestService
                 end
         {
           value: point,
-          details: [point.round, hold_number]
+          details: [ point.round, hold_number ]
         }
       when Constant::BEST_TIMES
         second = current_ascent.ascent_time&.seconds_since_midnight
         detail = if second.blank? || second.zero?
-                   '-'
+                   "-"
                  else
                    sec = current_ascent.ascent_time.sec
                    min = current_ascent.ascent_time.min
@@ -150,7 +150,7 @@ module ContestService
                  end
         {
           value: current_ascent.ascent_time ? current_ascent.ascent_time.seconds_since_midnight * -1 : nil,
-          details: [detail]
+          details: [ detail ]
         }
       else
         no_score
@@ -174,11 +174,11 @@ module ContestService
           value += ascent_value
         end
 
-        if [Constant::DIVISION, Constant::ATTEMPTS_TO_TOP, Constant::FIXED_POINTS].include? step.ranking_type
-          details ||= [0]
+        if [ Constant::DIVISION, Constant::ATTEMPTS_TO_TOP, Constant::FIXED_POINTS ].include? step.ranking_type
+          details ||= [ 0 ]
           details[0] += ascent_value if ascent_value.present?
-        elsif [Constant::DIVISION_AND_ZONE].include? step.ranking_type
-          details ||= [0, 0]
+        elsif [ Constant::DIVISION_AND_ZONE ].include? step.ranking_type
+          details ||= [ 0, 0 ]
           if ascent_value.present?
             details[0] += ascent_scores[:details].first
             details[1] += 1 if ascent_scores[:details].second
@@ -188,21 +188,21 @@ module ContestService
           Constant::HIGHEST_HOLD,
           Constant::POINT_RELATIVE_TO_HIGHEST_HOLD
         ].include? step.ranking_type
-          details ||= [0, 0]
+          details ||= [ 0, 0 ]
           if ascent_value.present?
             details[0] += ascent_scores[:details].first
             details[1] += ascent_scores[:details].second
           end
-        elsif [Constant::ATTEMPTS_TO_ONE_ZONE_AND_TOP].include? step.ranking_type
+        elsif [ Constant::ATTEMPTS_TO_ONE_ZONE_AND_TOP ].include? step.ranking_type
           details ||= []
           details << { top: ascent_scores[:details].first, zone: ascent_scores[:details].second }
-        elsif [Constant::ZONE_AND_TOP_REALISED].include? step.ranking_type
-          details ||= [0, 0]
+        elsif [ Constant::ZONE_AND_TOP_REALISED ].include? step.ranking_type
+          details ||= [ 0, 0 ]
           if ascent_value.present?
             details[0] += 1 if ascent_scores[:details].first
             details[1] += 1 if ascent_scores[:details].second
           end
-        elsif [Constant::BEST_TIMES].include? step.ranking_type
+        elsif [ Constant::BEST_TIMES ].include? step.ranking_type
           value = ascent_value if ascent_value.present? && ascent_value != 0 && value < ascent_value
           details ||= []
           details << ascent_scores[:details].first

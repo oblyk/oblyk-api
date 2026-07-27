@@ -16,7 +16,7 @@ module Api
       def favorite_crags
         subscribes = @user.subscribes
                           .includes(:user, followable: { photo: { picture_attachment: :blob }, static_map_attachment: :blob, static_map_banner_attachment: :blob })
-                          .where(followable_type: 'Crag')
+                          .where(followable_type: "Crag")
                           .order(updated_at: :desc)
                           .page(params.fetch(:page, 1))
         render json: subscribes.map(&:summary_to_json), status: :ok
@@ -24,8 +24,8 @@ module Api
 
       def favorite_gyms
         subscribes = @user.subscribes
-                          .includes(:user, followable: [:gym_spaces, :gym_options, { logo_attachment: :blob, banner_attachment: :blob }])
-                          .where(followable_type: 'Gym')
+                          .includes(:user, followable: [ :gym_spaces, :gym_options, { logo_attachment: :blob, banner_attachment: :blob } ])
+                          .where(followable_type: "Gym")
                           .order(updated_at: :desc)
                           .page(params.fetch(:page, 1))
                           .per(params.fetch(:per_page, 25))
@@ -34,12 +34,12 @@ module Api
 
       def subscribes
         page = params.fetch(:page, 1)
-        subscribes = @user.subscribes.includes(followable: { avatar_attachment: :blob }, user: { avatar_attachment: :blob }).where(followable_type: 'User').order(updated_at: :desc).page(page)
+        subscribes = @user.subscribes.includes(followable: { avatar_attachment: :blob }, user: { avatar_attachment: :blob }).where(followable_type: "User").order(updated_at: :desc).page(page)
         render json: subscribes.map(&:summary_to_json), status: :ok
       end
 
       def library
-        subscribes = @user.subscribes.includes(:user, followable: { cover_attachment: :blob }).where(followable_type: 'GuideBookPaper').order(views: :desc)
+        subscribes = @user.subscribes.includes(:user, followable: { cover_attachment: :blob }).where(followable_type: "GuideBookPaper").order(views: :desc)
         render json: subscribes.map(&:summary_to_json), status: :ok
       end
 
@@ -54,7 +54,7 @@ module Api
 
       def ascents_without_guides
         crag_ids = @user.ascended_crags.pluck(:id)
-        library_guides = @user.subscribes.where(followable_type: 'GuideBookPaper').pluck(:followable_id)
+        library_guides = @user.subscribes.where(followable_type: "GuideBookPaper").pluck(:followable_id)
         guides = GuideBookPaper
                  .includes(:guide_book_paper_crags, cover_attachment: :blob)
                  .where(guide_book_paper_crags: { crag_id: crag_ids })
@@ -66,7 +66,7 @@ module Api
       end
 
       def new_guide_books_version
-        subscribe_guides = @user.subscribes.where(followable_type: 'GuideBookPaper').pluck(:followable_id)
+        subscribe_guides = @user.subscribes.where(followable_type: "GuideBookPaper").pluck(:followable_id)
         old_guides = GuideBookPaper
                      .where(id: subscribe_guides)
                      .where.not(next_guide_book_paper_id: subscribe_guides)
@@ -80,7 +80,7 @@ module Api
       end
 
       def library_figures
-        subscribes = @user.subscribes.where(followable_type: 'GuideBookPaper')
+        subscribes = @user.subscribes.where(followable_type: "GuideBookPaper")
         guide_books = GuideBookPaper.includes(:crags).where(id: subscribes.pluck(:followable_id))
 
         crags_count = 0
@@ -172,7 +172,7 @@ module Api
                                .where(id: project_crag_route_ids)
                                .where.not(id: crag_route_ids)
                                .joins(:crag)
-                               .order(Arel.sql('crags.name'))
+                               .order(Arel.sql("crags.name"))
         render json: crag_routes.map { |crag_route| crag_route.summary_to_json(with_crag_in_sector: false) }, status: :ok
       end
 
@@ -188,7 +188,7 @@ module Api
                              photo: { picture_attachment: :blob }
                            )
                            .joins(:crag)
-                           .order(Arel.sql('crags.name'))
+                           .order(Arel.sql("crags.name"))
         render json: crag_routes.map { |crag_route| crag_route.summary_to_json(with_crag_in_sector: false) }, status: :ok
       end
 
@@ -200,11 +200,11 @@ module Api
         end
 
         render json: {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           crs: {
-            type: 'name',
+            type: "name",
             properties: {
-              name: 'urn'
+              name: "urn"
             }
           },
           features: features
@@ -213,7 +213,7 @@ module Api
 
       def subscribes_ascents
         page = params.fetch(:page, 1)
-        subscribe_ids = @user.subscribes.accepted.where(followable_type: 'User').pluck(:followable_id)
+        subscribe_ids = @user.subscribes.accepted.where(followable_type: "User").pluck(:followable_id)
         ascents = AscentCragRoute.made
                                  .where(user_id: subscribe_ids)
                                  .order(created_at: :desc, user_id: :asc)
@@ -303,10 +303,10 @@ module Api
                            .activated
                            .joins(:user, :locality)
                            .where(users: { partner_search: true })
-                           .where('users.last_activity_at > ?', Date.current - 3.years)
+                           .where("users.last_activity_at > ?", Date.current - 3.years)
                            .where.not(user: @current_user)
                            .where(
-                             'ST_DISTANCE_SPHERE(POINT(localities.longitude, localities.latitude), POINT(:lng, :lat)) < :dist',
+                             "ST_DISTANCE_SPHERE(POINT(localities.longitude, localities.latitude), POINT(:lng, :lat)) < :dist",
                              lat: current_user_locality.locality.latitude.to_f,
                              lng: current_user_locality.locality.longitude.to_f,
                              dist: current_user_locality.radius * 1000
@@ -315,7 +315,7 @@ module Api
           level = params.fetch(:level, nil)
           if level
             locality_users = locality_users.where(
-              '(users.grade_min IS NULL OR users.grade_min <= :level) AND (users.grade_max IS NULL OR users.grade_max >= :level)',
+              "(users.grade_min IS NULL OR users.grade_min <= :level) AND (users.grade_max IS NULL OR users.grade_max >= :level)",
               level: level
             )
           end
@@ -329,7 +329,7 @@ module Api
         user_localities = LocalityUser.joins(:user)
                                       .includes(:user, :locality)
                                       .where(id: around_localities)
-                                      .order(Arel.sql('users.last_activity_at DESC, user_id'))
+                                      .order(Arel.sql("users.last_activity_at DESC, user_id"))
                                       .page(params.fetch(:page, 1))
 
         json_user_localities = user_localities.map do |user_locality|
@@ -349,11 +349,11 @@ module Api
         @current_user.locality_users.includes(:locality).find_each do |current_user_locality|
           LocalityUser
             .joins(:user, :locality)
-            .where('users.last_activity_at > ?', Date.current - 3.years)
+            .where("users.last_activity_at > ?", Date.current - 3.years)
             .where(users: { partner_search: true })
             .where.not(user: @current_user)
             .where(
-              'ST_DISTANCE_SPHERE(POINT(localities.longitude, localities.latitude), POINT(:lng, :lat)) < :dist',
+              "ST_DISTANCE_SPHERE(POINT(localities.longitude, localities.latitude), POINT(:lng, :lat)) < :dist",
               lat: current_user_locality.locality.latitude.to_f,
               lng: current_user_locality.locality.longitude.to_f,
               dist: current_user_locality.radius * 1000

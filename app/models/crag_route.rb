@@ -32,7 +32,7 @@ class CragRoute < ApplicationRecord
     incline_type
     reception_type
     start_type
-  ], if: proc { |_obj| ENV['PAPER_TRAIL'] == 'true' }
+  ], if: proc { |_obj| ENV["PAPER_TRAIL"] == "true" }
 
   belongs_to :crag_sector, optional: true, counter_cache: :crag_routes_count, touch: true
   belongs_to :user, optional: true
@@ -91,8 +91,8 @@ class CragRoute < ApplicationRecord
   end
 
   def update_form_ascents!
-    ascents_historization = ENV.fetch('CRAG_ROUTE_ASCENTS_HISTORIZATION', 'false')
-    return if ascents_historization == 'false'
+    ascents_historization = ENV.fetch("CRAG_ROUTE_ASCENTS_HISTORIZATION", "false")
+    return if ascents_historization == "false"
 
     ascent_count = nil
     note_count = nil
@@ -125,7 +125,7 @@ class CragRoute < ApplicationRecord
         hardness_votes[ascent.hardness_status][:count] += 1
       end
 
-      if ascent.ascent_status != 'project'
+      if ascent.ascent_status != "project"
         ascent_count ||= 0
         ascent_count += 1
       end
@@ -137,7 +137,7 @@ class CragRoute < ApplicationRecord
     self.note_count = note_count
     self.difficulty_appreciation = hardness_value ? hardness_value.to_d / hardness_count : nil
     self.ascents_count = ascent_count
-    self.ascent_users_count = AscentCragRoute.select('COUNT(DISTINCT ascents.user_id) AS count')
+    self.ascent_users_count = AscentCragRoute.select("COUNT(DISTINCT ascents.user_id) AS count")
                                              .find_by(
                                                crag_route_id: id,
                                                ascents: { ascent_status: AscentStatus::FIRST_TOP_LIST }
@@ -153,7 +153,7 @@ class CragRoute < ApplicationRecord
   def public_ascents
     ascents = []
     last_ascents_by_user = {}
-    ascent_crag_routes.where.not(private_comment: true).where('ascents.comment IS NOT NULL OR ascents.note IS NOT NULL').find_each do |ascent|
+    ascent_crag_routes.where.not(private_comment: true).where("ascents.comment IS NOT NULL OR ascents.note IS NOT NULL").find_each do |ascent|
       if ascent.comment.present?
         ascents << ascent
       else
@@ -207,7 +207,7 @@ class CragRoute < ApplicationRecord
         photo: {
           id: photo&.id,
           attachments: {
-            picture: attachment_object(photo&.picture, 'CragRoute_picture')
+            picture: attachment_object(photo&.picture, "CragRoute_picture")
           }
         }
       }
@@ -241,28 +241,28 @@ class CragRoute < ApplicationRecord
   def publication_push!(publishable_subject = :new_crag_routes)
     publication = Publication.includes(:publication_attachments).find_by(
       publishable_id: crag_id,
-      publishable_type: 'Crag',
+      publishable_type: "Crag",
       publishable_subject: publishable_subject,
-      published_at: [created_at.all_week]
+      published_at: [ created_at.all_week ]
     )
 
     publication ||= Publication.new(
       publishable_id: crag_id,
-      publishable_type: 'Crag',
+      publishable_type: "Crag",
       publishable_subject: publishable_subject,
       generated: true,
       author_id: user_id
     )
     publication.published_at = created_at
     publication.last_updated_at = created_at
-    publication.publication_attachments << PublicationAttachment.new(attachable_type: 'CragRoute', attachable_id: id)
+    publication.publication_attachments << PublicationAttachment.new(attachable_type: "CragRoute", attachable_id: id)
     publication.save
   end
 
   private
 
   def historize_location
-    self.location = [latitude, longitude]
+    self.location = [ latitude, longitude ]
   end
 
   def format_route_section
@@ -273,22 +273,22 @@ class CragRoute < ApplicationRecord
     receptionable = Climb.receptionable?(climbing_type)
     startable = Climb.startable?(climbing_type)
     sections.each do |section|
-      section_height = section['height'].presence&.to_i
-      section_bolt_count = section['bolt_count'].presence&.to_i
-      grade = Grade.clean_grade(section['grade'])
+      section_height = section["height"].presence&.to_i
+      section_bolt_count = section["bolt_count"].presence&.to_i
+      grade = Grade.clean_grade(section["grade"])
       new_sections << {
-        climbing_type: single_pitch ? climbing_type : section['climbing_type'] || climbing_type,
-        description: single_pitch ? nil : section['description'],
+        climbing_type: single_pitch ? climbing_type : section["climbing_type"] || climbing_type,
+        description: single_pitch ? nil : section["description"],
         grade: grade,
         grade_value: grade.present? ? Grade.to_value(grade) : nil,
         height: single_pitch ? height : section_height,
         bolt_count: boltable ? section_bolt_count : nil,
-        bolt_type: boltable ? section['bolt_type'] : nil,
-        anchor_type: anchorable ? section['anchor_type'] : nil,
-        incline_type: section['incline_type'],
-        start_type: startable ? section['start_type'] : nil,
-        reception_type: receptionable ? section['reception_type'] : nil,
-        tags: section['tags']
+        bolt_type: boltable ? section["bolt_type"] : nil,
+        anchor_type: anchorable ? section["anchor_type"] : nil,
+        incline_type: section["incline_type"],
+        start_type: startable ? section["start_type"] : nil,
+        reception_type: receptionable ? section["reception_type"] : nil,
+        tags: section["tags"]
       }
     end
     self.sections = new_sections
@@ -296,16 +296,16 @@ class CragRoute < ApplicationRecord
 
   def historize_grade_gap
     max_grade_value = Grade::MIN_GRADE
-    max_grade_text = ''
+    max_grade_text = ""
     min_grade_value = Grade::MAX_GRADE
-    min_grade_text = ''
+    min_grade_text = ""
 
     sections.each do |section|
-      max_grade_text = section['grade'] if section['grade_value'] > max_grade_value
-      max_grade_value = section['grade_value'] if section['grade_value'] > max_grade_value
+      max_grade_text = section["grade"] if section["grade_value"] > max_grade_value
+      max_grade_value = section["grade_value"] if section["grade_value"] > max_grade_value
 
-      min_grade_text = section['grade'] if section['grade_value'] < min_grade_value
-      min_grade_value = section['grade_value'] if section['grade_value'] < min_grade_value
+      min_grade_text = section["grade"] if section["grade_value"] < min_grade_value
+      min_grade_value = section["grade_value"] if section["grade_value"] < min_grade_value
     end
 
     self.max_grade_text = max_grade_text
@@ -321,7 +321,7 @@ class CragRoute < ApplicationRecord
   def historize_max_bolt
     max_bolt = nil
     sections.each do |section|
-      max_bolt = section['bolt_count'] if (section['bolt_count'] || 0) > (max_bolt || 0)
+      max_bolt = section["bolt_count"] if (section["bolt_count"] || 0) > (max_bolt || 0)
     end
     self.max_bolt = max_bolt
   end
@@ -337,27 +337,27 @@ class CragRoute < ApplicationRecord
   def validate_sections
     sections.each do |section|
       # valid types
-      if section['grade']
-        errors.add(:grade, I18n.t('activerecord.errors.messages.inclusion')) unless Grade.valid? section['grade']
+      if section["grade"]
+        errors.add(:grade, I18n.t("activerecord.errors.messages.inclusion")) unless Grade.valid? section["grade"]
       else
-        errors.add(:grade, I18n.t('activerecord.errors.messages.required'))
+        errors.add(:grade, I18n.t("activerecord.errors.messages.required"))
       end
 
-      if section['climbing_type']
-        errors.add(:climbing_type, I18n.t('activerecord.errors.messages.inclusion')) if Climb::CRAG_LIST.exclude?(section['climbing_type'])
+      if section["climbing_type"]
+        errors.add(:climbing_type, I18n.t("activerecord.errors.messages.inclusion")) if Climb::CRAG_LIST.exclude?(section["climbing_type"])
       else
-        errors.add(:climbing_type, I18n.t('activerecord.errors.messages.required'))
+        errors.add(:climbing_type, I18n.t("activerecord.errors.messages.required"))
       end
 
-      errors.add(:bolt_type, I18n.t('activerecord.errors.messages.inclusion')) if section['bolt_type'].present? && Bolt::LIST.exclude?(section['bolt_type'])
-      errors.add(:start_type, I18n.t('activerecord.errors.messages.inclusion')) if section['start_type'].present? && Start::LIST.exclude?(section['start_type'])
-      errors.add(:anchor_type, I18n.t('activerecord.errors.messages.inclusion')) if section['anchor_type'].present? && Anchor::LIST.exclude?(section['anchor_type'])
-      errors.add(:incline_type, I18n.t('activerecord.errors.messages.inclusion')) if section['incline_type'].present? && Incline::LIST.exclude?(section['incline_type'])
-      errors.add(:reception_type, I18n.t('activerecord.errors.messages.inclusion')) if section['reception_type'].present? && Reception::LIST.exclude?(section['reception_type'])
+      errors.add(:bolt_type, I18n.t("activerecord.errors.messages.inclusion")) if section["bolt_type"].present? && Bolt::LIST.exclude?(section["bolt_type"])
+      errors.add(:start_type, I18n.t("activerecord.errors.messages.inclusion")) if section["start_type"].present? && Start::LIST.exclude?(section["start_type"])
+      errors.add(:anchor_type, I18n.t("activerecord.errors.messages.inclusion")) if section["anchor_type"].present? && Anchor::LIST.exclude?(section["anchor_type"])
+      errors.add(:incline_type, I18n.t("activerecord.errors.messages.inclusion")) if section["incline_type"].present? && Incline::LIST.exclude?(section["incline_type"])
+      errors.add(:reception_type, I18n.t("activerecord.errors.messages.inclusion")) if section["reception_type"].present? && Reception::LIST.exclude?(section["reception_type"])
 
       # Valid numerics
-      errors.add(:height, I18n.t('activerecord.errors.messages.greater_than')) if section['height'].present? && section['height'].negative?
-      errors.add(:bolt_count, I18n.t('activerecord.errors.messages.greater_than')) if section['bolt_count'].present? && section['bolt_count'].negative?
+      errors.add(:height, I18n.t("activerecord.errors.messages.greater_than")) if section["height"].present? && section["height"].negative?
+      errors.add(:bolt_count, I18n.t("activerecord.errors.messages.greater_than")) if section["bolt_count"].present? && section["bolt_count"].negative?
     end
   end
 end

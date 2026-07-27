@@ -57,7 +57,7 @@ class Area < ApplicationRecord
           illustrable_type: photo&.illustrable_type,
           illustrable_name: photo&.illustrable&.rich_name,
           attachments: {
-            picture: attachment_object(photo&.picture, 'Area_picture')
+            picture: attachment_object(photo&.picture, "Area_picture")
           }
         }
       }

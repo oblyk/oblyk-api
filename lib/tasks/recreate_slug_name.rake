@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 namespace :recreate_slug_name do
-  desc 'Slug Name refactor'
+  desc "Slug Name refactor"
   task :exec, %i[dry_run out] => :environment do |_t, args|
     out = args[:out] || $stdout
-    dry_run = args[:dry_run] != 'false'
+    dry_run = args[:dry_run] != "false"
 
-    out.puts '(dry_run)' if dry_run
+    out.puts "(dry_run)" if dry_run
 
     # Premiere passe on fait le slug avec nom et prenom
     User.where(deleted_at: nil).find_each do |user|
@@ -21,6 +21,6 @@ namespace :recreate_slug_name do
       user.save unless dry_run
     end
 
-    out.puts 'End'
+    out.puts "End"
   end
 end

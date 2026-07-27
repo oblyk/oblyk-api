@@ -56,18 +56,18 @@ class GymRoute < ApplicationRecord
       point = points
     else
       point_system = case climbing_type
-                     when 'sport_climbing'
+                     when "sport_climbing"
                        gym.sport_climbing_ranking
-                     when 'bouldering'
+                     when "bouldering"
                        gym.boulder_ranking
                      else
                        gym.pan_ranking
                      end
       point = case point_system
-              when 'division'
+              when "division"
                 ascents_count = self.ascents_count&.positive? ? self.ascents_count : 1
                 1000 / ascents_count
-              when 'point_by_grade'
+              when "point_by_grade"
                 min_grade_value ? (2000 * (0.85**(49 - min_grade_value))).round : 0
               else
                 points
@@ -81,11 +81,11 @@ class GymRoute < ApplicationRecord
   end
 
   def grade_to_s
-    return '' unless grade_system
+    return "" unless grade_system
 
     if sections_count > 1
-      sections_array = sections.pluck('grade')
-      sections_array.join(', ')
+      sections_array = sections.pluck("grade")
+      sections_array.join(", ")
     else
       min_grade_text
     end
@@ -94,7 +94,7 @@ class GymRoute < ApplicationRecord
   def tags
     tags = []
     sections.each do |section|
-      tags += section.try(:[], 'tags') || []
+      tags += section.try(:[], "tags") || []
     end
     tags
   end
@@ -102,7 +102,7 @@ class GymRoute < ApplicationRecord
   def styles
     styles = []
     sections.each do |section|
-      styles += section.try(:[], 'styles') || []
+      styles += section.try(:[], "styles") || []
     end
     styles
   end
@@ -249,7 +249,7 @@ class GymRoute < ApplicationRecord
           metadata: gym_route_cover&.picture&.metadata,
           original_file_path: gym_route_cover&.picture ? gym_route_cover.original_file_path : nil,
           attachments: {
-            picture: attachment_object(gym_route_cover&.picture, 'GymRouteCover_picture')
+            picture: attachment_object(gym_route_cover&.picture, "GymRouteCover_picture")
           }
         },
         attachments: {
@@ -325,16 +325,16 @@ class GymRoute < ApplicationRecord
     single_pitch = sections.one?
 
     sections.each do |section|
-      section_height = section['height'].present? ? Integer(section['height']) : nil
-      grade = Grade.clean_grade(section['grade'])
+      section_height = section["height"].present? ? Integer(section["height"]) : nil
+      grade = Grade.clean_grade(section["grade"])
       new_sections << {
-        climbing_type: single_pitch ? climbing_type : section['climbing_type'] || climbing_type,
-        description: single_pitch ? nil : section['description'],
+        climbing_type: single_pitch ? climbing_type : section["climbing_type"] || climbing_type,
+        description: single_pitch ? nil : section["description"],
         grade: grade,
         grade_value: grade.present? ? Grade.to_value(grade) : nil,
         height: single_pitch ? height : section_height,
-        points: single_pitch ? points : section['points'],
-        styles: section['styles']
+        points: single_pitch ? points : section["points"],
+        styles: section["styles"]
       }
     end
     self.sections = new_sections
@@ -347,13 +347,13 @@ class GymRoute < ApplicationRecord
     min_grade_text = nil
 
     sections.each do |section|
-      next unless section['grade']
+      next unless section["grade"]
 
-      max_grade_text = section['grade'] if max_grade_value.nil? || section['grade_value'] > max_grade_value
-      max_grade_value = section['grade_value'] if max_grade_value.nil? || section['grade_value'] > max_grade_value
+      max_grade_text = section["grade"] if max_grade_value.nil? || section["grade_value"] > max_grade_value
+      max_grade_value = section["grade_value"] if max_grade_value.nil? || section["grade_value"] > max_grade_value
 
-      min_grade_text = section['grade'] if min_grade_value.nil? || section['grade_value'] < min_grade_value
-      min_grade_value = section['grade_value'] if min_grade_value.nil? || section['grade_value'] < min_grade_value
+      min_grade_text = section["grade"] if min_grade_value.nil? || section["grade_value"] < min_grade_value
+      min_grade_value = section["grade_value"] if min_grade_value.nil? || section["grade_value"] < min_grade_value
     end
 
     self.max_grade_text = max_grade_text
@@ -369,10 +369,10 @@ class GymRoute < ApplicationRecord
   def validate_sections
     sections.each do |section|
       # valid types
-      errors.add(:grade, I18n.t('activerecord.errors.messages.inclusion')) if section['grade'].present? && !Grade.valid?(section['grade'])
+      errors.add(:grade, I18n.t("activerecord.errors.messages.inclusion")) if section["grade"].present? && !Grade.valid?(section["grade"])
 
       # Valid numerics
-      errors.add(:height, I18n.t('activerecord.errors.messages.greater_than')) if section['height'].present? && Integer(section['height']).negative?
+      errors.add(:height, I18n.t("activerecord.errors.messages.greater_than")) if section["height"].present? && Integer(section["height"]).negative?
     end
   end
 
@@ -383,7 +383,7 @@ class GymRoute < ApplicationRecord
       gym_level = gym.gym_levels.find_by(climbing_type: climbing_type)
       level = gym_level.levels[level_index]
       self.level_length = gym_level.levels.count
-      self.level_color = level['color']
+      self.level_color = level["color"]
     else
       self.level_length = nil
       self.level_color = nil

@@ -117,19 +117,19 @@ class DiscChartService
     return colors[0] if colors.length == 1
 
     n   = colors.length - 1
-    seg = [(0.5 / (1.0 / n)).to_i, n - 1].min
+    seg = [ (0.5 / (1.0 / n)).to_i, n - 1 ].min
     t   = (0.5 - (seg * (1.0 / n))) / (1.0 / n)
     c1  = colors[seg]
     c2  = colors[seg + 1]
     r   = linear_interpolation(c1[1..2].to_i(16), c2[1..2].to_i(16), t)
     g   = linear_interpolation(c1[3..4].to_i(16), c2[3..4].to_i(16), t)
     b   = linear_interpolation(c1[5..6].to_i(16), c2[5..6].to_i(16), t)
-    format('#%<r>02x%<g>02x%<b>02x', r: r, g: g, b: b)
+    format("#%<r>02x%<g>02x%<b>02x", r: r, g: g, b: b)
   end
 
   def text_color_for(hold_colors)
     ref = hold_colors.length > 1 ? interpolate_middle_color(hold_colors) : hold_colors[0]
-    dark_color?(ref) ? 'white' : 'black'
+    dark_color?(ref) ? "white" : "black"
   end
 
   # --- QR code embedding ----
@@ -139,9 +139,9 @@ class DiscChartService
   # A white backing rect is drawn first so the QR is always legible regardless
   # of the slice fill color (including white slices).
   def qr_nested_svg(qr_svg, x, y, size)
-    qr_svg = qr_svg.gsub(/<\?xml[^?]*\?>\s*/, '')
-    viewbox = qr_svg.match(/viewBox="([^"]+)"/i)&.captures&.first || '0 0 580 580'
-    inner   = qr_svg.sub(/<svg[^>]*>/m, '').sub(%r{</svg>\s*\z}m, '').strip
+    qr_svg = qr_svg.gsub(/<\?xml[^?]*\?>\s*/, "")
+    viewbox = qr_svg.match(/viewBox="([^"]+)"/i)&.captures&.first || "0 0 580 580"
+    inner   = qr_svg.sub(/<svg[^>]*>/m, "").sub(%r{</svg>\s*\z}m, "").strip
     rx = x.round(2)
     ry = y.round(2)
     <<~XML
@@ -156,7 +156,7 @@ class DiscChartService
 
   def openers_to_s(openers)
     names = openers.pluck(:name)
-    return '' if names.empty?
+    return "" if names.empty?
     return names[0] if names.length == 1
 
     "#{names[0..-2].join(', ')} / #{names[-1]}"
@@ -166,10 +166,10 @@ class DiscChartService
 
   # Returns a <linearGradient> XML fragment, or "" for solid colors.
   def gradient_def(id, x1, y1, x2, y2, colors)
-    return '' if colors.length == 1
+    return "" if colors.length == 1
 
     stops = colors.each_with_index.map do |color, idx|
-      offset = colors.length == 1 ? '0%' : "#{(idx * 100.0 / (colors.length - 1)).round}%"
+      offset = colors.length == 1 ? "0%" : "#{(idx * 100.0 / (colors.length - 1)).round}%"
       %(<stop offset="#{offset}" stop-color="#{color}"/>)
     end.join("\n      ")
 
@@ -236,7 +236,7 @@ class DiscChartService
             fill="#{text_color}" font-family="DejaVu Sans, sans-serif">#{openers}</text>
     XML
 
-    qr_element = ''
+    qr_element = ""
     if route[:qr_svg]
       qr_size    = QR_SIZE_SINGLE
       qr_x       = cx - (qr_size / 2.0)
@@ -253,7 +253,7 @@ class DiscChartService
     cx = CENTER_X
     cy = CENTER_Y
     n = group.length
-    cfg = DiscChartService::LAYOUT[[n, 6].min]
+    cfg = DiscChartService::LAYOUT[[ n, 6 ].min]
     sweep = 360.0 / n
     # Per-N offset so no bisector points at 270° (relay box at top of disc)
     offset = cfg[:offset]
@@ -294,8 +294,8 @@ class DiscChartService
       (anchor_y + half_gap).round(2)
 
       # QR code — mid-zone along bisector
-      qr_element = ''
-      texts = ''
+      qr_element = ""
+      texts = ""
       if route[:qr_svg]
         qr_cx = cx + (cfg[:qr_d] * @radius * Math.cos(mid_rad))
         qr_cy = cy + (cfg[:qr_d] * @radius * Math.sin(mid_rad))
@@ -342,10 +342,10 @@ class DiscChartService
   # --- PDF assembly ----
 
   def assemble_pdf(svg_list)
-    pdf = Prawn::Document.new(page_size: 'A4', margin: 0)
+    pdf = Prawn::Document.new(page_size: "A4", margin: 0)
     svg_list.each_with_index do |svg, idx|
       pdf.start_new_page if idx.positive?
-      pdf.svg(svg, at: [0, pdf.bounds.top], width: pdf.bounds.width, enable_web_requests: true)
+      pdf.svg(svg, at: [ 0, pdf.bounds.top ], width: pdf.bounds.width, enable_web_requests: true)
     end
     StringIO.new(pdf.render)
   end

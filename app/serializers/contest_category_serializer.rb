@@ -26,11 +26,11 @@ class ContestCategorySerializer < BaseSerializer
   end
 
   attribute :contest_participants_female_count do |object|
-    object.contest_participants.group_by { |participant| participant[:genre] }['female']&.size || 0
+    object.contest_participants.group_by { |participant| participant[:genre] }["female"]&.size || 0
   end
 
   attribute :contest_participants_male_count do |object|
-    object.contest_participants.group_by { |participant| participant[:genre] }['male']&.size || 0
+    object.contest_participants.group_by { |participant| participant[:genre] }["male"]&.size || 0
   end
 
   attribute :history do |object|

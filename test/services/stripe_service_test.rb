@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class StripeServiceTest < ActiveSupport::TestCase
   include ActionMailer::TestHelper
 
   setup do
-    Rails.application.config.action_mailer.default_url_options = { host: 'localhost:3000' }
-    @checkout_session_id = 'cs_test_123'
+    Rails.application.config.action_mailer.default_url_options = { host: "localhost:3000" }
+    @checkout_session_id = "cs_test_123"
     @gym_billing_account = gym_billing_accounts(:account_1)
     @gym = gyms(:my_gym)
     @gym.update!(gym_billing_account: @gym_billing_account)
@@ -16,7 +16,7 @@ class StripeServiceTest < ActiveSupport::TestCase
     IndoorSubscriptionGym.create!(indoor_subscription: @indoor_subscription, gym: @gym)
   end
 
-  test 'fulfill_checkout returns false if already processed' do
+  test "fulfill_checkout returns false if already processed" do
     StripeCheckoutSession.create!(checkout_session_id: @checkout_session_id, processed_at: Time.zone.now)
 
     result = StripeService.fulfill_checkout(@checkout_session_id)
@@ -24,12 +24,12 @@ class StripeServiceTest < ActiveSupport::TestCase
     assert_not result
   end
 
-  test 'fulfill_checkout processes successful payment' do
+  test "fulfill_checkout processes successful payment" do
     metadata = Struct.new(:gym_billing_account_uuid, :indoor_subscription_id)
                      .new(@gym_billing_account.uuid, @indoor_subscription.id)
 
     mock_session = Struct.new(:metadata, :customer, :payment_status, :subscription)
-                         .new(metadata, 'cus_new_123', 'paid', 'sub_stripe_123')
+                         .new(metadata, "cus_new_123", "paid", "sub_stripe_123")
 
     Stripe::Checkout::Session.stub :retrieve, mock_session do
       StripeService.stub :deactivated_payment_link, true do
@@ -42,8 +42,8 @@ class StripeServiceTest < ActiveSupport::TestCase
     @gym_billing_account.reload
     @indoor_subscription.reload
 
-    assert_equal 'cus_new_123', @gym_billing_account.customer_stripe_id
-    assert_equal 'sub_stripe_123', @indoor_subscription.subscription_stripe_id
+    assert_equal "cus_new_123", @gym_billing_account.customer_stripe_id
+    assert_equal "sub_stripe_123", @indoor_subscription.subscription_stripe_id
     assert_equal IndoorSubscription::PAID_STATUS, @indoor_subscription.payment_status
 
     stripe_session = StripeCheckoutSession.find_by(checkout_session_id: @checkout_session_id)
@@ -51,8 +51,8 @@ class StripeServiceTest < ActiveSupport::TestCase
     assert_predicate stripe_session, :processed?
   end
 
-  test 'deactivated_payment_link updates stripe payment link' do
-    payment_link_id = 'pl_123'
+  test "deactivated_payment_link updates stripe payment link" do
+    payment_link_id = "pl_123"
     mock_update = Minitest::Mock.new
     mock_update.expect(:call, true) { |*_args, **_kwargs| true }
 
@@ -60,18 +60,18 @@ class StripeServiceTest < ActiveSupport::TestCase
       StripeService.deactivated_payment_link(payment_link_id)
     end
 
-    mock_update.verify
+    assert mock_update.verify
   end
 
-  test 'customer_subscription_update handles cancellation' do
-    @indoor_subscription.update!(subscription_stripe_id: 'sub_123')
+  test "customer_subscription_update handles cancellation" do
+    @indoor_subscription.update!(subscription_stripe_id: "sub_123")
 
     canceled_at = Time.zone.now
     cancel_at = 1.month.from_now
 
     mock_event = Struct.new(:data).new(
       Struct.new(:object).new(
-        Struct.new(:id, :canceled_at, :cancel_at).new('sub_123', canceled_at.to_i, cancel_at.to_i)
+        Struct.new(:id, :canceled_at, :cancel_at).new("sub_123", canceled_at.to_i, cancel_at.to_i)
       )
     )
 
@@ -85,16 +85,16 @@ class StripeServiceTest < ActiveSupport::TestCase
     assert_equal cancel_at.to_date, @indoor_subscription.end_date
   end
 
-  test 'customer_subscription_update handles un-cancellation' do
+  test "customer_subscription_update handles un-cancellation" do
     @indoor_subscription.update!(
-      subscription_stripe_id: 'sub_123',
+      subscription_stripe_id: "sub_123",
       cancelled_at: Time.zone.now,
       end_date: 1.month.from_now.to_date
     )
 
     mock_event = Struct.new(:data).new(
       Struct.new(:object).new(
-        Struct.new(:id, :canceled_at).new('sub_123', nil)
+        Struct.new(:id, :canceled_at).new("sub_123", nil)
       )
     )
 

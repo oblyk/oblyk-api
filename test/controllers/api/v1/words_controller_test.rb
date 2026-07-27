@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -11,100 +11,100 @@ module Api
         @api_access_token_headers = api_access_token_headers
       end
 
-      test 'should get index' do
+      test "should get index" do
         get api_v1_words_url, headers: @api_headers, as: :json
 
         assert_response :success
       end
 
-      test 'should search words' do
+      test "should search words" do
         @word.index!
-        get search_api_v1_words_url(query: 'doigts'), headers: @api_headers, as: :json
+        get search_api_v1_words_url(query: "doigts"), headers: @api_headers, as: :json
 
         assert_response :success
         json_response = response.parsed_body
 
-        assert(json_response['data'].any? { |w| w['attributes']['name'] == @word.name })
+        assert(json_response["data"].any? { |w| w["attributes"]["name"] == @word.name })
       end
 
-      test 'should show word' do
+      test "should show word" do
         get api_v1_word_url(@word), headers: @api_headers, as: :json
 
         assert_response :success
         json_response = response.parsed_body
 
-        assert_equal @word.name, json_response['name']
+        assert_equal @word.name, json_response["name"]
       end
 
-      test 'should get word versions' do
+      test "should get word versions" do
         get versions_api_v1_word_url(@word), headers: @api_headers, as: :json
 
         assert_response :success
       end
 
-      test 'should create word when logged in' do
-        assert_difference('Word.count') do
+      test "should create word when logged in" do
+        assert_difference("Word.count") do
           post api_v1_words_url,
-               params: { word: { name: 'Nouvel mot', definition: 'Une nouvelle définition' } },
+               params: { word: { name: "Nouvel mot", definition: "Une nouvelle définition" } },
                headers: @api_headers,
                as: :json
         end
         assert_response :success
       end
 
-      test 'should return an error when I create it with invalid parameters' do
+      test "should return an error when I create it with invalid parameters" do
         post api_v1_words_url,
-             params: { word: { name: 'Nouvel mot', definition: nil } },
+             params: { word: { name: "Nouvel mot", definition: nil } },
              headers: @api_headers,
              as: :json
 
         assert_response :unprocessable_content
-        assert_not_empty response.parsed_body['error']
+        assert_not_empty response.parsed_body["error"]
       end
 
-      test 'should not create word when not logged in' do
-        assert_no_difference('Word.count') do
+      test "should not create word when not logged in" do
+        assert_no_difference("Word.count") do
           post api_v1_words_url,
-               params: { word: { name: 'Nouvel mot', definition: 'Une nouvelle définition' } },
+               params: { word: { name: "Nouvel mot", definition: "Une nouvelle définition" } },
                headers: @api_access_token_headers,
                as: :json
         end
         assert_response :unauthorized
       end
 
-      test 'should update word when logged in' do
+      test "should update word when logged in" do
         patch api_v1_word_url(@word),
-              params: { word: { name: 'Nom modifié' } },
+              params: { word: { name: "Nom modifié" } },
               headers: @api_headers,
               as: :json
 
         assert_response :success
         @word.reload
 
-        assert_equal 'Nom modifié', @word.name
+        assert_equal "Nom modifié", @word.name
       end
 
-      test 'should not update word when invalid parameters' do
+      test "should not update word when invalid parameters" do
         patch api_v1_word_url(@word),
               params: { word: { name: nil } },
               headers: @api_headers,
               as: :json
 
         assert_response :unprocessable_content
-        assert_not_empty response.parsed_body['error']
+        assert_not_empty response.parsed_body["error"]
       end
 
-      test 'should not update word when not logged in' do
+      test "should not update word when not logged in" do
         patch api_v1_word_url(@word),
-              params: { word: { name: 'Nom modifié' } },
+              params: { word: { name: "Nom modifié" } },
               headers: @api_access_token_headers,
               as: :json
 
         assert_response :unauthorized
       end
 
-      test 'should destroy word when super_admin' do
-        assert_difference('Word.count', -1) do
+      test "should destroy word when super_admin" do
+        assert_difference("Word.count", -1) do
           delete api_v1_word_url(@word),
                  headers: api_headers(user: :super_admin_user),
                  as: :json
@@ -112,8 +112,8 @@ module Api
         assert_response :no_content
       end
 
-      test 'should not destroy word when not super_admin' do
-        assert_no_difference('Word.count') do
+      test "should not destroy word when not super_admin" do
+        assert_no_difference("Word.count") do
           delete api_v1_word_url(@word),
                  headers: @api_headers,
                  as: :json

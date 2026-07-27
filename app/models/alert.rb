@@ -66,7 +66,7 @@ class Alert < ApplicationRecord
       author_id: nil
     )
     publication.publication_attachments << PublicationAttachment.new(
-      attachable_type: 'Alert',
+      attachable_type: "Alert",
       attachable_id: id
     )
     publication.save

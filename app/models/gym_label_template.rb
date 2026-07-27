@@ -73,14 +73,14 @@ class GymLabelTemplate < ApplicationRecord
   end
 
   def page_qr_code?
-    return true if footer_options['display'] && (
-      (footer_options['left']['display'] && footer_options['left']['type']['QrCode']) ||
-      (footer_options['right']['display'] && footer_options['right']['type']['QrCode'])
+    return true if footer_options["display"] && (
+      (footer_options["left"]["display"] && footer_options["left"]["type"]["QrCode"]) ||
+      (footer_options["right"]["display"] && footer_options["right"]["type"]["QrCode"])
     )
 
-    return true if header_options['display'] && (
-      (header_options['left']['display'] && header_options['left']['type']['QrCode']) ||
-      (header_options['right']['display'] && header_options['right']['type']['QrCode'])
+    return true if header_options["display"] && (
+      (header_options["left"]["display"] && header_options["left"]["type"]["QrCode"]) ||
+      (header_options["right"]["display"] && header_options["right"]["type"]["QrCode"])
     )
 
     false
@@ -89,8 +89,8 @@ class GymLabelTemplate < ApplicationRecord
   def fonts
     font_families = []
     font_families << font_family.to_sym
-    font_families << label_options['grade']['font_family'].to_sym
-    font_families << label_options['information']['font_family'].to_sym
+    font_families << label_options["grade"]["font_family"].to_sym
+    font_families << label_options["information"]["font_family"].to_sym
     font_families = font_families.uniq
     font_families.map do |font|
       GymLabelFont::FONTS[font.to_sym]
@@ -100,28 +100,28 @@ class GymLabelTemplate < ApplicationRecord
   def self.default_footer_options
     {
       display: true,
-      height: '20mm',
-      border: 'none',
-      margin_x: '0mm',
+      height: "20mm",
+      border: "none",
+      margin_x: "0mm",
       left: {
         display: true,
-        type: 'logo'
+        type: "logo"
       },
       right: {
         display: true,
-        type: 'QrCode'
+        type: "QrCode"
       },
       center_top: {
         body: "Découvre le topo de **%salle%**\net suis ta progression sur Oblyk.org !",
-        text_align: 'center',
-        color: '#000000',
-        font_size: '14pt'
+        text_align: "center",
+        color: "#000000",
+        font_size: "14pt"
       },
       center_bottom: {
-        body: '%type_de_groupe% **%reference%**',
-        text_align: 'center',
-        color: '#000000',
-        font_size: '12pt'
+        body: "%type_de_groupe% **%reference%**",
+        text_align: "center",
+        color: "#000000",
+        font_size: "12pt"
       }
     }
   end
@@ -129,21 +129,21 @@ class GymLabelTemplate < ApplicationRecord
   def self.default_header_options
     {
       display: true,
-      height: '20mm',
-      margin_x: '0mm',
+      height: "20mm",
+      margin_x: "0mm",
       left: {
         display: true,
-        type: 'logo_oblyk'
+        type: "logo_oblyk"
       },
       right: {
         display: false,
-        type: 'QrCode'
+        type: "QrCode"
       },
       center: {
-        body: '**%salle%**',
-        text_align: 'center',
-        color: '#000000',
-        font_size: '14pt'
+        body: "**%salle%**",
+        text_align: "center",
+        color: "#000000",
+        font_size: "14pt"
       }
     }
   end
@@ -151,28 +151,28 @@ class GymLabelTemplate < ApplicationRecord
   def self.default_label_options
     {
       grade: {
-        width: '18mm',
-        font_size: '25pt',
-        font_family: 'lato',
-        text_transform: 'lowercase'
+        width: "18mm",
+        font_size: "25pt",
+        font_family: "lato",
+        text_transform: "lowercase"
       },
       visual: {
-        width: '16mm'
+        width: "16mm"
       },
       information: {
-        font_size: '14pt',
-        font_family: 'lato'
+        font_size: "14pt",
+        font_family: "lato"
       },
       rectangular_horizontal: {
-        height: '27mm'
+        height: "27mm"
       },
       rectangular_vertical: {
         top: {
-          height: '27mm',
-          vertical_align: 'center'
+          height: "27mm",
+          vertical_align: "center"
         },
         bottom: {
-          height: '20mm'
+          height: "20mm"
         }
       }
     }
@@ -180,10 +180,10 @@ class GymLabelTemplate < ApplicationRecord
 
   def self.default_layout_options
     {
-      align_items: 'center',
-      page_margin: '10mm 10mm 10mm 10mm',
-      row_gap: '3mm',
-      column_gap: '3mm'
+      align_items: "center",
+      page_margin: "10mm 10mm 10mm 10mm",
+      row_gap: "3mm",
+      column_gap: "3mm"
     }
   end
 end

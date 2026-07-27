@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class VideoTest < ActiveSupport::TestCase
   setup do
@@ -10,7 +10,7 @@ class VideoTest < ActiveSupport::TestCase
     @user = users(:normal_user)
   end
 
-  test 'video is valid' do
+  test "video is valid" do
     mock_response = Minitest::Mock.new
     mock_response.expect :body, '{"html": "<iframe></iframe>"}'
 
@@ -26,16 +26,16 @@ class VideoTest < ActiveSupport::TestCase
     end
   end
 
-  test 'validates video service inclusion' do
+  test "validates video service inclusion" do
     video = Video.new(viewable: @crag, url: nil)
-    video.url = 'https://google.com'
+    video.url = "https://google.com"
 
     assert_not video.valid?
     assert_not_empty video.errors[:video_service]
   end
 
-  test 'validates viewable type inclusion' do
-    video = Video.new(viewable: @crag, video_service: 'youtube', url: 'https://youtu.be/123')
+  test "validates viewable type inclusion" do
+    video = Video.new(viewable: @crag, video_service: "youtube", url: "https://youtu.be/123")
     mock_response = Minitest::Mock.new
     mock_response.expect :body, '{"html": "<iframe></iframe>"}'
 
@@ -43,7 +43,7 @@ class VideoTest < ActiveSupport::TestCase
       assert_predicate video, :valid?
     end
 
-    video.viewable_type = 'User'
+    video.viewable_type = "User"
 
     mock_response = Minitest::Mock.new
     mock_response.expect :body, '{"html": "<iframe></iframe>"}'
@@ -54,18 +54,18 @@ class VideoTest < ActiveSupport::TestCase
     assert_not_empty video.errors[:viewable_type]
   end
 
-  test 'validates url_format_for_external_services' do
+  test "validates url_format_for_external_services" do
     video = Video.new(
       user: @user,
       viewable: @crag,
-      video_service: 'youtube',
-      url: 'https://invalid-url.com'
+      video_service: "youtube",
+      url: "https://invalid-url.com"
     )
     video.valid?
 
     assert_not_empty video.errors[:url]
 
-    video.url = 'https://www.youtube.com/watch?v=valid'
+    video.url = "https://www.youtube.com/watch?v=valid"
     mock_response = Minitest::Mock.new
     mock_response.expect :body, '{"html": "<iframe></iframe>"}'
 
@@ -74,29 +74,29 @@ class VideoTest < ActiveSupport::TestCase
     end
   end
 
-  test 'name returns id' do
+  test "name returns id" do
     assert_equal @video_youtube.id, @video_youtube.name
   end
 
-  test 'app_path returns correct path' do
+  test "app_path returns correct path" do
     assert_equal "/videos/#{@video_youtube.id}", @video_youtube.app_path
   end
 
-  test 'valid_url? checks URL regexp' do
-    @video_youtube.url = 'https://youtu.be/123'
+  test "valid_url? checks URL regexp" do
+    @video_youtube.url = "https://youtu.be/123"
 
     assert_predicate @video_youtube, :valid_url?
 
-    @video_youtube.url = 'https://google.com'
+    @video_youtube.url = "https://google.com"
 
     assert_not @video_youtube.valid_url?
   end
 
-  test 'init_embedded_code initializes embedded_code from oembed' do
+  test "init_embedded_code initializes embedded_code from oembed" do
     video = Video.new(
       user: @user,
       viewable: @crag,
-      url: 'https://www.youtube.com/watch?v=123'
+      url: "https://www.youtube.com/watch?v=123"
     )
 
     mock_response = Minitest::Mock.new
@@ -105,23 +105,23 @@ class VideoTest < ActiveSupport::TestCase
     Net::HTTP.stub :get_response, mock_response do
       video.valid?
 
-      assert_equal 'youtube', video.video_service
+      assert_equal "youtube", video.video_service
       assert_equal '<iframe src="https://www.youtube.com/embed/123"></iframe>', video.embedded_code
     end
   end
 
-  test 'publication_push! creates a publication after create' do
+  test "publication_push! creates a publication after create" do
     video = Video.new(
       user: @user,
       viewable: @crag,
-      video_service: 'youtube',
-      url: 'https://www.youtube.com/watch?v=new_video'
+      video_service: "youtube",
+      url: "https://www.youtube.com/watch?v=new_video"
     )
     mock_response = Minitest::Mock.new
     mock_response.expect :body, '{"html": "<iframe></iframe>"}'
 
     Net::HTTP.stub :get_response, mock_response do
-      assert_difference 'Publication.count', 1 do
+      assert_difference "Publication.count", 1 do
         video.save!
       end
     end
@@ -129,8 +129,8 @@ class VideoTest < ActiveSupport::TestCase
     publication = Publication.last
 
     assert_equal @crag.id, publication.publishable_id
-    assert_equal 'Crag', publication.publishable_type
-    assert_equal 'new_video', publication.publishable_subject
+    assert_equal "Crag", publication.publishable_type
+    assert_equal "new_video", publication.publishable_subject
     assert_equal 1, publication.publication_attachments.count
     assert_equal video.id, publication.publication_attachments.first.attachable_id
   end

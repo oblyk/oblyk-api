@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -12,26 +12,26 @@ module Api
         @user_headers = api_headers(user: :normal_user)
       end
 
-      test 'should get index' do
+      test "should get index" do
         get api_v1_publication_publication_attachments_url(publication_id: @publication.id),
             headers: @user_headers
 
         assert_response :success
       end
 
-      test 'should show publication attachment' do
+      test "should show publication attachment" do
         get api_v1_publication_publication_attachment_url(publication_id: @publication.id, id: @attachment.id),
             headers: @user_headers
 
         assert_response :success
       end
 
-      test 'should create publication attachment' do
-        assert_difference('PublicationAttachment.count', 1) do
+      test "should create publication attachment" do
+        assert_difference("PublicationAttachment.count", 1) do
           post api_v1_publication_publication_attachments_url(publication_id: @publication.id),
                params: {
                  publication_attachment: {
-                   attachable_type: 'Crag',
+                   attachable_type: "Crag",
                    attachable_id: crags(:orpierre).id
                  }
                },
@@ -40,13 +40,13 @@ module Api
         assert_response :success
       end
 
-      test 'should create bulk publication attachments' do
-        assert_difference('PublicationAttachment.count', 2) do
+      test "should create bulk publication attachments" do
+        assert_difference("PublicationAttachment.count", 2) do
           post create_bulk_api_v1_publication_publication_attachments_url(publication_id: @publication.id),
                params: {
                  publication_attachments: [
-                   { attachable_type: 'Crag', attachable_id: crags(:orpierre).id },
-                   { attachable_type: 'Crag', attachable_id: crags(:rocher_des_aures).id }
+                   { attachable_type: "Crag", attachable_id: crags(:orpierre).id },
+                   { attachable_type: "Crag", attachable_id: crags(:rocher_des_aures).id }
                  ]
                },
                headers: @user_headers, as: :json
@@ -54,20 +54,20 @@ module Api
         assert_response :success
       end
 
-      test 'should destroy publication attachment' do
-        assert_difference('PublicationAttachment.count', -1) do
+      test "should destroy publication attachment" do
+        assert_difference("PublicationAttachment.count", -1) do
           delete api_v1_publication_publication_attachment_url(publication_id: @publication.id, id: @attachment.id),
                  headers: @user_headers, as: :json
         end
         assert_response :success
       end
 
-      test 'should not allow unauthorized user to create' do
+      test "should not allow unauthorized user to create" do
         other_user_headers = api_headers(user: :super_admin_user)
         post api_v1_publication_publication_attachments_url(publication_id: @publication.id),
              params: {
                publication_attachment: {
-                 attachable_type: 'Crag',
+                 attachable_type: "Crag",
                  attachable_id: crags(:orpierre).id
                }
              },

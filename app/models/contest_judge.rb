@@ -27,7 +27,7 @@ class ContestJudge < ApplicationRecord
 
   def detail_to_json
     routes_table = []
-    contest_routes.includes(contest_route_group: [:contest_categories, { contest_stage_step: :contest_stage }]).find_each do |contest_route|
+    contest_routes.includes(contest_route_group: [ :contest_categories, { contest_stage_step: :contest_stage } ]).find_each do |contest_route|
       data = contest_route.summary_to_json
       contest_route_group = contest_route.contest_route_group
       contest_stage_step = contest_route_group.contest_stage_step

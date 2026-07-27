@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ContestTimeBlockTest < ActiveSupport::TestCase
   setup do
@@ -9,25 +9,25 @@ class ContestTimeBlockTest < ActiveSupport::TestCase
     @route_group = contest_route_groups(:route_group_1)
   end
 
-  test 'time block is valid' do
+  test "time block is valid" do
     assert_predicate @time_block, :valid?
   end
 
-  test 'time block is invalid without start_time' do
+  test "time block is invalid without start_time" do
     @time_block.start_time = nil
 
     assert_not @time_block.valid?
     assert_includes @time_block.errors.attribute_names, :start_time
   end
 
-  test 'time block is invalid without end_time' do
+  test "time block is invalid without end_time" do
     @time_block.end_time = nil
 
     assert_not @time_block.valid?
     assert_includes @time_block.errors.attribute_names, :end_time
   end
 
-  test 'summary_to_json returns expected keys' do
+  test "summary_to_json returns expected keys" do
     json = @time_block.summary_to_json
 
     assert_equal @time_block.id, json[:id]
@@ -37,7 +37,7 @@ class ContestTimeBlockTest < ActiveSupport::TestCase
     assert_equal @time_block.contest_wave_id, json[:contest_wave_id]
   end
 
-  test 'normalize_attributes sets dates from contest if one day event' do
+  test "normalize_attributes sets dates from contest if one day event" do
     contest = @time_block.contest
     new_date = DateTime.current + 15.days
     contest.update(
@@ -59,7 +59,7 @@ class ContestTimeBlockTest < ActiveSupport::TestCase
     assert_equal contest.end_date, new_time_block.end_date
   end
 
-  test 'delete_caches is called after save' do
+  test "delete_caches is called after save" do
     assert @time_block.save
   end
 end

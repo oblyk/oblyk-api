@@ -1,34 +1,34 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class GymLabelTemplateTest < ActiveSupport::TestCase
   setup do
     @template = gym_label_templates(:one)
   end
 
-  test 'validates presence of name' do
+  test "validates presence of name" do
     @template.name = nil
 
     assert_not @template.valid?
-    assert_includes @template.errors[:name], 'is_mandatory'
+    assert_includes @template.errors[:name], "is_mandatory"
   end
 
-  test 'validates inclusion of label_direction' do
-    @template.label_direction = 'invalid'
+  test "validates inclusion of label_direction" do
+    @template.label_direction = "invalid"
 
     assert_not @template.valid?
-    assert_includes @template.errors[:label_direction], 'is_not_a_permitted_value'
+    assert_includes @template.errors[:label_direction], "is_not_a_permitted_value"
   end
 
-  test 'validates inclusion of font_family' do
-    @template.font_family = 'invalid'
+  test "validates inclusion of font_family" do
+    @template.font_family = "invalid"
 
     assert_not @template.valid?
-    assert_includes @template.errors[:font_family], 'is_not_a_permitted_value'
+    assert_includes @template.errors[:font_family], "is_not_a_permitted_value"
   end
 
-  test 'summary_to_json contains expected keys' do
+  test "summary_to_json contains expected keys" do
     json = @template.summary_to_json
 
     assert_equal @template.id, json[:id]
@@ -38,7 +38,7 @@ class GymLabelTemplateTest < ActiveSupport::TestCase
     assert json.key?(:fonts)
   end
 
-  test 'detail_to_json contains history' do
+  test "detail_to_json contains history" do
     json = @template.detail_to_json
 
     assert json.key?(:history)
@@ -46,55 +46,55 @@ class GymLabelTemplateTest < ActiveSupport::TestCase
     assert json[:history].key?(:updated_at)
   end
 
-  test 'page_qr_code? returns true if footer has QrCode' do
+  test "page_qr_code? returns true if footer has QrCode" do
     @template.footer_options = {
-      'display' => true,
-      'left' => { 'display' => false },
-      'right' => { 'display' => true, 'type' => { 'QrCode' => true } }
+      "display" => true,
+      "left" => { "display" => false },
+      "right" => { "display" => true, "type" => { "QrCode" => true } }
     }
 
     assert_predicate @template, :page_qr_code?
   end
 
-  test 'page_qr_code? returns true if header has QrCode' do
+  test "page_qr_code? returns true if header has QrCode" do
     @template.header_options = {
-      'display' => true,
-      'left' => { 'display' => true, 'type' => { 'QrCode' => true } },
-      'right' => { 'display' => false }
+      "display" => true,
+      "left" => { "display" => true, "type" => { "QrCode" => true } },
+      "right" => { "display" => false }
     }
 
     assert_predicate @template, :page_qr_code?
   end
 
-  test 'page_qr_code? returns false if no QrCode is displayed' do
-    @template.footer_options = { 'display' => false }
-    @template.header_options = { 'display' => false }
+  test "page_qr_code? returns false if no QrCode is displayed" do
+    @template.footer_options = { "display" => false }
+    @template.header_options = { "display" => false }
 
     assert_not @template.page_qr_code?
   end
 
-  test 'fonts returns unique fonts used in template' do
-    @template.font_family = 'lato'
+  test "fonts returns unique fonts used in template" do
+    @template.font_family = "lato"
     @template.label_options = {
-      'grade' => { 'font_family' => 'lato' },
-      'information' => { 'font_family' => 'overpass' },
-      'rectangular_horizontal' => { 'height' => '27mm' }
+      "grade" => { "font_family" => "lato" },
+      "information" => { "font_family" => "overpass" },
+      "rectangular_horizontal" => { "height" => "27mm" }
     }
     fonts = @template.fonts
 
     assert_equal 2, fonts.size
-    assert_includes fonts.pluck(:ref), 'lato'
-    assert_includes fonts.pluck(:ref), 'overpass'
+    assert_includes fonts.pluck(:ref), "lato"
+    assert_includes fonts.pluck(:ref), "overpass"
   end
 
-  test 'default methods return hashes' do
+  test "default methods return hashes" do
     assert_kind_of Hash, GymLabelTemplate.default_footer_options
     assert_kind_of Hash, GymLabelTemplate.default_header_options
     assert_kind_of Hash, GymLabelTemplate.default_label_options
     assert_kind_of Hash, GymLabelTemplate.default_layout_options
   end
 
-  test 'is archivable' do
+  test "is archivable" do
     assert_respond_to @template, :archive!
     assert_respond_to @template, :unarchive!
     assert_nil @template.archived_at

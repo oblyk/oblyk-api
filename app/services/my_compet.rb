@@ -10,7 +10,7 @@ class MyCompet
         numeroFFME: ffme_application.ffme_licence_number
       }.to_json,
       content_type: :json,
-      authorization: ENV.fetch('MY_COMPET_TOKEN', nil)
+      authorization: ENV.fetch("MY_COMPET_TOKEN", nil)
     )
     JSON.parse(request.body)
   rescue RestClient::ExceptionWithResponse => e
@@ -33,7 +33,7 @@ class MyCompet
         idCompetition: ffme_contest.contest_id
       }.to_json,
       content_type: :json,
-      authorization: ENV.fetch('MY_COMPET_TOKEN', nil)
+      authorization: ENV.fetch("MY_COMPET_TOKEN", nil)
     )
     JSON.parse(request.body)
   rescue RestClient::ExceptionWithResponse => e
@@ -49,8 +49,8 @@ class MyCompet
     contest_result.results.each do |result|
       category = result[:category_name]
       genre = nil
-      genre = 'HOMME' if result[:genre] == 'male'
-      genre = 'FEMME' if result[:genre] == 'female'
+      genre = "HOMME" if result[:genre] == "male"
+      genre = "FEMME" if result[:genre] == "female"
       result[:participants].each do |participant|
         participant_id = if participant[:synchronise_with_ffme_contest] && participant[:user_uuid].present?
                            participant[:user_uuid]
@@ -73,7 +73,7 @@ class MyCompet
         resultats: results
       }.to_json,
       content_type: :json,
-      authorization: ENV.fetch('MY_COMPET_TOKEN', nil)
+      authorization: ENV.fetch("MY_COMPET_TOKEN", nil)
     )
     JSON.parse(request.body)
   rescue RestClient::ExceptionWithResponse => e
@@ -84,8 +84,8 @@ class MyCompet
   def self.update_or_create_contest(ffme_contest, mode: :create)
     contest_banner = ffme_contest.contest.banner_attachment_object
     banner_url = nil
-    banner_url = contest_banner[:variant_path].gsub(':variant', 'onerror=redirect,fit=scale-down,width=1920,height=1920') if contest_banner[:attached]
-    url_mode = mode == :create ? 'creationCompetition' : 'modificationCompetition'
+    banner_url = contest_banner[:variant_path].gsub(":variant", "onerror=redirect,fit=scale-down,width=1920,height=1920") if contest_banner[:attached]
+    url_mode = mode == :create ? "creationCompetition" : "modificationCompetition"
     data = {
       idCompetition: ffme_contest.contest_id,
       type: ffme_contest.ffme_contest_type,
@@ -104,7 +104,7 @@ class MyCompet
       "#{ENV.fetch('MY_COMPET_BASE_URL', nil)}/#{url_mode}",
       data.to_json,
       content_type: :json,
-      authorization: ENV.fetch('MY_COMPET_TOKEN', nil)
+      authorization: ENV.fetch("MY_COMPET_TOKEN", nil)
     )
     JSON.parse(request.body)
   rescue RestClient::ExceptionWithResponse => e

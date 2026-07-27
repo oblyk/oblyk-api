@@ -12,7 +12,7 @@ class PublicationViewsMapper
     return publications unless user
 
     if publications.instance_of? Publication
-      self.publications = [publications]
+      self.publications = [ publications ]
       mapper.first
     else
       mapper
@@ -56,8 +56,8 @@ class PublicationViewsMapper
     publication_views.each(&:save)
 
     # Destroy all related notification
-    Notification.where(notification_type: 'new_publication',
-                       notifiable_type: 'Publication',
+    Notification.where(notification_type: "new_publication",
+                       notifiable_type: "Publication",
                        notifiable_id: publication_ids,
                        user: user)
                 .destroy_all

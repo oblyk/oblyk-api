@@ -9,7 +9,7 @@ module Api
         gym_space_id = params.fetch(:gym_space_id, nil)
         gym_sector_id = params.fetch(:gym_sector_id, nil)
         page = params.fetch(:page, 1)
-        sort = params.fetch(:sort, 'opened_at')
+        sort = params.fetch(:sort, "opened_at")
 
         gym_routes = @gym.gym_routes
                          .includes(:gym_sector, :gym_route_cover, :gym_openers, thumbnail_attachment: :blob, gym: :gym_levels, gym_sector: :gym_space)
@@ -20,10 +20,10 @@ module Api
         gym_routes = gym_routes.where(gym_sectors: { id: gym_sector_id }) if gym_sector_id.present?
 
         # Order
-        gym_routes = gym_routes.reorder(opened_at: :desc) if sort == 'opened_at'
-        gym_routes = gym_routes.reorder(Arel.sql('gym_spaces.order, gym_spaces.name, gym_sectors.order, gym_sectors.name, gym_routes.id')) if sort == 'sector'
-        gym_routes = gym_routes.reorder(Arel.sql('gym_routes.level_index DESC, gym_routes.id')) if sort == 'color'
-        gym_routes = gym_routes.reorder(Arel.sql('gym_routes.min_grade_text DESC, gym_routes.id')) if sort == 'grade'
+        gym_routes = gym_routes.reorder(opened_at: :desc) if sort == "opened_at"
+        gym_routes = gym_routes.reorder(Arel.sql("gym_spaces.order, gym_spaces.name, gym_sectors.order, gym_sectors.name, gym_routes.id")) if sort == "sector"
+        gym_routes = gym_routes.reorder(Arel.sql("gym_routes.level_index DESC, gym_routes.id")) if sort == "color"
+        gym_routes = gym_routes.reorder(Arel.sql("gym_routes.min_grade_text DESC, gym_routes.id")) if sort == "grade"
 
         gym_routes = gym_routes.page(page)
 
@@ -48,14 +48,14 @@ module Api
         gym_route = @gym.gym_routes.find_by id: params[:id]
 
         unless gym_route
-          render json: { error: 'Gym route not found' }, status: :not_found
+          render json: { error: "Gym route not found" }, status: :not_found
           return
         end
 
         serializer = ::Embedded::GymRouteSerializer.new(
           gym_route,
           {
-            include: [:gym_sector, 'gym_sector.gym_space', :videos],
+            include: [ :gym_sector, "gym_sector.gym_space", :videos ],
             params: {
               include_gym_route_cover: true,
               include_cover_metadata: true,
@@ -74,7 +74,7 @@ module Api
       def set_gym
         @gym = Gym.find_by id: params[:gym_id]
 
-        render json: { error: 'Gym not found' }, status: :not_found unless @gym
+        render json: { error: "Gym not found" }, status: :not_found unless @gym
       end
     end
   end

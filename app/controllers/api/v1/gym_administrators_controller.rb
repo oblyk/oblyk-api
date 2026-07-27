@@ -57,8 +57,8 @@ module Api
         administrator = GymAdministrator.find_by user: @current_user, gym: @gym
         return unless administrator
 
-        administrator.last_comment_feed_read_at = DateTime.now if params[:feed_type] == 'comment'
-        administrator.last_video_feed_read_at = DateTime.now if params[:feed_type] == 'video'
+        administrator.last_comment_feed_read_at = DateTime.now if params[:feed_type] == "comment"
+        administrator.last_video_feed_read_at = DateTime.now if params[:feed_type] == "video"
         administrator.save
         head :no_content
       end
@@ -71,21 +71,21 @@ module Api
         count_by_feeds = {}
 
         feeds.each do |feed|
-          if feed == 'comment'
-            route_comments_count =  Comment.joins('INNER JOIN gym_routes ON commentable_id = gym_routes.id')
-                                           .joins('INNER JOIN gym_sectors ON gym_routes.gym_sector_id = gym_sectors.id')
-                                           .joins('INNER JOIN gym_spaces ON gym_sectors.gym_space_id = gym_spaces.id')
+          if feed == "comment"
+            route_comments_count =  Comment.joins("INNER JOIN gym_routes ON commentable_id = gym_routes.id")
+                                           .joins("INNER JOIN gym_sectors ON gym_routes.gym_sector_id = gym_sectors.id")
+                                           .joins("INNER JOIN gym_spaces ON gym_sectors.gym_space_id = gym_spaces.id")
                                            .where(
                                              gym_routes: { dismounted_at: nil },
-                                             commentable_type: 'GymRoute',
+                                             commentable_type: "GymRoute",
                                              gym_spaces: { gym_id: @gym.id }
                                            )
                                            .where(comments: { created_at: administrator.last_comment_feed_read_at.. })
                                            .count
-            ascent_comments_count = Comment.joins('INNER JOIN ascents ON commentable_id = ascents.id')
-                                           .joins('INNER JOIN gym_routes ON gym_route_id = gym_routes.id')
+            ascent_comments_count = Comment.joins("INNER JOIN ascents ON commentable_id = ascents.id")
+                                           .joins("INNER JOIN gym_routes ON gym_route_id = gym_routes.id")
                                            .where(
-                                             commentable_type: 'Ascent',
+                                             commentable_type: "Ascent",
                                              gym_routes: { dismounted_at: nil },
                                              ascents: { gym_id: @gym.id }
                                            )
@@ -98,8 +98,8 @@ module Api
             }
           end
 
-          if feed == 'video'
-            count = Video.where(viewable_type: 'GymRoute', viewable_id: @gym.gym_routes.mounted.pluck(:id))
+          if feed == "video"
+            count = Video.where(viewable_type: "GymRoute", viewable_id: @gym.gym_routes.mounted.pluck(:id))
                          .where(videos: { created_at: administrator.last_video_feed_read_at.. })
                          .count
             count_by_feeds[feed] = {
@@ -109,9 +109,9 @@ module Api
             }
           end
 
-          next unless feed == 'follower'
+          next unless feed == "follower"
 
-          count = Follow.where(followable_type: 'Gym', followable_id: @gym.id)
+          count = Follow.where(followable_type: "Gym", followable_id: @gym.id)
                         .where(follows: { created_at: administrator.last_follower_feed_read_at.. })
                         .count
           count_by_feeds[feed] = {

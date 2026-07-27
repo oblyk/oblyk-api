@@ -74,7 +74,7 @@ module Api
 
       def destroy
         if @contest_route.contest_participant_ascents.any?
-          render json: { error: { base: ['La ligne a des réalisations, elle ne peut pas être supprimée'] } }, status: :unprocessable_content
+          render json: { error: { base: [ "La ligne a des réalisations, elle ne peut pas être supprimée" ] } }, status: :unprocessable_content
           return
         end
 

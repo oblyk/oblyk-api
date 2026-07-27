@@ -1,25 +1,25 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ChampionshipContestTest < ActiveSupport::TestCase
   setup do
     @championship_contest = championship_contests(:champ_contest_1)
   end
 
-  test 'should be valid' do
+  test "should be valid" do
     assert_predicate @championship_contest, :valid?
   end
 
-  test 'should belong to championship' do
+  test "should belong to championship" do
     assert_instance_of Championship, @championship_contest.championship
   end
 
-  test 'should belong to contest' do
+  test "should belong to contest" do
     assert_instance_of Contest, @championship_contest.contest
   end
 
-  test 'destroying championship_contest should destroy related category matches' do
+  test "destroying championship_contest should destroy related category matches" do
     championship = @championship_contest.championship
     contest = @championship_contest.contest
 

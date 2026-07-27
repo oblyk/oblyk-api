@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -15,9 +15,9 @@ module Api
         @admin_headers = api_headers(user: :super_admin_user)
       end
 
-      test 'should subscribe participant to step' do
+      test "should subscribe participant to step" do
         @participant.contest_participant_steps.destroy_all
-        assert_difference('ContestParticipantStep.count') do
+        assert_difference("ContestParticipantStep.count") do
           post subscribe_api_v1_gym_contest_contest_participant_steps_url(@gym, @contest),
                params: {
                  contest_participant_step: {
@@ -32,12 +32,12 @@ module Api
         assert_response :no_content
       end
 
-      test 'should unsubscribe participant from step' do
+      test "should unsubscribe participant from step" do
         ContestParticipantStep.create(
           contest_participant: @participant,
           contest_stage_step: @step
         )
-        assert_difference('ContestParticipantStep.count', -1) do
+        assert_difference("ContestParticipantStep.count", -1) do
           post subscribe_api_v1_gym_contest_contest_participant_steps_url(@gym, @contest),
                params: {
                  contest_participant_step: {

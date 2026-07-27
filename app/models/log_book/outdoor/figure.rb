@@ -34,7 +34,7 @@ module LogBook
       def sum_meters
         @ascents.sum do |ascent|
           # Extract the section heights, ignoring nil values
-          sections_heights = ascent.sections.filter_map { |section| section['height'] }
+          sections_heights = ascent.sections.filter_map { |section| section["height"] }
           # If sections have heights, sum them, otherwise fallback to the ascent's height
           sections_heights.any? ? sections_heights.sum : (ascent.height || 0)
         end

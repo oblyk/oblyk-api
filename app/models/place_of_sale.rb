@@ -15,19 +15,19 @@ class PlaceOfSale < ApplicationRecord
   end
 
   def location
-    [latitude, longitude]
+    [ latitude, longitude ]
   end
 
   def to_geo_json(minimalistic: false)
     features = {
-      type: 'Feature',
+      type: "Feature",
       properties: {
-        type: 'PlaceOfSale',
+        type: "PlaceOfSale",
         id: id,
         guide_book_paper_id: guide_book_paper_id,
-        icon: 'place-of-sale-marker'
+        icon: "place-of-sale-marker"
       },
-      geometry: { type: 'Point', coordinates: [Float(longitude), Float(latitude), 0.0] }
+      geometry: { type: "Point", coordinates: [ Float(longitude), Float(latitude), 0.0 ] }
     }
     unless minimalistic
       features[:properties].merge!(

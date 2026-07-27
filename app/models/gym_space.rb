@@ -26,7 +26,7 @@ class GymSpace < ApplicationRecord
   validates :plan, blob: { content_type: :image }, allow_nil: true
   validates :three_d_picture, blob: { content_type: :image }, allow_nil: true
 
-  validates :three_d_gltf, blob: { content_type: 'model/gltf+json' }, allow_nil: true
+  validates :three_d_gltf, blob: { content_type: "model/gltf+json" }, allow_nil: true
 
   after_create :delete_gym_cache
   after_update :remove_sectors_cache
@@ -63,7 +63,7 @@ class GymSpace < ApplicationRecord
         scheme_height: scheme_height,
         scheme_width: scheme_width,
         sectors_color: sectors_color,
-        text_contrast_color: Color.black_or_white_rgb(sectors_color || 'rgb(0,0,0)'),
+        text_contrast_color: Color.black_or_white_rgb(sectors_color || "rgb(0,0,0)"),
         gym_space_group_id: gym_space_group_id,
         anchor: anchor,
         draft: draft,
@@ -73,7 +73,7 @@ class GymSpace < ApplicationRecord
         three_d_parameters: three_d_parameters,
         three_d_label_options: three_d_label_options,
         attachments: {
-          avatar: representation_type == '3d' ? attachment_object(three_d_picture) : attachment_object(plan),
+          avatar: representation_type == "3d" ? attachment_object(three_d_picture) : attachment_object(plan),
           banner: attachment_object(banner),
           plan: attachment_object(plan),
           three_d_picture: attachment_object(three_d_picture)
@@ -91,7 +91,7 @@ class GymSpace < ApplicationRecord
       }
     end
     if with_figures
-      routes_figures = gym_routes.mounted.select('MAX(opened_at) AS max_opened_at, COUNT(*) AS routes_count').first
+      routes_figures = gym_routes.mounted.select("MAX(opened_at) AS max_opened_at, COUNT(*) AS routes_count").first
       data[:figures] = {
         routes_count: routes_figures[:routes_count],
         last_route_opened_at: routes_figures[:max_opened_at]
@@ -127,9 +127,9 @@ class GymSpace < ApplicationRecord
         id: "id-#{sector.id}",
         points: []
       }
-      if representation_type == '3d' && sector.three_d_path
+      if representation_type == "3d" && sector.three_d_path
         sector.three_d_path.each do |xyz|
-          sector_points[:points] << { x: xyz['z'], y: xyz['x'] }
+          sector_points[:points] << { x: xyz["z"], y: xyz["x"] }
         end
       else
         next if sector.polygon.blank?
@@ -194,22 +194,22 @@ class GymSpace < ApplicationRecord
                        .where(gym_sectors: { gym_space_id: id })
     calculated_point_system = false
     sorts_by = sorts_by&.first
-    if sorts_by['has_fixed_point']&.zero?
-      climbing_types = sorts_by['climbing_types'].split(',')
+    if sorts_by["has_fixed_point"]&.zero?
+      climbing_types = sorts_by["climbing_types"].split(",")
       climbing_types.each do |climbing_type|
-        calculated_point_system = true if %w[division point_by_grade].include?(gym.sport_climbing_ranking) && climbing_type == 'sport_climbing'
-        calculated_point_system = true if %w[division point_by_grade].include?(gym.pan_ranking) && climbing_type == 'pan'
-        calculated_point_system = true if %w[division point_by_grade].include?(gym.boulder_ranking) && climbing_type == 'boulder'
+        calculated_point_system = true if %w[division point_by_grade].include?(gym.sport_climbing_ranking) && climbing_type == "sport_climbing"
+        calculated_point_system = true if %w[division point_by_grade].include?(gym.pan_ranking) && climbing_type == "pan"
+        calculated_point_system = true if %w[division point_by_grade].include?(gym.boulder_ranking) && climbing_type == "boulder"
       end
     end
 
     {
-      difficulty_by_level: sorts_by['has_level']&.positive?,
-      difficulty_by_grade: sorts_by['has_grade']&.positive?,
-      difficulty_by_point: sorts_by['has_fixed_point']&.positive? || calculated_point_system,
-      ascents_count: sorts_by['has_ascents']&.positive?,
-      likes_count: sorts_by['has_likes']&.positive?,
-      comments_count: sorts_by['has_comments']&.positive?
+      difficulty_by_level: sorts_by["has_level"]&.positive?,
+      difficulty_by_grade: sorts_by["has_grade"]&.positive?,
+      difficulty_by_point: sorts_by["has_fixed_point"]&.positive? || calculated_point_system,
+      ascents_count: sorts_by["has_ascents"]&.positive?,
+      likes_count: sorts_by["has_likes"]&.positive?,
+      comments_count: sorts_by["has_comments"]&.positive?
     }
   end
 

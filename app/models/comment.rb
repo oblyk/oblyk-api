@@ -4,12 +4,12 @@ class Comment < ApplicationRecord
   include StripTagable
 
   belongs_to :user, optional: true
-  belongs_to :reply_to_comment, class_name: 'Comment', optional: true
+  belongs_to :reply_to_comment, class_name: "Comment", optional: true
   belongs_to :commentable, polymorphic: true, counter_cache: :comments_count, touch: true
   has_many :reports, as: :reportable, dependent: :destroy
   has_many :likes, as: :likeable, dependent: :destroy
   has_many :comments, as: :commentable, dependent: :destroy
-  has_many :reply_to_comments, class_name: 'Comment', foreign_key: :reply_to_comment_id, dependent: :destroy
+  has_many :reply_to_comments, class_name: "Comment", foreign_key: :reply_to_comment_id, dependent: :destroy
 
   before_validation :normalize_blank_values
 
@@ -61,22 +61,22 @@ class Comment < ApplicationRecord
   end
 
   def create_notification!
-    return unless commentable_type == 'Comment'
+    return unless commentable_type == "Comment"
 
     Notification.create(
-      notification_type: 'new_reply',
-      notifiable_type: 'Comment',
+      notification_type: "new_reply",
+      notifiable_type: "Comment",
       notifiable_id: id,
       user: commentable.user
     )
   end
 
   def destroy_notification!
-    return unless commentable_type == 'Comment'
+    return unless commentable_type == "Comment"
 
     notification = Notification.find_by(
-      notification_type: 'new_reply',
-      notifiable_type: 'Comment',
+      notification_type: "new_reply",
+      notifiable_type: "Comment",
       notifiable_id: id,
       user: commentable.user
     )
@@ -84,7 +84,7 @@ class Comment < ApplicationRecord
   end
 
   def refresh_comments_count!
-    return unless commentable_type == 'GymRoute'
+    return unless commentable_type == "GymRoute"
 
     commentable.refresh_all_comments_count!
   end

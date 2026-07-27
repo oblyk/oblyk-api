@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 class OpenStreetMapApi
-  BASE_URL = 'https://nominatim.openstreetmap.org'
-  EMAIL = ENV.fetch('SMTP_USER_NAME', nil)
+  BASE_URL = "https://nominatim.openstreetmap.org"
+  EMAIL = ENV.fetch("SMTP_USER_NAME", nil)
 
   def self.search(query)
     request = RestClient.get(
       "#{BASE_URL}/search",
       params: {
         q: query,
-        format: 'json',
+        format: "json",
         addressdetails: 1,
         email: EMAIL
       }
@@ -26,7 +26,7 @@ class OpenStreetMapApi
     request = RestClient.get(
       "#{BASE_URL}/reverse",
       params: {
-        format: 'json',
+        format: "json",
         lat: latitude,
         lon: longitude,
         zoom: 13,

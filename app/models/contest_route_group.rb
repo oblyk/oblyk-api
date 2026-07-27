@@ -20,7 +20,7 @@ class ContestRouteGroup < ApplicationRecord
   after_save :delete_caches
 
   validates :genre_type, inclusion: { in: %w[unisex male female] }
-  validates :contest_categories, length: { minimum: 1, message: 'you_must_choose_one' }
+  validates :contest_categories, length: { minimum: 1, message: "you_must_choose_one" }
 
   accepts_nested_attributes_for :contest_time_blocks, reject_if: proc { |attrs| attrs.all? { |_k, v| v.blank? } }
 
@@ -116,7 +116,7 @@ class ContestRouteGroup < ApplicationRecord
 
         next if route_group_category.blank? || route_group_category.contest_route_group.genre_type != genre_type
 
-        errors.add(:base, 'category_is_taken_in_this_step')
+        errors.add(:base, "category_is_taken_in_this_step")
       end
     end
   end

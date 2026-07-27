@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 class GymOption < ApplicationRecord
-  OPTION_CONTEST = 'contest'
-  OPTION_PICTURE = 'picture'
-  OPTION_STATISTIC = 'statistic'
-  OPTION_PRINT_LABEL = 'print_label'
-  OPTION_MULTI_GYM = 'multi_gym'
-  OPTION_API = 'api'
+  OPTION_CONTEST = "contest"
+  OPTION_PICTURE = "picture"
+  OPTION_STATISTIC = "statistic"
+  OPTION_PRINT_LABEL = "print_label"
+  OPTION_MULTI_GYM = "multi_gym"
+  OPTION_API = "api"
 
   OPTION_LIST = [
     OPTION_CONTEST,

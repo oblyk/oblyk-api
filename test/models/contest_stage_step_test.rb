@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ContestStageStepTest < ActiveSupport::TestCase
   setup do
@@ -8,25 +8,25 @@ class ContestStageStepTest < ActiveSupport::TestCase
     @contest_stage = contest_stages(:stage_1)
   end
 
-  test 'contest stage step is valid' do
+  test "contest stage step is valid" do
     assert_predicate @contest_stage_step, :valid?
   end
 
-  test 'contest stage step is invalid without name' do
+  test "contest stage step is invalid without name" do
     @contest_stage_step.name = nil
 
     assert_not @contest_stage_step.valid?
     assert_includes @contest_stage_step.errors.attribute_names, :name
   end
 
-  test 'contest stage step is invalid with wrong ranking_type' do
-    @contest_stage_step.ranking_type = 'random_ranking'
+  test "contest stage step is invalid with wrong ranking_type" do
+    @contest_stage_step.ranking_type = "random_ranking"
 
     assert_not @contest_stage_step.valid?
     assert_includes @contest_stage_step.errors.attribute_names, :ranking_type
   end
 
-  test 'contest stage step is invalid with non-positive ascents_limit' do
+  test "contest stage step is invalid with non-positive ascents_limit" do
     @contest_stage_step.ascents_limit = 0
 
     assert_not @contest_stage_step.valid?
@@ -38,10 +38,10 @@ class ContestStageStepTest < ActiveSupport::TestCase
     assert_includes @contest_stage_step.errors.attribute_names, :ascents_limit
   end
 
-  test 'set_order sets step_order on create' do
+  test "set_order sets step_order on create" do
     new_step = ContestStageStep.create(
       contest_stage: @contest_stage,
-      name: 'New Step',
+      name: "New Step",
       ranking_type: ContestService::Constant::DIVISION
     )
 
@@ -49,7 +49,7 @@ class ContestStageStepTest < ActiveSupport::TestCase
     assert_equal 3, new_step.step_order
   end
 
-  test 'summary_to_json returns expected keys' do
+  test "summary_to_json returns expected keys" do
     json = @contest_stage_step.summary_to_json
 
     assert_equal @contest_stage_step.id, json[:id]
@@ -59,7 +59,7 @@ class ContestStageStepTest < ActiveSupport::TestCase
     assert_includes json.keys, :contest_stage
   end
 
-  test 'detail_to_json returns expected keys including associations' do
+  test "detail_to_json returns expected keys including associations" do
     json = @contest_stage_step.detail_to_json
 
     assert_equal @contest_stage_step.id, json[:id]

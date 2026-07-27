@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module ContestService
   class StatisticsTest < ActiveSupport::TestCase
@@ -9,7 +9,7 @@ module ContestService
       @stats_service = ContestService::Statistics.new(@contest)
     end
 
-    test 'participants_figure returns correct figures' do
+    test "participants_figure returns correct figures" do
       figures = @stats_service.participants_figure
 
       assert_not_nil figures[:total]
@@ -19,7 +19,7 @@ module ContestService
       assert_not_nil figures[:participation]
     end
 
-    test 'by_ages returns age distribution' do
+    test "by_ages returns age distribution" do
       stats = @stats_service.by_ages
 
       if stats
@@ -30,16 +30,16 @@ module ContestService
       end
     end
 
-    test 'ascents_by_steps returns structured statistics' do
+    test "ascents_by_steps returns structured statistics" do
       stats = @stats_service.ascents_by_steps
 
       assert_kind_of Array, stats
       assert_not_empty stats
-      assert_equal 'Qualifications', stats.first[:name]
+      assert_equal "Qualifications", stats.first[:name]
       assert_not_empty stats.first[:steps]
     end
 
-    test 'ascents_by_steps for different ranking types' do
+    test "ascents_by_steps for different ranking types" do
       types_to_test = [
         ContestService::Constant::DIVISION,
         ContestService::Constant::DIVISION_AND_ZONE,
@@ -110,7 +110,7 @@ module ContestService
       end
     end
 
-    test 'initialize with category_id' do
+    test "initialize with category_id" do
       category = contest_categories(:category_senior)
       stats_service = ContestService::Statistics.new(@contest, category_id: category.id)
       figures = stats_service.participants_figure

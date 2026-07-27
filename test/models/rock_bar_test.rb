@@ -1,28 +1,28 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class RockBarTest < ActiveSupport::TestCase
   setup do
     @rock_bar = rock_bars(:rock_bar_one)
   end
 
-  test 'rock bar is valid' do
+  test "rock bar is valid" do
     assert_predicate @rock_bar, :valid?
   end
 
-  test 'rock bar is invalid without polyline' do
+  test "rock bar is invalid without polyline" do
     @rock_bar.polyline = nil
 
     assert_predicate @rock_bar, :invalid?
   end
 
-  test 'to_geo_json returns geojson format' do
+  test "to_geo_json returns geojson format" do
     geo_json = @rock_bar.to_geo_json
 
-    assert_equal 'Feature', geo_json[:type]
-    assert_equal 'LineString', geo_json[:geometry][:type]
-    assert_equal 'RockBar', geo_json[:properties][:type]
+    assert_equal "Feature", geo_json[:type]
+    assert_equal "LineString", geo_json[:geometry][:type]
+    assert_equal "RockBar", geo_json[:properties][:type]
     assert_equal @rock_bar.id, geo_json[:properties][:id]
     assert_equal @rock_bar.crag_id, geo_json[:properties][:crag_id]
     assert_nil geo_json[:properties][:sector_id]
@@ -30,10 +30,10 @@ class RockBarTest < ActiveSupport::TestCase
 
     first_coord = @rock_bar.polyline.first
 
-    assert_equal [first_coord[1], first_coord[0]], geo_json[:geometry][:coordinates].first
+    assert_equal [ first_coord[1], first_coord[0] ], geo_json[:geometry][:coordinates].first
   end
 
-  test 'summary_to_json returns correct keys' do
+  test "summary_to_json returns correct keys" do
     summary = @rock_bar.summary_to_json
 
     assert_equal @rock_bar.id, summary[:id]
@@ -42,7 +42,7 @@ class RockBarTest < ActiveSupport::TestCase
     assert_equal @rock_bar.crag.id, summary[:crag][:id]
   end
 
-  test 'detail_to_json returns correct keys' do
+  test "detail_to_json returns correct keys" do
     detail = @rock_bar.detail_to_json
 
     assert_equal @rock_bar.id, detail[:id]

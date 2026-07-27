@@ -103,11 +103,9 @@ module Api
         features = []
 
         # Crags
-        crags = if minimalistic
-                  @area.crags.includes(:parks, :approaches, :crag_sectors)
-                else
+        crags = minimalistic ?
+                  @area.crags.includes(:parks, :approaches, :crag_sectors) :
                   @area.crags.includes(:parks, :approaches, crag_sectors: { photo: { picture_attachment: :blob } }, photo: { picture_attachment: :blob })
-                end
         crags.each do |crag|
           # Crag sectors
           crag.crag_sectors.each do |sector|
@@ -130,11 +128,11 @@ module Api
         end
 
         render json: {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           crs: {
-            type: 'name',
+            type: "name",
             properties: {
-              name: 'urn'
+              name: "urn"
             }
           },
           features: features

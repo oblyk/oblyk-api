@@ -11,7 +11,7 @@ class OpenElevationApi
     end
 
     request = RestClient.post(
-      'https://api.open-elevation.com/api/v1/lookup',
+      "https://api.open-elevation.com/api/v1/lookup",
       { locations: float_coordinates }.to_json,
       content_type: :json,
       accept: :json
@@ -19,7 +19,7 @@ class OpenElevationApi
 
     return if request.code != 200
 
-    JSON.parse(request.body)['results']
+    JSON.parse(request.body)["results"]
   rescue StandardError
     false
   end

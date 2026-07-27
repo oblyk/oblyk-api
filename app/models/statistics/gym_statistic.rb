@@ -69,7 +69,7 @@ module Statistics
           {
             data: grades.map { |grade| grade[1][:count] },
             backgroundColor: grades.map { |grade| Grade.value_color(grade[0] - 1) },
-            label: 'number'
+            label: "number"
           }
         ],
         labels: grades.pluck(0)
@@ -87,20 +87,20 @@ module Statistics
         gym_level = gym.gym_levels.find_by climbing_type: climbing_type
 
         gym_level.levels&.each do |level|
-          background << level['color']
-          labels << level['color']
-          data << routes_in_climbing_type.sum { |route| route.level_color == level['color'] ? 1 : 0 }
+          background << level["color"]
+          labels << level["color"]
+          data << routes_in_climbing_type.sum { |route| route.level_color == level["color"] ? 1 : 0 }
         end
 
         charts << {
-          type: 'level_chart',
+          type: "level_chart",
           climbing_type: climbing_type,
           chart: {
             datasets: [
               {
                 data: data,
                 backgroundColor: background,
-                label: 'level'
+                label: "level"
               }
             ],
             labels: labels
@@ -156,12 +156,12 @@ module Statistics
         difficulty_average: 0
       }
       gym_routes.each do |gym_route|
-        next if gym_route.votes.blank? || gym_route.votes['difficulty_appreciations'].blank?
+        next if gym_route.votes.blank? || gym_route.votes["difficulty_appreciations"].blank?
 
-        difficulty_appreciations = gym_route.votes['difficulty_appreciations']
-        harness_status[:easy_for_the_grade] += difficulty_appreciations['easy_for_the_grade'].try(:[], 'count') || 0
-        harness_status[:this_grade_is_accurate] += difficulty_appreciations['this_grade_is_accurate'].try(:[], 'count') || 0
-        harness_status[:sandbagged] += difficulty_appreciations['sandbagged'].try(:[], 'count') || 0
+        difficulty_appreciations = gym_route.votes["difficulty_appreciations"]
+        harness_status[:easy_for_the_grade] += difficulty_appreciations["easy_for_the_grade"].try(:[], "count") || 0
+        harness_status[:this_grade_is_accurate] += difficulty_appreciations["this_grade_is_accurate"].try(:[], "count") || 0
+        harness_status[:sandbagged] += difficulty_appreciations["sandbagged"].try(:[], "count") || 0
       end
       appreciation_count = harness_status[:easy_for_the_grade] + harness_status[:this_grade_is_accurate] + harness_status[:sandbagged]
       difficulty_average = (harness_status[:easy_for_the_grade] * -1) + harness_status[:sandbagged]
@@ -174,7 +174,7 @@ module Statistics
 
       if routes.empty?
         return {
-          datasets: [{}],
+          datasets: [ {} ],
           labels: []
         }
       end
@@ -183,19 +183,19 @@ module Statistics
       dates = {}
 
       (oldest_opening_date..date).each do |date|
-        dates[date.strftime('%Y-%m-%d')] ||= { count: 0 }
+        dates[date.strftime("%Y-%m-%d")] ||= { count: 0 }
       end
 
       routes.each do |route|
-        dates[route.opened_at.strftime('%Y-%m-%d')][:count] += 1
+        dates[route.opened_at.strftime("%Y-%m-%d")][:count] += 1
       end
 
       {
         datasets: [
           {
             data: dates.map { |date| date[1][:count] },
-            backgroundColor: '#31994e',
-            label: 'number'
+            backgroundColor: "#31994e",
+            label: "number"
           }
         ],
         labels: dates.pluck(0)
@@ -207,9 +207,9 @@ module Statistics
     def gym_routes
       routes = gym.gym_routes
                   .joins(gym_sector: :gym_space)
-                  .where('gym_routes.opened_at <= :date AND (gym_routes.dismounted_at IS NULL OR gym_routes.dismounted_at >= :date)', date: date)
+                  .where("gym_routes.opened_at <= :date AND (gym_routes.dismounted_at IS NULL OR gym_routes.dismounted_at >= :date)", date: date)
       routes = routes.where(gym_spaces: { id: space_ids }) if space_ids.size.positive?
-      routes = routes.where('EXISTS(SELECT * FROM gym_route_openers WHERE gym_opener_id IN (:opener_ids) AND gym_route_id = gym_routes.id)', opener_ids: opener_ids) if opener_ids.size.positive?
+      routes = routes.where("EXISTS(SELECT * FROM gym_route_openers WHERE gym_opener_id IN (:opener_ids) AND gym_route_id = gym_routes.id)", opener_ids: opener_ids) if opener_ids.size.positive?
       routes
     end
   end

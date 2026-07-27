@@ -9,8 +9,8 @@ module Api
       before_action -> { can? GymRole::MANAGE_SPACE }, except: %i[index show]
 
       def index
-        gym_label_templates = case params.fetch(:with_archived, 'false')
-                              when 'true'
+        gym_label_templates = case params.fetch(:with_archived, "false")
+                              when "true"
                                 @gym.gym_label_templates
                               else
                                 @gym.gym_label_templates.unarchived
@@ -24,21 +24,21 @@ module Api
 
       def model
         render json: {
-          label_direction: 'one_by_row',
+          label_direction: "one_by_row",
           layout_options: GymLabelTemplate.default_layout_options,
           footer_options: GymLabelTemplate.default_footer_options,
           header_options: GymLabelTemplate.default_header_options,
           label_options: GymLabelTemplate.default_label_options,
           border_style: {
-            'border-color': '#BEBEBE',
-            'border-width': '0.3mm',
-            'border-style': 'solid',
-            'border-radius': '3mm'
+            'border-color': "#BEBEBE",
+            'border-width': "0.3mm",
+            'border-style': "solid",
+            'border-radius': "3mm"
           },
-          font_family: 'lato',
-          qr_code_position: 'none',
-          label_arrangement: 'rectangular_horizontal',
-          grade_style: 'tag_and_hold',
+          font_family: "lato",
+          qr_code_position: "none",
+          label_arrangement: "rectangular_horizontal",
+          grade_style: "tag_and_hold",
           display_points: false,
           display_openers: true,
           display_opened_at: true,
@@ -48,13 +48,13 @@ module Api
           display_climbing_style: true,
           display_grade: true,
           display_tag_and_hold: true,
-          page_format: 'A4',
-          page_direction: 'portrait'
+          page_format: "A4",
+          page_direction: "portrait"
         }, status: :ok
       end
 
       def copy
-        gym_label_template = GymLabelTemplate.new(@gym_label_template.attributes.except('id', 'created_at', 'updated_at', 'archived_at'))
+        gym_label_template = GymLabelTemplate.new(@gym_label_template.attributes.except("id", "created_at", "updated_at", "archived_at"))
         gym_label_template.name = "#{@gym_label_template.name} - copie"
         gym_label_template.save
         render json: gym_label_template.detail_to_json, status: :ok
@@ -65,8 +65,8 @@ module Api
         route_ids = params.fetch(:route_ids, nil)
         preview_routes_set = params.fetch(:preview_routes_set, nil)
         group_by = params.fetch(:group_by, nil)
-        sort_by = params.fetch(:sort_by, 'grade')
-        sort_direction = params.fetch(:sort_direction, 'asc') == 'asc' ? 'asc' : 'desc'
+        sort_by = params.fetch(:sort_by, "grade")
+        sort_direction = params.fetch(:sort_direction, "asc") == "asc" ? "asc" : "desc"
         param_reference = params.fetch(:reference, nil)
         routes_by_page = params.fetch(:routes_by_page, 7)&.to_i
         pages = []
@@ -80,16 +80,16 @@ module Api
             sector = @gym.gym_sectors.find(sector)
             gym_routes = sector.gym_routes.mounted
           end
-          gym_routes = gym_routes.order(min_grade_value: sort_direction) if group_by == 'anchor' || sort_by == 'grade'
-          gym_routes = gym_routes.order("anchor_number #{sort_direction}, min_grade_value") if group_by == 'sector' || sort_by == 'anchor'
-          gym_routes = gym_routes.joins(:gym_sector).order("gym_sectors.order #{sort_direction}, gym_sectors.name, min_grade_value") if sort_by == 'sector'
-          gym_routes = gym_routes.order("opened_at #{sort_direction}") if sort_by == 'opened_at'
+          gym_routes = gym_routes.order(min_grade_value: sort_direction) if group_by == "anchor" || sort_by == "grade"
+          gym_routes = gym_routes.order("anchor_number #{sort_direction}, min_grade_value") if group_by == "sector" || sort_by == "anchor"
+          gym_routes = gym_routes.joins(:gym_sector).order("gym_sectors.order #{sort_direction}, gym_sectors.name, min_grade_value") if sort_by == "sector"
+          gym_routes = gym_routes.order("opened_at #{sort_direction}") if sort_by == "opened_at"
         end
 
         gym_routes = gym_routes.map(&:summary_to_json) unless preview_routes_set
 
         # Qrcode in label
-        if @gym_label_template.qr_code_position == 'in_label'
+        if @gym_label_template.qr_code_position == "in_label"
           gym_routes.each_with_index do |gym_route, index|
             gym_routes[index][:qrcode] = RQRCode::QRCode.new(
               gym_route[:short_app_path],
@@ -101,9 +101,9 @@ module Api
           end
         end
 
-        reference_body = @gym_label_template.footer_options['center_bottom']['body']
-        footer_body = @gym_label_template.footer_options['center_top']['body']
-        header_body = @gym_label_template.header_options['center']['body']
+        reference_body = @gym_label_template.footer_options["center_bottom"]["body"]
+        footer_body = @gym_label_template.footer_options["center_top"]["body"]
+        header_body = @gym_label_template.header_options["center"]["body"]
 
         # Convert description to markdown
         if @gym_label_template.display_description
@@ -120,10 +120,10 @@ module Api
         end
 
         case group_by
-        when 'anchor'
+        when "anchor"
           groups = gym_routes.group_by { |gym_route| gym_route[:anchor_number] }
           groups.each do |k, routes|
-            type = 'Relais'
+            type = "Relais"
             reference = replace_tags reference_body, type, k
             footer = replace_tags footer_body, type, k
             header = replace_tags header_body, type, k
@@ -135,11 +135,11 @@ module Api
               routes: routes
             }
           end
-        when 'sector'
+        when "sector"
           groups = gym_routes.group_by { |gym_route| gym_route[:gym_sector_id] }
           groups.each do |k, routes|
             group_sector = GymSector.find k
-            type = 'Secteur'
+            type = "Secteur"
             reference = replace_tags reference_body, type, group_sector&.name
             footer = replace_tags footer_body, type, group_sector&.name
             header = replace_tags header_body, type, group_sector&.name
@@ -155,7 +155,7 @@ module Api
           page_loop = 0
           page_index = 0
           gym_routes.each do |gym_route|
-            type = ''
+            type = ""
             reference = replace_tags reference_body, type, param_reference
             footer = replace_tags footer_body, type, param_reference
             header = replace_tags header_body, type, param_reference
@@ -179,7 +179,7 @@ module Api
         # Qrcode in footer
         if @gym_label_template.page_qr_code?
           pages.each_with_index do |page, index|
-            routes_query = page[:routes].map { |route| "r[]=#{route[:id]}" }.join('&')
+            routes_query = page[:routes].map { |route| "r[]=#{route[:id]}" }.join("&")
             uri = "#{ENV.fetch('OBLYK_APP_URL', nil)}/grs/#{@gym.id}?#{routes_query}"
             pages[index][:footer_qrcode] = RQRCode::QRCode.new(
               uri,
@@ -308,91 +308,91 @@ module Api
         routes = [
           {
             sets: %w[simple multi_pitch],
-            id: 'a',
-            name: 'Nom voie 1',
-            climbing_type: 'sport_climbing',
-            description: 'Une description sur la voie',
-            short_app_path: preview_short_path('a'),
+            id: "a",
+            name: "Nom voie 1",
+            climbing_type: "sport_climbing",
+            description: "Une description sur la voie",
+            short_app_path: preview_short_path("a"),
             openers: [
-              { name: 'Simon' }, { name: 'Léa' }
+              { name: "Simon" }, { name: "Léa" }
             ],
             opened_at: Date.current,
-            hold_colors: ['#ffcc00'],
-            tag_colors: ['#ffcc00'],
-            sections: [{ grade: '5a', styles: %w[technical] }],
-            grade_to_s: '5a',
+            hold_colors: [ "#ffcc00" ],
+            tag_colors: [ "#ffcc00" ],
+            sections: [ { grade: "5a", styles: %w[technical] } ],
+            grade_to_s: "5a",
             points: 100,
             anchor_number: 1
           },
           {
             sets: %w[simple],
-            id: 'b',
-            name: 'Cotation complex',
-            climbing_type: 'sport_climbing',
+            id: "b",
+            name: "Cotation complex",
+            climbing_type: "sport_climbing",
             description: nil,
-            short_app_path: preview_short_path('b'),
+            short_app_path: preview_short_path("b"),
             openers: [
-              { name: 'Simon' }
+              { name: "Simon" }
             ],
             opened_at: Date.current,
-            hold_colors: ['#0055d4'],
+            hold_colors: [ "#0055d4" ],
             tag_colors: %w[#0055d4 #ab37c8],
-            sections: [{ grade: '6a+/b', styles: %w[physics resistance] }],
-            grade_to_s: '6a+/b',
+            sections: [ { grade: "6a+/b", styles: %w[physics resistance] } ],
+            grade_to_s: "6a+/b",
             points: 150,
             anchor_number: 1
           },
           {
-            sets: ['multi_pitch'],
-            id: 'c',
-            name: 'Deux longueurs',
-            climbing_type: 'sport_climbing',
-            description: 'Voie de deux longeurs',
-            short_app_path: preview_short_path('c'),
+            sets: [ "multi_pitch" ],
+            id: "c",
+            name: "Deux longueurs",
+            climbing_type: "sport_climbing",
+            description: "Voie de deux longeurs",
+            short_app_path: preview_short_path("c"),
             openers: [
-              { name: 'Simon' }
+              { name: "Simon" }
             ],
             opened_at: Date.current,
-            hold_colors: ['#0055d4'],
+            hold_colors: [ "#0055d4" ],
             tag_colors: %w[#0055d4 #ab37c8],
-            sections: [{ grade: '6a', styles: %w[physics] }, { grade: '6c+', styles: %w[resistance] }],
-            grade_to_s: '6a, 6c',
+            sections: [ { grade: "6a", styles: %w[physics] }, { grade: "6c+", styles: %w[resistance] } ],
+            grade_to_s: "6a, 6c",
             points: 250,
             anchor_number: 1
           },
           {
             sets: %w[simple multi_pitch],
-            id: 'd',
-            name: 'Cotation complex',
-            climbing_type: 'sport_climbing',
+            id: "d",
+            name: "Cotation complex",
+            climbing_type: "sport_climbing",
             description: nil,
-            short_app_path: preview_short_path('d'),
+            short_app_path: preview_short_path("d"),
             openers: [
-              { name: 'Simon' }
+              { name: "Simon" }
             ],
             opened_at: Date.current,
-            hold_colors: ['#ab37c8'],
-            tag_colors: ['#ab37c8'],
-            sections: [{ grade: '6c', styles: %w[boulder] }],
-            grade_to_s: '6c',
+            hold_colors: [ "#ab37c8" ],
+            tag_colors: [ "#ab37c8" ],
+            sections: [ { grade: "6c", styles: %w[boulder] } ],
+            grade_to_s: "6c",
             points: 200,
             anchor_number: 1
           },
           {
             sets: %w[simple multi_pitch],
-            id: 'e',
-            name: 'Voie avec 3 ouvreurs',
-            climbing_type: 'sport_climbing',
+            id: "e",
+            name: "Voie avec 3 ouvreurs",
+            climbing_type: "sport_climbing",
             description: nil,
-            short_app_path: preview_short_path('e'),
+            short_app_path: preview_short_path("e"),
             openers: [
-              { name: 'Simon' }, { name: 'Léa' }, { name: 'Pierre' }
+              { name: "Simon" }, { name: "Léa" }, { name: "Pierre" }
             ],
             opened_at: Date.current,
             hold_colors: %w[#ff0000 #000000],
-            tag_colors: ['#ff0000'],
-            sections: [{ grade: '7a+', styles: %w[endurance] }],
-            grade_to_s: '7a+',
+            tag_colors: [ "#ff0000" ],
+            sections: [ { grade: "7a+", styles: %w[endurance] } ],
+            grade_to_s: "7a+",
             points: 300,
             anchor_number: 1
           }
@@ -405,11 +405,11 @@ module Api
       end
 
       def replace_tags(body, group_type, group_value)
-        body = body&.gsub('%type_de_groupe%', group_type || '')
-        body = body&.gsub('%reference%', group_value.to_s)
-        body = body&.gsub('%salle%', @gym&.name || '')
-        body = body&.gsub('****', '')
-        body = body&.gsub('__', '')
+        body = body&.gsub("%type_de_groupe%", group_type || "")
+        body = body&.gsub("%reference%", group_value.to_s)
+        body = body&.gsub("%salle%", @gym&.name || "")
+        body = body&.gsub("****", "")
+        body = body&.gsub("__", "")
         if body.present?
           renderer = Redcarpet::Render::HTML.new(
             no_links: true,
@@ -419,7 +419,7 @@ module Api
           markdown = Redcarpet::Markdown.new(renderer)
           markdown.render body
         else
-          ''
+          ""
         end
       end
     end

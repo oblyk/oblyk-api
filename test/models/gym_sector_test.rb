@@ -1,35 +1,35 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class GymSectorTest < ActiveSupport::TestCase
   setup do
     @gym_sector = gym_sectors(:my_gym_sector)
   end
 
-  test 'gym_sector is valid' do
+  test "gym_sector is valid" do
     assert_predicate @gym_sector, :valid?
   end
 
-  test 'gym_sector is invalid without name' do
+  test "gym_sector is invalid without name" do
     @gym_sector.name = nil
 
     assert_not @gym_sector.valid?
   end
 
-  test 'gym_sector is invalid without height' do
+  test "gym_sector is invalid without height" do
     @gym_sector.height = nil
 
     assert_not @gym_sector.valid?
   end
 
-  test 'gym_sector is invalid with incorrect climbing_type' do
-    @gym_sector.climbing_type = 'invalid_type'
+  test "gym_sector is invalid with incorrect climbing_type" do
+    @gym_sector.climbing_type = "invalid_type"
 
     assert_not @gym_sector.valid?
   end
 
-  test 'gym_sector app_path returns correct path' do
+  test "gym_sector app_path returns correct path" do
     gym = @gym_sector.gym_space.gym
     gym_space = @gym_sector.gym_space
     expected_path = "/gyms/#{gym.id}/#{gym.slug_name}/spaces/#{gym_space.id}/#{gym_space.slug_name}?sector=#{@gym_sector.id}"
@@ -37,7 +37,7 @@ class GymSectorTest < ActiveSupport::TestCase
     assert_equal expected_path, @gym_sector.app_path
   end
 
-  test 'gym_sector summary_to_json returns correct keys' do
+  test "gym_sector summary_to_json returns correct keys" do
     summary = @gym_sector.summary_to_json
 
     assert_equal @gym_sector.id, summary[:id]
@@ -46,19 +46,19 @@ class GymSectorTest < ActiveSupport::TestCase
     assert_includes summary.keys, :gym_space
   end
 
-  test 'anchor_ranges returns correct array' do
+  test "anchor_ranges returns correct array" do
     @gym_sector.min_anchor_number = 1
     @gym_sector.max_anchor_number = 5
 
-    assert_equal [1, 2, 3, 4, 5], @gym_sector.anchor_ranges
+    assert_equal [ 1, 2, 3, 4, 5 ], @gym_sector.anchor_ranges
 
     @gym_sector.min_anchor_number = 5
     @gym_sector.max_anchor_number = 1
 
-    assert_equal [1, 2, 3, 4, 5], @gym_sector.anchor_ranges
+    assert_equal [ 1, 2, 3, 4, 5 ], @gym_sector.anchor_ranges
   end
 
-  test 'anchor_ranges returns empty array if one is blank' do
+  test "anchor_ranges returns empty array if one is blank" do
     @gym_sector.min_anchor_number = 1
     @gym_sector.max_anchor_number = nil
 

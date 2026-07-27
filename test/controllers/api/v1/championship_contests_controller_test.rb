@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -12,8 +12,8 @@ module Api
         @auth_headers = api_headers(user: :super_admin_user)
       end
 
-      test 'should add contest to championship' do
-        assert_difference('ChampionshipContest.count') do
+      test "should add contest to championship" do
+        assert_difference("ChampionshipContest.count") do
           post api_v1_gym_championship_championship_contests_url(gym_id: @gym.id, championship_id: @championship.id),
                params: { championship: { contest_id: @contest.id } },
                headers: @auth_headers, as: :json
@@ -21,10 +21,10 @@ module Api
         assert_response :no_content
       end
 
-      test 'should remove contest from championship' do
+      test "should remove contest from championship" do
         ChampionshipContest.create(championship: @championship, contest: @contest)
 
-        assert_difference('ChampionshipContest.count', -1) do
+        assert_difference("ChampionshipContest.count", -1) do
           delete delete_api_v1_gym_championship_championship_contests_url(gym_id: @gym.id, championship_id: @championship.id),
                  params: { championship: { contest_id: @contest.id } },
                  headers: @auth_headers, as: :json

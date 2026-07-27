@@ -47,13 +47,13 @@ module Api
         # Sheet name
         sheet_references.uniq!
         sheet_references = if sheet_references.size <= 5
-                             sheet_references.join(', ')
+                             sheet_references.join(", ")
                            else
                              "#{sheet_references.first(5).join(', ')}..."
                            end
 
         filename = "Disque de voie - #{sheet_references} - #{I18n.l(Date.current, format: :iso)} - #{@gym.name}.pdf"
-        response.headers['X-Filename'] = filename
+        response.headers["X-Filename"] = filename
 
         send_data pdf_io, filename: filename
       end

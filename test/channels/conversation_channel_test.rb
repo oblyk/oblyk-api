@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ConversationChannelTest < ActionCable::Channel::TestCase
-  test 'subscribes to a conversation stream when user is part of it' do
+  test "subscribes to a conversation stream when user is part of it" do
     user = users(:normal_user)
     conversation = Conversation.create!
     ConversationUser.create!(user: user, conversation: conversation)
@@ -14,7 +14,7 @@ class ConversationChannelTest < ActionCable::Channel::TestCase
     assert_has_stream "conversations_#{conversation.id}"
   end
 
-  test 'does not subscribe to a conversation stream when user is not part of it' do
+  test "does not subscribe to a conversation stream when user is not part of it" do
     user = users(:normal_user)
     other_user = users(:super_admin_user)
     conversation = Conversation.create!
@@ -27,7 +27,7 @@ class ConversationChannelTest < ActionCable::Channel::TestCase
     end
   end
 
-  test 'unsubscribed stops all streams' do
+  test "unsubscribed stops all streams" do
     user = users(:normal_user)
     conversation = Conversation.create!
     ConversationUser.create!(user: user, conversation: conversation)

@@ -10,7 +10,7 @@ class Locality < ApplicationRecord
 
   scope :with_partner_search, -> { where(partner_search_users_count: 1..) }
   scope :with_local_sharing, -> { where(local_sharing_users_count: 1..) }
-  scope :with_climbers, -> { where('localities.local_sharing_users_count + localities.partner_search_users_count > 0') }
+  scope :with_climbers, -> { where("localities.local_sharing_users_count + localities.partner_search_users_count > 0") }
 
   def summary_to_json
     detail_to_json
@@ -37,17 +37,17 @@ class Locality < ApplicationRecord
 
   def to_geo_json
     {
-      type: 'Feature',
+      type: "Feature",
       properties: {
-        type: 'Locality',
-        icon: 'locality',
+        type: "Locality",
+        icon: "locality",
         name: name,
         id: id,
         partner_search_users_count: partner_search_users_count,
         local_sharing_users_count: local_sharing_users_count,
         distinct_users_count: distinct_users_count
       },
-      geometry: { type: 'Point', coordinates: [Float(longitude), Float(latitude), 0.0] }
+      geometry: { type: "Point", coordinates: [ Float(longitude), Float(latitude), 0.0 ] }
     }
   end
 
@@ -56,7 +56,7 @@ class Locality < ApplicationRecord
                                                   .activated
                                                   .where(locality_id: id)
                                                   .where(partner_search: true)
-                                                  .where('users.last_activity_at > ?', Date.current - 3.years)
+                                                  .where("users.last_activity_at > ?", Date.current - 3.years)
                                                   .where(users: { partner_search: true })
                                                   .count
     self.local_sharing_users_count = LocalityUser.activated

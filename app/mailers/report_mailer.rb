@@ -11,12 +11,12 @@ class ReportMailer < ApplicationMailer
     @user_id = params[:user_id]
     @user_email = params[:user_email]
 
-    subject = t('mailer.report.new_report.title', report_id: @report_id)
+    subject = t("mailer.report.new_report.title", report_id: @report_id)
 
     if use_send_in_blue?
-      send_with_send_in_blue(ENV.fetch('SEND_IN_BLUE_REPLY_EMAIL', nil), subject, 'report_mailer/new_report')
+      send_with_send_in_blue(ENV.fetch("SEND_IN_BLUE_REPLY_EMAIL", nil), subject, "report_mailer/new_report")
     else
-      mail(to: ENV.fetch('SMTP_USER_NAME', nil), subject: subject)
+      mail(to: ENV.fetch("SMTP_USER_NAME", nil), subject: subject)
     end
   end
 end

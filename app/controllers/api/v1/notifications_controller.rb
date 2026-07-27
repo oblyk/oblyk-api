@@ -7,14 +7,14 @@ module Api
       before_action :set_notification, only: %i[read]
 
       def index
-        unread_only = params.fetch(:unread_only, 'true')
-        notifications = @current_user.notifications.includes(:notifiable, notifiable: [:publishable, { user: { avatar_attachment: :blob } }])
-        notifications = unread_only == 'true' ? notifications.unread : notifications.page(params.fetch(:page, 1))
+        unread_only = params.fetch(:unread_only, "true")
+        notifications = @current_user.notifications.includes(:notifiable, notifiable: [ :publishable, { user: { avatar_attachment: :blob } } ])
+        notifications = unread_only == "true" ? notifications.unread : notifications.page(params.fetch(:page, 1))
 
         render json: serializer(
           NotificationSerializer,
           notifications,
-          { include: [:notifiable], params: { include_attachments: { User: %i[avatar] } } }
+          { include: [ :notifiable ], params: { include_attachments: { User: %i[avatar] } } }
         ), status: :ok
       end
 

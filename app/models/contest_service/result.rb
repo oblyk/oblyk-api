@@ -21,7 +21,7 @@ module ContestService
     def delete_cache_key
       by_types = %w[by_team by_participant]
       genders = %w[unisex multisex]
-      last_ascent = @contest.contest_participant_ascents.maximum(:registered_at) || 'no-ascents'
+      last_ascent = @contest.contest_participant_ascents.maximum(:registered_at) || "no-ascents"
 
       %w[rich simple].each do |detail|
         by_types.each do |team|
@@ -163,7 +163,7 @@ module ContestService
           ranks = []
           rlt_participant[:stages].each do |rlt_stage|
             last_step_rank = rlt_stage[:steps].map { |step| step[rank_key] }.last
-            rank_decimal = ''
+            rank_decimal = ""
             rlt_stage[:steps].map { |step| step[rank_key] }
                              .reverse
                              .each_with_index do |rank, rank_index|
@@ -213,9 +213,9 @@ module ContestService
 
         # Sort participant by global rank point
         results[category_index][:participants] = if is_combined && @contest.combined_ranking_type == Constant::COMBINED_RANKING_DECREMENT_POINTS
-                                                   results[category_index][:participants].sort_by { |participant| [-participant[:global_rank_point], participant[:team_id] || 0] }
+                                                   results[category_index][:participants].sort_by { |participant| [ -participant[:global_rank_point], participant[:team_id] || 0 ] }
                                                  else
-                                                   results[category_index][:participants].sort_by { |participant| [participant[:global_rank_point], participant[:team_id] || 0] }
+                                                   results[category_index][:participants].sort_by { |participant| [ participant[:global_rank_point], participant[:team_id] || 0 ] }
                                                  end
 
         # Create global rank index
@@ -260,11 +260,11 @@ module ContestService
     # @return [Hash], example : { step_id => [ contest_category_id, contest_category_id, contest_category_id] }
     def build_category_by_steps
       self.category_by_steps = Hash.new { |hash, key| hash[key] = [] }
-      group_categories = ContestRouteGroupCategory.select('contest_stage_steps.id AS contest_stage_step_id, contest_route_group_categories.contest_category_id')
+      group_categories = ContestRouteGroupCategory.select("contest_stage_steps.id AS contest_stage_step_id, contest_route_group_categories.contest_category_id")
                                                   .joins(contest_route_group: { contest_stage_step: :contest_stage })
                                                   .where(contest_stages: { contest_id: @contest.id })
       group_categories.each do |group_category|
-        category_by_steps[group_category['contest_stage_step_id']] << group_category.contest_category_id
+        category_by_steps[group_category["contest_stage_step_id"]] << group_category.contest_category_id
       end
     end
 
@@ -287,10 +287,10 @@ module ContestService
     # Create key for result cache
     # @return [String]
     def results_cache_key
-      rich_key = @rich_data ? 'rich' : 'simple'
-      by_team_key = @by_team ? 'by_team' : 'by_participant'
-      unisex = @unisex ? 'unisex' : 'multisex'
-      last_ascent = @contest.contest_participant_ascents.maximum(:registered_at) || 'no-ascents'
+      rich_key = @rich_data ? "rich" : "simple"
+      by_team_key = @by_team ? "by_team" : "by_participant"
+      unisex = @unisex ? "unisex" : "multisex"
+      last_ascent = @contest.contest_participant_ascents.maximum(:registered_at) || "no-ascents"
       "contest-results-#{@contest.id}-#{last_ascent}-#{rich_key}-#{by_team_key}-#{unisex}"
     end
 

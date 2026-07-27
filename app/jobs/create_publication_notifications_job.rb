@@ -24,8 +24,8 @@ class CreatePublicationNotificationsJob < ApplicationJob
 
     followers.each do |follow|
       Notification.create(
-        notification_type: 'new_publication',
-        notifiable_type: 'Publication',
+        notification_type: "new_publication",
+        notifiable_type: "Publication",
         notifiable_id: publication_id,
         user: follow.user
       )

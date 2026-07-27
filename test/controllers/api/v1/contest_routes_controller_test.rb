@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -17,31 +17,31 @@ module Api
         @admin_headers = api_headers(user: :super_admin_user)
       end
 
-      test 'should get index' do
+      test "should get index" do
         get api_v1_gym_contest_contest_routes_url(@gym, @contest), headers: @public_headers
 
         assert_response :success
       end
 
-      test 'should show contest_route' do
+      test "should show contest_route" do
         get api_v1_gym_contest_contest_route_url(@gym, @contest, @contest_route), headers: @public_headers
 
         assert_response :success
       end
 
-      test 'should update contest_route' do
+      test "should update contest_route" do
         put api_v1_gym_contest_contest_route_url(@gym, @contest, @contest_route),
-            params: { contest_route: { name: 'Updated Route Name' } },
+            params: { contest_route: { name: "Updated Route Name" } },
             headers: @admin_headers,
             as: :json
 
         assert_response :success
         @contest_route.reload
 
-        assert_equal 'Updated Route Name', @contest_route.name
+        assert_equal "Updated Route Name", @contest_route.name
       end
 
-      test 'should disable contest_route' do
+      test "should disable contest_route" do
         put disable_api_v1_gym_contest_contest_route_url(@gym, @contest, @contest_route),
             headers: @admin_headers, as: :json
 
@@ -51,7 +51,7 @@ module Api
         assert_not_nil @contest_route.disabled_at
       end
 
-      test 'should enable contest_route' do
+      test "should enable contest_route" do
         @contest_route.disable!
         put enable_api_v1_gym_contest_contest_route_url(@gym, @contest, @contest_route),
             headers: @admin_headers, as: :json
@@ -62,8 +62,8 @@ module Api
         assert_nil @contest_route.disabled_at
       end
 
-      test 'should add picture' do
-        dummy_file = fixture_file_upload('test/fixtures/files/image.jpg', 'image/jpeg')
+      test "should add picture" do
+        dummy_file = fixture_file_upload("test/fixtures/files/image.jpg", "image/jpeg")
         post add_picture_api_v1_gym_contest_contest_route_url(@gym, @contest, @contest_route),
              params: { contest_route: { picture: dummy_file } },
              headers: @admin_headers
@@ -71,16 +71,16 @@ module Api
         assert_response :no_content
       end
 
-      test 'should delete picture' do
+      test "should delete picture" do
         delete delete_picture_api_v1_gym_contest_contest_route_url(@gym, @contest, @contest_route),
                headers: @admin_headers, as: :json
 
         assert_response :no_content
       end
 
-      test 'should destroy contest_route' do
+      test "should destroy contest_route" do
         @contest_route.contest_participant_ascents.destroy_all
-        assert_difference('ContestRoute.count', -1) do
+        assert_difference("ContestRoute.count", -1) do
           delete api_v1_gym_contest_contest_route_url(@gym, @contest, @contest_route),
                  headers: @admin_headers, as: :json
         end

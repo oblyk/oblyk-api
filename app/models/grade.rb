@@ -96,7 +96,7 @@ class Grade
     return unless grade
 
     grade = grade.strip
-    grade_parts = grade.split '/'
+    grade_parts = grade.split "/"
     clean_grade = []
     grade_parts.each do |grade_part|
       grade_part = grade_part.downcase if /^[0-9][abc]/i.match?(grade_part)
@@ -106,7 +106,7 @@ class Grade
       grade_part = grade_part.upcase if /^V/i.match?(grade_part)
       clean_grade << grade_part
     end
-    clean_grade.join '/'
+    clean_grade.join "/"
   end
 
   def self.valid?(grade)
@@ -119,8 +119,8 @@ class Grade
     return nil unless grade
 
     val = MIN_GRADE
-    grade = grade.split('/').first
-    grade = grade.delete '?'
+    grade = grade.split("/").first
+    grade = grade.delete "?"
     GRADES_TO_VALUE.each_with_index do |grade_order, index|
       next unless grade.match? grade_order
 
@@ -140,55 +140,55 @@ class Grade
   end
 
   def self.degree(value)
-    return '1' if (1..6).cover? value
-    return '2' if (7..12).cover? value
-    return '3' if (13..18).cover? value
-    return '4' if (19..24).cover? value
-    return '5' if (25..30).cover? value
-    return '6' if (31..36).cover? value
-    return '7' if (37..42).cover? value
-    return '8' if (43..48).cover? value
+    return "1" if (1..6).cover? value
+    return "2" if (7..12).cover? value
+    return "3" if (13..18).cover? value
+    return "4" if (19..24).cover? value
+    return "5" if (25..30).cover? value
+    return "6" if (31..36).cover? value
+    return "7" if (37..42).cover? value
+    return "8" if (43..48).cover? value
 
-    '9' if (49..54).cover? value
+    "9" if (49..54).cover? value
   end
 
   def self.level(value)
-    return '1a' if (1..2).cover? value
-    return '1b' if (3..4).cover? value
-    return '1c' if (5..6).cover? value
+    return "1a" if (1..2).cover? value
+    return "1b" if (3..4).cover? value
+    return "1c" if (5..6).cover? value
 
-    return '2a' if (7..8).cover? value
-    return '2b' if (9..10).cover? value
-    return '2c' if (11..12).cover? value
+    return "2a" if (7..8).cover? value
+    return "2b" if (9..10).cover? value
+    return "2c" if (11..12).cover? value
 
-    return '3a' if (13..14).cover? value
-    return '3b' if (15..16).cover? value
-    return '3c' if (17..18).cover? value
+    return "3a" if (13..14).cover? value
+    return "3b" if (15..16).cover? value
+    return "3c" if (17..18).cover? value
 
-    return '4a' if (19..20).cover? value
-    return '4b' if (21..22).cover? value
-    return '4c' if (23..24).cover? value
+    return "4a" if (19..20).cover? value
+    return "4b" if (21..22).cover? value
+    return "4c" if (23..24).cover? value
 
-    return '5a' if (25..26).cover? value
-    return '5b' if (27..28).cover? value
-    return '5c' if (29..30).cover? value
+    return "5a" if (25..26).cover? value
+    return "5b" if (27..28).cover? value
+    return "5c" if (29..30).cover? value
 
-    return '6a' if (31..32).cover? value
-    return '6b' if (33..34).cover? value
-    return '6c' if (35..36).cover? value
+    return "6a" if (31..32).cover? value
+    return "6b" if (33..34).cover? value
+    return "6c" if (35..36).cover? value
 
-    return '7a' if (37..38).cover? value
-    return '7b' if (39..40).cover? value
-    return '7c' if (41..42).cover? value
+    return "7a" if (37..38).cover? value
+    return "7b" if (39..40).cover? value
+    return "7c" if (41..42).cover? value
 
-    return '8a' if (43..44).cover? value
-    return '8b' if (45..46).cover? value
-    return '8c' if (47..48).cover? value
+    return "8a" if (43..44).cover? value
+    return "8b" if (45..46).cover? value
+    return "8c" if (47..48).cover? value
 
-    return '9a' if (49..50).cover? value
-    return '9b' if (51..52).cover? value
+    return "9a" if (49..50).cover? value
+    return "9b" if (51..52).cover? value
 
-    '9c' if (53..54).cover? value
+    "9c" if (53..54).cover? value
   end
 
   def self.degree_colors
@@ -202,9 +202,9 @@ class Grade
   def self.range_values(grade_system)
     ranges = {
       french: 0..53,
-      pick_district: [12, 14, 16, 22, 31, 33, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49],
-      usa_lead: [0, 6, 8, 12, 14, 18, 20, 24, 26, 28, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53],
-      usa_bouldering: [12, 13, 14, 16, 21, 23, 26, 33, 35, 36, 37, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48]
+      pick_district: [ 12, 14, 16, 22, 31, 33, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49 ],
+      usa_lead: [ 0, 6, 8, 12, 14, 18, 20, 24, 26, 28, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53 ],
+      usa_bouldering: [ 12, 13, 14, 16, 21, 23, 26, 33, 35, 36, 37, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48 ]
     }
     ranges[grade_system]
   end

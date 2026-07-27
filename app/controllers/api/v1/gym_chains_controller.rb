@@ -11,11 +11,11 @@ module Api
 
       def gyms_geo_json
         render json: {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           crs: {
-            type: 'name',
+            type: "name",
             properties: {
-              name: 'urn'
+              name: "urn"
             }
           },
           features: geo_json_features

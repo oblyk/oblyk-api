@@ -5,7 +5,7 @@ module Api
     class CommonsController < ApiController
       def figures
         last_date = DateTime.now - 1.day
-        figures = Rails.cache.fetch('commons_contoller_figures', expires_in: 5.minutes) do
+        figures = Rails.cache.fetch("commons_contoller_figures", expires_in: 5.minutes) do
           {
             all: {
               crags_count: Crag.count,
@@ -37,17 +37,17 @@ module Api
       def micro_stats
         figures = params.fetch(:figures, [])
         data = {}
-        data[:climbers_count] = User.count if figures.include? 'climbers_count'
-        data[:gyms_count] = Gym.count if figures.include? 'gyms_count'
-        data[:crags_count] = Crag.count if figures.include? 'crags_count'
-        data[:crag_routes_count] = CragRoute.count if figures.include? 'crag_routes_count'
-        data[:guide_book_papers_count] = GuideBookPaper.count if figures.include? 'guide_book_papers_count'
-        if figures.include? 'partner_search_count'
+        data[:climbers_count] = User.count if figures.include? "climbers_count"
+        data[:gyms_count] = Gym.count if figures.include? "gyms_count"
+        data[:crags_count] = Crag.count if figures.include? "crags_count"
+        data[:crag_routes_count] = CragRoute.count if figures.include? "crag_routes_count"
+        data[:guide_book_papers_count] = GuideBookPaper.count if figures.include? "guide_book_papers_count"
+        if figures.include? "partner_search_count"
           data[:partner_search_count] = User.where(partner_search: true)
-                                            .where('EXISTS(SELECT * FROM locality_users WHERE deactivated_at IS NULL AND user_id = users.id)')
-                                            .where('users.last_activity_at > ?', Date.current - 3.years).count
+                                            .where("EXISTS(SELECT * FROM locality_users WHERE deactivated_at IS NULL AND user_id = users.id)")
+                                            .where("users.last_activity_at > ?", Date.current - 3.years).count
         end
-        if figures.include? 'gym_active_guides_count'
+        if figures.include? "gym_active_guides_count"
           results = ActiveRecord::Base.connection.execute(
             'SELECT COUNT(*), gym_id
                 FROM gyms
@@ -100,7 +100,7 @@ module Api
       def last_contributions
         publications = Publication.includes(publishable: {
                                               crag: { static_map_attachment: :blob, photo: { picture_attachment: :blob } },
-                                              gym: [:gym_options, :gym_spaces, { logo_attachment: :blob }]
+                                              gym: [ :gym_options, :gym_spaces, { logo_attachment: :blob } ]
                                             })
                                   .where(publishable_type: %i[Crag Gym GuideBookPaper], publishable_subject: :create)
                                   .order(published_at: :desc, id: :desc)
@@ -114,7 +114,7 @@ module Api
             :publication_attachments,
             :publishable,
             :author,
-            'publication_attachments.attachable'
+            "publication_attachments.attachable"
           ],
           params: {
             include_attachments: {

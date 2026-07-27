@@ -35,8 +35,8 @@ module Api
 
       def index
         contests = @gym.contests
-        contests = contests.where(archived_at: nil) if params.fetch(:active, 'false') == 'true'
-        contests = contests.where.not(archived_at: nil) if params.fetch(:archived, 'false') == 'true'
+        contests = contests.where(archived_at: nil) if params.fetch(:active, "false") == "true"
+        contests = contests.where.not(archived_at: nil) if params.fetch(:archived, "false") == "true"
 
         render json: contests.order(:archived_at, start_date: :desc).map(&:summary_to_json), status: :ok
       end
@@ -50,9 +50,9 @@ module Api
       end
 
       def results
-        by_team = params.fetch(:by_team, 'false') == 'true'
+        by_team = params.fetch(:by_team, "false") == "true"
         by_team = false unless @contest.team_contest
-        unisex = params.fetch(:unisex, 'false') == 'true'
+        unisex = params.fetch(:unisex, "false") == "true"
         render json: ContestService::Result.new(@contest, by_team: by_team, unisex: unisex).results, status: :ok
       end
 
@@ -65,7 +65,7 @@ module Api
           @contest,
           category_id: params[:category_id],
           genre: params[:genre],
-          exclude_without_ascents: params.fetch(:exclude_without_ascents, 'false') == 'true'
+          exclude_without_ascents: params.fetch(:exclude_without_ascents, "false") == "true"
         )
         render json: {
           participants: {
@@ -109,7 +109,7 @@ module Api
 
       def destroy
         unless @contest.draft?
-          render json: { error: { base: ['published_contest_cannot_be_deleted'] } }, status: :unprocessable_content
+          render json: { error: { base: [ "published_contest_cannot_be_deleted" ] } }, status: :unprocessable_content
           return
         end
 

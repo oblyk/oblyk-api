@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -11,24 +11,24 @@ module Api
         @public_headers = api_access_token_headers
       end
 
-      test 'should get index' do
+      test "should get index" do
         get api_v1_fast_accesses_url, headers: @user_headers, as: :json
 
         assert_response :success
 
         json_response = response.parsed_body
 
-        assert_includes json_response, 'follows_count'
-        assert_includes json_response, 'contests'
+        assert_includes json_response, "follows_count"
+        assert_includes json_response, "contests"
       end
 
-      test 'should be protected by session' do
+      test "should be protected by session" do
         get api_v1_fast_accesses_url, headers: @public_headers, as: :json
 
         assert_response :unauthorized
       end
 
-      test 'should return followed crag and gym' do
+      test "should return followed crag and gym" do
         crag = crags(:rocher_des_aures)
         gym = gyms(:my_gym)
 
@@ -41,13 +41,13 @@ module Api
 
         json_response = response.parsed_body
 
-        assert_not_nil json_response['crag']
-        assert_equal crag.name, json_response['crag']['name']
-        assert_not_nil json_response['gym']
-        assert_equal gym.name, json_response['gym']['name']
+        assert_not_nil json_response["crag"]
+        assert_equal crag.name, json_response["crag"]["name"]
+        assert_not_nil json_response["gym"]
+        assert_equal gym.name, json_response["gym"]["name"]
       end
 
-      test 'should return active contests participation' do
+      test "should return active contests participation" do
         contest = contests(:contest_1)
         category = contest_categories(:category_senior)
 
@@ -63,10 +63,10 @@ module Api
           contest_category: category,
           first_name: @user.first_name,
           last_name: @user.last_name,
-          date_of_birth: '1990-01-01',
-          genre: 'male',
+          date_of_birth: "1990-01-01",
+          genre: "male",
           email: @user.email,
-          token: 'test-token'
+          token: "test-token"
         )
 
         participant.stub :send_subscription_mail, nil do
@@ -79,9 +79,9 @@ module Api
 
         json_response = response.parsed_body
 
-        assert_not_empty json_response['contests']
-        assert_equal contest.name, json_response['contests'].first['name']
-        assert_not_nil json_response['contests'].first['participant_token']
+        assert_not_empty json_response["contests"]
+        assert_equal contest.name, json_response["contests"].first["name"]
+        assert_not_nil json_response["contests"].first["participant_token"]
       end
     end
   end

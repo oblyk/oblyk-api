@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ConversationUserTest < ActiveSupport::TestCase
   setup do
@@ -9,17 +9,17 @@ class ConversationUserTest < ActiveSupport::TestCase
     @conversation = conversations(:conversation_1)
   end
 
-  test 'read! updates last_read_at' do
+  test "read! updates last_read_at" do
     previous_read_at = @conversation_user.last_read_at
     @conversation_user.read!
 
     assert_operator @conversation_user.last_read_at, :>, previous_read_at
   end
 
-  test 'read! marks notifications as read' do
+  test "read! marks notifications as read" do
     message = conversation_messages(:message_2)
     notification = Notification.create!(
-      notification_type: 'new_message',
+      notification_type: "new_message",
       user: @user,
       notifiable: message,
       read_at: nil

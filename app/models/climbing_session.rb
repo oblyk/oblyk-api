@@ -10,8 +10,8 @@ class ClimbingSession < ApplicationRecord
   has_many :ascent_crag_routes
 
   def summary_to_json(for_current_user: true)
-    crag_ascents = ascents.joins(crag_route: :crag).select { |ascent| ascent.type == 'AscentCragRoute' }.sort_by { |ascent| -(ascent.max_grade_value || 0) }
-    gym_ascents = ascents.made.select { |ascent| ascent.type == 'AscentGymRoute' }.sort_by { |ascent| -(ascent.max_grade_value || 0) }
+    crag_ascents = ascents.joins(crag_route: :crag).select { |ascent| ascent.type == "AscentCragRoute" }.sort_by { |ascent| -(ascent.max_grade_value || 0) }
+    gym_ascents = ascents.made.select { |ascent| ascent.type == "AscentGymRoute" }.sort_by { |ascent| -(ascent.max_grade_value || 0) }
 
     crag_ids = []
     gym_ids = []
@@ -44,7 +44,7 @@ class ClimbingSession < ApplicationRecord
     crag_ascents.each do |crag_ascent|
       crag_ids << crag_ascent.crag_route.crag_id unless crag_ids.include? crag_ascent.crag_route.crag_id
 
-      if crag_ascent.ascent_status == 'project'
+      if crag_ascent.ascent_status == "project"
         project_by_grade[crag_ascent.max_grade_text] ||= {
           grade_text: crag_ascent.max_grade_text,
           grade_value: crag_ascent.max_grade_value,
@@ -91,7 +91,7 @@ class ClimbingSession < ApplicationRecord
                                 .maximum(:session_date)
     next_climbing_session = ClimbingSession
                             .where(user: user)
-                            .where('climbing_sessions.session_date > ?', session_date)
+                            .where("climbing_sessions.session_date > ?", session_date)
                             .minimum(:session_date)
 
     user_ids = AscentUser.where(ascent_id: ascent_crag_routes.pluck(:id)).pluck(:user_id).uniq

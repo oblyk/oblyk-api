@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -15,52 +15,52 @@ module Api
         @other_user_headers = api_headers(user: :super_admin_user)
       end
 
-      test 'should get index' do
+      test "should get index" do
         get api_v1_follows_url,
-            params: { followable_type: 'Crag', followable_id: @crag.id },
+            params: { followable_type: "Crag", followable_id: @crag.id },
             headers: @user_headers
 
         assert_response :success
       end
 
-      test 'should get followers' do
+      test "should get followers" do
         get followers_api_v1_follows_url,
-            params: { followable_type: 'Crag', followable_id: @crag.id },
+            params: { followable_type: "Crag", followable_id: @crag.id },
             headers: @user_headers
 
         assert_response :success
       end
 
-      test 'should create follow' do
+      test "should create follow" do
         new_crag = crags(:orpierre)
-        assert_difference('Follow.count', 1) do
+        assert_difference("Follow.count", 1) do
           post api_v1_follows_url,
-               params: { follow: { followable_type: 'Crag', followable_id: new_crag.id } },
+               params: { follow: { followable_type: "Crag", followable_id: new_crag.id } },
                headers: @user_headers, as: :json
         end
         assert_response :success
       end
 
-      test 'should destroy follow' do
-        assert_difference('Follow.count', -1) do
+      test "should destroy follow" do
+        assert_difference("Follow.count", -1) do
           delete api_v1_follows_url,
-                 params: { followable_type: 'Crag', followable_id: @crag.id },
+                 params: { followable_type: "Crag", followable_id: @crag.id },
                  headers: @user_headers, as: :json
         end
         assert_response :success
       end
 
-      test 'should increment follow' do
+      test "should increment follow" do
         follow = follows(:follow_user_to_crag)
         put increment_api_v1_follows_url,
-            params: { followable_type: 'Crag', followable_id: @crag.id },
+            params: { followable_type: "Crag", followable_id: @crag.id },
             headers: @user_headers, as: :json
 
         assert_response :success
         follow.reload
       end
 
-      test 'should get my follows by types' do
+      test "should get my follows by types" do
         get my_follows_by_types_api_v1_follows_url,
             params: { followable_types: %w[Crag Gym] },
             headers: @user_headers
@@ -68,13 +68,13 @@ module Api
         assert_response :success
         json_response = response.parsed_body
 
-        assert json_response.key?('Crag')
-        assert json_response.key?('Gym')
+        assert json_response.key?("Crag")
+        assert json_response.key?("Gym")
       end
 
-      test 'should not destroy follow of another user' do
+      test "should not destroy follow of another user" do
         delete api_v1_follows_url,
-               params: { followable_type: 'User', followable_id: @user.id },
+               params: { followable_type: "User", followable_id: @user.id },
                headers: @user_headers, as: :json
 
         assert_response :forbidden

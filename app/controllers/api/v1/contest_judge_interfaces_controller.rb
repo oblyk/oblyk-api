@@ -39,9 +39,9 @@ module Api
 
       def participants
         participant_ids = @contest_judge.contest_routes
-                                        .select('DISTINCT contest_participants.id AS participant_id')
+                                        .select("DISTINCT contest_participants.id AS participant_id")
                                         .joins(contest_route_group: { contest_route_group_categories: { contest_category: :contest_participants } })
-                                        .joins('INNER JOIN contest_participant_steps ON contest_participants.id = contest_participant_steps.contest_participant_id AND contest_route_groups.contest_stage_step_id = contest_participant_steps.contest_stage_step_id')
+                                        .joins("INNER JOIN contest_participant_steps ON contest_participants.id = contest_participant_steps.contest_participant_id AND contest_route_groups.contest_stage_step_id = contest_participant_steps.contest_stage_step_id")
                                         .where("contest_route_groups.genre_type = 'unisex' OR contest_route_groups.genre_type = contest_participants.genre")
                                         .reorder(1)
         participants = ContestParticipant.where(id: participant_ids.map(&:participant_id))
@@ -63,10 +63,10 @@ module Api
       end
 
       def verify_contest_judge_access
-        token = JwtToken::Token.decode(request.headers['HttpContestJudgeToken']).try(:[], 'data')
+        token = JwtToken::Token.decode(request.headers["HttpContestJudgeToken"]).try(:[], "data")
         return render json: {}, status: 419 if token.blank?
 
-        judge = @contest.contest_judges.find_by(id: token['judge_id'], code: token['code'])
+        judge = @contest.contest_judges.find_by(id: token["judge_id"], code: token["code"])
 
         return if judge
 

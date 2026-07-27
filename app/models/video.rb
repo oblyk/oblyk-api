@@ -26,9 +26,9 @@ class Video < ApplicationRecord
   validates :video_service, presence: true
   validates :viewable_type, inclusion: { in: %w[Crag CragRoute Gym GymRoute].freeze }
   validates :video_service, inclusion: { in: VIDEO_SERVICES }
-  validates :url, format: { with: URL_REGEXP }, if: proc { |obj| obj.video_service != 'oblyk_video' }
+  validates :url, format: { with: URL_REGEXP }, if: proc { |obj| obj.video_service != "oblyk_video" }
 
-  validates :video_file, blob: { content_type: :video }, if: proc { |obj| obj.video_service == 'oblyk_video' }
+  validates :video_file, blob: { content_type: :video }, if: proc { |obj| obj.video_service == "oblyk_video" }
 
   def app_path
     "/videos/#{id}"
@@ -39,7 +39,7 @@ class Video < ApplicationRecord
   end
 
   def video_metadata
-    return nil unless video_service == 'oblyk_video'
+    return nil unless video_service == "oblyk_video"
     return nil unless video_file.attached?
 
     video_file.blob.metadata
@@ -50,7 +50,7 @@ class Video < ApplicationRecord
   end
 
   def video_file_path
-    return nil unless video_service == 'oblyk_video'
+    return nil unless video_service == "oblyk_video"
     return nil unless video_file.attached?
 
     if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
@@ -68,10 +68,10 @@ class Video < ApplicationRecord
   end
 
   def video_content_type
-    return nil unless video_service == 'oblyk_video'
+    return nil unless video_service == "oblyk_video"
     return nil unless video_file.attached?
 
-    needs_be_converted? ? 'video/mp4' : video_file.content_type
+    needs_be_converted? ? "video/mp4" : video_file.content_type
   end
 
   def summary_to_json
@@ -105,7 +105,7 @@ class Video < ApplicationRecord
   end
 
   def thumbnail_url
-    return nil unless video_service == 'oblyk_video'
+    return nil unless video_service == "oblyk_video"
     return nil unless video_file.attached?
 
     if Rails.application.config.cdn_storage_services.include? Rails.application.config.active_storage.service
@@ -113,8 +113,8 @@ class Video < ApplicationRecord
     else
       begin
         rails_representation_url(
-          video_file.preview(resize_to_limit: [1000, 1000]).processed,
-          host: ENV.fetch('OBLYK_API_URL', nil)
+          video_file.preview(resize_to_limit: [ 1000, 1000 ]).processed,
+          host: ENV.fetch("OBLYK_API_URL", nil)
         )
       rescue StandardError => e
         RorVsWild.record_error(e)
@@ -133,24 +133,24 @@ class Video < ApplicationRecord
   end
 
   def convert_to_mp4
-    video_file.open(tmpdir: '/tmp') do |file|
+    video_file.open(tmpdir: "/tmp") do |file|
       movie = FFMPEG::Movie.new(file.path)
       path = "tmp/video-#{SecureRandom.alphanumeric(12)}.mp4"
-      movie.transcode(path, { video_codec: 'libx264', audio_codec: 'aac' })
-      video_file.attach(io: File.open(path), filename: "video-#{SecureRandom.alphanumeric(12)}.mp4", content_type: 'video/mp4')
+      movie.transcode(path, { video_codec: "libx264", audio_codec: "aac" })
+      video_file.attach(io: File.open(path), filename: "video-#{SecureRandom.alphanumeric(12)}.mp4", content_type: "video/mp4")
     end
   end
 
   def publication_push!(publishable_subject = :new_video)
     # Do not create publication for embedded video on GymRoute
-    return if viewable_type == 'GymRoute' && video_service != 'oblyk_video'
+    return if viewable_type == "GymRoute" && video_service != "oblyk_video"
 
     case viewable_type
-    when 'CragRoute', 'CragSector'
-      publishable_type = 'Crag'
+    when "CragRoute", "CragSector"
+      publishable_type = "Crag"
       publishable_id = viewable.crag_id
-    when 'GymRoute'
-      publishable_type = 'Gym'
+    when "GymRoute"
+      publishable_type = "Gym"
       publishable_id = viewable.gym_sector&.gym_space&.gym_id
     else
       publishable_type = viewable_type
@@ -163,7 +163,7 @@ class Video < ApplicationRecord
       publishable_id: publishable_id,
       publishable_type: publishable_type,
       publishable_subject: publishable_subject,
-      published_at: [created_at.all_day]
+      published_at: [ created_at.all_day ]
     )
 
     publication ||= Publication.new(
@@ -174,50 +174,50 @@ class Video < ApplicationRecord
     )
     publication.published_at = created_at
     publication.last_updated_at = created_at
-    publication.publication_attachments << PublicationAttachment.new(attachable_type: 'Video', attachable_id: id)
+    publication.publication_attachments << PublicationAttachment.new(attachable_type: "Video", attachable_id: id)
     publication.save
   end
 
   private
 
   def needs_be_converted?
-    video_service == 'oblyk_video' && video_file.content_type == 'video/quicktime'
+    video_service == "oblyk_video" && video_file.content_type == "video/quicktime"
   end
 
   def embedded_code_service
     if url.blank?
-      self.video_service = 'oblyk_video'
+      self.video_service = "oblyk_video"
       return true
     end
 
     self.video_service = case url
                          when /(youtube\.com|youtu\.be)/
-                           'youtube'
+                           "youtube"
                          when /vimeo\.com/
-                           'vimeo'
+                           "vimeo"
                          when /(dai\.ly|dailymotion\.com)/
-                           'dailymotion'
+                           "dailymotion"
                          when /(instagram\.com)/
-                           'instagram'
+                           "instagram"
                          when /(tiktok\.com)/
-                           'tiktok'
+                           "tiktok"
                          end
     return unless video_service
 
     oembed_url = URI::HTTPS.build(
-      host: 'iframe.ly',
-      path: '/api/oembed',
+      host: "iframe.ly",
+      path: "/api/oembed",
       query: {
-        api_key: ENV.fetch('IFRAMELY_API_KEY', nil),
+        api_key: ENV.fetch("IFRAMELY_API_KEY", nil),
         url: url
       }.to_query
     )
     resp = Net::HTTP.get_response(oembed_url)
     begin
       data = JSON.parse(resp.body)
-      self.embedded_code = data['html']
+      self.embedded_code = data["html"]
     rescue JSON::ParserError
-      errors.add(:url, 'must_be_valid_video_service')
+      errors.add(:url, "must_be_valid_video_service")
       false
     end
   end

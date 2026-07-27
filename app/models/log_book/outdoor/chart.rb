@@ -19,7 +19,7 @@ module LogBook
             {
               data: Climb::CRAG_LIST.map { |type| climb_counts[type] },
               backgroundColor: Climb::CRAG_LIST.map { |type| Climb::COLOR[type] },
-              label: 'climb_type'
+              label: "climb_type"
             }
           ],
           labels: Climb::CRAG_LIST
@@ -43,7 +43,7 @@ module LogBook
             {
               data: grades.map { |grade| grade[1][:count] },
               backgroundColor: grades.map { |grade| Grade.value_color(grade[0] - 1) },
-              label: 'number'
+              label: "number"
             }
           ],
           labels: grades.pluck(0)
@@ -51,7 +51,7 @@ module LogBook
       end
 
       def years
-        return { datasets: [{ data: [] }], labels: [] } if @ascents.blank?
+        return { datasets: [ { data: [] } ], labels: [] } if @ascents.blank?
 
         years = Hash.new(0)
 
@@ -67,8 +67,8 @@ module LogBook
           datasets: [
             {
               data: sorted_years.values,
-              backgroundColor: '#1565c0',
-              label: 'number'
+              backgroundColor: "#1565c0",
+              label: "number"
             }
           ],
           labels: sorted_years.keys
@@ -76,14 +76,14 @@ module LogBook
       end
 
       def months
-        return { datasets: [{ data: [] }], labels: [] } if @ascents.blank?
+        return { datasets: [ { data: [] } ], labels: [] } if @ascents.blank?
 
         dates = Hash.new(0)
 
         @ascents.each do |ascent|
           next if ascent.released_at.blank?
 
-          dates[ascent.released_at.strftime('%Y-%m')] += 1
+          dates[ascent.released_at.strftime("%Y-%m")] += 1
         end
 
         sorted_dates = dates.sort.to_h
@@ -92,8 +92,8 @@ module LogBook
           datasets: [
             {
               data: sorted_dates.values,
-              backgroundColor: '#1565c0',
-              label: 'number'
+              backgroundColor: "#1565c0",
+              label: "number"
             }
           ],
           labels: sorted_dates.keys
@@ -101,7 +101,7 @@ module LogBook
       end
 
       def evolution_by_year
-        return { datasets: [{ data: [] }], labels: [] } if @ascents.blank?
+        return { datasets: [ { data: [] } ], labels: [] } if @ascents.blank?
 
         years = Hash.new { |hash, year| hash[year] = Hash.new(0) }
 
@@ -110,7 +110,7 @@ module LogBook
 
           year = ascent.released_at.year
           climbing_type = ascent.climbing_type.to_sym
-          years[year][climbing_type] = [years[year][climbing_type], ascent.max_grade_value].max
+          years[year][climbing_type] = [ years[year][climbing_type], ascent.max_grade_value ].max
         end
 
         sorted_years = years.keys.sort

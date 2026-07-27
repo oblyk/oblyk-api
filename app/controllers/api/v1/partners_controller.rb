@@ -5,21 +5,21 @@ module Api
     class PartnersController < ApiController
       def figures
         climbers = User.where(partner_search: true)
-                       .where('EXISTS(SELECT * FROM locality_users WHERE deactivated_at IS NULL AND user_id = users.id)')
-                       .where('users.last_activity_at > ?', Date.current - 3.years)
+                       .where("EXISTS(SELECT * FROM locality_users WHERE deactivated_at IS NULL AND user_id = users.id)")
+                       .where("users.last_activity_at > ?", Date.current - 3.years)
         render json: {
           count_global: climbers.count,
-          count_last_week: climbers.where('partner_search_activated_at > ?', DateTime.current - 1.week).count
+          count_last_week: climbers.where("partner_search_activated_at > ?", DateTime.current - 1.week).count
         }, status: :ok
       end
 
       def partners_around
         locality_user = LocalityUser.joins(:user, :locality)
                                     .where(users: { partner_search: true })
-                                    .where('EXISTS(SELECT * FROM locality_users WHERE deactivated_at IS NULL AND user_id = users.id)')
-                                    .where('users.last_activity_at > ?', Date.current - 3.years)
+                                    .where("EXISTS(SELECT * FROM locality_users WHERE deactivated_at IS NULL AND user_id = users.id)")
+                                    .where("users.last_activity_at > ?", Date.current - 3.years)
                                     .where(
-                                      'ST_DISTANCE_SPHERE(POINT(localities.longitude, localities.latitude), POINT(:lng, :lat)) < (locality_users.radius * 1000)',
+                                      "ST_DISTANCE_SPHERE(POINT(localities.longitude, localities.latitude), POINT(:lng, :lat)) < (locality_users.radius * 1000)",
                                       lat: params[:latitude].to_f,
                                       lng: params[:longitude].to_f
                                     )

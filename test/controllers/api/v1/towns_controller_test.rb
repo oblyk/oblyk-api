@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -10,18 +10,18 @@ module Api
         @headers = api_access_token_headers
       end
 
-      test 'should search towns' do
+      test "should search towns" do
         @town.index!
-        get search_api_v1_towns_url(query: 'Valence'), headers: @headers
+        get search_api_v1_towns_url(query: "Valence"), headers: @headers
 
         assert_response :success
         json_response = response.parsed_body
 
         assert_kind_of Hash, json_response
-        assert(json_response['data'].any? { |w| w['attributes']['name'] == 'Valence' })
+        assert(json_response["data"].any? { |w| w["attributes"]["name"] == "Valence" })
       end
 
-      test 'should get towns by geo search' do
+      test "should get towns by geo search" do
         get geo_search_api_v1_towns_url(latitude: 44.93, longitude: 4.89), headers: @headers
 
         assert_response :success
@@ -30,34 +30,34 @@ module Api
         assert_kind_of Array, json_response
       end
 
-      test 'should show town' do
+      test "should show town" do
         get api_v1_town_url(@town.slug_name), headers: @headers
 
         assert_response :success
         json_response = response.parsed_body
 
-        assert_equal @town.name, json_response['name']
+        assert_equal @town.name, json_response["name"]
       end
 
-      test 'should return 404 for non-existent town' do
-        get api_v1_town_url('non-existent-town'), headers: @headers
+      test "should return 404 for non-existent town" do
+        get api_v1_town_url("non-existent-town"), headers: @headers
 
         assert_response :not_found
       end
 
-      test 'should get geo_json' do
+      test "should get geo_json" do
         get geo_json_api_v1_town_url(@town.slug_name), headers: @headers
 
         assert_response :success
         json_response = response.parsed_body
 
-        assert_equal 'FeatureCollection', json_response['type']
-        assert_kind_of Array, json_response['features']
+        assert_equal "FeatureCollection", json_response["type"]
+        assert_kind_of Array, json_response["features"]
       end
 
-      test 'should get geo_json with parameters' do
+      test "should get geo_json with parameters" do
         get geo_json_api_v1_town_url(@town.slug_name),
-            params: { minimalistic: 'true', dist: 20 },
+            params: { minimalistic: "true", dist: 20 },
             headers: @headers
 
         assert_response :success

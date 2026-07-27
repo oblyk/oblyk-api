@@ -35,7 +35,7 @@ module Api
         features = []
 
         # Crags
-        if params.fetch(:crags, 'true') == 'true'
+        if params.fetch(:crags, "true") == "true"
           crags = minimalistic ? @department.crags : @department.crags.includes(photo: { picture_attachment: :blob })
           Climb::CRAG_LIST.each do |climbing_type|
             crags = crags.where(climbing_type => true) if climbing_type == params[:climbing_type]
@@ -46,7 +46,7 @@ module Api
         end
 
         # Gyms
-        if params.fetch(:gyms, 'true') == 'true'
+        if params.fetch(:gyms, "true") == "true"
           gyms = @department.gyms.select(%i[id name longitude latitude updated_at]).includes(banner_attachment: :blob)
           gyms.find_each do |gym|
             features << gym.to_geo_json
@@ -56,11 +56,11 @@ module Api
         features << @department.to_geo_json if @department.geo_polygon
 
         render json: {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           crs: {
-            type: 'name',
+            type: "name",
             properties: {
-              name: 'urn'
+              name: "urn"
             }
           },
           features: features

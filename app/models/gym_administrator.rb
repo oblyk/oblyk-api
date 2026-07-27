@@ -59,7 +59,7 @@ class GymAdministrator < ApplicationRecord
     return unless roles
 
     (roles || []).each do |role|
-      errors.add(:roles, I18n.t('activerecord.errors.messages.inclusion')) unless GymRole::LIST.include? role
+      errors.add(:roles, I18n.t("activerecord.errors.messages.inclusion")) unless GymRole::LIST.include? role
     end
   end
 end

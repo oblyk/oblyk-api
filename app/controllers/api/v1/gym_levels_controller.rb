@@ -13,7 +13,7 @@ module Api
         average_by_level_for_sector_id = params.fetch(:average_for_sector_id, nil)
         if average_by_level_for_sector_id
           json_levels = []
-          level_by_index = GymRoute.select('ROUND(AVG(min_grade_value)) AS average_grade, level_index, climbing_type')
+          level_by_index = GymRoute.select("ROUND(AVG(min_grade_value)) AS average_grade, level_index, climbing_type")
                                    .where(gym_sector_id: average_by_level_for_sector_id)
                                    .group(:climbing_type, :level_index)
           by_climbs = level_by_index.group_by(&:climbing_type)
@@ -23,7 +23,7 @@ module Api
             if levels_for_climb
               json_level[:levels]&.each_with_index do |level, index|
                 levels_for_climb.each do |level_for_climb|
-                  json_level[:levels][index]['average_grade'] = level_for_climb[:average_grade] if level_for_climb[:level_index] == level['order']
+                  json_level[:levels][index]["average_grade"] = level_for_climb[:average_grade] if level_for_climb[:level_index] == level["order"]
                 end
               end
             end

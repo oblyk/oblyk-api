@@ -13,7 +13,7 @@ class Crag < ApplicationRecord
   meilisearch synchronous: Rails.env.test? do
     attribute %i[name city latitude longitude]
     attribute :areas_name do
-      areas.map(&:name).join(' ')
+      areas.map(&:name).join(" ")
     end
 
     searchable_attributes %i[name city areas_name]
@@ -51,7 +51,7 @@ class Crag < ApplicationRecord
     south_west
     west
     north_west
-  ], if: proc { |_obj| ENV['PAPER_TRAIL'] == 'true' }
+  ], if: proc { |_obj| ENV["PAPER_TRAIL"] == "true" }
 
   has_one_attached :static_map
   has_one_attached :static_map_banner
@@ -91,7 +91,7 @@ class Crag < ApplicationRecord
   after_create_commit :publication_push!
 
   def location
-    [latitude, longitude]
+    [ latitude, longitude ]
   end
 
   def rich_name
@@ -99,12 +99,12 @@ class Crag < ApplicationRecord
   end
 
   def climbing_key
-    key = ''
-    key += sport_climbing ? '1' : '0'
-    key += multi_pitch || trad_climbing || aid_climbing ? '1' : '0'
-    key += bouldering ? '1' : '0'
-    key += deep_water ? '1' : '0'
-    key += via_ferrata ? '1' : '0'
+    key = ""
+    key += sport_climbing ? "1" : "0"
+    key += multi_pitch || trad_climbing || aid_climbing ? "1" : "0"
+    key += bouldering ? "1" : "0"
+    key += deep_water ? "1" : "0"
+    key += via_ferrata ? "1" : "0"
     key
   end
 
@@ -132,22 +132,22 @@ class Crag < ApplicationRecord
   def update_climbing_type!
     climbing_types = crag_routes.select(:climbing_type).distinct&.pluck(:climbing_type)
 
-    self.sport_climbing = climbing_types.include?('sport_climbing')
-    self.bouldering = climbing_types.include?('bouldering')
-    self.multi_pitch = climbing_types.include?('multi_pitch')
-    self.trad_climbing = climbing_types.include?('trad_climbing')
-    self.aid_climbing = climbing_types.include?('aid_climbing')
-    self.deep_water = climbing_types.include?('deep_water')
-    self.via_ferrata = climbing_types.include?('via_ferrata')
+    self.sport_climbing = climbing_types.include?("sport_climbing")
+    self.bouldering = climbing_types.include?("bouldering")
+    self.multi_pitch = climbing_types.include?("multi_pitch")
+    self.trad_climbing = climbing_types.include?("trad_climbing")
+    self.aid_climbing = climbing_types.include?("aid_climbing")
+    self.deep_water = climbing_types.include?("deep_water")
+    self.via_ferrata = climbing_types.include?("via_ferrata")
 
     save
   end
 
   def cover_attachment_object
     if photo_id.present?
-      attachment_object(photo.picture, 'Crag_cover')
+      attachment_object(photo.picture, "Crag_cover")
     else
-      attachment_object(static_map, 'Crag_cover')
+      attachment_object(static_map, "Crag_cover")
     end
   end
 
@@ -198,7 +198,7 @@ class Crag < ApplicationRecord
         photo: {
           id: photo&.id,
           attachments: {
-            picture: attachment_object(photo&.picture, 'Crag_picture')
+            picture: attachment_object(photo&.picture, "Crag_picture")
           }
         },
         attachments: {
@@ -255,14 +255,14 @@ class Crag < ApplicationRecord
   def to_geo_json(minimalistic: false)
     Rails.cache.fetch("#{cache_key_with_version}/#{'minimalistic_' if minimalistic}geo_json_crag", expires_in: 28.days) do
       features = {
-        type: 'Feature',
+        type: "Feature",
         properties: {
-          type: 'Crag',
+          type: "Crag",
           id: id,
           name: name,
           icon: "crag-marker-#{climbing_key}"
         },
-        geometry: { type: 'Point', coordinates: [Float(longitude), Float(latitude), 0.0] }
+        geometry: { type: "Point", coordinates: [ Float(longitude), Float(latitude), 0.0 ] }
       }
       unless minimalistic
         features[:properties].merge!(
@@ -306,13 +306,13 @@ class Crag < ApplicationRecord
   end
 
   def update_ascents_count!
-    self.ascent_users_count = AscentCragRoute.select('COUNT(DISTINCT ascents.user_id) AS count')
+    self.ascent_users_count = AscentCragRoute.select("COUNT(DISTINCT ascents.user_id) AS count")
                                              .joins(:crag_route)
                                              .find_by(
                                                crag_routes: { crag_id: id },
                                                ascents: { ascent_status: AscentStatus::FIRST_TOP_LIST }
                                              )[:count]
-    self.ascents_count = AscentCragRoute.select('COUNT(*) AS count')
+    self.ascents_count = AscentCragRoute.select("COUNT(*) AS count")
                                         .joins(:crag_route)
                                         .find_by(
                                           crag_routes: { crag_id: id },
@@ -324,7 +324,7 @@ class Crag < ApplicationRecord
   def publication_push!(publishable_subject = :create)
     Publication.create(
       publishable_id: id,
-      publishable_type: 'Crag',
+      publishable_type: "Crag",
       publishable_subject: publishable_subject,
       published_at: created_at,
       last_updated_at: created_at,
@@ -340,7 +340,7 @@ class Crag < ApplicationRecord
     return if rocks&.count&.zero?
 
     rocks.each do |rock|
-      errors.add(:rocks, I18n.t('activerecord.errors.messages.inclusion')) if Rock::LIST.exclude? rock
+      errors.add(:rocks, I18n.t("activerecord.errors.messages.inclusion")) if Rock::LIST.exclude? rock
     end
   end
 

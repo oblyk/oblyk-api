@@ -12,7 +12,7 @@ class GymThreeDAsset < ApplicationRecord
 
   validates :name, presence: true
   validates :picture, blob: { content_type: :image }, allow_nil: true
-  validates :three_d_gltf, blob: { content_type: 'model/gltf+json' }, allow_nil: true
+  validates :three_d_gltf, blob: { content_type: "model/gltf+json" }, allow_nil: true
 
   def summary_to_json
     Rails.cache.fetch("#{cache_key_with_version}/summary_gym_three_d_asset", expires_in: 28.days) do

@@ -18,7 +18,7 @@ class GuideBookPaper < ApplicationRecord
     ean
     number_of_page
     weight
-  ], if: proc { |_obj| ENV['PAPER_TRAIL'] == 'true' }
+  ], if: proc { |_obj| ENV["PAPER_TRAIL"] == "true" }
 
   FUNDING_STATUS_LIST = %w[
     contributes_to_financing
@@ -36,8 +36,8 @@ class GuideBookPaper < ApplicationRecord
   has_many :place_of_sales
   has_many :article_guide_book_papers
   has_many :articles, through: :article_guide_book_papers
-  belongs_to :next_guide_book_paper, class_name: 'GuideBookPaper', optional: true
-  has_many :previous_guide_book_papers, class_name: 'GuideBookPaper', foreign_key: :next_guide_book_paper_id
+  belongs_to :next_guide_book_paper, class_name: "GuideBookPaper", optional: true
+  has_many :previous_guide_book_papers, class_name: "GuideBookPaper", foreign_key: :next_guide_book_paper_id
   has_many :publications, as: :publishable
 
   validates :name, presence: true
@@ -98,20 +98,20 @@ class GuideBookPaper < ApplicationRecord
   def to_geo_json
     Rails.cache.fetch("#{cache_key_with_version}/geo_json_guide_book_paper", expires_in: 28.days) do
       crags_coordinates = crags.map do |crag|
-        [crag.latitude, crag.longitude]
+        [ crag.latitude, crag.longitude ]
       end
       geo_center = GeoHelper.point_central crags_coordinates
       {
-        type: 'Feature',
+        type: "Feature",
         properties: {
-          type: 'GuideBookPaper',
+          type: "GuideBookPaper",
           id: id,
           attachments: {
             cover: attachment_object(cover)
           },
-          icon: 'guide-book-paper'
+          icon: "guide-book-paper"
         },
-        geometry: { type: 'Point', coordinates: [Float(geo_center[1]), Float(geo_center[0]), 0.0] }
+        geometry: { type: "Point", coordinates: [ Float(geo_center[1]), Float(geo_center[0]), 0.0 ] }
       }
     end
   end
@@ -141,11 +141,11 @@ class GuideBookPaper < ApplicationRecord
       crag.to_geo_json(minimalistic: minimalistic)
     end
     {
-      type: 'FeatureCollection',
+      type: "FeatureCollection",
       crs: {
-        type: 'name',
+        type: "name",
         properties: {
-          name: 'urn'
+          name: "urn"
         }
       },
       features: features
@@ -161,10 +161,10 @@ class GuideBookPaper < ApplicationRecord
   end
 
   def location
-    return [nil, nil] if crags.empty?
+    return [ nil, nil ] if crags.empty?
 
     crags_coordinates = crags.map do |crag|
-      [crag.latitude, crag.longitude]
+      [ crag.latitude, crag.longitude ]
     end
     GeoHelper.point_central crags_coordinates
   end
@@ -177,7 +177,7 @@ class GuideBookPaper < ApplicationRecord
   def publication_push!(publishable_subject = :create)
     Publication.create(
       publishable_id: id,
-      publishable_type: 'GuideBookPaper',
+      publishable_type: "GuideBookPaper",
       publishable_subject: publishable_subject,
       published_at: created_at,
       last_updated_at: created_at,

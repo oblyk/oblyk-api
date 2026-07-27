@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -11,7 +11,7 @@ module Api
         @headers = api_headers
       end
 
-      test 'should get index' do
+      test "should get index" do
         get api_v1_gym_indoor_subscription_products_url(gym_id: @gym.id), headers: @headers
 
         assert_response :success
@@ -20,13 +20,13 @@ module Api
         assert_kind_of Array, json_response
       end
 
-      test 'should show indoor subscription product' do
+      test "should show indoor subscription product" do
         get api_v1_gym_indoor_subscription_product_url(gym_id: @gym.id, id: @product.id), headers: @headers
 
         assert_response :success
         json_response = response.parsed_body
 
-        assert_equal @product.id, json_response['id']
+        assert_equal @product.id, json_response["id"]
       end
     end
   end

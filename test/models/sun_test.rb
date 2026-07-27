@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class SunTest < ActiveSupport::TestCase
-  test 'Sun::LIST is an array' do
+  test "Sun::LIST is an array" do
     assert_kind_of Array, Sun::LIST
   end
 
-  test 'Sun::LIST contains expected values' do
+  test "Sun::LIST contains expected values" do
     expected_anchors = %w[
       sunny_all_day
       shady
@@ -18,11 +18,11 @@ class SunTest < ActiveSupport::TestCase
     assert_equal expected_anchors.sort, Sun::LIST.sort
   end
 
-  test 'Sun::LIST is frozen' do
+  test "Sun::LIST is frozen" do
     assert_predicate Sun::LIST, :frozen?
   end
 
-  test 'Sun::LIST has 4 elements' do
+  test "Sun::LIST has 4 elements" do
     assert_equal 4, Sun::LIST.size
   end
 end

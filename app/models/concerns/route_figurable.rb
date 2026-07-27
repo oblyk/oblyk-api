@@ -29,26 +29,26 @@ module RouteFigurable
         via_ferrata: 0
       },
       degrees: {
-        '1' => 0,
-        '2' => 0,
-        '3' => 0,
-        '4' => 0,
-        '5' => 0,
-        '6' => 0,
-        '7' => 0,
-        '8' => 0,
-        '9' => 0
+        "1" => 0,
+        "2" => 0,
+        "3" => 0,
+        "4" => 0,
+        "5" => 0,
+        "6" => 0,
+        "7" => 0,
+        "8" => 0,
+        "9" => 0
       },
       levels: {
-        '1a' => 0, '1b' => 0, '1c' => 0,
-        '2a' => 0, '2b' => 0, '2c' => 0,
-        '3a' => 0, '3b' => 0, '3c' => 0,
-        '4a' => 0, '4b' => 0, '4c' => 0,
-        '5a' => 0, '5b' => 0, '5c' => 0,
-        '6a' => 0, '6b' => 0, '6c' => 0,
-        '7a' => 0, '7b' => 0, '7c' => 0,
-        '8a' => 0, '8b' => 0, '8c' => 0,
-        '9a' => 0, '9b' => 0, '9c' => 0
+        "1a" => 0, "1b" => 0, "1c" => 0,
+        "2a" => 0, "2b" => 0, "2c" => 0,
+        "3a" => 0, "3b" => 0, "3c" => 0,
+        "4a" => 0, "4b" => 0, "4c" => 0,
+        "5a" => 0, "5b" => 0, "5c" => 0,
+        "6a" => 0, "6b" => 0, "6c" => 0,
+        "7a" => 0, "7b" => 0, "7c" => 0,
+        "8a" => 0, "8b" => 0, "8c" => 0,
+        "9a" => 0, "9b" => 0, "9c" => 0
       }
     }
 
@@ -84,11 +84,11 @@ module RouteFigurable
       end
 
       crag_route.sections.each do |section|
-        next unless section['grade_value']&.positive?
+        next unless section["grade_value"]&.positive?
 
         figures[:section_count] += 1
-        figures[:degrees][Grade.degree(section['grade_value'])] += 1
-        figures[:levels][Grade.level(section['grade_value'])] += 1
+        figures[:degrees][Grade.degree(section["grade_value"])] += 1
+        figures[:levels][Grade.level(section["grade_value"])] += 1
       end
     end
     figures

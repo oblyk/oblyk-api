@@ -5,9 +5,9 @@ module Api
     module Sessions
       class TokenController < ApiController
         def refresh
-          refresh_token = JwtToken::Token.decode(params[:refresh_token]).try(:[], 'data')
+          refresh_token = JwtToken::Token.decode(params[:refresh_token]).try(:[], "data")
 
-          user_id = refresh_token.try(:[], 'id')
+          user_id = refresh_token.try(:[], "id")
           unless user_id
             render json: {}, status: 419
             return

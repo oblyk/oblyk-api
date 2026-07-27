@@ -1,33 +1,35 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ContestRouteGroupCategoryTest < ActiveSupport::TestCase
   setup do
     @route_group_category = contest_route_group_categories(:route_group_1_cat_u16)
   end
 
-  test 'contest_route_group_category is valid' do
+  test "contest_route_group_category is valid" do
     assert_predicate @route_group_category, :valid?
   end
 
-  test 'delete_results_cache is called after save' do
+  test "delete_results_cache is called after save" do
     mock_contest = Minitest::Mock.new
     mock_contest.expect :call, true
 
     @route_group_category.contest.stub :delete_results_cache, mock_contest do
       @route_group_category.save
     end
-    mock_contest.verify
+
+    assert mock_contest.verify
   end
 
-  test 'delete_results_cache is called after destroy' do
+  test "delete_results_cache is called after destroy" do
     mock_contest = Minitest::Mock.new
     mock_contest.expect :call, true
 
     @route_group_category.contest.stub :delete_results_cache, mock_contest do
       @route_group_category.destroy
     end
-    mock_contest.verify
+
+    assert mock_contest.verify
   end
 end

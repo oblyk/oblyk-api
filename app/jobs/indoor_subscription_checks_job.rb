@@ -10,7 +10,7 @@ class IndoorSubscriptionChecksJob < ApplicationJob
     finished_subscriptions.find_each do |subscription|
       subscription.update_gym_plans!
       result_plan = subscription.gyms.first.plan
-      next if result_plan != 'free'
+      next if result_plan != "free"
 
       IndoorSubscriptionMailer.with(indoor_subscription: subscription)
                               .end_indoor_subscription

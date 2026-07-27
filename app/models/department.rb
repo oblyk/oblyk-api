@@ -40,8 +40,8 @@ class Department < ApplicationRecord
       end
     end
 
-    hardest_sport_climbing = crag_routes.where(climbing_type: 'sport_climbing').order(max_grade_value: :desc).first
-    hardest_bouldering = crag_routes.where(climbing_type: 'bouldering').order(max_grade_value: :desc).first
+    hardest_sport_climbing = crag_routes.where(climbing_type: "sport_climbing").order(max_grade_value: :desc).first
+    hardest_bouldering = crag_routes.where(climbing_type: "bouldering").order(max_grade_value: :desc).first
 
     guide_books = GuideBookPaper.select(%i[id slug_name name author])
                                 .includes(cover_attachment: :blob)
@@ -97,9 +97,9 @@ class Department < ApplicationRecord
 
   def to_geo_json
     {
-      type: 'Feature',
+      type: "Feature",
       properties: {
-        type: 'Department',
+        type: "Department",
         id: id,
         name: name,
         slug_name: slug_name,
@@ -107,7 +107,7 @@ class Department < ApplicationRecord
         country_code: country.code_country,
         country_slug_name: country.slug_name
       },
-      geometry: { type: 'Polygon', coordinates: geo_polygon }
+      geometry: { type: "Polygon", coordinates: geo_polygon }
     }
   end
 end

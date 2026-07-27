@@ -8,14 +8,14 @@ module Api
       before_action :set_current_organization
 
       def user_for_paper_trail
-        @current_user ? @current_user.id : 'Public user'
+        @current_user ? @current_user.id : "Public user"
       end
 
       private
 
       def serializer(serializer_class, resource, options = {})
         serializer = serializer_class.new(resource, options).serializable_hash
-        serializer[:json_type] = 'jsonapi.org'
+        serializer[:json_type] = "jsonapi.org"
         serializer
       end
 
@@ -23,7 +23,7 @@ module Api
       def check_ip
         return unless request_can_write?
 
-        blocked_ip = IpBlackList.currently_blocked.find_by ip: request.env['HTTP_X_REAL_IP']
+        blocked_ip = IpBlackList.currently_blocked.find_by ip: request.env["HTTP_X_REAL_IP"]
         return if blocked_ip.blank?
 
         blocked_ip.blocked!(params)
@@ -34,11 +34,11 @@ module Api
       def check_honeypot_params
         return unless request_can_write?
 
-        honeypot_params = params.fetch(ENV.fetch('HONEYPOT_PARAMS', nil), false)
+        honeypot_params = params.fetch(ENV.fetch("HONEYPOT_PARAMS", nil), false)
         return unless honeypot_params
         return if honeypot_params.blank?
 
-        blocked_ip = IpBlackList.new ip: request.env['HTTP_X_REAL_IP']
+        blocked_ip = IpBlackList.new ip: request.env["HTTP_X_REAL_IP"]
         f = ActionDispatch::Http::ParameterFilter.new(Rails.application.config.filter_parameters)
         blocked_ip.blocked! f.filter(params)
         honeypot_response
@@ -47,7 +47,7 @@ module Api
       # Set current organization by http api access token
       def set_current_organization
         Organization.current = Rails.cache.fetch("#{request.headers['HttpApiAccessToken']}/organization_cache", expires_in: 10.minutes) do
-          Organization.find_by! api_access_token: request.headers['HttpApiAccessToken']
+          Organization.find_by! api_access_token: request.headers["HttpApiAccessToken"]
         end
       rescue StandardError
         forbidden
@@ -55,13 +55,13 @@ module Api
 
       # Extract login (/authorization) token
       def authorization_token
-        request.headers['Authorization'].split.last
+        request.headers["Authorization"].split.last
       end
 
       # Verify jwt and set current user
       def verify_json_web_token
-        data = JwtToken::Token.decode(authorization_token)['data']
-        @current_user ||= User.find data['id']
+        data = JwtToken::Token.decode(authorization_token)["data"]
+        @current_user ||= User.find data["id"]
         User.current = @current_user
       rescue StandardError
         not_authorized
@@ -69,8 +69,8 @@ module Api
 
       # Return if current user is connected
       def login?
-        data = JwtToken::Token.decode(authorization_token)['data']
-        @current_user ||= User.find data['id']
+        data = JwtToken::Token.decode(authorization_token)["data"]
+        @current_user ||= User.find data["id"]
         User.current = @current_user
         true
       rescue StandardError
@@ -79,13 +79,13 @@ module Api
 
       # Standard not authorized response
       def not_authorized
-        render json: { error: 'Not Authorized' }, status: :unauthorized
+        render json: { error: "Not Authorized" }, status: :unauthorized
       end
 
       def forbidden
         render json: {
-          error: 'You are not allowed to do this operation',
-          code_error: 'not_allowed'
+          error: "You are not allowed to do this operation",
+          code_error: "not_allowed"
         }, status: :forbidden
       end
 

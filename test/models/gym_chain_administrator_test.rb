@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class GymChainAdministratorTest < ActiveSupport::TestCase
   setup do
@@ -10,11 +10,11 @@ class GymChainAdministratorTest < ActiveSupport::TestCase
     )
   end
 
-  test 'gym chain administrator is valid' do
+  test "gym chain administrator is valid" do
     assert_predicate @gym_chain_administrator, :valid?
   end
 
-  test 'summary_to_json returns correct keys' do
+  test "summary_to_json returns correct keys" do
     @gym_chain_administrator.save
     json = @gym_chain_administrator.summary_to_json
 

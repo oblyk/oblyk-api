@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 namespace :ascents_faker do
-  desc 'Make random ascents on gym'
+  desc "Make random ascents on gym"
   task :gym_ascents, %i[gym_id base_user_id out] => :environment do |_t, args|
     out = args[:out] || $stdout
 
@@ -32,7 +32,7 @@ namespace :ascents_faker do
             gym_route: gym_route,
             gym: gym,
             released_at: Date.current,
-            selected_sections: [0]
+            selected_sections: [ 0 ]
           )
         end
       end

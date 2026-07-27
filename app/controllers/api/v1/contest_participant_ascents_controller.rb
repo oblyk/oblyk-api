@@ -17,7 +17,7 @@ module Api
                           .joins(:contest_participant)
                           .includes(contest_participant: %i[contest_category contest_wave])
         ascents = ascents.where(contest_route_id: params[:contest_route_id]) if params[:contest_route_id].present?
-        ascents = ascents.order(Arel.sql('contest_participants.last_name, contest_participants.first_name'))
+        ascents = ascents.order(Arel.sql("contest_participants.last_name, contest_participants.first_name"))
 
         render json: ascents.map(&:detail_to_json), status: :ok
       end
@@ -73,10 +73,10 @@ module Api
       private
 
       def broadcast_ascents
-        return if ENV['ACTIVE_CONTEST_BROADCAST'] == 'false'
+        return if ENV["ACTIVE_CONTEST_BROADCAST"] == "false"
 
         ActionCable.server.broadcast "contest_rankers_#{@contest.id}", {
-          type: 'AscentsUpdate',
+          type: "AscentsUpdate",
           first_name: @contest_participant.first_name,
           last_name: @contest_participant.last_name
         }

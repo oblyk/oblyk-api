@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class GymRoleTest < ActiveSupport::TestCase
-  test 'GymRole::LIST is an array' do
+  test "GymRole::LIST is an array" do
     assert_kind_of Array, GymRole::LIST
   end
 
-  test 'GymRole::LIST contains expected values' do
+  test "GymRole::LIST contains expected values" do
     expected_anchors = %w[
       manage_team_member
       manage_opening
@@ -20,11 +20,11 @@ class GymRoleTest < ActiveSupport::TestCase
     assert_equal expected_anchors.sort, GymRole::LIST.sort
   end
 
-  test 'GymRole::LIST is frozen' do
+  test "GymRole::LIST is frozen" do
     assert_predicate GymRole::LIST, :frozen?
   end
 
-  test 'GymRole::LIST has 6 elements' do
+  test "GymRole::LIST has 6 elements" do
     assert_equal 6, GymRole::LIST.size
   end
 end

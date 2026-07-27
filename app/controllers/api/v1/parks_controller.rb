@@ -26,7 +26,7 @@ module Api
 
         # Crag parks
         @crag.parks.each do |park|
-          next if park.id.to_s == params.fetch('exclude_id', nil)
+          next if park.id.to_s == params.fetch("exclude_id", nil)
 
           features << park.to_geo_json
         end
@@ -37,11 +37,11 @@ module Api
         end
 
         render json: {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           crs: {
-            type: 'name',
+            type: "name",
             properties: {
-              name: 'urn'
+              name: "urn"
             }
           },
           features: features

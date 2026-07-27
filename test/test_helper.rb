@@ -1,35 +1,35 @@
 # frozen_string_literal: true
 
-require 'simplecov'
-SimpleCov.start 'rails' do
-  skip '/lib'
+require "simplecov"
+SimpleCov.start "rails" do
+  skip "/lib"
 
-  group 'Controllers', 'app/controllers'
-  group 'Helpers',     'app/helpers'
-  group 'Jobs',        'app/jobs'
-  group 'Mailers',     'app/mailers'
-  group 'Models',      'app/models'
-  group 'Serializers', 'app/serializers'
-  group 'Services',    'app/services'
+  group "Controllers", "app/controllers"
+  group "Helpers",     "app/helpers"
+  group "Jobs",        "app/jobs"
+  group "Mailers",     "app/mailers"
+  group "Models",      "app/models"
+  group "Serializers", "app/serializers"
+  group "Services",    "app/services"
 end
 
-ENV['RAILS_ENV'] ||= 'test'
-ENV['SEND_EMAIL_WITH'] = 'smtp'
-ENV['MY_COMPET_TOKEN'] = 'oblyk-test-token'
-ENV['APP_URL'] = 'http://localhost:3000'
-ENV['PARALLEL_WORKERS'] = '5'
+ENV["RAILS_ENV"] ||= "test"
+ENV["SEND_EMAIL_WITH"] = "smtp"
+ENV["MY_COMPET_TOKEN"] = "oblyk-test-token"
+ENV["APP_URL"] = "http://localhost:3000"
+ENV["PARALLEL_WORKERS"] = "5"
 
-require_relative '../config/environment'
-require 'rails/test_help'
-require 'minitest/autorun'
-require 'support/auth_helpers'
+require_relative "../config/environment"
+require "rails/test_help"
+require "minitest/autorun"
+require "support/auth_helpers"
 
 module ActiveSupport
   class TestCase
     include AuthHelper
 
     # Run tests in parallel with specified workers
-    number_of_processors = ENV.fetch('TEST_NUMBER_OF_PROCESSORS', ENV.fetch('PARALLEL_WORKERS', nil))
+    number_of_processors = ENV.fetch("TEST_NUMBER_OF_PROCESSORS", ENV.fetch("PARALLEL_WORKERS", nil))
     parallelize(workers: number_of_processors)
 
     parallelize_setup do |worker|

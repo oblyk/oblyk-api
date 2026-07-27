@@ -23,7 +23,7 @@ module Embedded
                :scheme_width
 
     attribute :text_contrast_color do |object|
-      Color.black_or_white_rgb(object.sectors_color || 'rgb(0,0,0)')
+      Color.black_or_white_rgb(object.sectors_color || "rgb(0,0,0)")
     end
 
     def self.banner_attachment(object)
@@ -39,7 +39,7 @@ module Embedded
     end
 
     def self.avatar_attachment(object)
-      if object.representation_type == '3d'
+      if object.representation_type == "3d"
         three_d_picture_attachment(object)
       else
         plan_attachment(object)

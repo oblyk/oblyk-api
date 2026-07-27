@@ -5,7 +5,7 @@ class IpBlackList < ApplicationRecord
 
   BLOCK_TIME = 30
 
-  scope :currently_blocked, -> { where('block_expired_at <= NOW() OR block_expired_at IS NULL') }
+  scope :currently_blocked, -> { where("block_expired_at <= NOW() OR block_expired_at IS NULL") }
 
   def blocked!(params)
     self.block_count ||= 0

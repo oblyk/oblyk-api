@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -14,40 +14,40 @@ module Api
         @normal_admin_headers = api_headers(user: :gym_route_setter_user)
       end
 
-      test 'should show gym billing account' do
+      test "should show gym billing account" do
         get api_v1_gym_gym_billing_account_url(gym_id: @gym.id, id: @billing_account.id),
             headers: @subscription_admin_headers
 
         assert_response :success
         json_response = response.parsed_body
 
-        assert_equal @billing_account.email, json_response['email']
+        assert_equal @billing_account.email, json_response["email"]
       end
 
-      test 'should create gym billing account' do
+      test "should create gym billing account" do
         new_gym = Gym.create!(
-          name: 'New Gym',
-          address: 'Address',
-          postal_code: '12345',
-          code_country: 'fr',
-          country: 'France',
-          city: 'City',
-          big_city: 'Big City',
+          name: "New Gym",
+          address: "Address",
+          postal_code: "12345",
+          code_country: "fr",
+          country: "France",
+          city: "City",
+          big_city: "Big City",
           latitude: 0,
           longitude: 0
         )
         GymAdministrator.create!(
           user: users(:lulu),
           gym: new_gym,
-          roles: [GymRole::MANAGE_SUBSCRIPTION],
-          requested_email: 'lulu@oblyk.org'
+          roles: [ GymRole::MANAGE_SUBSCRIPTION ],
+          requested_email: "lulu@oblyk.org"
         )
 
-        assert_difference('GymBillingAccount.count', 1) do
+        assert_difference("GymBillingAccount.count", 1) do
           post api_v1_gym_gym_billing_accounts_url(gym_id: new_gym.id),
                params: {
                  gym_billing_account: {
-                   email: 'new@account.com'
+                   email: "new@account.com"
                  }
                },
                headers: @subscription_admin_headers, as: :json
@@ -58,11 +58,11 @@ module Api
         assert_not_nil new_gym.gym_billing_account_id
       end
 
-      test 'should update gym billing account' do
+      test "should update gym billing account" do
         patch api_v1_gym_gym_billing_account_url(gym_id: @gym.id, id: @billing_account.id),
               params: {
                 gym_billing_account: {
-                  email: 'updated@account.com'
+                  email: "updated@account.com"
                 }
               },
               headers: @subscription_admin_headers, as: :json
@@ -70,21 +70,21 @@ module Api
         assert_response :success
         @billing_account.reload
 
-        assert_equal 'updated@account.com', @billing_account.email
+        assert_equal "updated@account.com", @billing_account.email
       end
 
-      test 'should not show gym billing account if not authorized' do
+      test "should not show gym billing account if not authorized" do
         get api_v1_gym_gym_billing_account_url(gym_id: @gym.id, id: @billing_account.id),
             headers: @normal_admin_headers
 
         assert_response :forbidden
       end
 
-      test 'should not update gym billing account if not authorized' do
+      test "should not update gym billing account if not authorized" do
         patch api_v1_gym_gym_billing_account_url(gym_id: @gym.id, id: @billing_account.id),
               params: {
                 gym_billing_account: {
-                  email: 'hacker@account.com'
+                  email: "hacker@account.com"
                 }
               },
               headers: @normal_admin_headers, as: :json
@@ -92,17 +92,17 @@ module Api
         assert_response :forbidden
       end
 
-      test 'super admin should have access' do
+      test "super admin should have access" do
         get api_v1_gym_gym_billing_account_url(gym_id: @gym.id, id: @billing_account.id),
             headers: @super_admin_headers
 
         assert_response :success
       end
-      test 'should not create gym billing account with invalid params' do
+      test "should not create gym billing account with invalid params" do
         post api_v1_gym_gym_billing_accounts_url(gym_id: @gym.id),
              params: {
                gym_billing_account: {
-                 email: ''
+                 email: ""
                }
              },
              headers: @subscription_admin_headers, as: :json
@@ -110,11 +110,11 @@ module Api
         assert_response :unprocessable_content
       end
 
-      test 'should not update gym billing account with invalid params' do
+      test "should not update gym billing account with invalid params" do
         patch api_v1_gym_gym_billing_account_url(gym_id: @gym.id, id: @billing_account.id),
               params: {
                 gym_billing_account: {
-                  email: ''
+                  email: ""
                 }
               },
               headers: @subscription_admin_headers, as: :json

@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 namespace :reset_counters_cache do
-  desc 'Reset crags counter cache'
+  desc "Reset crags counter cache"
   task :crags, %i[cache out] => :environment do |_t, args|
     out = args[:out] || $stdout
     cache = args[:cache].to_sym
 
-    out.puts 'RESET CRAGS COUNTER CACHE'
+    out.puts "RESET CRAGS COUNTER CACHE"
     out.puts "Cache selected : #{cache}"
-    out.puts ''
+    out.puts ""
 
     index_count = Crag.count
     index = 0
@@ -22,18 +22,18 @@ namespace :reset_counters_cache do
       Crag.reset_counters(crag.id, :articles) if %i[all articles].include? cache
     end
 
-    out.puts ''
-    out.puts 'End'
+    out.puts ""
+    out.puts "End"
   end
 
-  desc 'Reset crag sectors counter cache'
+  desc "Reset crag sectors counter cache"
   task :crag_sectors, %i[cache out] => :environment do |_t, args|
     out = args[:out] || $stdout
     cache = args[:cache].to_sym
 
-    out.puts 'RESET CRAG SECTORS COUNTER CACHE'
+    out.puts "RESET CRAG SECTORS COUNTER CACHE"
     out.puts "Cache selected : #{cache}"
-    out.puts ''
+    out.puts ""
 
     index_count = CragSector.count
     index = 0
@@ -44,18 +44,18 @@ namespace :reset_counters_cache do
       CragSector.reset_counters(crag_sector.id, :photos) if %i[all photos].include? cache
     end
 
-    out.puts ''
-    out.puts 'End'
+    out.puts ""
+    out.puts "End"
   end
 
-  desc 'Reset crag routes counter cache'
+  desc "Reset crag routes counter cache"
   task :crag_routes, %i[cache out] => :environment do |_t, args|
     out = args[:out] || $stdout
     cache = args[:cache].to_sym
 
-    out.puts 'RESET CRAG ROUTE COUNTER CACHE'
+    out.puts "RESET CRAG ROUTE COUNTER CACHE"
     out.puts "Cache selected : #{cache}"
-    out.puts ''
+    out.puts ""
 
     index_count = CragRoute.count
     index = 0
@@ -67,18 +67,18 @@ namespace :reset_counters_cache do
       CragRoute.reset_counters(crag_route.id, :photos) if %i[all photos].include? cache
     end
 
-    out.puts ''
-    out.puts 'End'
+    out.puts ""
+    out.puts "End"
   end
 
-  desc 'Reset gyms counter cache'
+  desc "Reset gyms counter cache"
   task :gyms, %i[cache out] => :environment do |_t, args|
     out = args[:out] || $stdout
     cache = args[:cache].to_sym
 
-    out.puts 'RESET GYM COUNTER CACHE'
+    out.puts "RESET GYM COUNTER CACHE"
     out.puts "Cache selected : #{cache}"
-    out.puts ''
+    out.puts ""
 
     index_count = Gym.count
     index = 0
@@ -90,18 +90,18 @@ namespace :reset_counters_cache do
       Gym.reset_counters(gym.id, :follows) if %i[all follows].include? cache
     end
 
-    out.puts ''
-    out.puts 'End'
+    out.puts ""
+    out.puts "End"
   end
 
-  desc 'Reset gym routes counter cache'
+  desc "Reset gym routes counter cache"
   task :gym_routes, %i[cache out] => :environment do |_t, args|
     out = args[:out] || $stdout
     cache = args[:cache].to_sym
 
-    out.puts 'RESET GYM ROUTE COUNTER CACHE'
+    out.puts "RESET GYM ROUTE COUNTER CACHE"
     out.puts "Cache selected : #{cache}"
-    out.puts ''
+    out.puts ""
 
     index_count = GymRoute.count
     index = 0
@@ -112,18 +112,18 @@ namespace :reset_counters_cache do
       GymRoute.reset_counters(gym_route.id, :videos) if %i[all videos].include? cache
     end
 
-    out.puts ''
-    out.puts 'End'
+    out.puts ""
+    out.puts "End"
   end
 
-  desc 'Reset users counter cache'
+  desc "Reset users counter cache"
   task :users, %i[cache out] => :environment do |_t, args|
     out = args[:out] || $stdout
     cache = args[:cache].to_sym
 
-    out.puts 'RESET USER COUNTER CACHE'
+    out.puts "RESET USER COUNTER CACHE"
     out.puts "Cache selected : #{cache}"
-    out.puts ''
+    out.puts ""
 
     index_count = User.count
     index = 0
@@ -133,18 +133,18 @@ namespace :reset_counters_cache do
       User.reset_counters(user.id, :follows) if %i[all follows].include? cache
     end
 
-    out.puts ''
-    out.puts 'End'
+    out.puts ""
+    out.puts "End"
   end
 
-  desc 'Reset articles counter cache'
+  desc "Reset articles counter cache"
   task :articles, %i[cache out] => :environment do |_t, args|
     out = args[:out] || $stdout
     cache = args[:cache].to_sym
 
-    out.puts 'RESET ARTICLE COUNTER CACHE'
+    out.puts "RESET ARTICLE COUNTER CACHE"
     out.puts "Cache selected : #{cache}"
-    out.puts ''
+    out.puts ""
 
     index_count = Article.count
     index = 0
@@ -155,7 +155,7 @@ namespace :reset_counters_cache do
       Article.reset_counters(article.id, :photos) if %i[all photos].include? cache
     end
 
-    out.puts ''
-    out.puts 'End'
+    out.puts ""
+    out.puts "End"
   end
 end

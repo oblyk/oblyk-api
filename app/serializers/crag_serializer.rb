@@ -61,7 +61,7 @@ class CragSerializer < BaseSerializer
   end
 
   def self.cover_attachment(object)
-    object.photo_id.present? ? object.attachment_object(object.photo.picture, 'Crag_cover') : object.attachment_object(object.static_map, 'Crag_cover')
+    object.photo_id.present? ? object.attachment_object(object.photo.picture, "Crag_cover") : object.attachment_object(object.static_map, "Crag_cover")
   end
 
   def self.avatar_attachment(object)

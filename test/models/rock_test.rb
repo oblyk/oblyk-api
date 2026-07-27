@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class RockTest < ActiveSupport::TestCase
-  test 'Rock::LIST is an array' do
+  test "Rock::LIST is an array" do
     assert_kind_of Array, Rock::LIST
   end
 
-  test 'Rock::LIST contains expected values' do
+  test "Rock::LIST contains expected values" do
     expected_anchors = %w[
       slate
       limestone
@@ -32,11 +32,11 @@ class RockTest < ActiveSupport::TestCase
     assert_equal expected_anchors.sort, Rock::LIST.sort
   end
 
-  test 'Rock::LIST is frozen' do
+  test "Rock::LIST is frozen" do
     assert_predicate Rock::LIST, :frozen?
   end
 
-  test 'Rock::LIST has 18 elements' do
+  test "Rock::LIST has 18 elements" do
     assert_equal 18, Rock::LIST.size
   end
 end

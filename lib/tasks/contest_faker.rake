@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 namespace :contest_faker do
-  desc 'Subscribe participant'
+  desc "Subscribe participant"
   task :subscribe, %i[contest_id nb_participants dry_run out] => :environment do |_t, args|
     out = args[:out] || $stdout
-    dry_run = args[:dry_run] != 'false'
+    dry_run = args[:dry_run] != "false"
 
     genres = %w[male female]
     contest = Contest.find args[:contest_id]
@@ -17,11 +17,11 @@ namespace :contest_faker do
     creation_attempt = 0
 
     out.puts "Création de #{nb_participants} participants"
-    out.puts ''
+    out.puts ""
     while participant_created < nb_participants
       creation_attempt += 1
       genre = genres[rand(0..1)]
-      first_name = genre == 'male' ? Faker::Name.male_first_name : Faker::Name.female_first_name
+      first_name = genre == "male" ? Faker::Name.male_first_name : Faker::Name.female_first_name
       last_name = Faker::Name.last_name
       affiliation = nil
       wave = nil
@@ -57,14 +57,14 @@ namespace :contest_faker do
       break if creation_attempt > 1000
     end
 
-    out.puts ''
-    out.puts 'Fin'
+    out.puts ""
+    out.puts "Fin"
     out.puts "#{creation_attempt} tentatives pour #{nb_participants} création de participant"
   end
 
   task :make_ascents, %i[step_id dry_run out] => :environment do |_t, args|
     out = args[:out] || $stdout
-    dry_run = args[:dry_run] != 'false'
+    dry_run = args[:dry_run] != "false"
     step = ContestStageStep.find args[:step_id]
     step.contest_participant_steps.each do |contest_participant_step|
       participant = contest_participant_step.contest_participant

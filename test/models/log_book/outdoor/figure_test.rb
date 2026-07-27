@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module LogBook
   module Outdoor
@@ -8,11 +8,11 @@ module LogBook
       setup do
         @ascent1 = ascent_crag_routes(:crag_ascent_one)
         @ascent2 = ascent_crag_routes(:crag_ascent_project)
-        @ascents = [@ascent1, @ascent2]
+        @ascents = [ @ascent1, @ascent2 ]
         @figure = Figure.new(@ascents)
       end
 
-      test 'figures returns correct keys' do
+      test "figures returns correct keys" do
         figs = @figure.figures
 
         assert_includes figs.keys, :countries
@@ -23,11 +23,11 @@ module LogBook
         assert_includes figs.keys, :max_grade_value
       end
 
-      test 'ascents_count returns correct count' do
+      test "ascents_count returns correct count" do
         assert_equal 2, @figure.send(:ascents_count)
       end
 
-      test 'sum_meters handles nil height' do
+      test "sum_meters handles nil height" do
         @ascent1.stub :sections, [] do
           @ascent1.stub :height, nil do
             @ascent2.stub :sections, [] do

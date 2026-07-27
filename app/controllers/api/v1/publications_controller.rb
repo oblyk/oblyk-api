@@ -28,7 +28,7 @@ module Api
                            type: type,
                            id: id
                          )
-                       elsif type == 'User'
+                       elsif type == "User"
                          Publication.where(author_id: id)
                                     .where.not(publishable_type: %w[Gym])
                                     .where('publications.publishable_subject IS NULL OR publications.publishable_subject NOT IN ("new_crag_routes", "new_video", "new_alert")')
@@ -62,7 +62,7 @@ module Api
                                     .where(published_at: nil)
 
         # If current_user is not a gym team member, return an empty array
-        if type == 'Gym'
+        if type == "Gym"
           @gym = Gym.find id
           unless gym_team_user?
             render json: [], status: :ok
@@ -149,7 +149,7 @@ module Api
       private
 
       def set_publications
-        publishable_type = params[:publishable_type] == 'CurrentUser' ? 'User' : params[:publishable_type]
+        publishable_type = params[:publishable_type] == "CurrentUser" ? "User" : params[:publishable_type]
         if publishable_type.blank? || Publication::PUBLISHABLE_TYPES.exclude?(publishable_type)
           render json: nil, status: :not_found
           return
@@ -180,9 +180,9 @@ module Api
             :publication_attachments,
             :publishable,
             :author,
-            'publication_attachments.attachable',
-            'publication_attachments.attachable.gym_space',
-            'publication_attachments.attachable.crag_sector'
+            "publication_attachments.attachable",
+            "publication_attachments.attachable.gym_space",
+            "publication_attachments.attachable.crag_sector"
           ],
           params: {
             include_attachments: {
@@ -208,7 +208,7 @@ module Api
             { crag_sector: :crag },
             { crag_space: { plan_attachment: :blob, three_d_picture_attachment: :blob } },
             { guide_book_paper: { cover_attachment: :blob } },
-            { gym: [:gym_spaces, { logo_attachment: :blob }] },
+            { gym: [ :gym_spaces, { logo_attachment: :blob } ] },
             { gym_sector: :gym_space },
             { video: { video_file_attachment: :blob } },
             { photo: { picture_attachment: :blob } }
@@ -220,12 +220,12 @@ module Api
         {
           crag: { static_map_attachment: :blob, photo: { picture_attachment: :blob } },
           photo: { picture_attachment: :blob },
-          gym: [:gym_options, :gym_spaces, { logo_attachment: :blob }]
+          gym: [ :gym_options, :gym_spaces, { logo_attachment: :blob } ]
         }
       end
 
       def private_protected
-        return true unless @publication.publishable_type == 'User'
+        return true unless @publication.publishable_type == "User"
 
         user = @publication.publishable
 
@@ -233,7 +233,7 @@ module Api
       end
 
       def index_private_protected
-        return true if params[:publishable_type] != 'User'
+        return true if params[:publishable_type] != "User"
 
         user = User.find_by(id: params[:publishable_id])
 
@@ -245,10 +245,10 @@ module Api
 
       def protected_by_owner
         case @publication.publishable_type
-        when 'Gym'
+        when "Gym"
           @gym = @publication.publishable
           forbidden unless gym_team_user?
-        when 'User'
+        when "User"
           forbidden unless @publication.publishable == @current_user
         end
       end

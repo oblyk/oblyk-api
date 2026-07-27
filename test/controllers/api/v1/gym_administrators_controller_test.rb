@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -14,25 +14,25 @@ module Api
         @gym_admin = gym_administrators(:gym_administrator_one)
       end
 
-      test 'should get index' do
+      test "should get index" do
         get api_v1_gym_gym_administrators_url(gym_id: @gym.id), headers: @admin_headers
 
         assert_response :success
       end
 
-      test 'should show gym administrator' do
+      test "should show gym administrator" do
         get api_v1_gym_gym_administrator_url(gym_id: @gym.id, id: @gym_admin.id), headers: @admin_headers
 
         assert_response :success
       end
 
-      test 'should create gym administrator' do
-        assert_difference('GymAdministrator.count', 1) do
+      test "should create gym administrator" do
+        assert_difference("GymAdministrator.count", 1) do
           post api_v1_gym_gym_administrators_url(gym_id: @gym.id),
                params: {
                  gym_administrator: {
-                   requested_email: 'new_admin@test.com',
-                   roles: ['manage_gym']
+                   requested_email: "new_admin@test.com",
+                   roles: [ "manage_gym" ]
                  }
                },
                headers: @admin_headers, as: :json
@@ -40,7 +40,7 @@ module Api
         assert_response :success
       end
 
-      test 'should update gym administrator' do
+      test "should update gym administrator" do
         patch api_v1_gym_gym_administrator_url(gym_id: @gym.id, id: @gym_admin.id),
               params: {
                 gym_administrator: {
@@ -52,26 +52,26 @@ module Api
         assert_response :success
         @gym_admin.reload
 
-        assert_includes @gym_admin.roles, 'manage_space'
+        assert_includes @gym_admin.roles, "manage_space"
       end
 
-      test 'should destroy gym administrator' do
-        assert_difference('GymAdministrator.count', -1) do
+      test "should destroy gym administrator" do
+        assert_difference("GymAdministrator.count", -1) do
           delete api_v1_gym_gym_administrator_url(gym_id: @gym.id, id: @gym_admin.id),
                  headers: @admin_headers, as: :json
         end
         assert_response :success
       end
 
-      test 'should update feed last read' do
+      test "should update feed last read" do
         put update_feed_last_read_api_v1_gym_gym_administrators_url(gym_id: @gym.id),
-            params: { feed_type: 'comment' },
+            params: { feed_type: "comment" },
             headers: @user_headers, as: :json
 
         assert_response :no_content
       end
 
-      test 'should get new in feeds' do
+      test "should get new in feeds" do
         get new_in_feeds_api_v1_gym_gym_administrators_url(gym_id: @gym.id),
             params: { feeds: %w[comment video] },
             headers: @user_headers
@@ -79,12 +79,12 @@ module Api
         assert_response :success
       end
 
-      test 'should not create gym administrator if not authorized' do
+      test "should not create gym administrator if not authorized" do
         post api_v1_gym_gym_administrators_url(gym_id: @gym.id),
              params: {
                gym_administrator: {
-                 requested_email: 'fail@test.com',
-                 roles: ['manage_gym']
+                 requested_email: "fail@test.com",
+                 roles: [ "manage_gym" ]
                }
              },
              headers: @user_headers, as: :json

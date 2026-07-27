@@ -10,9 +10,9 @@ module Api
 
       def index
         gym_openers = case params.fetch(:activate, nil)
-                      when 'true'
+                      when "true"
                         @gym.gym_openers.activated
-                      when 'false'
+                      when "false"
                         @gym.gym_openers.deactivated
                       else
                         @gym.gym_openers

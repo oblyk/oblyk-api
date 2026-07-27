@@ -40,7 +40,7 @@ class GuideBookWeb < ApplicationRecord
   def publication_push!(publishable_subject = :new_guide_book_web)
     publication = Publication.new(
       publishable_id: crag_id,
-      publishable_type: 'Crag',
+      publishable_type: "Crag",
       publishable_subject: publishable_subject,
       published_at: created_at,
       last_updated_at: created_at,
@@ -48,7 +48,7 @@ class GuideBookWeb < ApplicationRecord
       author_id: user_id
     )
     publication.publication_attachments << PublicationAttachment.new(
-      attachable_type: 'GuideBookWeb',
+      attachable_type: "GuideBookWeb",
       attachable_id: id
     )
     publication.save

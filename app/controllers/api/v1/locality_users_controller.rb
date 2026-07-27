@@ -7,7 +7,7 @@ module Api
       before_action :set_locality_user, only: %i[show update activate deactivate destroy]
 
       def index
-        active = params.fetch(:only_active, 'false') != 'false'
+        active = params.fetch(:only_active, "false") != "false"
         locality_users = active ? @current_user.locality_users.activated : @current_user.locality_users
         render json: locality_users.map(&:summary_to_json), status: :ok
       end

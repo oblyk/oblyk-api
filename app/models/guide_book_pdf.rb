@@ -13,7 +13,7 @@ class GuideBookPdf < ApplicationRecord
   delegate :longitude, to: :crag
 
   validates :name, :pdf_file, presence: true
-  validates :pdf_file, blob: { content_type: ['application/pdf'] }
+  validates :pdf_file, blob: { content_type: [ "application/pdf" ] }
 
   after_create_commit :publication_push!
 
@@ -57,7 +57,7 @@ class GuideBookPdf < ApplicationRecord
   def publication_push!(publishable_subject = :new_guide_book_pdf)
     publication = Publication.new(
       publishable_id: crag_id,
-      publishable_type: 'Crag',
+      publishable_type: "Crag",
       publishable_subject: publishable_subject,
       published_at: created_at,
       last_updated_at: created_at,
@@ -65,7 +65,7 @@ class GuideBookPdf < ApplicationRecord
       author_id: user_id
     )
     publication.publication_attachments << PublicationAttachment.new(
-      attachable_type: 'GuideBookPdf',
+      attachable_type: "GuideBookPdf",
       attachable_id: id
     )
     publication.save

@@ -6,7 +6,7 @@ class ContestParticipantAscent < ApplicationRecord
   belongs_to :contest
   has_one :contest_category, through: :contest_participant
 
-  self.skip_time_zone_conversion_for_attributes = [:ascent_time]
+  self.skip_time_zone_conversion_for_attributes = [ :ascent_time ]
 
   before_validation :set_contest
   before_validation :normalize_attributes

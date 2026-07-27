@@ -17,16 +17,16 @@ class Publication < ApplicationRecord
   ].freeze
 
   MAX_PUBLICATIONS = {
-    'Gym' => 2,
-    'User' => 1,
-    'Crag' => 1,
-    'GuideBookPaper' => 1
+    "Gym" => 2,
+    "User" => 1,
+    "Crag" => 1,
+    "GuideBookPaper" => 1
   }.freeze
 
   attr_accessor :viewed
 
   belongs_to :publishable, polymorphic: true
-  belongs_to :author, class_name: 'User', optional: true
+  belongs_to :author, class_name: "User", optional: true
   has_many :publication_attachments, dependent: :destroy
   has_many :likes, as: :likeable, dependent: :destroy
   has_many :comments, as: :commentable, dependent: :destroy
@@ -85,12 +85,12 @@ class Publication < ApplicationRecord
       generated: false,
       publishable_type: publishable_type,
       publishable_id: publishable_id,
-      published_at: [DateTime.current.all_day]
+      published_at: [ DateTime.current.all_day ]
     )
     today_publications = today_publications.where(author: author) if %w[Crag GuideBookPaper].include? publishable_type
 
     if today_publications.count >= MAX_PUBLICATIONS[publishable_type]
-      errors.add(:base, 'posting_limit_for_today')
+      errors.add(:base, "posting_limit_for_today")
       return false
     end
 
@@ -111,7 +111,7 @@ class Publication < ApplicationRecord
 
     attachements_count = publication_attachments.size
 
-    return unless publishable_type == 'Crag' && %w[new_alert new_photo].include?(publishable_subject) && attachements_count.zero?
+    return unless publishable_type == "Crag" && %w[new_alert new_photo].include?(publishable_subject) && attachements_count.zero?
 
     destroy
   end

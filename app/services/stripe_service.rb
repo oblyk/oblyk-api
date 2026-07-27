@@ -2,12 +2,12 @@
 
 class StripeService
   def self.fulfill_checkout(checkout_session_id)
-    Stripe.api_key = ENV.fetch('STRIPE_API_KEY', nil)
+    Stripe.api_key = ENV.fetch("STRIPE_API_KEY", nil)
 
     stripe_checkout_session = StripeCheckoutSession.find_or_initialize_by checkout_session_id: checkout_session_id
     return false if stripe_checkout_session.processed?
 
-    checkout_session = Stripe::Checkout::Session.retrieve(id: checkout_session_id, expand: ['line_items'])
+    checkout_session = Stripe::Checkout::Session.retrieve(id: checkout_session_id, expand: [ "line_items" ])
 
     ActiveRecord::Base.transaction do
       # Update GymBillingAccount
@@ -18,7 +18,7 @@ class StripeService
       end
 
       # Update subscription
-      if checkout_session.payment_status == 'paid' && checkout_session.metadata.indoor_subscription_id.present?
+      if checkout_session.payment_status == "paid" && checkout_session.metadata.indoor_subscription_id.present?
         subscription = IndoorSubscription.find checkout_session.metadata.indoor_subscription_id
         subscription.subscription_stripe_id = checkout_session.subscription
         subscription.payment_status = IndoorSubscription::PAID_STATUS
@@ -41,7 +41,7 @@ class StripeService
   end
 
   def self.deactivated_payment_link(payment_link_id)
-    Stripe.api_key = ENV.fetch('STRIPE_API_KEY', nil)
+    Stripe.api_key = ENV.fetch("STRIPE_API_KEY", nil)
     Stripe::PaymentLink.update(payment_link_id, active: false)
   end
 

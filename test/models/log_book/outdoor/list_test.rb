@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module LogBook
   module Outdoor
@@ -11,15 +11,15 @@ module LogBook
         @list = List.new(@ascents)
       end
 
-      test 'ascended_crag_routes returns an array' do
-        result = @list.ascended_crag_routes(1, 'released_at')
+      test "ascended_crag_routes returns an array" do
+        result = @list.ascended_crag_routes(1, "released_at")
 
         assert_kind_of Array, result
       end
 
-      test 'ascended_crag_routes handles different orders' do
-        assert_kind_of Array, @list.ascended_crag_routes(1, 'crags')
-        assert_kind_of Array, @list.ascended_crag_routes(1, 'grade')
+      test "ascended_crag_routes handles different orders" do
+        assert_kind_of Array, @list.ascended_crag_routes(1, "crags")
+        assert_kind_of Array, @list.ascended_crag_routes(1, "grade")
       end
     end
   end

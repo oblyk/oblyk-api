@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class GeolocableTest < ActiveSupport::TestCase
   setup do
     @crag = crags(:orpierre)
   end
 
-  test 'validates latitude' do
+  test "validates latitude" do
     @crag.latitude = 91
 
     assert_not @crag.valid?
@@ -19,7 +19,7 @@ class GeolocableTest < ActiveSupport::TestCase
     assert_predicate @crag, :valid?
   end
 
-  test 'validates longitude' do
+  test "validates longitude" do
     @crag.longitude = 181
 
     assert_not @crag.valid?
@@ -31,7 +31,7 @@ class GeolocableTest < ActiveSupport::TestCase
     assert_predicate @crag, :valid?
   end
 
-  test 'geo_search returns objects within distance' do
+  test "geo_search returns objects within distance" do
     results = Crag.geo_search(44.319, 5.497, 5)
 
     assert_includes results, @crag

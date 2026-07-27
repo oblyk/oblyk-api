@@ -13,7 +13,7 @@ module Api
                                  .select(:id, :title, :description, :archived_at, :gym_id, :created_at, :updated_at)
                                  .includes(:gym)
 
-        gym_opening_sheets = if params.fetch(:archived, 'true') == 'true'
+        gym_opening_sheets = if params.fetch(:archived, "true") == "true"
                                gym_opening_sheets.archived
                              else
                                gym_opening_sheets.unarchived
@@ -29,7 +29,7 @@ module Api
 
       def print
         pdf_html = ActionController::Base.new.render_to_string(
-          template: 'api/v1/gym_opening_sheet/print.pdf.erb',
+          template: "api/v1/gym_opening_sheet/print.pdf.erb",
           locals: { gym_opening_sheet: @gym_opening_sheet }
         )
         pdf = WickedPdf.new.pdf_from_string(pdf_html)
@@ -59,9 +59,9 @@ module Api
 
       def update_cells
         gym_opening_sheet_cells_params[:cells].each do |cell|
-          @gym_opening_sheet.row_json[cell[:rowIndex]]['routes'][cell[:cellIndex]]['grade'] = cell[:grade]
-          @gym_opening_sheet.row_json[cell[:rowIndex]]['routes'][cell[:cellIndex]]['hold_color'] = cell[:hold_color]
-          @gym_opening_sheet.row_json[cell[:rowIndex]]['routes'][cell[:cellIndex]]['climbing_styles'] = cell[:climbing_styles] || []
+          @gym_opening_sheet.row_json[cell[:rowIndex]]["routes"][cell[:cellIndex]]["grade"] = cell[:grade]
+          @gym_opening_sheet.row_json[cell[:rowIndex]]["routes"][cell[:cellIndex]]["hold_color"] = cell[:hold_color]
+          @gym_opening_sheet.row_json[cell[:rowIndex]]["routes"][cell[:cellIndex]]["climbing_styles"] = cell[:climbing_styles] || []
         end
         @gym_opening_sheet.save
         head :no_content

@@ -11,7 +11,7 @@ class HistorizeParkStaticMapJob < ApplicationJob
     response = Net::HTTP.get_response(URI.parse(url))
     raise "Failed to fetch map: #{response.code}" unless response.is_a?(Net::HTTPSuccess)
 
-    park.static_map.attach(io: StringIO.new(response.body), filename: "#{park.id}-static-park-map.png", content_type: 'image/png')
+    park.static_map.attach(io: StringIO.new(response.body), filename: "#{park.id}-static-park-map.png", content_type: "image/png")
     park.save
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -16,30 +16,30 @@ module Api
           user: @admin,
           gym: @gym,
           requested_email: @admin.email,
-          roles: [GymRole::MANAGE_OPENING]
+          roles: [ GymRole::MANAGE_OPENING ]
         )
         @admin_headers = api_headers(user: :other_user)
       end
 
-      test 'should get disc chart by sector_id' do
+      test "should get disc chart by sector_id" do
         get disc_chart_api_v1_gym_gym_community_labels_url(gym_id: @gym.id),
             params: { sector_id: @sector.id },
             headers: @admin_headers
 
         assert_response :success
-        assert_equal 'application/pdf', response.content_type
+        assert_equal "application/pdf", response.content_type
       end
 
-      test 'should get disc chart by route ids' do
+      test "should get disc chart by route ids" do
         get disc_chart_api_v1_gym_gym_community_labels_url(gym_id: @gym.id),
-            params: { ids: [@route_1.id, @route_2.id] },
+            params: { ids: [ @route_1.id, @route_2.id ] },
             headers: @admin_headers
 
         assert_response :success
-        assert_equal 'application/pdf', response.content_type
+        assert_equal "application/pdf", response.content_type
       end
 
-      test 'should be forbidden for unauthorized user' do
+      test "should be forbidden for unauthorized user" do
         user_headers = api_headers(user: :lulu)
         get disc_chart_api_v1_gym_gym_community_labels_url(gym_id: @gym.id),
             params: { sector_id: @sector.id },

@@ -3,7 +3,7 @@
 module ContestService
   class Statistics
     def initialize(contest, category_id: nil, genre: nil, exclude_without_ascents: false)
-      genre = nil if genre == 'unisex'
+      genre = nil if genre == "unisex"
       @contest = contest
       @genre = genre
       @exclude_without_ascents = exclude_without_ascents
@@ -31,9 +31,9 @@ module ContestService
     def by_ages
       build_participants
 
-      participants = @participants.select('COUNT(*) AS count, TIMESTAMPDIFF(YEAR, contest_participants.date_of_birth, CURDATE()) AS age')
-                                  .group('2')
-                                  .reorder(Arel.sql('2'))
+      participants = @participants.select("COUNT(*) AS count, TIMESTAMPDIFF(YEAR, contest_participants.date_of_birth, CURDATE()) AS age")
+                                  .group("2")
+                                  .reorder(Arel.sql("2"))
       return false if participants.blank?
 
       participants = participants.map { |participant| { age: participant[:age], count: participant[:count] } }
@@ -77,7 +77,7 @@ module ContestService
           participants_step = ContestParticipantStep.joins(:contest_participant).where(contest_stage_step_id: step.id)
           participants_step = participants_step.where(contest_participants: { genre: @genre }) if @genre.present?
           participants_step = participants_step.where(contest_participants: { contest_category_id: @category.id }) if @category.present?
-          participants_step = participants_step.where('EXISTS(SELECT * FROM contest_participant_ascents WHERE contest_participants.id = contest_participant_ascents.contest_participant_id)') if @exclude_without_ascents
+          participants_step = participants_step.where("EXISTS(SELECT * FROM contest_participant_ascents WHERE contest_participants.id = contest_participant_ascents.contest_participant_id)") if @exclude_without_ascents
           step_hash = {
             name: step.name,
             ranking_type: step.ranking_type,
@@ -99,14 +99,14 @@ module ContestService
                 number: route.number,
                 name: route.name,
                 attachments: {
-                  gym_route_thumbnail: route.attachment_object(route.gym_route&.thumbnail, 'GymRoute_thumbnail'),
+                  gym_route_thumbnail: route.attachment_object(route.gym_route&.thumbnail, "GymRoute_thumbnail"),
                   picture: route.attachment_object(route.picture)
                 }
               }
               ascents = @ascents.select { |ascent| ascent.contest_route_id == route.id }
 
               # For each type of ranking system get stats
-              if [Constant::DIVISION, Constant::FIXED_POINTS].include? step.ranking_type
+              if [ Constant::DIVISION, Constant::FIXED_POINTS ].include? step.ranking_type
                 top = 0.0
                 ascents.each do |ascent|
                   top += 1 if ascent.realised
@@ -115,7 +115,7 @@ module ContestService
                 route_hash[:top_ratio] = top.zero? ? 0 : (top.to_f / number_of_participants * 100).round(1)
               end
 
-              if [Constant::DIVISION_AND_ZONE, Constant::ZONE_AND_TOP_REALISED].include? step.ranking_type
+              if [ Constant::DIVISION_AND_ZONE, Constant::ZONE_AND_TOP_REALISED ].include? step.ranking_type
                 top = 0.0
                 zone = 0.0
                 ascents.each do |ascent|
@@ -141,7 +141,7 @@ module ContestService
                                            end
               end
 
-              if [Constant::ZONE_AND_TOP_REALISED].include? step.ranking_type
+              if [ Constant::ZONE_AND_TOP_REALISED ].include? step.ranking_type
                 top = 0.0
                 zone = 0.0
                 ascents.each do |ascent|
@@ -161,7 +161,7 @@ module ContestService
                                            end
               end
 
-              if [Constant::ATTEMPTS_TO_ONE_ZONE_AND_TOP].include? step.ranking_type
+              if [ Constant::ATTEMPTS_TO_ONE_ZONE_AND_TOP ].include? step.ranking_type
                 top = 0.0
                 zone = 0.0
                 top_attempt = 0.0
@@ -182,7 +182,7 @@ module ContestService
                 route_hash[:zone_ratio] = zone.zero? ? 0 : (zone / number_of_participants * 100).round(1)
               end
 
-              if [Constant::DIVISION_AND_ATTEMPT, Constant::ATTEMPTS_TO_TOP].include? step.ranking_type
+              if [ Constant::DIVISION_AND_ATTEMPT, Constant::ATTEMPTS_TO_TOP ].include? step.ranking_type
                 top = 0.0
                 top_attempt = 0.0
                 top_by_attempt = Hash.new { |h, k| h[k] = 0 }
@@ -205,7 +205,7 @@ module ContestService
                 if number_of_tentatives.present?
                   (1..number_of_tentatives).each do |index|
                     top_by_attempt[index] ||= 0
-                    top_by_attempt_color << '#7b1fa2'
+                    top_by_attempt_color << "#7b1fa2"
                   end
                 end
                 top_by_attempt = top_by_attempt.sort.to_h
@@ -215,7 +215,7 @@ module ContestService
                 route_hash[:attempt_average] = top.zero? ? 0 : (top_attempt / top).round(2)
               end
 
-              if [Constant::HIGHEST_HOLD, Constant::POINT_RELATIVE_TO_HIGHEST_HOLD].include? step.ranking_type
+              if [ Constant::HIGHEST_HOLD, Constant::POINT_RELATIVE_TO_HIGHEST_HOLD ].include? step.ranking_type
                 route_number_of_holds = route.number_of_holds || 0
                 top = 0
                 max_hold = nil
@@ -224,7 +224,7 @@ module ContestService
                 colors = []
                 (0..route_number_of_holds).each do |index|
                   max_holds[index] = 0
-                  colors << '#7b1fa2'
+                  colors << "#7b1fa2"
                 end
                 holds = []
                 ascents.each do |ascent|
@@ -247,7 +247,7 @@ module ContestService
                 route_hash[:top_ratio] = top.zero? ? 0 : (top.to_f / number_of_participants * 100).round(1)
               end
 
-              if [Constant::BEST_TIMES].include? step.ranking_type
+              if [ Constant::BEST_TIMES ].include? step.ranking_type
                 best_time = nil
                 worst_time = nil
                 times = []
@@ -259,7 +259,7 @@ module ContestService
                   times << { y: ascent.ascent_time, x: 0 }
                 end
                 colors = times.map do |_time|
-                  '#7b1fa2'
+                  "#7b1fa2"
                 end
                 route_hash[:best_time] = best_time
                 route_hash[:worst_time] = worst_time
@@ -302,13 +302,13 @@ module ContestService
       ascents = ContestParticipantAscent.joins(contest_participant: :contest_category).where(contest_categories: { contest_id: @contest.id })
       ascents = ascents.where(contest_participants: { genre: @genre }) if @genre.present?
       ascents = ascents.where(contest_participants: { contest_category_id: @category.id }) if @category.present?
-      ascents = ascents.where('EXISTS(SELECT * FROM contest_participant_ascents WHERE contest_participants.id = contest_participant_ascents.contest_participant_id)') if @exclude_without_ascents
+      ascents = ascents.where("EXISTS(SELECT * FROM contest_participant_ascents WHERE contest_participants.id = contest_participant_ascents.contest_participant_id)") if @exclude_without_ascents
       @ascents = ascents.to_a
     end
 
     def time_format(time)
       if time.blank? # || time.zero?
-        '-'
+        "-"
       else
         sec = time.sec
         min = time.min

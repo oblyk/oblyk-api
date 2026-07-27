@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -12,15 +12,15 @@ module Api
         @public_headers = api_access_token_headers
       end
 
-      test 'should create report when authenticated' do
-        assert_difference('Report.count', 1) do
+      test "should create report when authenticated" do
+        assert_difference("Report.count", 1) do
           post api_v1_reports_url,
                params: {
                  report: {
-                   reportable_type: 'Crag',
+                   reportable_type: "Crag",
                    reportable_id: crags(:rocher_des_aures).id,
-                   body: 'Ceci est un signalement pour une falaise.',
-                   report_from_url: 'https://oblyk.org/crags/rocher-des-aures'
+                   body: "Ceci est un signalement pour une falaise.",
+                   report_from_url: "https://oblyk.org/crags/rocher-des-aures"
                  }
                },
                headers: @user_headers,
@@ -29,12 +29,12 @@ module Api
         assert_response :success
       end
 
-      test 'should set default reportable to Organization if not provided' do
-        assert_difference('Report.count', 1) do
+      test "should set default reportable to Organization if not provided" do
+        assert_difference("Report.count", 1) do
           post api_v1_reports_url,
                params: {
                  report: {
-                   body: 'Signalement sans reportable spécifié.'
+                   body: "Signalement sans reportable spécifié."
                  }
                },
                headers: @user_headers,
@@ -44,16 +44,16 @@ module Api
 
         report = Report.last
 
-        assert_equal 'Organization', report.reportable_type
+        assert_equal "Organization", report.reportable_type
         assert_equal @organization.id, report.reportable_id
       end
 
-      test 'should fail to create report when not authenticated' do
-        assert_no_difference('Report.count') do
+      test "should fail to create report when not authenticated" do
+        assert_no_difference("Report.count") do
           post api_v1_reports_url,
                params: {
                  report: {
-                   body: 'Signalement par un utilisateur non connecté.'
+                   body: "Signalement par un utilisateur non connecté."
                  }
                },
                headers: @public_headers,
@@ -62,12 +62,12 @@ module Api
         assert_response :unauthorized
       end
 
-      test 'should return unprocessable entity when params are invalid' do
+      test "should return unprocessable entity when params are invalid" do
         post api_v1_reports_url,
              params: {
                report: {
-                 reportable_type: 'Ascent',
-                 body: 'Type de signalement non autorisé.'
+                 reportable_type: "Ascent",
+                 body: "Type de signalement non autorisé."
                }
              },
              headers: @user_headers,

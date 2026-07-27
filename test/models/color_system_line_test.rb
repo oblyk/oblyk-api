@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ColorSystemLineTest < ActiveSupport::TestCase
   setup do
     @line = color_system_lines(:line_1_1)
   end
 
-  test 'color system line is valid' do
+  test "color system line is valid" do
     assert_predicate @line, :valid?
   end
 
-  test 'summary_to_json returns expected keys' do
+  test "summary_to_json returns expected keys" do
     json = @line.summary_to_json
 
     assert_equal @line.id, json[:id]
@@ -19,7 +19,7 @@ class ColorSystemLineTest < ActiveSupport::TestCase
     assert_equal @line.order, json[:order]
   end
 
-  test 'detail_to_json returns expected keys' do
+  test "detail_to_json returns expected keys" do
     json = @line.detail_to_json
 
     assert_equal @line.id, json[:id]
@@ -27,7 +27,7 @@ class ColorSystemLineTest < ActiveSupport::TestCase
     assert_equal @line.order, json[:order]
   end
 
-  test 'default scope orders by order' do
+  test "default scope orders by order" do
     lines = ColorSystemLine.where(color_system: color_systems(:system_1))
 
     assert_equal 1, lines.first.order

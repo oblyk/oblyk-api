@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ContestStageTest < ActiveSupport::TestCase
   setup do
@@ -8,43 +8,43 @@ class ContestStageTest < ActiveSupport::TestCase
     @contest = contests(:contest_1)
   end
 
-  test 'contest stage is valid' do
+  test "contest stage is valid" do
     assert_predicate @contest_stage, :valid?
   end
 
-  test 'contest stage is invalid without climbing_type' do
+  test "contest stage is invalid without climbing_type" do
     @contest_stage.climbing_type = nil
 
     assert_not @contest_stage.valid?
     assert_includes @contest_stage.errors.attribute_names, :climbing_type
   end
 
-  test 'contest stage is invalid with wrong climbing_type' do
-    @contest_stage.climbing_type = 'walking'
+  test "contest stage is invalid with wrong climbing_type" do
+    @contest_stage.climbing_type = "walking"
 
     assert_not @contest_stage.valid?
     assert_includes @contest_stage.errors.attribute_names, :climbing_type
   end
 
-  test 'contest stage is invalid with wrong default_ranking_type' do
-    @contest_stage.default_ranking_type = 'random_ranking'
+  test "contest stage is invalid with wrong default_ranking_type" do
+    @contest_stage.default_ranking_type = "random_ranking"
 
     assert_not @contest_stage.valid?
     assert_includes @contest_stage.errors.attribute_names, :default_ranking_type
   end
 
-  test 'set_order sets stage_order on create' do
+  test "set_order sets stage_order on create" do
     new_stage = ContestStage.create(
       contest: @contest,
       climbing_type: Climb::SPORT_CLIMBING,
-      name: 'New Stage'
+      name: "New Stage"
     )
 
     assert_not_nil new_stage.stage_order
     assert_equal 4, new_stage.stage_order
   end
 
-  test 'summary_to_json returns expected keys' do
+  test "summary_to_json returns expected keys" do
     json = @contest_stage.summary_to_json
 
     assert_equal @contest_stage.id, json[:id]
@@ -53,20 +53,20 @@ class ContestStageTest < ActiveSupport::TestCase
     assert_includes json.keys, :contest
   end
 
-  test 'detail_to_json returns expected keys including associations' do
+  test "detail_to_json returns expected keys including associations" do
     json = @contest_stage.detail_to_json
 
     assert_equal @contest_stage.id, json[:id]
     assert_includes json.keys, :contest_stage_steps
   end
 
-  test 'normalize_attributes strips and nils description' do
-    @contest_stage.description = '  Some description  '
+  test "normalize_attributes strips and nils description" do
+    @contest_stage.description = "  Some description  "
     @contest_stage.valid?
 
-    assert_equal 'Some description', @contest_stage.description
+    assert_equal "Some description", @contest_stage.description
 
-    @contest_stage.description = '   '
+    @contest_stage.description = "   "
     @contest_stage.valid?
 
     assert_nil @contest_stage.description

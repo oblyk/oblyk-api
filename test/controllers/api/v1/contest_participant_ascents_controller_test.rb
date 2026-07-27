@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -16,16 +16,16 @@ module Api
         @public_headers = api_access_token_headers
       end
 
-      test 'should get index' do
+      test "should get index" do
         get api_v1_gym_contest_contest_participant_ascents_url(@gym, @contest),
             headers: @admin_headers
 
         assert_response :success
       end
 
-      test 'should create contest_participant_ascent' do
+      test "should create contest_participant_ascent" do
         @participant.contest_participant_ascents.destroy_all
-        assert_difference('ContestParticipantAscent.count') do
+        assert_difference("ContestParticipantAscent.count") do
           post api_v1_gym_contest_contest_participant_contest_participant_ascents_url(@gym, @contest, @participant),
                params: {
                  contest_participant_ascent: {
@@ -41,10 +41,10 @@ module Api
         assert_response :no_content
       end
 
-      test 'should bulk create contest_participant_ascents' do
+      test "should bulk create contest_participant_ascents" do
         @participant.contest_participant_ascents.destroy_all
         contest_route_2 = contest_routes(:route_2)
-        assert_difference('ContestParticipantAscent.count', 2) do
+        assert_difference("ContestParticipantAscent.count", 2) do
           post bulk_api_v1_gym_contest_contest_participant_contest_participant_ascents_url(@gym, @contest, @participant),
                params: {
                  contest_participant_ascent: {

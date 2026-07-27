@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class GymRouteAscentsMapperTest < ActiveSupport::TestCase
   setup do
@@ -9,7 +9,7 @@ class GymRouteAscentsMapperTest < ActiveSupport::TestCase
     @ascent = ascent_gym_routes(:gym_ascent_one)
   end
 
-  test 'map_ascents maps ascents for a single route' do
+  test "map_ascents maps ascents for a single route" do
     route_hash = @gym_route.summary_to_json
     mapper = GymRouteAscentsMapper.new(route_hash, @user)
     mapped_route = mapper.map_ascents
@@ -20,7 +20,7 @@ class GymRouteAscentsMapperTest < ActiveSupport::TestCase
     assert_equal @ascent.id, mapped_route[:my_ascents].first[:id]
   end
 
-  test 'map_ascents maps ascents for an array of routes' do
+  test "map_ascents maps ascents for an array of routes" do
     routes = [
       @gym_route.summary_to_json,
       gym_routes(:gym_route_two).summary_to_json
@@ -37,7 +37,7 @@ class GymRouteAscentsMapperTest < ActiveSupport::TestCase
     assert_not mapped_routes[1].key?(:my_ascents)
   end
 
-  test 'map_ascents returns original if no ascents found' do
+  test "map_ascents returns original if no ascents found" do
     other_user = users(:super_admin_user)
     route_hash = @gym_route.summary_to_json
     mapper = GymRouteAscentsMapper.new(route_hash, other_user)

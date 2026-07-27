@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class IpBlackListTest < ActiveSupport::TestCase
-  test 'initialize dates before validation' do
-    ip_black_list = IpBlackList.new(ip: '1.1.1.1')
+  test "initialize dates before validation" do
+    ip_black_list = IpBlackList.new(ip: "1.1.1.1")
 
     assert_nil ip_black_list.blocked_at
     assert_nil ip_black_list.block_expired_at
@@ -16,10 +16,10 @@ class IpBlackListTest < ActiveSupport::TestCase
     assert_equal 30, ((ip_black_list.block_expired_at - ip_black_list.blocked_at) / 60).round
   end
 
-  test 'blocked! method updates attributes' do
+  test "blocked! method updates attributes" do
     ip_black_list = ip_black_lists(:one)
     old_count = ip_black_list.block_count
-    params = { foo: 'bar' }
+    params = { foo: "bar" }
 
     ip_black_list.blocked!(params)
 
@@ -29,7 +29,7 @@ class IpBlackListTest < ActiveSupport::TestCase
     assert_in_delta 30.minutes.from_now, ip_black_list.block_expired_at, 2.seconds
   end
 
-  test 'currently_blocked scope' do
+  test "currently_blocked scope" do
     blocked = IpBlackList.currently_blocked
 
     assert_includes blocked, ip_black_lists(:two)

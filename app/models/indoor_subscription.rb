@@ -5,22 +5,22 @@ class IndoorSubscription < ApplicationRecord
   has_many :gyms, through: :indoor_subscription_gyms
 
   validates :start_date, presence: true
-  validates :month_by_occurrence, inclusion: { in: [1, 3, 6, 12] }
+  validates :month_by_occurrence, inclusion: { in: [ 1, 3, 6, 12 ] }
 
-  scope :active, -> { where('indoor_subscriptions.start_date <= :date AND (indoor_subscriptions.end_date IS NULL OR indoor_subscriptions.end_date >= :date)', date: Date.current) }
+  scope :active, -> { where("indoor_subscriptions.start_date <= :date AND (indoor_subscriptions.end_date IS NULL OR indoor_subscriptions.end_date >= :date)", date: Date.current) }
 
-  WAITING_FIST_PAYMENT_STATUS = 'waiting_first_payment'
-  PAYMENT_FAILED_STATUS = 'payment_failed'
-  PAID_STATUS = 'paid'
+  WAITING_FIST_PAYMENT_STATUS = "waiting_first_payment"
+  PAYMENT_FAILED_STATUS = "payment_failed"
+  PAID_STATUS = "paid"
 
-  PAYMENT_STATUS_LIST = [WAITING_FIST_PAYMENT_STATUS, PAID_STATUS, PAYMENT_FAILED_STATUS].freeze
+  PAYMENT_STATUS_LIST = [ WAITING_FIST_PAYMENT_STATUS, PAID_STATUS, PAYMENT_FAILED_STATUS ].freeze
 
   def summary_to_json
     detail_to_json
   end
 
   def name
-    gym_type = for_gym_type == 'club' ? 'Club' : 'Salle privée'
+    gym_type = for_gym_type == "club" ? "Club" : "Salle privée"
 
     "Abonnement #{gym_type} Pack Complet"
   end
@@ -60,12 +60,12 @@ class IndoorSubscription < ApplicationRecord
   end
 
   def create_payment_link!(indoor_subscription_product, gym, number_of_trials_days = nil)
-    Stripe.api_key = ENV.fetch('STRIPE_API_KEY', nil)
+    Stripe.api_key = ENV.fetch("STRIPE_API_KEY", nil)
 
     plan = Stripe::Plan.create(
       amount: indoor_subscription_product.price_cents,
       currency: indoor_subscription_product.price_currency,
-      interval: 'month',
+      interval: "month",
       interval_count: indoor_subscription_product.month_by_occurrence,
       product: indoor_subscription_product.product_stripe_id
     )
@@ -83,12 +83,12 @@ class IndoorSubscription < ApplicationRecord
         }
       ],
       after_completion: {
-        type: 'redirect',
+        type: "redirect",
         redirect: {
           url: "#{gym.admin_app_path(with_domain: true)}/indoor-subscriptions"
         }
       },
-      billing_address_collection: 'required',
+      billing_address_collection: "required",
       subscription_data: subscription_data,
       allow_promotion_codes: true,
       tax_id_collection: {

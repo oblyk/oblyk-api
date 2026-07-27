@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 namespace :create_publications do
-  desc 'Create publications by model'
+  desc "Create publications by model"
   task :for_model, %i[model out] => :environment do |_t, args|
     out = args[:out] || $stdout
     model = args[:model]
@@ -10,17 +10,17 @@ namespace :create_publications do
     count = klass.count
     start_time = Time.current
 
-    out.puts ''
+    out.puts ""
     out.puts "create publication for #{count} #{model}"
 
     object = case model
-             when 'Crag'
+             when "Crag"
                Crag.includes(:user)
-             when 'Gym'
+             when "Gym"
                Gym.includes(:user)
-             when 'GuideBookPaper'
+             when "GuideBookPaper"
                GuideBookPaper.includes(:user)
-             when 'Photo'
+             when "Photo"
                Photo.includes(:illustrable)
              else
                klass
@@ -37,10 +37,10 @@ namespace :create_publications do
     minutes = (seconds.to_d / 60.0).round
     hours = (minutes.to_d / 60.0).round(1)
     out.puts "Finish on #{seconds} seconds, aka #{minutes} minutes, aka #{hours} hours"
-    out.puts 'End'
+    out.puts "End"
   end
 
-  desc 'Create publications for route'
+  desc "Create publications for route"
   task :for_crag_routes, %i[out] => :environment do |_t, args|
     out = args[:out] || $stdout
 
@@ -48,7 +48,7 @@ namespace :create_publications do
     crags_count = crags.count
     start_time = Time.current
 
-    out.puts ''
+    out.puts ""
     out.puts "create publication for #{crags_count} crags"
 
     loop = 0
@@ -65,15 +65,15 @@ namespace :create_publications do
       route_by_dates.each_value do |routes|
         publication = Publication.new(
           publishable_id: crag.id,
-          publishable_type: 'Crag',
-          publishable_subject: 'new_crag_routes',
+          publishable_type: "Crag",
+          publishable_subject: "new_crag_routes",
           generated: true
         )
         routes.each do |route|
           publication.published_at = route.created_at
           publication.last_updated_at = route.created_at
           publication.author_id = route.user_id
-          publication.publication_attachments << PublicationAttachment.new(attachable_type: 'CragRoute', attachable_id: route.id)
+          publication.publication_attachments << PublicationAttachment.new(attachable_type: "CragRoute", attachable_id: route.id)
         end
         publication.save
       end
@@ -83,6 +83,6 @@ namespace :create_publications do
     minutes = (seconds.to_d / 60.0).round
     hours = (minutes.to_d / 60.0).round(1)
     out.puts "Finish on #{seconds} seconds, aka #{minutes} minutes, aka #{hours} hours"
-    out.puts 'End'
+    out.puts "End"
   end
 end

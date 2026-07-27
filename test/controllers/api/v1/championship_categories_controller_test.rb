@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -13,38 +13,38 @@ module Api
         @auth_headers = api_headers(user: :super_admin_user)
       end
 
-      test 'should get index' do
+      test "should get index" do
         get api_v1_gym_championship_championship_categories_url(gym_id: @gym.id, championship_id: @championship.id),
             headers: @auth_headers, as: :json
 
         assert_response :success
       end
 
-      test 'should show championship category' do
+      test "should show championship category" do
         get api_v1_gym_championship_championship_category_url(gym_id: @gym.id, championship_id: @championship.id, id: @category.id),
             headers: @auth_headers, as: :json
 
         assert_response :success
       end
 
-      test 'should get contest categories' do
+      test "should get contest categories" do
         get contest_categories_api_v1_gym_championship_championship_categories_url(gym_id: @gym.id, championship_id: @championship.id),
             headers: @auth_headers, as: :json
 
         assert_response :success
       end
 
-      test 'should create championship category' do
-        assert_difference('ChampionshipCategory.count') do
+      test "should create championship category" do
+        assert_difference("ChampionshipCategory.count") do
           post api_v1_gym_championship_championship_categories_url(gym_id: @gym.id, championship_id: @championship.id),
-               params: { championship_category: { name: 'New Category', contest_categories: [@contest_category.id] } },
+               params: { championship_category: { name: "New Category", contest_categories: [ @contest_category.id ] } },
                headers: @auth_headers, as: :json
         end
         assert_response :no_content
       end
 
-      test 'should destroy championship category' do
-        assert_difference('ChampionshipCategory.count', -1) do
+      test "should destroy championship category" do
+        assert_difference("ChampionshipCategory.count", -1) do
           delete api_v1_gym_championship_championship_category_url(gym_id: @gym.id, championship_id: @championship.id, id: @category.id),
                  headers: @auth_headers, as: :json
         end

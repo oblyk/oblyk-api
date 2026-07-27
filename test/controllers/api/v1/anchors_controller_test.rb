@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -9,7 +9,7 @@ module Api
         @api_headers = api_headers
       end
 
-      test 'should get index' do
+      test "should get index" do
         get api_v1_anchors_url, headers: @api_headers, as: :json
 
         assert_response :success

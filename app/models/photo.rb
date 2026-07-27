@@ -31,11 +31,11 @@ class Photo < ApplicationRecord
   end
 
   def photo_height
-    picture.blob.metadata['height']
+    picture.blob.metadata["height"]
   end
 
   def photo_width
-    picture.blob.metadata['width']
+    picture.blob.metadata["width"]
   end
 
   def destroyable?
@@ -50,10 +50,10 @@ class Photo < ApplicationRecord
 
   def copy
     copies = []
-    copies << 'BY' if copyright_by
-    copies << 'NC' if copyright_nc
-    copies << 'ND' if copyright_nd
-    copies.join ' - '
+    copies << "BY" if copyright_by
+    copies << "NC" if copyright_nc
+    copies << "ND" if copyright_nd
+    copies.join " - "
   end
 
   def detail_to_json
@@ -108,22 +108,22 @@ class Photo < ApplicationRecord
 
     publication = Publication.includes(:publication_attachments).find_by(
       publishable_id: crag_id,
-      publishable_type: 'Crag',
+      publishable_type: "Crag",
       publishable_subject: publishable_subject,
-      published_at: [posted_at.all_day],
+      published_at: [ posted_at.all_day ],
       author_id: user_id
     )
 
     publication ||= Publication.new(
       publishable_id: crag_id,
-      publishable_type: 'Crag',
+      publishable_type: "Crag",
       publishable_subject: publishable_subject,
       generated: true,
       author_id: user_id
     )
     publication.published_at = posted_at
     publication.last_updated_at = posted_at
-    publication.publication_attachments << PublicationAttachment.new(attachable_type: 'Photo', attachable_id: id)
+    publication.publication_attachments << PublicationAttachment.new(attachable_type: "Photo", attachable_id: id)
     publication.save
   end
 

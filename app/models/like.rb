@@ -29,8 +29,8 @@ class Like < ApplicationRecord
     return unless USER_NOTIFIABLE_TYPES.include? likeable_type
 
     Notification.create(
-      notification_type: 'new_like',
-      notifiable_type: 'Like',
+      notification_type: "new_like",
+      notifiable_type: "Like",
       notifiable_id: id,
       user: likeable.user
     )
@@ -40,8 +40,8 @@ class Like < ApplicationRecord
     return unless USER_NOTIFIABLE_TYPES.include? likeable_type
 
     notification = Notification.find_by(
-      notification_type: 'new_like',
-      notifiable_type: 'Like',
+      notification_type: "new_like",
+      notifiable_type: "Like",
       notifiable_id: id,
       user: likeable.user
     )

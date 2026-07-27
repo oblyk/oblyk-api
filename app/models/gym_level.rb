@@ -3,14 +3,14 @@
 class GymLevel < ApplicationRecord
   belongs_to :gym
 
-  HOLD_REPRESENTATION = 'hold'
-  TAG_REPRESENTATION = 'tag'
-  TAG_AND_HOLD_REPRESENTATION = 'hold_and_tag'
-  LEVEL_REPRESENTATIONS = [HOLD_REPRESENTATION, TAG_REPRESENTATION, TAG_AND_HOLD_REPRESENTATION].freeze
+  HOLD_REPRESENTATION = "hold"
+  TAG_REPRESENTATION = "tag"
+  TAG_AND_HOLD_REPRESENTATION = "hold_and_tag"
+  LEVEL_REPRESENTATIONS = [ HOLD_REPRESENTATION, TAG_REPRESENTATION, TAG_AND_HOLD_REPRESENTATION ].freeze
 
   before_validation :normalize_sub_level
   validates :climbing_type, :level_representation, presence: true
-  validates :climbing_type, uniqueness: { scope: [:gym_id], case_sensitive: false }
+  validates :climbing_type, uniqueness: { scope: [ :gym_id ], case_sensitive: false }
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }
   validates :grade_system, inclusion: { in: Grade::GRADE_STYLES }, allow_blank: true
   validates :level_representation, inclusion: { in: LEVEL_REPRESENTATIONS }
@@ -41,7 +41,7 @@ class GymLevel < ApplicationRecord
   end
 
   def colors_system_mark
-    levels.pluck('color').join
+    levels.pluck("color").join
   end
 
   private

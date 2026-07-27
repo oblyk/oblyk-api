@@ -10,7 +10,7 @@ class Word < ApplicationRecord
     searchable_attributes %i[name definition]
   end
 
-  has_paper_trail only: %i[name definition], if: proc { |_obj| ENV['PAPER_TRAIL'] == 'true' }
+  has_paper_trail only: %i[name definition], if: proc { |_obj| ENV["PAPER_TRAIL"] == "true" }
 
   has_one_attached :picture
   belongs_to :user, optional: true
@@ -50,6 +50,6 @@ class Word < ApplicationRecord
   private
 
   def search_indexes
-    [{ value: name, column_names: %i[name] }]
+    [ { value: name, column_names: %i[name] } ]
   end
 end

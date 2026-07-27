@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 namespace :delete_cache do
-  desc 'Delete summary cache for specific model'
+  desc "Delete summary cache for specific model"
   task :for_summary, %i[model key out] => :environment do |_t, args|
     out = args[:out] || $stdout
     model = args[:model]

@@ -11,7 +11,7 @@ module Api
         count_select = if @gym
                          "(SELECT COUNT(*) FROM ascents INNER JOIN color_system_lines ON ascents.color_system_line_id = color_system_lines.id WHERE color_system_id = color_systems.id AND gym_id = #{@gym.id})"
                        else
-                         '(SELECT COUNT(*) FROM ascents INNER JOIN color_system_lines ON ascents.color_system_line_id = color_system_lines.id WHERE color_system_id = color_systems.id)'
+                         "(SELECT COUNT(*) FROM ascents INNER JOIN color_system_lines ON ascents.color_system_line_id = color_system_lines.id WHERE color_system_id = color_systems.id)"
                        end
         color_systems = ColorSystem.select("#{count_select} AS count_usage, color_systems.*")
                                    .order(count_usage: :desc)

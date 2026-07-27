@@ -75,7 +75,7 @@ module Api
       end
 
       def serialized_publication(publication)
-        options = { include: [:publication_attachments, :publishable, :author, 'publication_attachments.attachable'], params: serializer_params }
+        options = { include: [ :publication_attachments, :publishable, :author, "publication_attachments.attachable" ], params: serializer_params }
         serializer PublicationSerializer, publication, options
       end
 
@@ -84,7 +84,7 @@ module Api
           PublicationAttachmentSerializer,
           publication,
           {
-            include: [:attachable],
+            include: [ :attachable ],
             params: serializer_params
           }
         )
@@ -120,10 +120,10 @@ module Api
 
       def protected_by_owner
         case @publication.publishable_type
-        when 'Gym'
+        when "Gym"
           @gym = @publication.publishable
           forbidden unless gym_team_user?
-        when 'User'
+        when "User"
           forbidden unless @publication.publishable == @current_user
         end
       end

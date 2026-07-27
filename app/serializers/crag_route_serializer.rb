@@ -40,7 +40,7 @@ class CragRouteSerializer < BaseSerializer
     {
       id: object.photo&.id,
       attachments: {
-        picture: object.attachment_object(object.photo&.picture, 'CragRoute_picture')
+        picture: object.attachment_object(object.photo&.picture, "CragRoute_picture")
       }
     }
   end

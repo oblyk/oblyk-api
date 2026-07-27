@@ -4,7 +4,7 @@ class AscentGymRoute < Ascent
   belongs_to :gym_route, optional: true
   belongs_to :gym
   belongs_to :color_system_line, optional: true
-  has_one :ascent_comment, class_name: 'Comment', as: :commentable, dependent: :destroy
+  has_one :ascent_comment, class_name: "Comment", as: :commentable, dependent: :destroy
 
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }
 
@@ -146,9 +146,9 @@ class AscentGymRoute < Ascent
 
       sections << {
         index: index,
-        height: section['height'],
-        grade: section['grade'],
-        grade_value: section['grade_value']
+        height: section["height"],
+        grade: section["grade"],
+        grade_value: section["grade_value"]
       }
     end
     self.sections = sections
@@ -163,13 +163,13 @@ class AscentGymRoute < Ascent
     return if sections.blank?
 
     sections.each do |section|
-      next unless section['grade_value']
+      next unless section["grade_value"]
 
-      max_grade_text = section['grade'] if max_grade_value.blank? || section['grade_value'] > max_grade_value
-      max_grade_value = section['grade_value'] if max_grade_value.blank? || section['grade_value'] > max_grade_value
+      max_grade_text = section["grade"] if max_grade_value.blank? || section["grade_value"] > max_grade_value
+      max_grade_value = section["grade_value"] if max_grade_value.blank? || section["grade_value"] > max_grade_value
 
-      min_grade_text = section['grade'] if min_grade_value.blank? || section['grade_value'] < min_grade_value
-      min_grade_value = section['grade_value'] if min_grade_value.blank? || section['grade_value'] < min_grade_value
+      min_grade_text = section["grade"] if min_grade_value.blank? || section["grade_value"] < min_grade_value
+      min_grade_value = section["grade_value"] if min_grade_value.blank? || section["grade_value"] < min_grade_value
     end
 
     self.max_grade_text = max_grade_text
@@ -181,7 +181,7 @@ class AscentGymRoute < Ascent
 
   def normalize_roping_status
     self.roping_status = nil if RopingStatus::LIST.exclude? roping_status
-    self.roping_status = nil if ascent_status == 'project'
+    self.roping_status = nil if ascent_status == "project"
     return if roping_status.blank? || gym_route_id.blank?
 
     self.roping_status = nil unless gym_route.climbing_type == Climb::SPORT_CLIMBING

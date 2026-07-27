@@ -1,23 +1,23 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class GymThreeDAssetTest < ActiveSupport::TestCase
   setup do
     @gym_three_d_asset = gym_three_d_assets(:asset_1)
   end
 
-  test 'gym_three_d_asset is valid' do
+  test "gym_three_d_asset is valid" do
     assert_predicate @gym_three_d_asset, :valid?
   end
 
-  test 'gym_three_d_asset is invalid without name' do
+  test "gym_three_d_asset is invalid without name" do
     @gym_three_d_asset.name = nil
 
     assert_not @gym_three_d_asset.valid?
   end
 
-  test 'summary_to_json returns correct keys' do
+  test "summary_to_json returns correct keys" do
     summary = @gym_three_d_asset.summary_to_json
 
     assert_equal @gym_three_d_asset.id, summary[:id]
@@ -26,11 +26,11 @@ class GymThreeDAssetTest < ActiveSupport::TestCase
     assert_includes summary.keys, :attachments
   end
 
-  test 'three_d? returns true if three_d_gltf is attached' do
+  test "three_d? returns true if three_d_gltf is attached" do
     assert_not @gym_three_d_asset.three_d?
   end
 
-  test 'three_d_gltf_url returns nil if nothing attached' do
+  test "three_d_gltf_url returns nil if nothing attached" do
     assert_nil @gym_three_d_asset.three_d_gltf_url
   end
 end

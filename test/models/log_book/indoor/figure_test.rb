@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module LogBook
   module Indoor
@@ -16,7 +16,7 @@ module LogBook
         )
       end
 
-      test 'figures returns expected statistics' do
+      test "figures returns expected statistics" do
         figure = Figure.new(@user)
         stats = figure.figures
 
@@ -27,7 +27,7 @@ module LogBook
         assert_equal 1, stats[:last_28_days][:ascents]
       end
 
-      test 'geographic stats' do
+      test "geographic stats" do
         figure = Figure.new(@user)
         stats = figure.figures
 
@@ -36,7 +36,7 @@ module LogBook
         assert_equal 1, stats[:regions]
       end
 
-      test 'climbing sessions stats' do
+      test "climbing sessions stats" do
         session = ClimbingSession.create!(
           user: @user,
           session_date: Date.current

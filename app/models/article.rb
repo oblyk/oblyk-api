@@ -76,12 +76,12 @@ class Article < ApplicationRecord
   def publication_push!
     return unless published?
 
-    return if Publication.exists?(publishable_type: 'Article', publishable_id: id, publishable_subject: :create)
+    return if Publication.exists?(publishable_type: "Article", publishable_id: id, publishable_subject: :create)
 
     Publication.create(
       publishable_id: id,
-      publishable_type: 'Article',
-      publishable_subject: 'create',
+      publishable_type: "Article",
+      publishable_subject: "create",
       published_at: published_at,
       last_updated_at: published_at,
       generated: true,

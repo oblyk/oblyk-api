@@ -15,7 +15,7 @@ module Api
 
       def index
         steps = @contest_stage.contest_stage_steps.map do |step|
-          step.summary_to_json(with_routes: params[:with_routes] == 'true')
+          step.summary_to_json(with_routes: params[:with_routes] == "true")
         end
         render json: steps, status: :ok
       end

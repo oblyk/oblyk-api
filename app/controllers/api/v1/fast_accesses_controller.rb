@@ -8,11 +8,11 @@ module Api
       def index
         crag = Follow.includes(followable: { photo: { picture_attachment: :blob }, static_map_attachment: :blob })
                      .order(updated_at: :desc)
-                     .find_by(followable_type: 'Crag', user: @current_user)
+                     .find_by(followable_type: "Crag", user: @current_user)
         crag = crag&.followable
         gym = Follow.includes(followable: { logo_attachment: :blob })
                     .order(updated_at: :desc)
-                    .find_by(followable_type: 'Gym', user: @current_user)
+                    .find_by(followable_type: "Gym", user: @current_user)
         gym = gym&.followable
 
         follows_count = Follow.where(user: @current_user)
@@ -22,7 +22,7 @@ module Api
 
         if crag.present?
           avatar = if crag.photo_id.present?
-                     crag.attachment_object(crag.photo&.picture, 'Crag_cover')
+                     crag.attachment_object(crag.photo&.picture, "Crag_cover")
                    else
                      crag.attachment_object(crag.static_map)
                    end

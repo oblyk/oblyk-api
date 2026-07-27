@@ -35,13 +35,13 @@ class Notification < ApplicationRecord
   after_save :broadcast_notification
 
   def name
-    if notifiable_type == 'User'
+    if notifiable_type == "User"
       notifiable.first_name
-    elsif notifiable_type == 'Article'
+    elsif notifiable_type == "Article"
       notifiable.name
     elsif %w[ConversationMessage Like Comment].include? notifiable_type
       notifiable.user.first_name
-    elsif notifiable_type == 'Publication'
+    elsif notifiable_type == "Publication"
       notifiable.publishable.name
     end
   end
@@ -49,7 +49,7 @@ class Notification < ApplicationRecord
   def app_path
     if %w[new_follower subscribe_accepted request_for_follow_up new_reply new_publication new_message].include? notification_type
       notifiable.app_path
-    elsif notification_type == 'new_like'
+    elsif notification_type == "new_like"
       notifiable.likeable.app_path
     end
   end
@@ -83,7 +83,7 @@ class Notification < ApplicationRecord
   end
 
   def send_email_notification
-    return if notification_type == 'new_publication' && notifiable_type == 'Publication' # Send with SendPublicationsEmailsJob
+    return if notification_type == "new_publication" && notifiable_type == "Publication" # Send with SendPublicationsEmailsJob
     return if user.email_notifiable_list.blank?
     return unless user.email_notifiable_list&.include?(notification_type)
 

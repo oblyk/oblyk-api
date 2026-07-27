@@ -20,19 +20,19 @@ class Park < ApplicationRecord
   end
 
   def location
-    [latitude, longitude]
+    [ latitude, longitude ]
   end
 
   def to_geo_json(minimalistic: false)
     features = {
-      type: 'Feature',
+      type: "Feature",
       properties: {
-        type: 'Park',
+        type: "Park",
         id: id,
         crag_id: crag_id,
-        icon: 'park-marker'
+        icon: "park-marker"
       },
-      geometry: { type: 'Point', coordinates: [Float(longitude), Float(latitude), 0.0] }
+      geometry: { type: "Point", coordinates: [ Float(longitude), Float(latitude), 0.0 ] }
     }
     unless minimalistic
       features[:properties].merge!(

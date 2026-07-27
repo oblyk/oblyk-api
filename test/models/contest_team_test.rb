@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ContestTeamTest < ActiveSupport::TestCase
   setup do
@@ -8,32 +8,32 @@ class ContestTeamTest < ActiveSupport::TestCase
     @contest = contests(:contest_ongoing)
   end
 
-  test 'contest team is valid' do
+  test "contest team is valid" do
     assert_predicate @team, :valid?
   end
 
-  test 'contest team is invalid without name' do
+  test "contest team is invalid without name" do
     @team.name = nil
 
     assert_not @team.valid?
     assert_includes @team.errors.attribute_names, :name
   end
 
-  test 'contest team name is unique within a contest' do
+  test "contest team name is unique within a contest" do
     duplicate_team = ContestTeam.new(name: @team.name, contest: @contest)
 
     assert_not duplicate_team.valid?
     assert_includes duplicate_team.errors.attribute_names, :name
   end
 
-  test 'strip_whitespace removes leading and trailing spaces from name' do
-    @team.name = '  Team name with spaces  '
+  test "strip_whitespace removes leading and trailing spaces from name" do
+    @team.name = "  Team name with spaces  "
     @team.valid?
 
-    assert_equal 'Team name with spaces', @team.name
+    assert_equal "Team name with spaces", @team.name
   end
 
-  test 'summary_to_json returns expected keys' do
+  test "summary_to_json returns expected keys" do
     json = @team.summary_to_json
 
     assert_equal @team.id, json[:id]
@@ -44,7 +44,7 @@ class ContestTeamTest < ActiveSupport::TestCase
     assert_includes json.keys, :detail_name
   end
 
-  test 'detail_to_json returns expected keys' do
+  test "detail_to_json returns expected keys" do
     json = @team.detail_to_json
 
     assert_equal @team.id, json[:id]
@@ -52,15 +52,15 @@ class ContestTeamTest < ActiveSupport::TestCase
     assert_includes json.keys, :history
   end
 
-  test 'detail_name returns formatted string' do
-    assert_equal 'Team 1 (2/2)', @team.detail_name
+  test "detail_name returns formatted string" do
+    assert_equal "Team 1 (2/2)", @team.detail_name
   end
 
-  test 'number_of_participants returns correct count' do
+  test "number_of_participants returns correct count" do
     assert_equal 2, @team.number_of_participants
   end
 
-  test 'remaining_places returns correct value' do
+  test "remaining_places returns correct value" do
     assert_equal 0, @team.remaining_places
 
     @team.contest_participants.first.update_column(:contest_team_id, nil)
@@ -68,7 +68,7 @@ class ContestTeamTest < ActiveSupport::TestCase
     assert_equal 1, @team.reload.remaining_places
   end
 
-  test 'un_team_participants sets participant contest_team_id to nil on destroy' do
+  test "un_team_participants sets participant contest_team_id to nil on destroy" do
     participants = @team.contest_participants.to_a
 
     assert_not_empty participants

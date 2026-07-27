@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -12,17 +12,17 @@ module Api
         @public_headers = api_access_token_headers
       end
 
-      test 'should show judge interface data' do
+      test "should show judge interface data" do
         get api_v1_gym_contest_contest_judge_interface_url(@gym, @contest, @judge.uuid), headers: @public_headers, as: :json
 
         assert_response :success
         json_response = response.parsed_body
 
-        assert_equal @judge.name, json_response['contest_judge']['name']
-        assert_equal @contest.name, json_response['contest']['name']
+        assert_equal @judge.name, json_response["contest_judge"]["name"]
+        assert_equal @contest.name, json_response["contest"]["name"]
       end
 
-      test 'should unlock judge interface' do
+      test "should unlock judge interface" do
         post unlock_api_v1_gym_contest_contest_judge_interface_url(@gym, @contest, @judge.uuid),
              params: {
                contest_judge: {
@@ -35,15 +35,15 @@ module Api
         assert_response :success
         json_response = response.parsed_body
 
-        assert json_response['unlocked']
-        assert_not_nil json_response['token']
+        assert json_response["unlocked"]
+        assert_not_nil json_response["token"]
       end
 
-      test 'should not unlock judge interface with wrong code' do
+      test "should not unlock judge interface with wrong code" do
         post unlock_api_v1_gym_contest_contest_judge_interface_url(@gym, @contest, @judge.uuid),
              params: {
                contest_judge: {
-                 code: 'WRONGCODE'
+                 code: "WRONGCODE"
                }
              },
              headers: @public_headers,
@@ -52,15 +52,15 @@ module Api
         assert_response :success
         json_response = response.parsed_body
 
-        assert_not json_response['unlocked']
-        assert_nil json_response['token']
+        assert_not json_response["unlocked"]
+        assert_nil json_response["token"]
       end
 
-      test 'should get participants for judge' do
+      test "should get participants for judge" do
         exp = Time.zone.tomorrow.end_of_day.to_i
         token = JwtToken::Token.generate({ judge_id: @judge.id, code: @judge.code }, exp)
 
-        headers = @public_headers.merge({ 'HttpContestJudgeToken' => token })
+        headers = @public_headers.merge({ "HttpContestJudgeToken" => token })
 
         get participants_api_v1_gym_contest_contest_judge_interface_url(@gym, @contest, @judge.uuid),
             headers: headers,
@@ -72,7 +72,7 @@ module Api
         assert_kind_of Array, json_response
       end
 
-      test 'should not get participants without token' do
+      test "should not get participants without token" do
         get participants_api_v1_gym_contest_contest_judge_interface_url(@gym, @contest, @judge.uuid),
             headers: @public_headers,
             as: :json

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class AreaTest < ActiveSupport::TestCase
   setup do
@@ -10,18 +10,18 @@ class AreaTest < ActiveSupport::TestCase
     @crag_orpierre = crags(:orpierre)
   end
 
-  test 'area is valid' do
+  test "area is valid" do
     assert_predicate @area, :valid?
   end
 
-  test 'area is invalid without name' do
+  test "area is invalid without name" do
     @area.name = nil
 
     assert_not @area.valid?
     assert_includes @area.errors.attribute_names, :name
   end
 
-  test 'crag_routes_count returns sum of crags routes count' do
+  test "crag_routes_count returns sum of crags routes count" do
     assert_equal 3, @area.crag_routes_count
 
     AreaCrag.create!(area: @area, crag: @crag_orpierre)
@@ -29,20 +29,20 @@ class AreaTest < ActiveSupport::TestCase
     assert_equal 4, @area.crag_routes_count
   end
 
-  test 'hardest_route returns the crag with the highest max_grade_value' do
+  test "hardest_route returns the crag with the highest max_grade_value" do
     crag_easy = Crag.create!(
-      name: 'Easy Crag',
+      name: "Easy Crag",
       latitude: 45,
       longitude: 5,
-      city: 'Test City',
+      city: "Test City",
       max_grade_value: 10,
       user: @user
     )
     crag_hard = Crag.create!(
-      name: 'Hard Crag',
+      name: "Hard Crag",
       latitude: 45,
       longitude: 5,
-      city: 'Test City',
+      city: "Test City",
       max_grade_value: 50,
       user: @user
     )
@@ -53,20 +53,20 @@ class AreaTest < ActiveSupport::TestCase
     assert_equal crag_hard, @area.hardest_route
   end
 
-  test 'easiest_route returns the crag with the lowest min_grade_value' do
+  test "easiest_route returns the crag with the lowest min_grade_value" do
     crag_easy = Crag.create!(
-      name: 'Easy Crag',
+      name: "Easy Crag",
       latitude: 45,
       longitude: 5,
-      city: 'Test City',
+      city: "Test City",
       min_grade_value: 10,
       user: @user
     )
     crag_hard = Crag.create!(
-      name: 'Hard Crag',
+      name: "Hard Crag",
       latitude: 45,
       longitude: 5,
-      city: 'Test City',
+      city: "Test City",
       min_grade_value: 50,
       user: @user
     )
@@ -77,7 +77,7 @@ class AreaTest < ActiveSupport::TestCase
     assert_equal crag_easy, @area.easiest_route
   end
 
-  test 'summary_to_json returns expected keys' do
+  test "summary_to_json returns expected keys" do
     @area.save
     json = @area.summary_to_json
 
@@ -88,7 +88,7 @@ class AreaTest < ActiveSupport::TestCase
     assert_includes json.keys, :photo
   end
 
-  test 'detail_to_json returns expected keys' do
+  test "detail_to_json returns expected keys" do
     json = @area.detail_to_json
 
     assert_equal @area.id, json[:id]
@@ -99,7 +99,7 @@ class AreaTest < ActiveSupport::TestCase
     assert_includes json.keys, :history
   end
 
-  test 'all_photos returns all photos from crags, sectors and routes' do
+  test "all_photos returns all photos from crags, sectors and routes" do
     assert_kind_of Array, @area.all_photos
   end
 end

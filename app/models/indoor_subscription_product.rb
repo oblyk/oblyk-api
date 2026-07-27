@@ -2,7 +2,7 @@
 
 class IndoorSubscriptionProduct < ApplicationRecord
   validates :reference, :price_cents, presence: true
-  validates :month_by_occurrence, inclusion: { in: [1, 3, 6, 12] }
+  validates :month_by_occurrence, inclusion: { in: [ 1, 3, 6, 12 ] }
 
   monetize :price_cents
 

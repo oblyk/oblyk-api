@@ -25,7 +25,7 @@ class CragSector < ApplicationRecord
     south_west
     west
     north_west
-  ], if: proc { |_obj| ENV['PAPER_TRAIL'] == 'true' }
+  ], if: proc { |_obj| ENV["PAPER_TRAIL"] == "true" }
 
   belongs_to :user, optional: true
   belongs_to :photo, optional: true
@@ -56,14 +56,14 @@ class CragSector < ApplicationRecord
 
   def to_geo_json
     {
-      type: 'Feature',
+      type: "Feature",
       properties: {
-        type: 'CragSector',
+        type: "CragSector",
         id: id,
         app_path: app_path,
-        icon: 'sector-marker'
+        icon: "sector-marker"
       },
-      geometry: { type: 'Point', coordinates: [Float(longitude), Float(latitude), 0.0] }
+      geometry: { type: "Point", coordinates: [ Float(longitude), Float(latitude), 0.0 ] }
     }
   end
 
@@ -120,7 +120,7 @@ class CragSector < ApplicationRecord
         photo: {
           id: photo&.id,
           attachments: {
-            picture: attachment_object(photo&.picture, 'CragSector_picture')
+            picture: attachment_object(photo&.picture, "CragSector_picture")
           }
         }
       }
@@ -144,13 +144,13 @@ class CragSector < ApplicationRecord
   end
 
   def update_ascents_count!
-    self.ascent_users_count = AscentCragRoute.select('COUNT(DISTINCT ascents.user_id) AS count')
+    self.ascent_users_count = AscentCragRoute.select("COUNT(DISTINCT ascents.user_id) AS count")
                                              .joins(:crag_route)
                                              .find_by(
                                                crag_routes: { crag_sector_id: id },
                                                ascents: { ascent_status: AscentStatus::FIRST_TOP_LIST }
                                              )[:count]
-    self.ascents_count = AscentCragRoute.select('COUNT(*) AS count')
+    self.ascents_count = AscentCragRoute.select("COUNT(*) AS count")
                                         .joins(:crag_route)
                                         .find_by(
                                           crag_routes: { crag_sector_id: id },
@@ -163,9 +163,9 @@ class CragSector < ApplicationRecord
 
   def historize_location
     self.location = if latitude
-                      [latitude, longitude]
+                      [ latitude, longitude ]
                     else
-                      [crag.latitude, crag.longitude]
+                      [ crag.latitude, crag.longitude ]
                     end
   end
 

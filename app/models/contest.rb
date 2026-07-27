@@ -166,7 +166,7 @@ class Contest < ApplicationRecord
       start_date: subscription_start_date,
       events: [
         {
-          event_type: 'SubscriptionOpen',
+          event_type: "SubscriptionOpen",
           start_date: subscription_start_date,
           end_date: subscription_end_date
         }
@@ -178,7 +178,7 @@ class Contest < ApplicationRecord
       start_date: start_date,
       events: [
         {
-          event_type: 'ContestStart',
+          event_type: "ContestStart",
           start_date: start_date
         }
       ]
@@ -229,7 +229,7 @@ class Contest < ApplicationRecord
             events: []
           }
           times[time_key][:events] << {
-            event_type: 'ContestStep',
+            event_type: "ContestStep",
             end_date: contest_time_block.end_date,
             end_time: contest_time_block.end_time,
             additional_time: contest_time_block.additional_time,
@@ -248,7 +248,7 @@ class Contest < ApplicationRecord
           events: []
         }
         times[time_key][:events] << {
-          event_type: 'ContestStep',
+          event_type: "ContestStep",
           end_date: route_group.end_date,
           end_time: route_group.end_time,
           additional_time: route_group.additional_time,
@@ -266,7 +266,7 @@ class Contest < ApplicationRecord
       start_date: end_date,
       events: [
         {
-          event_type: 'ContestEnd',
+          event_type: "ContestEnd",
           end_date: end_date
         }
       ]
@@ -286,21 +286,21 @@ class Contest < ApplicationRecord
 
   def results_to_csv(unisex: false, by_team: false)
     results = ContestService::Result.new(self, unisex: unisex, by_team: by_team, rich_data: true).results
-    CSV.generate(headers: true, encoding: 'utf-8', col_sep: "\t") do |csv|
+    CSV.generate(headers: true, encoding: "utf-8", col_sep: "\t") do |csv|
       header = []
-      header << 'Classement général'
-      header << 'Catégorie'
-      header << 'Genre'
-      header << 'Nom'
-      header << 'Prénom'
-      header << 'Date de naissance'
-      header << 'Email'
-      header << 'Affiliation'
+      header << "Classement général"
+      header << "Catégorie"
+      header << "Genre"
+      header << "Nom"
+      header << "Prénom"
+      header << "Date de naissance"
+      header << "Email"
+      header << "Affiliation"
       category_header = results[0]
       first_participant = category_header[:participants][0]
       first_participant[:stages].each do |stage|
         stage[:steps].each do |step|
-          climbing_type = stage[:climbing_type] == 'bouldering' ? 'Bloc' : 'Voie'
+          climbing_type = stage[:climbing_type] == "bouldering" ? "Bloc" : "Voie"
           step_name = "#{climbing_type} - #{step[:name]}"
           header << "#{step_name} - Classement"
           header << "#{step_name} - Point"
@@ -354,13 +354,13 @@ class Contest < ApplicationRecord
   end
 
   def create_u_age
-    return unless categorization_type == 'official_under_age'
+    return unless categorization_type == "official_under_age"
 
     obligations = ContestCategory::OBLIGATION_LIST.filter { |obligation| obligation != ContestCategory::BETWEEN_AGE }
 
     obligations.each do |obligation|
       contest_categories << ContestCategory.new(
-        name: obligation.tr('_', ' ').titleize,
+        name: obligation.tr("_", " ").titleize,
         capacity: total_capacity.present? ? total_capacity / obligations.size : nil,
         registration_obligation: obligation
       )
@@ -368,8 +368,8 @@ class Contest < ApplicationRecord
   end
 
   def validate_dates
-    errors.add(:subscription_end_date, 'before_start_date') if subscription_start_date && subscription_end_date < subscription_start_date
-    errors.add(:subscription_end_date, 'before_end_date') if end_date < subscription_end_date
-    errors.add(:end_date, 'before_start_date') if end_date < start_date
+    errors.add(:subscription_end_date, "before_start_date") if subscription_start_date && subscription_end_date < subscription_start_date
+    errors.add(:subscription_end_date, "before_end_date") if end_date < subscription_end_date
+    errors.add(:end_date, "before_start_date") if end_date < start_date
   end
 end

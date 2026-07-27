@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -11,7 +11,7 @@ module Api
         @notification = notifications(:new_message_notif)
       end
 
-      test 'should get index' do
+      test "should get index" do
         get api_v1_notifications_url, headers: @api_headers, as: :json
 
         assert_response :success
@@ -20,8 +20,8 @@ module Api
         assert_not_empty json_response
       end
 
-      test 'should get index with unread_only false' do
-        get api_v1_notifications_url, headers: @api_headers, params: { unread_only: 'false' }
+      test "should get index with unread_only false" do
+        get api_v1_notifications_url, headers: @api_headers, params: { unread_only: "false" }
 
         assert_response :success
         json_response = response.parsed_body
@@ -29,14 +29,14 @@ module Api
         assert_not_empty json_response
       end
 
-      test 'should get unread count' do
+      test "should get unread count" do
         get unread_count_api_v1_notifications_url, headers: @api_headers, as: :json
 
         assert_response :success
         assert_equal @user.notifications.unread.count, response.parsed_body
       end
 
-      test 'should mark notification as read' do
+      test "should mark notification as read" do
         @notification.update_column(:read_at, nil)
 
         assert_nil @notification.read_at
@@ -48,7 +48,7 @@ module Api
         assert_not_nil @notification.read_at
       end
 
-      test 'should mark all notifications as read' do
+      test "should mark all notifications as read" do
         @user.notifications.update_all(read_at: nil)
 
         assert_predicate @user.notifications.unread.count, :positive?

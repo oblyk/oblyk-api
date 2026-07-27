@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class RainTest < ActiveSupport::TestCase
-  test 'Rain::LIST is an array' do
+  test "Rain::LIST is an array" do
     assert_kind_of Array, Rain::LIST
   end
 
-  test 'Rain::LIST contains expected values' do
+  test "Rain::LIST contains expected values" do
     expected_anchors = %w[
       protected
       exposed
@@ -16,11 +16,11 @@ class RainTest < ActiveSupport::TestCase
     assert_equal expected_anchors.sort, Rain::LIST.sort
   end
 
-  test 'Rain::LIST is frozen' do
+  test "Rain::LIST is frozen" do
     assert_predicate Rain::LIST, :frozen?
   end
 
-  test 'Rain::LIST has 2 elements' do
+  test "Rain::LIST has 2 elements" do
     assert_equal 2, Rain::LIST.size
   end
 end

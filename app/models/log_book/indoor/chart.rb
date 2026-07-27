@@ -29,7 +29,7 @@ module LogBook
             {
               data: grades.map { |grade| grade[1][:count] },
               backgroundColor: grades.map { |grade| Grade.value_color(grade[0] - 1) },
-              label: 'number'
+              label: "number"
             }
           ],
           labels: grades.pluck(0)
@@ -52,14 +52,14 @@ module LogBook
           end
 
           charts << {
-            type: 'level_chart',
+            type: "level_chart",
             color_system: color_system.detail_to_json,
             chart: {
               datasets: [
                 {
                   data: data,
                   backgroundColor: background,
-                  label: 'level'
+                  label: "level"
                 }
               ],
               labels: labels
@@ -75,9 +75,9 @@ module LogBook
         pan = 0
 
         @user.ascent_gym_routes.made.each do |ascent|
-          sport_climbing += ascent.quantity if ascent.climbing_type == 'sport_climbing'
-          bouldering += ascent.quantity if ascent.climbing_type == 'bouldering'
-          pan += ascent.quantity if ascent.climbing_type == 'pan'
+          sport_climbing += ascent.quantity if ascent.climbing_type == "sport_climbing"
+          bouldering += ascent.quantity if ascent.climbing_type == "bouldering"
+          pan += ascent.quantity if ascent.climbing_type == "pan"
         end
 
         {
@@ -93,7 +93,7 @@ module LogBook
                 Climb::COLOR[Climb::BOULDERING],
                 Climb::COLOR[Climb::PAN]
               ],
-              label: 'climb_type'
+              label: "climb_type"
             }
           ],
           labels: %w[sport_climbing bouldering pan]
@@ -119,8 +119,8 @@ module LogBook
           datasets: [
             {
               data: years.map { |year| year[1][:count] },
-              backgroundColor: '#31994e',
-              label: 'number'
+              backgroundColor: "#31994e",
+              label: "number"
             }
           ],
           labels: years.pluck(0)
@@ -133,21 +133,21 @@ module LogBook
         dates = {}
 
         (min_date..max_date).each do |date|
-          dates[date.strftime('%Y-%m')] ||= { count: 0 }
+          dates[date.strftime("%Y-%m")] ||= { count: 0 }
         end
 
         @user.ascent_gym_routes.made.order(:released_at).each do |ascent|
           next if ascent.released_at.blank?
 
-          dates[ascent.released_at.strftime('%Y-%m')][:count] += ascent.quantity
+          dates[ascent.released_at.strftime("%Y-%m")][:count] += ascent.quantity
         end
 
         {
           datasets: [
             {
               data: dates.map { |date| date[1][:count] },
-              backgroundColor: '#31994e',
-              label: 'number'
+              backgroundColor: "#31994e",
+              label: "number"
             }
           ],
           labels: dates.pluck(0)

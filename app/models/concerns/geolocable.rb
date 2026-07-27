@@ -9,12 +9,12 @@ module Geolocable
 
     def self.geo_search(latitude, longitude, distance)
       where(
-        'ST_DISTANCE_SPHERE(POINT(longitude, latitude), POINT(:lng, :lat)) < :distance',
+        "ST_DISTANCE_SPHERE(POINT(longitude, latitude), POINT(:lng, :lat)) < :distance",
         lat: latitude.to_f,
         lng: longitude.to_f,
         distance: distance.to_i * 1000
       )
-        .order(Arel.sql(sanitize_sql(['ST_DISTANCE_SPHERE(POINT(longitude, latitude), POINT(?, ?))', longitude.to_f, latitude.to_f])))
+        .order(Arel.sql(sanitize_sql([ "ST_DISTANCE_SPHERE(POINT(longitude, latitude), POINT(?, ?))", longitude.to_f, latitude.to_f ])))
     end
   end
 end

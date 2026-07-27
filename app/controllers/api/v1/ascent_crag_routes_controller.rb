@@ -14,12 +14,10 @@ module Api
       end
 
       def export
-        type = params.fetch(:type, 'ascents')
-        ascents = if type == 'ascents'
-                    @current_user.ascent_crag_routes.where.not(ascent_status: :project)
-                  else
+        type = params.fetch(:type, "ascents")
+        ascents = (type == "ascents") ?
+                    @current_user.ascent_crag_routes.where.not(ascent_status: :project) :
                     @current_user.ascent_crag_routes.where(ascent_status: :project)
-                  end
         send_data ascents.to_csv, filename: "export-ascents-#{Date.current}.csv"
       end
 

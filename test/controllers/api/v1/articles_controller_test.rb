@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -16,7 +16,7 @@ module Api
         @user_headers = api_headers(user: :normal_user)
       end
 
-      test 'should get index' do
+      test "should get index" do
         get api_v1_articles_url, headers: @public_headers, as: :json
 
         assert_response :success
@@ -25,16 +25,16 @@ module Api
         assert_kind_of Array, json_response
       end
 
-      test 'should show article' do
+      test "should show article" do
         get api_v1_article_url(@article), headers: @public_headers, as: :json
 
         assert_response :success
         json_response = response.parsed_body
 
-        assert_equal @article.name, json_response['name']
+        assert_equal @article.name, json_response["name"]
       end
 
-      test 'should view article' do
+      test "should view article" do
         post view_api_v1_article_url(@article), headers: @public_headers, as: :json
 
         assert_response :no_content
@@ -43,32 +43,32 @@ module Api
         assert_equal 11, @article.views
       end
 
-      test 'should get crags' do
+      test "should get crags" do
         get crags_api_v1_article_url(@article), headers: @public_headers, as: :json
 
         assert_response :success
       end
 
-      test 'should get guide_book_papers' do
+      test "should get guide_book_papers" do
         get guide_book_papers_api_v1_article_url(@article), headers: @public_headers, as: :json
 
         assert_response :success
       end
 
-      test 'should get photos' do
+      test "should get photos" do
         get photos_api_v1_article_url(@article), headers: @public_headers, as: :json
 
         assert_response :success
       end
 
-      test 'should create article as super admin' do
-        assert_difference('Article.count') do
+      test "should create article as super admin" do
+        assert_difference("Article.count") do
           post api_v1_articles_url,
                params: {
                  article: {
-                   name: 'New Article',
-                   description: 'New Description',
-                   body: 'New Body',
+                   name: "New Article",
+                   description: "New Description",
+                   body: "New Body",
                    author_id: @author.id
                  }
                },
@@ -78,36 +78,36 @@ module Api
         assert_response :success
       end
 
-      test 'should not create article as normal user' do
-        assert_no_difference('Article.count') do
+      test "should not create article as normal user" do
+        assert_no_difference("Article.count") do
           post api_v1_articles_url,
-               params: { article: { name: 'New Article' } },
+               params: { article: { name: "New Article" } },
                headers: @user_headers,
                as: :json
         end
         assert_response :forbidden
       end
 
-      test 'should update article as super admin' do
+      test "should update article as super admin" do
         put api_v1_article_url(@article),
-            params: { article: { name: 'Updated Name' } },
+            params: { article: { name: "Updated Name" } },
             headers: @admin_headers,
             as: :json
 
         assert_response :success
         @article.reload
 
-        assert_equal 'Updated Name', @article.name
+        assert_equal "Updated Name", @article.name
       end
 
-      test 'should destroy article as super admin' do
-        assert_difference('Article.count', -1) do
+      test "should destroy article as super admin" do
+        assert_difference("Article.count", -1) do
           delete api_v1_article_url(@article), headers: @admin_headers, as: :json
         end
         assert_response :success
       end
 
-      test 'should publish article as super admin' do
+      test "should publish article as super admin" do
         put publish_api_v1_article_url(@unpublished_article), headers: @admin_headers, as: :json
 
         assert_response :no_content
@@ -116,7 +116,7 @@ module Api
         assert_predicate @unpublished_article, :published?
       end
 
-      test 'should unpublish article as super admin' do
+      test "should unpublish article as super admin" do
         put un_publish_api_v1_article_url(@article), headers: @admin_headers, as: :json
 
         assert_response :no_content
@@ -125,7 +125,7 @@ module Api
         assert_not @article.published?
       end
 
-      test 'should add crag to article' do
+      test "should add crag to article" do
         crag = crags(:orpierre)
         post add_crag_api_v1_article_url(@article),
              params: { article: { crag_id: crag.id } },
@@ -136,7 +136,7 @@ module Api
         assert_includes @article.crags, crag
       end
 
-      test 'should add guide book paper to article' do
+      test "should add guide book paper to article" do
         guide_book = guide_book_papers(:guide_book_2024)
         post add_guide_book_paper_api_v1_article_url(@article),
              params: { article: { guide_book_paper_id: guide_book.id } },

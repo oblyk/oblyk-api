@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ContestCategoryTest < ActiveSupport::TestCase
   setup do
@@ -10,25 +10,25 @@ class ContestCategoryTest < ActiveSupport::TestCase
     @contest = contests(:contest_1)
   end
 
-  test 'category is valid' do
+  test "category is valid" do
     assert_predicate @category_u18, :valid?
   end
 
-  test 'category is invalid without name' do
+  test "category is invalid without name" do
     @category_u18.name = nil
 
     assert_not @category_u18.valid?
     assert_includes @category_u18.errors.attribute_names, :name
   end
 
-  test 'category is invalid with wrong registration_obligation' do
-    @category_u18.registration_obligation = 'wrong_obligation'
+  test "category is invalid with wrong registration_obligation" do
+    @category_u18.registration_obligation = "wrong_obligation"
 
     assert_not @category_u18.valid?
     assert_includes @category_u18.errors.attribute_names, :registration_obligation
   end
 
-  test 'category between_age is invalid without min or max age' do
+  test "category between_age is invalid without min or max age" do
     @category_custom.min_age = nil
     @category_custom.max_age = nil
 
@@ -36,7 +36,7 @@ class ContestCategoryTest < ActiveSupport::TestCase
     assert_includes @category_custom.errors.attribute_names, :registration_obligation
   end
 
-  test 'category with parity must have even capacity' do
+  test "category with parity must have even capacity" do
     @category_u18.parity = true
     @category_u18.capacity = 11
 
@@ -48,13 +48,13 @@ class ContestCategoryTest < ActiveSupport::TestCase
     assert_predicate @category_u18, :valid?
   end
 
-  test 'under_age returns expected value' do
+  test "under_age returns expected value" do
     assert_equal 18, @category_u18.under_age
     assert_equal 40, @category_senior.under_age
     assert_nil @category_custom.under_age
   end
 
-  test 'over_age returns expected value based on categories in contest' do
+  test "over_age returns expected value based on categories in contest" do
     assert_equal 16, @category_u18.over_age
     assert_equal 0, contest_categories(:category_u16).over_age
     assert_equal 18, @category_senior.over_age
@@ -64,7 +64,7 @@ class ContestCategoryTest < ActiveSupport::TestCase
     assert_equal 15, @category_u18.over_age
   end
 
-  test 'summary_to_json returns expected keys' do
+  test "summary_to_json returns expected keys" do
     json = @category_u18.summary_to_json
 
     assert_equal @category_u18.id, json[:id]
@@ -75,12 +75,12 @@ class ContestCategoryTest < ActiveSupport::TestCase
     assert_includes json.keys, :contest
   end
 
-  test 'normalize_attributes handles blank values' do
+  test "normalize_attributes handles blank values" do
     category = ContestCategory.new(
-      name: 'Test Category',
+      name: "Test Category",
       contest: @contest,
-      description: '',
-      registration_obligation: ''
+      description: "",
+      registration_obligation: ""
     )
     category.valid?
 
@@ -88,9 +88,9 @@ class ContestCategoryTest < ActiveSupport::TestCase
     assert_nil category.registration_obligation
   end
 
-  test 'set_order sets default order on create' do
+  test "set_order sets default order on create" do
     category = ContestCategory.create(
-      name: 'New Category',
+      name: "New Category",
       contest: @contest
     )
 

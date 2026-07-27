@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class ApplicationMailer < ActionMailer::Base
-  default from: ENV.fetch('EMAIL_DEFAULT_FROM', nil)
-  layout 'mailer'
+  default from: ENV.fetch("EMAIL_DEFAULT_FROM", nil)
+  layout "mailer"
 
   before_action :app_url
 
@@ -14,21 +14,21 @@ class ApplicationMailer < ActionMailer::Base
     sid_email = Brevo::SendSmtpEmail.new
 
     # Build content
-    html_content = render_to_string template, formats: [:html]
-    text_content = render_to_string template, formats: [:text]
+    html_content = render_to_string template, formats: [ :html ]
+    text_content = render_to_string template, formats: [ :text ]
 
     # Set send in blue email parameters
-    sid_email.to = [{ email: to }]
+    sid_email.to = [ { email: to } ]
     sid_email.subject = subject
     sid_email.html_content = html_content
     sid_email.text_content = text_content
     sid_email.sender = {
-      name: ENV.fetch('SEND_IN_BLUE_SENDER_NAME', nil),
-      email: ENV.fetch('SEND_IN_BLUE_SENDER_EMAIL', nil)
+      name: ENV.fetch("SEND_IN_BLUE_SENDER_NAME", nil),
+      email: ENV.fetch("SEND_IN_BLUE_SENDER_EMAIL", nil)
     }
     sid_email.reply_to = {
-      email: ENV.fetch('SEND_IN_BLUE_REPLY_EMAIL', nil),
-      name: ENV.fetch('SEND_IN_BLUE_SENDER_NAME', nil)
+      email: ENV.fetch("SEND_IN_BLUE_REPLY_EMAIL", nil),
+      name: ENV.fetch("SEND_IN_BLUE_SENDER_NAME", nil)
     }
 
     # Send email
@@ -40,7 +40,7 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def use_send_in_blue?
-    ENV['SEND_EMAIL_WITH'] == 'send_in_blue'
+    ENV["SEND_EMAIL_WITH"] == "send_in_blue"
   end
 
   def app_url

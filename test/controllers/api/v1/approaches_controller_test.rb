@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -15,7 +15,7 @@ module Api
         @public_headers = api_access_token_headers
       end
 
-      test 'should get index' do
+      test "should get index" do
         get api_v1_crag_approaches_url(crag_id: @crag.id),
             headers: @public_headers,
             as: :json
@@ -24,7 +24,7 @@ module Api
         assert_equal @crag.approaches.count, response.parsed_body.size
       end
 
-      test 'should get geo_json_around' do
+      test "should get geo_json_around" do
         get geo_json_around_api_v1_crag_approaches_url(crag_id: @crag.id, id: @approach.id),
             headers: @public_headers,
             as: :json
@@ -32,11 +32,11 @@ module Api
         assert_response :success
         json_response = response.parsed_body
 
-        assert_equal 'FeatureCollection', json_response['type']
-        assert_kind_of Array, json_response['features']
+        assert_equal "FeatureCollection", json_response["type"]
+        assert_kind_of Array, json_response["features"]
       end
 
-      test 'should show approach' do
+      test "should show approach" do
         get api_v1_crag_approach_url(crag_id: @crag.id, id: @approach.id),
             headers: @public_headers,
             as: :json
@@ -44,19 +44,19 @@ module Api
         assert_response :success
         json_response = response.parsed_body
 
-        assert_equal @approach.id, json_response['id']
+        assert_equal @approach.id, json_response["id"]
       end
 
-      test 'should create approach' do
-        assert_difference('Approach.count') do
+      test "should create approach" do
+        assert_difference("Approach.count") do
           post api_v1_crag_approaches_url(crag_id: @crag.id),
                params: {
                  approach: {
-                   description: 'New approach',
+                   description: "New approach",
                    length: 300,
-                   approach_type: 'soft_ascent',
+                   approach_type: "soft_ascent",
                    from_park: true,
-                   polyline: [[44.469592, 5.058089], [44.470000, 5.060000]]
+                   polyline: [ [ 44.469592, 5.058089 ], [ 44.470000, 5.060000 ] ]
                  }
                },
                headers: @auth_headers,
@@ -65,11 +65,11 @@ module Api
         assert_response :success
       end
 
-      test 'should update approach' do
+      test "should update approach" do
         put api_v1_crag_approach_url(crag_id: @crag.id, id: @approach.id),
             params: {
               approach: {
-                description: 'Updated description',
+                description: "Updated description",
                 polyline: @approach.polyline
               }
             },
@@ -79,11 +79,11 @@ module Api
         assert_response :success
         @approach.reload
 
-        assert_equal 'Updated description', @approach.description
+        assert_equal "Updated description", @approach.description
       end
 
-      test 'should not destroy approach if not super admin' do
-        assert_no_difference('Approach.count') do
+      test "should not destroy approach if not super admin" do
+        assert_no_difference("Approach.count") do
           delete api_v1_crag_approach_url(crag_id: @crag.id, id: @approach.id),
                  headers: @auth_headers,
                  as: :json
@@ -91,8 +91,8 @@ module Api
         assert_response :forbidden
       end
 
-      test 'should destroy approach if super admin' do
-        assert_difference('Approach.count', -1) do
+      test "should destroy approach if super admin" do
+        assert_difference("Approach.count", -1) do
           delete api_v1_crag_approach_url(crag_id: @crag.id, id: @approach.id),
                  headers: @admin_headers,
                  as: :json

@@ -20,6 +20,6 @@ class AreaSerializer < BaseSerializer
   end
 
   def self.avatar_attachment(object)
-    object.attachment_object(object.photo&.picture, 'Area_picture')
+    object.attachment_object(object.photo&.picture, "Area_picture")
   end
 end

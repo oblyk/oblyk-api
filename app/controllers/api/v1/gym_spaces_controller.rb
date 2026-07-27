@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'zip'
+require "zip"
 
 module Api
   module V1
@@ -16,16 +16,16 @@ module Api
       def index
         gym_spaces = @gym.gym_spaces
                          .unarchived
-                         .joins('LEFT JOIN gym_space_groups ON gym_space_groups.id = gym_spaces.gym_space_group_id')
-                         .reorder(Arel.sql('gym_space_groups.order IS NULL ASC, gym_space_groups.order, gym_spaces.order'))
+                         .joins("LEFT JOIN gym_space_groups ON gym_space_groups.id = gym_spaces.gym_space_group_id")
+                         .reorder(Arel.sql("gym_space_groups.order IS NULL ASC, gym_space_groups.order, gym_spaces.order"))
         render json: gym_spaces.map { |gym_space| gym_space.summary_to_json(with_figures: true) }, status: :ok
       end
 
       def groups
         gym_spaces = @gym.gym_spaces
                          .unarchived
-                         .joins('LEFT JOIN gym_space_groups ON gym_space_groups.id = gym_spaces.gym_space_group_id')
-                         .reorder(Arel.sql('gym_space_groups.order IS NULL ASC, gym_space_groups.order, gym_spaces.order'))
+                         .joins("LEFT JOIN gym_space_groups ON gym_space_groups.id = gym_spaces.gym_space_group_id")
+                         .reorder(Arel.sql("gym_space_groups.order IS NULL ASC, gym_space_groups.order, gym_spaces.order"))
         in_group = {}
         out_group = []
         gym_spaces.each do |gym_space|
@@ -73,7 +73,7 @@ module Api
 
       def create
         @gym_space = GymSpace.new(gym_space_params)
-        @gym_space.representation_type ||= '2d_picture'
+        @gym_space.representation_type ||= "2d_picture"
         @gym_space.gym = @gym
         if @gym_space.save
           render json: @gym_space.detail_to_json, status: :ok
@@ -134,7 +134,7 @@ module Api
 
       def add_three_d_file
         unless attach_three_d_file
-          render json: { error: { base: ['three_d_import_error'] } }, status: :unprocessable_content
+          render json: { error: { base: [ "three_d_import_error" ] } }, status: :unprocessable_content
           return
         end
 
@@ -151,7 +151,7 @@ module Api
           space = {
             id: gym_space.id,
             name: gym_space.name,
-            type: 'GymSpace',
+            type: "GymSpace",
             children: []
           }
           gym_space.gym_sectors.each do |gym_sector|
@@ -159,7 +159,7 @@ module Api
             sector = {
               id: gym_sector.id,
               name: gym_sector.name,
-              type: 'GymSector',
+              type: "GymSector",
               last_opening_date: routes_last_mounted
             }
             space[:children] << sector
@@ -172,7 +172,7 @@ module Api
       private
 
       def attach_three_d_file
-        import_type = params[:gym_space].fetch(:import_type, '').to_s
+        import_type = params[:gym_space].fetch(:import_type, "").to_s
 
         if %w[obj_zip obj_mtl].include? import_type
           @gym_space.three_d_parameters ||= { highlight_edges: false, color_correction_sketchup_exports: true }
@@ -182,26 +182,26 @@ module Api
 
           # Save file on folder for conversion to .gltf
           case import_type
-          when 'obj_zip'
+          when "obj_zip"
             zip_file_params = params[:gym_space].fetch(:three_d_file, nil)
 
             # Unzip .obj.zip
             Zip::File.open(zip_file_params) do |zip_file|
               zip_file.each do |f|
-                file_extension = f.name.split('.').last
+                file_extension = f.name.split(".").last
                 next unless %w[obj mtl].include? file_extension
 
                 f_path = File.join(folder, f.name)
                 zip_file.extract(f, f_path) unless File.exist?(f_path)
-                obj_name = f.name if file_extension == 'obj'
+                obj_name = f.name if file_extension == "obj"
               end
             end
-          when 'obj_mtl'
+          when "obj_mtl"
             mtl_file_params = params[:gym_space].fetch(:three_d_file_mtl, nil)
             obj_file_params = params[:gym_space].fetch(:three_d_file_obj, nil)
 
-            if File.extname(mtl_file_params) != '.mtl' || File.extname(obj_file_params) != '.obj'
-              @gym_space.errors.add(:base, 'wrong_file_format')
+            if File.extname(mtl_file_params) != ".mtl" || File.extname(obj_file_params) != ".obj"
+              @gym_space.errors.add(:base, "wrong_file_format")
               FileUtils.remove_dir folder.first
               return false
             end
@@ -216,7 +216,7 @@ module Api
             f_path_mtl = File.join(folder, mtl_name)
             File.binwrite(f_path_mtl, mtl_file_params.read)
           else
-            @gym_space.errors.add(:base, 'wrong_file_format')
+            @gym_space.errors.add(:base, "wrong_file_format")
             FileUtils.remove_dir folder.first
             return false
           end
@@ -225,9 +225,9 @@ module Api
           if obj_name
             # Run obj2gltf shell command
             _stdout, stderr, status = Open3.capture3(
-              { 'PATH' => "#{ENV.fetch('NPM_BIN_PATH', nil)}:#{ENV.fetch('PATH', nil)}" },
+              { "PATH" => "#{ENV.fetch('NPM_BIN_PATH', nil)}:#{ENV.fetch('PATH', nil)}" },
               "#{ENV.fetch('NPM_BIN_PATH', nil)}/obj2gltf",
-              '-i',
+              "-i",
               "#{folder.first}/#{obj_name}"
             )
             if status.success?
@@ -236,7 +236,7 @@ module Api
               @gym_space.three_d_gltf.attach(
                 io: StringIO.new(file_content),
                 filename: gltf_file_name,
-                content_type: 'model/gltf+json'
+                content_type: "model/gltf+json"
               )
             else
               RorVsWild.record_error(stderr)
@@ -246,10 +246,10 @@ module Api
 
           # Delete unzip file
           FileUtils.remove_dir folder.first
-        elsif import_type == 'gltf'
+        elsif import_type == "gltf"
           @gym_space.three_d_parameters ||= { highlight_edges: false, color_correction_sketchup_exports: false }
           file = params[:gym_space].fetch(:three_d_file, nil)
-          if file && File.extname(file) == '.gltf'
+          if file && File.extname(file) == ".gltf"
             random_file_name = SecureRandom.uuid
             folder = FileUtils.mkdir_p "tmp/obj2gltf_folder/#{random_file_name}"
 
@@ -262,19 +262,19 @@ module Api
             @gym_space.three_d_gltf.attach(
               io: StringIO.new(file_content),
               filename: file_name,
-              content_type: 'model/gltf+json'
+              content_type: "model/gltf+json"
             )
             FileUtils.remove_dir folder.first
             unless @gym_space.valid?
-              @gym_space.errors.add(:base, 'wrong_file_format')
+              @gym_space.errors.add(:base, "wrong_file_format")
               return false
             end
           else
-            @gym_space.errors.add(:base, 'wrong_file_format')
+            @gym_space.errors.add(:base, "wrong_file_format")
             return false
           end
         else
-          @gym_space.errors.add(:base, 'wrong_file_format')
+          @gym_space.errors.add(:base, "wrong_file_format")
           return false
         end
 

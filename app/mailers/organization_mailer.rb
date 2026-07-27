@@ -6,11 +6,11 @@ class OrganizationMailer < ApplicationMailer
     @name = params[:name]
     @email = params[:email]
     @api_usage_type = params[:api_usage_type]
-    subject = t('mailer.organization.new_organization.title', organization_id: @organization_id)
+    subject = t("mailer.organization.new_organization.title", organization_id: @organization_id)
     if use_send_in_blue?
-      send_with_send_in_blue(ENV.fetch('SEND_IN_BLUE_REPLY_EMAIL', nil), subject, 'organization_mailer/new_organization')
+      send_with_send_in_blue(ENV.fetch("SEND_IN_BLUE_REPLY_EMAIL", nil), subject, "organization_mailer/new_organization")
     else
-      mail(to: ENV.fetch('SMTP_USER_NAME', nil), subject: t('mailer.organization.new_organization.title', organization_id: @organization_id))
+      mail(to: ENV.fetch("SMTP_USER_NAME", nil), subject: t("mailer.organization.new_organization.title", organization_id: @organization_id))
     end
   end
 end

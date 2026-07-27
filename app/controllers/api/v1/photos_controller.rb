@@ -39,7 +39,7 @@ module Api
 
       def destroy
         unless @photo.destroyable?
-          render json: { error: { base: ['un_destroyable'] } }, status: :unprocessable_content
+          render json: { error: { base: [ "un_destroyable" ] } }, status: :unprocessable_content
           return
         end
 

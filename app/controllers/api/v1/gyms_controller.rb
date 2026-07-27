@@ -20,10 +20,10 @@ module Api
           latitude = params[:latitude].to_f
           longitude = params[:longitude].to_f
           gyms = gyms.order(
-            Arel.sql(Gym.sanitize_sql(['ST_DISTANCE_SPHERE(POINT(gyms.longitude, gyms.latitude), POINT(?, ?)) ASC, gyms.id ASC', longitude.to_f, latitude.to_f]))
+            Arel.sql(Gym.sanitize_sql([ "ST_DISTANCE_SPHERE(POINT(gyms.longitude, gyms.latitude), POINT(?, ?)) ASC, gyms.id ASC", longitude.to_f, latitude.to_f ]))
           )
         end
-        gyms = gyms.order(Arel.sql('gyms.follows_count DESC, id')) if params[:order].present? && params[:order] == 'popularity'
+        gyms = gyms.order(Arel.sql("gyms.follows_count DESC, id")) if params[:order].present? && params[:order] == "popularity"
         gyms = gyms.page(params[:page]).per(params.fetch(:per_page, 25)) if params[:page].present?
 
         render json: gyms.map(&:summary_to_json), status: :ok
@@ -61,11 +61,11 @@ module Api
 
       def geo_json
         render json: {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           crs: {
-            type: 'name',
+            type: "name",
             properties: {
-              name: 'urn'
+              name: "urn"
             }
           },
           features: geo_json_features
@@ -104,8 +104,8 @@ module Api
 
         # Date filter
         ascents = if start_date || end_date
-                    ascents.where(released_at: [start_date..end_date])
-                           .where('gym_routes.opened_at <= :end_date AND (gym_routes.dismounted_at IS NULL OR gym_routes.dismounted_at >= :start_date)', end_date: end_date, start_date: start_date)
+                    ascents.where(released_at: [ start_date..end_date ])
+                           .where("gym_routes.opened_at <= :end_date AND (gym_routes.dismounted_at IS NULL OR gym_routes.dismounted_at >= :start_date)", end_date: end_date, start_date: start_date)
                            .where(ascents: { created_at: start_date.beginning_of_day.. })
                            .where(ascents: { created_at: ..(end_date + 1.day).end_of_day })
                   else
@@ -113,45 +113,45 @@ module Api
                   end
 
         # Gender filter
-        ascents = ascents.where(users: { genre: gender }) if gender != 'all' && gender.present?
+        ascents = ascents.where(users: { genre: gender }) if gender != "all" && gender.present?
 
         # Climbing type filter
-        ascents = ascents.joins(:gym_route).where(gym_routes: { climbing_type: climbing_type }) if climbing_type != 'all' && climbing_type.present?
+        ascents = ascents.joins(:gym_route).where(gym_routes: { climbing_type: climbing_type }) if climbing_type != "all" && climbing_type.present?
 
         # Age filter
         if age.present?
           case age
-          when 'U6'
-            ascents = ascents.joins(:user).where('users.date_of_birth > ?', Date.current - 6.years)
-          when 'U8'
-            ascents = ascents.joins(:user).where('users.date_of_birth > ?', Date.current - 8.years)
-          when 'U10'
-            ascents = ascents.joins(:user).where('users.date_of_birth > ?', Date.current - 10.years)
-          when 'U12'
-            ascents = ascents.joins(:user).where('users.date_of_birth > ?', Date.current - 12.years)
-          when 'U14'
-            ascents = ascents.joins(:user).where('users.date_of_birth > ?', Date.current - 14.years)
-          when 'U16'
-            ascents = ascents.joins(:user).where('users.date_of_birth > ?', Date.current - 16.years)
-          when 'U18'
-            ascents = ascents.joins(:user).where('users.date_of_birth > ?', Date.current - 18.years)
-          when 'U20'
-            ascents = ascents.joins(:user).where('users.date_of_birth > ?', Date.current - 20.years)
-          when 'senior'
+          when "U6"
+            ascents = ascents.joins(:user).where("users.date_of_birth > ?", Date.current - 6.years)
+          when "U8"
+            ascents = ascents.joins(:user).where("users.date_of_birth > ?", Date.current - 8.years)
+          when "U10"
+            ascents = ascents.joins(:user).where("users.date_of_birth > ?", Date.current - 10.years)
+          when "U12"
+            ascents = ascents.joins(:user).where("users.date_of_birth > ?", Date.current - 12.years)
+          when "U14"
+            ascents = ascents.joins(:user).where("users.date_of_birth > ?", Date.current - 14.years)
+          when "U16"
+            ascents = ascents.joins(:user).where("users.date_of_birth > ?", Date.current - 16.years)
+          when "U18"
+            ascents = ascents.joins(:user).where("users.date_of_birth > ?", Date.current - 18.years)
+          when "U20"
+            ascents = ascents.joins(:user).where("users.date_of_birth > ?", Date.current - 20.years)
+          when "senior"
             ascents = ascents.joins(:user).where(users: { date_of_birth: (Date.current - 39.years)..(Date.current - 20.years) })
-          when 'A40'
+          when "A40"
             ascents = ascents.joins(:user).where(users: { date_of_birth: ..(Date.current - 40.years) })
-          when 'A50'
+          when "A50"
             ascents = ascents.joins(:user).where(users: { date_of_birth: ..(Date.current - 50.years) })
-          when 'A60'
+          when "A60"
             ascents = ascents.joins(:user).where(users: { date_of_birth: ..(Date.current - 60.years) })
           end
         end
 
         # Get limite of grade
         gym_routes = GymRoute.joins(gym_sector: :gym_space).where(gym_spaces: { gym_id: @gym.id })
-        gym_routes = start_date.present? ? gym_routes.where('opened_at <= :start_date AND dismounted_at IS NULL OR dismounted_at >= :end_date', start_date: start_date, end_date: end_date) : gym_routes.mounted
-        min_max = gym_routes.select('MIN(gym_routes.min_grade_value) AS min_grade_value, MAX(gym_routes.min_grade_value) AS max_grade_value, gym_routes.climbing_type').group(:climbing_type)&.group_by(&:climbing_type)
+        gym_routes = start_date.present? ? gym_routes.where("opened_at <= :start_date AND dismounted_at IS NULL OR dismounted_at >= :end_date", start_date: start_date, end_date: end_date) : gym_routes.mounted
+        min_max = gym_routes.select("MIN(gym_routes.min_grade_value) AS min_grade_value, MAX(gym_routes.min_grade_value) AS max_grade_value, gym_routes.climbing_type").group(:climbing_type)&.group_by(&:climbing_type)
 
         # Get colors for charts
         chart_templates = {}
@@ -171,7 +171,7 @@ module Api
           chart_templates[climbing_type][:grade_system] = gym_level.grade_system
           chart_templates[climbing_type][:have_levels] = gym_level.levels.present?
 
-          if gym_level.grade_system == 'french'
+          if gym_level.grade_system == "french"
             min = min_max[gym_level.climbing_type].try(:first).try(:min_grade_value) || 0
             max = min_max[gym_level.climbing_type].try(:first).try(:max_grade_value) || 53
             chart_templates[climbing_type][:min] = min
@@ -179,7 +179,7 @@ module Api
             chart_templates[climbing_type][:colors] = Grade.degree_colors[range]
             chart_templates[climbing_type][:data] = range.map { |_index| 0 }
           elsif gym_level.levels
-            chart_templates[climbing_type][:colors] = gym_level.levels.map { |level| level['color'] }
+            chart_templates[climbing_type][:colors] = gym_level.levels.map { |level| level["color"] }
             chart_templates[climbing_type][:data] = gym_level.levels.map { |_index| 0 }
           elsif %w[usa_lead usa_bouldering pick_district].include? gym_level.grade_system
             chart_templates[climbing_type][:colors] = Grade.range_values(gym_level.grade_system.to_sym).map { |value| Grade::GRADES_COLOR[value] }
@@ -201,7 +201,7 @@ module Api
           }
           scores[user_key][:points] += ascent.points(ascent.gym_route, @gym)[:score] || 0
 
-          grade_value = if chart_templates[climbing_type][:grade_system] == 'french'
+          grade_value = if chart_templates[climbing_type][:grade_system] == "french"
                           next if ascent.gym_route.min_grade_value.nil?
 
                           ((ascent.gym_route.min_grade_value - (chart_templates[climbing_type][:min] || 0)) / 2).to_i
@@ -282,7 +282,7 @@ module Api
                      else
                        @gym.gym_routes.joins(gym_sector: :gym_space).where(gym_spaces: { archived_at: nil })
                      end
-        gym_routes = if params.fetch(:dismounted, 'false') == 'true'
+        gym_routes = if params.fetch(:dismounted, "false") == "true"
                        gym_routes.dismounted
                      else
                        gym_routes.mounted
@@ -296,14 +296,14 @@ module Api
           space = {
             id: gym_space.id,
             name: gym_space.name,
-            type: 'GymSpace',
+            type: "GymSpace",
             children: []
           }
           gym_space.gym_sectors.each do |gym_sector|
             sector = {
               id: gym_sector.id,
               name: gym_sector.name,
-              type: 'GymSector',
+              type: "GymSector",
               children: []
             }
             gym_sector.gym_routes.mounted.each do |gym_route|
@@ -311,7 +311,7 @@ module Api
                 id: gym_route.id,
                 name: "#{gym_route.grade_to_s} #{gym_route.name}",
                 route: gym_route.tree_summary.merge({ gym_space_name: gym_space.name, gym_sector_name: gym_sector.name }),
-                type: 'GymRoute'
+                type: "GymRoute"
               }
               sector[:children] << route
             end
@@ -370,53 +370,53 @@ module Api
       def figures
         figures = params.fetch(:figures, [])
         data = {}
-        data[:contests_count] = @gym.contests.unarchived.count if figures.include? 'contests_count'
-        data[:championships_count] = @gym.all_championships.unarchived.count if figures.include? 'championships_count'
-        data[:gym_spaces_count] = @gym.gym_spaces.count if figures.include? 'gym_spaces_count'
-        data[:mounted_gym_routes_count] = @gym.gym_routes.mounted.count if figures.include? 'mounted_gym_routes_count'
-        data[:gym_administrators_count] = @gym.gym_administrators.count if figures.include? 'gym_administrators_count'
-        data[:gym_openers_count] = @gym.gym_openers.count if figures.include? 'gym_openers_count'
-        data[:publications_count] = @gym.publications.where.not(published_at: nil).count if figures.include? 'publications_count'
-        data[:publication_drafts_count] = @gym.publications.where(published_at: nil).count if figures.include? 'publication_drafts_count'
-        if figures.include? 'comments_count'
-          route_comments_count = Comment.joins('INNER JOIN gym_routes ON commentable_id = gym_routes.id')
-                                        .joins('INNER JOIN gym_sectors ON gym_routes.gym_sector_id = gym_sectors.id')
-                                        .joins('INNER JOIN gym_spaces ON gym_sectors.gym_space_id = gym_spaces.id')
+        data[:contests_count] = @gym.contests.unarchived.count if figures.include? "contests_count"
+        data[:championships_count] = @gym.all_championships.unarchived.count if figures.include? "championships_count"
+        data[:gym_spaces_count] = @gym.gym_spaces.count if figures.include? "gym_spaces_count"
+        data[:mounted_gym_routes_count] = @gym.gym_routes.mounted.count if figures.include? "mounted_gym_routes_count"
+        data[:gym_administrators_count] = @gym.gym_administrators.count if figures.include? "gym_administrators_count"
+        data[:gym_openers_count] = @gym.gym_openers.count if figures.include? "gym_openers_count"
+        data[:publications_count] = @gym.publications.where.not(published_at: nil).count if figures.include? "publications_count"
+        data[:publication_drafts_count] = @gym.publications.where(published_at: nil).count if figures.include? "publication_drafts_count"
+        if figures.include? "comments_count"
+          route_comments_count = Comment.joins("INNER JOIN gym_routes ON commentable_id = gym_routes.id")
+                                        .joins("INNER JOIN gym_sectors ON gym_routes.gym_sector_id = gym_sectors.id")
+                                        .joins("INNER JOIN gym_spaces ON gym_sectors.gym_space_id = gym_spaces.id")
                                         .where(
                                           gym_routes: { dismounted_at: nil },
-                                          commentable_type: 'GymRoute',
+                                          commentable_type: "GymRoute",
                                           gym_spaces: { gym_id: @gym.id }
                                         )
                                         .count
-          ascent_comments_count = Comment.joins('INNER JOIN ascents ON commentable_id = ascents.id')
-                                         .joins('INNER JOIN gym_routes ON gym_route_id = gym_routes.id')
+          ascent_comments_count = Comment.joins("INNER JOIN ascents ON commentable_id = ascents.id")
+                                         .joins("INNER JOIN gym_routes ON gym_route_id = gym_routes.id")
                                          .where(
-                                           commentable_type: 'Ascent',
+                                           commentable_type: "Ascent",
                                            gym_routes: { dismounted_at: nil },
                                            ascents: { gym_id: @gym.id }
                                          )
                                          .count
           data[:comments_count] = route_comments_count + ascent_comments_count
         end
-        data[:videos_count] = Video.where(viewable_type: 'GymRoute', viewable_id: @gym.gym_routes.mounted.pluck(:id)).count if figures.include? 'videos_count'
-        data[:followers_count] = Follow.where(followable_type: 'Gym', followable_id: @gym.id).count if figures.include? 'followers_count'
+        data[:videos_count] = Video.where(viewable_type: "GymRoute", viewable_id: @gym.gym_routes.mounted.pluck(:id)).count if figures.include? "videos_count"
+        data[:followers_count] = Follow.where(followable_type: "Gym", followable_id: @gym.id).count if figures.include? "followers_count"
         render json: data, status: :ok
       end
 
       def comments
         page = params.fetch(:page, 1)
-        route_comments_count = Comment.joins('INNER JOIN gym_routes ON commentable_id = gym_routes.id')
-                                      .joins('INNER JOIN gym_sectors ON gym_routes.gym_sector_id = gym_sectors.id')
-                                      .joins('INNER JOIN gym_spaces ON gym_sectors.gym_space_id = gym_spaces.id')
+        route_comments_count = Comment.joins("INNER JOIN gym_routes ON commentable_id = gym_routes.id")
+                                      .joins("INNER JOIN gym_sectors ON gym_routes.gym_sector_id = gym_sectors.id")
+                                      .joins("INNER JOIN gym_spaces ON gym_sectors.gym_space_id = gym_spaces.id")
                                       .where(
                                         gym_routes: { dismounted_at: nil },
-                                        commentable_type: 'GymRoute',
+                                        commentable_type: "GymRoute",
                                         gym_spaces: { gym_id: @gym.id }
                                       )
-        ascent_comments_count = Comment.joins('INNER JOIN ascents ON commentable_id = ascents.id')
-                                       .joins('INNER JOIN gym_routes ON gym_route_id = gym_routes.id')
+        ascent_comments_count = Comment.joins("INNER JOIN ascents ON commentable_id = ascents.id")
+                                       .joins("INNER JOIN gym_routes ON gym_route_id = gym_routes.id")
                                        .where(
-                                         commentable_type: 'Ascent',
+                                         commentable_type: "Ascent",
                                          gym_routes: { dismounted_at: nil },
                                          ascents: { gym_id: @gym.id }
                                        )
@@ -425,7 +425,7 @@ module Api
           CommentSerializer,
           comments,
           {
-            include: [:user, :commentable, 'commentable.ascent_gym_route', 'commentable.ascent_gym_route.gym_route', 'commentable.gym_route'],
+            include: [ :user, :commentable, "commentable.ascent_gym_route", "commentable.ascent_gym_route.gym_route", "commentable.gym_route" ],
             params: { include_attachments: { User: %i[avatar], GymRoute: %i[thumbnail] } }
           }
         ), status: :ok
@@ -433,7 +433,7 @@ module Api
 
       def videos
         page = params.fetch(:page, 1)
-        videos = Video.where(viewable_type: 'GymRoute', viewable_id: @gym.gym_routes.pluck(:id))
+        videos = Video.where(viewable_type: "GymRoute", viewable_id: @gym.gym_routes.pluck(:id))
                       .order(created_at: :desc)
                       .page(page)
         render json: videos.map(&:detail_to_json), status: :ok
@@ -453,7 +453,7 @@ module Api
             name: space.name,
             slug_name: space.slug_name,
             color: space.sectors_color,
-            text_contrast_color: Color.black_or_white_rgb(space.sectors_color || 'rgb(0,0,0)'),
+            text_contrast_color: Color.black_or_white_rgb(space.sectors_color || "rgb(0,0,0)"),
             three_d_gltf_url: space.three_d_gltf_url,
             three_d_parameters: space.three_d_parameters,
             three_d_rotation: space.three_d_rotation,
@@ -503,9 +503,9 @@ module Api
                  end
         routes.each do |route|
           route.sections.each do |section|
-            next if section['styles'].blank?
+            next if section["styles"].blank?
 
-            section['styles'].each do |style|
+            section["styles"].each do |style|
               styles[style] += 1
             end
           end
@@ -526,11 +526,11 @@ module Api
         end
 
         gym_type = params.fetch(:gym_type, nil)
-        gyms = gyms.where(gym_type: 'club') if gym_type == 'club'
-        gyms = gyms.where(gym_type: 'private') if gym_type == 'private'
+        gyms = gyms.where(gym_type: "club") if gym_type == "club"
+        gyms = gyms.where(gym_type: "private") if gym_type == "private"
 
-        with_guide_book = params.fetch(:with_guide_book, nil) == 'true'
-        gyms = gyms.where('EXISTS(SELECT * FROM gym_routes INNER JOIN gym_sectors ON gym_routes.gym_sector_id = gym_sectors.id INNER JOIN gym_spaces ON gym_sectors.gym_space_id = gym_spaces.id WHERE gym_routes.dismounted_at IS NULL AND gym_spaces.draft IS FALSE AND gym_spaces.gym_id = gyms.id AND gym_routes.opened_at > NOW() - INTERVAL 400 DAY)') if with_guide_book
+        with_guide_book = params.fetch(:with_guide_book, nil) == "true"
+        gyms = gyms.where("EXISTS(SELECT * FROM gym_routes INNER JOIN gym_sectors ON gym_routes.gym_sector_id = gym_sectors.id INNER JOIN gym_spaces ON gym_sectors.gym_space_id = gym_spaces.id WHERE gym_routes.dismounted_at IS NULL AND gym_spaces.draft IS FALSE AND gym_spaces.gym_id = gyms.id AND gym_routes.opened_at > NOW() - INTERVAL 400 DAY)") if with_guide_book
 
         gyms.map(&:to_geo_json)
       end

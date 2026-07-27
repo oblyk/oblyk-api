@@ -22,7 +22,7 @@ class PointsToSvg
 
     range_x = max_x - min_x
     range_y = max_y - min_y
-    scale = [width / range_x, height / range_y].min
+    scale = [ width / range_x, height / range_y ].min
 
     # CALCULATE VIEW PORT CENTER
     offset_x = (width  - (range_x * scale)) / 2.0
@@ -32,7 +32,7 @@ class PointsToSvg
       points = shape[:points].map do |point|
         svg_x = ((point[:x] - min_x) * scale) + offset_x
         svg_y = ((max_y - point[:y]) * scale) + offset_y
-        [svg_x.round(3), svg_y.round(3)]
+        [ svg_x.round(3), svg_y.round(3) ]
       end
 
       next if points.empty?
@@ -43,10 +43,10 @@ class PointsToSvg
 
       polygon = "<polygon id='#{shape[:id]}' points='#{points.join(' ')}' />"
       circle = "<circle id='#{shape[:id]}' cx='#{cx}' cy='#{cy}' r='#{circle_radius}' />"
-      [polygon, circle].join
+      [ polygon, circle ].join
     end
 
-    xmlns = 'http://www.w3.org/2000/svg'
+    xmlns = "http://www.w3.org/2000/svg"
     view_box = "0 0 #{width} #{height}"
 
     "<svg xmlns='#{xmlns}' width='#{width}' height='#{height}' viewBox='#{view_box}'>#{polygons.join}</svg>"

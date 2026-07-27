@@ -25,7 +25,7 @@ class User < ApplicationRecord
   has_one_attached :banner
   has_one :user_application_my_compet
   has_many :follows, as: :followable
-  has_many :subscribes, class_name: 'Follow'
+  has_many :subscribes, class_name: "Follow"
   has_many :conversation_messages
   has_many :conversation_users
   has_many :conversations, through: :conversation_users
@@ -114,11 +114,11 @@ class User < ApplicationRecord
   alias_attribute :name, :first_name
 
   def location
-    [latitude, longitude]
+    [ latitude, longitude ]
   end
 
   def partner_location
-    [partner_latitude, partner_longitude]
+    [ partner_latitude, partner_longitude ]
   end
 
   def full_name
@@ -158,7 +158,7 @@ class User < ApplicationRecord
 
   def ascent_gym_routes_to_a
     ascent_gym_routes.where.not(gym_route_id: nil)
-                     .where.not(ascent_status: 'repetition')
+                     .where.not(ascent_status: "repetition")
                      .map do |ascent|
       {
         gym_route_id: ascent.gym_route_id,
@@ -189,7 +189,7 @@ class User < ApplicationRecord
   end
 
   def user_subscribes
-    subscribes.accepted.where(followable_type: 'User')
+    subscribes.accepted.where(followable_type: "User")
   end
 
   def other_user_can?(other_user, request: :see_publications) # rubocop:disable Lint/UnusedMethodArgument
@@ -214,7 +214,7 @@ class User < ApplicationRecord
         full_name: full_name,
         slug_name: slug_name,
         app_path: app_path,
-        description: description ? Markdown.new(description, :hard_wrap).to_html.html_safe : '',
+        description: description ? Markdown.new(description, :hard_wrap).to_html.html_safe : "",
         age: age,
         genre: genre,
         partner_search: partner_search,
@@ -254,7 +254,7 @@ class User < ApplicationRecord
     return unless deletable?
 
     ActiveRecord::Base.transaction do
-      self.first_name = 'Anonyme'
+      self.first_name = "Anonyme"
       self.last_name = nil
       self.email = "#{Date.current}-#{id}@delete.mail"
       self.password_digest = "deleted-user-#{id}"
@@ -274,7 +274,7 @@ class User < ApplicationRecord
       self.pan = 0
       self.grade_max = nil
       self.grade_min = nil
-      self.slug_name = 'anonymous'
+      self.slug_name = "anonymous"
       self.localization = nil
       self.language = nil
       self.reset_password_token = nil
@@ -396,7 +396,7 @@ class User < ApplicationRecord
     return potential_slug if User.where.not(id: id).where(slug_name: potential_slug).blank?
 
     # find user with slug_name an -[digit] at the end
-    same_slug_users = User.where.not(id: id).where('slug_name RLIKE ?', "^#{potential_slug}-[0-9]+$")
+    same_slug_users = User.where.not(id: id).where("slug_name RLIKE ?", "^#{potential_slug}-[0-9]+$")
 
     if same_slug_users.blank?
       # Return potential_slug with -1 if is the first duplicate slug
@@ -404,7 +404,7 @@ class User < ApplicationRecord
     else
       slug_indexes = []
       same_slug_users.find_each do |user|
-        slug_indexes << user.slug_name.split('-').last.to_i
+        slug_indexes << user.slug_name.split("-").last.to_i
       end
       slug_indexes.sort!
       slug_indexes.each_with_index do |slug_index, index|
@@ -432,7 +432,7 @@ class User < ApplicationRecord
   private
 
   def search_indexes
-    [{ value: full_name, column_names: %i[first_name last_name] }]
+    [ { value: full_name, column_names: %i[first_name last_name] } ]
   end
 
   def init_slug_name
@@ -468,7 +468,7 @@ class User < ApplicationRecord
     return if email_notifiable_list.blank? || email_notifiable_list&.count&.zero?
 
     email_notifiable_list.each do |email_notifiable|
-      errors.add(:email_notifiable, I18n.t('activerecord.errors.messages.inclusion')) if Notification::EMAILABLE_NOTIFICATION_LIST.exclude? email_notifiable
+      errors.add(:email_notifiable, I18n.t("activerecord.errors.messages.inclusion")) if Notification::EMAILABLE_NOTIFICATION_LIST.exclude? email_notifiable
     end
   end
 
@@ -496,6 +496,6 @@ class User < ApplicationRecord
     return unless date_of_birth_was
     return unless date_of_birth_changed?
 
-    errors.add(:date_of_birth, 'cannot_be_changed') if date_of_birth_was >= Date.current - 18.years
+    errors.add(:date_of_birth, "cannot_be_changed") if date_of_birth_was >= Date.current - 18.years
   end
 end

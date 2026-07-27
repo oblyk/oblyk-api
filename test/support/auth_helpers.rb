@@ -9,16 +9,16 @@ module AuthHelper
 
   def api_headers(user: :normal_user, organization: :oblyk_orga)
     {
-      'Authorization' => generate_token(users(user)),
-      'HttpApiAccessToken' => organizations(organization).api_access_token,
-      'Content-Type' => 'application/json'
+      "Authorization" => generate_token(users(user)),
+      "HttpApiAccessToken" => organizations(organization).api_access_token,
+      "Content-Type" => "application/json"
     }
   end
 
   def api_access_token_headers(organization: :oblyk_orga)
     {
-      'HttpApiAccessToken' => organizations(organization).api_access_token,
-      'Content-Type' => 'application/json'
+      "HttpApiAccessToken" => organizations(organization).api_access_token,
+      "Content-Type" => "application/json"
     }
   end
 end

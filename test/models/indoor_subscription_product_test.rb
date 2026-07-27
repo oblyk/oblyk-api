@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class IndoorSubscriptionProductTest < ActiveSupport::TestCase
   setup do
     @product = indoor_subscription_products(:product_one)
   end
 
-  test 'validations' do
+  test "validations" do
     @product.reference = nil
 
     assert_not @product.valid?
 
-    @product.reference = 'ref'
+    @product.reference = "ref"
     @product.price_cents = nil
 
     assert_not @product.valid?
@@ -27,7 +27,7 @@ class IndoorSubscriptionProductTest < ActiveSupport::TestCase
     assert_predicate @product, :valid?
   end
 
-  test 'detail_to_json' do
+  test "detail_to_json" do
     json = @product.detail_to_json
 
     assert_equal @product.id, json[:id]

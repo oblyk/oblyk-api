@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ClimbingStyleTest < ActiveSupport::TestCase
-  test 'ClimbingStyle::STYLE_LIST is an array' do
+  test "ClimbingStyle::STYLE_LIST is an array" do
     assert_kind_of Array, ClimbingStyle::STYLE_LIST
   end
 
-  test 'ClimbingStyle::STYLE_LIST contains expected values' do
+  test "ClimbingStyle::STYLE_LIST contains expected values" do
     expected_anchors = %w[
       boulder
       endurance
@@ -47,11 +47,11 @@ class ClimbingStyleTest < ActiveSupport::TestCase
     assert_equal expected_anchors.sort, ClimbingStyle::STYLE_LIST.sort
   end
 
-  test 'ClimbingStyle::STYLE_LIST is frozen' do
+  test "ClimbingStyle::STYLE_LIST is frozen" do
     assert_predicate ClimbingStyle::STYLE_LIST, :frozen?
   end
 
-  test 'ClimbingStyle::STYLE_LIST has 26 elements' do
+  test "ClimbingStyle::STYLE_LIST has 26 elements" do
     assert_equal 33, ClimbingStyle::STYLE_LIST.size
   end
 end

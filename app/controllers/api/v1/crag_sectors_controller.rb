@@ -19,7 +19,7 @@ module Api
         features << @crag.to_geo_json
 
         @crag.crag_sectors.each do |sector|
-          next if sector.latitude.blank? || sector.id.to_s == params.fetch('exclude_id', nil)
+          next if sector.latitude.blank? || sector.id.to_s == params.fetch("exclude_id", nil)
 
           features << sector.to_geo_json
         end
@@ -35,11 +35,11 @@ module Api
         end
 
         render json: {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           crs: {
-            type: 'name',
+            type: "name",
             properties: {
-              name: 'urn'
+              name: "urn"
             }
           },
           features: features

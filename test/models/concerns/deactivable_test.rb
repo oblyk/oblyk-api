@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class DeactivableTest < ActiveSupport::TestCase
   setup do
     @opener = gym_openers(:opener_one)
   end
 
-  test 'activated scope returns only activated objects' do
+  test "activated scope returns only activated objects" do
     @opener.activate!
 
     assert_includes GymOpener.activated, @opener
@@ -17,7 +17,7 @@ class DeactivableTest < ActiveSupport::TestCase
     assert_not_includes GymOpener.activated, @opener
   end
 
-  test 'deactivated scope returns only deactivated objects' do
+  test "deactivated scope returns only deactivated objects" do
     @opener.deactivate!
 
     assert_includes GymOpener.deactivated, @opener
@@ -27,14 +27,14 @@ class DeactivableTest < ActiveSupport::TestCase
     assert_not_includes GymOpener.deactivated, @opener
   end
 
-  test 'deactivate! sets deactivated_at' do
+  test "deactivate! sets deactivated_at" do
     assert_nil @opener.deactivated_at
     @opener.deactivate!
 
     assert_not_nil @opener.deactivated_at
   end
 
-  test 'activate! clears deactivated_at' do
+  test "activate! clears deactivated_at" do
     @opener.deactivate!
 
     assert_not_nil @opener.deactivated_at
@@ -43,7 +43,7 @@ class DeactivableTest < ActiveSupport::TestCase
     assert_nil @opener.deactivated_at
   end
 
-  test 'deactivated? returns true if deactivated_at is present and in the past' do
+  test "deactivated? returns true if deactivated_at is present and in the past" do
     @opener.deactivated_at = 1.day.ago
 
     assert_predicate @opener, :deactivated?
@@ -57,7 +57,7 @@ class DeactivableTest < ActiveSupport::TestCase
     assert_not @opener.deactivated?
   end
 
-  test 'activated? returns true if not deactivated' do
+  test "activated? returns true if not deactivated" do
     @opener.deactivated_at = nil
 
     assert_predicate @opener, :activated?

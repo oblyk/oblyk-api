@@ -78,9 +78,9 @@ class GymOpeningSheet < ApplicationRecord
       }
       number_of_columns.times do
         data[gym_sector.id][:build_routes] << {
-          open: { grade: nil, hold_color: nil, text_hold_color: 'inherit', type: 'open' },
-          to_open: { grade: nil, hold_color: nil, text_hold_color: 'inherit', type: 'to_open', climbing_styles: [] },
-          opened: { grade: nil, hold_color: nil, text_hold_color: 'inherit', type: 'opened' }
+          open: { grade: nil, hold_color: nil, text_hold_color: "inherit", type: "open" },
+          to_open: { grade: nil, hold_color: nil, text_hold_color: "inherit", type: "to_open", climbing_styles: [] },
+          opened: { grade: nil, hold_color: nil, text_hold_color: "inherit", type: "opened" }
         }
       end
     end
@@ -93,12 +93,12 @@ class GymOpeningSheet < ApplicationRecord
         data[gym_route.gym_sector_id][:build_routes][index][:open] = {
           number: index + 1,
           id: gym_route.id,
-          type: 'open',
+          type: "open",
           grade: gym_route.min_grade_text,
           hold_color: gym_route.hold_colors&.first,
           tag_color: gym_route.tag_colors&.first,
-          text_hold_color: Color.black_or_white_rgb(gym_route.hold_colors&.first || 'inherit'),
-          text_tag_color: Color.black_or_white_rgb(gym_route.tag_colors&.first || 'inherit')
+          text_hold_color: Color.black_or_white_rgb(gym_route.hold_colors&.first || "inherit"),
+          text_tag_color: Color.black_or_white_rgb(gym_route.tag_colors&.first || "inherit")
         }
         break
       end

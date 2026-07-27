@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 module Api
   module V1
@@ -16,7 +16,7 @@ module Api
           @refresh_token = JwtToken::Token.generate(user_data, exp + 3.months)
         end
 
-        test 'should refresh token with valid refresh token' do
+        test "should refresh token with valid refresh token" do
           post api_v1_sessions_tokens_url,
                params: { refresh_token: @refresh_token },
                headers: @headers,
@@ -25,20 +25,20 @@ module Api
           assert_response :created
           json_response = response.parsed_body
 
-          assert_not_nil json_response['token']
-          assert_not_nil json_response['refresh_token']
+          assert_not_nil json_response["token"]
+          assert_not_nil json_response["refresh_token"]
         end
 
-        test 'should not refresh token with invalid refresh token' do
+        test "should not refresh token with invalid refresh token" do
           post api_v1_sessions_tokens_url,
-               params: { refresh_token: 'invalid_token' },
+               params: { refresh_token: "invalid_token" },
                headers: @headers,
                as: :json
 
           assert_equal 419, response.status
         end
 
-        test 'should not refresh token for non-existent user' do
+        test "should not refresh token for non-existent user" do
           user_data = { id: 99_999 }
           exp = Time.now.to_i + Rails.application.config.jwt_session_lifetime
           token = JwtToken::Token.generate(user_data, exp + 3.months)

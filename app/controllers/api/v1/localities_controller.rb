@@ -17,11 +17,11 @@ module Api
         end
 
         json = {
-          type: 'FeatureCollection',
+          type: "FeatureCollection",
           crs: {
-            type: 'name',
+            type: "name",
             properties: {
-              name: 'urn'
+              name: "urn"
             }
           },
           features: json_features
@@ -34,18 +34,18 @@ module Api
         localities = @locality.locality_users
                               .joins(:user)
                               .activated
-                              .where('users.last_activity_at > ?', Date.current - 3.years)
+                              .where("users.last_activity_at > ?", Date.current - 3.years)
 
         level = params.fetch(:level, nil)
         if level
           localities = localities.where(
-            '(users.grade_min IS NULL OR users.grade_min <= :level) AND (users.grade_max IS NULL OR users.grade_max >= :level)',
+            "(users.grade_min IS NULL OR users.grade_min <= :level) AND (users.grade_max IS NULL OR users.grade_max >= :level)",
             level: level
           )
         end
 
         partner_search = params.fetch(:partner_search, nil)
-        if partner_search.to_s == 'true'
+        if partner_search.to_s == "true"
           localities = localities.where(users: { partner_search: true })
                                  .where(partner_search: true)
         end
@@ -55,7 +55,7 @@ module Api
         localities = localities.where(users: { climbing_type => true }) if climbing_type
 
         json = localities.page(page)
-                         .order(Arel.sql('users.last_activity_at DESC, id'))
+                         .order(Arel.sql("users.last_activity_at DESC, id"))
                          .map(&:local_to_json)
         render json: json, status: :ok
       end

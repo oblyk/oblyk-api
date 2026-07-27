@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class ContestJudgeTest < ActiveSupport::TestCase
   setup do
@@ -8,26 +8,26 @@ class ContestJudgeTest < ActiveSupport::TestCase
     @contest = contests(:contest_1)
   end
 
-  test 'contest judge is valid' do
+  test "contest judge is valid" do
     assert_predicate @judge, :valid?
   end
 
-  test 'contest judge is invalid without name' do
+  test "contest judge is invalid without name" do
     @judge.name = nil
 
     assert_not @judge.valid?
     assert_includes @judge.errors.attribute_names, :name
   end
 
-  test 'contest judge is invalid without code' do
+  test "contest judge is invalid without code" do
     @judge.code = nil
 
     assert_not @judge.valid?
     assert_includes @judge.errors.attribute_names, :code
   end
 
-  test 'set_uuid is called before validation' do
-    new_judge = ContestJudge.new(name: 'New Judge', code: 'NEW', contest: @contest)
+  test "set_uuid is called before validation" do
+    new_judge = ContestJudge.new(name: "New Judge", code: "NEW", contest: @contest)
 
     assert_nil new_judge.uuid
     new_judge.valid?
@@ -35,7 +35,7 @@ class ContestJudgeTest < ActiveSupport::TestCase
     assert_not_nil new_judge.uuid
   end
 
-  test 'summary_to_json returns expected keys' do
+  test "summary_to_json returns expected keys" do
     json = @judge.summary_to_json
 
     assert_equal @judge.id, json[:id]
@@ -46,7 +46,7 @@ class ContestJudgeTest < ActiveSupport::TestCase
     assert_kind_of Array, json[:contest_routes]
   end
 
-  test 'detail_to_json returns expected keys including routes_table' do
+  test "detail_to_json returns expected keys including routes_table" do
     json = @judge.detail_to_json
 
     assert_equal @judge.id, json[:id]
