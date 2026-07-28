@@ -11,3 +11,10 @@ video_vimeo:
   video_service: vimeo
   url: https://vimeo.com/123456
   description: Une vidéo sur Vimeo
+
+video_route:
+  user: normal_user
+  viewable: route_one (CragRoute)
+  video_service: youtube
+  url: https://www.youtube.com/watch?v=route1
+  description: Vidéo de la voie 1

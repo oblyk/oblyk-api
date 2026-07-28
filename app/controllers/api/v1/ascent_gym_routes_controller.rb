@@ -120,19 +120,19 @@ module Api
           grade_value = Grade.to_value grade
           gym_ascent.color_system_line_id = ascent[:color_system_line_id] if ascent_bulk_params[:ascents_by] == "color"
           gym_ascent.sections = if ascent_bulk_params[:ascents_by] == "grade"
-                                  [{
+                                  [ {
                                     grade: grade,
                                     index: 0,
                                     height: ascent[:height],
                                     grade_value: grade_value
-                                  }]
+                                  } ]
                                 else
-                                  [{
+                                  [ {
                                     grade: nil,
                                     index: 0,
                                     height: ascent[:height],
                                     grade_value: nil
-                                  }]
+                                  } ]
                                 end
           new_ascents << gym_ascent
         end

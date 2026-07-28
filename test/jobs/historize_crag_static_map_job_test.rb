@@ -88,7 +88,7 @@ class HistorizeCragStaticMapJobTest < ActiveJob::TestCase
   end
 
   test "raises an error if the second call (banner map) fails; the static map remains attached" do
-    responses = [success_response, failure_response]
+    responses = [ success_response, failure_response ]
 
     error = assert_raises(RuntimeError) do
       Net::HTTP.stub :get_response, lambda { |*|

@@ -503,7 +503,7 @@ module Api
         json_response = response.parsed_body
 
         assert_kind_of Array, json_response
-        assert_equal 1, json_response.size
+        assert_equal 2, json_response.size
       end
 
       test "should get crag articles" do

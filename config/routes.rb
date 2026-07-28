@@ -534,6 +534,7 @@ Rails.application.routes.draw do
           get :videos, on: :member
           get :random, on: :collection
           get :search, on: :collection
+          get :search_by_grades, on: :collection
           get :suggested_routes, on: :collection
         end
 

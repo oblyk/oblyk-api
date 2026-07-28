@@ -92,6 +92,8 @@ module Api
 
       def search_by_grades
         grade_params = params[:grade]
+        return head :no_content if grade_params.blank?
+
         (1..9).each do |level|
           grade_params = "#{level}a #{level}c+" if grade_params == level.to_s
         end
@@ -166,11 +168,8 @@ module Api
       end
 
       def destroy
-        if @crag_route.destroy
-          render json: {}, status: :ok
-        else
-          render json: { error: @crag_route.errors }, status: :unprocessable_content
-        end
+        @crag_route.destroy
+        head :no_content
       end
 
       private

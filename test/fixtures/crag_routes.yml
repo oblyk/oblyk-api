@@ -15,6 +15,10 @@ route_one:
   max_grade_value: 32
   min_grade_text: '6a'
   max_grade_text: '6a'
+  note: 3.0
+  note_count: 1
+  ascents_count: 10
+  ascent_users_count: 5
 
 route_two:
   name: Route Two
@@ -32,6 +36,10 @@ route_two:
   max_grade_value: 41
   min_grade_text: '7a'
   max_grade_text: '7a'
+  note: 4.5
+  note_count: 1
+  ascents_count: 3
+  ascent_users_count: 2
 
 multi_pitch_route:
   name: Multi Pitch Route
@@ -52,6 +60,10 @@ multi_pitch_route:
   max_grade_value: 32
   min_grade_text: '5c'
   max_grade_text: '6a'
+  note: 2.0
+  note_count: 1
+  ascents_count: 20
+  ascent_users_count: 10
 
 petit_ange:
   name: Petit Ange
