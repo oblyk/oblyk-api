@@ -518,11 +518,15 @@ module Api
       def geo_json_features
         gyms = Gym.select(%i[id name longitude latitude updated_at])
                   .includes(banner_attachment: :blob, logo_attachment: :blob)
-
         climbing_style = params.fetch(:climbing_style, nil)
-        if climbing_style.present?
-          climbing_style = nil unless %w[sport_climbing bouldering fun_climbing].include?(climbing_style)
-          gyms = gyms.where(climbing_style => true) if climbing_style.present?
+
+        # Climbing Type filter
+        if [ Climb::SPORT_CLIMBING, Climb::BOULDERING, Climb::PAN ].include?(climbing_style) && climbing_style.present?
+          gyms = case climbing_style
+                 when "sport_climbing" then gyms.where(sport_climbing: true)
+                 when "bouldering"     then gyms.where(bouldering: true)
+                 when "pan"            then gyms.where(pan: true)
+                 end
         end
 
         gym_type = params.fetch(:gym_type, nil)

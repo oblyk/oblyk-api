@@ -58,6 +58,11 @@ class UserTest < ActiveSupport::TestCase
     @user.password_confirmation = "no_digit_no_upper"
 
     assert_not @user.valid?
+
+    @user.password = "Pass\nWord123"
+    @user.password_confirmation = "Pass\nWord123"
+
+    assert_not @user.valid?
   end
 
   test "full_name returns first and last name" do

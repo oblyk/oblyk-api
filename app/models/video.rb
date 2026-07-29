@@ -18,7 +18,7 @@ class Video < ApplicationRecord
 
   after_create_commit :publication_push!
 
-  URL_REGEXP = /(youtu\.be|youtube\.com|vimeo\.com|dai\.ly|dailymotion\.com|instagram\.com|tiktok.com)/
+  URL_REGEXP = %r{\A https?://(www\.)?(youtu\.be|youtube\.com|vimeo\.com|dai\.ly|dailymotion\.com|instagram\.com|tiktok\.com)(/.*)?\z}x
   VIDEO_SERVICES = %w[youtube vimeo dailymotion instagram tiktok oblyk_video].freeze
 
   before_validation :init_embedded_code

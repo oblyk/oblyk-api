@@ -213,8 +213,17 @@ module Api
           crags = Crag.all
 
           # Climbing Type filter
-          climbing_style = nil unless %w[sport_climbing bouldering multi_pitch trad_climbing aid_climbing deep_water via_ferrata].include?(climbing_style)
-          crags = crags.where(climbing_style => true) if climbing_style.present?
+          if Climb::CRAG_LIST.include?(climbing_style) && climbing_style.present?
+            crags = case climbing_style
+                    when "sport_climbing" then crags.where(sport_climbing: true)
+                    when "bouldering"     then crags.where(bouldering: true)
+                    when "multi_pitch"    then crags.where(multi_pitch: true)
+                    when "trad_climbing"  then crags.where(trad_climbing: true)
+                    when "aid_climbing"   then crags.where(aid_climbing: true)
+                    when "deep_water"     then crags.where(deep_water: true)
+                    when "via_ferrata"    then crags.where(via_ferrata: true)
+                    end
+          end
 
           if altitude.present? && altitude_switch.present?
             crags = crags.where(crags: { elevation: altitude.to_i.. }) if altitude_switch == "above"

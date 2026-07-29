@@ -16,7 +16,7 @@ class User < ApplicationRecord
       (?=.*\d)     # Must contain a digit
       (?=.*[a-z])  # Must contain a lower case character
       (?=.*[A-Z])  # Must contain an upper case character
-    /x
+    .*\z/x
 
   mattr_accessor :current, instance_accessor: false
 
