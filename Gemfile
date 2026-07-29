@@ -6,9 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.4.10"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", ">= 7.2"
-# Pin concurrent-ruby < 1.3.0 (1.3.0+ breaks ActiveSupport 6.0.x LoggerThreadSafeLevel)
-gem "concurrent-ruby", "~> 1.3"
+gem "rails", "8.1.3"
 # Use sqlite3 as the database for Active Record
 gem "mysql2"
 # Use Puma as the app server
@@ -19,13 +17,9 @@ gem "redis"
 gem "hiredis"
 # Use Active Model has_secure_password
 gem "bcrypt"
-# provides a full set of stores (Cache, Session, HTTP Cache) for Ruby on Rails
-gem "redis-rails"
-# Adds a Redis::Namespace class which can be used to namespace Redis keys
-gem "redis-namespace"
 
 # Keep connection pool under version 3.0 (delete this when upgrade to Rails 8.0.5)
-gem "connection_pool", "< 3.0"
+gem "connection_pool"
 
 # Convert Video (from .mov to .mp4 by example)
 gem "streamio-ffmpeg"
@@ -54,7 +48,7 @@ gem "useragent"
 gem "kaminari"
 
 # Sidekiq
-gem "sidekiq", "~> 7"
+gem "sidekiq"
 
 # Track changes
 gem "paper_trail"
@@ -98,7 +92,7 @@ gem "rqrcode"
 gem "google-cloud-storage", require: false
 
 # Aws sdk s3 for Cloudflare R2 object storage
-gem "aws-sdk-s3", "1.142.0"
+gem "aws-sdk-s3"
 
 # A fast JSON parser and Object marshaller as a Ruby gem.
 gem "oj"
@@ -154,17 +148,14 @@ group :development do
   gem "bcrypt_pbkdf"
   gem "ed25519"
 
-  # Bundler leak memory
-  gem "bundler-leak"
+  # Security vulnerability scanner
+  gem "brakeman", require: false
+  gem "bundler-audit", require: false
 end
 
 group :test do
-  gem "minitest", "5.27" # unpinned minitest version when upgrade to rails 8.0.4+
-  # Adds support for Capybara system testing and selenium driver
-  gem "capybara"
-  gem "selenium-webdriver"
+  gem "minitest"
+  gem "minitest-mock"
   # Test coverage : https://github.com/simplecov-ruby/simplecov
   gem "simplecov", require: false
-  # Easy installation and use of web drivers to run system tests with browsers
-  gem "webdrivers"
 end

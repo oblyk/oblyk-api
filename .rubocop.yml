@@ -10,7 +10,7 @@ inherit_gem:
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.4.10
-  TargetRailsVersion: 7
+  TargetRailsVersion: 8
   DisplayCopNames: true
   Exclude:
     - 'bin/**/*'
@@ -75,6 +75,9 @@ Rails/InverseOf:
   Enabled: false
 
 Rails/I18nLocaleTexts:
+  Enabled: false
+
+Rails/StrongParametersExpect:
   Enabled: false
 
 Minitest/MultipleAssertions:
