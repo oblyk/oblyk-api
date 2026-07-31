@@ -78,7 +78,7 @@ module Api
         other_headers = api_headers(user: :other_user)
         get api_v1_gym_indoor_subscriptions_url(gym_id: @gym.id), headers: other_headers
 
-        assert_response :unauthorized
+        assert_response :forbidden
       end
 
       test "should not access if user does not have manage_subscription role" do

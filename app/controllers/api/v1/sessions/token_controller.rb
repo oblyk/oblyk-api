@@ -9,13 +9,13 @@ module Api
 
           user_id = refresh_token.try(:[], "id")
           unless user_id
-            render json: {}, status: 419
+            render json: { error: "broken_refresh_token" }, status: :forbidden
             return
           end
 
           user = User.where(deleted_at: nil).find_by id: user_id
           unless user
-            render json: {}, status: 419
+            render json: { error: "broken_refresh_token" }, status: :forbidden
             return
           end
 

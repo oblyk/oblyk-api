@@ -35,7 +35,8 @@ module Api
                headers: @headers,
                as: :json
 
-          assert_equal 419, response.status
+          assert_equal 403, response.status
+          assert_equal "broken_refresh_token", response.parsed_body["error"]
         end
 
         test "should not refresh token for non-existent user" do
@@ -48,7 +49,8 @@ module Api
                headers: @headers,
                as: :json
 
-          assert_equal 419, response.status
+          assert_equal 403, response.status
+          assert_equal "broken_refresh_token", response.parsed_body["error"]
         end
       end
     end

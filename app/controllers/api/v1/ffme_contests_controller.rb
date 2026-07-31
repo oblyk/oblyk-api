@@ -68,7 +68,7 @@ module Api
 
         return unless @gym.administered?
 
-        not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).none?
+        forbidden if @gym.gym_administrators.where(user_id: @current_user.id).none?
       end
 
       def ffme_contest_params

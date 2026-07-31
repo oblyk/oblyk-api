@@ -131,7 +131,7 @@ module Api
 
         return unless @gym.administered?
 
-        not_authorized if @gym.gym_administrators.where(user_id: @current_user.id).none?
+        forbidden if @gym.gym_administrators.where(user_id: @current_user.id).none?
       end
 
       def user_can_manage_contest

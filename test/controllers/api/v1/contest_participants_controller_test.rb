@@ -192,7 +192,7 @@ module Api
              headers: other_headers,
              as: :json
 
-        assert_response :unauthorized
+        assert_response :forbidden
       end
 
       test "should subscribe" do

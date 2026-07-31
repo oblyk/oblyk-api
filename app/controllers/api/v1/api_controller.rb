@@ -58,13 +58,13 @@ module Api
         request.headers["Authorization"].split.last
       end
 
-      # Verify jwt and set current user
+      # Verify jwt and set current user, return 401 if json token is undecodable
       def verify_json_web_token
         data = JwtToken::Token.decode(authorization_token)["data"]
         @current_user ||= User.find data["id"]
         User.current = @current_user
       rescue StandardError
-        not_authorized
+        render json: { error: "Not Authorized" }, status: :unauthorized
       end
 
       # Return if current user is connected
@@ -75,11 +75,6 @@ module Api
         true
       rescue StandardError
         false
-      end
-
-      # Standard not authorized response
-      def not_authorized
-        render json: { error: "Not Authorized" }, status: :unauthorized
       end
 
       def forbidden

@@ -96,7 +96,7 @@ module Api
         other_user_headers = api_headers(user: :other_user)
         get api_v1_gym_contest_contest_judges_url(@gym, @contest), headers: other_user_headers, as: :json
 
-        assert_response :unauthorized
+        assert_response :forbidden
       end
     end
   end

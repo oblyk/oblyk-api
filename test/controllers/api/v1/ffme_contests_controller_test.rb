@@ -127,7 +127,7 @@ module Api
         get api_v1_gym_contest_ffme_contest_url(@gym, @contest, @ffme_contest),
             headers: @user_headers
 
-        assert_response :unauthorized
+        assert_response :forbidden
       end
     end
   end
