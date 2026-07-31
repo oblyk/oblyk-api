@@ -2,15 +2,16 @@
 
 Oblyk is an open-source community website dedicated to climbing. It aims to build a large open-data database of cliffs, routes and climbing gyms in France and around the world that can be freely consulted via an API. Climbers can also use this tool to rate their crosses or find climbing partners.
 
-This repository is the API part of Oblyk project.  
-For front app, go here : [oblyk-app](https://github.com/oblyk/oblyk-app) 
+This repository is the API part of the Oblyk project.  
+For the front app, go here: [oblyk-app](https://github.com/oblyk/oblyk-app) 
 
 ## Dependencies
 
-- ruby 2.6.5
+- ruby 3.4.10 ([Use Rbenv to manage Ruby versions](https://github.com/rbenv/rbenv))
 - bundle >= 2.0.0
 - docker >= 20.10
-    - docker-compose >= 1.25
+    - docker-compose >= 1.2
+- vips >= 8.13
 
 ## Installation
 ```shell
@@ -38,7 +39,7 @@ bundle exec rails db:setup
 bundle exec rails s
 ```
 Go to [localhost:3000](http://localhost:3000)  
-Enjoy !
+Enjoy!
 
 
 ## Create your organization for set yours API private key
@@ -51,7 +52,7 @@ End create your organization
 my_organization = Organization.new name: 'My Awesome Organization', email: 'my@email.com', api_usage_type: 'personal'
 my_organization.save
 my_organization.api_access_token
-# => vvPpFZhg....
+# => vvPpFZhg...
 # You can use this token in HttpApiAccessToken header
 ```
 
@@ -66,7 +67,7 @@ Sidekiq user and password is configured in `config/local_env.yml`
 ## Helpers
 
 ### (re)Create MeiliSearch index
-Dans une console rails `rails c`
+In a Rails console `rails c`
 ```ruby
 [GuideBookPaper, Area, Gym, Word, User].each do |klass|
   klass.ms_reindex!
@@ -75,12 +76,3 @@ Crag.includes(:areas).ms_reindex!
 CragRoute.joins(:crag, :crag_sector).includes(:crag, :crag_sector).ms_reindex!
 Town.includes(:department).ms_reindex!
 ```
-
-### Generate API documentation
-
-```shell
-RAILS_ENV=test rails db:migrate # if necessary
-bundle exec rake docs:generate
-```
-
-Go to [http://localhost:3000/documentation](http://localhost:3000/documentation)
