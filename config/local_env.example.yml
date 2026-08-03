@@ -4,6 +4,10 @@
 # Each entry gets set as a local environment variable.
 # This file overrides ENV variables in the Unix shell.
 
+# Set real secret jwt token
+JWT_SECRET_TOKEN: ''
+
+# Sidekiq password and user
 SIDEKIQ_USERNAME: 'sidekiq'
 SIDEKIQ_PASSWORD: 'password'
 

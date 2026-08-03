@@ -15,7 +15,9 @@ module JwtToken
     end
 
     def self.api_secret
-      ENV.fetch("JWT_SECRET_TOKEN", "my-secret-jwt-token")
+      api_secret = ENV.fetch("JWT_SECRET_TOKEN", nil)
+      raise "JWT_SECRET_TOKEN environment variable must be set" if api_secret.blank?
+      api_secret
     end
   end
 end
