@@ -45,7 +45,7 @@ module Api
       private
 
       def set_gym_space_group
-        @gym_space_group = GymSpaceGroup.find params[:id]
+        @gym_space_group = @gym.gym_space_groups.find params[:id]
       end
 
       def gym_space_group_params

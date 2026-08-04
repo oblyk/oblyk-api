@@ -34,7 +34,7 @@ module Api
       private
 
       def set_gym_billing_account
-        @gym_billing_account = GymBillingAccount.find params[:id]
+        @gym_billing_account = @gym.gym_billing_account
       end
 
       def gym_billing_account_params

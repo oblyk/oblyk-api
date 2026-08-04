@@ -399,15 +399,19 @@ module Api
       end
 
       def set_gym_space
-        @gym_space = GymSpace.find_by(id: params[:gym_space_id]) if params[:gym_space_id].present?
+        @gym_space = @gym.gym_spaces.find_by(id: params[:gym_space_id]) if params[:gym_space_id].present?
       end
 
       def set_gym_sector
-        @gym_sector = GymSector.find_by id: params[:gym_sector_id]
+        @gym_sector = GymSector.joins(:gym_space)
+                               .where(gym_spaces: { gym_id: @gym.id })
+                               .find_by(id: params[:gym_sector_id])
       end
 
       def set_gym_route
-        @gym_route = GymRoute.find params[:id]
+        @gym_route = GymRoute.joins(gym_sector: :gym_space)
+                             .where(gym_spaces: { gym_id: @gym.id })
+                             .find(params[:id])
       end
 
       def gym_route_params

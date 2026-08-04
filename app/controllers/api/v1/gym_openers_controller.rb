@@ -68,7 +68,7 @@ module Api
       private
 
       def set_gym_opener
-        @gym_opener = GymOpener.find params[:id]
+        @gym_opener = @gym.gym_openers.find params[:id]
       end
 
       def gym_opener_params

@@ -76,7 +76,7 @@ module Api
       private
 
       def set_indoor_subscription
-        @indoor_subscription = IndoorSubscription.find params[:id]
+        @indoor_subscription = @gym.indoor_subscriptions.find params[:id]
       end
 
       def indoor_subscription_params

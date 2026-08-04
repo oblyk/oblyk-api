@@ -284,7 +284,7 @@ module Api
       end
 
       def set_gym_space
-        @gym_space = GymSpace.find params[:id]
+        @gym_space = @gym.gym_spaces.find params[:id]
       end
 
       def gym_space_params

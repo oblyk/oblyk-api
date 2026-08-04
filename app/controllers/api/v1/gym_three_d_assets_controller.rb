@@ -81,7 +81,7 @@ module Api
       private
 
       def set_gym_three_d_asset
-        @gym_three_d_asset = GymThreeDAsset.find params[:id]
+        @gym_three_d_asset = @gym.gym_three_d_assets.find params[:id]
       end
 
       def attach_three_d_file

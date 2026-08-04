@@ -59,7 +59,7 @@ module Api
       end
 
       def set_gym_three_d_element
-        @gym_three_d_element = GymThreeDElement.find params[:id]
+        @gym_three_d_element = @gym.gym_three_d_elements.find params[:id]
       end
 
       def gym_three_d_element_params

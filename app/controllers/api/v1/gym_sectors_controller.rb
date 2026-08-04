@@ -98,11 +98,11 @@ module Api
       private
 
       def set_gym_sector
-        @gym_sector = GymSector.find params[:id]
+        @gym_sector = @gym_space.gym_sectors.find params[:id]
       end
 
       def set_gym_space
-        @gym_space = GymSpace.find params[:gym_space_id]
+        @gym_space = @gym.gym_spaces.find params[:gym_space_id]
       end
 
       def gym_sector_params

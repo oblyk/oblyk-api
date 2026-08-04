@@ -62,6 +62,7 @@ class Gym < ApplicationRecord
   has_many :gym_label_templates
   has_many :gym_chain_gyms
   has_many :gym_chains, through: :gym_chain_gyms
+  has_many :gym_three_d_assets
   has_many :gym_three_d_elements
   has_many :gym_levels
   has_many :gym_opening_sheets

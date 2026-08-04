@@ -127,7 +127,7 @@ module Api
       private
 
       def set_gym_administrator
-        @gym_administrator = GymAdministrator.find params[:id]
+        @gym_administrator = @gym.gym_administrators.find params[:id]
       end
 
       def gym_administrator_params
