@@ -228,7 +228,8 @@ module Api
               { "PATH" => "#{ENV.fetch('NPM_BIN_PATH', nil)}:#{ENV.fetch('PATH', nil)}" },
               "#{ENV.fetch('NPM_BIN_PATH', nil)}/obj2gltf",
               "-i",
-              "#{folder.first}/#{obj_name}"
+              "#{folder.first}/#{obj_name}",
+              "--secure"
             )
             if status.success?
               gltf_file_name = "#{obj_name.split('.').first}.gltf"
