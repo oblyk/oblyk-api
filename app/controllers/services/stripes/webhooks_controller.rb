@@ -3,6 +3,8 @@
 module Services
   module Stripes
     class WebhooksController < ApplicationController
+      before_action :raise_unless_stripe_endpoint_secret
+
       def index
         Stripe.api_key = ENV.fetch("STRIPE_API_KEY", nil)
         endpoint_secret = ENV.fetch("STRIPE_ENDPOINT_SECRET", nil)
@@ -24,12 +26,11 @@ module Services
           # Retrieve the event by verifying the signature using the raw body and secret.
           signature = request.env["HTTP_STRIPE_SIGNATURE"]
           begin
-            event = Stripe::Webhook.construct_event(
-              payload, signature, endpoint_secret
-            )
+            event = Stripe::Webhook.construct_event(payload, signature, endpoint_secret)
           rescue Stripe::SignatureVerificationError => e
             RorVsWild.record_error(e)
             head :bad_request
+            return
           end
         end
 
@@ -42,6 +43,12 @@ module Services
         end
 
         head :ok
+      end
+
+      private
+
+      def raise_unless_stripe_endpoint_secret
+        raise "Stripe endpoint secret must be set" unless ENV.fetch("STRIPE_ENDPOINT_SECRET", nil)
       end
     end
   end

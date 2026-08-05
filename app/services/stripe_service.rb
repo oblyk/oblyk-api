@@ -2,6 +2,8 @@
 
 class StripeService
   def self.fulfill_checkout(checkout_session_id)
+    raise "Stripe API key must be set" unless ENV.fetch("STRIPE_API_KEY", nil)
+
     Stripe.api_key = ENV.fetch("STRIPE_API_KEY", nil)
 
     stripe_checkout_session = StripeCheckoutSession.find_or_initialize_by checkout_session_id: checkout_session_id
@@ -41,6 +43,8 @@ class StripeService
   end
 
   def self.deactivated_payment_link(payment_link_id)
+    raise "Stripe API key must be set" unless ENV.fetch("STRIPE_API_KEY", nil)
+
     Stripe.api_key = ENV.fetch("STRIPE_API_KEY", nil)
     Stripe::PaymentLink.update(payment_link_id, active: false)
   end
