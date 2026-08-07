@@ -11,6 +11,7 @@ module Api
       before_action :private_protected, except: %i[create index drafts my_publication_feed]
       before_action :index_private_protected, only: %i[create index]
       before_action :protected_by_owner, only: %i[update destroy publish]
+      before_action :protected_creation, only: %i[create]
 
       def index
         type = params[:publishable_type].to_s
@@ -243,13 +244,25 @@ module Api
         forbidden if user.present? && !user.other_user_can?(@current_user, request: :see_publications)
       end
 
+      def protected_creation
+        return forbidden if publication_params[:publishable_type] == "Article"
+        return forbidden if publication_params[:publishable_type] == "User" && publication_params[:publishable_id] != @current_user.id
+        if publication_params[:publishable_type] == "Gym"
+          @gym = Gym.find_by id: publication_params[:publishable_id]
+          return forbidden unless gym_team_user?
+        end
+        true
+      end
+
       def protected_by_owner
         case @publication.publishable_type
         when "Gym"
           @gym = @publication.publishable
           forbidden unless gym_team_user?
         when "User"
-          forbidden unless @publication.publishable == @current_user
+          forbidden if @publication.publishable != @current_user || @publication.author != @current_user
+        else
+          forbidden unless @publication.author == @current_user
         end
       end
     end

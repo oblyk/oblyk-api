@@ -20,7 +20,8 @@ class Publication < ApplicationRecord
     "Gym" => 2,
     "User" => 1,
     "Crag" => 1,
-    "GuideBookPaper" => 1
+    "GuideBookPaper" => 1,
+    "Article" => 5
   }.freeze
 
   attr_accessor :viewed
