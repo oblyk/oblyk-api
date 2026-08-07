@@ -23,7 +23,7 @@ module Api
       end
 
       test "should get index" do
-        get api_v1_gym_contest_contest_participants_url(@gym, @contest), headers: @user_headers
+        get api_v1_gym_contest_contest_participants_url(@gym, @contest), headers: @admin_headers
 
         assert_response :success
         json_response = response.parsed_body
@@ -37,7 +37,7 @@ module Api
           genre: "male", contest_category: contest_categories(:category_senior),
           email: "test@test.com"
         )
-        get api_v1_gym_contest_contest_participant_url(@gym, @contest, p), headers: @user_headers
+        get api_v1_gym_contest_contest_participant_url(@gym, @contest, p), headers: @admin_headers
 
         assert_response :success
       end
@@ -284,7 +284,7 @@ module Api
       end
 
       test "should synchronise with ffme contest" do
-        put synchronise_participant_with_ffme_contest_api_v1_gym_contest_contest_participant_url(@gym, @contest, @participant), headers: @user_headers
+        put synchronise_participant_with_ffme_contest_api_v1_gym_contest_contest_participant_url(@gym, @contest, @participant), headers: @admin_headers
 
         assert_response :no_content
         @participant.reload
@@ -293,7 +293,7 @@ module Api
       end
 
       test "should get tombola winners" do
-        get tombola_winners_api_v1_gym_contest_contest_participants_url(@gym, @contest), headers: @user_headers
+        get tombola_winners_api_v1_gym_contest_contest_participants_url(@gym, @contest), headers: @admin_headers
 
         assert_response :success
       end

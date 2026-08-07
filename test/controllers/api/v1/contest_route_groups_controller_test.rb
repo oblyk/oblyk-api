@@ -22,7 +22,7 @@ module Api
       test "should get index" do
         get api_v1_gym_contest_contest_stage_contest_stage_step_contest_route_groups_url(
           @gym, @contest, @contest_stage, @contest_stage_step
-        ), headers: @public_headers
+        ), headers: @admin_headers
 
         assert_response :success
       end
@@ -30,7 +30,7 @@ module Api
       test "should show contest_route_group" do
         get api_v1_gym_contest_contest_stage_contest_stage_step_contest_route_group_url(
           @gym, @contest, @contest_stage, @contest_stage_step, @contest_route_group
-        ), headers: @public_headers
+        ), headers: @admin_headers
 
         assert_response :success
       end

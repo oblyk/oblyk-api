@@ -20,7 +20,7 @@ module Api
       end
 
       test "should get index" do
-        get api_v1_gym_contest_contest_stages_url(@gym, @contest), headers: @public_headers
+        get api_v1_gym_contest_contest_stages_url(@gym, @contest), headers: @admin_headers
 
         assert_response :success
         json_response = response.parsed_body
@@ -29,7 +29,7 @@ module Api
       end
 
       test "should show contest_stage" do
-        get api_v1_gym_contest_contest_stage_url(@gym, @contest, @contest_stage), headers: @public_headers
+        get api_v1_gym_contest_contest_stage_url(@gym, @contest, @contest_stage), headers: @admin_headers
 
         assert_response :success
         json_response = response.parsed_body

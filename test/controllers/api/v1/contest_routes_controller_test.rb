@@ -18,13 +18,13 @@ module Api
       end
 
       test "should get index" do
-        get api_v1_gym_contest_contest_routes_url(@gym, @contest), headers: @public_headers
+        get api_v1_gym_contest_contest_routes_url(@gym, @contest), headers: @admin_headers
 
         assert_response :success
       end
 
       test "should show contest_route" do
-        get api_v1_gym_contest_contest_route_url(@gym, @contest, @contest_route), headers: @public_headers
+        get api_v1_gym_contest_contest_route_url(@gym, @contest, @contest_route), headers: @admin_headers
 
         assert_response :success
       end

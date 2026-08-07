@@ -6,7 +6,7 @@ module Api
       include UploadVerification
       include GymRolesVerification
 
-      before_action :protected_by_session, except: %i[participant subscribe link_to_current_user]
+      before_action :protected_by_session, except: %i[participant subscribe]
       before_action :set_gym
       before_action :set_contest
       before_action :set_contest_participant, only: %i[show update destroy link_to_current_user synchronise_participant_with_ffme_contest]
