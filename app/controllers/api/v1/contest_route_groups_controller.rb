@@ -5,14 +5,14 @@ module Api
     class ContestRouteGroupsController < ApiController
       include GymRolesVerification
 
-      before_action :protected_by_session, only: %i[create update destroy add_route]
+      before_action :protected_by_session
       before_action :set_gym
       before_action :set_contest
       before_action :set_contest_stage
       before_action :set_contest_stage_step
       before_action :set_contest_route_group, only: %i[show update destroy add_route]
-      before_action :protected_by_administrator, only: %i[create update destroy add_route]
-      before_action :user_can_manage_contest, except: %i[index show]
+      before_action :protected_by_administrator
+      before_action :user_can_manage_contest
 
       def index
         steps = @contest_stage_step.contest_route_groups.map(&:summary_to_json)

@@ -5,13 +5,13 @@ module Api
     class ContestStageStepsController < ApiController
       include GymRolesVerification
 
-      before_action :protected_by_session, only: %i[create update destroy]
+      before_action :protected_by_session
       before_action :set_gym
       before_action :set_contest
       before_action :set_contest_stage
       before_action :set_contest_stage_step, only: %i[show update destroy]
-      before_action :protected_by_administrator, only: %i[create update destroy]
-      before_action :user_can_manage_contest, except: %i[index show]
+      before_action :protected_by_administrator
+      before_action :user_can_manage_contest
 
       def index
         steps = @contest_stage.contest_stage_steps.map do |step|

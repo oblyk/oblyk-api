@@ -7,12 +7,12 @@ module Api
       include GymRolesVerification
       include ImageParamsConvert
 
-      before_action :protected_by_session, except: %i[index show]
+      before_action :protected_by_session
       before_action :set_gym
       before_action :set_contest
       before_action :set_contest_route, only: %i[show update destroy disable enable add_picture linked unlinked delete_picture]
-      before_action :protected_by_administrator, only: %i[create update destroy disable enable add_picture linked unlinked delete_picture]
-      before_action :user_can_manage_contest, except: %i[index show]
+      before_action :protected_by_administrator
+      before_action :user_can_manage_contest
 
       def index
         render json: @contest.contest_routes.map(&:summary_to_json), status: :ok

@@ -5,11 +5,11 @@ module Api
     class ContestParticipantAscentsController < ApiController
       include GymRolesVerification
 
-      before_action :protected_by_session, only: %i[index]
+      before_action :protected_by_session, except: %i[create bulk]
       before_action :set_gym, only: %i[index]
       before_action :set_contest
-      before_action :protected_by_administrator, only: %i[index]
-      before_action :user_can_manage_contest, only: %i[index]
+      before_action :protected_by_administrator, except: %i[create bulk]
+      before_action :user_can_manage_contest, except: %i[create bulk]
       before_action :set_contest_participant, except: %i[index]
 
       def index

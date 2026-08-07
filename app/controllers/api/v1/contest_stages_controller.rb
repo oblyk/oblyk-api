@@ -5,12 +5,12 @@ module Api
     class ContestStagesController < ApiController
       include GymRolesVerification
 
-      before_action :protected_by_session, only: %i[create update destroy]
+      before_action :protected_by_session
       before_action :set_gym
       before_action :set_contest
       before_action :set_contest_stage, only: %i[show update destroy]
-      before_action :protected_by_administrator, only: %i[create update destroy]
-      before_action :user_can_manage_contest, except: %i[index show]
+      before_action :protected_by_administrator
+      before_action :user_can_manage_contest
 
       def index
         render json: @contest.contest_stages.map(&:summary_to_json), status: :ok

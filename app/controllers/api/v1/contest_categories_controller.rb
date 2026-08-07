@@ -5,11 +5,11 @@ module Api
     class ContestCategoriesController < ApiController
       include GymRolesVerification
 
-      before_action :protected_by_session, only: %i[create update destroy]
+      before_action :protected_by_session, except: %i[index show]
       before_action :set_gym
       before_action :set_contest
       before_action :set_contest_category, only: %i[show update destroy]
-      before_action :protected_by_administrator, only: %i[create update destroy]
+      before_action :protected_by_administrator, except: %i[index show]
       before_action :user_can_manage_contest, except: %i[index show]
 
       def index

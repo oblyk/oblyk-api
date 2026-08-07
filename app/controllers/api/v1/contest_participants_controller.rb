@@ -6,12 +6,12 @@ module Api
       include UploadVerification
       include GymRolesVerification
 
-      before_action :protected_by_session, only: %i[index export import import_template create update destroy tombola tombola_winners link_to_current_user synchronise_participant_with_ffme_contest]
+      before_action :protected_by_session, except: %i[participant subscribe link_to_current_user]
       before_action :set_gym
       before_action :set_contest
       before_action :set_contest_participant, only: %i[show update destroy link_to_current_user synchronise_participant_with_ffme_contest]
-      before_action :protected_by_administrator, only: %i[export import import_template create update destroy tombola tombola_winners]
-      before_action :user_can_manage_contest, except: %i[index show participant subscribe tombola tombola_winners link_to_current_user synchronise_participant_with_ffme_contest]
+      before_action :protected_by_administrator, except: %i[participant subscribe link_to_current_user]
+      before_action :user_can_manage_contest, except: %i[participant subscribe link_to_current_user]
 
       def index
         render json: @contest.contest_participants.includes(:contest_category, :contest_wave).map(&:summary_to_json), status: :ok
@@ -323,7 +323,6 @@ module Api
           :contest_category_id,
           :contest_wave_id,
           :contest_team_id,
-          :tombola_winner,
           :synchronise_with_ffme_contest
         )
       end
