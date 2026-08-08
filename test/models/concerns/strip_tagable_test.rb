@@ -5,7 +5,7 @@ require "test_helper"
 class StripTagableTest < ActiveSupport::TestCase
   test "strip_tag_column strips tags from description" do
     contest = Contest.new(name: "Test", description: "<p>Hello</p> <b>World</b>")
-    contest.send(:strip_tag_column)
+    contest.send(:strip_tag_columns)
 
     assert_equal "Hello World", contest.description
   end

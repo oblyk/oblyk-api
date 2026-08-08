@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ContestStageStep < ApplicationRecord
+  include StripTagable
   include Slugable
 
   belongs_to :contest_stage

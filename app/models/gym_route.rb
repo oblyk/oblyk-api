@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class GymRoute < ApplicationRecord
-  include AttachmentResizable
   include StripTagable
+  include AttachmentResizable
 
   has_one_attached :thumbnail
   belongs_to :gym_route_cover, optional: true

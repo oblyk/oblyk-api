@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class GymAdministrator < ApplicationRecord
+  include StripTagable
   include Emailable
 
   belongs_to :user, optional: true

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ContestTeam < ApplicationRecord
+  include StripTagable
+
   belongs_to :contest
   has_many :contest_participants
 

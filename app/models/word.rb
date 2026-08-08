@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Word < ApplicationRecord
-  include Slugable
   include StripTagable
+  include Slugable
   include MeiliSearch::Rails
 
   meilisearch synchronous: Rails.env.test? do

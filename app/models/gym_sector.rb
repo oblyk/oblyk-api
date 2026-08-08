@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class GymSector < ApplicationRecord
-  include SoftDeletable
   include StripTagable
+  include SoftDeletable
 
   belongs_to :gym_space
   has_one :gym, through: :gym_space

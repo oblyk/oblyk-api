@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Photo < ApplicationRecord
-  include AttachmentResizable
   include StripTagable
+  include AttachmentResizable
 
   has_one_attached :picture
 

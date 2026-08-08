@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Contest < ApplicationRecord
+  include StripTagable
   include Slugable
   include AttachmentResizable
-  include StripTagable
   include Archivable
   include SoftDeletable
 

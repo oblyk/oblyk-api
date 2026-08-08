@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  include AttachmentResizable
   include StripTagable
+  include AttachmentResizable
   include Emailable
   include MeiliSearch::Rails
 

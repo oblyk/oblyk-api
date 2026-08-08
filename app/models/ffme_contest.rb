@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class FfmeContest < ApplicationRecord
+  include StripTagable
+
   belongs_to :contest
   has_one :gym, through: :contest
 

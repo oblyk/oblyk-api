@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class CragRoute < ApplicationRecord
+  include StripTagable
   include SoftDeletable
   include Slugable
   include AttachmentResizable

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class GymOpeningSheet < ApplicationRecord
-  include Archivable
   include StripTagable
+  include Archivable
 
   belongs_to :gym
 

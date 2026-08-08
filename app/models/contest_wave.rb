@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ContestWave < ApplicationRecord
+  include StripTagable
+
   belongs_to :contest
 
   has_many :contest_participants

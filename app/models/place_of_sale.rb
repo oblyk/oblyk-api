@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class PlaceOfSale < ApplicationRecord
-  include Geolocable
   include StripTagable
+  include Geolocable
 
   belongs_to :user, optional: true
   belongs_to :guide_book_paper

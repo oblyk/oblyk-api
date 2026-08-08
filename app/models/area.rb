@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Area < ApplicationRecord
+  include StripTagable
   include Slugable
   include AttachmentResizable
   include MeiliSearch::Rails

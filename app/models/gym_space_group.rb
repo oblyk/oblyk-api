@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class GymSpaceGroup < ApplicationRecord
+  include StripTagable
   belongs_to :gym
   has_many :gym_spaces
 

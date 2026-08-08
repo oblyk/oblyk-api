@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class CragSector < ApplicationRecord
+  include StripTagable
   include Geolocable
   include SoftDeletable
   include Slugable
   include GapGradable
   include RouteFigurable
   include Elevable
-  include StripTagable
   include AttachmentResizable
 
   has_paper_trail only: %i[

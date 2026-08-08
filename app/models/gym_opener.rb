@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class GymOpener < ApplicationRecord
+  include StripTagable
   include Emailable
   include Slugable
   include Deactivable

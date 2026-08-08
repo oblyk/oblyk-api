@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ContestJudge < ApplicationRecord
+  include StripTagable
+
   belongs_to :contest
   has_many :contest_judge_routes, dependent: :destroy
   has_many :contest_routes, through: :contest_judge_routes

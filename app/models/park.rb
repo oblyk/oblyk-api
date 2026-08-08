@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Park < ApplicationRecord
+  include StripTagable
   include Geolocable
   include Elevable
-  include StripTagable
   include AttachmentResizable
 
   has_one_attached :static_map

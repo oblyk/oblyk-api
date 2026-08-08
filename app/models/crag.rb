@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Crag < ApplicationRecord
+  include StripTagable
   include Geolocable
   include SoftDeletable
   include Slugable

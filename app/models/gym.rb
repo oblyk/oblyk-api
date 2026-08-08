@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class Gym < ApplicationRecord
+  include StripTagable
   include Geolocable
   include SoftDeletable
   include Slugable
   include AttachmentResizable
-  include StripTagable
   include Emailable
   include MeiliSearch::Rails
 

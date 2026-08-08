@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class GymBillingAccount < ApplicationRecord
+  include StripTagable
+
   has_many :gyms
   validates :email, presence: true
   before_validation :set_uuid

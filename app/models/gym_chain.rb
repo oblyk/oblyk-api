@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class GymChain < ApplicationRecord
+  include StripTagable
   include Slugable
   include AttachmentResizable
-  include StripTagable
 
   has_secure_token :api_access_token
 

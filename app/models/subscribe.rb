@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Subscribe < ApplicationRecord
+  include StripTagable
   include Emailable
 
   validates :email, presence: true

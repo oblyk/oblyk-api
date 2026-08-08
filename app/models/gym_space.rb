@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class GymSpace < ApplicationRecord
+  include StripTagable
   include SoftDeletable
   include Slugable
   include AttachmentResizable
-  include StripTagable
   include Archivable
 
   has_one_attached :banner

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Locality < ApplicationRecord
+  include StripTagable
   include Geolocable
 
   has_many :locality_users

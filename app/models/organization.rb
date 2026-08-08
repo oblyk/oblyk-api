@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Organization < ApplicationRecord
+  include StripTagable
   include Slugable
   include Emailable
 

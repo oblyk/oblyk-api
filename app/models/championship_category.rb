@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ChampionshipCategory < ApplicationRecord
+  include StripTagable
   include Slugable
 
   belongs_to :championship

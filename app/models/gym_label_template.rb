@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class GymLabelTemplate < ApplicationRecord
+  include StripTagable
   include Archivable
 
   LABEL_DIRECTION_LIST = %w[one_by_row two_by_row three_by_row four_by_row circular].freeze

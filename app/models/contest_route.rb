@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ContestRoute < ApplicationRecord
+  include StripTagable
   include AttachmentResizable
 
   has_one_attached :picture
