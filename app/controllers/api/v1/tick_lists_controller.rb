@@ -32,7 +32,7 @@ module Api
       private
 
       def set_tick_list
-        @tick_list = TickList.find_by crag_route_id: params[:crag_route_id]
+        @tick_list = @current_user.tick_lists.find_by crag_route_id: params[:crag_route_id]
       end
 
       def tick_list_params
