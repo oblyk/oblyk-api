@@ -192,8 +192,16 @@ class User < ApplicationRecord
     subscribes.accepted.where(followable_type: "User")
   end
 
-  def other_user_can?(other_user, request: :see_publications) # rubocop:disable Lint/UnusedMethodArgument
-    return true if public_profile
+  def other_user_can?(other_user, request: :see_publications)
+    return true if self == other_user
+
+    if request == :see_publications
+      return true if public_profile
+    elsif request == :see_indoor_ascents
+      return true if public_indoor_ascents
+    elsif request == :see_outdoor_ascents
+      return true if public_outdoor_ascents
+    end
 
     follows.where(user: other_user).where.not(accepted_at: nil).exists?
   end

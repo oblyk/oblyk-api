@@ -55,6 +55,13 @@ module Api
 
       def points
         user = User.find_by uuid: params[:user_uuid]
+        return render nil, status: :not_found unless user
+
+        unless user.other_user_can?(@current_user, request: :see_indoor_ascents)
+          render json: { error: "private_indoor_ascents" }, status: :ok
+          return
+        end
+
         gym = Gym.find_by id: params[:gym_id]
         page = params.fetch(:page, 1)
         start_date = params.fetch(:start_date, nil)
