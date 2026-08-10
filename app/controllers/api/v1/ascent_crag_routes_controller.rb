@@ -22,7 +22,7 @@ module Api
       end
 
       def show
-        render json: @ascent_crag_route.detail_to_json, status: :ok
+        render json: @ascent_crag_route.detail_to_json(for_current_user: @current_user.id == @ascent_crag_route.user_id), status: :ok
       end
 
       def create
