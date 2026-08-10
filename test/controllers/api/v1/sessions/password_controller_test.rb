@@ -27,7 +27,7 @@ module Api
                headers: @headers,
                as: :json
 
-          assert_response :not_found
+          assert_response :ok
         end
 
         test "should update password with valid token" do

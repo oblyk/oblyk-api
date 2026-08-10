@@ -6,10 +6,10 @@ module Api
       class PasswordController < ApiController
         def create
           user = User.find_by email: params[:email]
-          not_found && return if user.blank?
+          return head :ok if user.blank?
 
           user.send_reset_password_instructions
-          render json: {}, status: :ok
+          head :ok
         end
 
         def update
