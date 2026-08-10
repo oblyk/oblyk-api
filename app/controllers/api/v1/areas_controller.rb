@@ -3,8 +3,8 @@
 module Api
   module V1
     class AreasController < ApiController
+      before_action :protected_by_session, only: %i[create update destroy add_crag remove_crag]
       before_action :protected_by_super_admin, only: %i[destroy]
-      before_action :protected_by_session, only: %i[create update]
       before_action :set_area, only: %i[show crags crags_figures guide_book_papers geo_json photos add_crag remove_crag update destroy]
 
       def index
