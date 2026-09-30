@@ -59,6 +59,7 @@ class Crag < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :photo, optional: true
   belongs_to :department, optional: true
+  has_one :user_crag_declaration, -> { where(user_id: User.current&.id) }
   has_many :comments, as: :commentable
   has_many :links, as: :linkable
   has_many :follows, as: :followable
@@ -80,10 +81,12 @@ class Crag < ApplicationRecord
   has_many :articles, through: :article_crags
   has_many :rock_bars
   has_many :publications, as: :publishable
+  has_many :user_crag_declarations, dependent: :destroy
 
   validates :name, :latitude, :longitude, :city, presence: true
   validates :rain, inclusion: { in: Rain::LIST }, allow_nil: true
   validates :sun, inclusion: { in: Sun::LIST }, allow_nil: true
+  validates :grade_protection_level, inclusion: { in: GradeProtectionLevel::LEVELS }, allow_nil: true
   validate :validate_rocks
 
   after_update :update_routes_location
@@ -163,6 +166,7 @@ class Crag < ApplicationRecord
         name: name,
         slug_name: slug_name,
         app_path: app_path,
+        grade_protection_level: grade_protection_level,
         rain: rain,
         sun: sun,
         sport_climbing: sport_climbing,

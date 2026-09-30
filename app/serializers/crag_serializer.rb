@@ -6,6 +6,7 @@ class CragSerializer < BaseSerializer
   attributes :id,
              :name,
              :app_path,
+             :grade_protection_level,
              :slug_name,
              :latitude,
              :longitude,
@@ -56,6 +57,18 @@ class CragSerializer < BaseSerializer
         max_value: object.max_grade_value,
         max_text: object.max_grade_text,
         min_text: object.min_grade_text
+      }
+    }
+  end
+
+  attribute :current_user do |object, params|
+    user_level = params[:current_user] ? 1 : 0
+    user_level = object.user_crag_declaration.equivalent_level if object.user_crag_declaration
+    {
+      grade_protection: {
+        level: user_level,
+        required_level: object.grade_protection_level,
+        need_level_up: object.grade_protection_level > user_level
       }
     }
   end

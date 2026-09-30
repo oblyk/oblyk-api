@@ -3,6 +3,8 @@
 class GuideBookPaperSerializer < BaseSerializer
   include AttachmentsSerializerHelper
 
+  has_many :guide_book_paper_questions, lazy_load_data: true
+
   attributes :id,
              :name,
              :slug_name,

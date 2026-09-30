@@ -21,6 +21,7 @@ module Api
         )
         @user_headers = api_headers(user: :normal_user)
         @admin_headers = api_headers(user: :super_admin_user)
+        @other_user_headers = api_headers(user: :other_user)
       end
 
       test "should get index" do
@@ -66,7 +67,7 @@ module Api
 
       test "should not destroy guide_book_pdf by normal user" do
         assert_no_difference("GuideBookPdf.count") do
-          delete api_v1_guide_book_pdf_url(@guide_book_pdf), headers: @user_headers
+          delete api_v1_guide_book_pdf_url(@guide_book_pdf), headers: @other_user_headers
         end
         assert_response :forbidden
       end

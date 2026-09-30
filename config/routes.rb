@@ -170,6 +170,9 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :user_crag_declarations, only: %i[create] do
+        get :available_guide_book_papers, on: :collection
+      end
       resources :fast_accesses, only: %i[index]
 
       resources :notifications, only: %i[index] do

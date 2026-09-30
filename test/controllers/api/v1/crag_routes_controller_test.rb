@@ -158,13 +158,13 @@ module Api
         assert_equal 2, body.length
       end
 
-      test "should obfuscate route names in search by grades when not logged in" do
+      test "should obfuscate route grade in search by grades when not logged in" do
         get search_by_grades_api_v1_crag_routes_url, params: { grade: "7c" }, headers: api_access_token_headers
 
         assert_response :success
         body = response.parsed_body
 
-        assert body.all? { |route| route["name"].match?(/^[• ]+$/) } # Use [• ]+ to allow spaces if any
+        assert body.all? { |route| route["grade_to_s"].nil? }
       end
 
       test "should return no content if grade parameter is missing" do

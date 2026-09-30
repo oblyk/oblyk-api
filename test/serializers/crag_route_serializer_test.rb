@@ -4,8 +4,9 @@ require "test_helper"
 
 class CragRouteSerializerTest < ActiveSupport::TestCase
   setup do
+    @user = users(:normal_user)
     @crag_route = crag_routes(:route_one)
-    @serializer = CragRouteSerializer.new(@crag_route)
+    @serializer = CragRouteSerializer.new(@crag_route, params: { current_user: @user })
     @serialization = JSON.parse(@serializer.serializable_hash.to_json)
   end
 

@@ -47,7 +47,17 @@ module Api
       end
 
       def show
-        render json: @crag_sector.detail_to_json, status: :ok
+        user_level = 0
+        user_level = UserCragDeclaration.order(equivalent_level: :desc).find_by(user: @current_user, crag: @crag_sector.crag)&.equivalent_level || 1 if login?
+
+        data = @crag_sector.detail_to_json
+        data[:crag][:current_user] = {
+          grade_protection: {
+            level: user_level,
+            need_level_up: @crag_sector.crag.grade_protection_level > user_level
+          }
+        }
+        render json: data, status: :ok
       end
 
       def versions

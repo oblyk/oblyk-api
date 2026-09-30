@@ -11,7 +11,12 @@ module Api
       before_action :set_area, only: %i[index search_by_grades]
 
       def index
+        login? # Set Current.user
+
+        crag = @crag_sector&.crag || @crag
         order_by = params.fetch(:order_by, "difficulty_desc")
+        order_by = "name" if crag && !user_can_see_grade?(crag) && %w[difficulty_desc order_by].include?(order_by) # If the visitor can not be see grade, we force the list to be sorted by name because the ratings are hidden
+
         order = case order_by
                 when "difficulty_desc"
                   "crag_routes.max_grade_value DESC, crag_routes.name, crag_routes.id"
@@ -30,7 +35,7 @@ module Api
                       elsif @crag_sector
                         @crag_sector.crag_routes.includes(:crag_sector).order(order)
                       elsif @area
-                        @area.crag_routes.includes(:crag, :crag_sector, photo: { picture_attachment: :blob }).order(order)
+                        @area.crag_routes.includes(:crag, :crag_sector, photo: { picture_attachment: :blob }, crag: :user_crag_declaration).order(order)
                       else
                         CragRoute.includes(:crag_sector).where(crag_id: params[:crag_id]).order(order)
                       end
@@ -59,10 +64,13 @@ module Api
         query = params.fetch(:query, nil)
         return head :no_content if query.blank?
 
+        login? # Set current user
+
         page = params.fetch(:page, 1).to_i
         per_page = params.fetch(:per_page, 25).to_i
 
         hits = CragRoute.includes(:crag_sector, crag: { static_map_attachment: :blob, static_map_banner_attachment: :blob })
+                        .includes(crag: :user_crag_declaration)
         hits = if @crag_sector
                  hits.search(query, filter: "crag_sector_id = #{@crag_sector.id}", page: page, hits_per_page: per_page)
                elsif @crag
@@ -76,7 +84,10 @@ module Api
           hits,
           {
             include: %i[crag crag_sector],
-            params: { include_attachments: { CragRoute: %i[thumbnail] } },
+            params: {
+              include_attachments: { CragRoute: %i[thumbnail] },
+              current_user: @current_user
+            },
             meta: {
               query: query,
               current_page: hits.current_page,
@@ -103,7 +114,8 @@ module Api
         sql_query = "(crag_routes.min_grade_value BETWEEN :min AND :max) OR (crag_routes.max_grade_value BETWEEN :min AND :max)"
 
         crag_routes = if @crag_sector
-                        CragRoute.where(crag_sector: @crag_sector)
+                        CragRoute.includes(:crag)
+                                 .where(crag_sector: @crag_sector)
                                  .where(sql_query, min: min_grade, max: max_grade)
                                  .order(:min_grade_value)
                       elsif @crag
@@ -112,6 +124,7 @@ module Api
                                  .order(:min_grade_value)
                       elsif @area
                         @area.crag_routes
+                             .includes(:crag)
                              .where(sql_query, min: min_grade, max: max_grade)
                              .order(:min_grade_value)
                       else
@@ -142,11 +155,34 @@ module Api
 
       def random
         crag_route = CragRoute.order(Arel.sql("RAND()")).first
-        render json: crag_route.detail_to_json, status: :ok
+        data = crag_route.detail_to_json
+        unless user_can_see_grade?(crag_route.crag)
+          data[:grade_to_s] = nil
+          data[:grade_gap] = nil
+          data[:masked] = true
+        end
+        render json: data, status: :ok
       end
 
       def show
-        render json: @crag_route.detail_to_json, status: :ok
+        data = @crag_route.detail_to_json
+        @crag = @crag_route.crag
+        unless user_can_see_grade?(@crag_route.crag)
+          data[:grade_to_s] = nil
+          data[:grade_gap] = nil
+          data[:masked] = true
+        end
+
+        user_level = 0
+        user_level = @crag.user_crag_declaration&.equivalent_level || 1 if login?
+
+        data[:crag][:current_user] = {
+          grade_protection: {
+            level: user_level,
+            need_level_up: @crag.grade_protection_level > user_level
+          }
+        }
+        render json: data, status: :ok
       end
 
       def create
@@ -175,12 +211,25 @@ module Api
       private
 
       def routes_summary(routes)
-        user_is_login = login?
         routes.map do |crag_route|
           summary = crag_route.summary_to_json(with_crag_in_sector: false)
-          summary[:name] = summary[:name].gsub(/\S/, "•") unless user_is_login
+          unless user_can_see_grade?(crag_route.crag)
+            summary[:grade_to_s] = nil
+            summary[:grade_gap] = nil
+            summary[:masked] = true
+          end
           summary
         end
+      end
+
+      def user_can_see_grade?(crag)
+        return true if crag.grade_protection_level.zero?
+        return false unless @current_user
+        return true if crag.grade_protection_level == 1
+
+        user_declaration_level = crag.user_crag_declaration&.equivalent_level || 0
+        return true if user_declaration_level >= crag.grade_protection_level
+        false
       end
 
       def set_crag_sector
