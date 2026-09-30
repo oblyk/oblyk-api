@@ -77,6 +77,7 @@ class User < ApplicationRecord
   has_many :user_applications
   has_many :publications, as: :publishable
   has_many :publication_views, dependent: :destroy
+  has_many :user_crag_declarations, dependent: :destroy
 
   before_validation :init_slug_name
   before_validation :set_uuid
@@ -318,6 +319,7 @@ class User < ApplicationRecord
         gym_openers.update_all(user_id: nil)
         likes.destroy_all
         publication_views.destroy_all
+        user_crag_declarations.destroy_all
       end
     end
   end

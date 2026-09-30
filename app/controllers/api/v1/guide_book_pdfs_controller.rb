@@ -3,9 +3,9 @@
 module Api
   module V1
     class GuideBookPdfsController < ApiController
-      before_action :protected_by_super_admin, only: %i[destroy]
-      before_action :protected_by_session, only: %i[create update]
+      before_action :protected_by_session, only: %i[destroy create update]
       before_action :set_guide_book_pdf, only: %i[show update destroy]
+      before_action :protected_by_owner, only: %i[destroy update]
 
       def index
         guide_book_pdfs = GuideBookPdf.where crag_id: params[:crag_id]
@@ -46,6 +46,12 @@ module Api
 
       def set_guide_book_pdf
         @guide_book_pdf = GuideBookPdf.find params[:id]
+      end
+
+      def protected_by_owner
+        return true if @current_user.super_admin?
+        return true if @guide_book_pdf.user == @current_user
+        forbidden
       end
 
       def guide_book_pdf_params

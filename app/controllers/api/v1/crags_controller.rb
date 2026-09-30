@@ -24,9 +24,11 @@ module Api
         query = params.fetch(:query, nil)
         return head :no_content if query.blank?
 
+        login? # set User.current
+
         page = params.fetch(:page, 1).to_i
         per_page = params.fetch(:per_page, 25).to_i
-        hits = Crag.includes(photo: { picture_attachment: :blob }, static_map_banner_attachment: :blob, static_map_attachment: :blob)
+        hits = Crag.includes(:user_crag_declaration, photo: { picture_attachment: :blob }, static_map_banner_attachment: :blob, static_map_attachment: :blob)
                    .search(
                      query,
                      page: page,
@@ -36,7 +38,10 @@ module Api
           CragSerializer,
           hits,
           {
-            params: { include_attachments: { Crag: %i[cover static_map static_map] } },
+            params: {
+              include_attachments: { Crag: %i[cover static_map static_map] },
+              current_user: @current_user
+            },
             meta: {
               query: query,
               current_page: hits.current_page,
@@ -370,7 +375,17 @@ module Api
       end
 
       def show
-        render json: @crag.detail_to_json, status: :ok
+        user_level = 0
+        user_level = @crag.user_crag_declaration&.equivalent_level || 1 if login?
+
+        data = @crag.detail_to_json
+        data[:current_user] = {
+          grade_protection: {
+            level: user_level,
+            need_level_up: @crag.grade_protection_level > user_level
+          }
+        }
+        render json: data, status: :ok
       end
 
       def guides

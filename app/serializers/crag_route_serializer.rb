@@ -24,16 +24,31 @@ class CragRouteSerializer < BaseSerializer
              :votes,
              :difficulty_appreciation,
              :crag_id,
-             :crag_sector_id,
-             :grade_to_s
+             :crag_sector_id
 
-  attribute :grade_gap do |object|
-    {
-      max_grade_value: object.max_grade_value,
-      min_grade_value: object.min_grade_value,
-      max_grade_text: object.max_grade_text,
-      min_grade_text: object.min_grade_text
-    }
+  attribute :grade_gap do |object, params|
+    if grade_masked?(object, params)
+      nil
+    else
+      {
+        max_grade_value: object.max_grade_value,
+        min_grade_value: object.min_grade_value,
+        max_grade_text: object.max_grade_text,
+        min_grade_text: object.min_grade_text
+      }
+    end
+  end
+
+  attribute :masked do |object, params|
+    grade_masked?(object, params)
+  end
+
+  attribute :grade_to_s do |object, params|
+    if grade_masked?(object, params)
+      nil
+    else
+      object.grade_to_s
+    end
   end
 
   attribute :photo do |object|
@@ -43,5 +58,11 @@ class CragRouteSerializer < BaseSerializer
         picture: object.attachment_object(object.photo&.picture, "CragRoute_picture")
       }
     }
+  end
+
+  def self.grade_masked?(object, params)
+    user_level = params[:current_user] ? 1 : 0
+    user_level = object.crag.user_crag_declaration.equivalent_level if object.crag.user_crag_declaration
+    user_level < object.crag.grade_protection_level
   end
 end

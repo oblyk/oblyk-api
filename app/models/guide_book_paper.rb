@@ -29,6 +29,7 @@ class GuideBookPaper < ApplicationRecord
 
   has_one_attached :cover
   belongs_to :user, optional: true
+  belongs_to :next_guide_book_paper, class_name: "GuideBookPaper", optional: true
   has_many :guide_book_paper_crags
   has_many :crags, through: :guide_book_paper_crags
   has_many :links, as: :linkable
@@ -37,9 +38,10 @@ class GuideBookPaper < ApplicationRecord
   has_many :place_of_sales
   has_many :article_guide_book_papers
   has_many :articles, through: :article_guide_book_papers
-  belongs_to :next_guide_book_paper, class_name: "GuideBookPaper", optional: true
   has_many :previous_guide_book_papers, class_name: "GuideBookPaper", foreign_key: :next_guide_book_paper_id
   has_many :publications, as: :publishable
+  has_many :guide_book_paper_questions, dependent: :destroy
+  has_many :user_crag_declarations, dependent: :destroy
 
   validates :name, presence: true
   validates :cover, blob: { content_type: :image }, allow_nil: true

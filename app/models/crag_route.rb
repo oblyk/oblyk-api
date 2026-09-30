@@ -39,6 +39,7 @@ class CragRoute < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :photo, optional: true
   belongs_to :crag, counter_cache: :crag_routes_count, touch: true
+  has_one :user_crag_declaration, through: :crag
   has_many :comments, as: :commentable
   has_many :links, as: :linkable
   has_many :alerts, as: :alertable
