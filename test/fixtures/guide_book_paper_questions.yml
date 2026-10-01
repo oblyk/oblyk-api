@@ -1,0 +1,9 @@
+one:
+  guide_book_paper: guide_book_2024
+  question: "Quel est le mot de passe ?"
+  answer: "Summit"
+
+two:
+  guide_book_paper: guide_book_2020
+  question: "Quel est le titre du premier chapitre ?"
+  answer: "Introduction"
