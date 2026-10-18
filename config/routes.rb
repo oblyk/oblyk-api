@@ -414,6 +414,13 @@ Rails.application.routes.draw do
             get :contest_categories, on: :collection
           end
         end
+        resources :spray_walls do
+          post :add_picture, on: :member
+          put :archived, on: :member
+          put :unarchived, on: :member
+          resources :spray_wall_holds
+          resources :spray_wall_pipelines, only: %i[index show create]
+        end
       end
       resources :gym_label_fonts, only: %i[index]
       resources :gym_roles, only: %i[index]
