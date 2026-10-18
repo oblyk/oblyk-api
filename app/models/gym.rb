@@ -69,6 +69,7 @@ class Gym < ApplicationRecord
   has_many :indoor_subscription_gyms
   has_many :indoor_subscriptions, through: :indoor_subscription_gyms
   has_many :publications, as: :publishable
+  has_many :spray_walls
 
   validates :logo, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true

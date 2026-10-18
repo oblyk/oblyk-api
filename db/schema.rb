@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_22_095849) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_02_082352) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -1448,6 +1448,90 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_22_095849) do
     t.index ["user_id"], name: "index_rock_bars_on_user_id"
   end
 
+  create_table "spray_wall_holds", charset: "utf8mb3", force: :cascade do |t|
+    t.boolean "active", default: true
+    t.float "area", null: false
+    t.float "confidence"
+    t.datetime "created_at", null: false
+    t.float "cx", null: false
+    t.float "cy", null: false
+    t.float "max_x", null: false
+    t.float "max_y", null: false
+    t.float "min_x", null: false
+    t.float "min_y", null: false
+    t.json "points", null: false
+    t.string "source", default: "manual", null: false
+    t.bigint "spray_wall_id"
+    t.datetime "updated_at", null: false
+    t.index ["spray_wall_id"], name: "index_spray_wall_holds_on_spray_wall_id"
+  end
+
+  create_table "spray_wall_pipelines", charset: "utf8mb3", force: :cascade do |t|
+    t.json "body"
+    t.datetime "created_at", null: false
+    t.datetime "end_at"
+    t.string "service"
+    t.bigint "spray_wall_id"
+    t.datetime "start_at"
+    t.string "status"
+    t.datetime "updated_at", null: false
+    t.index ["spray_wall_id"], name: "index_spray_wall_pipelines_on_spray_wall_id"
+  end
+
+  create_table "spray_wall_route_holds", charset: "utf8mb3", force: :cascade do |t|
+    t.boolean "end_hold", default: false
+    t.string "hold_type"
+    t.integer "number"
+    t.bigint "spray_wall_hold_id"
+    t.bigint "spray_wall_route_id"
+    t.boolean "strat_hold", default: false
+    t.index ["spray_wall_hold_id"], name: "index_spray_wall_route_holds_on_spray_wall_hold_id"
+    t.index ["spray_wall_route_id"], name: "index_spray_wall_route_holds_on_spray_wall_route_id"
+  end
+
+  create_table "spray_wall_routes", charset: "utf8mb3", force: :cascade do |t|
+    t.integer "ascents_count", default: 0
+    t.boolean "circus"
+    t.integer "comments_count", default: 0
+    t.datetime "created_at", null: false
+    t.boolean "free_foot"
+    t.string "grade_text"
+    t.string "grade_value"
+    t.string "level_color"
+    t.integer "level_index"
+    t.integer "level_length"
+    t.integer "likes_count", default: 0
+    t.string "name"
+    t.boolean "no_foot"
+    t.integer "spray_wall_holds_count", default: 0
+    t.bigint "spray_wall_id"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.integer "videos_count", default: 0
+    t.index ["spray_wall_id"], name: "index_spray_wall_routes_on_spray_wall_id"
+    t.index ["user_id"], name: "index_spray_wall_routes_on_user_id"
+  end
+
+  create_table "spray_walls", charset: "utf8mb3", force: :cascade do |t|
+    t.datetime "archived_at"
+    t.datetime "created_at", null: false
+    t.boolean "draft", default: true
+    t.bigint "gym_id"
+    t.bigint "gym_sector_id"
+    t.bigint "gym_space_id"
+    t.string "name"
+    t.integer "number"
+    t.datetime "opened_at"
+    t.integer "picture_height"
+    t.integer "picture_width"
+    t.integer "spray_wall_holds_count", default: 0
+    t.integer "spray_wall_routes_count", default: 0
+    t.datetime "updated_at", null: false
+    t.index ["gym_id"], name: "index_spray_walls_on_gym_id"
+    t.index ["gym_sector_id"], name: "index_spray_walls_on_gym_sector_id"
+    t.index ["gym_space_id"], name: "index_spray_walls_on_gym_space_id"
+  end
+
   create_table "stripe_checkout_sessions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "checkout_session_id"
     t.datetime "created_at", null: false
@@ -1677,6 +1761,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_22_095849) do
   add_foreign_key "publication_views", "publications"
   add_foreign_key "publication_views", "users"
   add_foreign_key "publications", "users", column: "author_id"
+  add_foreign_key "spray_wall_holds", "spray_walls"
+  add_foreign_key "spray_wall_pipelines", "spray_walls"
+  add_foreign_key "spray_wall_route_holds", "spray_wall_holds"
+  add_foreign_key "spray_wall_route_holds", "spray_wall_routes"
+  add_foreign_key "spray_wall_routes", "spray_walls"
+  add_foreign_key "spray_wall_routes", "users"
+  add_foreign_key "spray_walls", "gym_sectors"
+  add_foreign_key "spray_walls", "gym_spaces"
+  add_foreign_key "spray_walls", "gyms"
   add_foreign_key "user_applications", "users"
   add_foreign_key "user_crag_declarations", "crags"
   add_foreign_key "user_crag_declarations", "guide_book_papers"
