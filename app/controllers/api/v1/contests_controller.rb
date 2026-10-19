@@ -8,10 +8,24 @@ module Api
       include ImageParamsConvert
 
       before_action :protected_by_session, only: %i[create update destroy add_banner draft archived unarchived time_line export_results statistics]
-      before_action :set_gym, except: %i[opens]
+      before_action :set_gym, except: %i[publics opens]
       before_action :set_contest, only: %i[show update destroy draft archived unarchived add_banner time_line results export_results statistics]
       before_action :protected_by_administrator, only: %i[create update destroy draft archived unarchived add_banner time_line export_results statistics]
-      before_action :user_can_manage_contest, except: %i[opens index show results]
+      before_action :user_can_manage_contest, except: %i[publics opens index show results]
+
+      def publics
+        page = params.fetch(:page, 1)
+        projection = params.fetch(:projection, "upcoming")
+        contests = Contest.includes(banner_attachment: :blob).where(draft: false, private: false)
+        contests = projection == "upcoming" ? contests.upcoming.order(start_date: :asc) : contests.past.order(start_date: :desc)
+        contests = contests.page(page)
+        serializer = serializer(
+          ContestSerializer,
+          contests,
+          { params: { include_attachments: { Contest: %i[banner] } } }
+        )
+        render json: serializer, status: :ok
+      end
 
       def opens
         contests = Contest.where(draft: false, private: false).order(start_date: :desc)

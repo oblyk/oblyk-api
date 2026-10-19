@@ -226,6 +226,7 @@ Rails.application.routes.draw do
         delete :destroy, on: :collection
       end
       resources :contests, only: %i[] do
+        get :publics, on: :collection
         get :opens, on: :collection
       end
       resources :gyms do

@@ -44,6 +44,7 @@ class Contest < ApplicationRecord
   validate :validate_dates
 
   scope :upcoming, -> { where(draft: false, private: false).where(contests: { end_date: Date.current.. }) }
+  scope :past, -> { where(draft: false, private: false).where(contests: { end_date: ...Date.current }) }
 
   def public_app_path
     "#{ENV.fetch('OBLYK_APP_URL', nil)}/gyms/#{gym.id}/#{gym.slug_name}/contests/#{id}/#{slug_name}"
