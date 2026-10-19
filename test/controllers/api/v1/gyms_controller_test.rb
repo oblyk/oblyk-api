@@ -135,6 +135,28 @@ module Api
         assert json_response.none? { |score| score["user"]["id"] == user.id }, "User (45yo) should not be in U6 category"
       end
 
+      test "should hide private profile users from ascent scores but keep them visible to themselves" do
+        user = users(:normal_user)
+        user.update!(public_profile: false)
+        ascent = ascent_gym_routes(:gym_ascent_one)
+        ascent.update!(user: user, gym: @gym, released_at: Date.current, ascent_status: "sent")
+        ascent.gym_route.update!(dismounted_at: nil)
+
+        get ascent_scores_api_v1_gym_url(@gym.id), headers: @public_headers
+
+        assert_response :success
+        json_response = response.parsed_body
+
+        assert json_response.none? { |score| score["user"]["id"] == user.id }, "User with private profile should not appear in public ranking"
+
+        get ascent_scores_api_v1_gym_url(@gym.id), headers: api_headers(user: :normal_user)
+
+        assert_response :success
+        json_response = response.parsed_body
+
+        assert json_response.any? { |score| score["user"]["id"] == user.id }, "User with private profile should still see themselves in ranking"
+      end
+
       test "should get routes count" do
         get routes_count_api_v1_gym_url(@gym.id), headers: @user_headers
 

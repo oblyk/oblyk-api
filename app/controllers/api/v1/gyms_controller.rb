@@ -96,11 +96,15 @@ module Api
         age = params.fetch(:age, nil)
         climbing_type = params.fetch(:climbing_type, nil)
 
+        current_user_id = login? ? @current_user.id : nil
+
         ascents = AscentGymRoute.includes(:user, :gym_route, gym_route: :gym, user: { avatar_attachment: :blob })
                                 .joins(gym_route: { gym_sector: :gym_space })
+                                .joins(:user)
                                 .where(gym: @gym)
                                 .where.not(ascent_status: %w[project repetition])
                                 .where.not(gym_route_id: nil)
+                                .where("users.public_profile = :public OR users.id = :current_user_id", public: true, current_user_id: current_user_id)
 
         # Date filter
         ascents = if start_date || end_date
