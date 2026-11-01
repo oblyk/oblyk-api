@@ -1,0 +1,5 @@
+my_gym_spray_wall:
+  gym: my_gym
+  name: Pan
+  number: 1
+  draft: true
