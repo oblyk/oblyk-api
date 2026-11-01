@@ -10,7 +10,7 @@ class SprayWallPipelineJob < ApplicationJob
 
     pipeline.status = "ai_running"
     pipeline.save
-    response = RoboflowApi.outline_holds(pipeline.spray_wall.picture_url)
+    response = RoboflowApi.outline_holds(pipeline.spray_wall.picture.download)
     if response
       pipeline.body = response
       pipeline.status = "holds_creating"

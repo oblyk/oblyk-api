@@ -4,12 +4,12 @@ class RoboflowApi
   ROBOLOW_OUTLINE_END_POINT = ENV.fetch("ROBOLOW_OUTLINE_END_POINT", nil)
   ROBOLOW_API_KEY = ENV.fetch("ROBOLOW_API_KEY", nil)
 
-  # @param [Array] coordinates
-  def self.outline_holds(image_url)
+  # @param [String] image binary content, sent inline so the picture needs no public URL
+  def self.outline_holds(image)
     request = RestClient::Request.execute(
       method: :post,
       url: ROBOLOW_OUTLINE_END_POINT,
-      payload: { inputs: { image: { type: "url", value: image_url } } }.to_json,
+      payload: { inputs: { image: { type: "base64", value: Base64.strict_encode64(image) } } }.to_json,
       headers: {
         accept: :json,
         content_type: :json,
