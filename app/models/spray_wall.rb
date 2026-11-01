@@ -20,7 +20,11 @@ class SprayWall < ApplicationRecord
   end
 
   def app_path
-    "/gyms/#{gym_id}/spray-walls/#{id}"
+    "/gyms/#{gym_id}/#{gym.slug_name}/spray-walls/#{id}"
+  end
+
+  def admin_app_path
+    "/gyms/#{gym_id}/#{gym.slug_name}/admins/spray-walls/#{id}"
   end
 
   def set_picture_dimension!
