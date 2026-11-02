@@ -81,3 +81,7 @@ IFRAMELY_API_KEY: 'my-api-key'
 
 # NPM EXECUTABLE PATH
 NPM_BIN_PATH: '/usr/local/bin'
+
+# ROBOFLOW
+ROBOFLOW_OUTLINE_END_POINT: 'https://serverless.roboflow.com/my-workflow'
+ROBOFLOW_API_KEY: 'my-roboflow-api-token'

@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
 class RoboflowApi
-  ROBOLOW_OUTLINE_END_POINT = ENV.fetch("ROBOLOW_OUTLINE_END_POINT", nil)
-  ROBOLOW_API_KEY = ENV.fetch("ROBOLOW_API_KEY", nil)
+  ROBOFLOW_OUTLINE_END_POINT = ENV.fetch("ROBOFLOW_OUTLINE_END_POINT", nil)
+  ROBOFLOW_API_KEY = ENV.fetch("ROBOFLOW_API_KEY", nil)
 
-  # @param [Array] coordinates
-  def self.outline_holds(image_url)
+  # @param [String] image binary content, sent inline so the picture needs no public URL
+  def self.outline_holds(image)
     request = RestClient::Request.execute(
       method: :post,
-      url: ROBOLOW_OUTLINE_END_POINT,
-      payload: { inputs: { image: { type: "url", value: image_url } } }.to_json,
+      url: ROBOFLOW_OUTLINE_END_POINT,
+      payload: { inputs: { image: { type: "base64", value: Base64.strict_encode64(image) } } }.to_json,
       headers: {
         accept: :json,
         content_type: :json,
-        authorization: "Bearer #{ROBOLOW_API_KEY}"
+        authorization: "Bearer #{ROBOFLOW_API_KEY}"
       },
       timeout: 300,
       open_timeout: 30
