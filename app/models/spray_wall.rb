@@ -7,8 +7,12 @@ class SprayWall < ApplicationRecord
   belongs_to :gym
   belongs_to :gym_sector, optional: true
   belongs_to :gym_space, optional: true
-  has_many :spray_wall_holds
-  has_many :spray_wall_pipelines
+  has_many :spray_wall_holds, dependent: :destroy
+  has_many :spray_wall_pipelines, dependent: :destroy
+  has_many :spray_wall_routes, dependent: :destroy
+
+  scope :published, -> { where.not(draft: false) }
+  scope :unpublished, -> { where(draft: true) }
 
   before_create :set_number
 
@@ -20,7 +24,11 @@ class SprayWall < ApplicationRecord
   end
 
   def app_path
-    "/gyms/#{gym_id}/spray-walls/#{id}"
+    "/gyms/#{gym_id}/#{gym.slug_name}/spray-walls/#{id}"
+  end
+
+  def admin_app_path
+    "/gyms/#{gym_id}/#{gym.slug_name}/admins/spray-walls/#{id}"
   end
 
   def set_picture_dimension!
@@ -52,6 +60,14 @@ class SprayWall < ApplicationRecord
       spray_wall_pipelines: SprayWallPipelineSerializer.new(spray_wall_pipelines).serializable_hash
     }
     SprayWallEditorChannel.broadcast self, data
+  end
+
+  def publish!
+    update_attribute :draft, false
+  end
+
+  def unpublish!
+    update_attribute :draft, true
   end
 
   private

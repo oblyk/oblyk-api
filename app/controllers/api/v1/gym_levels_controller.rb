@@ -36,7 +36,7 @@ module Api
       end
 
       def update_all
-        %i[sport_climbing bouldering pan].each do |climbing_type|
+        %i[sport_climbing bouldering pan spray_wall].each do |climbing_type|
           level = GymLevel.find_by(gym_id: @gym.id, climbing_type: climbing_type)
           level.update gym_levels_params[climbing_type]
         end
@@ -63,6 +63,14 @@ module Api
             { levels: %i[order color default_grade default_point] }
           ],
           pan: [
+            :grade_system,
+            :enabled,
+            :level_representation,
+            :sub_level_enabled,
+            :sub_level_max,
+            { levels: %i[order color default_grade default_point] }
+          ],
+          spray_wall: [
             :grade_system,
             :enabled,
             :level_representation,

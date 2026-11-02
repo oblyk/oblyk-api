@@ -271,6 +271,7 @@ class Gym < ApplicationRecord
     gym_levels << GymLevel.new(climbing_type: Climb::BOULDERING, grade_system: nil, level_representation: GymLevel::TAG_AND_HOLD_REPRESENTATION) unless GymLevel.exists?(gym_id: id, climbing_type: Climb::BOULDERING)
     gym_levels << GymLevel.new(climbing_type: Climb::SPORT_CLIMBING, grade_system: "french", level_representation: GymLevel::HOLD_REPRESENTATION) unless GymLevel.exists?(gym_id: id, climbing_type: Climb::SPORT_CLIMBING)
     gym_levels << GymLevel.new(climbing_type: Climb::PAN, grade_system: "french", level_representation: GymLevel::TAG_REPRESENTATION) unless GymLevel.exists?(gym_id: id, climbing_type: Climb::PAN)
+    gym_levels << GymLevel.new(climbing_type: Climb::SPRAY_WALL, grade_system: nil, level_representation: GymLevel::TAG_REPRESENTATION) unless GymLevel.exists?(gym_id: id, climbing_type: Climb::SPRAY_WALL)
   end
 
   def init_ascents_multiplier

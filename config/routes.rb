@@ -419,8 +419,11 @@ Rails.application.routes.draw do
           post :add_picture, on: :member
           put :archived, on: :member
           put :unarchived, on: :member
+          put :publish, on: :member
+          put :unpublish, on: :member
           resources :spray_wall_holds
           resources :spray_wall_pipelines, only: %i[index show create]
+          resources :spray_wall_routes
         end
       end
       resources :gym_label_fonts, only: %i[index]
