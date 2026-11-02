@@ -46,14 +46,18 @@ class CreateSprayWalls < ActiveRecord::Migration[8.1]
       t.references :spray_wall, foreign_key: true
       t.references :user, foreign_key: true
       t.string :name
+      t.text :comment
+      t.json :styles
       # Difficulty
       t.integer :level_index
       t.integer :level_length
       t.string :level_color
       t.string :grade_text
       t.string :grade_value
+      t.string :sub_level
+      t.string :sub_level_max
       # Options
-      t.boolean :foot_authorization # no foot, only small foot, free foot, hand
+      t.string :foot_authorization # no foot, only small foot, free foot, hand
       t.boolean :circus
       # Count historisation
       t.integer :spray_wall_holds_count, default: 0
@@ -67,10 +71,10 @@ class CreateSprayWalls < ActiveRecord::Migration[8.1]
     create_table :spray_wall_route_holds do |t|
       t.references :spray_wall_route, foreign_key: true
       t.references :spray_wall_hold, foreign_key: true
-      t.boolean :strat_hold, default: false
-      t.boolean :end_hold, default: false
-      t.string :hold_type # only hand, only foot, hand and foot, etc.
+      t.string :hold_type # start, top, middle, foot, etc.
+      t.string :hold_rule # left hand, right hand, etc.
       t.integer :number
     end
+    add_index :spray_wall_route_holds, %i[spray_wall_route_id spray_wall_hold_id], unique: true
   end
 end

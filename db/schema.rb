@@ -1479,22 +1479,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_02_082352) do
   end
 
   create_table "spray_wall_route_holds", charset: "utf8mb3", force: :cascade do |t|
-    t.boolean "end_hold", default: false
+    t.string "hold_rule"
     t.string "hold_type"
     t.integer "number"
     t.bigint "spray_wall_hold_id"
     t.bigint "spray_wall_route_id"
-    t.boolean "strat_hold", default: false
     t.index ["spray_wall_hold_id"], name: "index_spray_wall_route_holds_on_spray_wall_hold_id"
+    t.index ["spray_wall_route_id", "spray_wall_hold_id"], name: "idx_on_spray_wall_route_id_spray_wall_hold_id_853e83c52e", unique: true
     t.index ["spray_wall_route_id"], name: "index_spray_wall_route_holds_on_spray_wall_route_id"
   end
 
   create_table "spray_wall_routes", charset: "utf8mb3", force: :cascade do |t|
     t.integer "ascents_count", default: 0
     t.boolean "circus"
+    t.text "comment"
     t.integer "comments_count", default: 0
     t.datetime "created_at", null: false
-    t.boolean "free_foot"
+    t.string "foot_authorization"
     t.string "grade_text"
     t.string "grade_value"
     t.string "level_color"
@@ -1502,9 +1503,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_02_082352) do
     t.integer "level_length"
     t.integer "likes_count", default: 0
     t.string "name"
-    t.boolean "no_foot"
     t.integer "spray_wall_holds_count", default: 0
     t.bigint "spray_wall_id"
+    t.json "styles"
+    t.string "sub_level"
+    t.string "sub_level_max"
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.integer "videos_count", default: 0

@@ -18,7 +18,8 @@ class SprayWallSerializer < BaseSerializer
              :picture_width,
              :archived_at,
              :app_path,
-             :spray_wall_holds_count
+             :admin_app_path,
+             :spray_wall_holds_count,
              :spray_wall_routes_count
 
   def self.picture_attachment(object)

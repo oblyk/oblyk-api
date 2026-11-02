@@ -83,6 +83,16 @@ module Api
         head :no_content
       end
 
+      def publish
+        @spray_wall.publish!
+        head :no_content
+      end
+
+      def unpublish
+        @spray_wall.unpublish!
+        head :no_content
+      end
+
       private
 
       def set_spray_wall
