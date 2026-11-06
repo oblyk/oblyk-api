@@ -9,7 +9,7 @@ inherit_gem:
 
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 3.4.10
+  TargetRubyVersion: 4.0.9
   TargetRailsVersion: 8
   DisplayCopNames: true
   Exclude:

@@ -7,8 +7,8 @@ For the front app, go here: [oblyk-app](https://github.com/oblyk/oblyk-app)
 
 ## Dependencies
 
-- ruby 3.4.10 ([Use Rbenv to manage Ruby versions](https://github.com/rbenv/rbenv))
-- bundle >= 2.0.0
+- ruby 4.0.9 ([Use Rbenv to manage Ruby versions](https://github.com/rbenv/rbenv))
+- bundle >= 4.0.0
 - docker >= 20.10
     - docker-compose >= 1.2
 - vips >= 8.13
