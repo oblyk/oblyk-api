@@ -22,7 +22,7 @@ module StripTagable
       next unless has_attribute?(column)
 
       value = public_send(column)
-      public_send("#{column}=", strip_tags(value)) if value
+      public_send("#{column}=", Loofah.fragment(value).text(encode_special_chars: false)) if value
     end
   end
 end
