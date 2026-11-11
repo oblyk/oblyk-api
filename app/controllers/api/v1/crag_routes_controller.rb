@@ -165,6 +165,8 @@ module Api
       end
 
       def show
+        login? # Set Current.user
+
         data = @crag_route.detail_to_json
         @crag = @crag_route.crag
         unless user_can_see_grade?(@crag_route.crag)

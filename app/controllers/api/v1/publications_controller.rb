@@ -196,7 +196,8 @@ module Api
               Article: %i[avatar],
               Contest: %i[banner],
               Photo: %i[picture]
-            }
+            },
+            current_user: @current_user
           }
         }
       end
