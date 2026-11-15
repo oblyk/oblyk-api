@@ -70,6 +70,7 @@ class Gym < ApplicationRecord
   has_many :indoor_subscriptions, through: :indoor_subscription_gyms
   has_many :publications, as: :publishable
   has_many :spray_walls
+  has_many :active_spray_walls, -> { active }, class_name: "SprayWall", inverse_of: :gym
 
   validates :logo, blob: { content_type: :image }, allow_nil: true
   validates :banner, blob: { content_type: :image }, allow_nil: true
@@ -236,6 +237,21 @@ class Gym < ApplicationRecord
   end
 
   def detail_to_json
+    spray_walls = active_spray_walls.map do |spray_wall|
+      {
+        id: spray_wall.id,
+        gym_id: spray_wall.gym_id,
+        name: spray_wall.name,
+        gym_sector_id: spray_wall.gym_sector_id,
+        opened_at: spray_wall.opened_at,
+        spray_wall_routes_count: spray_wall.spray_wall_routes_count,
+        spray_wall_holds_count: spray_wall.spray_wall_holds_count,
+        app_path: spray_wall.app_path,
+        attachments: {
+          picture: spray_wall.attachment_object(spray_wall.picture)
+        }
+      }
+    end
     summary_to_json.merge(
       {
         follow_count: follows.count,
@@ -243,6 +259,7 @@ class Gym < ApplicationRecord
         gym_chains: gym_chains.map(&:summary_to_json),
         gym_spaces: gym_spaces.unarchived.map(&:summary_to_json),
         gym_space_groups: gym_space_groups.map(&:summary_to_json),
+        active_spray_walls: spray_walls,
         sorts_available: sorts_available,
         display_ranking: ranking?,
         ascents_multiplier: ascents_multiplier,

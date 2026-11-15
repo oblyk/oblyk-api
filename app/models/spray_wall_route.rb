@@ -23,6 +23,12 @@ class SprayWallRoute < ApplicationRecord
     "/gyms/#{gym_id}/#{spray_wall.gym.slug_name}/spray-walls/#{spray_wall_id}/spray-wall-routes/#{id}"
   end
 
+  def grade_color
+    return unless grade_value
+
+    Grade::GRADES_COLOR[grade_value]
+  end
+
   def historize_level_information
     return unless level_index_changed?
 

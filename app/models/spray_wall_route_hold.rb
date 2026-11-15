@@ -2,7 +2,7 @@
 
 class SprayWallRouteHold < ApplicationRecord
   belongs_to :spray_wall_route
-  belongs_to :spray_wall_hold
+  belongs_to :spray_wall_hold, counter_cache: :spray_wall_route_holds_count
 
   before_validation :set_default
 

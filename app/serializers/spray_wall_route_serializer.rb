@@ -15,6 +15,7 @@ class SprayWallRouteSerializer < BaseSerializer
              :level_color,
              :grade_text,
              :grade_value,
+             :grade_color,
              :sub_level,
              :sub_level_max,
              :foot_authorization,
@@ -23,7 +24,11 @@ class SprayWallRouteSerializer < BaseSerializer
              :ascents_count,
              :comments_count,
              :likes_count,
-             :videos_count
+             :videos_count,
+             :created_at,
+             :updated_at
+
+  attribute :grade_to_s, &:grade_text
 
   attribute :current_user do |object, params|
     is_author = params[:current_user]&.id == object.user_id

@@ -423,7 +423,9 @@ Rails.application.routes.draw do
           put :unpublish, on: :member
           resources :spray_wall_holds
           resources :spray_wall_pipelines, only: %i[index show create]
-          resources :spray_wall_routes
+          resources :spray_wall_routes do
+            get :available_filters, on: :collection
+          end
         end
       end
       resources :gym_label_fonts, only: %i[index]

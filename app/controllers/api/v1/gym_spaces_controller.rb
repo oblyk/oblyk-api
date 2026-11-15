@@ -43,8 +43,22 @@ module Api
             out_group << gym_space.summary_to_json(with_figures: true)
           end
         end
+
+        spray_walls = []
+        @gym.spray_walls.active.includes(:gym).order(opened_at: :desc).each do |spray_wall|
+          spray_walls << {
+            id: spray_wall.id,
+            name: spray_wall.name,
+            app_path: spray_wall.app_path,
+            attachments: {
+              picture: spray_wall.attachment_object(spray_wall.picture)
+            }
+          }
+        end
+
         render json: {
           grouped_spaces: in_group.map(&:last),
+          spray_walls: spray_walls,
           ungrouped_spaces: out_group
         }, status: :ok
       end

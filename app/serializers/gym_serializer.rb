@@ -4,6 +4,7 @@ class GymSerializer < BaseSerializer
   include AttachmentsSerializerHelper
 
   has_many :gym_options, lazy_load_data: true
+  has_many :active_spray_walls, serializer: :spray_wall, record_type: :spray_wall, lazy_load_data: true
 
   attributes :id,
              :name,

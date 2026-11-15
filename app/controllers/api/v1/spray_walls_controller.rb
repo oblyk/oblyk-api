@@ -11,9 +11,12 @@ module Api
       before_action -> { can? GymRole::MANAGE_OPENING }, except: %i[index show]
 
       def index
+        spray_wall = @gym.spray_walls.includes(picture_attachment: :blob)
+        spray_wall = spray_wall.where(draft: true, archived_at: nil) if params.fetch(:active, "false") == "true"
+
         render json: serializer(
           SprayWallSerializer,
-          @gym.spray_walls.includes(picture_attachment: :blob),
+          spray_wall,
           { params: { include_attachments: { SprayWall: %i[picture] } } }
         ), status: :ok
       end
@@ -23,7 +26,7 @@ module Api
           SprayWallSerializer,
           @spray_wall,
           {
-            include: %i[spray_wall_holds],
+            include: %i[spray_wall_holds gym_sector],
             params: { include_attachments: { SprayWall: %i[picture] } }
           }
         ), status: :ok
@@ -85,6 +88,8 @@ module Api
 
       def publish
         @spray_wall.publish!
+        @spray_wall.opened_at = Time.current
+        @spray_wall.save!
         head :no_content
       end
 

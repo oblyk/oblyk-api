@@ -152,6 +152,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_02_082352) do
     t.integer "gym_grade_level"
     t.bigint "gym_id"
     t.bigint "gym_route_id"
+    t.bigint "spray_wall_route_id"
     t.string "hardness_status"
     t.integer "height"
     t.bigint "legacy_id"
@@ -176,6 +177,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_02_082352) do
     t.index ["created_at"], name: "index_ascents_on_created_at"
     t.index ["gym_id"], name: "index_ascents_on_gym_id"
     t.index ["gym_route_id"], name: "index_ascents_on_gym_route_id"
+    t.index ["spray_wall_route_id"], name: "index_ascents_on_spray_wall_route_id"
     t.index ["released_at"], name: "index_ascents_on_released_at"
     t.index ["user_id"], name: "index_ascents_on_user_id"
   end
@@ -1449,90 +1451,89 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_02_082352) do
   end
 
   create_table "spray_wall_holds", charset: "utf8mb3", force: :cascade do |t|
-    t.boolean "active", default: true
-    t.float "area", null: false
-    t.float "confidence"
-    t.datetime "created_at", null: false
+    t.bigint "spray_wall_id"
+    t.json "points", null: false
     t.float "cx", null: false
     t.float "cy", null: false
-    t.float "max_x", null: false
-    t.float "max_y", null: false
+    t.float "area", null: false
     t.float "min_x", null: false
     t.float "min_y", null: false
-    t.json "points", null: false
+    t.float "max_x", null: false
+    t.float "max_y", null: false
+    t.float "confidence"
+    t.boolean "active", default: true
     t.string "source", default: "manual", null: false
-    t.bigint "spray_wall_id"
+    t.integer "spray_wall_route_holds_count", default: 0
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["spray_wall_id"], name: "index_spray_wall_holds_on_spray_wall_id"
   end
 
   create_table "spray_wall_pipelines", charset: "utf8mb3", force: :cascade do |t|
-    t.json "body"
-    t.datetime "created_at", null: false
-    t.datetime "end_at"
-    t.string "service"
     t.bigint "spray_wall_id"
-    t.datetime "start_at"
+    t.string "service"
     t.string "status"
+    t.json "body"
+    t.datetime "start_at"
+    t.datetime "end_at"
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["spray_wall_id"], name: "index_spray_wall_pipelines_on_spray_wall_id"
   end
 
   create_table "spray_wall_route_holds", charset: "utf8mb3", force: :cascade do |t|
-    t.string "hold_rule"
-    t.string "hold_type"
-    t.integer "number"
-    t.bigint "spray_wall_hold_id"
     t.bigint "spray_wall_route_id"
+    t.bigint "spray_wall_hold_id"
+    t.string "hold_type"
+    t.string "hold_rule"
+    t.integer "number"
     t.index ["spray_wall_hold_id"], name: "index_spray_wall_route_holds_on_spray_wall_hold_id"
     t.index ["spray_wall_route_id", "spray_wall_hold_id"], name: "idx_on_spray_wall_route_id_spray_wall_hold_id_853e83c52e", unique: true
     t.index ["spray_wall_route_id"], name: "index_spray_wall_route_holds_on_spray_wall_route_id"
   end
 
   create_table "spray_wall_routes", charset: "utf8mb3", force: :cascade do |t|
-    t.integer "ascents_count", default: 0
-    t.boolean "circus"
+    t.bigint "spray_wall_id"
+    t.bigint "user_id"
+    t.string "name"
     t.text "comment"
-    t.integer "comments_count", default: 0
-    t.datetime "created_at", null: false
-    t.string "foot_authorization"
-    t.string "grade_text"
-    t.string "grade_value"
-    t.string "level_color"
+    t.json "styles"
     t.integer "level_index"
     t.integer "level_length"
-    t.integer "likes_count", default: 0
-    t.string "name"
+    t.string "level_color"
+    t.string "grade_text"
+    t.integer "grade_value"
+    t.integer "sub_level"
+    t.integer "sub_level_max"
+    t.string "foot_authorization"
+    t.boolean "circus"
     t.integer "spray_wall_holds_count", default: 0
-    t.bigint "spray_wall_id"
-    t.json "styles"
-    t.string "sub_level"
-    t.string "sub_level_max"
-    t.datetime "updated_at", null: false
-    t.bigint "user_id"
+    t.integer "ascents_count", default: 0
+    t.integer "comments_count", default: 0
+    t.integer "likes_count", default: 0
     t.integer "videos_count", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["spray_wall_id"], name: "index_spray_wall_routes_on_spray_wall_id"
     t.index ["user_id"], name: "index_spray_wall_routes_on_user_id"
   end
 
   create_table "spray_walls", charset: "utf8mb3", force: :cascade do |t|
-    t.datetime "archived_at"
-    t.datetime "created_at", null: false
-    t.boolean "draft", default: true
-    t.bigint "gym_id"
-    t.bigint "gym_sector_id"
-    t.bigint "gym_space_id"
     t.string "name"
     t.integer "number"
-    t.datetime "opened_at"
+    t.bigint "gym_id"
+    t.bigint "gym_sector_id"
+    t.boolean "draft", default: true
     t.integer "picture_height"
     t.integer "picture_width"
+    t.datetime "opened_at"
+    t.datetime "archived_at"
     t.integer "spray_wall_holds_count", default: 0
     t.integer "spray_wall_routes_count", default: 0
+    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["gym_id"], name: "index_spray_walls_on_gym_id"
     t.index ["gym_sector_id"], name: "index_spray_walls_on_gym_sector_id"
-    t.index ["gym_space_id"], name: "index_spray_walls_on_gym_space_id"
   end
 
   create_table "stripe_checkout_sessions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1771,7 +1772,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_02_082352) do
   add_foreign_key "spray_wall_routes", "spray_walls"
   add_foreign_key "spray_wall_routes", "users"
   add_foreign_key "spray_walls", "gym_sectors"
-  add_foreign_key "spray_walls", "gym_spaces"
   add_foreign_key "spray_walls", "gyms"
   add_foreign_key "user_applications", "users"
   add_foreign_key "user_crag_declarations", "crags"

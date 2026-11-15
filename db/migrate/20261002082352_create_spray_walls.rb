@@ -5,7 +5,6 @@ class CreateSprayWalls < ActiveRecord::Migration[8.1]
       t.integer :number
       t.references :gym, foreign_key: true
       t.references :gym_sector, foreign_key: true
-      t.references :gym_space, foreign_key: true
       t.boolean :draft, default: true
       t.integer :picture_height
       t.integer :picture_width
@@ -29,6 +28,7 @@ class CreateSprayWalls < ActiveRecord::Migration[8.1]
       t.float :confidence
       t.boolean :active, default: true
       t.string  :source, null: false, default: "manual"
+      t.integer :spray_wall_route_holds_count, default: 0
       t.timestamps
     end
 
@@ -53,9 +53,9 @@ class CreateSprayWalls < ActiveRecord::Migration[8.1]
       t.integer :level_length
       t.string :level_color
       t.string :grade_text
-      t.string :grade_value
-      t.string :sub_level
-      t.string :sub_level_max
+      t.integer :grade_value
+      t.integer :sub_level
+      t.integer :sub_level_max
       # Options
       t.string :foot_authorization # no foot, only small foot, free foot, hand
       t.boolean :circus
@@ -76,5 +76,7 @@ class CreateSprayWalls < ActiveRecord::Migration[8.1]
       t.integer :number
     end
     add_index :spray_wall_route_holds, %i[spray_wall_route_id spray_wall_hold_id], unique: true
+
+    add_reference :ascents, :spray_wall_route, after: :gym_route_id
   end
 end

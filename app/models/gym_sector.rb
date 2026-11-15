@@ -8,6 +8,8 @@ class GymSector < ApplicationRecord
   has_one :gym, through: :gym_space
   has_many :gym_routes
   has_many :gym_route_covers, through: :gym_routes
+  has_many :spray_walls
+  has_many :active_spray_walls, -> { active }, class_name: "SprayWall"
 
   validates :name, :height, presence: true
   validates :climbing_type, inclusion: { in: Climb::GYM_LIST }

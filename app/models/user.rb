@@ -26,6 +26,7 @@ class User < ApplicationRecord
   has_one :user_application_my_compet
   has_many :follows, as: :followable
   has_many :subscribes, class_name: "Follow"
+  has_many :friends, -> { where(followable_type: "User").where.not(accepted_at: nil) }, class_name: "Follow"
   has_many :conversation_messages
   has_many :conversation_users
   has_many :conversations, through: :conversation_users

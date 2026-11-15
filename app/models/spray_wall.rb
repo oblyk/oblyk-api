@@ -6,13 +6,13 @@ class SprayWall < ApplicationRecord
 
   belongs_to :gym
   belongs_to :gym_sector, optional: true
-  belongs_to :gym_space, optional: true
   has_many :spray_wall_holds, dependent: :destroy
   has_many :spray_wall_pipelines, dependent: :destroy
   has_many :spray_wall_routes, dependent: :destroy
 
   scope :published, -> { where.not(draft: false) }
   scope :unpublished, -> { where(draft: true) }
+  scope :active, -> { where(draft: false, archived_at: nil) }
 
   before_create :set_number
 
