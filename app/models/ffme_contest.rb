@@ -81,7 +81,7 @@ class FfmeContest < ApplicationRecord
   end
 
   def sendable?
-    Time.current.between?(min_send_date.beginning_of_day, max_send_date.beginning_of_day)
+    Time.current >= end_date
   end
 
   def send_results!
