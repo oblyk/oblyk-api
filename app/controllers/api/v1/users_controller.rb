@@ -168,7 +168,7 @@ module Api
       end
 
       def current_user_is_subscribed?
-        login? && User.current.subscribes.accepted.exists?(followable_type: "User", followable_id: @user.id)
+        login? && Current.user.subscribes.accepted.exists?(followable_type: "User", followable_id: @user.id)
       end
 
       def set_user

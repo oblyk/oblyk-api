@@ -24,7 +24,7 @@ module Api
         query = params.fetch(:query, nil)
         return head :no_content if query.blank?
 
-        login? # set User.current
+        login? # set Current.user
 
         page = params.fetch(:page, 1).to_i
         per_page = params.fetch(:per_page, 25).to_i

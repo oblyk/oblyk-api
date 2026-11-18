@@ -59,7 +59,7 @@ class Crag < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :photo, optional: true
   belongs_to :department, optional: true
-  has_one :user_crag_declaration, -> { where(user_id: User.current&.id) }
+  has_one :user_crag_declaration, -> { where(user_id: Current.user&.id) }
   has_many :comments, as: :commentable
   has_many :links, as: :linkable
   has_many :follows, as: :followable

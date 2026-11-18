@@ -62,7 +62,7 @@ module Api
       def verify_json_web_token
         data = JwtToken::Token.decode(authorization_token)["data"]
         @current_user ||= User.find data["id"]
-        User.current = @current_user
+        Current.user = @current_user
       rescue StandardError
         render json: { error: "Not Authorized" }, status: :unauthorized
       end
@@ -71,7 +71,7 @@ module Api
       def login?
         data = JwtToken::Token.decode(authorization_token)["data"]
         @current_user ||= User.find data["id"]
-        User.current = @current_user
+        Current.user = @current_user
         true
       rescue StandardError
         false

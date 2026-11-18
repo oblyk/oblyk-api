@@ -8,7 +8,7 @@ module Api
       before_action :protected_by_owner, except: %i[create index]
 
       def index
-        organizations = User.current.organizations
+        organizations = Current.user.organizations
         render json: organizations.map(&:summary_to_json), status: :ok
       end
 
@@ -22,7 +22,7 @@ module Api
 
       def create
         @organization = Organization.new organization_params
-        @organization.organization_users << OrganizationUser.new(user: User.current)
+        @organization.organization_users << OrganizationUser.new(user: Current.user)
         if @organization.save
           render json: @organization.detail_to_json, status: :ok
         else
@@ -55,7 +55,7 @@ module Api
       end
 
       def protected_by_owner
-        forbidden unless @organization.users.include?(User.current)
+        forbidden unless @organization.users.include?(Current.user)
       end
 
       def organization_params
