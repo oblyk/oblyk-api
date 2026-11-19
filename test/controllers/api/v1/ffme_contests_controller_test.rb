@@ -97,7 +97,7 @@ module Api
       end
 
       test "should send results if sendable" do
-        @ffme_contest.update(start_date: Date.yesterday, end_date: Date.tomorrow)
+        @ffme_contest.update(start_date: Date.current - 5.days, end_date: Date.current - 1.day)
 
         MyCompet.stub :send_results, true do
           post send_results_api_v1_gym_contest_ffme_contest_url(@gym, @contest, @ffme_contest),

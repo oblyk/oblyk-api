@@ -71,13 +71,13 @@ class FfmeContestTest < ActiveSupport::TestCase
   end
 
   test "sendable? returns correct boolean" do
-    @ffme_contest.start_date = Date.current - 1.day
-    @ffme_contest.end_date = Date.current + 1.day
+    @ffme_contest.start_date = Date.current - 2.days
+    @ffme_contest.end_date = Date.current - 1.day
 
     assert_predicate @ffme_contest, :sendable?
 
-    @ffme_contest.start_date = Date.current + 1.day
-    @ffme_contest.end_date = Date.current + 2.days
+    @ffme_contest.start_date = Date.current - 1.day
+    @ffme_contest.end_date = Date.current + 1.day
 
     assert_not @ffme_contest.sendable?
   end
