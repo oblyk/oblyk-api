@@ -6,6 +6,7 @@ module Api
       before_action :check_ip
       before_action :check_honeypot_params
       before_action :set_current_organization
+      before_action :set_current_user_id
 
       def user_for_paper_trail
         @current_user ? @current_user.id : "Public user"
@@ -72,9 +73,18 @@ module Api
         data = JwtToken::Token.decode(authorization_token)["data"]
         @current_user ||= User.find data["id"]
         Current.user = @current_user
+        Current.user_id = @current_user.id
         true
       rescue StandardError
         false
+      end
+
+      def set_current_user_id
+        header = request.headers["Authorization"]
+        return if header.blank?
+
+        user_id = JwtToken::Token.decode(header.split.last).dig("data", "id")
+        Current.user_id = user_id if user_id.present?
       end
 
       def forbidden
