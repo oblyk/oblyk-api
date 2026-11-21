@@ -24,7 +24,7 @@ Rails.application.configure do
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
   config.action_cable.url = "wss://#{ENV.fetch('OBLYK_API_DOMAIN', nil)}/cable"
-  config.action_cable.allowed_request_origins = %w[https://next.oblyk.org https://oblyk.org https://www.oblyk.org]
+  config.action_cable.allowed_request_origins = %w[https://next.oblyk.org https://oblyk.org https://www.oblyk.org https://new.oblyk.org]
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
   # config.assume_ssl = true
