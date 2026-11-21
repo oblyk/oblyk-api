@@ -23,6 +23,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
             "http://localhost:4500",
             "http://localhost:4501",
             "http://localhost:3000",
+            "https://new.oblyk.org",
             "https://next.oblyk.org",
             "https://oblyk.org"
 
